@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.3 (2025-04-21)
+## 32.2.4 (2025-05-06)
 
-* [bitnami/redmine] Release 32.2.3 ([#33093](https://github.com/bitnami/charts/pull/33093))
+* [bitnami/redmine] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33430](https://github.com/bitnami/charts/pull/33430))
+
+## <small>32.2.3 (2025-04-21)</small>
+
+* [bitnami/redmine] Release 32.2.3 (#33093) ([baa8b99](https://github.com/bitnami/charts/commit/baa8b99c67065cfb9647613242022b4ed0a47ecb)), closes [#33093](https://github.com/bitnami/charts/issues/33093)
 
 ## <small>32.2.2 (2025-04-20)</small>
 

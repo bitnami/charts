@@ -48,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAffinityPreset "component" "triggerer" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAntiAffinityPreset "component" "triggerer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAffinityPreset "component" "triggerer" "customLabels" $podLabels "topologyKey" .Values.triggerer.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.triggerer.podAntiAffinityPreset "component" "triggerer" "customLabels" $podLabels "topologyKey" .Values.triggerer.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.triggerer.nodeAffinityPreset.type "key" .Values.triggerer.nodeAffinityPreset.key "values" .Values.triggerer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.triggerer.nodeSelector }}

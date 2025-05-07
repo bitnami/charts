@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.8 (2025-04-28)
+## 4.4.9 (2025-05-06)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.4.8 ([#33216](https://github.com/bitnami/charts/pull/33216))
+* [bitnami/rabbitmq-cluster-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33427](https://github.com/bitnami/charts/pull/33427))
+
+## <small>4.4.8 (2025-04-28)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.4.8 (#33216) ([10fcf9a](https://github.com/bitnami/charts/commit/10fcf9afff42aa53dd67a24be41410cc9ca09441)), closes [#33216](https://github.com/bitnami/charts/issues/33216)
 
 ## <small>4.4.7 (2025-04-02)</small>
 

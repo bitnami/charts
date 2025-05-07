@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.6 (2025-05-02)
+## 5.0.7 (2025-05-06)
 
-* [bitnami/kube-state-metrics] Release 5.0.6 ([#33295](https://github.com/bitnami/charts/pull/33295))
+* [bitnami/kube-state-metrics] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33388](https://github.com/bitnami/charts/pull/33388))
+
+## <small>5.0.6 (2025-05-02)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.6 (#33295) ([f90ae20](https://github.com/bitnami/charts/commit/f90ae20419304eda7ade6fefff0745675dfe8bc0)), closes [#33295](https://github.com/bitnami/charts/issues/33295)
 
 ## <small>5.0.5 (2025-04-02)</small>
 

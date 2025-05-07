@@ -1,8 +1,6 @@
 # Changelog
 
-## 8.1.4 (2025-05-06)
-
-* [bitnami/sonarqube] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33436](https://github.com/bitnami/charts/pull/33436))
+## 8.1.4 (2025-05-07)
 
 ## <small>8.1.3 (2025-04-30)</small>
 
