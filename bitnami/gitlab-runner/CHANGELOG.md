@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.4 (2025-05-05)
+## 0.1.5 (2025-05-06)
 
-* [bitnami/gitlab-runner] Release 0.1.4 ([#33325](https://github.com/bitnami/charts/pull/33325))
+* [bitnami/gitlab-runner] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33366](https://github.com/bitnami/charts/pull/33366))
+
+## <small>0.1.4 (2025-05-05)</small>
+
+* [bitnami/gitlab-runner] Release 0.1.4 (#33325) ([8074779](https://github.com/bitnami/charts/commit/8074779bfb292239e7267b80655026b9c61cb156)), closes [#33325](https://github.com/bitnami/charts/issues/33325)
 
 ## <small>0.1.3 (2025-04-17)</small>
 

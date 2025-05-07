@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.0.3 (2025-05-05)
+## 23.1.0 (2025-05-06)
 
-* [bitnami/airflow] Fix svc name for Ingress backend ([#33316](https://github.com/bitnami/charts/pull/33316))
+* [bitnami/airflow] Expose topologyKey for all objects ([#33461](https://github.com/bitnami/charts/pull/33461))
+
+## <small>23.0.4 (2025-05-06)</small>
+
+* [bitnami/airflow] Fix baseUrl generation with ingress enabled (#33399) ([461bc9f](https://github.com/bitnami/charts/commit/461bc9face35a3b6339f012c60cf4622c3d18ac6)), closes [#33399](https://github.com/bitnami/charts/issues/33399)
+
+## <small>23.0.3 (2025-05-05)</small>
+
+* [bitnami/airflow] Fix svc name for Ingress backend (#33316) ([d814a50](https://github.com/bitnami/charts/commit/d814a50bfb2756a817cbd4f66abbba71d1b74b63)), closes [#33316](https://github.com/bitnami/charts/issues/33316)
 
 ## <small>23.0.2 (2025-05-01)</small>
 

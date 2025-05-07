@@ -1,8 +1,12 @@
 # Changelog
 
+## 37.0.1 (2025-05-06)
+
+* [bitnami/spring-cloud-dataflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33438](https://github.com/bitnami/charts/pull/33438))
+
 ## 37.0.0 (2025-04-29)
 
-* [bitnami/spring-cloud-dataflow] Major 37.0.0: Upgrade MariaDB to 11.4.x ([#33243](https://github.com/bitnami/charts/pull/33243))
+* [bitnami/spring-cloud-dataflow] Major 37.0.0: Upgrade MariaDB to 11.4.x (#33243) ([f3400ee](https://github.com/bitnami/charts/commit/f3400eecb2f39db9aec724fdd61cb279b4c9e6d3)), closes [#33243](https://github.com/bitnami/charts/issues/33243)
 
 ## <small>36.0.1 (2025-04-28)</small>
 

@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.5.5 (2025-05-06)
+## 12.0.0 (2025-05-06)
 
-* [bitnami/redis-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33429](https://github.com/bitnami/charts/pull/33429))
+* [bitnami/redis-cluster] Release 12.0.0 ([#33456](https://github.com/bitnami/charts/pull/33456))
 
 ## <small>11.5.4 (2025-04-30)</small>
 

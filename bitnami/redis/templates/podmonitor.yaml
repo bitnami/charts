@@ -64,7 +64,7 @@ spec:
         {{- end }}
       {{- end }}
     {{- end }}
-  {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
+  {{- if .Values.metrics.podMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
   {{- with .Values.metrics.podMonitor.sampleLimit -}}
