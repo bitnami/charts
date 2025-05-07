@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_users.yaml
-# Version: 1.16.0
+# Version: 1.17.0
 # VersionOf: rmq-messaging-topology-operator
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -67,6 +67,23 @@ spec:
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
+              limits:
+                description: |-
+                  Limits to apply to a user to restrict the number of connections and channels
+                  the user can create. These limits can be used as guard rails in environments
+                  where applications cannot be trusted and monitored in detail, for example,
+                  when RabbitMQ clusters are offered as a service. See https://www.rabbitmq.com/docs/user-limits.
+                properties:
+                  channels:
+                    description: Limits how many AMQP 0.9.1 channels the user can
+                      open.
+                    format: int32
+                    type: integer
+                  connections:
+                    description: Limits how many connections the user can open.
+                    format: int32
+                    type: integer
+                type: object
               rabbitmqClusterReference:
                 description: |-
                   Reference to the RabbitmqCluster that the user will be created for. This cluster must
