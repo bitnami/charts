@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.2 (2025-05-07)
+## 4.0.0 (2025-05-07)
 
-* [bitnami/chainloop] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33343](https://github.com/bitnami/charts/pull/33343))
+* [bitnami/chainloop] Release 4.0.0 ([#33548](https://github.com/bitnami/charts/pull/33548))
+
+## <small>3.0.2 (2025-05-07)</small>
+
+* [bitnami/chainloop] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([ad1a8c7](https://github.com/bitnami/charts/commit/ad1a8c784c38bdbf23a2c4726ab388667f961c12)), closes [#33343](https://github.com/bitnami/charts/issues/33343)
 
 ## <small>3.0.1 (2025-05-07)</small>
 
