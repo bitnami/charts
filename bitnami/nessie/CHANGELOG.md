@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.8 (2025-05-06)
+## 2.0.9 (2025-05-07)
 
-* [bitnami/nessie] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33412](https://github.com/bitnami/charts/pull/33412))
+* [bitnami/nessie] Release 2.0.9 ([#33536](https://github.com/bitnami/charts/pull/33536))
+
+## <small>2.0.8 (2025-05-06)</small>
+
+* [bitnami/nessie] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33412) ([9f42a65](https://github.com/bitnami/charts/commit/9f42a65f1d468cd16c4892f095b6fad804c71cdc)), closes [#33412](https://github.com/bitnami/charts/issues/33412)
 
 ## <small>2.0.7 (2025-05-01)</small>
 
