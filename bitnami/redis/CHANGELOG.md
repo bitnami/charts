@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.0.1 (2025-05-06)
+
+* [bitnami/redis] fix pod-monitor podTargetLabels conditional  ([#33459](https://github.com/bitnami/charts/pull/33459))
+
 ## 21.0.0 (2025-05-06)
 
-* [bitnami/redis] Release 21.0.0 ([#33455](https://github.com/bitnami/charts/pull/33455))
+* [bitnami/redis] Release 21.0.0 (#33455) ([41b5013](https://github.com/bitnami/charts/commit/41b5013934cca7b8ab2c301bdc680fa770a1684d)), closes [#33455](https://github.com/bitnami/charts/issues/33455)
 
 ## <small>20.13.4 (2025-04-30)</small>
 
