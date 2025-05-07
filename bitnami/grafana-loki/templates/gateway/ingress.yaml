@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.gateway.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.gateway.ingress.ingressClassName }}
   ingressClassName: {{ .Values.gateway.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -29,9 +29,7 @@ spec:
           {{- toYaml .Values.gateway.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.gateway.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.gateway.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "grafana-loki.gateway.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.gateway.ingress.extraHosts }}
@@ -39,9 +37,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "grafana-loki.gateway.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
   {{- if or (and .Values.gateway.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.gateway.ingress.annotations )) .Values.gateway.ingress.selfSigned)) .Values.gateway.ingress.extraTls }}

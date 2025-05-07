@@ -1,8 +1,17 @@
 # Changelog
 
-## 20.13.4 (2025-04-29)
+## 21.0.1 (2025-05-06)
 
-* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33181](https://github.com/bitnami/charts/pull/33181))
+* [bitnami/redis] fix pod-monitor podTargetLabels conditional  ([#33459](https://github.com/bitnami/charts/pull/33459))
+
+## 21.0.0 (2025-05-06)
+
+* [bitnami/redis] Release 21.0.0 (#33455) ([41b5013](https://github.com/bitnami/charts/commit/41b5013934cca7b8ab2c301bdc680fa770a1684d)), closes [#33455](https://github.com/bitnami/charts/issues/33455)
+
+## <small>20.13.4 (2025-04-30)</small>
+
+* [bitnami/redis] Release 20.13.3 (#33217) ([f2b8c65](https://github.com/bitnami/charts/commit/f2b8c6511d38015371555fefb53aaca189c8c2de)), closes [#33217](https://github.com/bitnami/charts/issues/33217)
+* [bitnami/redis] Switch shell from /bin/sh to /bin/bash to improve process handling (#33181) ([cfe2165](https://github.com/bitnami/charts/commit/cfe21650167fb27f415edc6268b67c4ec91217f0)), closes [#33181](https://github.com/bitnami/charts/issues/33181)
 
 ## <small>20.13.2 (2025-04-24)</small>
 

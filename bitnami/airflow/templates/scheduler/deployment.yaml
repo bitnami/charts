@@ -44,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.scheduler.podAffinityPreset "component" "scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.scheduler.podAntiAffinityPreset "component" "scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.scheduler.podAffinityPreset "component" "scheduler" "customLabels" $podLabels "topologyKey" .Values.scheduler.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.scheduler.podAntiAffinityPreset "component" "scheduler" "customLabels" $podLabels "topologyKey" .Values.scheduler.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.scheduler.nodeAffinityPreset.type "key" .Values.scheduler.nodeAffinityPreset.key "values" .Values.scheduler.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.scheduler.nodeSelector }}
