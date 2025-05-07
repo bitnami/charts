@@ -1,12 +1,12 @@
 # Changelog
 
-## 22.0.3 (2025-05-06)
+## 22.0.3 (2025-05-07)
 
 * [bitnami/elasticsearch] add shareProcessNamespace support ([#33232](https://github.com/bitnami/charts/pull/33232))
 
-## 22.0.2 (2025-05-06)
+## <small>22.0.2 (2025-05-06)</small>
 
-* [bitnami/elasticsearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33356](https://github.com/bitnami/charts/pull/33356))
+* [bitnami/elasticsearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([97dc9b1](https://github.com/bitnami/charts/commit/97dc9b1af8160f11f01df6d24cf041c22b4f62d3)), closes [#33356](https://github.com/bitnami/charts/issues/33356)
 
 ## <small>22.0.1 (2025-04-30)</small>
 
