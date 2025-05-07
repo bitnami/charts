@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2025-05-07)
+## 3.0.0 (2025-05-07)
 
-* [bitnami/superset] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33439](https://github.com/bitnami/charts/pull/33439))
+* [bitnami/superset] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33512](https://github.com/bitnami/charts/pull/33512))
+
+## <small>2.0.3 (2025-05-07)</small>
+
+* [bitnami/superset] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3343 ([579785a](https://github.com/bitnami/charts/commit/579785a27121c71fe803e31fdf1b3071c2cc62a5)), closes [#33439](https://github.com/bitnami/charts/issues/33439) [#33402](https://github.com/bitnami/charts/issues/33402)
 
 ## <small>2.0.2 (2025-05-06)</small>
 
