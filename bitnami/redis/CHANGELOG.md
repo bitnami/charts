@@ -1,5 +1,17 @@
 # Changelog
 
+## 21.0.2 (2025-05-07)
+
+* [bitnami/redis] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33428](https://github.com/bitnami/charts/pull/33428))
+
+## <small>21.0.1 (2025-05-07)</small>
+
+* [bitnami/redis] fix pod-monitor podTargetLabels conditional  (#33459) ([2b78fb6](https://github.com/bitnami/charts/commit/2b78fb6590887a81bfbaefe90e32b177fb108142)), closes [#33459](https://github.com/bitnami/charts/issues/33459)
+
+## 21.0.0 (2025-05-06)
+
+* [bitnami/redis] Release 21.0.0 (#33455) ([41b5013](https://github.com/bitnami/charts/commit/41b5013934cca7b8ab2c301bdc680fa770a1684d)), closes [#33455](https://github.com/bitnami/charts/issues/33455)
+
 ## <small>20.13.4 (2025-04-30)</small>
 
 * [bitnami/redis] Release 20.13.3 (#33217) ([f2b8c65](https://github.com/bitnami/charts/commit/f2b8c6511d38015371555fefb53aaca189c8c2de)), closes [#33217](https://github.com/bitnami/charts/issues/33217)
