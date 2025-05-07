@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.16 (2025-05-06)
+## 15.3.17 (2025-05-07)
 
-* [bitnami/postgresql-ha] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33423](https://github.com/bitnami/charts/pull/33423))
+* [bitnami/postgresql-ha] Release 15.3.17 ([#33538](https://github.com/bitnami/charts/pull/33538))
+
+## <small>15.3.16 (2025-05-06)</small>
+
+* [bitnami/postgresql-ha] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([3dde55e](https://github.com/bitnami/charts/commit/3dde55e482728954d9b99a4fe13cfa5b253948dd)), closes [#33423](https://github.com/bitnami/charts/issues/33423)
 
 ## <small>15.3.15 (2025-04-24)</small>
 
