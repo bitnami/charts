@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.6.17 (2025-04-30)
+## 11.6.20 (2025-05-07)
 
-* [bitnami/nginx-ingress-controller] Fix securitycontext compatibility ([#33253](https://github.com/bitnami/charts/pull/33253))
+* [bitnami/nginx-ingress-controller] Release 11.6.20 ([#33486](https://github.com/bitnami/charts/pull/33486))
+
+## <small>11.6.19 (2025-05-06)</small>
+
+* [bitnami/nginx-ingress-controller] chore: :recycle: Remove extra unnecessary k8s version checks (#33 ([dd8840d](https://github.com/bitnami/charts/commit/dd8840d5a45a6a0224626bc15ed9f3046c93ecfa)), closes [#33453](https://github.com/bitnami/charts/issues/33453)
+
+## <small>11.6.18 (2025-05-06)</small>
+
+* [bitnami/nginx-ingress-controller] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 r ([61a1119](https://github.com/bitnami/charts/commit/61a111923dc51ae9ae31b5abd35594b551314111)), closes [#33414](https://github.com/bitnami/charts/issues/33414)
+
+## <small>11.6.17 (2025-05-05)</small>
+
+* [bitnami/nginx-ingress-controller] Fix securitycontext compatibility (#33253) ([c0f400e](https://github.com/bitnami/charts/commit/c0f400e40947109f461a9c05e708274be84d2177)), closes [#33253](https://github.com/bitnami/charts/issues/33253)
 
 ## <small>11.6.16 (2025-04-30)</small>
 

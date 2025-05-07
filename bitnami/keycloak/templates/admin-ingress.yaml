@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.adminIngress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.adminIngress.ingressClassName }}
   ingressClassName: {{ .Values.adminIngress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -29,9 +29,7 @@ spec:
           {{- toYaml .Values.adminIngress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ include "common.tplvalues.render" ( dict "value" .Values.adminIngress.path "context" $) }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.adminIngress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" .Values.adminIngress.servicePort "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.adminIngress.extraHosts }}
@@ -39,9 +37,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" $.Values.adminIngress.servicePort "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.adminIngress.extraRules }}

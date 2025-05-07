@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.4.1 (2025-05-02)
+## 0.4.3 (2025-05-06)
 
-* [bitnami/neo4j] Release 0.4.1 ([#33307](https://github.com/bitnami/charts/pull/33307))
+* [bitnami/neo4j] Release 0.4.3 ([#33466](https://github.com/bitnami/charts/pull/33466))
+
+## <small>0.4.2 (2025-05-06)</small>
+
+* [bitnami/neo4j] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33411) ([f20b267](https://github.com/bitnami/charts/commit/f20b26755c4baf3014bf9ff4054e9c00ee20b467)), closes [#33411](https://github.com/bitnami/charts/issues/33411)
+
+## <small>0.4.1 (2025-05-02)</small>
+
+* [bitnami/neo4j] Release 0.4.1 (#33307) ([e1f95c2](https://github.com/bitnami/charts/commit/e1f95c2e61edb3ab20146965a5c579f1d56a10eb)), closes [#33307](https://github.com/bitnami/charts/issues/33307)
 
 ## 0.4.0 (2025-04-04)
 

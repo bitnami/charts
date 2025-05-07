@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.1.14 (2025-04-29)
+## 15.1.15 (2025-05-06)
 
-* [bitnami/discourse] Release 15.1.14 ([#33241](https://github.com/bitnami/charts/pull/33241))
+* [bitnami/discourse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33352](https://github.com/bitnami/charts/pull/33352))
 
 ## <small>15.1.13 (2025-04-09)</small>
 

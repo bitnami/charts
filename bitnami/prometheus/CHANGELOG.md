@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.0.2 (2025-05-02)
+## 2.0.3 (2025-05-06)
 
-* [bitnami/prometheus] Release 2.0.2 ([#33312](https://github.com/bitnami/charts/pull/33312))
+* [bitnami/prometheus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33424](https://github.com/bitnami/charts/pull/33424))
+
+## <small>2.0.2 (2025-05-02)</small>
+
+* [bitnami/prometheus] Release 2.0.0 (#33240) ([123eb4e](https://github.com/bitnami/charts/commit/123eb4e36bb3852dc166ebfa53738cf0be581058)), closes [#33240](https://github.com/bitnami/charts/issues/33240)
+* [bitnami/prometheus] Release 2.0.1 (#33311) ([4e0c474](https://github.com/bitnami/charts/commit/4e0c474059d9f1ee163f9e315df0874978c9768e)), closes [#33311](https://github.com/bitnami/charts/issues/33311)
+* [bitnami/prometheus] Release 2.0.2 (#33312) ([a62fc07](https://github.com/bitnami/charts/commit/a62fc075b2e7428c8624cf2725180deeef12099a)), closes [#33312](https://github.com/bitnami/charts/issues/33312)
 
 ## <small>1.4.10 (2025-04-02)</small>
 

@@ -37,4 +37,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
 - https://github.com/prometheus/prometheus
 - https://github.com/prometheus-community/helm-charts
-version: 2.0.2
+version: 2.0.3

@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.6.2 (2025-05-06)
+## 9.6.3 (2025-05-07)
 
 * [bitnami/solr] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33435](https://github.com/bitnami/charts/pull/33435))
+
+## 9.6.2 (2025-05-05)
+
+* [bitnami/solr] Add persistentvolumeclaim retention on solr statefulset ([#33310](https://github.com/bitnami/charts/pull/33310))
 
 ## <small>9.6.1 (2025-04-09)</small>
 
