@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.7 (2025-05-06)
+## 9.3.7 (2025-05-07)
 
 * [bitnami/matomo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33396](https://github.com/bitnami/charts/pull/33396))
 
