@@ -39,6 +39,7 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetCPU }}
+    {{- end }}
     {{- if .Values.autoscaling.targetMemory }}
     - type: Resource
       resource:
@@ -46,4 +47,5 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetMemory  }}
+    {{- end }}
 {{- end }}
