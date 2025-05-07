@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.5.3 (2025-04-24)
+## 20.5.4 (2025-05-06)
 
-* adds spec.terminationGracePeriodSeconds to mariadb ([#33168](https://github.com/bitnami/charts/pull/33168))
+* [bitnami/mariadb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33393](https://github.com/bitnami/charts/pull/33393))
+
+## <small>20.5.3 (2025-04-25)</small>
+
+* [bitnami/mariadb] adds spec.terminationGracePeriodSeconds to mariadb (#33168) ([22790f0](https://github.com/bitnami/charts/commit/22790f0378d4baa0362b69ba1e011c2a045aabbc)), closes [#33168](https://github.com/bitnami/charts/issues/33168)
 
 ## <small>20.4.3 (2025-04-20)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.3 (2025-04-24)
+## 8.1.4 (2025-05-06)
 
-* [bitnami/sonarqube] Increase password length to minimum 12 characters ([#33160](https://github.com/bitnami/charts/pull/33160))
+* [bitnami/sonarqube] Release 8.1.4 ([#33457](https://github.com/bitnami/charts/pull/33457))
+
+## <small>8.1.3 (2025-04-30)</small>
+
+* [bitnami/sonarqube] Increase password length to minimum 12 characters (#33160) ([c1acb5e](https://github.com/bitnami/charts/commit/c1acb5ea46e87991d8847ee178e45cb954c62db4)), closes [#33160](https://github.com/bitnami/charts/issues/33160)
 
 ## <small>8.1.2 (2025-04-09)</small>
 

@@ -1,9 +1,5 @@
 # Changelog
 
-## 20.13.5 (2025-05-06)
-
-* [bitnami/redis] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33428](https://github.com/bitnami/charts/pull/33428))
-
 ## <small>20.13.4 (2025-04-30)</small>
 
 * [bitnami/redis] Release 20.13.3 (#33217) ([f2b8c65](https://github.com/bitnami/charts/commit/f2b8c6511d38015371555fefb53aaca189c8c2de)), closes [#33217](https://github.com/bitnami/charts/issues/33217)
