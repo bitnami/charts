@@ -83,12 +83,15 @@ data:
       sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
     {{- end }}
     {{- if .Values.auth.acl.sentinel }}
-    {{- range .Values.auth.acl.users }}
+    {{- $userSecret := .Values.auth.acl.userSecret -}}
     # Sentinel ACL configuration, only for users with password
-    {{ if .password }}
-    user {{ .username }} {{ default "on" .enabled }} {{ if .password }}#{{ sha256sum .password }}{{ else }}nopass{{ end }} ~* &* +@all
+    {{- range .Values.auth.acl.users }}
+    {{- $userPassword := .password | default "" }}
+    {{- $secretPassword := (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $))}}
+    {{ if or $userPassword $secretPassword }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else }}#{{ sha256sum $userPassword }}{{ end }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
-    sentinel sentinel-pass {{ .password }} 
+    sentinel sentinel-pass {{ if $secretPassword }}{{ $secretPassword }}{{ else }}{{ $userPassword }}{{ end }}
     {{- end }}
     {{- end }}
     {{- end }}
