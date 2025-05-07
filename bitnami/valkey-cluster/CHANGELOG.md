@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.4 (2025-04-29)
+## 3.0.5 (2025-05-06)
 
-* [bitnami/valkey-cluster] only use password files if auth is enabled ([#33239](https://github.com/bitnami/charts/pull/33239))
+* [bitnami/valkey-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33444](https://github.com/bitnami/charts/pull/33444))
+
+## <small>3.0.4 (2025-05-05)</small>
+
+* [bitnami/valkey-cluster] only use password files if auth is enabled (#33239) ([ce60ab6](https://github.com/bitnami/charts/commit/ce60ab65a82c5429d488eaf9fdb805915fd4af0a)), closes [#33239](https://github.com/bitnami/charts/issues/33239)
 
 ## <small>3.0.3 (2025-04-23)</small>
 
