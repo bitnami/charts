@@ -1,8 +1,16 @@
 # Changelog
 
-## 22.2.14 (2025-04-18)
+## 22.2.16 (2025-05-06)
 
-* [bitnami/ghost] Release 22.2.14 ([#33074](https://github.com/bitnami/charts/pull/33074))
+* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33364](https://github.com/bitnami/charts/pull/33364))
+
+## <small>22.2.15 (2025-04-25)</small>
+
+* [bitnami/ghost] Release 22.2.15 (#33187) ([019ff0a](https://github.com/bitnami/charts/commit/019ff0ab43d28fe671817c899857fef90b48c746)), closes [#33187](https://github.com/bitnami/charts/issues/33187)
+
+## <small>22.2.14 (2025-04-18)</small>
+
+* [bitnami/ghost] Release 22.2.14 (#33074) ([5213e1c](https://github.com/bitnami/charts/commit/5213e1c5c2ce00d1adb367000bc8e06323b67c8f)), closes [#33074](https://github.com/bitnami/charts/issues/33074)
 
 ## <small>22.2.13 (2025-04-15)</small>
 

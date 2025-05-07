@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.8.1 (2025-04-18)
+## 7.8.2 (2025-05-06)
 
-* [bitnami/memcached] Release 7.8.1 ([#33078](https://github.com/bitnami/charts/pull/33078))
+* [bitnami/memcached] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33397](https://github.com/bitnami/charts/pull/33397))
+
+## <small>7.8.1 (2025-04-18)</small>
+
+* [bitnami/memcached] Release 7.8.1 (#33078) ([658218b](https://github.com/bitnami/charts/commit/658218b21d9c670c31a1002a729755515067de5c)), closes [#33078](https://github.com/bitnami/charts/issues/33078)
 
 ## 7.8.0 (2025-03-31)
 

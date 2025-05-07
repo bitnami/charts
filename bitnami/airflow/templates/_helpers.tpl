@@ -352,6 +352,10 @@ Add environment variables to configure airflow common values
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+- name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-jwt-secret-key"
+{{- end }}
 {{- else }}
 - name: AIRFLOW__CORE__FERNET_KEY
   valueFrom:
@@ -363,6 +367,13 @@ Add environment variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-secret-key
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+- name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.secretName" . }}
+      key: airflow-jwt-secret-key
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -386,7 +397,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- $host := default (include "airflow.serviceIP" .) .Values.web.baseUrl -}}
 {{- $port := printf ":%d" (int .Values.service.ports.http) -}}
 {{- $schema := ternary "https://" "http://" (or .Values.web.tls.enabled (and .Values.ingress.enabled .Values.ingress.tls)) -}}
-{{- if regexMatch "^https?://" .Values.web.baseUrl -}}
+{{- if and (regexMatch "^https?://" .Values.web.baseUrl) (not .Values.ingress.enabled) -}}
   {{- $schema = "" -}}
 {{- end -}}
 {{- if or (regexMatch ":\\d+$" .Values.web.baseUrl) (eq $port ":80") (eq $port ":443") -}}
@@ -394,6 +405,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- end -}}
 {{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
   {{- $host = .Values.ingress.hostname -}}
+  {{- $port = "" -}}
 {{- end -}}
 {{- printf "%s%s%s" $schema $host $port -}}
 {{- end -}}
@@ -515,4 +527,37 @@ Ref: https://github.com/bitnami/charts/pull/6096#issuecomment-856499047
 */}}
 {{- define "airflow.worker.executor" -}}
 {{- print (ternary "CeleryExecutor" .Values.executor (eq .Values.executor "CeleryKubernetesExecutor")) -}}
+{{- end -}}
+
+{{/*
+Validates a semver constraint
+*/}}
+{{- define "airflow.semverCondition" -}}
+{{- $constraint := .constraint -}}
+{{- $imageVersion := (.imageVersion | toString) -}}
+
+{{/* tag 'latest' is an special case, where we fall to .Chart.AppVersion value */}}
+{{- if eq "latest" $imageVersion -}}
+{{- $imageVersion = .context.Chart.AppVersion -}}
+{{- else -}}
+{{- $imageVersion = (index (splitList "-" $imageVersion) 0 ) -}}
+{{- end -}}
+
+{{- if semverCompare $constraint $imageVersion -}}
+true
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validates the image tag version is equal or higher than 3.0.0
+*/}}
+{{- define "airflow.isImageMajorVersion3" -}}
+{{- include "airflow.semverCondition" (dict "constraint" "^3" "imageVersion" .Values.image.tag "context" $) -}}
+{{- end -}}
+
+{{/*
+Validates the image tag version is equal or higher than 2.0.0
+*/}}
+{{- define "airflow.isImageMajorVersion2" -}}
+{{- include "airflow.semverCondition" (dict "constraint" "^2" "imageVersion" .Values.image.tag "context" $) -}}
 {{- end -}}

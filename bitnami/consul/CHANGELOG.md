@@ -1,8 +1,32 @@
 # Changelog
 
-## 11.4.11 (2025-04-01)
+## 11.4.17 (2025-05-07)
 
-* [bitnami/consul] Release 11.4.11 ([#32726](https://github.com/bitnami/charts/pull/32726))
+* [bitnami/consul] Release 11.4.17 ([#33474](https://github.com/bitnami/charts/pull/33474))
+
+## <small>11.4.16 (2025-05-06)</small>
+
+* [bitnami/consul] Release 11.4.16 (#33462) ([d27763a](https://github.com/bitnami/charts/commit/d27763a49e4f586aae2f81c7e44784b5a1f03e50)), closes [#33462](https://github.com/bitnami/charts/issues/33462)
+
+## <small>11.4.15 (2025-05-06)</small>
+
+* [bitnami/consul] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33349) ([059f766](https://github.com/bitnami/charts/commit/059f76645d06e7d7af07fb2d7fe7fabfc5b35ec2)), closes [#33349](https://github.com/bitnami/charts/issues/33349)
+
+## <small>11.4.14 (2025-04-30)</small>
+
+* [bitnami/consul] Fix mismatched serfLAN and serfWAN ports in consul-headless-service (#33114) ([9447571](https://github.com/bitnami/charts/commit/944757190dadada96f0eb7c86f745d6df7283ea0)), closes [#33114](https://github.com/bitnami/charts/issues/33114)
+
+## <small>11.4.13 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.13 (#33201) ([d1dbafc](https://github.com/bitnami/charts/commit/d1dbafc7ad5581e5d9f2b6a4387980272f996115)), closes [#33201](https://github.com/bitnami/charts/issues/33201)
+
+## <small>11.4.12 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.12 (#33200) ([0507ec6](https://github.com/bitnami/charts/commit/0507ec6480cbc335c2576f86f1478f871d5b571a)), closes [#33200](https://github.com/bitnami/charts/issues/33200)
+
+## <small>11.4.11 (2025-04-01)</small>
+
+* [bitnami/consul] Release 11.4.11 (#32726) ([754755d](https://github.com/bitnami/charts/commit/754755d846dc4e1d00f848a0f6db4fe7852781d3)), closes [#32726](https://github.com/bitnami/charts/issues/32726)
 
 ## <small>11.4.10 (2025-03-12)</small>
 

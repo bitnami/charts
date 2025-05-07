@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.1.5 (2025-04-16)
+## 0.1.8 (2025-05-06)
 
-* [bitnami/clickhouse-operator] docs: improve examples on READMEs ([#33020](https://github.com/bitnami/charts/pull/33020))
+* [bitnami/clickhouse-operator] Release 0.1.8 ([#33470](https://github.com/bitnami/charts/pull/33470))
+
+## <small>0.1.7 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 refere ([6e26520](https://github.com/bitnami/charts/commit/6e265202caf4130181697af3fc28ae680a786e4f)), closes [#33346](https://github.com/bitnami/charts/issues/33346)
+
+## <small>0.1.6 (2025-04-29)</small>
+
+* [bitnami/clickhouse-operator] fix: :bug: Change default operator user (#33247) ([f46836c](https://github.com/bitnami/charts/commit/f46836c1d5afef413e950e731d55cb4a445d4f50)), closes [#33247](https://github.com/bitnami/charts/issues/33247)
+
+## <small>0.1.5 (2025-04-16)</small>
+
+* [bitnami/clickhouse-operator] docs: improve examples on READMEs (#33020) ([c2c81e8](https://github.com/bitnami/charts/commit/c2c81e8b6fd7b2c3b23ac09cafca7dc5d07f6969)), closes [#33020](https://github.com/bitnami/charts/issues/33020)
 
 ## <small>0.1.4 (2025-04-09)</small>
 

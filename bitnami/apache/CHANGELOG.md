@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.3.5 (2025-03-27)
+## 11.3.7 (2025-05-06)
 
-* [bitnami/apache] Release 11.3.5 ([#32652](https://github.com/bitnami/charts/pull/32652))
+* [bitnami/apache] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33334](https://github.com/bitnami/charts/pull/33334))
+
+## <small>11.3.6 (2025-04-26)</small>
+
+* [bitnami/apache] Release 11.3.6 (#33193) ([14cff54](https://github.com/bitnami/charts/commit/14cff541b7e03af1d3a69772c294f5c9728ac0d3)), closes [#33193](https://github.com/bitnami/charts/issues/33193)
+
+## <small>11.3.5 (2025-03-27)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/apache] Release 11.3.5 (#32652) ([ad8e2b3](https://github.com/bitnami/charts/commit/ad8e2b369e3b53eb30374b71d25c4d44268b7b27)), closes [#32652](https://github.com/bitnami/charts/issues/32652)
 
 ## <small>11.3.4 (2025-02-25)</small>
 

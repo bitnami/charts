@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.0.2 (2025-05-06)
+
+* [bitnami/dremio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33353](https://github.com/bitnami/charts/pull/33353))
+
+## <small>1.0.1 (2025-04-25)</small>
+
+* [bitnami/dremio] Release 1.0.1 (#33188) ([5c6123d](https://github.com/bitnami/charts/commit/5c6123db2f98118b67c1fa1e3f42f76c1917efa4)), closes [#33188](https://github.com/bitnami/charts/issues/33188)
+
 ## 1.0.0 (2025-04-01)
 
-* [bitnami/dremio] Bump MinIO major version 16.x.x ([#32698](https://github.com/bitnami/charts/pull/32698))
+* [bitnami/dremio] Bump MinIO major version 16.x.x (#32698) ([371ddca](https://github.com/bitnami/charts/commit/371ddcabf6c8be0b2cd6d90c340aa264682ba405)), closes [#32698](https://github.com/bitnami/charts/issues/32698)
 
 ## <small>0.6.3 (2025-03-26)</small>
 

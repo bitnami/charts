@@ -254,7 +254,7 @@ memoryHighWatermark:
   ## Memory high watermark value.
   ## @param memoryHighWatermark.value Memory high watermark value
   ## The default value of 0.4 stands for 40% of available RAM
-  ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
+  ## Note: the memory relative limit is applied to the resourcesPreset memory limit or the resource.limits.memory to calculate the memory threshold
   ## You can also use an absolute value, e.g.: 256Mi
   ##
   value: 0.4

@@ -1,8 +1,20 @@
 # Changelog
 
-## 3.5.0 (2025-04-08)
+## 3.5.3 (2025-05-07)
 
-* [bitnami/kubernetes-event-exporter] Add clusterName config setting to values ([#32852](https://github.com/bitnami/charts/pull/32852))
+* [bitnami/kubernetes-event-exporter] Release 3.5.3 ([#33484](https://github.com/bitnami/charts/pull/33484))
+
+## <small>3.5.2 (2025-05-06)</small>
+
+* [bitnami/kubernetes-event-exporter] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23  ([e95d150](https://github.com/bitnami/charts/commit/e95d15019116d3f6a08913d0bbb664369eece12d)), closes [#33391](https://github.com/bitnami/charts/issues/33391)
+
+## <small>3.5.1 (2025-05-01)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.5.1 (#33293) ([18969d9](https://github.com/bitnami/charts/commit/18969d97dd900f78bdd004b774954dbc65c5e09c)), closes [#33293](https://github.com/bitnami/charts/issues/33293)
+
+## 3.5.0 (2025-04-16)
+
+* [bitnami/kubernetes-event-exporter] Add clusterName config setting to values (#32852) ([d04b96f](https://github.com/bitnami/charts/commit/d04b96f2655d9cef448f299bdca0ab6cd1b6950f)), closes [#32852](https://github.com/bitnami/charts/issues/32852)
 
 ## <small>3.4.5 (2025-04-01)</small>
 

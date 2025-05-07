@@ -1,8 +1,17 @@
 # Changelog
 
-## 14.2.2 (2025-04-01)
+## 14.2.4 (2025-05-06)
 
-* [bitnami/mariadb-galera] Release 14.2.2 ([#32712](https://github.com/bitnami/charts/pull/32712))
+* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33394](https://github.com/bitnami/charts/pull/33394))
+
+## <small>14.2.3 (2025-05-01)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.3 (#33284) ([66b41fa](https://github.com/bitnami/charts/commit/66b41fa1e056bf0b065100045888bffe7c3026d0)), closes [#33284](https://github.com/bitnami/charts/issues/33284)
+
+## <small>14.2.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mariadb-galera] Release 14.2.2 (#32712) ([325f550](https://github.com/bitnami/charts/commit/325f550908ee29765e2d8b22fcd1aa600d8ae7f0)), closes [#32712](https://github.com/bitnami/charts/issues/32712)
 
 ## <small>14.2.1 (2025-03-02)</small>
 

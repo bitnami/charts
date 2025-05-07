@@ -110,12 +110,12 @@ The order in which this function returns a secret password:
 {{- end }}
 
 {{- if and $providedPasswordValue .honorProvidedValues }}
-  {{- $password = $providedPasswordValue | toString }}
+  {{- $password = tpl ($providedPasswordValue | toString) .context }}
 {{- end }}
 
 {{- if not $password }}
   {{- if $providedPasswordValue }}
-    {{- $password = $providedPasswordValue | toString }}
+    {{- $password = tpl ($providedPasswordValue | toString) .context }}
   {{- else }}
     {{- if .context.Values.enabled }}
       {{- $subchart = $chartName }}

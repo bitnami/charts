@@ -1,8 +1,16 @@
 # Changelog
 
-## 25.2.2 (2025-04-16)
+## 26.0.1 (2025-05-06)
 
-* [bitnami/moodle] Release 25.2.2 ([#33042](https://github.com/bitnami/charts/pull/33042))
+* [bitnami/moodle] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33407](https://github.com/bitnami/charts/pull/33407))
+
+## 26.0.0 (2025-04-30)
+
+* [bitnami/moodle] Release 26.0.0 (#33267) ([e83e3be](https://github.com/bitnami/charts/commit/e83e3be7a4c094947e7b1012d828e157c92c6bc5)), closes [#33267](https://github.com/bitnami/charts/issues/33267)
+
+## <small>25.2.2 (2025-04-16)</small>
+
+* [bitnami/moodle] Release 25.2.2 (#33042) ([c59ae4e](https://github.com/bitnami/charts/commit/c59ae4e423d0179cd00bb5cf8872fcf09698dd9c)), closes [#33042](https://github.com/bitnami/charts/issues/33042)
 
 ## <small>25.2.1 (2025-04-16)</small>
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.0.4 (2025-04-29)
+## 9.0.6 (2025-05-06)
 
-* [jupyterhub] Fix singleuser image pull secrets ([#33176](https://github.com/bitnami/charts/pull/33176))
+* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33378](https://github.com/bitnami/charts/pull/33378))
+
+## <small>9.0.5 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.5 (#33304) ([18bc5da](https://github.com/bitnami/charts/commit/18bc5da4bfc5c0b02874b4c13b4f226a00759608)), closes [#33304](https://github.com/bitnami/charts/issues/33304)
+
+## <small>9.0.4 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.4 (#33303) ([5972ed9](https://github.com/bitnami/charts/commit/5972ed96a412ee74df71bc10c7418276744ef6cd)), closes [#33303](https://github.com/bitnami/charts/issues/33303)
 
 ## <small>9.0.3 (2025-04-16)</small>
 

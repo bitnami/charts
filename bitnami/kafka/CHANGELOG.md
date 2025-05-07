@@ -1,8 +1,16 @@
 # Changelog
 
-## 32.2.1 (2025-04-24)
+## 32.2.3 (2025-05-06)
 
-* [bitnami/kafka] Release 32.2.1 ([#33159](https://github.com/bitnami/charts/pull/33159))
+* [bitnami/kafka] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33379](https://github.com/bitnami/charts/pull/33379))
+
+## <small>32.2.2 (2025-04-28)</small>
+
+* [bitnami/kafka] Release 32.2.2 (#33220) ([172a252](https://github.com/bitnami/charts/commit/172a2520dd4da7c43a2451313db54e649ceabed6)), closes [#33220](https://github.com/bitnami/charts/issues/33220)
+
+## <small>32.2.1 (2025-04-24)</small>
+
+* [bitnami/kafka] Release 32.2.1 (#33159) ([c03b265](https://github.com/bitnami/charts/commit/c03b265fd1dc007f70789f8de1f78adc497273d9)), closes [#33159](https://github.com/bitnami/charts/issues/33159)
 
 ## 32.2.0 (2025-04-15)
 

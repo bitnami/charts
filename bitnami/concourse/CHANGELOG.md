@@ -1,8 +1,24 @@
 # Changelog
 
-## 5.1.24 (2025-04-10)
+## 5.1.28 (2025-05-06)
 
-* [bitnami/concourse] Release 5.1.24 ([#32946](https://github.com/bitnami/charts/pull/32946))
+* [bitnami/concourse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33348](https://github.com/bitnami/charts/pull/33348))
+
+## <small>5.1.27 (2025-05-05)</small>
+
+* [bitnami/concourse] Release 5.1.27 (#33328) ([32a1154](https://github.com/bitnami/charts/commit/32a11548d42e2faa90ca978552d0831c17da3b53)), closes [#33328](https://github.com/bitnami/charts/issues/33328)
+
+## <small>5.1.26 (2025-04-29)</small>
+
+* [bitnami/concourse] Release 5.1.26 (#33252) ([2b044e8](https://github.com/bitnami/charts/commit/2b044e855625a0047c1ebe713bceebb872bffb68)), closes [#33252](https://github.com/bitnami/charts/issues/33252)
+
+## <small>5.1.25 (2025-04-25)</small>
+
+* [bitnami/concourse] Release 5.1.25 (#33183) ([18dd2c0](https://github.com/bitnami/charts/commit/18dd2c0062b99799ec5ebacf10552078ce2ad988)), closes [#33183](https://github.com/bitnami/charts/issues/33183)
+
+## <small>5.1.24 (2025-04-10)</small>
+
+* [bitnami/concourse] Release 5.1.24 (#32946) ([d8ed62a](https://github.com/bitnami/charts/commit/d8ed62a36d73ee04d631da044fe2966c7945c8a5)), closes [#32946](https://github.com/bitnami/charts/issues/32946)
 
 ## <small>5.1.23 (2025-04-09)</small>
 

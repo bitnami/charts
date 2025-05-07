@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.1.5 (2025-04-14)
+## 2.1.9 (2025-05-06)
 
-* [bitnami/cilium] Release 2.1.5 ([#32998](https://github.com/bitnami/charts/pull/32998))
+* [bitnami/cilium] Release 2.1.9 ([#33469](https://github.com/bitnami/charts/pull/33469))
+
+## <small>2.1.8 (2025-05-06)</small>
+
+* [bitnami/cilium] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33344) ([99c4868](https://github.com/bitnami/charts/commit/99c4868670d065b2f42e98abd4d596056b347e3d)), closes [#33344](https://github.com/bitnami/charts/issues/33344)
+
+## <small>2.1.7 (2025-04-25)</small>
+
+* [bitnami/cilium] Release 2.1.7 (#33184) ([9c2f6dd](https://github.com/bitnami/charts/commit/9c2f6dd6fa278be47e52003cc645fb9878b86fe0)), closes [#33184](https://github.com/bitnami/charts/issues/33184)
+
+## <small>2.1.6 (2025-04-25)</small>
+
+* [bitnami/cilium] Release 2.1.6 (#33179) ([6ca5222](https://github.com/bitnami/charts/commit/6ca52227ed9fceff4685f5c28a909dedaa0fd3e6)), closes [#33179](https://github.com/bitnami/charts/issues/33179)
+
+## <small>2.1.5 (2025-04-14)</small>
+
+* [bitnami/cilium] Release 2.1.5 (#32998) ([40b6117](https://github.com/bitnami/charts/commit/40b6117c7bbcbcbe78aad39a184c17471928ba18)), closes [#32998](https://github.com/bitnami/charts/issues/32998)
 
 ## <small>2.1.4 (2025-04-04)</small>
 

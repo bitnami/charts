@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.7.5 (2025-04-18)
+## 1.7.7 (2025-05-06)
 
-* [bitnami/vault] Release 1.7.5 ([#33075](https://github.com/bitnami/charts/pull/33075))
+* [bitnami/vault] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33445](https://github.com/bitnami/charts/pull/33445))
+
+## <small>1.7.6 (2025-04-30)</small>
+
+* [bitnami/vault] Release 1.7.6 (#33273) ([3dfb09f](https://github.com/bitnami/charts/commit/3dfb09f99574b2225d693e2803689186817afb35)), closes [#33273](https://github.com/bitnami/charts/issues/33273)
+
+## <small>1.7.5 (2025-04-18)</small>
+
+* [bitnami/vault] Release 1.7.5 (#33075) ([9dfede7](https://github.com/bitnami/charts/commit/9dfede72bb0df747cf0bb2e3c3db210e4447fe80)), closes [#33075](https://github.com/bitnami/charts/issues/33075)
 
 ## <small>1.7.4 (2025-04-14)</small>
 

@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 2.10.5-debian-12-r11
+  tag: 3.0.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -132,6 +132,10 @@ auth:
   ## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#secret-key
   ##
   secretKey: ""
+  ## @param auth.jwtSecretKey JWT secret key to run your flask app
+  ## ref: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html#secret-key
+  ##
+  jwtSecretKey: ""
   ## @param auth.existingSecret Name of an existing secret to use for Airflow credentials
   ## `auth.password`, `auth.fernetKey`, and `auth.secretKey` will be ignored and picked up from this secret
   ## The secret must contain the keys `airflow-password`, `airflow-fernet-key` and `airflow-secret-key'
@@ -682,6 +686,10 @@ web:
   ## @param web.podAnnotations Add extra annotations to the Airflow webserver pods
   ##
   podAnnotations: {}
+  ## @param web.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param web.affinity Affinity for Airflow webserver pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `web.podAffinityPreset`, `web.podAntiAffinityPreset`, and `web.nodeAffinityPreset` will be ignored when it's set
@@ -1022,6 +1030,10 @@ scheduler:
   ## @param scheduler.podAnnotations Add extra annotations to the Airflow scheduler pods
   ##
   podAnnotations: {}
+  ## @param scheduler.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param scheduler.affinity Affinity for Airflow scheduler pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `scheduler.podAffinityPreset`, `scheduler.podAntiAffinityPreset`, and `scheduler.nodeAffinityPreset` will be ignored when it's set
@@ -1218,7 +1230,7 @@ scheduler:
 dagProcessor:
   ## @param dagProcessor.enabled Run Airflow Dag Processor Manager as a standalone component
   ##
-  enabled: false
+  enabled: true
   ## @param dagProcessor.replicaCount Number of Airflow Dag Processor replicas
   ##
   replicaCount: 1
@@ -1363,6 +1375,10 @@ dagProcessor:
   ## @param dagProcessor.podAnnotations Add extra annotations to the Airflow Dag Processor pods
   ##
   podAnnotations: {}
+  ## @param dagProcessor.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param dagProcessor.affinity Affinity for Airflow Dag Processor pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `dagProcessor.podAffinityPreset`, `dagProcessor.podAntiAffinityPreset`, and `dagProcessor.nodeAffinityPreset` will be ignored when it's set
@@ -1559,7 +1575,7 @@ dagProcessor:
 triggerer:
   ## @param triggerer.enabled Run Airflow Triggerer as a standalone component
   ##
-  enabled: false
+  enabled: true
   ## @param triggerer.defaultCapacity How many triggers a single Triggerer can run at once
   ##
   defaultCapacity: 1000
@@ -1711,6 +1727,10 @@ triggerer:
   ## @param triggerer.podAnnotations Add extra annotations to the Airflow Triggerer pods
   ##
   podAnnotations: {}
+  ## @param triggerer.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param triggerer.affinity Affinity for Airflow Triggerer pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `triggerer.podAffinityPreset`, `triggerer.podAntiAffinityPreset`, and `triggerer.nodeAffinityPreset` will be ignored when it's set
@@ -2161,6 +2181,10 @@ worker:
   ## @param worker.podAnnotations Add extra annotations to the Airflow worker pods
   ##
   podAnnotations: {}
+  ## @param worker.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param worker.affinity Affinity for Airflow worker pods assignment (evaluated as a template)
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: `worker.podAffinityPreset`, `worker.podAntiAffinityPreset`, and `worker.nodeAffinityPreset` will be ignored when it's set
@@ -2439,10 +2463,10 @@ setupDBJob:
   extraEnvVarsSecret: ""
   ## Airflow "setup-db" job's container resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
+  ## @param setupDBJob.resourcesPreset Set Airflow "setup-db" job's container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if setupDBJob.resources is set (setupDBJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "micro"
+  resourcesPreset: "small"
   ## @param setupDBJob.resources Set Airflow "setup-db" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## E.g:
   ## resources:
@@ -2472,6 +2496,65 @@ setupDBJob:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param setupDBJob.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
+  ## @param setupDBJob.affinity Affinity for Airflow setup-db pods assignment (evaluated as a template)
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: `setupDBJob.podAffinityPreset`, `setupDBJob.podAntiAffinityPreset`, and `setupDBJob.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## Node affinity preset
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ## @param setupDBJob.nodeAffinityPreset.key Node label key to match. Ignored if `setupDBJob.affinity` is set.
+  ## @param setupDBJob.nodeAffinityPreset.type Node affinity preset type. Ignored if `setupDBJob.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param setupDBJob.nodeAffinityPreset.values Node label values to match. Ignored if `setupDBJob.affinity` is set.
+  ##
+  nodeAffinityPreset:
+    ## e.g:
+    ## key: "kubernetes.io/e2e-az-name"
+    ##
+    key: ""
+    type: ""
+    ## e.g:
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param setupDBJob.nodeSelector Node labels for Airflow setup-db pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param setupDBJob.podAffinityPreset Pod affinity preset. Ignored if `setupDBJob.affinity` is set. Allowed values: `soft` or `hard`.
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param setupDBJob.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `setupDBJob.affinity` is set. Allowed values: `soft` or `hard`.
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## @param setupDBJob.tolerations Tolerations for Airflow setup-db pods assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param setupDBJob.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param setupDBJob.priorityClassName Priority Class Name
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  ##
+  priorityClassName: ""
+  ## @param setupDBJob.schedulerName Use an alternate scheduler, e.g. "stork".
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param setupDBJob.terminationGracePeriodSeconds Seconds Airflow setup-db pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param setupDBJob.extraVolumes Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods
   ##
   extraVolumes: []
@@ -2904,6 +2987,10 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param metrics.topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
+  ## i.e. topologyKey: topology.kubernetes.io/zone
+  ##
+  topologyKey: ""
   ## @param metrics.podAffinityPreset Pod affinity preset. Ignored if `metrics.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -3104,7 +3191,7 @@ postgresql:
   primary:
     ## PostgreSQL Primary resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
