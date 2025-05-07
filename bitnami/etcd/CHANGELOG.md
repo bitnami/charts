@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.2 (2025-05-06)
+## 11.3.2 (2025-05-07)
 
 * [bitnami/etcd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33358](https://github.com/bitnami/charts/pull/33358))
 
