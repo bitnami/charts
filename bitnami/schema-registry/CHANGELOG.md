@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.1.3 (2025-05-06)
+## 25.1.3 (2025-05-07)
 
 * [bitnami/schema-registry] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33431](https://github.com/bitnami/charts/pull/33431))
 
