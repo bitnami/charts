@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.6 (2025-05-06)
+## 4.8.7 (2025-05-07)
 
-* [bitnami/grafana-loki] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33368](https://github.com/bitnami/charts/pull/33368))
+* [bitnami/grafana-loki] Release 4.8.7 ([#33476](https://github.com/bitnami/charts/pull/33476))
+
+## <small>4.8.6 (2025-05-06)</small>
+
+* [bitnami/grafana-loki] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([e2d7ad4](https://github.com/bitnami/charts/commit/e2d7ad49b2ab3ea1d1ed85d8fdae1e8492216308)), closes [#33368](https://github.com/bitnami/charts/issues/33368)
 
 ## <small>4.8.5 (2025-04-30)</small>
 
