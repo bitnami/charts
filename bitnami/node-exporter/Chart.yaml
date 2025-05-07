@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: node-exporter
-      image: docker.io/bitnami/node-exporter:1.9.1-debian-12-r4
+      image: docker.io/bitnami/node-exporter:1.9.1-debian-12-r5
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 1.9.1
 dependencies:
@@ -16,7 +16,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
+description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels,
+  with pluggable metric collectors.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
@@ -29,4 +30,4 @@ maintainers:
 name: node-exporter
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 4.5.12
+version: 4.5.13
