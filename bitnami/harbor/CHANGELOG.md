@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.6.1 (2025-04-28)
+## 25.0.1 (2025-05-06)
 
-* [bitnami/harbor] Release 24.6.1 ([#33209](https://github.com/bitnami/charts/pull/33209))
+* [bitnami/harbor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33373](https://github.com/bitnami/charts/pull/33373))
+
+## 25.0.0 (2025-04-29)
+
+* [bitnami/harbor] Major 25.0.0: Upgrade PostgreSQL to 17.x.x (#33242) ([461f94e](https://github.com/bitnami/charts/commit/461f94ef15ab2530b1b370f5ca0dd2f5f2a4a894)), closes [#33242](https://github.com/bitnami/charts/issues/33242)
+
+## <small>24.6.1 (2025-04-28)</small>
+
+* [bitnami/harbor] Release 24.6.1 (#33209) ([57c27d4](https://github.com/bitnami/charts/commit/57c27d473c55998289d776a9834fd0adf9effb3c)), closes [#33209](https://github.com/bitnami/charts/issues/33209)
 
 ## 24.6.0 (2025-04-15)
 

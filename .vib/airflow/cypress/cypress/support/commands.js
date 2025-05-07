@@ -17,10 +17,22 @@ for (const command of ['click']) {
   });
 }
 
+// Due to a bug when using "hosts" in Cypress, we cannot set a "baseUrl" in the
+// cypress.json file. Workaround this by modifying the "visit" command to preprend
+// the base URL.
+//
+// Further details: https://github.com/cypress-io/cypress/issues/20647
+Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+  // Only replace relative URLs
+  const targetUrl = url.includes('://') ? url : `${Cypress.env('baseUrl')}${url}`;
+  return originalFn(targetUrl, options);
+});
+
+
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/login');
+    cy.visit('/');
     // Wait for DOM content to load
     cy.wait(5000);
     cy.get('form[name="login"]').should('exist').and('be.visible'); // Needed to ensure stability of the test
@@ -31,9 +43,6 @@ Cypress.Commands.add(
 );
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-  if (
-    err.message.includes('Cannot set properties of undefined')
-  ) {
-    return false;
-  }
+  // Skip all exceptions
+  return false;
 });

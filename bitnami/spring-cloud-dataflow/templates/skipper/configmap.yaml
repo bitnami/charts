@@ -117,12 +117,10 @@ data:
                     {{- if .Values.deployer.imagePullPolicy }}
                     imagePullPolicy: {{ .Values.deployer.imagePullPolicy }}
                     {{- end }}
-      {{- if .Values.externalDatabase.hibernateDialect }}
       jpa:
         properties:
           hibernate:
-            dialect: {{- printf "%s" .Values.externalDatabase.hibernateDialect -}}
-      {{- end }}
+            dialect: {{ include "scdf.database.dialect" . }}
       datasource:
         url: '{{ include "scdf.database.skipper.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}

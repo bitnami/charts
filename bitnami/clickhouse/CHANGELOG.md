@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.2.1 (2025-05-01)
+
+* [bitnami/clickhouse] Release 9.2.1 ([#33281](https://github.com/bitnami/charts/pull/33281))
+
 ## 9.2.0 (2025-04-24)
 
-* [bitnami/clickhouse] feat: add TLS support for communications with Keeper ([#33158](https://github.com/bitnami/charts/pull/33158))
+* [bitnami/clickhouse] feat: add TLS support for communications with Keeper (#33158) ([9cb93de](https://github.com/bitnami/charts/commit/9cb93de6a93117b06cc3644ef277cc496081ddb9)), closes [#33158](https://github.com/bitnami/charts/issues/33158)
 
 ## <small>9.1.3 (2025-04-23)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.0.2 (2025-04-24)
+## 3.0.6 (2025-05-06)
 
-* [bitnami/mlflow] Release 3.0.2 ([#33164](https://github.com/bitnami/charts/pull/33164))
+* [bitnami/mlflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33404](https://github.com/bitnami/charts/pull/33404))
+
+## <small>3.0.5 (2025-05-02)</small>
+
+* [bitnami/mlflow] Release 3.0.5 (#33309) ([dbb7a86](https://github.com/bitnami/charts/commit/dbb7a86bddd464ff476173a8c9f55bebd9c70db9)), closes [#33309](https://github.com/bitnami/charts/issues/33309)
+
+## <small>3.0.4 (2025-05-02)</small>
+
+* [bitnami/mlflow] Release 3.0.4 (#33306) ([53bbbf2](https://github.com/bitnami/charts/commit/53bbbf2307f338fd3fe4d7929a3db78b35f5c494)), closes [#33306](https://github.com/bitnami/charts/issues/33306)
+
+## <small>3.0.3 (2025-04-29)</small>
+
+* Fix syntax (parameter order) for flaskServerSecretKey in template (#33248) ([5397041](https://github.com/bitnami/charts/commit/5397041481d28c64eb3ff5db6d3bc81441436236)), closes [#33248](https://github.com/bitnami/charts/issues/33248)
+
+## <small>3.0.2 (2025-04-24)</small>
+
+* [bitnami/mlflow] Release 3.0.2 (#33164) ([c4882c1](https://github.com/bitnami/charts/commit/c4882c117384e928e47c50113acc3c52511153c0)), closes [#33164](https://github.com/bitnami/charts/issues/33164)
 
 ## <small>3.0.1 (2025-04-09)</small>
 

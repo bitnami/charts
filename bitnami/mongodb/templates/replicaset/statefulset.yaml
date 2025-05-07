@@ -579,9 +579,7 @@ spec:
     whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
+    - metadata:
         name: datadir
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}

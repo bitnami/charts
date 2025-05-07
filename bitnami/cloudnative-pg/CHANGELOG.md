@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.1.7 (2025-04-01)
+## 0.1.10 (2025-05-06)
 
-* [bitnami/cloudnative-pg] Release 0.1.7 ([#32723](https://github.com/bitnami/charts/pull/32723))
+* [bitnami/cloudnative-pg] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33347](https://github.com/bitnami/charts/pull/33347))
+
+## <small>0.1.9 (2025-05-01)</small>
+
+* [bitnami/cloudnative-pg] Release 0.1.9 (#33288) ([3f91ddd](https://github.com/bitnami/charts/commit/3f91ddd256a23a12350fe8a8eea7a91dc026bc2a)), closes [#33288](https://github.com/bitnami/charts/issues/33288)
+
+## <small>0.1.8 (2025-04-30)</small>
+
+* [bitnami/cloudnative-pg] fix use Values failed in range method (#33101) ([d10b4af](https://github.com/bitnami/charts/commit/d10b4af2bd4fafbe00bf0e3f3ed0f115e2876cc0)), closes [#33101](https://github.com/bitnami/charts/issues/33101)
+
+## <small>0.1.7 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cloudnative-pg] Release 0.1.7 (#32723) ([5c9af25](https://github.com/bitnami/charts/commit/5c9af25502d10851181a6285e2fc3678892336f5)), closes [#32723](https://github.com/bitnami/charts/issues/32723)
 
 ## <small>0.1.6 (2025-03-05)</small>
 

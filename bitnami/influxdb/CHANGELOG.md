@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.9 (2025-04-23)
+## 6.6.10 (2025-05-06)
 
-*  [bitnami/influxdb] Fix backup functionality, closes bitnami#33110 ([#33111](https://github.com/bitnami/charts/pull/33111))
+* [bitnami/influxdb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33374](https://github.com/bitnami/charts/pull/33374))
+
+## <small>6.6.9 (2025-04-28)</small>
+
+*  [bitnami/influxdb] Fix backup functionality, closes bitnami#33110 (#33111) ([2f8efe4](https://github.com/bitnami/charts/commit/2f8efe49372ea6c45c197154d093f49bcfb3d625)), closes [bitnami#33110](https://github.com/bitnami/issues/33110) [#33111](https://github.com/bitnami/charts/issues/33111) [bitnami#33110](https://github.com/bitnami/issues/33110)
 
 ## <small>6.6.8 (2025-04-22)</small>
 

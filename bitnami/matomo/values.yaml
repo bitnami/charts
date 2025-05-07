@@ -77,7 +77,7 @@ usePasswordFiles: true
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.3.1-debian-12-r4
+  tag: 5.3.2-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -139,7 +139,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 8.0.8-debian-12-r0
+  tag: 8.0.9-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

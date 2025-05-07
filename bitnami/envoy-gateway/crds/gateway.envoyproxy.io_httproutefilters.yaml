@@ -1,0 +1,222 @@
+# Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_httproutefilters.yaml
+# Version: 1.3.2
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.1
+  name: httproutefilters.gateway.envoyproxy.io
+spec:
+  group: gateway.envoyproxy.io
+  names:
+    categories:
+    - envoy-gateway
+    kind: HTTPRouteFilter
+    listKind: HTTPRouteFilterList
+    plural: httproutefilters
+    shortNames:
+    - hrf
+    singular: httproutefilter
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          HTTPRouteFilter is a custom Envoy Gateway HTTPRouteFilter which provides extended
+          traffic processing options such as path regex rewrite, direct response and more.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired state of HTTPRouteFilter.
+            properties:
+              directResponse:
+                description: HTTPDirectResponseFilter defines the configuration to
+                  return a fixed response.
+                properties:
+                  body:
+                    description: Body of the Response
+                    properties:
+                      inline:
+                        description: Inline contains the value as an inline string.
+                        type: string
+                      type:
+                        allOf:
+                        - enum:
+                          - Inline
+                          - ValueRef
+                        - enum:
+                          - Inline
+                          - ValueRef
+                        default: Inline
+                        description: |-
+                          Type is the type of method to use to read the body value.
+                          Valid values are Inline and ValueRef, default is Inline.
+                        type: string
+                      valueRef:
+                        description: |-
+                          ValueRef contains the contents of the body
+                          specified as a local object reference.
+                          Only a reference to ConfigMap is supported.
+
+                          The value of key `response.body` in the ConfigMap will be used as the response body.
+                          If the key is not found, the first value in the ConfigMap will be used.
+                        properties:
+                          group:
+                            description: |-
+                              Group is the group of the referent. For example, "gateway.networking.k8s.io".
+                              When unspecified or empty string, core API group is inferred.
+                            maxLength: 253
+                            pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                            type: string
+                          kind:
+                            description: Kind is kind of the referent. For example
+                              "HTTPRoute" or "Service".
+                            maxLength: 63
+                            minLength: 1
+                            pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                            type: string
+                          name:
+                            description: Name is the name of the referent.
+                            maxLength: 253
+                            minLength: 1
+                            type: string
+                        required:
+                        - group
+                        - kind
+                        - name
+                        type: object
+                    required:
+                    - type
+                    type: object
+                    x-kubernetes-validations:
+                    - message: inline must be set for type Inline
+                      rule: '(!has(self.type) || self.type == ''Inline'')? has(self.inline)
+                        : true'
+                    - message: valueRef must be set for type ValueRef
+                      rule: '(has(self.type) && self.type == ''ValueRef'')? has(self.valueRef)
+                        : true'
+                    - message: only ConfigMap is supported for ValueRef
+                      rule: 'has(self.valueRef) ? self.valueRef.kind == ''ConfigMap''
+                        : true'
+                  contentType:
+                    description: Content Type of the response. This will be set in
+                      the Content-Type header.
+                    type: string
+                  statusCode:
+                    description: |-
+                      Status Code of the HTTP response
+                      If unset, defaults to 200.
+                    type: integer
+                type: object
+              urlRewrite:
+                description: HTTPURLRewriteFilter define rewrites of HTTP URL components
+                  such as path and host
+                properties:
+                  hostname:
+                    description: |-
+                      Hostname is the value to be used to replace the Host header value during
+                      forwarding.
+                    properties:
+                      header:
+                        description: Header is the name of the header whose value
+                          would be used to rewrite the Host header
+                        type: string
+                      type:
+                        description: HTTPPathModifierType defines the type of Hostname
+                          rewrite.
+                        enum:
+                        - Header
+                        - Backend
+                        type: string
+                    required:
+                    - type
+                    type: object
+                    x-kubernetes-validations:
+                    - message: header must be nil if the type is not Header
+                      rule: '!(has(self.header) && self.type != ''Header'')'
+                    - message: header must be specified for Header type
+                      rule: '!(!has(self.header) && self.type == ''Header'')'
+                  path:
+                    description: Path defines a path rewrite.
+                    properties:
+                      replaceRegexMatch:
+                        description: |-
+                          ReplaceRegexMatch defines a path regex rewrite. The path portions matched by the regex pattern are replaced by the defined substitution.
+                          https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto#envoy-v3-api-field-config-route-v3-routeaction-regex-rewrite
+                          Some examples:
+                          (1) replaceRegexMatch:
+                                pattern: ^/service/([^/]+)(/.*)$
+                                substitution: \2/instance/\1
+                              Would transform /service/foo/v1/api into /v1/api/instance/foo.
+                          (2) replaceRegexMatch:
+                                pattern: one
+                                substitution: two
+                              Would transform /xxx/one/yyy/one/zzz into /xxx/two/yyy/two/zzz.
+                          (3) replaceRegexMatch:
+                                pattern: ^(.*?)one(.*)$
+                                substitution: \1two\2
+                              Would transform /xxx/one/yyy/one/zzz into /xxx/two/yyy/one/zzz.
+                          (3) replaceRegexMatch:
+                                pattern: (?i)/xxx/
+                                substitution: /yyy/
+                              Would transform path /aaa/XxX/bbb into /aaa/yyy/bbb (case-insensitive).
+                        properties:
+                          pattern:
+                            description: |-
+                              Pattern matches a regular expression against the value of the HTTP Path.The regex string must
+                              adhere to the syntax documented in https://github.com/google/re2/wiki/Syntax.
+                            minLength: 1
+                            type: string
+                          substitution:
+                            description: |-
+                              Substitution is an expression that replaces the matched portion.The expression may include numbered
+                              capture groups that adhere to syntax documented in https://github.com/google/re2/wiki/Syntax.
+                            type: string
+                        required:
+                        - pattern
+                        - substitution
+                        type: object
+                      type:
+                        description: HTTPPathModifierType defines the type of path
+                          redirect or rewrite.
+                        enum:
+                        - ReplaceRegexMatch
+                        type: string
+                    required:
+                    - type
+                    type: object
+                    x-kubernetes-validations:
+                    - message: If HTTPPathModifier type is ReplaceRegexMatch, replaceRegexMatch
+                        field needs to be set.
+                      rule: 'self.type == ''ReplaceRegexMatch'' ? has(self.replaceRegexMatch)
+                        : !has(self.replaceRegexMatch)'
+                type: object
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources: {}

@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.1.12 (2025-04-28)
+## 11.1.14 (2025-05-06)
 
-* [bitnami/argo-workflows] Release 11.1.12 ([#33230](https://github.com/bitnami/charts/pull/33230))
+* [bitnami/argo-workflows] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33338](https://github.com/bitnami/charts/pull/33338))
+
+## <small>11.1.13 (2025-04-29)</small>
+
+* [bitnami/argo-workflows] Release 11.1.13 (#33251) ([3486155](https://github.com/bitnami/charts/commit/348615503d4c72ad09bc8a1e0ba20db2df83823d)), closes [#33251](https://github.com/bitnami/charts/issues/33251)
+
+## <small>11.1.12 (2025-04-28)</small>
+
+* [bitnami/argo-workflows] Release 11.1.12 (#33230) ([c4f0308](https://github.com/bitnami/charts/commit/c4f03080b936f33da9874043c863ce3817d8df7d)), closes [#33230](https://github.com/bitnami/charts/issues/33230)
 
 ## <small>11.1.11 (2025-04-01)</small>
 
