@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.11 (2025-05-06)
+## 5.2.12 (2025-05-07)
 
-* [bitnami/appsmith] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33336](https://github.com/bitnami/charts/pull/33336))
+* [bitnami/appsmith] Release 5.2.12 ([#33504](https://github.com/bitnami/charts/pull/33504))
+
+## <small>5.2.11 (2025-05-06)</small>
+
+* [bitnami/appsmith] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3333 ([261a251](https://github.com/bitnami/charts/commit/261a2519c584fb942b26ab2dbf5fd230607a9483)), closes [#33336](https://github.com/bitnami/charts/issues/33336)
 
 ## <small>5.2.10 (2025-04-30)</small>
 
