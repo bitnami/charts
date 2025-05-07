@@ -4,9 +4,9 @@
 
 * [bitnami/argo-cd] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33500](https://github.com/bitnami/charts/pull/33500))
 
-## 7.3.8 (2025-05-07)
+## <small>7.3.8 (2025-05-07)</small>
 
-* [bitnami/argo-cd] Release 7.3.8 ([#33506](https://github.com/bitnami/charts/pull/33506))
+* [bitnami/argo-cd] Release 7.3.8 (#33506) ([a6ea6f0](https://github.com/bitnami/charts/commit/a6ea6f0975c92a1430895f5d813ad92dbc20f7f9)), closes [#33506](https://github.com/bitnami/charts/issues/33506)
 
 ## <small>7.3.7 (2025-05-06)</small>
 
