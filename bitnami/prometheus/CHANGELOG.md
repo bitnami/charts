@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.4 (2025-05-07)
+## 2.0.5 (2025-05-08)
 
-* [bitnami/prometheus] Release 2.0.4 ([#33515](https://github.com/bitnami/charts/pull/33515))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#33570](https://github.com/bitnami/charts/pull/33570))
+
+## <small>2.0.4 (2025-05-07)</small>
+
+* [bitnami/prometheus] Release 2.0.4 (#33515) ([39c09bf](https://github.com/bitnami/charts/commit/39c09bf5150bef220d06b059195e16d1b40c65df)), closes [#33515](https://github.com/bitnami/charts/issues/33515)
 
 ## <small>2.0.3 (2025-05-06)</small>
 
