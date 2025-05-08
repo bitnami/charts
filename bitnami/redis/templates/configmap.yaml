@@ -89,9 +89,9 @@ data:
     {{- $userPassword := .password | default "" }}
     {{- $secretPassword := (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $))}}
     {{ if or $userPassword $secretPassword }}
-    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else }}#{{ sha256sum $userPassword }}{{ end }} ~* &* +@all
+    user {{ .username }} {{ default "on" .enabled }} #{{ coalesce $secretPassword $userPassword | sha256sum }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
-    sentinel sentinel-pass {{ if $secretPassword }}{{ $secretPassword }}{{ else }}{{ $userPassword }}{{ end }}
+    sentinel sentinel-pass {{ coalesce $secretPassword $userPassword }}
     {{- end }}
     {{- end }}
     {{- end }}
