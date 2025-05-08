@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.7 (2025-05-06)
+## 18.0.0 (2025-05-07)
 
-* [bitnami/kubeapps] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33389](https://github.com/bitnami/charts/pull/33389))
+* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33503](https://github.com/bitnami/charts/pull/33503))
+
+## <small>17.1.7 (2025-05-06)</small>
+
+* [bitnami/kubeapps] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3338 ([4041a6e](https://github.com/bitnami/charts/commit/4041a6ea2e1c7fac693ce41beb3a0c997725570d)), closes [#33389](https://github.com/bitnami/charts/issues/33389)
 
 ## <small>17.1.6 (2025-04-28)</small>
 

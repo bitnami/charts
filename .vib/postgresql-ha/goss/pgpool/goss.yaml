@@ -1,6 +1,22 @@
 # Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
+file:
+  {{- $srCheckUser := .Vars.pgpool.srCheckUsername }}
+  /opt/bitnami/pgpool/conf/pool_passwd:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - 'postgres'
+      - '{{ $srCheckUser }}'
+  /opt/bitnami/pgpool/conf/pool_hba.conf:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - /host\s+all\s+postgres\s+all\s+scram-sha-256/
+      - /host\s+all\s+{{ $srCheckUser }}\s+all\s+scram-sha-256/
 command:
   check-pool-nodes:
     {{- $pgpool_host := "localhost" }}

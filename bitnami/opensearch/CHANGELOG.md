@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.9.2 (2025-05-06)
+## 1.9.4 (2025-05-08)
 
-* [bitnami/opensearch] Release 1.9.2 ([#33452](https://github.com/bitnami/charts/pull/33452))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#33569](https://github.com/bitnami/charts/pull/33569))
+
+## <small>1.9.3 (2025-05-07)</small>
+
+* [bitnami/opensearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([2cb9aaf](https://github.com/bitnami/charts/commit/2cb9aafb37c4aaf25f34e4bdaf09997c4a4a1899)), closes [#33418](https://github.com/bitnami/charts/issues/33418)
+
+## <small>1.9.2 (2025-05-06)</small>
+
+* [bitnami/opensearch] Release 1.9.2 (#33452) ([e9e4ae7](https://github.com/bitnami/charts/commit/e9e4ae793f095b2ab359a5dce6c2e1567711e71f)), closes [#33452](https://github.com/bitnami/charts/issues/33452)
 
 ## <small>1.9.1 (2025-04-09)</small>
 

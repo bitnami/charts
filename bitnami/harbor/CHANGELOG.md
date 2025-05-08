@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.0.0 (2025-05-07)
+## 26.0.0 (2025-05-08)
 
 * [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33502](https://github.com/bitnami/charts/pull/33502))
+
+## <small>25.0.2 (2025-05-08)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33559](https://github.com/bitnami/charts/pull/33559))
 
 ## <small>25.0.1 (2025-05-06)</small>
 

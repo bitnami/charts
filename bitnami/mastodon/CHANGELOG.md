@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.2 (2025-05-06)
+## 12.0.0 (2025-05-07)
 
-* [bitnami/mastodon] Release 11.0.2 ([#33463](https://github.com/bitnami/charts/pull/33463))
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33505](https://github.com/bitnami/charts/pull/33505))
+
+## <small>11.0.2 (2025-05-06)</small>
+
+* [bitnami/mastodon] Release 11.0.2 (#33463) ([336ac7a](https://github.com/bitnami/charts/commit/336ac7a11f3751e2c1570b084530007e68cc708c)), closes [#33463](https://github.com/bitnami/charts/issues/33463)
 
 ## <small>11.0.1 (2025-05-06)</small>
 

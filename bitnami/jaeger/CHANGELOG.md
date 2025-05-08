@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.1.15 (2025-05-07)
+## 5.1.17 (2025-05-08)
 
-* [bitnami/jaeger] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33375](https://github.com/bitnami/charts/pull/33375))
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#33563](https://github.com/bitnami/charts/pull/33563))
+
+## <small>5.1.16 (2025-05-07)</small>
+
+* [bitnami/jaeger] Release 5.1.16 (#33498) ([6958ffa](https://github.com/bitnami/charts/commit/6958ffa03c00d311c0b6131858903c8016277461)), closes [#33498](https://github.com/bitnami/charts/issues/33498)
+
+## <small>5.1.15 (2025-05-07)</small>
+
+* [bitnami/jaeger] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33375) ([aa10601](https://github.com/bitnami/charts/commit/aa1060191c244c76b538a46e41c9a276c984298b)), closes [#33375](https://github.com/bitnami/charts/issues/33375)
 
 ## <small>5.1.14 (2025-04-15)</small>
 

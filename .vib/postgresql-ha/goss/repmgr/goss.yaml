@@ -11,6 +11,7 @@ command:
   {{- $nodes := .Vars.postgresql.replicaCount }}
   check-repmgr-config:
     {{- $repmgr_password := .Vars.postgresql.repmgrPassword }}
+    {{- $repmgr_passfile := .Vars.postgresql.repmgrPassfilePath }}
     {{- $repmgr_user := .Vars.postgresql.repmgrUsername }}
     {{- $repmgr_database := .Vars.postgresql.repmgrDatabase }}
     {{- $repmgr_port := .Vars.postgresql.containerPorts.postgresql }}
@@ -19,7 +20,7 @@ command:
     exit-status: 0
     stdout:
     - "user={{ $repmgr_user }}"
-    - "password={{ $repmgr_password }}"
+    - "passfile={{ $repmgr_passfile }}"
     - "dbname={{ $repmgr_database }}"
     - "port={{ $repmgr_port }}"
     - "connect_timeout={{ .Vars.postgresql.repmgrConnectTimeout }}"

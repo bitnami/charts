@@ -1,8 +1,8 @@
 <!--- app-name: Bitnami Object Storage based on MinIO&reg; Operator -->
 
-# Bitnami Object Storage based on MinIO(R) Operator
+# Bitnami Object Storage based on MinIO&reg; Operator
 
-MinIO(R) Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO(R) object storage across hybrid cloud infrastructures.
+MinIO&reg; Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO&reg; object storage across hybrid cloud infrastructures.
 
 [Overview of Bitnami Object Storage based on MinIO&reg; Operator](https://min.io/)
 

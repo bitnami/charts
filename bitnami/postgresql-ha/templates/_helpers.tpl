@@ -9,54 +9,26 @@ SPDX-License-Identifier: APACHE-2.0
 Fully qualified app name for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresql" -}}
-{{- if .Values.fullnameOverride -}}
-{{- printf "%s-postgresql" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-postgresql" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-postgresql" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
+{{- printf "%s-postgresql" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Fully qualified app name for Pgpool
+Fully qualified app name for Pgpool-II
 */}}
 {{- define "postgresql-ha.pgpool" -}}
-{{- if .Values.fullnameOverride -}}
-{{- printf "%s-pgpool" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-pgpool" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-pgpool" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
+{{- printf "%s-pgpool" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Fully qualified app name for LDAP
 */}}
 {{- define "postgresql-ha.ldap" -}}
-{{- if .Values.fullnameOverride -}}
-{{- printf "%s-ldap" .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
-{{- if contains $name .Release.Name -}}
-{{- printf "%s-ldap" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s-ldap" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-ldap" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
 
 {{/*
- Create the name of the service account to use
- */}}
+Create the name of the service account to use
+*/}}
 {{- define "postgresql-ha.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
@@ -73,7 +45,7 @@ Return the proper PostgreSQL image name
 {{- end -}}
 
 {{/*
-Return the proper Pgpool image name
+Return the proper Pgpool-II image name
 */}}
 {{- define "postgresql-ha.pgpool.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.pgpool.image "global" .Values.global ) -}}
@@ -104,80 +76,22 @@ Return the proper Docker Image Registry Secret Names
 Return the PostgreSQL username
 */}}
 {{- define "postgresql-ha.postgresqlUsername" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.username -}}
-            {{- .Values.global.postgresql.username -}}
-        {{- else -}}
-            {{- .Values.postgresql.username -}}
-        {{- end -}}
-    {{- else -}}
-        {{- .Values.postgresql.username -}}
-    {{- end -}}
-{{- else -}}
-    {{- .Values.postgresql.username -}}
-{{- end -}}
+{{- coalesce ((.Values.global).postgresql).username .Values.postgresql.username | default "" -}}
 {{- end -}}
 
 {{/*
-Return PostgreSQL postgres user password
+Return the PostgreSQL database to create
 */}}
-{{- define "postgresql-ha.postgresqlPostgresPassword" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.postgresPassword -}}
-            {{- .Values.global.postgresql.postgresPassword -}}
-        {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
-    {{- end -}}
-{{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.postgresql.postgresPassword (empty .Values.postgresql.postgresPassword) -}}
-{{- end -}}
+{{- define "postgresql-ha.postgresqlDatabase" -}}
+{{- coalesce ((.Values.global).postgresql).database .Values.postgresql.database "postgres" -}}
 {{- end -}}
 
 {{/*
 Return true if PostgreSQL postgres user password has been provided
 */}}
 {{- define "postgresql-ha.postgresqlPasswordProvided" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-        {{- if .Values.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.postgresql.postgresPassword -}}
-      {{- true -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the PostgreSQL password
-*/}}
-{{- define "postgresql-ha.postgresqlPassword" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.postgresql }}
-        {{- if .Values.global.postgresql.password }}
-            {{- .Values.global.postgresql.password -}}
-        {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.postgresql.password (empty .Values.postgresql.password) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.postgresql.password (empty .Values.postgresql.password) -}}
-    {{- end -}}
-{{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.postgresql.password (empty .Values.postgresql.password) -}}
+{{- if not (empty (coalesce ((.Values.global).postgresql).postgresPassword .Values.postgresql.postgresPassword) | default "") -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
@@ -185,38 +99,15 @@ Return the PostgreSQL password
 Return the Pgpool Admin username
 */}}
 {{- define "postgresql-ha.pgpoolAdminUsername" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.pgpool -}}
-        {{- if .Values.global.pgpool.adminUsername -}}
-            {{- .Values.global.pgpool.adminUsername -}}
-        {{- else -}}
-            {{- .Values.pgpool.adminUsername -}}
-        {{- end -}}
-    {{- else -}}
-        {{- .Values.pgpool.adminUsername -}}
-    {{- end -}}
-{{- else -}}
-    {{- .Values.pgpool.adminUsername -}}
-{{- end -}}
+{{- coalesce ((.Values.global).pgpool).adminUsername .Values.pgpool.adminUsername | default "" -}}
 {{- end -}}
 
+
 {{/*
-Return the Pgpool Admin password
+Return the Pgpool-II SR Check username
 */}}
-{{- define "postgresql-ha.pgpoolAdminPassword" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.pgpool -}}
-        {{- if .Values.global.pgpool.adminPassword -}}
-            {{- .Values.global.pgpool.adminPassword -}}
-        {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.pgpool.adminPassword (empty .Values.pgpool.adminPassword) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.pgpool.adminPassword (empty .Values.pgpool.adminPassword) -}}
-    {{- end -}}
-{{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.pgpool.adminPassword (empty .Values.pgpool.adminPassword) -}}
-{{- end -}}
+{{- define "postgresql-ha.pgoolSrCheckUsername" -}}
+{{- coalesce ((.Values.global).pgpool).srCheckUsername .Values.pgpool.srCheckUsername | default "" -}}
 {{- end -}}
 
 {{/*
@@ -227,80 +118,17 @@ Get the metrics ConfigMap name.
 {{- end -}}
 
 {{/*
-Return the PostgreSQL database to create
-*/}}
-{{- define "postgresql-ha.postgresqlDatabase" -}}
-{{- $postgresqlDatabase := default "postgres" .Values.postgresql.database -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.database -}}
-            {{- default "postgres" .Values.global.postgresql.database -}}
-        {{- else -}}
-            {{- $postgresqlDatabase -}}
-        {{- end -}}
-    {{- else -}}
-        {{- $postgresqlDatabase -}}
-    {{- end -}}
-{{- else -}}
-    {{- $postgresqlDatabase -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the PostgreSQL repmgr username
+Return the PostgreSQL Repmgr username
 */}}
 {{- define "postgresql-ha.postgresqlRepmgrUsername" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.repmgrUsername -}}
-            {{- .Values.global.postgresql.repmgrUsername -}}
-        {{- else -}}
-            {{- .Values.postgresql.repmgrUsername -}}
-        {{- end -}}
-    {{- else -}}
-        {{- .Values.postgresql.repmgrUsername -}}
-    {{- end -}}
-{{- else -}}
-    {{- .Values.postgresql.repmgrUsername -}}
-{{- end -}}
+{{- coalesce ((.Values.global).postgresql).repmgrUsername .Values.postgresql.repmgrUsername | default "" -}}
 {{- end -}}
 
 {{/*
-Return the PostgreSQL repmgr password
-*/}}
-{{- define "postgresql-ha.postgresqlRepmgrPassword" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.repmgrPassword -}}
-            {{- .Values.global.postgresql.repmgrPassword -}}
-        {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.postgresql.repmgrPassword (empty .Values.postgresql.repmgrPassword) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.postgresql.repmgrPassword (empty .Values.postgresql.repmgrPassword) -}}
-    {{- end -}}
-{{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.postgresql.repmgrPassword (empty .Values.postgresql.repmgrPassword) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the database to use for repmgr
+Return the database to use for Repmgr
 */}}
 {{- define "postgresql-ha.repmgrDatabase" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.repmgrDatabase -}}
-            {{- .Values.global.postgresql.repmgrDatabase -}}
-        {{- else -}}
-            {{- .Values.postgresql.repmgrDatabase -}}
-        {{- end -}}
-    {{- else -}}
-        {{- .Values.postgresql.repmgrDatabase -}}
-    {{- end -}}
-{{- else -}}
-    {{- .Values.postgresql.repmgrDatabase -}}
-{{- end -}}
+{{- coalesce ((.Values.global).postgresql).repmgrDatabase .Values.postgresql.repmgrDatabase | default "" -}}
 {{- end -}}
 
 {{/*
@@ -308,7 +136,7 @@ Return true if the PostgreSQL credential secret has a separate entry for the pos
 */}}
 {{- define "postgresql-ha.postgresqlSeparatePostgresPassword" -}}
 {{- if (include "postgresql-ha.postgresqlCreateSecret" .) -}}
-    {{- if and (include "postgresql-ha.postgresqlPostgresPassword" .) (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) -}}
+    {{- if not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres") }}
         {{- true -}}
     {{- end -}}
 {{- else -}}
@@ -323,16 +151,7 @@ Return true if the PostgreSQL credential secret has a separate entry for the pos
 Return true if a secret object should be created for PostgreSQL
 */}}
 {{- define "postgresql-ha.postgresqlCreateSecret" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.existingSecret -}}
-        {{- else if (not .Values.postgresql.existingSecret) -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else if (not .Values.postgresql.existingSecret) -}}
-        {{- true -}}
-    {{- end -}}
-{{- else if (not .Values.postgresql.existingSecret) -}}
+{{- if empty (coalesce ((.Values.global).postgresql).existingSecret .Values.postgresql.existingSecret | default "") -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -341,43 +160,18 @@ Return true if a secret object should be created for PostgreSQL
 Return the PostgreSQL credentials secret.
 */}}
 {{- define "postgresql-ha.postgresqlSecretName" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.existingSecret -}}
-            {{- printf "%s" (tpl .Values.global.postgresql.existingSecret $) -}}
-        {{- else if .Values.postgresql.existingSecret -}}
-            {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
-        {{- else -}}
-            {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
-        {{- end -}}
-     {{- else if .Values.postgresql.existingSecret -}}
-         {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
-     {{- end -}}
-{{- else -}}
-     {{- if .Values.postgresql.existingSecret -}}
-         {{- printf "%s" (tpl .Values.postgresql.existingSecret $) -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.postgresql" .) -}}
-     {{- end -}}
+{{- if include "postgresql-ha.postgresqlCreateSecret" . -}}
+    {{- print (include "postgresql-ha.postgresql" .) -}}
+{{- else }}
+    {{- print (tpl (coalesce ((.Values.global).postgresql).existingSecret .Values.postgresql.existingSecret) .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a secret object should be created for Pgpool
+Return true if a secret object should be created for Pgpool-II
 */}}
 {{- define "postgresql-ha.pgpoolCreateSecret" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.pgpool -}}
-        {{- if .Values.global.pgpool.existingSecret -}}
-        {{- else if (not .Values.pgpool.existingSecret) -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else if (not .Values.pgpool.existingSecret) -}}
-        {{- true -}}
-    {{- end -}}
-{{- else if (not .Values.pgpool.existingSecret) -}}
+{{- if empty (coalesce ((.Values.global).pgpool).existingSecret .Values.pgpool.existingSecret | default "") -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -386,70 +180,54 @@ Return true if a secret object should be created for Pgpool
 Return the Pgpool credentials secret.
 */}}
 {{- define "postgresql-ha.pgpoolSecretName" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.pgpool -}}
-        {{- if .Values.global.pgpool.existingSecret -}}
-            {{- printf "%s" (tpl .Values.global.pgpool.existingSecret $) -}}
-        {{- else if .Values.pgpool.existingSecret -}}
-            {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
-        {{- else -}}
-            {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
-        {{- end -}}
-     {{- else if .Values.pgpool.existingSecret -}}
-         {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
-     {{- end -}}
-{{- else -}}
-     {{- if .Values.pgpool.existingSecret -}}
-         {{- printf "%s" (tpl .Values.pgpool.existingSecret $) -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.pgpool" .) -}}
-     {{- end -}}
+{{- if include "postgresql-ha.pgpoolCreateSecret" . -}}
+    {{- print (include "postgresql-ha.pgpool" .) -}}
+{{- else }}
+    {{- print (tpl (coalesce ((.Values.global).pgpool).existingSecret .Values.pgpool.existingSecret) .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the PostgreSQL configuration configmap.
+Return the PostgreSQL configuration ConfigMap
 */}}
 {{- define "postgresql-ha.postgresqlConfigurationCM" -}}
 {{- if .Values.postgresql.configurationCM -}}
-{{- printf "%s" (tpl .Values.postgresql.configurationCM $) -}}
+    {{- print (tpl .Values.postgresql.configurationCM .) -}}
 {{- else -}}
-{{- printf "%s-configuration" (include "postgresql-ha.postgresql" .) -}}
+    {{- printf "%s-configuration" (include "postgresql-ha.postgresql" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the PostgreSQL extended configuration configmap.
+Return the PostgreSQL extended configuration ConfigMap
 */}}
 {{- define "postgresql-ha.postgresqlExtendedConfCM" -}}
 {{- if .Values.postgresql.extendedConfCM -}}
-{{- printf "%s" (tpl .Values.postgresql.extendedConfCM $) -}}
+    {{- print (tpl .Values.postgresql.extendedConfCM .) -}}
 {{- else -}}
-{{- printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) -}}
+    {{- printf "%s-extended-configuration" (include "postgresql-ha.postgresql" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the Pgpool configuration configmap.
+Return the Pgpool-II configuration ConfigMap
 */}}
 {{- define "postgresql-ha.pgpoolConfigurationCM" -}}
 {{- if .Values.pgpool.configurationCM -}}
-{{- printf "%s" (tpl .Values.pgpool.configurationCM $) -}}
+    {{- print (tpl .Values.pgpool.configurationCM .) -}}
 {{- else -}}
-{{- printf "%s-configuration" (include "postgresql-ha.pgpool" .) -}}
+    {{- printf "%s-configuration" (include "postgresql-ha.pgpool" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the PostgreSQL initdb scripts configmap.
+Return the PostgreSQL initdb scripts ConfigMap
 */}}
 {{- define "postgresql-ha.postgresqlInitdbScriptsCM" -}}
 {{- if .Values.postgresql.initdbScriptsCM -}}
-{{- printf "%s" (tpl .Values.postgresql.initdbScriptsCM $) -}}
+    {{- print (tpl .Values.postgresql.initdbScriptsCM .) -}}
 {{- else -}}
-{{- printf "%s-initdb-scripts" (include "postgresql-ha.postgresql" .) -}}
+    {{- printf "%s-initdb-scripts" (include "postgresql-ha.postgresql" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -463,7 +241,7 @@ Get the initialization scripts Secret name.
 {{- end -}}
 
 {{/*
-Return the Pgpool initdb scripts configmap.
+Return the Pgpool-II initdb scripts configmap.
 */}}
 {{- define "postgresql-ha.pgpoolInitdbScriptsCM" -}}
 {{- if .Values.pgpool.initdbScriptsCM -}}
@@ -486,18 +264,15 @@ Get the pgpool initialization scripts Secret name.
 Return the LDAP bind password
 */}}
 {{- define "postgresql-ha.ldapPassword" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.ldap }}
-        {{- if .Values.global.ldap.bindpw }}
-            {{- .Values.global.ldap.bindpw -}}
-        {{- else -}}
-            {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
-        {{- end -}}
-    {{- else -}}
-        {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
-    {{- end -}}
-{{- else -}}
-    {{- ternary (randAlphaNum 10) .Values.ldap.bindpw (empty .Values.ldap.bindpw) -}}
+{{- coalesce ((.Values.global).ldap).bindpw .Values.ldap.bindpw (randAlphaNum 10) -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object should be created for LDAP
+*/}}
+{{- define "postgresql-ha.ldapCreateSecret" -}}
+{{- if empty (coalesce ((.Values.global).ldap).existingSecret .Values.ldap.existingSecret | default "") -}}
+    {{- true -}}
 {{- end -}}
 {{- end -}}
 
@@ -505,26 +280,10 @@ Return the LDAP bind password
 Return the LDAP credentials secret.
 */}}
 {{- define "postgresql-ha.ldapSecretName" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.ldap }}
-        {{- if .Values.global.ldap.existingSecret }}
-            {{- printf "%s" .Values.global.ldap.existingSecret -}}
-        {{- else if .Values.ldap.existingSecret -}}
-            {{- printf "%s" .Values.ldap.existingSecret -}}
-        {{- else -}}
-            {{- printf "%s" (include "postgresql-ha.ldap" .) -}}
-        {{- end -}}
-     {{- else if .Values.ldap.existingSecret -}}
-         {{- printf "%s" .Values.ldap.existingSecret -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.ldap" .) -}}
-     {{- end -}}
-{{- else -}}
-     {{- if .Values.ldap.existingSecret -}}
-         {{- printf "%s" .Values.ldap.existingSecret -}}
-     {{- else -}}
-         {{- printf "%s" (include "postgresql-ha.ldap" .) -}}
-     {{- end -}}
+{{- if include "postgresql-ha.ldapCreateSecret" . -}}
+    {{- print (include "postgresql-ha.ldap" .) -}}
+{{- else }}
+    {{- print (tpl (coalesce ((.Values.global).ldap).existingSecret .Values.ldap.existingSecret) .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -567,7 +326,7 @@ postgresql-ha: Nodes hostnames
 
 {{/* Validate values of PostgreSQL HA - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "postgresql-ha.validateValues.ldap" -}}
-{{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (and (empty .Values.ldap.basedn) (empty .Values.ldap.base)) (empty .Values.ldap.binddn) (and (empty .Values.ldap.bindpw) (empty .Values.ldap.existingSecret))) -}}
+{{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.basedn) (empty .Values.ldap.binddn) (and (empty .Values.ldap.bindpw) (empty .Values.ldap.existingSecret))) -}}
 postgresql-ha: LDAP
     Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.uri",
     "ldap.basedn", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
@@ -612,7 +371,7 @@ PGPASSWORD=$POSTGRES_PASSWORD
 {{- end -}}
 {{- end -}}
 
-{{/* Set Pgpool PGPASSWORD as environment variable depends on configuration */}}
+{{/* Set Pgpool-II PGPASSWORD as environment variable depends on configuration */}}
 {{- define "postgresql-ha.pgpoolPostgresPassword" -}}
 {{- if .Values.postgresql.usePasswordFiles -}}
 PGPASSWORD=$(< $PGPOOL_POSTGRES_PASSWORD_FILE)
@@ -622,14 +381,13 @@ PGPASSWORD=$PGPOOL_POSTGRES_PASSWORD
 {{- end -}}
 
 {{/*
-Return the Pgpool secret containing custom users to be added to
-pool_passwd file.
+Return the Pgpool-II secret containing custom users to be added to pool_passwd file.
 */}}
 {{- define "postgresql-ha.pgpoolCustomUsersSecretName" -}}
 {{- if .Values.pgpool.customUsersSecret -}}
-{{- printf "%s" (tpl .Values.pgpool.customUsersSecret $) -}}
+    {{- print (tpl .Values.pgpool.customUsersSecret .) -}}
 {{- else -}}
-{{- printf "%s-custom-users" (include "postgresql-ha.pgpool" .) -}}
+    {{- printf "%s-custom-users" (include "postgresql-ha.pgpool" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -640,7 +398,7 @@ Return the path to the cert file.
 {{- if and .Values.pgpool.tls.enabled .Values.pgpool.tls.autoGenerated }}
     {{- printf "/opt/bitnami/pgpool/certs/tls.crt" -}}
 {{- else -}}
-{{- required "Certificate filename is required when TLS in enabled" .Values.pgpool.tls.certFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
+    {{- required "Certificate filename is required when TLS in enabled" .Values.pgpool.tls.certFilename | printf "/opt/bitnami/pgpool/certs/%s" -}}
 {{- end -}}
 {{- end -}}
 
@@ -685,48 +443,6 @@ Return the path to the CA cert file.
 {{- else -}}
     {{ required "A secret containing TLS certificates is required when TLS is enabled" (tpl .Values.pgpool.tls.certificatesSecret $) }}
 {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if PostgreSQL postgres existingSecret has been provided
-*/}}
-{{- define "postgresql-ha.postgresql.existingSecretProvided" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.existingSecret -}}
-            {{- true -}}
-        {{- else if .Values.postgresql.existingSecret -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else if .Values.postgresql.existingSecret -}}
-        {{- true -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.postgresql.existingSecret -}}
-      {{- true -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if PostgreSQL pgpool existingSecret has been provided
-*/}}
-{{- define "postgresql-ha.pgpool.existingSecretProvided" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.pgpool -}}
-        {{- if .Values.global.pgpool.existingSecret -}}
-            {{- true -}}
-        {{- else if .Values.pgpool.existingSecret -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else if .Values.pgpool.existingSecret -}}
-        {{- true -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.pgpool.existingSecret -}}
-      {{- true -}}
-    {{- end -}}
 {{- end -}}
 {{- end -}}
 
