@@ -80,7 +80,8 @@
               "namespace": "{{namespace}}",
               "name": "postgresql-ha",
               "username": "postgres",
-              "password": "psqlPassword123!4"
+              "password": "psqlPassword123!4",
+              "timeoutSeconds": 300
             }
           }
         },
