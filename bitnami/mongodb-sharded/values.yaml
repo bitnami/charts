@@ -605,6 +605,10 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param configsvr.persistence.selector Persistent Volume selector
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
@@ -1463,6 +1467,17 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param shardsvr.persistence.selector Persistent Volume selector
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## Selector can be defined with static and dynamic options:
+    ## selector:
+    ##   matchLabels:
+    ##     app: web
+    ##     shard: shard{{ .Index }}
+    ##
+    ## shard{{ .Index }} will be substituted to shard0, shard1 accordingly
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
