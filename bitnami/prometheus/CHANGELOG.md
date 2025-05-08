@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.5 (2025-05-08)
+## 2.0.6 (2025-05-08)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#33570](https://github.com/bitnami/charts/pull/33570))
+* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map object and string ([#33525](https://github.com/bitnami/charts/pull/33525))
+
+## <small>2.0.5 (2025-05-08)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#33570) ([4e3ea1e](https://github.com/bitnami/charts/commit/4e3ea1ed5d632e3b82904d6a77f672fd50139831)), closes [#33570](https://github.com/bitnami/charts/issues/33570)
 
 ## <small>2.0.4 (2025-05-07)</small>
 
