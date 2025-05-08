@@ -7,11 +7,11 @@ annotations:
     - name: arangodb
       image: docker.io/bitnami/arangodb:3.11.13-debian-12-r6
     - name: kube-arangodb
-      image: docker.io/bitnami/kube-arangodb:1.2.47-debian-12-r5
+      image: docker.io/bitnami/kube-arangodb:1.2.48-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 1.2.47
+appVersion: 1.2.48
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -33,4 +33,4 @@ maintainers:
 name: kube-arangodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-arangodb
-version: 0.1.11
+version: 0.1.12

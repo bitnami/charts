@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.5 (2025-05-06)
+## 24.6.6 (2025-05-08)
 
-* [bitnami/keycloak] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33380](https://github.com/bitnami/charts/pull/33380))
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#33565](https://github.com/bitnami/charts/pull/33565))
+
+## <small>24.6.5 (2025-05-06)</small>
+
+* [bitnami/keycloak] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3338 ([c347b21](https://github.com/bitnami/charts/commit/c347b21d2da034bce20f223f6bc2b7db9514b6d4)), closes [#33380](https://github.com/bitnami/charts/issues/33380)
 
 ## <small>24.6.4 (2025-05-05)</small>
 
