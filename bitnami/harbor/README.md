@@ -28,8 +28,6 @@ For example, the following changes have been introduced:
 - Uses Bitnami non-root container images by default.
 - This chart supports the Harbor optional components.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

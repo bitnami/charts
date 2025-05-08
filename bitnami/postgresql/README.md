@@ -22,8 +22,6 @@ This chart bootstraps a [PostgreSQL](https://github.com/bitnami/containers/tree/
 
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

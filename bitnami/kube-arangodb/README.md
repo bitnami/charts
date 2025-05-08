@@ -20,8 +20,6 @@ Looking to use ArangoDB Kubernetes Operator in production? Try [VMware Tanzu App
 
 This chart bootstraps a [ArangoDB Kubernetes Operator](https://github.com/bitnami/containers/tree/main/bitnami/kube-arangodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

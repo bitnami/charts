@@ -20,8 +20,6 @@ Looking to use Argo CD in production? Try [VMware Tanzu Application Catalog](htt
 
 This chart bootstraps an Argo CD deployment on a Kubernetes cluster using the Helm package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
