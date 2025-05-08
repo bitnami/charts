@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: contour
-      image: docker.io/bitnami/contour:1.31.0-debian-12-r0
+      image: docker.io/bitnami/contour:1.31.0-debian-12-r1
     - name: envoy
       image: docker.io/bitnami/envoy:1.31.8-debian-12-r1
     - name: nginx
