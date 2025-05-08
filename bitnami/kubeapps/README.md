@@ -6,6 +6,10 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued, therefore, this Helm chart will be deprecated as well.
+
 ## TL;DR
 
 ```console
