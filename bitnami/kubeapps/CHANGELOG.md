@@ -1,8 +1,12 @@
 # Changelog
 
+## 18.0.1 (2025-05-08)
+
+* [bitnami/kubeapps] Deprecate Helm chart ([#33578](https://github.com/bitnami/charts/pull/33578))
+
 ## 18.0.0 (2025-05-07)
 
-* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33503](https://github.com/bitnami/charts/pull/33503))
+* [bitnami/kubeapps] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33503) ([eab4db6](https://github.com/bitnami/charts/commit/eab4db60c2bb1fd7b9e6ad85e41e3f7fc68de6bd)), closes [#33503](https://github.com/bitnami/charts/issues/33503)
 
 ## <small>17.1.7 (2025-05-06)</small>
 
