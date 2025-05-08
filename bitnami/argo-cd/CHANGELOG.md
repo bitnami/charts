@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.3.7 (2025-05-06)
+## 9.0.0 (2025-05-08)
 
-* [bitnami/argo-cd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33337](https://github.com/bitnami/charts/pull/33337))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33561](https://github.com/bitnami/charts/pull/33561))
+
+## 8.0.0 (2025-05-07)
+
+* [bitnami/argo-cd] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33500) ([8a930f5](https://github.com/bitnami/charts/commit/8a930f5bf8e24160c337799d4d2da411db479de8)), closes [#33500](https://github.com/bitnami/charts/issues/33500)
+
+## <small>7.3.8 (2025-05-07)</small>
+
+* [bitnami/argo-cd] Release 7.3.8 (#33506) ([a6ea6f0](https://github.com/bitnami/charts/commit/a6ea6f0975c92a1430895f5d813ad92dbc20f7f9)), closes [#33506](https://github.com/bitnami/charts/issues/33506)
+
+## <small>7.3.7 (2025-05-06)</small>
+
+* [bitnami/argo-cd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33337 ([81eeb64](https://github.com/bitnami/charts/commit/81eeb64efc5548ed46b369612b23abe401644670)), closes [#33337](https://github.com/bitnami/charts/issues/33337)
 
 ## <small>7.3.6 (2025-04-22)</small>
 

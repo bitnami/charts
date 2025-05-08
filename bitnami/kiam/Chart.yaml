@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: kiam
-      image: docker.io/bitnami/kiam:4.2.0-debian-12-r61
+      image: docker.io/bitnami/kiam:4.2.0-debian-12-r62
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 4.2.0
 dependencies:
@@ -16,7 +16,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
+description: kiam is a proxy that captures AWS Metadata API requests. It allows AWS
+  IAM roles to be set for Kubernetes workloads.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kiam/img/kiam-stack-220x234.png
 keywords:
@@ -29,4 +30,4 @@ maintainers:
 name: kiam
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 2.3.10
+version: 2.3.11

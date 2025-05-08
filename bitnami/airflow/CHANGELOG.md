@@ -1,8 +1,20 @@
 # Changelog
 
+## 24.0.1 (2025-05-08)
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33572](https://github.com/bitnami/charts/pull/33572))
+
+## 24.0.0 (2025-05-07)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33518) ([fb8524a](https://github.com/bitnami/charts/commit/fb8524ac91a57c98a817a73ba7cf518064801df8)), closes [#33518](https://github.com/bitnami/charts/issues/33518)
+
+## <small>23.1.1 (2025-05-07)</small>
+
+* [bitnami/airflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33333 ([c74d5b3](https://github.com/bitnami/charts/commit/c74d5b3ea31edbde920c94b16648b88b6ee15dd7)), closes [#33333](https://github.com/bitnami/charts/issues/33333)
+
 ## 23.1.0 (2025-05-06)
 
-* [bitnami/airflow] Expose topologyKey for all objects ([#33461](https://github.com/bitnami/charts/pull/33461))
+* [bitnami/airflow] Expose topologyKey for all objects (#33461) ([b320070](https://github.com/bitnami/charts/commit/b320070f3688a4ef2ffbb623b181ebbc72bf9bf8)), closes [#33461](https://github.com/bitnami/charts/issues/33461)
 
 ## <small>23.0.4 (2025-05-06)</small>
 

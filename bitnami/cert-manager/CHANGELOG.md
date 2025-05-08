@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.15 (2025-05-06)
+## 1.4.16 (2025-05-07)
 
-* [bitnami/cert-manager] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33342](https://github.com/bitnami/charts/pull/33342))
+* [bitnami/cert-manager] Release 1.4.16 ([#33523](https://github.com/bitnami/charts/pull/33523))
+
+## <small>1.4.15 (2025-05-06)</small>
+
+* [bitnami/cert-manager] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([241352d](https://github.com/bitnami/charts/commit/241352decddbbab70a72d3f683c24c46502516c8)), closes [#33342](https://github.com/bitnami/charts/issues/33342)
 
 ## <small>1.4.14 (2025-04-24)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.10 (2025-05-06)
+## 6.6.11 (2025-05-07)
 
-* [bitnami/influxdb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33374](https://github.com/bitnami/charts/pull/33374))
+* [bitnami/influxdb] Release 6.6.11 ([#33529](https://github.com/bitnami/charts/pull/33529))
+
+## <small>6.6.10 (2025-05-06)</small>
+
+* [bitnami/influxdb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3337 ([695f099](https://github.com/bitnami/charts/commit/695f09932a34a2e6fe754ea34d7052d45483355b)), closes [#33374](https://github.com/bitnami/charts/issues/33374)
 
 ## <small>6.6.9 (2025-04-28)</small>
 
