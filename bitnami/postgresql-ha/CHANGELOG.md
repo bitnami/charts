@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.1 (2025-05-08)
+## 16.0.2 (2025-05-08)
 
-* [bitnami/postgresql-ha] ci: improve stability on Ginkgo tests ([#33567](https://github.com/bitnami/charts/pull/33567))
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33576](https://github.com/bitnami/charts/pull/33576))
+
+## <small>16.0.1 (2025-05-08)</small>
+
+* [bitnami/postgresql-ha] ci: improve stability on Ginkgo tests (#33567) ([6d8bc54](https://github.com/bitnami/charts/commit/6d8bc54fc027517e3861a82e6fe4e96141bfc7b2)), closes [#33567](https://github.com/bitnami/charts/issues/33567)
 
 ## 16.0.0 (2025-05-08)
 
