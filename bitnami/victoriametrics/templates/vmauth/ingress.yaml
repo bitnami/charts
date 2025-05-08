@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.vmauth.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.vmauth.ingress.ingressClassName }}
   ingressClassName: {{ .Values.vmauth.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -29,9 +29,7 @@ spec:
           {{- toYaml .Values.vmauth.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.vmauth.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.vmauth.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "victoriametrics.vmauth.fullname" . | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.vmauth.ingress.extraHosts }}
@@ -39,9 +37,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "victoriametrics.vmauth.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.vmauth.ingress.extraRules }}

@@ -742,6 +742,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 3.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
 ### To 2.0.0
 
 This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, , all credentials will be mounted as files instead of using an environment variable.

@@ -61,7 +61,6 @@ spec:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
                 {{- if and .Values.auth.rbac.create .Values.auth.token.enabled }}
-                {{- if eq .Values.auth.token.type "simple" }}
                 {{- if .Values.usePasswordFiles }}
                 - name: ETCD_ROOT_PASSWORD_FILE
                   value: {{ printf "/opt/bitnami/etcd/secrets/%s" (include "etcd.secretPasswordKey" .) }}
@@ -72,11 +71,6 @@ spec:
                       name: {{ include "etcd.secretName" . }}
                       key: {{ include "etcd.secretPasswordKey" . }}
                 {{- end }}
-                {{- else }}
-                {{- fail "defragmention and auth.token = jwt is not supported by the helm chart"   }}
-                {{- end }}
-                - name: ETCDCTL_USER
-                  value: "root:$(ETCD_ROOT_PASSWORD)"
                 {{- end }}
                 {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
                 - name: ETCDCTL_CACERT
@@ -103,46 +97,57 @@ spec:
               {{- if .Values.defrag.cronjob.command }}
               command: {{ .Values.defrag.cronjob.command | toYaml | nindent 16 }}
               {{- else }}
-              command: ["etcdctl"]
+              command: 
+                - /bin/bash
+                - -c
+                - |-
+                  #!/usr/bin/env bash
+                  set -eo pipefail
+
+                  # Include library
+                  . /opt/bitnami/scripts/libetcd.sh
+
+                  # Load etcd environment settings
+                  . /opt/bitnami/scripts/etcd-env.sh
+
+                  # Common flags
+                  read -r -a flags <<<"$(etcdctl_auth_flags)"
+                  cmd="etcdctl --command-timeout=60s ${flags[@]}"
+                  {{- $etcdFullname := include "common.names.fullname" . }}
+                  {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
+                  {{- $namespace := .Release.Namespace }}
+                  {{- $clusterDomain := .Values.clusterDomain }}
+                  {{- $port := int .Values.service.ports.client }}
+                  {{- $endpointStr := "" }}
+                  {{- $replicaCount := (int .Values.replicaCount) }}
+                  {{- $releaseNamespace := .Release.Namespace }}
+                  {{- range $iEndpoint, $e := until $replicaCount }}
+                  {{- $endpoint := printf "%s://%s-%d.%s.%s.svc.%s:%d" (include "etcd.peerProtocol" $) $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
+                  {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
+                  {{- if ne $iEndpoint (sub $replicaCount 1) }}
+                  {{- $endpointStr = printf "%s," $endpointStr }}
+                  {{- end }}
+                  {{- end }}
+                  {{- $endpointStr = printf "%s" $endpointStr }}
+                  $cmd --endpoints={{ $endpointStr | quote}} defrag
               {{- end }}
               {{- if .Values.defrag.cronjob.args }}
               args: {{ .Values.defrag.cronjob.args | toYaml | nindent 16 }}
-              {{- else }}
-              args:
-                - defrag
-                - --cluster
-                {{- $etcdFullname := include "common.names.fullname" . }}
-                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
-                {{- $namespace := .Release.Namespace }}
-                {{- $clusterDomain := .Values.clusterDomain }}
-                {{- $port := int .Values.service.ports.client }}
-                {{- $endpointStr := "--endpoints=[" }}
-                {{- $replicaCount := (int .Values.replicaCount) }}
-                {{- $releaseNamespace := .Release.Namespace }}
-                {{- range $iEndpoint, $e := until $replicaCount }}
-                {{- if or $.Values.auth.client.enableAuthentication (and $.Values.auth.client.secureTransport (not $.Values.auth.client.useAutoTLS )) }}
-                {{- $endpoint := printf "https://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
-                {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
-                {{- else }}
-                {{- $endpoint := printf "http://%s-%d.%s.%s.svc.%s:%d" $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
-                {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
-                {{- end }}
-                {{- if ne $iEndpoint (sub $replicaCount 1) }}
-                {{- $endpointStr = printf "%s," $endpointStr }}
-                {{- end }}
-                {{- end }}
-                {{- $endpointStr = printf "%s]" $endpointStr }}
-                - {{ $endpointStr }}
               {{- end }}
               {{- if .Values.defrag.cronjob.resources }}
               resources: {{- toYaml .Values.defrag.cronjob.resources | nindent 16 }}
               {{- else if ne .Values.defrag.cronjob.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.defrag.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
-              {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
               volumeMounts:
+              {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) }}
                 - name: etcd-client-certs
                   mountPath: /opt/bitnami/etcd/certs/client/
+                  readOnly: true
+              {{- end }}
+              {{- if and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled) }}
+                - name: etcd-secrets
+                  mountPath: /opt/bitnami/etcd/secrets/
                   readOnly: true
               {{- end }}
           {{- if or .Values.auth.client.enableAuthentication (and .Values.auth.client.secureTransport (not .Values.auth.client.useAutoTLS )) (and .Values.usePasswordFiles (or .Values.auth.rbac.create .Values.auth.rbac.enabled)) }}

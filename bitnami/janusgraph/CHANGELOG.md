@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.2 (2025-04-25)
+## 1.4.3 (2025-05-06)
 
-* [bitnami/janusgraph] Release 1.4.2 ([#33174](https://github.com/bitnami/charts/pull/33174))
+* [bitnami/janusgraph] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33376](https://github.com/bitnami/charts/pull/33376))
+
+## <small>1.4.2 (2025-04-25)</small>
+
+* [bitnami/janusgraph] Release 1.4.2 (#33174) ([1113c4d](https://github.com/bitnami/charts/commit/1113c4d507d6ce746fe5f773cdd1c7559be359fe)), closes [#33174](https://github.com/bitnami/charts/issues/33174)
 
 ## <small>1.4.1 (2025-03-26)</small>
 

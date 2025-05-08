@@ -19,7 +19,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.hubble.ui.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.hubble.ui.ingress.ingressClassName }}
   ingressClassName: {{ .Values.hubble.ui.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -31,9 +31,7 @@ spec:
           {{- toYaml .Values.hubble.ui.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.hubble.ui.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.hubble.ui.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "cilium.hubble.ui.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.hubble.ui.ingress.extraHosts }}
@@ -41,9 +39,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "cilium.hubble.ui.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.hubble.ui.ingress.extraRules }}

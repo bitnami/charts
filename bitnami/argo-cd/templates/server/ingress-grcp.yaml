@@ -22,7 +22,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if and .Values.server.ingressGrpc.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.server.ingressGrpc.ingressClassName }}
   ingressClassName: {{ .Values.server.ingressGrpc.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -34,9 +34,7 @@ spec:
           {{- toYaml .Values.server.ingressGrpc.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.server.ingressGrpc.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.ingressGrpc.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" .) "servicePort" (ternary "https" "http" .Values.server.ingressGrpc.tls) "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.server.ingressGrpc.extraHosts }}
@@ -44,9 +42,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "argocd.server" $) "servicePort" (ternary "https" "http" $.Values.server.ingressGrpc.tls) "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.server.ingressGrpc.extraRules }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.5 (2025-05-01)
+## 16.5.6 (2025-05-06)
 
-* [bitnami/mongodb] Release 16.5.5 ([#33286](https://github.com/bitnami/charts/pull/33286))
+* [bitnami/mongodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33405](https://github.com/bitnami/charts/pull/33405))
+
+## <small>16.5.5 (2025-05-01)</small>
+
+* [bitnami/mongodb] Release 16.5.5 (#33286) ([c084df3](https://github.com/bitnami/charts/commit/c084df377f1cb009a149dd58fa9eb691aa3d635c)), closes [#33286](https://github.com/bitnami/charts/issues/33286)
 
 ## <small>16.5.4 (2025-04-30)</small>
 

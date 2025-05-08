@@ -22,7 +22,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -34,15 +34,11 @@ spec:
         {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
         {{- end }}
         - path: /apis
-          {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
           pathType: {{ $.Values.ingress.pathType }}
-          {{- end }}
           backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
         {{- if and .Values.ingress.path (ne (quote (trim .Values.ingress.path)) (quote "/")) }}
         - path: {{ .Values.ingress.path }}
-          {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
           pathType: {{ $.Values.ingress.pathType }}
-          {{- end }}
           backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
         {{- end -}}
     {{- end }}
@@ -51,9 +47,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- if .Values.ingress.extraRules }}
@@ -82,7 +76,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -91,9 +85,7 @@ spec:
       http:
         paths:
           - path: /
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ $.Values.ingress.pathType }}
-            {{- end }}
             backend:
               service:
                 name: {{ template "kubeapps.kubeappsapis.fullname" . }}

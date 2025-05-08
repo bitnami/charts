@@ -1,8 +1,16 @@
 # Changelog
 
-## 19.5.11 (2025-04-28)
+## 19.5.13 (2025-05-07)
 
-* [bitnami/contour] Release 19.5.11 ([#33207](https://github.com/bitnami/charts/pull/33207))
+* [bitnami/contour] Release 19.5.13 ([#33545](https://github.com/bitnami/charts/pull/33545))
+
+## <small>19.5.12 (2025-05-06)</small>
+
+* [bitnami/contour] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33350 ([cd58f6a](https://github.com/bitnami/charts/commit/cd58f6afa50404b6de290620e2286871626cb3a3)), closes [#33350](https://github.com/bitnami/charts/issues/33350)
+
+## <small>19.5.11 (2025-04-28)</small>
+
+* [bitnami/contour] Release 19.5.11 (#33207) ([fba4edd](https://github.com/bitnami/charts/commit/fba4edd4b68eee5305e0919743b805da35bdc9f7)), closes [#33207](https://github.com/bitnami/charts/issues/33207)
 
 ## <small>19.5.10 (2025-04-01)</small>
 

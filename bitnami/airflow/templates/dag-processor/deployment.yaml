@@ -44,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAffinityPreset "component" "dag-processor" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAntiAffinityPreset "component" "dag-processor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAffinityPreset "component" "dag-processor" "customLabels" $podLabels "topologyKey" .Values.dagProcessor.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dagProcessor.podAntiAffinityPreset "component" "dag-processor" "customLabels" $podLabels "topologyKey" .Values.dagProcessor.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dagProcessor.nodeAffinityPreset.type "key" .Values.dagProcessor.nodeAffinityPreset.key "values" .Values.dagProcessor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.dagProcessor.nodeSelector }}

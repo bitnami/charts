@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: service
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: cloudnative-pg
-      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r5
+      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r6
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r17
+      image: docker.io/bitnami/postgresql:17.4.0-debian-12-r19
+  licenses: Apache-2.0
+  tanzuCategory: service
 apiVersion: v2
 appVersion: 1.25.1
 dependencies:
@@ -18,7 +18,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep.
+description: CloudNativePG is an open-source tool for managing PostgreSQL databases
+  on Kubernetes, from setup to ongoing upkeep.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/cloudnative-pg/img/cloudnative-pg-stack-220x234.png
 keywords:
@@ -31,4 +32,4 @@ maintainers:
 name: cloudnative-pg
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
-version: 0.1.9
+version: 0.1.11

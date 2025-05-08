@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.3 (2025-05-01)
+## 14.2.4 (2025-05-06)
 
-* [bitnami/mariadb-galera] Release 14.2.3 ([#33284](https://github.com/bitnami/charts/pull/33284))
+* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33394](https://github.com/bitnami/charts/pull/33394))
+
+## <small>14.2.3 (2025-05-01)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.3 (#33284) ([66b41fa](https://github.com/bitnami/charts/commit/66b41fa1e056bf0b065100045888bffe7c3026d0)), closes [#33284](https://github.com/bitnami/charts/issues/33284)
 
 ## <small>14.2.2 (2025-04-01)</small>
 

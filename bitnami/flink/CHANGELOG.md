@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2025-04-24)
+## 2.0.2 (2025-05-06)
 
-* [bitnami/flink] Release 2.0.1 ([#33172](https://github.com/bitnami/charts/pull/33172))
+* [bitnami/flink] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33360](https://github.com/bitnami/charts/pull/33360))
+
+## <small>2.0.1 (2025-04-24)</small>
+
+* [bitnami/flink] Release 2.0.1 (#33172) ([8e878d7](https://github.com/bitnami/charts/commit/8e878d711fe5a2b616a2e7cc7cfdf86e3ee0e04b)), closes [#33172](https://github.com/bitnami/charts/issues/33172)
 
 ## 2.0.0 (2025-03-28)
 

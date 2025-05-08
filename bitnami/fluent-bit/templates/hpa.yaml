@@ -33,7 +33,6 @@ spec:
         name: cpu
         target:
           averageUtilization: {{ .Values.autoscaling.hpa.targetCPUUtilizationPercentage }}
-          type: Utilization
   {{- end }}
   {{- if .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
     - type: Resource
@@ -41,7 +40,6 @@ spec:
         name: memory
         target:
           averageUtilization: {{ .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
-          type: Utilization
   {{- end }}
   {{- if .Values.autoscaling.hpa.customRules -}}
     {{- toYaml .Values.autoscaling.hpa.customRules | nindent 4}}

@@ -887,6 +887,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 12.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
 ### To 11.0.0
 
 This major updates the `elasticsearch` subchart to its newest major, 22.0.0, which uses Elasticsearch 9.x. For more information on this subchart's major, please refer to [elasticsearch upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-2200).

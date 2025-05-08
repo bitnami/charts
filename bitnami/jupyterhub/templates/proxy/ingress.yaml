@@ -22,7 +22,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.proxy.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.proxy.ingress.ingressClassName }}
   ingressClassName: {{ .Values.proxy.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -34,9 +34,7 @@ spec:
           {{- toYaml .Values.proxy.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.proxy.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.proxy.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-proxy-public" (include "common.names.fullname" . )) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.proxy.ingress.extraHosts }}
@@ -44,9 +42,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.proxy.ingress.extraRules }}

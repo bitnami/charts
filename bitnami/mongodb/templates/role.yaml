@@ -23,7 +23,7 @@ rules:
 {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
 {{- end -}}
 {{- if and (include "common.capabilities.psp.supported" .) .Values.podSecurityPolicy.create }}
-  - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
+  - apiGroups: ['policy']
     resources: ['podsecuritypolicies']
     verbs: ['use']
     resourceNames: [{{ include "mongodb.fullname" . }}]

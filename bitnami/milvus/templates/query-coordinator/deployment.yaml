@@ -40,9 +40,7 @@ spec:
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: query-coordinator
     spec:
-      {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- end }}
       serviceAccountName: {{ template "milvus.query-coordinator.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.queryCoord.automountServiceAccountToken }}

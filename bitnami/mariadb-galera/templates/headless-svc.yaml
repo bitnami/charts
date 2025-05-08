@@ -17,25 +17,18 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
     - name: galera
       port: 4567
       targetPort: galera
-      {{- if $appProtocolAvailable }}
       appProtocol: mysql
-      {{- end }}
     - name: ist
       port: 4568
       targetPort: ist
-      {{- if $appProtocolAvailable }}
       appProtocol: mysql
-      {{- end }}
     - name: sst
       port: 4444
       targetPort: sst
-      {{- if $appProtocolAvailable }}
       appProtocol: mysql
-      {{- end }}
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingest.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingest.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingest.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -27,9 +27,7 @@ spec:
           {{- toYaml .Values.ingest.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingest.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingest.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.ingest.fullname" .) "servicePort" "tcp-rest-api" "context" $)  | nindent 14 }}
       {{- if ne .Values.ingest.ingress.hostname "*" }}
       host: {{ .Values.ingest.ingress.hostname }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "elasticsearch.ingest.fullname" $) "servicePort" "tcp-rest-api" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.ingest.ingress.extraRules }}
