@@ -389,13 +389,13 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.pgpool.usePasswordFiles }}
-            - name: postgresql-password
+            - name: postgresql-creds
               subPath: pgpool-password
               mountPath: /opt/bitnami/pgpool/secrets/pgpool-password
-            - name: pgpool-password
+            - name: pgpool-creds
               subPath: admin-password
               mountPath: /opt/bitnami/pgpool/secrets/admin-password
-            - name: pgpool-password
+            - name: pgpool-creds
               subPath: sr-check-password
               mountPath: /opt/bitnami/pgpool/secrets/sr-check-password
             {{- end }}
@@ -428,13 +428,13 @@ spec:
             secretName: {{ template "postgresql-ha.pgpoolInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.pgpool.usePasswordFiles }}
-        - name: postgresql-password
+        - name: postgresql-creds
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
             items:
               - key: password
                 path: pgpool-password
-        - name: pgpool-password
+        - name: pgpool-creds
           secret:
             secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}
         {{- end }}

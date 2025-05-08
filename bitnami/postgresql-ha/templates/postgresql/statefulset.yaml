@@ -493,13 +493,13 @@ spec:
               mountPath: /opt/bitnami/postgresql/secrets/postgres-password
               subPath: postgres-password
             {{- end }}
-            - name: postgresql-password
+            - name: postgresql-creds
               subPath: password
               mountPath: /opt/bitnami/postgresql/secrets/password
-            - name: postgresql-password
+            - name: postgresql-creds
               subPath: repmgr-password
               mountPath: /opt/bitnami/postgresql/secrets/repmgr-password
-            - name: pgpool-password
+            - name: pgpool-creds
               subPath: sr-check-password
               mountPath: /opt/bitnami/postgresql/secrets/sr-check-password
             {{- end }}
@@ -594,7 +594,7 @@ spec:
               subPath: tmp-dir
           {{- if or .Values.postgresql.usePasswordFiles .Values.metrics.customMetrics }}
             {{- if .Values.postgresql.usePasswordFiles }}
-            - name: postgresql-password
+            - name: postgresql-creds
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
             {{- if .Values.metrics.customMetrics }}
@@ -648,10 +648,10 @@ spec:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.postgresql.usePasswordFiles }}
-        - name: postgresql-password
+        - name: postgresql-creds
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
-        - name: pgpool-password
+        - name: pgpool-creds
           secret:
             secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}
         {{- end }}
