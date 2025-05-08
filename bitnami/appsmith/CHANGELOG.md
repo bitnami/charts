@@ -2,7 +2,7 @@
 
 ## 6.0.1 (2025-05-08)
 
-* [bitnami/appsmith] Release 5.2.12 ([#33504](https://github.com/bitnami/charts/pull/33504))
+* [bitnami/appsmith] Release 6.0.1 ([#33504](https://github.com/bitnami/charts/pull/33504))
 
 ## 6.0.0 (2025-05-07)
 
