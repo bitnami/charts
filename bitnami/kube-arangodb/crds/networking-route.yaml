@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/arangodb/kube-arangodb/refs/tags/{version}/chart/kube-arangodb/crds/networking-route.yaml
-# Version: 1.2.47
+# Version: 1.2.48
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -20,5 +20,18 @@ spec:
           x-kubernetes-preserve-unknown-fields: true
       served: true
       storage: true
+      additionalPrinterColumns:
+        - jsonPath: '.status.conditions[?(@.type=="Ready")].status'
+          description: Defines if Route is valid
+          name: Ready
+          type: string
+        - jsonPath: '.status.deployment.name'
+          description: ArangoDeployment Name
+          name: Deployment
+          type: string
+        - jsonPath: '.status.target.route.path'
+          description: Route Path
+          name: Route
+          type: string
       subresources:
         status: {}
