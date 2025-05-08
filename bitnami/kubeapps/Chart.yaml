@@ -2,18 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: kubeapps-apis
-      image: docker.io/bitnami/kubeapps-apis:2.12.1-debian-12-r15
+      image: docker.io/bitnami/kubeapps-apis:2.12.1-debian-12-r16
     - name: kubeapps-apprepository-controller
-      image: docker.io/bitnami/kubeapps-apprepository-controller:2.12.1-debian-12-r7
+      image: docker.io/bitnami/kubeapps-apprepository-controller:2.12.1-debian-12-r8
     - name: kubeapps-asset-syncer
-      image: docker.io/bitnami/kubeapps-asset-syncer:2.12.1-debian-12-r8
+      image: docker.io/bitnami/kubeapps-asset-syncer:2.12.1-debian-12-r9
     - name: kubeapps-dashboard
-      image: docker.io/bitnami/kubeapps-dashboard:2.12.1-debian-12-r10
+      image: docker.io/bitnami/kubeapps-dashboard:2.12.1-debian-12-r11
     - name: kubeapps-oci-catalog
       image: docker.io/bitnami/kubeapps-oci-catalog:2.12.1-debian-12-r10
     - name: kubeapps-pinniped-proxy
@@ -21,7 +19,9 @@ annotations:
     - name: nginx
       image: docker.io/bitnami/nginx:1.28.0-debian-12-r0
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.8.2-debian-12-r4
+      image: docker.io/bitnami/oauth2-proxy:7.9.0-debian-12-r1
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 2.12.1
 dependencies:
@@ -38,7 +38,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
+description: Kubeapps is a web-based UI for launching and managing applications on
+  Kubernetes. It allows users to deploy trusted applications and operators to control
+  users access to the cluster.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
@@ -53,4 +55,4 @@ maintainers:
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 18.0.0
+version: 18.0.1
