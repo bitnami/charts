@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.1.0 (2025-05-07)
+## 21.1.0 (2025-05-08)
 
 * [bitnami/redis] Allow grabbing sentinel acl configuration from userSecret ([#33546](https://github.com/bitnami/charts/pull/33546))
 
