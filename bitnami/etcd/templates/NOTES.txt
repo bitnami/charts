@@ -29,11 +29,11 @@ The chart has been deployed in diagnostic mode. All probes have been disabled an
 
 Get the list of pods by executing:
 
-  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
 Access the pod you want to debug by executing
 
-  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
 In order to replicate the container startup scripts execute this command:
 
@@ -43,15 +43,15 @@ In order to replicate the container startup scripts execute this command:
 
 etcd can be accessed via port {{ coalesce .Values.service.ports.client .Values.service.port }} on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+    {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
 To create a pod that you can use as a etcd client run the following command:
 
-    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}" --namespace {{ .Release.Namespace }} --command -- sleep infinity
+    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}" --namespace {{ include "common.names.namespace" . }} --command -- sleep infinity
 
 Then, you can set/get a key using the commands below:
 
-    kubectl exec --namespace {{ .Release.Namespace }} -it {{ template "common.names.fullname" . }}-client -- bash
+    kubectl exec --namespace {{ include "common.names.namespace" . }} -it {{ template "common.names.fullname" . }}-client -- bash
     {{- $etcdAuthOptions := include "etcd.authOptions" . }}
     etcdctl {{ $etcdAuthOptions }} put /message Hello
     etcdctl {{ $etcdAuthOptions }} get /message
@@ -60,21 +60,21 @@ To connect to your etcd server from outside the cluster execute the following co
 
 {{- if contains "NodePort" .Values.service.type }}
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
     echo "etcd URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     echo "etcd URL: http://$SERVICE_IP:{{ coalesce .Values.service.ports.client .Values.service.port }}/"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ coalesce .Values.service.ports.client .Values.service.port }}:{{ coalesce .Values.service.ports.client .Values.service.port }} &
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ coalesce .Values.service.ports.client .Values.service.port }}:{{ coalesce .Values.service.ports.client .Values.service.port }} &
     echo "etcd URL: http://127.0.0.1:{{ coalesce .Values.service.ports.client .Values.service.port }}"
 
 {{- end }}
@@ -82,7 +82,7 @@ To connect to your etcd server from outside the cluster execute the following co
 
  * As rbac is enabled you should add the flag `--user root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Use the command below to export the password:
 
-    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d)
+    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d)
 
 {{- end }}
 {{- if .Values.auth.client.secureTransport }}
