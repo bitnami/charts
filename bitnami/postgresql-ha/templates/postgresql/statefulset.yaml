@@ -30,15 +30,16 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: postgresql
         role: data
-      {{- if or .Values.postgresql.podAnnotations (and .Values.metrics.enabled .Values.metrics.annotations) }}
       annotations:
-      {{- if .Values.postgresql.podAnnotations }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- end }}
+        {{- if and (or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration) (not .Values.postgresql.configurationCM) }}
+        checksum/configuration: {{ include (print $.Template.BasePath "/postgresql/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.postgresql.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.annotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.postgresql.automountServiceAccountToken }}
@@ -376,6 +377,22 @@ spec:
             - name: POSTGRESQL_SYNCHRONOUS_REPLICAS_MODE
               value: {{ .Values.postgresql.syncReplicationMode | quote }}
             {{- end }}
+            - name: POSTGRESQL_SR_CHECK
+              value: "yes"
+            - name: POSTGRESQL_SR_CHECK_USERNAME
+              value: {{ (include "postgresql-ha.pgoolSrCheckUsername" .) | quote }}
+            - name: POSTGRESQL_SR_CHECK_DATABASE
+              value: {{ .Values.pgpool.srCheckDatabase | quote  }}
+            {{- if .Values.postgresql.usePasswordFiles }}
+            - name: POSTGRESQL_SR_CHECK_PASSWORD_FILE
+              value: "/opt/bitnami/postgresql/secrets/sr-check-password"
+            {{- else }}
+            - name: POSTGRESQL_SR_CHECK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql-ha.pgpoolSecretName" . }}
+                  key: sr-check-password
+            {{- end }}
             {{- if .Values.postgresql.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -471,8 +488,20 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
             {{- if .Values.postgresql.usePasswordFiles }}
-            - name: password
-              mountPath: /opt/bitnami/postgresql/secrets/
+            {{- if and (not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres")) (or (include "postgresql-ha.postgresqlCreateSecret" .) (include "postgresql-ha.postgresqlPasswordProvided" .)) }}
+            - name: postgres-password
+              mountPath: /opt/bitnami/postgresql/secrets/postgres-password
+              subPath: postgres-password
+            {{- end }}
+            - name: postgresql-password
+              subPath: password
+              mountPath: /opt/bitnami/postgresql/secrets/password
+            - name: postgresql-password
+              subPath: repmgr-password
+              mountPath: /opt/bitnami/postgresql/secrets/repmgr-password
+            - name: pgpool-password
+              subPath: sr-check-password
+              mountPath: /opt/bitnami/postgresql/secrets/sr-check-password
             {{- end }}
             {{- if .Values.postgresql.tls.enabled }}
             - name: postgresql-certificates
@@ -565,7 +594,7 @@ spec:
               subPath: tmp-dir
           {{- if or .Values.postgresql.usePasswordFiles .Values.metrics.customMetrics }}
             {{- if .Values.postgresql.usePasswordFiles }}
-            - name: password
+            - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
             {{- end }}
             {{- if .Values.metrics.customMetrics }}
@@ -619,9 +648,12 @@ spec:
             secretName: {{ template "postgresql-ha.postgresqlInitdbScriptsSecret" . }}
         {{- end }}
         {{- if .Values.postgresql.usePasswordFiles }}
-        - name: password
+        - name: postgresql-password
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
+        - name: pgpool-password
+          secret:
+            secretName: {{ include "postgresql-ha.pgpoolSecretName" . }}
         {{- end }}
         {{- if or .Values.postgresql.initdbScriptsCM .Values.postgresql.initdbScripts }}
         - name: custom-init-scripts
