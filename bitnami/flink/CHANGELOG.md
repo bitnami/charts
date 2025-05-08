@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.2 (2025-05-06)
+## 2.0.3 (2025-05-08)
 
-* [bitnami/flink] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33360](https://github.com/bitnami/charts/pull/33360))
+* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#33562](https://github.com/bitnami/charts/pull/33562))
+
+## <small>2.0.2 (2025-05-06)</small>
+
+* [bitnami/flink] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33360) ([3522956](https://github.com/bitnami/charts/commit/3522956e60ae89f100e093f8fbe22e81503cf3df)), closes [#33360](https://github.com/bitnami/charts/issues/33360)
 
 ## <small>2.0.1 (2025-04-24)</small>
 
