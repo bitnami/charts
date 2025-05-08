@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.3.17 (2025-05-07)
+## 16.0.0 (2025-05-08)
 
-* [bitnami/postgresql-ha] Release 15.3.17 ([#33538](https://github.com/bitnami/charts/pull/33538))
+* [bitnami/postgresql-ha] feat: Customizable Stream Replication Check credentials ([#33552](https://github.com/bitnami/charts/pull/33552))
+
+## <small>15.3.17 (2025-05-07)</small>
+
+* [bitnami/postgresql-ha] Release 15.3.17 (#33538) ([c28174e](https://github.com/bitnami/charts/commit/c28174e931c0aba3c68b4369b68300ac84ed7172)), closes [#33538](https://github.com/bitnami/charts/issues/33538)
 
 ## <small>15.3.16 (2025-05-06)</small>
 
