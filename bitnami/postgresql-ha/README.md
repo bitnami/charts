@@ -32,13 +32,13 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simple and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
 
 - Both the PostgreSQL HA and the PostgreSQL chart configures a cluster with a primary/replica topology. The primary node has writing permissions while replication is on the replica nodes which have read-only permissions.
-- The PostgreSQL HA Helm chart deploys a cluster with three nodes by default, one for pgpool, one primary, and one replica for PostgreSQL. The PostgreSQL chart configures a cluster with two nodes by default (one primary and one replica).
-- The PostgreSQL HA Helm chart uses pgpool to handle the connection to the nodes. pgpool is responsible to spread the queries among nodes.
-- The PostgreSQL HA Helm chart includes a repmgr module that ensures high-availability thanks to automatic membership control. If the primary is down, any of the replica nodes will be promoted as primary to avoid data loss.
+- The PostgreSQL HA Helm chart deploys a cluster with four nodes by default, one for Pgpool-II, and three PostgreSQL+Repmgr replicas. The PostgreSQL chart configures a cluster with two nodes by default (one primary and one replica).
+- The PostgreSQL HA Helm chart uses Pgpool-II to handle the connection to the nodes. Pgpool-II is responsible to spread the queries among nodes.
+- The PostgreSQL HA Helm chart includes a Repmgr module that ensures high-availability thanks to automatic membership control. If the primary is down, any of the replica nodes will be promoted as primary to avoid data loss.
 
 The following diagram shows you the options you have for using Bitnami's PostgreSQL solutions in your deployments:
 
-![A diagram comparing a PostgreSQL solution versus a PostgreSQL HA with pgpool and repmgr](img/postgresql-ha-topology.png)
+![A diagram comparing a PostgreSQL solution versus a PostgreSQL HA with Pgpool-II and Repmgr](img/postgresql-ha-topology.png)
 
 ## Prerequisites
 
@@ -100,7 +100,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different PostgreSQL version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+To modify the application version used in this chart, specify a different version of the image using the `postgresql.image.tag` parameter and/or a different repository using the `postgresql.image.repository` parameter.
 
 ### Use a volume for /dev/shm
 
@@ -118,7 +118,7 @@ postgresql:
       mountPath: /dev/shm
 ```
 
-### Configure the way how to expose PostgreSQL
+### Configure the way how to expose Pgpool-II
 
 - **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
 - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You will be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
@@ -154,7 +154,7 @@ For example:
 ```text
 ldap.enabled="true"
 ldap.uri="ldap://my_ldap_server"
-ldap.base="dc=example\,dc=org"
+ldap.basedn="dc=example\,dc=org"
 ldap.binddn="cn=admin\,dc=example\,dc=org"
 ldap.bindpw="admin"
 ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
@@ -173,12 +173,12 @@ Next, login to the PostgreSQL server using the `psql` client and add the PAM aut
 
 The chart handles two main flows of traffic information:
 
-- Connections between end-clients and PgPool (sometimes referred to as *frontend* connections).
-- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as *backend* connections).
+- Connections between end-clients and Pgpool-II (sometimes referred to as *frontend* connections).
+- Internal connections between Pgpool-II and PostgreSQL nodes (sometimes referred to as *backend* connections).
 
 The Bitnami postgresql-ha chart allows configuring the securitization of both types of traffic using TLS.
 
-#### Encrypt traffic between clients and Pgpool (frontend)
+#### Encrypt traffic between clients and Pgpool-II (frontend)
 
 TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.*` parameters when installing a release. Below you can find detailed information about these parameters:
 
@@ -206,7 +206,7 @@ For example:
     pgpool.tls.certKeyFilename="cert.key"
     ```
 
-> Note: Certificates permissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+> Note: Certificates permissions: Pgpool-II requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
 
 ##### Enable client certificate authentication
 
@@ -227,9 +227,9 @@ You can enable this authentication feature additionally specifying the following
 
 Clients using this method to authenticate will be required to provide a certificate with the CN (Common Name) field matching the requested database user name. Please, refer to [the official documentation](https://www.postgresql.org/docs/current/auth-cert.html) for further information.
 
-> Note: As with traditional password-based authentication, database users must exist in both PgPool and PostgreSQL nodes and have the correct privileges to connect to a database. You may use the `postgresql.initdbScripts` and `pgpool.customUsers` properties to create them in advance.
+> Note: As with traditional password-based authentication, database users must exist in both Pgpool-II and PostgreSQL nodes and have the correct privileges to connect to a database. You may use the `postgresql.initdbScripts` and `pgpool.customUsers` properties to create them in advance.
 
-#### Encrypt traffic between Pgpool and PostgreSQL nodes (backend)
+#### Encrypt traffic between Pgpool-II and PostgreSQL nodes (backend)
 
 TLS for backend connections can be enabled in the chart by specifying the `postgresql.tls.*` parameters while creating a release. Below you can find detailed information about these parameters:
 
@@ -259,11 +259,11 @@ For example:
 
 If you want to encrypt both *frontend* and *backend* traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
 
-### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
+### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf / pool_hba.conf files as configMap
 
-This helm chart also supports to customize the whole configuration file.
+This Helm chart also supports to customize the whole configuration file.
 
-You can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
+You can specify the Pgpool-II, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `pgpool.poolHbaConfiguration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool-II, Repmgr and the PostgreSQL server.
 
 In addition to this option, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the previous options.
 
@@ -281,7 +281,7 @@ In addition to this option, you can also set an external ConfigMap with all the 
 
 The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecret`) are supported in both StatefulSet by prepending `postgresql` or `pgpool` to the parameter, depending on the use case (see above parameters table).
 
-The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
+The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **Postgresql** container while only `.sh` in the case of the **Pgpool-II** one.
 
 +info: <https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance> and <https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts>
 
@@ -325,7 +325,7 @@ global.postgresql.postgresqlPassword=testtest
 global.postgresql.postgresqlDatabase=db1
 ```
 
-This way, the credentials will be available in all of the subcharts.
+This way, the credentials will be available in all of the sub-charts.
 
 ### Setting Pod's affinity
 
@@ -339,7 +339,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 
 ## Persistence
 
-The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
+The data is persisted by default using PVC templates in the PostgreSQL StatefulSet. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
 
 ## Parameters
@@ -1007,15 +1007,22 @@ Given users' creation is skipped when there's existing data, upgrading from `15.
 - Manually create the user:
 
 ```console
-
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql-ha-postgresql -o jsonpath="{.data.password}" | base64 -d)
+kubectl run pg-client --rm --tty -i --restart='Never' --image docker.io/bitnami/postgresql-repmgr:17 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- \
+    psql -h postgresql-ha-pgpool -p 5432 -U postgres --command "CREATE ROLE sr_check_user WITH LOGIN PASSWORD 'some-password';"
+kubectl run pg-client --rm --tty -i --restart='Never' --image docker.io/bitnami/postgresql-repmgr:17 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- \
+    psql -h postgresql-ha-pgpool -p 5432 -U postgres --command "GRANT CONNECT ON DATABASE postgres TO sr_check_user;"
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha \
+    --set pgpool.srCheckPassword="some-password"
 ```
 
+- Setting `pgpool.srCheckUsername` and `pgpool.srCheckPassword` parameters with the same values as `postgresql.repmgrUsername` and `postgresql.repmgrPassword` parameters:
+
 ```console
+export REPMGR_PASSWORD=$(kubectl get secret --namespace default postgresql-ha-postgresql -o jsonpath="{.data.repmgr-password}" | base64 -d)
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha \
-    --set pgpool.srCheckUsername=repmgr \
-    --set pgpool.srCheckPassword=[REPMGR_PASSWORD] \
-    --set postgresql.password=[POSTGRES_PASSWORD] \
-    --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
+    --set pgpool.srCheckUsername="repmgr" \
+    --set pgpool.srCheckPassword="$REPMGR_PASSWORD"
 ```
 
 ### To 15.1.0
