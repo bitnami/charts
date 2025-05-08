@@ -99,7 +99,7 @@ Return true if PostgreSQL postgres user password has been provided
 Return the Pgpool Admin username
 */}}
 {{- define "postgresql-ha.pgpoolAdminUsername" -}}
-{{- coalesce ((.Values.global).pgpool).adminUsername .Values.pgpool.adminUsername (randAlphaNum 10) -}}
+{{- coalesce ((.Values.global).pgpool).adminUsername .Values.pgpool.adminUsername | default "" -}}
 {{- end -}}
 
 
@@ -107,7 +107,7 @@ Return the Pgpool Admin username
 Return the Pgpool-II SR Check username
 */}}
 {{- define "postgresql-ha.pgoolSrCheckUsername" -}}
-{{- coalesce ((.Values.global).pgpool).srCheckUsername .Values.pgpool.srCheckUsername (randAlphaNum 10) -}}
+{{- coalesce ((.Values.global).pgpool).srCheckUsername .Values.pgpool.srCheckUsername | default "" -}}
 {{- end -}}
 
 {{/*
