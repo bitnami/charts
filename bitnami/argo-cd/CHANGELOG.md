@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.0.0 (2025-05-08)
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33561](https://github.com/bitnami/charts/pull/33561))
+
 ## 8.0.0 (2025-05-07)
 
-* [bitnami/argo-cd] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33500](https://github.com/bitnami/charts/pull/33500))
+* [bitnami/argo-cd] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33500) ([8a930f5](https://github.com/bitnami/charts/commit/8a930f5bf8e24160c337799d4d2da411db479de8)), closes [#33500](https://github.com/bitnami/charts/issues/33500)
 
 ## <small>7.3.8 (2025-05-07)</small>
 
