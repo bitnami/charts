@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.controlPlane.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.controlPlane.ingress.ingressClassName }}
   ingressClassName: {{ .Values.controlPlane.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -30,9 +30,7 @@ spec:
           {{- toYaml .Values.controlPlane.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.controlPlane.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.controlPlane.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.control-plane.fullname" . | trunc 63 | trimSuffix "-") "servicePort" $servicePort "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.controlPlane.ingress.extraHosts }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "apisix.control-plane.fullname" $ | trunc 63 | trimSuffix "-") "servicePort" $servicePort "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.controlPlane.ingress.extraRules }}

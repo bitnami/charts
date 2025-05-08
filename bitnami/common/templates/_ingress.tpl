@@ -28,26 +28,6 @@ service:
 {{- end -}}
 
 {{/*
-TODO: Remove as soon it is removed from the rest of the charts
-Print "true" if the API pathType field is supported
-Usage:
-{{ include "common.ingress.supportsPathType" . }}
-*/}}
-{{- define "common.ingress.supportsPathType" -}}
-{{- print "true" -}}
-{{- end -}}
-
-{{/*
-TODO: Remove as soon it is removed from the rest of the charts
-Returns true if the ingressClassname field is supported
-Usage:
-{{ include "common.ingress.supportsIngressClassname" . }}
-*/}}
-{{- define "common.ingress.supportsIngressClassname" -}}
-{{- print "true" -}}
-{{- end -}}
-
-{{/*
 Return true if cert-manager required annotations for TLS signed
 certificates are set in the Ingress annotations
 Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations

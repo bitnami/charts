@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 rules:
   {{- if and (include "common.capabilities.psp.supported" .) .Values.podSecurityPolicy.create }}
-  - apiGroups: ['{{ template "podSecurityPolicy.apiGroup" . }}']
+  - apiGroups: ['policy']
     resources: ['podsecuritypolicies']
     verbs: ['use']
     resourceNames: [{{ template "common.names.fullname" . }}]

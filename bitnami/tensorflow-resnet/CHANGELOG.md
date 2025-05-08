@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.7 (2025-05-06)
+## 4.3.8 (2025-05-06)
 
-* [bitnami/tensorflow-resnet] Release 4.3.7 ([#33331](https://github.com/bitnami/charts/pull/33331))
+* [bitnami/tensorflow-resnet] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33440](https://github.com/bitnami/charts/pull/33440))
+
+## <small>4.3.7 (2025-05-06)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.7 (#33331) ([1209c0f](https://github.com/bitnami/charts/commit/1209c0f3ad121880ba407d5614a2135777b7dab6)), closes [#33331](https://github.com/bitnami/charts/issues/33331)
 
 ## <small>4.3.6 (2025-04-18)</small>
 

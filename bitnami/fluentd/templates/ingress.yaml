@@ -22,7 +22,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.aggregator.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.aggregator.ingress.ingressClassName }}
   ingressClassName: {{ .Values.aggregator.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -34,9 +34,7 @@ spec:
           {{- toYaml .Values.aggregator.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.aggregator.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.aggregator.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.aggregator.ingress.extraHosts }}
@@ -44,9 +42,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.aggregator.ingress.extraRules }}

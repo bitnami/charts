@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.6.5 (2025-04-23)
+## 11.6.7 (2025-05-07)
 
-* [bitnami/grafana] Release 11.6.5 ([#33146](https://github.com/bitnami/charts/pull/33146))
+* [bitnami/grafana] Release 11.6.7 ([#33480](https://github.com/bitnami/charts/pull/33480))
+
+## <small>11.6.6 (2025-05-06)</small>
+
+* [bitnami/grafana] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33367 ([241a6af](https://github.com/bitnami/charts/commit/241a6af687e15581bd0b69c6eb8c9af012a962a9)), closes [#33367](https://github.com/bitnami/charts/issues/33367)
+
+## <small>11.6.5 (2025-04-23)</small>
+
+* [bitnami/grafana] Release 11.6.5 (#33146) ([bf5ff07](https://github.com/bitnami/charts/commit/bf5ff07b490c29681ca87f3ddcfd97a1c4e6171c)), closes [#33146](https://github.com/bitnami/charts/issues/33146)
 
 ## <small>11.6.4 (2025-04-22)</small>
 

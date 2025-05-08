@@ -45,6 +45,7 @@ web:
     enabled: true
     failureThreshold: 60
     periodSeconds: 10
+  resourcesPreset: large
 worker:
   podSecurityContext:
     fsGroup: 1002

@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.5 (2025-04-22)
+## 12.3.6 (2025-05-06)
 
-* [bitnami/cassandra]fix(readinessProbe): Remove path for metrics readinessProbe ([#33121](https://github.com/bitnami/charts/pull/33121))
+* [bitnami/cassandra] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33341](https://github.com/bitnami/charts/pull/33341))
+
+## <small>12.3.5 (2025-04-23)</small>
+
+* [bitnami/cassandra]fix(readinessProbe): Remove path for metrics readinessProbe (#33121) ([7753e55](https://github.com/bitnami/charts/commit/7753e550cc1fc8941e5ec4bb3d3b4082aa8463f8)), closes [#33121](https://github.com/bitnami/charts/issues/33121)
 
 ## <small>12.3.4 (2025-04-22)</small>
 
