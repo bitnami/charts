@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.9 (2025-04-14)
+## 1.4.10 (2025-05-06)
 
-* [bitnami/kuberay] match upstream clusterrole ([#32829](https://github.com/bitnami/charts/pull/32829))
+* [bitnami/kuberay] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33390](https://github.com/bitnami/charts/pull/33390))
+
+## <small>1.4.9 (2025-04-14)</small>
+
+* [bitnami/kuberay] match upstream clusterrole (#32829) ([2e22964](https://github.com/bitnami/charts/commit/2e22964831c0891af097e780ff19b41a6883a10a)), closes [#32829](https://github.com/bitnami/charts/issues/32829)
 
 ## <small>1.4.8 (2025-04-09)</small>
 

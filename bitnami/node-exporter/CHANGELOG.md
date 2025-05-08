@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.5.11 (2025-05-02)
+## 4.5.13 (2025-05-07)
 
-* [bitnami/node-exporter] Release 4.5.11 ([#33299](https://github.com/bitnami/charts/pull/33299))
+* [bitnami/node-exporter] Release 4.5.13 ([#33537](https://github.com/bitnami/charts/pull/33537))
+
+## <small>4.5.12 (2025-05-06)</small>
+
+* [bitnami/node-exporter] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([11acc98](https://github.com/bitnami/charts/commit/11acc98ce0f6d57c6c7f0a4386f3ae345ef2336b)), closes [#33415](https://github.com/bitnami/charts/issues/33415)
+
+## <small>4.5.11 (2025-05-02)</small>
+
+* [bitnami/node-exporter] Release 4.5.11 (#33299) ([2818119](https://github.com/bitnami/charts/commit/28181193f440e0bf2debbd7cc3e6ebd4972b4479)), closes [#33299](https://github.com/bitnami/charts/issues/33299)
 
 ## <small>4.5.10 (2025-04-02)</small>
 

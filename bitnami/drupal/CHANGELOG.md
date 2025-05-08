@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.2.6 (2025-04-25)
+## 21.2.8 (2025-05-08)
 
-* [bitnami/drupal] Release 21.2.6 ([#33182](https://github.com/bitnami/charts/pull/33182))
+* [bitnami/drupal] Release 21.2.8 ([#33551](https://github.com/bitnami/charts/pull/33551))
+
+## <small>21.2.7 (2025-05-06)</small>
+
+* [bitnami/drupal] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33354) ([06648bb](https://github.com/bitnami/charts/commit/06648bb460b7b064848f4abc3e131d145bb0960c)), closes [#33354](https://github.com/bitnami/charts/issues/33354)
+
+## <small>21.2.6 (2025-04-25)</small>
+
+* [bitnami/drupal] Release 21.2.6 (#33182) ([19023d0](https://github.com/bitnami/charts/commit/19023d0eb33370ea6d231728991cc0444b7fa0b7)), closes [#33182](https://github.com/bitnami/charts/issues/33182)
 
 ## <small>21.2.5 (2025-04-22)</small>
 

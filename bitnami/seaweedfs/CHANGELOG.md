@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.8.5 (2025-05-05)
+## 4.8.7 (2025-05-07)
 
-* [bitnami/seaweedfs] Release 4.8.5 ([#33315](https://github.com/bitnami/charts/pull/33315))
+* [bitnami/seaweedfs] Release 4.8.7 ([#33539](https://github.com/bitnami/charts/pull/33539))
+
+## <small>4.8.6 (2025-05-06)</small>
+
+* [bitnami/seaweedfs] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([3789e42](https://github.com/bitnami/charts/commit/3789e42484b6f398325c81a52f273d9218129b89)), closes [#33434](https://github.com/bitnami/charts/issues/33434)
+
+## <small>4.8.5 (2025-05-05)</small>
+
+* [bitnami/seaweedfs] Release 4.8.5 (#33315) ([af40402](https://github.com/bitnami/charts/commit/af40402b56235183cc899c55777c0267e0c50312)), closes [#33315](https://github.com/bitnami/charts/issues/33315)
 
 ## <small>4.8.4 (2025-05-02)</small>
 
