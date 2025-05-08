@@ -87,7 +87,7 @@ data:
     # Sentinel ACL configuration, only for users with password
     {{- range .Values.auth.acl.users }}
     {{- $userPassword := .password | default "" }}
-    {{- $secretPassword := (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $))}}
+    {{- $secretPassword := ternary "" (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $)) (empty $userSecret) }}
     {{ if or $userPassword $secretPassword }}
     user {{ .username }} {{ default "on" .enabled }} #{{ coalesce $secretPassword $userPassword | sha256sum }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
