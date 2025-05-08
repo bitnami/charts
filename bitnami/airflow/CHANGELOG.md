@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.0.1 (2025-05-08)
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33572](https://github.com/bitnami/charts/pull/33572))
+
 ## 24.0.0 (2025-05-07)
 
-* [bitnami/airflow] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33518](https://github.com/bitnami/charts/pull/33518))
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33518) ([fb8524a](https://github.com/bitnami/charts/commit/fb8524ac91a57c98a817a73ba7cf518064801df8)), closes [#33518](https://github.com/bitnami/charts/issues/33518)
 
 ## <small>23.1.1 (2025-05-07)</small>
 
