@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: opensearch
-      image: docker.io/bitnami/opensearch:3.0.0-debian-12-r0
+      image: docker.io/bitnami/opensearch:3.0.0-debian-12-r1
     - name: opensearch-dashboards
       image: docker.io/bitnami/opensearch-dashboards:3.0.0-debian-12-r0
     - name: os-shell
