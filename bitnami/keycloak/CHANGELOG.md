@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.6 (2025-05-08)
+## 24.6.7 (2025-05-09)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#33565](https://github.com/bitnami/charts/pull/33565))
+* [bitnami/keycloak] fix: preserve timestamps in init script ([#33492](https://github.com/bitnami/charts/pull/33492))
+
+## <small>24.6.6 (2025-05-08)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33565) ([e750bc1](https://github.com/bitnami/charts/commit/e750bc1d7f2228c15181e003b6589eff8133d155)), closes [#33565](https://github.com/bitnami/charts/issues/33565)
 
 ## <small>24.6.5 (2025-05-06)</small>
 
