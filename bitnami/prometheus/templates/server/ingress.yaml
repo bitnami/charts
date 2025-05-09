@@ -22,7 +22,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.server.ingress.hostname }}
-    - host: {{ .Values.server.ingress.hostname }}
+    - host: {{ tpl .Values.server.ingress.hostname . | quote }}
       http:
         paths:
           {{- if .Values.server.ingress.extraPaths }}
