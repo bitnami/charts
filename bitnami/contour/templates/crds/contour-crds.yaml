@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/projectcontour/contour/v{version}/examples/contour/01-crds.yaml
-# Version: 1.30.3
+# Version: 1.31.0
 # Conditional: .Values.contour.manageCRDs
 {{- if .Values.contour.manageCRDs }}
 ---
@@ -7,7 +7,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: contourconfigurations.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -285,6 +285,22 @@ spec:
                     description: Listener hold various configurable Envoy listener
                       values.
                     properties:
+                      compression:
+                        description: Compression defines configuration related to
+                          compression in the default HTTP Listener filters.
+                        properties:
+                          algorithm:
+                            description: |-
+                              Algorithm selects the response compression type applied in the compression HTTP filter of the default Listener filters.
+                              Values: `gzip` (default), `brotli`, `zstd`, `disabled`.
+                              Setting this to `disabled` will make Envoy skip "Accept-Encoding: gzip,deflate" request header and always return uncompressed response.
+                            enum:
+                            - gzip
+                            - brotli
+                            - zstd
+                            - disabled
+                            type: string
+                        type: object
                       connectionBalancer:
                         description: |-
                           ConnectionBalancer. If the value is exact, the listener will use the exact connection balancer
@@ -525,6 +541,33 @@ spec:
                           Contour's default is 0.
                         format: int32
                         type: integer
+                      stripTrailingHostDot:
+                        description: |-
+                          EnvoyStripTrailingHostDot defines if trailing dot of the host should be removed from host/authority header
+                          before any processing of request by HTTP filters or routing. This
+                          affects the upstream host header. Without setting this option to true, incoming
+                          requests with host example.com. will not match against route with domains
+                          match set to example.com.
+                          See https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto?highlight=strip_trailing_host_dot
+                          for more information.
+                          Contour's default is false.
+                        type: boolean
+                    type: object
+                  omEnforcedHealth:
+                    description: |-
+                      OMEnforcedHealth defines the endpoint Envoy uses to serve health checks with
+                      the envoy overload manager actions, such as global connection limits, enforced.
+                      The configured values must be different from the endpoints
+                      configured by [EnvoyConfig.Metrics] and [EnvoyConfig.Health]
+                      This is disabled by default
+                    properties:
+                      address:
+                        description: Defines the health address interface.
+                        minLength: 1
+                        type: string
+                      port:
+                        description: Defines the health port.
+                        type: integer
                     type: object
                   service:
                     description: |-
@@ -607,12 +650,7 @@ spec:
                     type: object
                 type: object
               featureFlags:
-                description: |-
-                  FeatureFlags defines toggle to enable new contour features.
-                  Available toggles are:
-                  useEndpointSlices - Configures contour to fetch endpoint data
-                  from k8s endpoint slices. defaults to true,
-                  If false then reads endpoint data from the k8s endpoints.
+                description: FeatureFlags defines toggle to enable new contour features.
                 items:
                   type: string
                 type: array
@@ -882,6 +920,8 @@ spec:
                                           descriptor entry.
                                         minLength: 1
                                         type: string
+                                    required:
+                                    - value
                                     type: object
                                   remoteAddress:
                                     description: |-
@@ -904,6 +944,9 @@ spec:
                                           the header to look for on the request.
                                         minLength: 1
                                         type: string
+                                    required:
+                                    - descriptorKey
+                                    - headerName
                                     type: object
                                   requestHeaderValueMatch:
                                     description: |-
@@ -997,10 +1040,14 @@ spec:
                                           descriptor entry.
                                         minLength: 1
                                         type: string
+                                    required:
+                                    - value
                                     type: object
                                 type: object
                               minItems: 1
                               type: array
+                          required:
+                          - entries
                           type: object
                         minItems: 1
                         type: array
@@ -1148,14 +1195,6 @@ spec:
                         description: Client key filename.
                         type: string
                     type: object
-                  type:
-                    description: |-
-                      Defines the XDSServer to use for `contour serve`.
-                      Values: `envoy` (default), `contour (deprecated)`.
-                      Other values will produce an error.
-                      Deprecated: this field will be removed in a future release when
-                      the `contour` xDS server implementation is removed.
-                    type: string
                 type: object
             type: object
           status:
@@ -1285,12 +1324,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1372,7 +1406,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: contourdeployments.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -1437,9 +1471,6 @@ spec:
                             description: |-
                               Rolling update config params. Present only if DeploymentStrategyType =
                               RollingUpdate.
-                              ---
-                              TODO: Update this to follow our convention for oneOf, whatever we decide it
-                              to be.
                             properties:
                               maxSurge:
                                 anyOf:
@@ -1606,6 +1637,12 @@ spec:
                                 the Pod where this field is used. It makes that resource available
                                 inside a container.
                               type: string
+                            request:
+                              description: |-
+                                Request is the name chosen for a request in the referenced claim.
+                                If empty, everything from the claim is made available, otherwise
+                                only the result of this request.
+                              type: string
                           required:
                           - name
                           type: object
@@ -1688,12 +1725,8 @@ spec:
                           use to replace existing DaemonSet pods with new pods.
                         properties:
                           rollingUpdate:
-                            description: |-
-                              Rolling update config params. Present only if type = "RollingUpdate".
-                              ---
-                              TODO: Update this to follow our convention for oneOf, whatever we decide it
-                              to be. Same as Deployment `strategy.rollingUpdate`.
-                              See https://github.com/kubernetes/kubernetes/issues/35345
+                            description: Rolling update config params. Present only
+                              if type = "RollingUpdate".
                             properties:
                               maxSurge:
                                 anyOf:
@@ -1764,9 +1797,6 @@ spec:
                             description: |-
                               Rolling update config params. Present only if DeploymentStrategyType =
                               RollingUpdate.
-                              ---
-                              TODO: Update this to follow our convention for oneOf, whatever we decide it
-                              to be.
                             properties:
                               maxSurge:
                                 anyOf:
@@ -1879,6 +1909,8 @@ spec:
                           description: |-
                             awsElasticBlockStore represents an AWS Disk resource that is attached to a
                             kubelet's host machine and then exposed to the pod.
+                            Deprecated: AWSElasticBlockStore is deprecated. All operations for the in-tree
+                            awsElasticBlockStore type are redirected to the ebs.csi.aws.com CSI driver.
                             More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
                           properties:
                             fsType:
@@ -1887,7 +1919,6 @@ spec:
                                 Tip: Ensure that the filesystem type is supported by the host operating system.
                                 Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
                                 More info: https://kubernetes.io/docs/concepts/storage/volumes#awselasticblockstore
-                                TODO: how do we prevent errors in the filesystem from compromising the machine
                               type: string
                             partition:
                               description: |-
@@ -1911,8 +1942,10 @@ spec:
                           - volumeID
                           type: object
                         azureDisk:
-                          description: azureDisk represents an Azure Data Disk mount
-                            on the host and bind mount to the pod.
+                          description: |-
+                            azureDisk represents an Azure Data Disk mount on the host and bind mount to the pod.
+                            Deprecated: AzureDisk is deprecated. All operations for the in-tree azureDisk type
+                            are redirected to the disk.csi.azure.com CSI driver.
                           properties:
                             cachingMode:
                               description: 'cachingMode is the Host Caching mode:
@@ -1927,6 +1960,7 @@ spec:
                                 blob storage
                               type: string
                             fsType:
+                              default: ext4
                               description: |-
                                 fsType is Filesystem type to mount.
                                 Must be a filesystem type supported by the host operating system.
@@ -1940,6 +1974,7 @@ spec:
                                 to shared'
                               type: string
                             readOnly:
+                              default: false
                               description: |-
                                 readOnly Defaults to false (read/write). ReadOnly here will force
                                 the ReadOnly setting in VolumeMounts.
@@ -1949,8 +1984,10 @@ spec:
                           - diskURI
                           type: object
                         azureFile:
-                          description: azureFile represents an Azure File Service
-                            mount on the host and bind mount to the pod.
+                          description: |-
+                            azureFile represents an Azure File Service mount on the host and bind mount to the pod.
+                            Deprecated: AzureFile is deprecated. All operations for the in-tree azureFile type
+                            are redirected to the file.csi.azure.com CSI driver.
                           properties:
                             readOnly:
                               description: |-
@@ -1969,8 +2006,9 @@ spec:
                           - shareName
                           type: object
                         cephfs:
-                          description: cephFS represents a Ceph FS mount on the host
-                            that shares a pod's lifetime
+                          description: |-
+                            cephFS represents a Ceph FS mount on the host that shares a pod's lifetime.
+                            Deprecated: CephFS is deprecated and the in-tree cephfs type is no longer supported.
                           properties:
                             monitors:
                               description: |-
@@ -2007,9 +2045,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -2024,6 +2060,8 @@ spec:
                         cinder:
                           description: |-
                             cinder represents a cinder volume attached and mounted on kubelets host machine.
+                            Deprecated: Cinder is deprecated. All operations for the in-tree cinder type
+                            are redirected to the cinder.csi.openstack.org CSI driver.
                             More info: https://examples.k8s.io/mysql-cinder-pd/README.md
                           properties:
                             fsType:
@@ -2051,9 +2089,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -2126,9 +2162,7 @@ spec:
                                 This field is effectively required, but due to backwards compatibility is
                                 allowed to be empty. Instances of this type with an empty value here are
                                 almost certainly wrong.
-                                TODO: Add other useful fields. apiVersion, kind, uid?
                                 More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                               type: string
                             optional:
                               description: optional specify whether the ConfigMap
@@ -2139,7 +2173,7 @@ spec:
                         csi:
                           description: csi (Container Storage Interface) represents
                             ephemeral storage that is handled by certain external
-                            CSI drivers (Beta feature).
+                            CSI drivers.
                           properties:
                             driver:
                               description: |-
@@ -2167,9 +2201,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -2545,7 +2577,7 @@ spec:
                                         set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource
                                         exists.
                                         More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/
-                                        (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled.
+                                        (Beta) Using this field requires the VolumeAttributesClass feature gate to be enabled (off by default).
                                       type: string
                                     volumeMode:
                                       description: |-
@@ -2571,7 +2603,6 @@ spec:
                                 fsType is the filesystem type to mount.
                                 Must be a filesystem type supported by the host operating system.
                                 Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
-                                TODO: how do we prevent errors in the filesystem from compromising the machine
                               type: string
                             lun:
                               description: 'lun is Optional: FC target lun number'
@@ -2602,6 +2633,7 @@ spec:
                           description: |-
                             flexVolume represents a generic volume resource that is
                             provisioned/attached using an exec based plugin.
+                            Deprecated: FlexVolume is deprecated. Consider using a CSIDriver instead.
                           properties:
                             driver:
                               description: driver is the name of the driver to use
@@ -2639,9 +2671,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -2649,9 +2679,9 @@ spec:
                           - driver
                           type: object
                         flocker:
-                          description: flocker represents a Flocker volume attached
-                            to a kubelet's host machine. This depends on the Flocker
-                            control service being running
+                          description: |-
+                            flocker represents a Flocker volume attached to a kubelet's host machine. This depends on the Flocker control service being running.
+                            Deprecated: Flocker is deprecated and the in-tree flocker type is no longer supported.
                           properties:
                             datasetName:
                               description: |-
@@ -2667,6 +2697,8 @@ spec:
                           description: |-
                             gcePersistentDisk represents a GCE Disk resource that is attached to a
                             kubelet's host machine and then exposed to the pod.
+                            Deprecated: GCEPersistentDisk is deprecated. All operations for the in-tree
+                            gcePersistentDisk type are redirected to the pd.csi.storage.gke.io CSI driver.
                             More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
                           properties:
                             fsType:
@@ -2675,7 +2707,6 @@ spec:
                                 Tip: Ensure that the filesystem type is supported by the host operating system.
                                 Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
                                 More info: https://kubernetes.io/docs/concepts/storage/volumes#gcepersistentdisk
-                                TODO: how do we prevent errors in the filesystem from compromising the machine
                               type: string
                             partition:
                               description: |-
@@ -2703,7 +2734,7 @@ spec:
                         gitRepo:
                           description: |-
                             gitRepo represents a git repository at a particular revision.
-                            DEPRECATED: GitRepo is deprecated. To provision a container with a git repo, mount an
+                            Deprecated: GitRepo is deprecated. To provision a container with a git repo, mount an
                             EmptyDir into an InitContainer that clones the repo using git, then mount the EmptyDir
                             into the Pod's container.
                           properties:
@@ -2727,6 +2758,7 @@ spec:
                         glusterfs:
                           description: |-
                             glusterfs represents a Glusterfs mount on the host that shares a pod's lifetime.
+                            Deprecated: Glusterfs is deprecated and the in-tree glusterfs type is no longer supported.
                             More info: https://examples.k8s.io/volumes/glusterfs/README.md
                           properties:
                             endpoints:
@@ -2756,9 +2788,6 @@ spec:
                             used for system agents or other privileged things that are allowed
                             to see the host machine. Most containers will NOT need this.
                             More info: https://kubernetes.io/docs/concepts/storage/volumes#hostpath
-                            ---
-                            TODO(jonesdl) We need to restrict who can use host directory mounts and who can/can not
-                            mount host directories as read/write.
                           properties:
                             path:
                               description: |-
@@ -2774,6 +2803,39 @@ spec:
                               type: string
                           required:
                           - path
+                          type: object
+                        image:
+                          description: |-
+                            image represents an OCI object (a container image or artifact) pulled and mounted on the kubelet's host machine.
+                            The volume is resolved at pod startup depending on which PullPolicy value is provided:
+                            - Always: the kubelet always attempts to pull the reference. Container creation will fail If the pull fails.
+                            - Never: the kubelet never pulls the reference and only uses a local image or artifact. Container creation will fail if the reference isn't present.
+                            - IfNotPresent: the kubelet pulls if the reference isn't already present on disk. Container creation will fail if the reference isn't present and the pull fails.
+                            The volume gets re-resolved if the pod gets deleted and recreated, which means that new remote content will become available on pod recreation.
+                            A failure to resolve or pull the image during pod startup will block containers from starting and may add significant latency. Failures will be retried using normal volume backoff and will be reported on the pod reason and message.
+                            The types of objects that may be mounted by this volume are defined by the container runtime implementation on a host machine and at minimum must include all valid types supported by the container image field.
+                            The OCI object gets mounted in a single directory (spec.containers[*].volumeMounts.mountPath) by merging the manifest layers in the same way as for container images.
+                            The volume will be mounted read-only (ro) and non-executable files (noexec).
+                            Sub path mounts for containers are not supported (spec.containers[*].volumeMounts.subpath).
+                            The field spec.securityContext.fsGroupChangePolicy has no effect on this volume type.
+                          properties:
+                            pullPolicy:
+                              description: |-
+                                Policy for pulling OCI objects. Possible values are:
+                                Always: the kubelet always attempts to pull the reference. Container creation will fail If the pull fails.
+                                Never: the kubelet never pulls the reference and only uses a local image or artifact. Container creation will fail if the reference isn't present.
+                                IfNotPresent: the kubelet pulls if the reference isn't already present on disk. Container creation will fail if the reference isn't present and the pull fails.
+                                Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+                              type: string
+                            reference:
+                              description: |-
+                                Required: Image or artifact reference to be used.
+                                Behaves in the same way as pod.spec.containers[*].image.
+                                Pull secrets will be assembled in the same way as for the container image by looking up node credentials, SA image pull secrets, and pod spec image pull secrets.
+                                More info: https://kubernetes.io/docs/concepts/containers/images
+                                This field is optional to allow higher level config management to default or override
+                                container images in workload controllers like Deployments and StatefulSets.
+                              type: string
                           type: object
                         iscsi:
                           description: |-
@@ -2795,7 +2857,6 @@ spec:
                                 Tip: Ensure that the filesystem type is supported by the host operating system.
                                 Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
                                 More info: https://kubernetes.io/docs/concepts/storage/volumes#iscsi
-                                TODO: how do we prevent errors in the filesystem from compromising the machine
                               type: string
                             initiatorName:
                               description: |-
@@ -2807,6 +2868,7 @@ spec:
                               description: iqn is the target iSCSI Qualified Name.
                               type: string
                             iscsiInterface:
+                              default: default
                               description: |-
                                 iscsiInterface is the interface Name that uses an iSCSI transport.
                                 Defaults to 'default' (tcp).
@@ -2839,9 +2901,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -2906,9 +2966,9 @@ spec:
                           - claimName
                           type: object
                         photonPersistentDisk:
-                          description: photonPersistentDisk represents a PhotonController
-                            persistent disk attached and mounted on kubelets host
-                            machine
+                          description: |-
+                            photonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine.
+                            Deprecated: PhotonPersistentDisk is deprecated and the in-tree photonPersistentDisk type is no longer supported.
                           properties:
                             fsType:
                               description: |-
@@ -2924,8 +2984,11 @@ spec:
                           - pdID
                           type: object
                         portworxVolume:
-                          description: portworxVolume represents a portworx volume
-                            attached and mounted on kubelets host machine
+                          description: |-
+                            portworxVolume represents a portworx volume attached and mounted on kubelets host machine.
+                            Deprecated: PortworxVolume is deprecated. All operations for the in-tree portworxVolume type
+                            are redirected to the pxd.portworx.com CSI driver when the CSIMigrationPortworx feature-gate
+                            is on.
                           properties:
                             fsType:
                               description: |-
@@ -2960,10 +3023,13 @@ spec:
                               format: int32
                               type: integer
                             sources:
-                              description: sources is the list of volume projections
+                              description: |-
+                                sources is the list of volume projections. Each entry in this list
+                                handles one source.
                               items:
-                                description: Projection that may be projected along
-                                  with other supported volume types
+                                description: |-
+                                  Projection that may be projected along with other supported volume types.
+                                  Exactly one of these fields must be set.
                                 properties:
                                   clusterTrustBundle:
                                     description: |-
@@ -3105,9 +3171,7 @@ spec:
                                           This field is effectively required, but due to backwards compatibility is
                                           allowed to be empty. Instances of this type with an empty value here are
                                           almost certainly wrong.
-                                          TODO: Add other useful fields. apiVersion, kind, uid?
                                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                         type: string
                                       optional:
                                         description: optional specify whether the
@@ -3246,9 +3310,7 @@ spec:
                                           This field is effectively required, but due to backwards compatibility is
                                           allowed to be empty. Instances of this type with an empty value here are
                                           almost certainly wrong.
-                                          TODO: Add other useful fields. apiVersion, kind, uid?
                                           More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                         type: string
                                       optional:
                                         description: optional field specify whether
@@ -3290,8 +3352,9 @@ spec:
                               x-kubernetes-list-type: atomic
                           type: object
                         quobyte:
-                          description: quobyte represents a Quobyte mount on the host
-                            that shares a pod's lifetime
+                          description: |-
+                            quobyte represents a Quobyte mount on the host that shares a pod's lifetime.
+                            Deprecated: Quobyte is deprecated and the in-tree quobyte type is no longer supported.
                           properties:
                             group:
                               description: |-
@@ -3330,6 +3393,7 @@ spec:
                         rbd:
                           description: |-
                             rbd represents a Rados Block Device mount on the host that shares a pod's lifetime.
+                            Deprecated: RBD is deprecated and the in-tree rbd type is no longer supported.
                             More info: https://examples.k8s.io/volumes/rbd/README.md
                           properties:
                             fsType:
@@ -3338,7 +3402,6 @@ spec:
                                 Tip: Ensure that the filesystem type is supported by the host operating system.
                                 Examples: "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
                                 More info: https://kubernetes.io/docs/concepts/storage/volumes#rbd
-                                TODO: how do we prevent errors in the filesystem from compromising the machine
                               type: string
                             image:
                               description: |-
@@ -3346,6 +3409,7 @@ spec:
                                 More info: https://examples.k8s.io/volumes/rbd/README.md#how-to-use-it
                               type: string
                             keyring:
+                              default: /etc/ceph/keyring
                               description: |-
                                 keyring is the path to key ring for RBDUser.
                                 Default is /etc/ceph/keyring.
@@ -3360,6 +3424,7 @@ spec:
                               type: array
                               x-kubernetes-list-type: atomic
                             pool:
+                              default: rbd
                               description: |-
                                 pool is the rados pool name.
                                 Default is rbd.
@@ -3385,13 +3450,12 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
                             user:
+                              default: admin
                               description: |-
                                 user is the rados user name.
                                 Default is admin.
@@ -3402,10 +3466,12 @@ spec:
                           - monitors
                           type: object
                         scaleIO:
-                          description: scaleIO represents a ScaleIO persistent volume
-                            attached and mounted on Kubernetes nodes.
+                          description: |-
+                            scaleIO represents a ScaleIO persistent volume attached and mounted on Kubernetes nodes.
+                            Deprecated: ScaleIO is deprecated and the in-tree scaleIO type is no longer supported.
                           properties:
                             fsType:
+                              default: xfs
                               description: |-
                                 fsType is the filesystem type to mount.
                                 Must be a filesystem type supported by the host operating system.
@@ -3437,9 +3503,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -3448,6 +3512,7 @@ spec:
                                 with Gateway, default false
                               type: boolean
                             storageMode:
+                              default: ThinProvisioned
                               description: |-
                                 storageMode indicates whether the storage for a volume should be ThickProvisioned or ThinProvisioned.
                                 Default is ThinProvisioned.
@@ -3536,8 +3601,9 @@ spec:
                               type: string
                           type: object
                         storageos:
-                          description: storageOS represents a StorageOS volume attached
-                            and mounted on Kubernetes nodes.
+                          description: |-
+                            storageOS represents a StorageOS volume attached and mounted on Kubernetes nodes.
+                            Deprecated: StorageOS is deprecated and the in-tree storageos type is no longer supported.
                           properties:
                             fsType:
                               description: |-
@@ -3562,9 +3628,7 @@ spec:
                                     This field is effectively required, but due to backwards compatibility is
                                     allowed to be empty. Instances of this type with an empty value here are
                                     almost certainly wrong.
-                                    TODO: Add other useful fields. apiVersion, kind, uid?
                                     More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                    TODO: Drop `kubebuilder:default` when controller-gen doesn't need it https://github.com/kubernetes-sigs/kubebuilder/issues/3896.
                                   type: string
                               type: object
                               x-kubernetes-map-type: atomic
@@ -3584,8 +3648,10 @@ spec:
                               type: string
                           type: object
                         vsphereVolume:
-                          description: vsphereVolume represents a vSphere volume attached
-                            and mounted on kubelets host machine
+                          description: |-
+                            vsphereVolume represents a vSphere volume attached and mounted on kubelets host machine.
+                            Deprecated: VsphereVolume is deprecated. All operations for the in-tree vsphereVolume type
+                            are redirected to the csi.vsphere.vmware.com CSI driver.
                           properties:
                             fsType:
                               description: |-
@@ -3730,6 +3796,15 @@ spec:
                           type: object
                         type: array
                     type: object
+                  overloadMaxDownstreamConnections:
+                    description: |-
+                      OverloadMaxDownstreamConn defines the envoy global downstream connection limit controlled by the overload manager.
+                      When the value is greater than 0 the overload manager is enabled and listeners
+                      will begin rejecting connections when the the connection threshold is hit.
+                      Metrics and health listeners are not subject to the connection limits, however,
+                      they still count against the global limit.
+                    format: int64
+                    type: integer
                   overloadMaxHeapSize:
                     description: |-
                       OverloadMaxHeapSize defines the maximum heap memory of the envoy controlled by the overload manager.
@@ -3777,6 +3852,12 @@ spec:
                                 Name must match the name of one entry in pod.spec.resourceClaims of
                                 the Pod where this field is used. It makes that resource available
                                 inside a container.
+                              type: string
+                            request:
+                              description: |-
+                                Request is the name chosen for a request in the referenced claim.
+                                If empty, everything from the claim is made available, otherwise
+                                only the result of this request.
                               type: string
                           required:
                           - name
@@ -4067,6 +4148,22 @@ spec:
                         description: Listener hold various configurable Envoy listener
                           values.
                         properties:
+                          compression:
+                            description: Compression defines configuration related
+                              to compression in the default HTTP Listener filters.
+                            properties:
+                              algorithm:
+                                description: |-
+                                  Algorithm selects the response compression type applied in the compression HTTP filter of the default Listener filters.
+                                  Values: `gzip` (default), `brotli`, `zstd`, `disabled`.
+                                  Setting this to `disabled` will make Envoy skip "Accept-Encoding: gzip,deflate" request header and always return uncompressed response.
+                                enum:
+                                - gzip
+                                - brotli
+                                - zstd
+                                - disabled
+                                type: string
+                            type: object
                           connectionBalancer:
                             description: |-
                               ConnectionBalancer. If the value is exact, the listener will use the exact connection balancer
@@ -4307,6 +4404,33 @@ spec:
                               Contour's default is 0.
                             format: int32
                             type: integer
+                          stripTrailingHostDot:
+                            description: |-
+                              EnvoyStripTrailingHostDot defines if trailing dot of the host should be removed from host/authority header
+                              before any processing of request by HTTP filters or routing. This
+                              affects the upstream host header. Without setting this option to true, incoming
+                              requests with host example.com. will not match against route with domains
+                              match set to example.com.
+                              See https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/http_connection_manager/v3/http_connection_manager.proto?highlight=strip_trailing_host_dot
+                              for more information.
+                              Contour's default is false.
+                            type: boolean
+                        type: object
+                      omEnforcedHealth:
+                        description: |-
+                          OMEnforcedHealth defines the endpoint Envoy uses to serve health checks with
+                          the envoy overload manager actions, such as global connection limits, enforced.
+                          The configured values must be different from the endpoints
+                          configured by [EnvoyConfig.Metrics] and [EnvoyConfig.Health]
+                          This is disabled by default
+                        properties:
+                          address:
+                            description: Defines the health address interface.
+                            minLength: 1
+                            type: string
+                          port:
+                            description: Defines the health port.
+                            type: integer
                         type: object
                       service:
                         description: |-
@@ -4389,12 +4513,8 @@ spec:
                         type: object
                     type: object
                   featureFlags:
-                    description: |-
-                      FeatureFlags defines toggle to enable new contour features.
-                      Available toggles are:
-                      useEndpointSlices - Configures contour to fetch endpoint data
-                      from k8s endpoint slices. defaults to true,
-                      If false then reads endpoint data from the k8s endpoints.
+                    description: FeatureFlags defines toggle to enable new contour
+                      features.
                     items:
                       type: string
                     type: array
@@ -4665,6 +4785,8 @@ spec:
                                               the descriptor entry.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - value
                                         type: object
                                       remoteAddress:
                                         description: |-
@@ -4687,6 +4809,9 @@ spec:
                                               of the header to look for on the request.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - descriptorKey
+                                        - headerName
                                         type: object
                                       requestHeaderValueMatch:
                                         description: |-
@@ -4780,10 +4905,14 @@ spec:
                                               the descriptor entry.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - value
                                         type: object
                                     type: object
                                   minItems: 1
                                   type: array
+                              required:
+                              - entries
                               type: object
                             minItems: 1
                             type: array
@@ -4932,14 +5061,6 @@ spec:
                             description: Client key filename.
                             type: string
                         type: object
-                      type:
-                        description: |-
-                          Defines the XDSServer to use for `contour serve`.
-                          Values: `envoy` (default), `contour (deprecated)`.
-                          Other values will produce an error.
-                          Deprecated: this field will be removed in a future release when
-                          the `contour` xDS server implementation is removed.
-                        type: string
                     type: object
                 type: object
             type: object
@@ -4951,16 +5072,8 @@ spec:
                 description: Conditions describe the current conditions of the ContourDeployment
                   resource.
                 items:
-                  description: "Condition contains details for one aspect of the current
-                    state of this API Resource.\n---\nThis struct is intended for
-                    direct use as an array at the field path .status.conditions.  For
-                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
-                    observations of a foo's current state.\n\t    // Known .status.conditions.type
-                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
-                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
-                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
-                    \   // other fields\n\t}"
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
                   properties:
                     lastTransitionTime:
                       description: |-
@@ -5001,12 +5114,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -5032,7 +5140,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: extensionservices.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -5147,6 +5255,8 @@ spec:
                                 request, no hash will be produced.
                               minLength: 1
                               type: string
+                          required:
+                          - headerName
                           type: object
                         queryParameterHashOptions:
                           description: |-
@@ -5161,6 +5271,8 @@ spec:
                                 request, no hash will be produced.
                               minLength: 1
                               type: string
+                          required:
+                          - parameterName
                           type: object
                         terminal:
                           description: |-
@@ -5428,12 +5540,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -5513,7 +5620,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: httpproxies.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -6205,6 +6312,8 @@ spec:
                                       request, no hash will be produced.
                                     minLength: 1
                                     type: string
+                                required:
+                                - headerName
                                 type: object
                               queryParameterHashOptions:
                                 description: |-
@@ -6219,6 +6328,8 @@ spec:
                                       request, no hash will be produced.
                                     minLength: 1
                                     type: string
+                                required:
+                                - parameterName
                                 type: object
                               terminal:
                                 description: |-
@@ -6319,6 +6430,8 @@ spec:
                                                 of the descriptor entry.
                                               minLength: 1
                                               type: string
+                                          required:
+                                          - value
                                           type: object
                                         remoteAddress:
                                           description: |-
@@ -6342,6 +6455,9 @@ spec:
                                                 the request.
                                               minLength: 1
                                               type: string
+                                          required:
+                                          - descriptorKey
+                                          - headerName
                                           type: object
                                         requestHeaderValueMatch:
                                           description: |-
@@ -6435,10 +6551,14 @@ spec:
                                                 of the descriptor entry.
                                               minLength: 1
                                               type: string
+                                          required:
+                                          - value
                                           type: object
                                       type: object
                                     minItems: 1
                                     type: array
+                                required:
+                                - entries
                                 type: object
                               minItems: 1
                               type: array
@@ -6608,6 +6728,10 @@ spec:
                           enum:
                           - 301
                           - 302
+                          - 303
+                          - 307
+                          - 308
+                          format: int32
                           type: integer
                       type: object
                     responseHeadersPolicy:
@@ -6678,11 +6802,14 @@ spec:
                             - `5xx`
                             - `gateway-error`
                             - `reset`
+                            - `reset-before-request`
                             - `connect-failure`
+                            - `envoy-ratelimited`
                             - `retriable-4xx`
                             - `refused-stream`
                             - `retriable-status-codes`
                             - `retriable-headers`
+                            - `http3-post-connect-failure`
                             Supported [gRPC conditions](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on):
                             - `cancelled`
                             - `deadline-exceeded`
@@ -6696,11 +6823,14 @@ spec:
                             - 5xx
                             - gateway-error
                             - reset
+                            - reset-before-request
                             - connect-failure
+                            - envoy-ratelimited
                             - retriable-4xx
                             - refused-stream
                             - retriable-status-codes
                             - retriable-headers
+                            - http3-post-connect-failure
                             - cancelled
                             - deadline-exceeded
                             - internal
@@ -7083,6 +7213,8 @@ spec:
                                     request, no hash will be produced.
                                   minLength: 1
                                   type: string
+                              required:
+                              - headerName
                               type: object
                             queryParameterHashOptions:
                               description: |-
@@ -7097,6 +7229,8 @@ spec:
                                     request, no hash will be produced.
                                   minLength: 1
                                   type: string
+                              required:
+                              - parameterName
                               type: object
                             terminal:
                               description: |-
@@ -7763,6 +7897,8 @@ spec:
                                               the descriptor entry.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - value
                                         type: object
                                       remoteAddress:
                                         description: |-
@@ -7785,6 +7921,9 @@ spec:
                                               of the header to look for on the request.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - descriptorKey
+                                        - headerName
                                         type: object
                                       requestHeaderValueMatch:
                                         description: |-
@@ -7878,10 +8017,14 @@ spec:
                                               the descriptor entry.
                                             minLength: 1
                                             type: string
+                                        required:
+                                        - value
                                         type: object
                                     type: object
                                   minItems: 1
                                   type: array
+                              required:
+                              - entries
                               type: object
                             minItems: 1
                             type: array
@@ -8220,12 +8363,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -8335,6 +8473,8 @@ spec:
                             Ports is a list of records of service ports
                             If used, every port defined in the service should have an entry in it
                           items:
+                            description: PortStatus represents the error condition
+                              of a service port
                             properties:
                               error:
                                 description: |-
@@ -8344,8 +8484,6 @@ spec:
                                     CamelCase names
                                   - cloud provider specific error values must have names that comply with the
                                     format foo.example.com/CamelCase.
-                                  ---
-                                  The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                                 maxLength: 316
                                 pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                                 type: string
@@ -8355,12 +8493,12 @@ spec:
                                 format: int32
                                 type: integer
                               protocol:
-                                default: TCP
                                 description: |-
                                   Protocol is the protocol of the service port of which status is recorded here
                                   The supported values are: "TCP", "UDP", "SCTP"
                                 type: string
                             required:
+                            - error
                             - port
                             - protocol
                             type: object
@@ -8384,7 +8522,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: tlscertificatedelegations.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -8585,12 +8723,7 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: |-
-                        type of condition in CamelCase or in foo.example.com/CamelCase.
-                        ---
-                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                        useful (see .node.status.conditions), the ability to deconflict is important.
-                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
