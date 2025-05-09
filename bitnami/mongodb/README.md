@@ -20,8 +20,6 @@ Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog]
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Architecture
 
 This chart allows installing MongoDB(&reg;) using two different architecture setups: `standalone` or `replicaset`. Use the `architecture` parameter to choose the one to use:
