@@ -461,6 +461,10 @@ spec:
         resources:
           requests:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
+        {{- with $.Values.shardsvr.persistence.selector }}
+        selector:
+          {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.persistence.selector "context" (merge $ (dict "Index" $i))) | nindent 10 }}
+        {{- end }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
