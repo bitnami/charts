@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.0.1 (2025-05-09)
+
+* [bitnami/superset] fix ingress with extraHosts failed to deploy ([#33052](https://github.com/bitnami/charts/pull/33052))
+
 ## 3.0.0 (2025-05-07)
 
-* [bitnami/superset] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33512](https://github.com/bitnami/charts/pull/33512))
+* [bitnami/superset] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33512) ([da6da50](https://github.com/bitnami/charts/commit/da6da50e471c17933688cee861af5d5f8be32a81)), closes [#33512](https://github.com/bitnami/charts/issues/33512)
 
 ## <small>2.0.3 (2025-05-07)</small>
 
