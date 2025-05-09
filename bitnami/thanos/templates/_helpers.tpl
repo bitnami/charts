@@ -110,6 +110,20 @@ Return the Thanos Objstore configuration secret.
 {{- end -}}
 
 {{/*
+Return the Thanos Objstore configuration secret key.
+*/}}
+{{- define "thanos.objstoreSecretKey" -}}
+    {{- $defaultKey := "objstore.yml" -}}
+    {{- $foundKey := "" -}}
+    {{- range .Values.existingObjstoreSecretItems }}
+      {{- if and (eq .path $defaultKey) (eq $foundKey "") }}
+        {{- $foundKey = .key }}
+      {{- end }}
+    {{- end }}
+    {{- default $defaultKey $foundKey }}
+{{- end }}
+
+{{/*
 Return true if a secret object should be created
 */}}
 {{- define "thanos.createObjstoreSecret" -}}
