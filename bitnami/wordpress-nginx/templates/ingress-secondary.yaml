@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.secondaryIngress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "common.names.fullname" . }}-secondary
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.secondaryIngress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondaryIngress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.secondaryIngress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.secondaryIngress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.secondaryIngress.hostname }}
+    - host: {{ tpl .Values.secondaryIngress.hostname $ | quote }}
+      http:
+        paths:
+          {{- if .Values.secondaryIngress.extraPaths }}
+          {{- toYaml .Values.secondaryIngress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.secondaryIngress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.secondaryIngress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.secondaryIngress.extraHosts }}
+    - host: {{ tpl .name $ | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.secondaryIngress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.secondaryIngress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.secondaryIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.secondaryIngress.annotations )) .Values.secondaryIngress.selfSigned)) .Values.secondaryIngress.extraTls }}
+  tls:
+    {{- if and .Values.secondaryIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.secondaryIngress.annotations )) .Values.secondaryIngress.selfSigned) }}
+    - hosts:
+        - {{ tpl .Values.secondaryIngress.hostname $ | quote }}
+        {{- if or (.Values.secondaryIngress.tlsWwwPrefix) (eq (index .Values.secondaryIngress.annotations "nginx.ingress.kubernetes.io/from-to-www-redirect") "true" ) }}
+        - {{ printf "www.%s" (tpl .Values.secondaryIngress.hostname $) | quote }}
+        {{- end }}
+      secretName: {{ printf "%s-tls" (tpl .Values.secondaryIngress.hostname $) }}
+    {{- end }}
+    {{- if .Values.secondaryIngress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.secondaryIngress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
