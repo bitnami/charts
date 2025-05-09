@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.6.3 (2025-05-07)
+## 9.6.4 (2025-05-09)
 
-* [bitnami/solr] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33435](https://github.com/bitnami/charts/pull/33435))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#33583](https://github.com/bitnami/charts/pull/33583))
+
+## <small>9.6.3 (2025-05-07)</small>
+
+* [bitnami/solr] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33435) ([537f842](https://github.com/bitnami/charts/commit/537f842cd75f07bab23b261697a89a47be5e65e7)), closes [#33435](https://github.com/bitnami/charts/issues/33435)
 
 ## <small>9.6.2 (2025-05-07)</small>
 
