@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.6 (2025-04-26)
+## 11.3.7 (2025-05-06)
 
-* [bitnami/apache] Release 11.3.6 ([#33193](https://github.com/bitnami/charts/pull/33193))
+* [bitnami/apache] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33334](https://github.com/bitnami/charts/pull/33334))
+
+## <small>11.3.6 (2025-04-26)</small>
+
+* [bitnami/apache] Release 11.3.6 (#33193) ([14cff54](https://github.com/bitnami/charts/commit/14cff541b7e03af1d3a69772c294f5c9728ac0d3)), closes [#33193](https://github.com/bitnami/charts/issues/33193)
 
 ## <small>11.3.5 (2025-03-27)</small>
 

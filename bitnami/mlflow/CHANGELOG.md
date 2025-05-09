@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.0.5 (2025-05-02)
+## 3.0.7 (2025-05-08)
 
-* [bitnami/mlflow] Release 3.0.5 ([#33309](https://github.com/bitnami/charts/pull/33309))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#33557](https://github.com/bitnami/charts/pull/33557))
+
+## <small>3.0.6 (2025-05-06)</small>
+
+* [bitnami/mlflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33404) ([205d1e8](https://github.com/bitnami/charts/commit/205d1e8f33a1b5a71f4a69bc17f84271a6817d49)), closes [#33404](https://github.com/bitnami/charts/issues/33404)
+
+## <small>3.0.5 (2025-05-02)</small>
+
+* [bitnami/mlflow] Release 3.0.5 (#33309) ([dbb7a86](https://github.com/bitnami/charts/commit/dbb7a86bddd464ff476173a8c9f55bebd9c70db9)), closes [#33309](https://github.com/bitnami/charts/issues/33309)
 
 ## <small>3.0.4 (2025-05-02)</small>
 

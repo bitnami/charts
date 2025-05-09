@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.0.7 (2025-05-01)
+## 2.0.10 (2025-05-07)
 
-* [bitnami/nessie] Release 2.0.7 ([#33279](https://github.com/bitnami/charts/pull/33279))
+* [bitnami/nessie] Release 2.0.10 ([#33549](https://github.com/bitnami/charts/pull/33549))
+
+## <small>2.0.9 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.9 (#33536) ([b3fdd10](https://github.com/bitnami/charts/commit/b3fdd10c0105f2ee69620dcd887731985df76289)), closes [#33536](https://github.com/bitnami/charts/issues/33536)
+
+## <small>2.0.8 (2025-05-06)</small>
+
+* [bitnami/nessie] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33412) ([9f42a65](https://github.com/bitnami/charts/commit/9f42a65f1d468cd16c4892f095b6fad804c71cdc)), closes [#33412](https://github.com/bitnami/charts/issues/33412)
+
+## <small>2.0.7 (2025-05-01)</small>
+
+* [bitnami/nessie] Release 2.0.7 (#33279) ([5299ff5](https://github.com/bitnami/charts/commit/5299ff516e7766cc97eb1a45d9df40dc414185ba)), closes [#33279](https://github.com/bitnami/charts/issues/33279)
 
 ## <small>2.0.6 (2025-04-26)</small>
 

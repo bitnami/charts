@@ -232,7 +232,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 30
-    timeoutSeconds: 20
+    timeoutSeconds: 60
     failureThreshold: 5
     successThreshold: 1
   ## @param client.readinessProbe.enabled Enable readinessProbe on Client nodes

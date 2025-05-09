@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.0.4 (2025-04-22)
+## 16.0.6 (2025-05-07)
 
-* [bitnami/thanos] Release 16.0.4 ([#33109](https://github.com/bitnami/charts/pull/33109))
+* [bitnami/thanos] Release 16.0.6 ([#33544](https://github.com/bitnami/charts/pull/33544))
+
+## <small>16.0.5 (2025-05-06)</small>
+
+* [bitnami/thanos] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33441) ([1f4814b](https://github.com/bitnami/charts/commit/1f4814b1ac7289d8635101aeb4a9a3edc5af1761)), closes [#33441](https://github.com/bitnami/charts/issues/33441)
+
+## <small>16.0.4 (2025-04-22)</small>
+
+* [bitnami/thanos] Release 16.0.4 (#33109) ([e88eeed](https://github.com/bitnami/charts/commit/e88eeed2db08e09cb06ba2cdbbaa5ab1a8d8f4fc)), closes [#33109](https://github.com/bitnami/charts/issues/33109)
 
 ## <small>16.0.3 (2025-04-09)</small>
 

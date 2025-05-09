@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.1.14 (2025-04-29)
+## 16.0.0 (2025-05-07)
 
-* [bitnami/discourse] Release 15.1.14 ([#33241](https://github.com/bitnami/charts/pull/33241))
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33501](https://github.com/bitnami/charts/pull/33501))
+
+## <small>15.1.15 (2025-05-06)</small>
+
+* [bitnami/discourse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([7947c69](https://github.com/bitnami/charts/commit/7947c69dd2d9a0a262e430cbb48683d8ee95ef45)), closes [#33352](https://github.com/bitnami/charts/issues/33352)
+* [bitnami/discourse] Release 15.1.14 (#33241) ([bceff0f](https://github.com/bitnami/charts/commit/bceff0fcc3f5c0091ba103662bc540cf6ccdd3a4)), closes [#33241](https://github.com/bitnami/charts/issues/33241)
 
 ## <small>15.1.13 (2025-04-09)</small>
 

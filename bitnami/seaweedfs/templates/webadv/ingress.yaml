@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.webdav.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.webdav.ingress.ingressClassName }}
   ingressClassName: {{ .Values.webdav.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -27,9 +27,7 @@ spec:
           {{- toYaml .Values.webdav.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.webdav.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.webdav.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.webdav.fullname" .) "servicePort" (ternary "https" "http" .Values.webdav.tls.enabled) "context" $)  | nindent 14 }}
       {{- if not (empty .Values.webdav.ingress.hostname )}}
       host: {{ .Values.webdav.ingress.hostname }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.webdav.fullname" $) "servicePort" ("https" "http" .Values.webdav.tls.enabled) "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.webdav.ingress.extraRules }}

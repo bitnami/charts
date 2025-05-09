@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.filer.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.filer.ingress.ingressClassName }}
   ingressClassName: {{ .Values.filer.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -27,9 +27,7 @@ spec:
           {{- toYaml .Values.filer.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.filer.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.filer.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.filer.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
       {{- if not (empty .Values.filer.ingress.hostname )}}
       host: {{ .Values.filer.ingress.hostname }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.filer.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.filer.ingress.extraRules }}

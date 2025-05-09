@@ -1,6 +1,8 @@
 pgpool:
   adminUsername: adminUser
   adminPassword: adminPassword123!4
+  srCheckUsername: srCheck
+  srCheckPassword: srCheckPassword123!4
   replicaCount: 1
   podSecurityContext:
     enabled: true
@@ -14,6 +16,7 @@ postgresql:
   repmgrUsername: repmgr
   repmgrPassword: repmgrPassword123!4
   repmgrDatabase: repmgr
+  repmgrPassfilePath: /opt/bitnami/repmgr/conf/.pgpass
   repmgrConnectTimeout: 7
   replicaCount: 4
   password: psqlPassword123!4

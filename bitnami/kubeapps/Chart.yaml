@@ -28,7 +28,7 @@ dependencies:
 - condition: packaging.flux.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.x.x
+  version: 21.x.x
 - condition: packaging.helm.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -38,7 +38,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
+# The Kubeapps chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
@@ -47,10 +49,8 @@ keywords:
 - service catalog
 - deployment
 kubeVersion: '>=1.21.0-0'
-maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 17.1.6
+version: 18.0.1

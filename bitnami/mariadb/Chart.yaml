@@ -2,25 +2,27 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: service
   category: Database
-  licenses: Apache-2.0
   images: |
     - name: mariadb
-      image: docker.io/bitnami/mariadb:11.4.5-debian-12-r12
+      image: docker.io/bitnami/mariadb:11.4.6-debian-12-r0
     - name: mysqld-exporter
-      image: docker.io/bitnami/mysqld-exporter:0.17.2-debian-12-r7
+      image: docker.io/bitnami/mysqld-exporter:0.17.2-debian-12-r8
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r43
+  licenses: Apache-2.0
+  tanzuCategory: service
 apiVersion: v2
-appVersion: 11.4.5
+appVersion: 11.4.6
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
   version: 2.x.x
-description: MariaDB is an open source, community-developed SQL database server that is widely in use around the world due to its enterprise features, flexibility, and collaboration with leading tech firms.
+description: MariaDB is an open source, community-developed SQL database server that
+  is widely in use around the world due to its enterprise features, flexibility, and
+  collaboration with leading tech firms.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mariadb/img/mariadb-stack-220x234.png
 keywords:
@@ -35,4 +37,4 @@ maintainers:
 name: mariadb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mariadb
-version: 20.5.3
+version: 20.5.5

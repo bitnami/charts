@@ -397,7 +397,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- $host := default (include "airflow.serviceIP" .) .Values.web.baseUrl -}}
 {{- $port := printf ":%d" (int .Values.service.ports.http) -}}
 {{- $schema := ternary "https://" "http://" (or .Values.web.tls.enabled (and .Values.ingress.enabled .Values.ingress.tls)) -}}
-{{- if regexMatch "^https?://" .Values.web.baseUrl -}}
+{{- if and (regexMatch "^https?://" .Values.web.baseUrl) (not .Values.ingress.enabled) -}}
   {{- $schema = "" -}}
 {{- end -}}
 {{- if or (regexMatch ":\\d+$" .Values.web.baseUrl) (eq $port ":80") (eq $port ":443") -}}
@@ -405,6 +405,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 {{- end -}}
 {{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
   {{- $host = .Values.ingress.hostname -}}
+  {{- $port = "" -}}
 {{- end -}}
 {{- printf "%s%s%s" $schema $host $port -}}
 {{- end -}}
