@@ -1,8 +1,13 @@
 # Changelog
 
-## 26.0.0 (2025-05-08)
+## 26.1.0 (2025-05-09)
 
-* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33502](https://github.com/bitnami/charts/pull/33502))
+* [bitnami/harbor] Add support for registry storage upload purging setting ([#33587](https://github.com/bitnami/charts/pull/33587))
+
+## 26.0.0 (2025-05-09)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33502) ([1fe91e0](https://github.com/bitnami/charts/commit/1fe91e0de5f7f343c31ff8bd8ac44ace87253207)), closes [#33502](https://github.com/bitnami/charts/issues/33502)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>25.0.2 (2025-05-08)</small>
 
