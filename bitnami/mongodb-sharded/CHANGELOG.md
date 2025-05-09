@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.2.6 (2025-05-08)
+## 9.2.6 (2025-05-09)
 
 * [bitnami/mongodb-sharded] allow selector definitions for volumeClaimTemplates ([#33574](https://github.com/bitnami/charts/pull/33574))
 
