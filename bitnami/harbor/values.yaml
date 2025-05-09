@@ -389,6 +389,16 @@ persistence:
     ## @param persistence.imageChartStorage.disableredirect The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO&reg; for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail
     ##
     disableredirect: false
+    ## Upload purging is a background process that periodically removes orphaned files from the upload directories of the registry
+    ## @param persistence.imageChartStorage.uploadpurging.enabled Maintenance upload purging setting: Set to `true` to enable upload purging. (Defaults to `false` for backward compatibility)
+    ## @param persistence.imageChartStorage.uploadpurging.age Maintenance upload purging setting: Upload directories which are older than this age will be deleted
+    ## @param persistence.imageChartStorage.uploadpurging.interval Maintenance upload purging setting: The interval between upload directory purging
+    ## @param persistence.imageChartStorage.uploadpurging.dryrun Maintenance upload purging setting: Set to `true` to obtain a summary of what directories will be deleted
+    uploadpurging:
+      enabled: false
+      age: 168h # 1 week
+      interval: 24h
+      dryrun: false
     ## @param persistence.imageChartStorage.type The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail
     ##
     type: filesystem
