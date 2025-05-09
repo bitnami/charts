@@ -22,8 +22,6 @@ This chart bootstraps a [DeepSpeed](https://github.com/bitnami/containers/tree/m
 
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

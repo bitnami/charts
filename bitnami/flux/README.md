@@ -20,8 +20,6 @@ Looking to use Flux in production? Try [VMware Tanzu Application Catalog](https:
 
 This chart bootstraps a [Flux](https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-kustomize-controller) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

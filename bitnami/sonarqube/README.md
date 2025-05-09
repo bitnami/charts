@@ -20,8 +20,6 @@ Looking to use SonarQube&trade; in production? Try [VMware Tanzu Application Cat
 
 This chart bootstraps an [SonarQube&trade;](https://github.com/bitnami/containers/tree/main/bitnami/sonarqube) cluster on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

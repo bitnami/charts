@@ -20,8 +20,6 @@ Looking to use Redisreg; Cluster in production? Try [VMware Tanzu Application Ca
 
 This chart bootstraps a [Redis&reg;](https://github.com/bitnami/containers/tree/main/bitnami/redis) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ### Choose between Redis&reg; Helm Chart and Redis&reg; Cluster Helm Chart
 
 You can choose any of the two Redis&reg; Helm charts for deploying a Redis&reg; cluster.

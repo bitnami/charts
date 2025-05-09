@@ -20,8 +20,6 @@ Looking to use MariaDB Galera in production? Try [VMware Tanzu Application Catal
 
 This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Differences between the the Bitnami MariaDB Galera and Bitnami MariaDB Helm charts
 
 There are two different ways to deploy a MariaDB cluster, using the MariaDB Helm chart or the MariaDB Galera Helm chart. Both solutions provide a simply and reliable way to run MariaDB in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.

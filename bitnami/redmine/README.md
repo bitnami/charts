@@ -22,8 +22,6 @@ This chart bootstraps a [Redmine](https://github.com/bitnami/containers/tree/mai
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) and the [PostgreSQL chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) which are required for bootstrapping a MariaDB/PostgreSQL deployment for the database requirements of the Redmine application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
