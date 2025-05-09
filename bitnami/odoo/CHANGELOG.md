@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.2.3 (2025-05-06)
+## 28.2.4 (2025-05-09)
 
-* [bitnami/odoo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33417](https://github.com/bitnami/charts/pull/33417))
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#33584](https://github.com/bitnami/charts/pull/33584))
+
+## <small>28.2.3 (2025-05-06)</small>
+
+* [bitnami/odoo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33417) ([4a0c8c6](https://github.com/bitnami/charts/commit/4a0c8c63b7a5a55d105f66d634aefb773fc351e7)), closes [#33417](https://github.com/bitnami/charts/issues/33417)
 
 ## <small>28.2.2 (2025-04-09)</small>
 
