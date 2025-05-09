@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.7.8 (2025-05-07)
+## 1.7.9 (2025-05-09)
 
-* [bitnami/vault] Release 1.7.8 ([#33516](https://github.com/bitnami/charts/pull/33516))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#33594](https://github.com/bitnami/charts/pull/33594))
+
+## <small>1.7.8 (2025-05-07)</small>
+
+* [bitnami/vault] Release 1.7.8 (#33516) ([524f254](https://github.com/bitnami/charts/commit/524f2543ec651adbb58cfe757119f9d1207fd503)), closes [#33516](https://github.com/bitnami/charts/issues/33516)
 
 ## <small>1.7.7 (2025-05-07)</small>
 
