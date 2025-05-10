@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.7 (2025-05-07)
+## 9.0.8 (2025-05-09)
 
-* [jupyterhub] Fix singleuser image pull secrets ([#33176](https://github.com/bitnami/charts/pull/33176))
+* [bitnami/jupyterhub] Init containers can be used with external PostgreSQL ([#33582](https://github.com/bitnami/charts/pull/33582))
+
+## <small>9.0.7 (2025-05-07)</small>
+
+* [jupyterhub] Fix singleuser image pull secrets (#33176) ([95a3490](https://github.com/bitnami/charts/commit/95a34900e72996e02e0ba14bea719a6f7747e2c2)), closes [#33176](https://github.com/bitnami/charts/issues/33176)
 
 ## <small>9.0.6 (2025-05-06)</small>
 
