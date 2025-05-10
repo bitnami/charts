@@ -6,11 +6,22 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Override "common.names.fullname" function from the common chart with priority to global.postgresql.fullnameOverride
+*/}}
+{{- define "common.names.fullname" -}}
+{{- if and .Values.global.postgresql.fullnameOverride .Chart.IsRoot }}
+{{- .Values.global.postgresql.fullnameOverride -}}
+{{- else }}
+{{- include "common.names.dependency.fullname" (dict "chartName" .Chart.Name "chartValues" .Values "context" $) }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name for PostgreSQL Primary objects
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "postgresql.v1.primary.fullname" -}}
-{{- $fullname := default (include "common.names.fullname" .) .Values.global.postgresql.fullnameOverride -}}
+{{- $fullname := include "common.names.fullname" . -}}
 {{- ternary (printf "%s-%s" $fullname .Values.primary.name | trunc 63 | trimSuffix "-") $fullname (eq .Values.architecture "replication") -}}
 {{- end -}}
 
