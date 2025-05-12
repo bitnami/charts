@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.3 (2025-05-07)
+## 25.1.4 (2025-05-11)
 
-* [bitnami/schema-registry] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33431](https://github.com/bitnami/charts/pull/33431))
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#33603](https://github.com/bitnami/charts/pull/33603))
+
+## <small>25.1.3 (2025-05-07)</small>
+
+* [bitnami/schema-registry] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([4e7a54e](https://github.com/bitnami/charts/commit/4e7a54ee3bf4d18b6801193fc99869087a02fe63)), closes [#33431](https://github.com/bitnami/charts/issues/33431) [#33391](https://github.com/bitnami/charts/issues/33391) [#33397](https://github.com/bitnami/charts/issues/33397) [#33409](https://github.com/bitnami/charts/issues/33409) [#33406](https://github.com/bitnami/charts/issues/33406) [#33414](https://github.com/bitnami/charts/issues/33414) [#33430](https://github.com/bitnami/charts/issues/33430) [#33425](https://github.com/bitnami/charts/issues/33425) [#33450](https://github.com/bitnami/charts/issues/33450) [#33448](https://github.com/bitnami/charts/issues/33448) [#33384](https://github.com/bitnami/charts/issues/33384)
 
 ## <small>25.1.2 (2025-04-11)</small>
 
