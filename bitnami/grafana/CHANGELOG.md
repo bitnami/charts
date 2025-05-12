@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.6.7 (2025-05-07)
+## 12.0.0 (2025-05-12)
 
-* [bitnami/grafana] Release 11.6.7 ([#33480](https://github.com/bitnami/charts/pull/33480))
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#33604](https://github.com/bitnami/charts/pull/33604))
+
+## <small>11.6.7 (2025-05-07)</small>
+
+* [bitnami/grafana] Release 11.6.7 (#33480) ([e6f2524](https://github.com/bitnami/charts/commit/e6f25246b6bc970e8b7496fd5f09739f15d18b3f)), closes [#33480](https://github.com/bitnami/charts/issues/33480)
 
 ## <small>11.6.6 (2025-05-06)</small>
 
