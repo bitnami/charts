@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.4 (2025-05-07)
+## 0.1.5 (2025-05-12)
 
-* [bitnami/envoy-gateway] Release 0.1.4 ([#33541](https://github.com/bitnami/charts/pull/33541))
+* bitnami/envoy-gateway: fix template hpa ([#33621](https://github.com/bitnami/charts/pull/33621))
+
+## <small>0.1.4 (2025-05-07)</small>
+
+* [bitnami/envoy-gateway] Release 0.1.4 (#33541) ([68c37dc](https://github.com/bitnami/charts/commit/68c37dcf1363b40e1a14e7b76a46dbc5e7d5b0a1)), closes [#33541](https://github.com/bitnami/charts/issues/33541)
 
 ## <small>0.1.3 (2025-05-06)</small>
 
