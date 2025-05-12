@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.7.3 (2025-05-10)
+## 16.7.3 (2025-05-12)
 
 * [bitnami/postgresql] Postgresql global fullnameOverride fix ([#33593](https://github.com/bitnami/charts/pull/33593))
 
