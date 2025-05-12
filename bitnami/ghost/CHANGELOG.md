@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.2.16 (2025-05-06)
+## 23.0.0 (2025-05-12)
 
-* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33364](https://github.com/bitnami/charts/pull/33364))
+* [bitnami/ghost] Update MySQL subchart ([#33609](https://github.com/bitnami/charts/pull/33609))
+
+## <small>22.2.16 (2025-05-06)</small>
+
+* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33364) ([609e1db](https://github.com/bitnami/charts/commit/609e1db564adb895c89b8d08abd01cbfd5bd68c3)), closes [#33364](https://github.com/bitnami/charts/issues/33364)
 
 ## <small>22.2.15 (2025-04-25)</small>
 
