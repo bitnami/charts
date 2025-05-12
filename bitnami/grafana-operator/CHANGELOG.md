@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.9.14 (2025-05-06)
+## 4.9.16 (2025-05-12)
 
-* [bitnami/grafana-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33370](https://github.com/bitnami/charts/pull/33370))
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#33605](https://github.com/bitnami/charts/pull/33605))
+
+## <small>4.9.15 (2025-05-07)</small>
+
+* [bitnami/grafana-operator] Release 4.9.15 (#33520) ([5d5a22b](https://github.com/bitnami/charts/commit/5d5a22bd3ac142cac8367e9a69414c3a44725d36)), closes [#33520](https://github.com/bitnami/charts/issues/33520)
+
+## <small>4.9.14 (2025-05-06)</small>
+
+* [bitnami/grafana-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 reference ([6bab5cc](https://github.com/bitnami/charts/commit/6bab5cce113601dbdd2370de0e3cb7455e099a17)), closes [#33370](https://github.com/bitnami/charts/issues/33370)
 
 ## <small>4.9.13 (2025-04-22)</small>
 

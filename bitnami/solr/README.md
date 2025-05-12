@@ -20,8 +20,6 @@ Looking to use Apache Solr in production? Try [VMware Tanzu Application Catalog]
 
 This chart bootstraps a [Solr](https://github.com/bitnami/containers/tree/main/bitnami/solr) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -372,6 +370,14 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `persistence.subPath`       | Path within the volume from which the container's                 | `""`                |
 | `persistence.subPathExpr`   | Expanded path within the volume from which                        | `""`                |
 | `persistence.selector`      | Selector to match an existing Persistent Volume for Solr data PVC | `{}`                |
+
+### Persistent Volume Claim Retention Policy
+
+| Name                                               | Description                                                                    | Value    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | -------- |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for Solr Statefulset                 | `false`  |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain` |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain` |
 
 ### Volume Permissions parameters
 

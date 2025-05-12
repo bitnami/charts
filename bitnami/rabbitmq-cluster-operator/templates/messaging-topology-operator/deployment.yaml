@@ -92,7 +92,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /manager
+            - manager
           {{- end }}
           {{- if .Values.msgTopologyOperator.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.args "context" $) | nindent 12 }}

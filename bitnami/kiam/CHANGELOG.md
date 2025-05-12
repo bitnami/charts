@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.10 (2025-05-06)
+## 2.3.11 (2025-05-07)
 
-* [bitnami/kiam] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33382](https://github.com/bitnami/charts/pull/33382))
+* [bitnami/kiam] Release 2.3.11 ([#33531](https://github.com/bitnami/charts/pull/33531))
+
+## <small>2.3.10 (2025-05-06)</small>
+
+* [bitnami/kiam] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33382) ([8324840](https://github.com/bitnami/charts/commit/8324840d752836cf61399b327951699fb0b82d3a)), closes [#33382](https://github.com/bitnami/charts/issues/33382)
 
 ## <small>2.3.9 (2025-05-01)</small>
 

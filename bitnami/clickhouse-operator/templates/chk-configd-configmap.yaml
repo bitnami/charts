@@ -38,8 +38,14 @@ data:
             <storage_path>/bitnami/clickhouse-keeper</storage_path>
             <tcp_port>2181</tcp_port>
         </keeper_server>
-        <listen_host>::</listen_host>
+        {{- if .Values.ipFamily.enableIpv4 }}
         <listen_host>0.0.0.0</listen_host>
+        <interserver_listen_host>0.0.0.0</interserver_listen_host>
+        {{- end }}
+        {{- if .Values.ipFamily.enableIpv6 }}
+        <listen_host>::</listen_host>
+        <interserver_listen_host>::</interserver_listen_host>
+        {{- end }}
         <listen_try>1</listen_try>
         <logger>
             <console>1</console>

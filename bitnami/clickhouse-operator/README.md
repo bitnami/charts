@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [ClickHouse Operator](https://github.com/Altinity/clickhouse-operator) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -305,6 +303,8 @@ Check the [official quickstart guide](https://docs.altinity.com/altinitykubernet
 | `auth.existingSecret`                               | Name of a secret containing the Admin credentials                                                                                                                                                                              | `""`                                  |
 | `auth.existingSecretUsernameKey`                    | Name of the key inside the existing secret containing the Admin username                                                                                                                                                       | `""`                                  |
 | `auth.existingSecretPasswordKey`                    | Name of the key inside the existing secret containing the Admin password                                                                                                                                                       | `""`                                  |
+| `ipFamily.enableIpv4`                               | Enable IPv4 addresses                                                                                                                                                                                                          | `true`                                |
+| `ipFamily.enableIpv6`                               | Enable IPv6 listening                                                                                                                                                                                                          | `true`                                |
 | `replicaCount`                                      | Number of ClickHouse Operator replicas to deploy                                                                                                                                                                               | `1`                                   |
 | `containerPorts.metrics`                            | ClickHouse Operator Metrics container port                                                                                                                                                                                     | `9999`                                |
 | `extraContainerPorts`                               | Optionally specify extra list of additional ports for ClickHouse Operator containers                                                                                                                                           | `[]`                                  |

@@ -21,7 +21,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if and .Values.cas.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.cas.ingress.ingressClassName }}
   ingressClassName: {{ .Values.cas.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -33,9 +33,7 @@ spec:
           {{- toYaml .Values.cas.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.cas.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.cas.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $fullName "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.cas.ingress.extraHosts }}
@@ -43,9 +41,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" $fullName "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.cas.ingress.extraRules }}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.8 (2025-05-06)
+## 0.2.0 (2025-05-12)
 
-* [bitnami/clickhouse-operator] Release 0.1.8 ([#33470](https://github.com/bitnami/charts/pull/33470))
+* [bitnami/clickhouse-operator] feat: :sparkles: Allow setting IP Families ([#33606](https://github.com/bitnami/charts/pull/33606))
+
+## <small>0.1.8 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] Release 0.1.8 (#33470) ([406dcc6](https://github.com/bitnami/charts/commit/406dcc6bcfa614950ff41cd0f22c1e72fc543f9b)), closes [#33470](https://github.com/bitnami/charts/issues/33470)
 
 ## <small>0.1.7 (2025-05-06)</small>
 

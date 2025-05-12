@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.10 (2025-05-06)
+## 1.2.11 (2025-05-07)
 
-* [bitnami/whereabouts] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33447](https://github.com/bitnami/charts/pull/33447))
+* [bitnami/whereabouts] Release 1.2.11 ([#33522](https://github.com/bitnami/charts/pull/33522))
+
+## <small>1.2.10 (2025-05-06)</small>
+
+* [bitnami/whereabouts] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3 ([74a51c1](https://github.com/bitnami/charts/commit/74a51c173ec5d8ffd02b300cd05658222d016cb2)), closes [#33447](https://github.com/bitnami/charts/issues/33447)
 
 ## <small>1.2.9 (2025-04-09)</small>
 

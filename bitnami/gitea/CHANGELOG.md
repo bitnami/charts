@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.2.4 (2025-05-06)
+## 3.2.6 (2025-05-08)
 
-* [bitnami/gitea] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33365](https://github.com/bitnami/charts/pull/33365))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33558](https://github.com/bitnami/charts/pull/33558))
+
+## <small>3.2.5 (2025-05-07)</small>
+
+* [bitnami/gitea] Release 3.2.5 (#33479) ([a1595ee](https://github.com/bitnami/charts/commit/a1595eee53e221b0b22cbdef0db922dc72ef825d)), closes [#33479](https://github.com/bitnami/charts/issues/33479)
+
+## <small>3.2.4 (2025-05-06)</small>
+
+* [bitnami/gitea] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33365) ([6850abe](https://github.com/bitnami/charts/commit/6850abe386dcae0781ee5b1f4e61b548784a292b)), closes [#33365](https://github.com/bitnami/charts/issues/33365)
 
 ## <small>3.2.3 (2025-04-09)</small>
 

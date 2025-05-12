@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.0.6 (2025-05-06)
+## 9.0.8 (2025-05-09)
 
-* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33378](https://github.com/bitnami/charts/pull/33378))
+* [bitnami/jupyterhub] Init containers can be used with external PostgreSQL ([#33582](https://github.com/bitnami/charts/pull/33582))
+
+## <small>9.0.7 (2025-05-07)</small>
+
+* [jupyterhub] Fix singleuser image pull secrets (#33176) ([95a3490](https://github.com/bitnami/charts/commit/95a34900e72996e02e0ba14bea719a6f7747e2c2)), closes [#33176](https://github.com/bitnami/charts/issues/33176)
+
+## <small>9.0.6 (2025-05-06)</small>
+
+* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([4f25ca4](https://github.com/bitnami/charts/commit/4f25ca45071de7b489e3b7dc14d994c64777a069)), closes [#33378](https://github.com/bitnami/charts/issues/33378)
 
 ## <small>9.0.5 (2025-05-02)</small>
 

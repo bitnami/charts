@@ -255,4 +255,19 @@ spec:
           for: 15m
           labels:
             severity: warning
+        - alert: KubePdbNotEnoughHealthyPods
+          annotations:
+            description: PDB {{`{{`}} $labels.cluster {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.poddisruptionbudget {{`}}`}} expects {{`{{`}} $value {{`}}`}} more healthy pods. The desired number of healthy pods has not been met for at least 15m.
+            runbook_url: https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepdbnotenoughhealthypods
+            summary: PDB does not have enough healthy pods.
+          expr: |-
+            (
+              kube_poddisruptionbudget_status_desired_healthy{job="kube-state-metrics", namespace=~".*"}
+              -
+              kube_poddisruptionbudget_status_current_healthy{job="kube-state-metrics", namespace=~".*"}
+            )
+            > 0
+          for: 15m
+          labels:
+            severity: warning
 {{- end }}

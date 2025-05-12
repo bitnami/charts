@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.6.7 (2025-05-06)
+## 16.7.1 (2025-05-08)
 
-* [bitnami/postgresql] Release 16.6.7 ([#33384](https://github.com/bitnami/charts/pull/33384))
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#33577](https://github.com/bitnami/charts/pull/33577))
+
+## 16.7.0 (2025-05-08)
+
+* [bitnami/postgresql] Global postgres fullname override, needed when the fullname needs to be shared  ([81a2c5f](https://github.com/bitnami/charts/commit/81a2c5f710bb3ba6a8a338cde54a309f3697bf32)), closes [#33198](https://github.com/bitnami/charts/issues/33198)
+
+## <small>16.6.7 (2025-05-06)</small>
+
+* [bitnami/postgresql] Release 16.6.7 (#33384) ([71bd413](https://github.com/bitnami/charts/commit/71bd413abfa6e4622f5a479c2d6ffe965b7986b1)), closes [#33384](https://github.com/bitnami/charts/issues/33384)
 
 ## <small>16.6.6 (2025-04-25)</small>
 
