@@ -690,6 +690,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 13.0.0
+
+This major bump uses mysql `9.3` image. Follow the [official instructions](https://dev.mysql.com/doc/refman/9.3/en/upgrading.html) to upgrade.
+
 ### To 12.2.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
