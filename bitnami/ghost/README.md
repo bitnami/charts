@@ -483,6 +483,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 23.0.0
+
+This major updates the MySQL subchart to its newest major, 13.0.0. For more information on this subchart's major, please refer to [MySQL upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1300).
+
 ### To 22.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
@@ -499,7 +503,7 @@ Then execute `helm upgrade` as usual.
 
 ### To 21.0.0
 
-This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
+This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [MySQL upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
 
 ### To 20.0.0
 

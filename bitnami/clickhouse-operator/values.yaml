@@ -164,6 +164,11 @@ auth:
   existingSecret: ""
   existingSecretUsernameKey: ""
   existingSecretPasswordKey: ""
+## @param ipFamily.enableIpv4 Enable IPv4 addresses
+## @param ipFamily.enableIpv6 Enable IPv6 listening
+ipFamily:
+  enableIpv4: true
+  enableIpv6: true
 ## @param replicaCount Number of ClickHouse Operator replicas to deploy
 ##
 replicaCount: 1
