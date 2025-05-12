@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.6 (2025-05-06)
+## 7.1.7 (2025-05-12)
 
-* [bitnami/fluentd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33362](https://github.com/bitnami/charts/pull/33362))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#33611](https://github.com/bitnami/charts/pull/33611))
+
+## <small>7.1.6 (2025-05-07)</small>
+
+* [bitnami/fluentd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33362 ([1d61b4a](https://github.com/bitnami/charts/commit/1d61b4a8eddfaf58c6530b4a57f8505c245f6935)), closes [#33362](https://github.com/bitnami/charts/issues/33362)
 
 ## <small>7.1.5 (2025-04-12)</small>
 
