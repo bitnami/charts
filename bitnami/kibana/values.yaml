@@ -163,7 +163,7 @@ savedObjects:
   ##
   configmap: ""
   ## @param savedObjects.SavedObjectsOverWrite Overwrite saved objects
-  SavedObjectsOverWrite: false
+  overwrite: false
   ##
 ## @param extraConfiguration Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template
 ##
