@@ -1,8 +1,13 @@
 # Changelog
 
-## 25.1.4 (2025-05-11)
+## 25.1.5 (2025-05-12)
 
-* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#33603](https://github.com/bitnami/charts/pull/33603))
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#33614](https://github.com/bitnami/charts/pull/33614))
+
+## <small>25.1.4 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#33603) ([475edf8](https://github.com/bitnami/charts/commit/475edf87dcc2e0bdfb9e0c68984fe9c337e11513)), closes [#33603](https://github.com/bitnami/charts/issues/33603)
 
 ## <small>25.1.3 (2025-05-07)</small>
 
