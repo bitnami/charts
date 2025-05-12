@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.4 (2025-05-06)
+## 2.0.5 (2025-05-07)
 
-* [bitnami/grafana-mimir] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33369](https://github.com/bitnami/charts/pull/33369))
+* [bitnami/grafana-mimir] Release 2.0.5 ([#33514](https://github.com/bitnami/charts/pull/33514))
+
+## <small>2.0.4 (2025-05-06)</small>
+
+* [bitnami/grafana-mimir] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([0790fef](https://github.com/bitnami/charts/commit/0790fef042b5b787723602e74ca213b7a2b51155)), closes [#33369](https://github.com/bitnami/charts/issues/33369)
 
 ## <small>2.0.3 (2025-04-28)</small>
 

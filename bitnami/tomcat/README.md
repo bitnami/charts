@@ -22,8 +22,6 @@ This chart bootstraps a [Tomcat](https://github.com/bitnami/containers/tree/main
 
 Tomcat implements several Java EE specifications including Java Servlet, JavaServer Pages, Java EL, and WebSocket, and provides a "pure Java" HTTP web server environment for Java code to run in.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

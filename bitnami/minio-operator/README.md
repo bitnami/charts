@@ -1,8 +1,8 @@
 <!--- app-name: Bitnami Object Storage based on MinIO&reg; Operator -->
 
-# Bitnami Object Storage based on MinIO(R) Operator
+# Bitnami Object Storage based on MinIO&reg; Operator
 
-MinIO(R) Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO(R) object storage across hybrid cloud infrastructures.
+MinIO&reg; Operator is a Kubernetes-native tool for deploying and managing high-performance, S3-compatible MinIO&reg; object storage across hybrid cloud infrastructures.
 
 [Overview of Bitnami Object Storage based on MinIO&reg; Operator](https://min.io/)
 
@@ -19,8 +19,6 @@ Looking to use Bitnami Object Storage based on MinIO&reg; Operator in production
 ## Introduction
 
 This chart bootstraps a [Bitnami Object Storage based on MinIO&reg; Operator](https://github.com/bitnami/containers/tree/main/bitnami/minio-operator) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 

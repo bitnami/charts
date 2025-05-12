@@ -22,8 +22,6 @@ This chart bootstraps a [Ghost](https://github.com/bitnami/containers/tree/main/
 
 It also packages the [Bitnami MySQL chart](https://github.com/bitnami/charts/tree/main/bitnami/mysql) which is required for bootstrapping a MySQL deployment for the database requirements of the Ghost application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

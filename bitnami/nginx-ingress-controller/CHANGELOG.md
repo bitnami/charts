@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.6.19 (2025-05-06)
+## 11.6.20 (2025-05-07)
 
-* [bitnami/nginx-ingress-controller] chore: :recycle: Remove extra unnecessary k8s version checks ([#33453](https://github.com/bitnami/charts/pull/33453))
+* [bitnami/nginx-ingress-controller] Release 11.6.20 ([#33486](https://github.com/bitnami/charts/pull/33486))
+
+## <small>11.6.19 (2025-05-06)</small>
+
+* [bitnami/nginx-ingress-controller] chore: :recycle: Remove extra unnecessary k8s version checks (#33 ([dd8840d](https://github.com/bitnami/charts/commit/dd8840d5a45a6a0224626bc15ed9f3046c93ecfa)), closes [#33453](https://github.com/bitnami/charts/issues/33453)
 
 ## <small>11.6.18 (2025-05-06)</small>
 

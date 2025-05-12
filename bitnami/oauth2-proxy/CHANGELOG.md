@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.2.13 (2025-05-06)
+## 7.0.0 (2025-05-07)
 
-* [bitnami/oauth2-proxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33416](https://github.com/bitnami/charts/pull/33416))
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33507](https://github.com/bitnami/charts/pull/33507))
+
+## <small>6.2.14 (2025-05-07)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.14 (#33487) ([a4f0f8d](https://github.com/bitnami/charts/commit/a4f0f8d94ef4b7efc07f32c6a83eb9b72904718c)), closes [#33487](https://github.com/bitnami/charts/issues/33487)
+
+## <small>6.2.13 (2025-05-06)</small>
+
+* [bitnami/oauth2-proxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([4d0bf5d](https://github.com/bitnami/charts/commit/4d0bf5daa6b9684f4493075626c13b74cc052cdc)), closes [#33416](https://github.com/bitnami/charts/issues/33416)
 
 ## <small>6.2.12 (2025-04-28)</small>
 

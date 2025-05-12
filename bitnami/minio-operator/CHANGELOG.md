@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.8 (2025-05-06)
+## 0.1.10 (2025-05-07)
 
-* [bitnami/minio-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33403](https://github.com/bitnami/charts/pull/33403))
+* [bitnami/minio-operator] Release 0.1.10 ([#33535](https://github.com/bitnami/charts/pull/33535))
+
+## <small>0.1.9 (2025-05-07)</small>
+
+* [bitnami/minio-operator] Release 0.1.9 (#33533) ([cae9a05](https://github.com/bitnami/charts/commit/cae9a0589b1691f02ad8bb4f6192dc59e57640e0)), closes [#33533](https://github.com/bitnami/charts/issues/33533)
+
+## <small>0.1.8 (2025-05-06)</small>
+
+* [bitnami/minio-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([8943108](https://github.com/bitnami/charts/commit/894310873115a0ed11f21e56c58a62fbd52c6e62)), closes [#33403](https://github.com/bitnami/charts/issues/33403)
 
 ## <small>0.1.7 (2025-04-23)</small>
 

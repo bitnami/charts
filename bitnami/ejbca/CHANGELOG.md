@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.1 (2025-04-23)
+## 17.1.2 (2025-05-06)
 
-* [bitnami/ejbca] Release 17.1.1 ([#33136](https://github.com/bitnami/charts/pull/33136))
+* [bitnami/ejbca] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33355](https://github.com/bitnami/charts/pull/33355))
+
+## <small>17.1.1 (2025-04-23)</small>
+
+* [bitnami/ejbca] Release 17.1.1 (#33136) ([30e4c1d](https://github.com/bitnami/charts/commit/30e4c1d01245b09dc537d1a3c54acbec6f15d8b3)), closes [#33136](https://github.com/bitnami/charts/issues/33136)
 
 ## 17.1.0 (2025-04-04)
 

@@ -24,8 +24,6 @@ Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

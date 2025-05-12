@@ -20,8 +20,6 @@ Looking to use Kube State Metrics in production? Try [VMware Tanzu Application C
 
 This chart bootstraps [kube-state-metrics](https://github.com/bitnami/containers/tree/main/bitnami/kube-state-metrics) on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

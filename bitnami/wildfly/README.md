@@ -22,8 +22,6 @@ This chart bootstraps a [WildFly](https://github.com/bitnami/containers/tree/mai
 
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

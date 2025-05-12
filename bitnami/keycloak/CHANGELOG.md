@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.6.6 (2025-05-07)
+## 24.6.7 (2025-05-07)
 
 * [bitnami/keycloak] Improvements to Keycloak cache handling ([#32885](https://github.com/bitnami/charts/pull/32885))
+
+## <small>24.6.6 (2025-05-08)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#33565](https://github.com/bitnami/charts/pull/33565))
 
 ## <small>24.6.5 (2025-05-06)</small>
 

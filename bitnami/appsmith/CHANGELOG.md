@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.2.11 (2025-05-06)
+## 6.0.1 (2025-05-08)
 
-* [bitnami/appsmith] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33336](https://github.com/bitnami/charts/pull/33336))
+* [bitnami/appsmith] Release 6.0.1 ([#33504](https://github.com/bitnami/charts/pull/33504))
+
+## 6.0.0 (2025-05-07)
+
+* [bitnami/appsmith] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33497) ([6bf0667](https://github.com/bitnami/charts/commit/6bf0667369e158065bda2c10af5b2fc53709371e)), closes [#33497](https://github.com/bitnami/charts/issues/33497)
+
+## <small>5.2.11 (2025-05-06)</small>
+
+* [bitnami/appsmith] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3333 ([261a251](https://github.com/bitnami/charts/commit/261a2519c584fb942b26ab2dbf5fd230607a9483)), closes [#33336](https://github.com/bitnami/charts/issues/33336)
 
 ## <small>5.2.10 (2025-04-30)</small>
 
