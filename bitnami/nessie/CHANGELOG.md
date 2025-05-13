@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.10 (2025-05-07)
+## 2.0.11 (2025-05-13)
 
-* [bitnami/nessie] Release 2.0.10 ([#33549](https://github.com/bitnami/charts/pull/33549))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#33642](https://github.com/bitnami/charts/pull/33642))
+
+## <small>2.0.10 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.10 (#33549) ([b29bdd1](https://github.com/bitnami/charts/commit/b29bdd190c56330769e17f1c23d3ce471f322926)), closes [#33549](https://github.com/bitnami/charts/issues/33549)
 
 ## <small>2.0.9 (2025-05-07)</small>
 
