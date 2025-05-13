@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.0.3 (2025-05-13)
+## 21.0.4 (2025-05-13)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33645](https://github.com/bitnami/charts/pull/33645))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33666](https://github.com/bitnami/charts/pull/33666))
+
+## <small>21.0.3 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33645) ([9481812](https://github.com/bitnami/charts/commit/9481812ac05be1954ff374170a9a32d5fa94c771)), closes [#33645](https://github.com/bitnami/charts/issues/33645)
 
 ## <small>21.0.2 (2025-05-07)</small>
 
