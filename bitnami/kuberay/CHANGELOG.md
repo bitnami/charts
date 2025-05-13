@@ -1,12 +1,8 @@
 # Changelog
 
-## 1.4.11 (2025-05-09)
+## 1.4.10 (2025-05-06)
 
-* [bitnami/kuberay] Release 1.4.11 ([#33481](https://github.com/bitnami/charts/pull/33481))
-
-## <small>1.4.10 (2025-05-06)</small>
-
-* [bitnami/kuberay] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33390 ([bcdcba5](https://github.com/bitnami/charts/commit/bcdcba5f33b36b87b7e4640c13d1c7540e01e697)), closes [#33390](https://github.com/bitnami/charts/issues/33390)
+* [bitnami/kuberay] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33390](https://github.com/bitnami/charts/pull/33390))
 
 ## <small>1.4.9 (2025-04-14)</small>
 
