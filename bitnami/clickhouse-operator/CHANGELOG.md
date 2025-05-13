@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.2.1 (2025-05-13)
+
+* [clickhouse-operator] bugfix: remove unused parameters ([#33627](https://github.com/bitnami/charts/pull/33627))
+
 ## 0.2.0 (2025-05-12)
 
-* [bitnami/clickhouse-operator] feat: :sparkles: Allow setting IP Families ([#33606](https://github.com/bitnami/charts/pull/33606))
+* [bitnami/clickhouse-operator] feat: :sparkles: Allow setting IP Families (#33606) ([9c8e84c](https://github.com/bitnami/charts/commit/9c8e84c91704c6abebc029a5dbd1003678342d45)), closes [#33606](https://github.com/bitnami/charts/issues/33606)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.8 (2025-05-06)</small>
 
