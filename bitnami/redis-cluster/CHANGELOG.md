@@ -1,8 +1,13 @@
 # Changelog
 
-## 12.0.2 (2025-05-13)
+## 12.0.3 (2025-05-13)
 
-* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#33649](https://github.com/bitnami/charts/pull/33649))
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#33667](https://github.com/bitnami/charts/pull/33667))
+
+## <small>12.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33649) ([d75776d](https://github.com/bitnami/charts/commit/d75776d265c727d7819af8d79d8ab408d4524d9e)), closes [#33649](https://github.com/bitnami/charts/issues/33649)
 
 ## <small>12.0.1 (2025-05-07)</small>
 
