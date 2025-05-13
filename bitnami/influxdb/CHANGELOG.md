@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.11 (2025-05-07)
+## 6.6.12 (2025-05-13)
 
-* [bitnami/influxdb] Release 6.6.11 ([#33529](https://github.com/bitnami/charts/pull/33529))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33654](https://github.com/bitnami/charts/pull/33654))
+
+## <small>6.6.11 (2025-05-07)</small>
+
+* [bitnami/influxdb] Release 6.6.11 (#33529) ([40152ae](https://github.com/bitnami/charts/commit/40152ae66be8dddb6b7123ceb5d1294c0fba8d7a)), closes [#33529](https://github.com/bitnami/charts/issues/33529)
 
 ## <small>6.6.10 (2025-05-06)</small>
 
