@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.1 (2025-05-13)
+## 9.0.2 (2025-05-13)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33662](https://github.com/bitnami/charts/pull/33662))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33665](https://github.com/bitnami/charts/pull/33665))
+
+## <small>9.0.1 (2025-05-13)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33662) ([7338c3c](https://github.com/bitnami/charts/commit/7338c3c3e735052654bdf2aa34aa031869db8755)), closes [#33662](https://github.com/bitnami/charts/issues/33662)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## 9.0.0 (2025-05-08)
 
