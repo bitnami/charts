@@ -9,7 +9,7 @@ annotations:
     - name: parse
       image: docker.io/bitnami/parse:8.2.0-debian-12-r2
     - name: parse-dashboard
-      image: docker.io/bitnami/parse-dashboard:7.1.0-debian-12-r1
+      image: docker.io/bitnami/parse-dashboard:7.1.0-debian-12-r2
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
