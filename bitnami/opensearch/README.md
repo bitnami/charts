@@ -1106,6 +1106,18 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+This major version updates the Opensearch image and Opensearch Dashboard from version 2.x to 3.x. Follow the [official instructions](https://docs.opensearch.org/docs/latest/install-and-configure/upgrade-opensearch/index/) to upgrade to 3.x.
+
+In addition, this new version of the chart removes the `metrics` related values:
+- `master.metrics.*`
+- `data.metrics.*`
+- `coordinating.metrics.*`
+- `ingest.metrics.*`
+
+The reason for this change is because the bitnami/opensearch container 3.x no longer contains the prometheus-exporter plugin, which hasn't released a new version since Opensearch 2.17.x and is not supported in Opensearch 3.x.
+
 ### To 1.5.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
