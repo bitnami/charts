@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.9 (2025-05-07)
+## 0.1.10 (2025-05-13)
 
-* [bitnami/victoriametrics] Release 0.1.9 ([#33527](https://github.com/bitnami/charts/pull/33527))
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#33678](https://github.com/bitnami/charts/pull/33678))
+
+## <small>0.1.9 (2025-05-07)</small>
+
+* [bitnami/victoriametrics] Release 0.1.9 (#33527) ([cff5725](https://github.com/bitnami/charts/commit/cff5725baa84be2b6143aa3fd52b320379232c5c)), closes [#33527](https://github.com/bitnami/charts/issues/33527)
 
 ## <small>0.1.8 (2025-05-07)</small>
 
