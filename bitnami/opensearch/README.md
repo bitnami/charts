@@ -1111,6 +1111,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 This major version updates the Opensearch image and Opensearch Dashboard from version 2.x to 3.x. Follow the [official instructions](https://docs.opensearch.org/docs/latest/install-and-configure/upgrade-opensearch/index/) to upgrade to 3.x.
 
 In addition, this new version of the chart removes the `metrics` related values:
+
 - `master.metrics.*`
 - `data.metrics.*`
 - `coordinating.metrics.*`
