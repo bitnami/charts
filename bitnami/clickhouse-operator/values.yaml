@@ -152,18 +152,14 @@ keeperImage:
   ##
   pullSecrets: []
 ## Authentication
-## @param auth.username ClickHouse Admin username
-## @param auth.password ClickHouse Admin password
-## @param auth.existingSecret Name of a secret containing the Admin credentials
-## @param auth.existingSecretUsernameKey Name of the key inside the existing secret containing the Admin username
-## @param auth.existingSecretPasswordKey Name of the key inside the existing secret containing the Admin password
+## @param auth.username ClickHouse Operator username
+## @param auth.password ClickHouse Operator password
+## @param auth.existingSecret Name of a secret containing the ClickHouse Operator credentials (expected keys: `username` and `password`)
 ##
 auth:
   username: clickhouse_operator
   password: ""
   existingSecret: ""
-  existingSecretUsernameKey: ""
-  existingSecretPasswordKey: ""
 ## @param ipFamily.enableIpv4 Enable IPv4 addresses
 ## @param ipFamily.enableIpv6 Enable IPv6 listening
 ipFamily:
