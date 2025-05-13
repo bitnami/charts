@@ -1,9 +1,5 @@
 # Changelog
 
-## 16.7.3 (2025-05-12)
-
-* [bitnami/postgresql] Support for global postgresql fullnameOverride ([#33616](https://github.com/bitnami/charts/pull/33616))
-
 ## <small>16.7.2 (2025-05-09)</small>
 
 * [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)

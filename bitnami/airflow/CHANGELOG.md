@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.1 (2025-05-08)
+## 24.0.2 (2025-05-12)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33572](https://github.com/bitnami/charts/pull/33572))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33617](https://github.com/bitnami/charts/pull/33617))
+
+## <small>24.0.1 (2025-05-08)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33572) ([9daa628](https://github.com/bitnami/charts/commit/9daa628a3e71a75a154775e971952d27614b4122)), closes [#33572](https://github.com/bitnami/charts/issues/33572)
 
 ## 24.0.0 (2025-05-07)
 
