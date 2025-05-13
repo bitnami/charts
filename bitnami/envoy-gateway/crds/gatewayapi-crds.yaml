@@ -1,4 +1,4 @@
-# Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/v{version}/charts/gateway-helm/crds/gatewayapi-crds.yaml
+# Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/gatewayapi-crds.yaml
 # Version: 1.3.2
 # Copyright 2024 The Kubernetes Authors.
 #
