@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.2 (2025-05-12)
+## 24.0.3 (2025-05-13)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33617](https://github.com/bitnami/charts/pull/33617))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33681](https://github.com/bitnami/charts/pull/33681))
+
+## <small>24.0.2 (2025-05-12)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33617) ([96d1206](https://github.com/bitnami/charts/commit/96d1206faf46aa9b9e45f82eb49bc468248bfa64)), closes [#33617](https://github.com/bitnami/charts/issues/33617)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>24.0.1 (2025-05-08)</small>
 
