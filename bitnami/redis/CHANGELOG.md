@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.2 (2025-05-07)
+## 21.0.3 (2025-05-13)
 
-* [bitnami/redis] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33428](https://github.com/bitnami/charts/pull/33428))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33645](https://github.com/bitnami/charts/pull/33645))
+
+## <small>21.0.2 (2025-05-07)</small>
+
+* [bitnami/redis] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33428) ([98dff1d](https://github.com/bitnami/charts/commit/98dff1d7e991004d0374b386ea0917edac05316c)), closes [#33428](https://github.com/bitnami/charts/issues/33428)
 
 ## <small>21.0.1 (2025-05-07)</small>
 
