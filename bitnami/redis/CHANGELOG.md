@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.4 (2025-05-13)
+## 21.1.0 (2025-05-13)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33666](https://github.com/bitnami/charts/pull/33666))
+* [bitnami/redis] Allow grabbing sentinel acl configuration from userSecret ([#33546](https://github.com/bitnami/charts/pull/33546))
+
+## <small>21.0.4 (2025-05-13)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33666) ([36dbe42](https://github.com/bitnami/charts/commit/36dbe424f82e0f8b28601ec0bd13610702a8599e)), closes [#33666](https://github.com/bitnami/charts/issues/33666)
 
 ## <small>21.0.3 (2025-05-13)</small>
 
