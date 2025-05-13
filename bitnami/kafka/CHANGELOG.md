@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.3 (2025-05-06)
+## 32.2.4 (2025-05-13)
 
-* [bitnami/kafka] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33379](https://github.com/bitnami/charts/pull/33379))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33633](https://github.com/bitnami/charts/pull/33633))
+
+## <small>32.2.3 (2025-05-06)</small>
+
+* [bitnami/kafka] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33379) ([12ee35a](https://github.com/bitnami/charts/commit/12ee35a7256e3f0872fbaba0c921ffd9a21d3f4a)), closes [#33379](https://github.com/bitnami/charts/issues/33379)
 
 ## <small>32.2.2 (2025-04-28)</small>
 
