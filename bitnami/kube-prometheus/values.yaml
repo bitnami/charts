@@ -1256,6 +1256,10 @@ prometheus:
   ## @param prometheus.logFormat Log format for Prometheus
   ##
   logFormat: logfmt
+  ## @param prometheus.nameValidationScheme Specifies the validation scheme for metric and label names
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api-reference/api.md#monitoring.coreos.com/v1.NameValidationSchemeOptions
+  ##
+  nameValidationScheme: "UTF8"
   ## @param prometheus.podMetadata [object] Standard object's metadata
   ## ref: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
   ##

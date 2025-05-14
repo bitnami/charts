@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.1.12 (2025-05-14)
+
+* [bitnami/kube-prometheus] Add support for `nameValidationScheme` ([#33691](https://github.com/bitnami/charts/pull/33691)), closes #33660
+
 ## 11.1.11 (2025-05-12)
 
 * [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#33610](https://github.com/bitnami/charts/pull/33610))
