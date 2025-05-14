@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: kube-state-metrics
-      image: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r11
+      image: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r12
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 2.15.0
 dependencies:
@@ -16,7 +16,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+description: kube-state-metrics is a simple service that listens to the Kubernetes
+  API server and generates metrics about the state of the objects.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kube-state-metrics/img/kube-state-metrics-stack-220x234.png
 keywords:
@@ -29,4 +30,4 @@ maintainers:
 name: kube-state-metrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 5.0.6
+version: 5.0.8

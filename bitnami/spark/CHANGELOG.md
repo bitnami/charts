@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.3.7 (2025-04-28)
+## 9.3.9 (2025-05-06)
 
-* [bitnami/spark] Release 9.3.7 ([#33233](https://github.com/bitnami/charts/pull/33233))
+* [bitnami/spark] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33437](https://github.com/bitnami/charts/pull/33437))
+
+## <small>9.3.8 (2025-05-05)</small>
+
+* [bitnami/spark] Release 9.3.8 (#33318) ([49b30b2](https://github.com/bitnami/charts/commit/49b30b2139edd43a5bd6ebf1ad6fd615e221d7d8)), closes [#33318](https://github.com/bitnami/charts/issues/33318)
+
+## <small>9.3.7 (2025-04-28)</small>
+
+* [bitnami/spark] Release 9.3.7 (#33233) ([3378e33](https://github.com/bitnami/charts/commit/3378e3330dd7cf6d66f5e4e8c9aa25f008b46860)), closes [#33233](https://github.com/bitnami/charts/issues/33233)
 
 ## <small>9.3.6 (2025-03-29)</small>
 

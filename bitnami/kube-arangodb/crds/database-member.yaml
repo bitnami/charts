@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/arangodb/kube-arangodb/refs/tags/{version}/chart/kube-arangodb/crds/database-member.yaml
-# Version: 1.2.47
+# Version: 1.2.48
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -22,6 +22,16 @@ spec:
           x-kubernetes-preserve-unknown-fields: true
       served: true
       storage: true
+      additionalPrinterColumns:
+        - jsonPath: '.status.conditions[?(@.type=="Ready")].status'
+          description: Defines if Member is ready
+          name: Ready
+          type: string
+        - jsonPath: '.status.conditions[?(@.type=="PendingRestart")].status'
+          description: Defines if Member is pending restart
+          name: PendingRestart
+          priority: 1
+          type: string
       subresources:
         status: {}
     - name: v2alpha1
@@ -31,5 +41,15 @@ spec:
           x-kubernetes-preserve-unknown-fields: true
       served: true
       storage: false
+      additionalPrinterColumns:
+        - jsonPath: '.status.conditions[?(@.type=="Ready")].status'
+          description: Defines if Member is ready
+          name: Ready
+          type: string
+        - jsonPath: '.status.conditions[?(@.type=="PendingRestart")].status'
+          description: Defines if Member is pending restart
+          name: PendingRestart
+          priority: 1
+          type: string
       subresources:
         status: {}

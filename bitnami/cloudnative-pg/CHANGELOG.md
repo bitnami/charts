@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.1.9 (2025-05-01)
+## 0.1.12 (2025-05-13)
 
-* [bitnami/cloudnative-pg] Release 0.1.9 ([#33288](https://github.com/bitnami/charts/pull/33288))
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#33630](https://github.com/bitnami/charts/pull/33630))
+
+## <small>0.1.11 (2025-05-07)</small>
+
+* [bitnami/cloudnative-pg] Release 0.1.11 (#33509) ([268cf66](https://github.com/bitnami/charts/commit/268cf663c07e40f91b72ef133171b93dea1ef0e8)), closes [#33509](https://github.com/bitnami/charts/issues/33509)
+
+## <small>0.1.10 (2025-05-06)</small>
+
+* [bitnami/cloudnative-pg] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([3894afd](https://github.com/bitnami/charts/commit/3894afd8826371419a99fc899b62d4dd13f30f3e)), closes [#33347](https://github.com/bitnami/charts/issues/33347)
+
+## <small>0.1.9 (2025-05-01)</small>
+
+* [bitnami/cloudnative-pg] Release 0.1.9 (#33288) ([3f91ddd](https://github.com/bitnami/charts/commit/3f91ddd256a23a12350fe8a8eea7a91dc026bc2a)), closes [#33288](https://github.com/bitnami/charts/issues/33288)
 
 ## <small>0.1.8 (2025-04-30)</small>
 

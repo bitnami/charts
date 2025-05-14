@@ -2,12 +2,10 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: DeveloperTools
-  licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.33.0-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.33.0-debian-12-r1
     - name: prometheus-rsocket-proxy
       image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r43
     - name: spring-cloud-dataflow
@@ -16,6 +14,8 @@ annotations:
       image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r13
     - name: spring-cloud-skipper
       image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r14
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 2.11.5
 dependencies:
@@ -38,7 +38,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
+description: Spring Cloud Data Flow is a microservices-based toolkit for building
+  streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
@@ -52,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 37.0.0
+version: 37.0.2

@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.5.5 (2025-04-20)
+## 0.5.7 (2025-05-13)
 
-* [bitnami/keydb] Release 0.5.5 ([#33084](https://github.com/bitnami/charts/pull/33084))
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#33634](https://github.com/bitnami/charts/pull/33634))
+
+## <small>0.5.6 (2025-05-06)</small>
+
+* [bitnami/keydb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33381) ([9fce7db](https://github.com/bitnami/charts/commit/9fce7db045bb0eb41566f8b21176b0c9cebe9818)), closes [#33381](https://github.com/bitnami/charts/issues/33381)
+
+## <small>0.5.5 (2025-04-20)</small>
+
+* [bitnami/keydb] Release 0.5.5 (#33084) ([333e4ec](https://github.com/bitnami/charts/commit/333e4ec92b771a936ad0ba4ce42d4debb8ff0c57)), closes [#33084](https://github.com/bitnami/charts/issues/33084)
 
 ## <small>0.5.4 (2025-03-21)</small>
 

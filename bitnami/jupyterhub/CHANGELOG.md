@@ -1,8 +1,25 @@
 # Changelog
 
-## 9.0.5 (2025-05-02)
+## 9.0.9 (2025-05-13)
 
-* [bitnami/jupyterhub] Release 9.0.5 ([#33304](https://github.com/bitnami/charts/pull/33304))
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#33656](https://github.com/bitnami/charts/pull/33656))
+
+## <small>9.0.8 (2025-05-12)</small>
+
+* [bitnami/jupyterhub] Init containers can be used with external PostgreSQL (#33582) ([58e80d9](https://github.com/bitnami/charts/commit/58e80d9805f0f6d7f5da29adf35efead9f7b28d9)), closes [#33582](https://github.com/bitnami/charts/issues/33582)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>9.0.7 (2025-05-07)</small>
+
+* [jupyterhub] Fix singleuser image pull secrets (#33176) ([95a3490](https://github.com/bitnami/charts/commit/95a34900e72996e02e0ba14bea719a6f7747e2c2)), closes [#33176](https://github.com/bitnami/charts/issues/33176)
+
+## <small>9.0.6 (2025-05-06)</small>
+
+* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([4f25ca4](https://github.com/bitnami/charts/commit/4f25ca45071de7b489e3b7dc14d994c64777a069)), closes [#33378](https://github.com/bitnami/charts/issues/33378)
+
+## <small>9.0.5 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.5 (#33304) ([18bc5da](https://github.com/bitnami/charts/commit/18bc5da4bfc5c0b02874b4c13b4f226a00759608)), closes [#33304](https://github.com/bitnami/charts/issues/33304)
 
 ## <small>9.0.4 (2025-05-02)</small>
 

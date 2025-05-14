@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.0.14 (2025-05-01)
+## 9.0.17 (2025-05-13)
 
-* [bitnami/nats] Release 9.0.14 ([#33278](https://github.com/bitnami/charts/pull/33278))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#33640](https://github.com/bitnami/charts/pull/33640))
+
+## <small>9.0.16 (2025-05-07)</small>
+
+* [bitnami/nats] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33410) ([f2667b0](https://github.com/bitnami/charts/commit/f2667b0d8fa6772d6690abcf1f095edec02c07ec)), closes [#33410](https://github.com/bitnami/charts/issues/33410)
+
+## <small>9.0.15 (2025-05-07)</small>
+
+* [bitnami/nats] Release 9.0.15 (#33485) ([62269c2](https://github.com/bitnami/charts/commit/62269c278eabaa535ef27c41598576cbe1e9fd8b)), closes [#33485](https://github.com/bitnami/charts/issues/33485)
+
+## <small>9.0.14 (2025-05-01)</small>
+
+* [bitnami/nats] Release 9.0.14 (#33278) ([47d5c34](https://github.com/bitnami/charts/commit/47d5c34a24bf12e2e8428cbeec0295757181576c)), closes [#33278](https://github.com/bitnami/charts/issues/33278)
 
 ## <small>9.0.13 (2025-04-25)</small>
 

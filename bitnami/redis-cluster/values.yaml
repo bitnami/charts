@@ -38,7 +38,7 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
-## @section Redis&reg; Cluster Common parameters
+## @section Redis(R) Cluster Common parameters
 ##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.4.3-debian-12-r0
+  tag: 8.0.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -114,8 +114,8 @@ networkPolicy:
   ##
   enabled: true
   ## @param networkPolicy.allowExternal The Policy model to apply
-  ## When set to false, only pods with the correct client label will have network access to the ports Redis&reg; Cluster is
-  ## listening on. When true, Redis&reg; Cluster will accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the ports Redis(R) Cluster is
+  ## listening on. When true, Redis(R) Cluster will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -850,10 +850,10 @@ updateJob:
 ## @section Cluster management parameters
 ##
 
-## Redis&reg; Cluster settings
+## Redis(R) Cluster settings
 ##
 cluster:
-  ## @param cluster.init Enable the initialization of the Redis&reg; Cluster
+  ## @param cluster.init Enable the initialization of the Redis(R) Cluster
   ##
   init: true
   ## Number of Redis&reg; nodes to be deployed
@@ -871,7 +871,7 @@ cluster:
   ## 1 means that we want a replica for every master created
   ##
   replicas: 1
-  ## Configuration to access the Redis&reg; Cluster from outside the Kubernetes cluster
+  ## Configuration to access the Redis(R) Cluster from outside the Kubernetes cluster
   ##
   externalAccess:
     ## @param cluster.externalAccess.enabled Enable access to the Redis
@@ -909,7 +909,7 @@ cluster:
       ##   - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param cluster.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster
+      ## @param cluster.externalAccess.service.annotations Annotations to add to the services used to expose every Pod of the Redis(R) Cluster
       ##
       annotations: {}
   ## This section allows to update the Redis&reg; cluster nodes.
@@ -947,7 +947,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.70.0-debian-12-r2
+    tag: 1.71.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

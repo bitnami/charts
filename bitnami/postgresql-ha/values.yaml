@@ -9,7 +9,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ## @param global.postgresql.username PostgreSQL username (overrides `postgresql.username`)
 ## @param global.postgresql.password PostgreSQL password (overrides `postgresql.password`)
 ## @param global.postgresql.database PostgreSQL database (overrides `postgresql.database`)
@@ -19,9 +18,11 @@
 ## @param global.postgresql.existingSecret Name of existing secret to use for PostgreSQL passwords (overrides `postgresql.existingSecret`)
 ## @param global.ldap.bindpw LDAP bind password (overrides `ldap.bindpw`)
 ## @param global.ldap.existingSecret Name of existing secret to use for LDAP passwords (overrides `ldap.existingSecret`)
-## @param global.pgpool.adminUsername Pgpool Admin username (overrides `pgpool.adminUsername`)
-## @param global.pgpool.adminPassword Pgpool Admin password (overrides `pgpool.adminPassword`)
-## @param global.pgpool.existingSecret Pgpool existing secret
+## @param global.pgpool.adminUsername Pgpool-II Admin username (overrides `pgpool.adminUsername`)
+## @param global.pgpool.adminPassword Pgpool-II Admin password (overrides `pgpool.adminPassword`)
+## @param global.pgpool.srCheckUsername Pgpool-II SR Check username (overrides `pgpool.srCheckUsername`)
+## @param global.pgpool.srCheckPassword Pgpool-II SR Check password (overrides `pgpool.srCheckPassword`)
+## @param global.pgpool.existingSecret Pgpool-II existing secret
 ##
 global:
   imageRegistry: ""
@@ -31,7 +32,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -51,6 +51,8 @@ global:
   pgpool:
     adminUsername: ""
     adminPassword: ""
+    srCheckUsername: ""
+    srCheckPassword: ""
     existingSecret: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -61,6 +63,7 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -101,16 +104,15 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section PostgreSQL with Repmgr parameters
 
-## PostgreSQL parameters
-##
 postgresql:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
   ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL with Repmgr image registry
   ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql-repmgr] PostgreSQL with Repmgr image repository
   ## @skip postgresql.image.tag PostgreSQL with Repmgr image tag
-  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param postgresql.image.digest PostgreSQL with Repmgr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL with Repmgr image pull policy
   ## @param postgresql.image.pullSecrets Specify docker-registry secret names as an array
   ## @param postgresql.image.debug Specify if debug logs should be enabled
@@ -118,7 +120,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 17.4.0-debian-12-r15
+    tag: 17.5.0-debian-12-r2
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -146,7 +148,7 @@ postgresql:
   ## @param postgresql.replicaCount Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.
   ##
   replicaCount: 3
-  ## @param postgresql.updateStrategy.type Postgresql statefulset strategy type
+  ## @param postgresql.updateStrategy.type Postgresql StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## e.g:
   ## updateStrategy:
@@ -301,16 +303,16 @@ postgresql:
   ## @param postgresql.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
-  ## @param postgresql.extraVolumes Extra volumes to add to the deployment
+  ## @param postgresql.extraVolumes Extra volumes to add to the StatefulSet
   ##
   extraVolumes: []
   ## @param postgresql.extraVolumeMounts Extra volume mounts to add to the container. Normally used with `extraVolumes`.
   ##
   extraVolumeMounts: []
-  ## @param postgresql.initContainers Extra init containers to add to the deployment
+  ## @param postgresql.initContainers Extra init containers to add to the StatefulSet
   ##
   initContainers: []
-  ## @param postgresql.sidecars Extra sidecar containers to add to the deployment
+  ## @param postgresql.sidecars Extra sidecar containers to add to the StatefulSet
   ##
   sidecars: []
   ## PostgreSQL containers' resource requests and limits
@@ -334,9 +336,9 @@ postgresql:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## The pod management policy of the statefulset.
+  ## @param postgresql.podManagementPolicy Sets the pod management policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-  ## @param postgresql.podManagementPolicy sets the pod management policy
+  ##
   podManagementPolicy: Parallel
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -459,7 +461,7 @@ postgresql:
     create: true
     minAvailable: ""
     maxUnavailable: ""
-  ## PostgreSQL configuration parameters
+  ## PostgreSQL authentication parameters
   ## @param postgresql.username PostgreSQL username
   ## @param postgresql.password PostgreSQL password
   ## @param postgresql.database PostgreSQL database
@@ -476,22 +478,12 @@ postgresql:
   postgresPassword: ""
   ## @param postgresql.usePasswordFiles Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable
   ##
-  usePasswordFiles: true
-  ## @param postgresql.repmgrUsePassfile Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)
-  ## ref: https://repmgr.org/docs/current/configuration-password-management.html
-  ##      https://www.postgresql.org/docs/current/libpq-pgpass.html
-  ##
-  repmgrUsePassfile: ""
-  ## @param postgresql.repmgrPassfilePath Custom path where `passfile` will be stored
-  ##
-  repmgrPassfilePath: ""
-  ## @param postgresql.upgradeRepmgrExtension Upgrade repmgr extension in the database
-  ##
-  upgradeRepmgrExtension: false
+  usePasswordFiles: true 
   ## @param postgresql.pgHbaTrustAll Configures PostgreSQL HBA to trust every user
   ##
   pgHbaTrustAll: false
-  ## @param postgresql.syncReplication Make the replication synchronous. This will wait until the data is synchronized in all the replicas before other query can be run. This ensures the data availability at the expenses of speed.
+  ## @param postgresql.syncReplication Enable synchronous replication synchronous, waiting until data is synchronized in every replica before other queries can be run
+  ## This ensures the data availability at the expenses of speed
   ##
   syncReplication: false
   ## @param postgresql.syncReplicationMode This specifies the method to choose synchronous standbys from the listed servers. Valid values: empty, FIRST, ANY.
@@ -502,6 +494,8 @@ postgresql:
   ## @param postgresql.repmgrUsername PostgreSQL Repmgr username
   ## @param postgresql.repmgrPassword PostgreSQL Repmgr password
   ## @param postgresql.repmgrDatabase PostgreSQL Repmgr database
+  ## @param postgresql.repmgrUsePassfile Configure Repmgr to use `passfile` instead of `password` vars*:*:*:username:password"
+  ## @param postgresql.repmgrPassfilePath Custom path where `passfile` will be stored
   ## @param postgresql.repmgrLogLevel Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)
   ## @param postgresql.repmgrConnectTimeout Repmgr backend connection timeout (in seconds)
   ## @param postgresql.repmgrReconnectAttempts Repmgr backend reconnection attempts
@@ -510,10 +504,13 @@ postgresql:
   ## @param postgresql.repmgrChildNodesCheckInterval Repmgr child nodes check interval (in seconds)
   ## @param postgresql.repmgrChildNodesConnectedMinCount Repmgr minimum number of connected child nodes before being considered as failed primary for fencing
   ## @param postgresql.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
+  ## @param postgresql.upgradeRepmgrExtension Upgrade Repmgr extension in the database
   ##
   repmgrUsername: repmgr
   repmgrPassword: ""
   repmgrDatabase: repmgr
+  repmgrUsePassfile: true
+  repmgrPassfilePath: ""
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 2
@@ -522,7 +519,7 @@ postgresql:
   repmgrChildNodesCheckInterval: 5
   repmgrChildNodesConnectedMinCount: 1
   repmgrChildNodesDisconnectTimeout: 30
-  ## EXPERMENTAL: Use pg_rewind for standby failover
+  upgradeRepmgrExtension: false
   ## @param postgresql.usePgRewind Use pg_rewind for standby failover (experimental)
   ##
   usePgRewind: false
@@ -604,7 +601,7 @@ postgresql:
   repmgrConfiguration: ""
   ## @param postgresql.configuration PostgreSQL configuration
   ## You can use this parameter to specify the content for postgresql.conf
-  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## Otherwise, a postgresql.conf will be generated based on the environment variables
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
   ## Example:
@@ -616,7 +613,7 @@ postgresql:
   configuration: ""
   ## @param postgresql.pgHbaConfiguration PostgreSQL client authentication configuration
   ## You can use this parameter to specify the content for pg_hba.conf
-  ## Otherwise, a repmgr.conf will be generated based on the environment variables
+  ## Otherwise, a pg_hba.conf will be generated based on the environment variables
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
   ## Example:
@@ -681,9 +678,9 @@ postgresql:
     ## @param postgresql.tls.certKeyFilename Certificate key filename
     ##
     certKeyFilename: ""
-  ## @param postgresql.preStopDelayAfterPgStopSeconds Minimal number of seconds preStop hook waits after postgres instance is stopped
-  ## It is used to delay postgres pod termination. It gives pgpool time to detect that node goes down. Down up cycle in
-  ## pgpool makes sure postgres node is registered correctly in pgpool (mainly primary flag).
+  ## @param postgresql.preStopDelayAfterPgStopSeconds Minimal number of seconds preStop hook waits after PostgreSQL instance is stopped
+  ## It is used to delay PostgreSQL pod termination. It gives Pgpool-II time to detect that node goes down. Down up cycle in
+  ## Pgpool-II makes sure PostgreSQL node is registered correctly in Pgpool-II (mainly primary flag).
   ## Note: it could be replaced with .spec.minReadySeconds for Kubernetes v1.25 or later once
   ##       https://github.com/kubernetes/kubernetes/issues/112066 is fixed.
   ## Note: must be set to lower value than terminationGracePeriodSeconds (defaults to 30) so that preStop hook finishes
@@ -691,11 +688,11 @@ postgresql:
   ##
   preStopDelayAfterPgStopSeconds: 25
   ## @param postgresql.headlessWithNotReadyAddresses set postgres headless service into publishNotReadyAddresses mode
-  ## It can be used to minimize/eliminate pgpool restarts during PG rolling upgrades or edge-case situations like
-  ## network split. It expects that no other external component will use PG headless service to connect or that
+  ## It can be used to minimize/eliminate Pgpool-II restarts during PostgreSQL rolling upgrades or edge-case situations like
+  ## network split. It expects that no other external component will use PostgreSQL headless service to connect or that
   ## such component implements re-try logic.
   ## This mode also enables enriched readiness probe implementation which delays first switch of POD to READY state
-  ## after start/restart of container. It gives pgpool time switch node back from DOWN to UP state during rolling
+  ## after start/restart of container. It gives Pgpool-II time switch node back from DOWN to UP state during rolling
   ## upgrade.
   headlessWithNotReadyAddresses: false
 witness:
@@ -712,7 +709,7 @@ witness:
   ## @param witness.replicaCount Number of replicas to deploy.
   ##
   replicaCount: 1
-  ## @param witness.updateStrategy.type Postgresql statefulset strategy type
+  ## @param witness.updateStrategy.type Postgresql StatefulSet strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## e.g:
   ## updateStrategy:
@@ -1116,25 +1113,26 @@ witness:
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
   initdbScriptsSecret: ""
-## @section Pgpool parameters
 
-## Pgpool parameters
+## @section Pgpool-II parameters
+
+## Pgpool-II parameters
 ##
 pgpool:
-  ## Bitnami Pgpool image
+  ## Bitnami Pgpool-II image
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
-  ## @param pgpool.image.registry [default: REGISTRY_NAME] Pgpool image registry
-  ## @param pgpool.image.repository [default: REPOSITORY_NAME/pgpool] Pgpool image repository
-  ## @skip pgpool.image.tag Pgpool image tag
-  ## @param pgpool.image.digest Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param pgpool.image.pullPolicy Pgpool image pull policy
+  ## @param pgpool.image.registry [default: REGISTRY_NAME] Pgpool-II image registry
+  ## @param pgpool.image.repository [default: REPOSITORY_NAME/pgpool] Pgpool-II image repository
+  ## @skip pgpool.image.tag Pgpool-II image tag
+  ## @param pgpool.image.digest Pgpool-II image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param pgpool.image.pullPolicy Pgpool-II image pull policy
   ## @param pgpool.image.pullSecrets Specify docker-registry secret names as an array
   ## @param pgpool.image.debug Specify if debug logs should be enabled
   ##
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.6.0-debian-12-r5
+    tag: 4.6.0-debian-12-r8
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1171,7 +1169,7 @@ pgpool:
   ## The secret must contain the keys "usernames" and "passwords" respectively.
   ##
   customUsersSecret: ""
-  ## @param pgpool.existingSecret Pgpool admin password using existing secret
+  ## @param pgpool.existingSecret Pgpool-II admin password using existing secret
   ##
   existingSecret: ""
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
@@ -1186,7 +1184,7 @@ pgpool:
   ## @param pgpool.serviceLabels Labels to add to the service. Evaluated as template
   ##
   serviceLabels: {}
-  ## @param pgpool.serviceAnnotations Provide any additional annotations for Pgpool service
+  ## @param pgpool.serviceAnnotations Provide any additional annotations for Pgpool-II service
   ##
   serviceAnnotations: {}
   ## @param pgpool.customLivenessProbe Override default liveness probe
@@ -1254,53 +1252,53 @@ pgpool:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param pgpool.podAffinityPreset Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param pgpool.podAffinityPreset Pgpool-II pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param pgpool.podAntiAffinityPreset Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param pgpool.podAntiAffinityPreset Pgpool-II pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Pgpool node affinity preset
+  ## Pgpool-II node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param pgpool.nodeAffinityPreset.type Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param pgpool.nodeAffinityPreset.type Pgpool-II node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param pgpool.nodeAffinityPreset.key Pgpool node label key to match Ignored if `pgpool.affinity` is set.
+    ## @param pgpool.nodeAffinityPreset.key Pgpool-II node label key to match Ignored if `pgpool.affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## @param pgpool.nodeAffinityPreset.values Pgpool node label values to match. Ignored if `pgpool.affinity` is set.
+    ## @param pgpool.nodeAffinityPreset.values Pgpool-II node label values to match. Ignored if `pgpool.affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param pgpool.affinity Affinity for Pgpool pods assignment
+  ## @param pgpool.affinity Affinity for Pgpool-II pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: pgpool.podAffinityPreset, pgpool.podAntiAffinityPreset, and pgpool.nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param pgpool.nodeSelector Node labels for Pgpool pods assignment
+  ## @param pgpool.nodeSelector Node labels for Pgpool-II pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param pgpool.tolerations Tolerations for Pgpool pods assignment
+  ## @param pgpool.tolerations Tolerations for Pgpool-II pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param pgpool.podSecurityContext.enabled Enable security context for Pgpool
+  ## @param pgpool.podSecurityContext.enabled Enable security context for Pgpool-II
   ## @param pgpool.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param pgpool.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param pgpool.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param pgpool.podSecurityContext.fsGroup Group ID for the Pgpool filesystem
+  ## @param pgpool.podSecurityContext.fsGroup Group ID for the Pgpool-II filesystem
   ##
   podSecurityContext:
     enabled: true
@@ -1340,7 +1338,7 @@ pgpool:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## Pgpool containers' resource requests and limits
+  ## Pgpool-II containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -1361,7 +1359,7 @@ pgpool:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Pgpool container's liveness probe
+  ## Pgpool-II container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param pgpool.livenessProbe.enabled Enable livenessProbe
   ## @param pgpool.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -1377,7 +1375,7 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## Pgpool container's readiness probe
+  ## Pgpool-II container's readiness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param pgpool.readinessProbe.enabled Enable readinessProbe
   ## @param pgpool.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1393,7 +1391,7 @@ pgpool:
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
-  ## Pgpool container's startup probe
+  ## Pgpool-II container's startup probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param pgpool.startupProbe.enabled Enable startupProbe
   ## @param pgpool.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -1465,7 +1463,7 @@ pgpool:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
   ## Pod disruption budget configuration
-  ## @param pgpool.pdb.create Specifies whether a Pod disruption budget should be created for Pgpool pods
+  ## @param pgpool.pdb.create Specifies whether a Pod disruption budget should be created for Pgpool-II pods
   ## @param pgpool.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
   ## @param pgpool.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pgpool.pdb.minAvailable` and `pgpool.pdb.maxUnavailable` are empty.
   ##
@@ -1477,19 +1475,23 @@ pgpool:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy: {}
-  ## @param pgpool.containerPorts.postgresql Pgpool port
+  ## @param pgpool.containerPorts.postgresql Pgpool-II port
   ##
   containerPorts:
     postgresql: 5432
   ## @param pgpool.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: ""
-  ## Credentials for the pgpool administrator
-  ## @param pgpool.adminUsername Pgpool Admin username
-  ## @param pgpool.adminPassword Pgpool Admin password
+  ## Credentials for the Pgpool-II
+  ## @param pgpool.adminUsername Pgpool-II Admin username
+  ## @param pgpool.adminPassword Pgpool-II Admin password
+  ## @param pgpool.srCheckUsername Pgpool-II Streaming Replication Check username
+  ## @param pgpool.srCheckPassword Pgpool-II Streaming Replication Check password
   ##
   adminUsername: admin
   adminPassword: ""
+  srCheckUsername: "sr_check_user"
+  srCheckPassword: ""
   ## @param pgpool.usePasswordFiles Set to `true` to mount pgpool secret as a file instead of passing environment variable
   ##
   usePasswordFiles: true
@@ -1550,14 +1552,14 @@ pgpool:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   connectionLifeTime: ""
-  ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
+  ## @param pgpool.useLoadBalancing Use Pgpool-II Load-Balancing
   ##
   useLoadBalancing: true
   ## @param pgpool.disableLoadBalancingOnWrite LoadBalancer on write actions behavior
   ## one of: [off, transaction, trans_transaction, always]
   ##
   disableLoadBalancingOnWrite: transaction
-  ## @param pgpool.configuration Pgpool configuration
+  ## @param pgpool.configuration Pgpool-II configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
@@ -1569,13 +1571,24 @@ pgpool:
   ##   ...
   ##
   configuration: ""
-  ## @param pgpool.configurationCM ConfigMap with Pgpool configuration
-  ## NOTE: This will override pgpool.configuration parameter
-  ## The file used must be named `pgpool.conf`
+  ## @param pgpool.poolHbaConfiguration Pgpool-II client authentication configuration
+  ## You can use this parameter to specify the content for pool_hba.conf
+  ## Otherwise, a pool_hba.conf will be generated based on the environment variables
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr#configuration-file
+  ## Example:
+  ## poolHbaConfiguration: |-
+  ##   host     all            repmgr    0.0.0.0/0    md5
+  ##   host     repmgr         repmgr    0.0.0.0/0    md
+  ##   ...
+  ##
+  poolHbaConfiguration: ""
+  ## @param pgpool.configurationCM ConfigMap with Pgpool-II configuration
+  ## NOTE: This will override pgpool.configuration and pgpool.poolHbaConfiguration parameters
   ##
   configurationCM: ""
   ## @param pgpool.initdbScripts Dictionary of initdb scripts
-  ## Specify dictionary of scripts to be run every time Pgpool container is initialized
+  ## Specify dictionary of scripts to be run every time Pgpool-II container is initialized
   ## The allowed extension is `.sh`
   ## ref: https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#initialize-a-fresh-instance
   ## e.g:
@@ -1585,11 +1598,11 @@ pgpool:
   ##      echo "Do something."
   ##
   initdbScripts: {}
-  ## @param pgpool.initdbScriptsCM ConfigMap with scripts to be run every time Pgpool container is initialized
+  ## @param pgpool.initdbScriptsCM ConfigMap with scripts to be run every time Pgpool-II container is initialized
   ## NOTE: This will override pgpool.initdbScripts
   ##
   initdbScriptsCM: ""
-  ## @param pgpool.initdbScriptsSecret Secret with scripts to be run every time Pgpool container is initialized
+  ## @param pgpool.initdbScriptsSecret Secret with scripts to be run every time Pgpool-II container is initialized
   ## Note: can be used with initdbScriptsCM or initdbScripts
   ##
   initdbScriptsSecret: ""
@@ -1616,17 +1629,17 @@ pgpool:
     ##
     certKeyFilename: ""
     ## @param pgpool.tls.certCAFilename CA Certificate filename
-    ## If provided, PgPool will authenticate TLS/SSL clients by requesting them a certificate
+    ## If provided, Pgpool-II will authenticate TLS/SSL clients by requesting them a certificate
     ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
     ##
     certCAFilename: ""
+
 ## @section LDAP parameters
 
 ## LDAP parameters
 ## @param ldap.enabled Enable LDAP support
 ## @param ldap.existingSecret Name of existing secret to use for LDAP passwords
 ## @param ldap.uri LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`
-## DEPRECATED ldap.base will be removed in a future, please use 'ldap.basedn' instead
 ## @param ldap.basedn LDAP base DN
 ## @param ldap.binddn LDAP bind DN
 ## @param ldap.bindpw LDAP bind password
@@ -1716,7 +1729,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.17.1-debian-12-r5
+    tag: 0.17.1-debian-12-r7
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1966,7 +1979,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r42
+    tag: 12-debian-12-r43
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -2131,7 +2144,7 @@ service:
   ##   clientIP:
   ##     timeoutSeconds: 300
   sessionAffinityConfig: {}
-  ## @param service.annotations Provide any additional annotations both for PostgreSQL and Pgpool services
+  ## @param service.annotations Provide any additional annotations both for PostgreSQL and Pgpool-II services
   ##
   annotations: {}
   ## @param service.serviceLabels Labels for PostgreSQL service

@@ -1,8 +1,21 @@
 # Changelog
 
-## 9.6.1 (2025-04-09)
+## 9.6.4 (2025-05-09)
 
-* [bitnami/solr] Release 9.6.1 ([#32893](https://github.com/bitnami/charts/pull/32893))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#33583](https://github.com/bitnami/charts/pull/33583))
+
+## <small>9.6.3 (2025-05-07)</small>
+
+* [bitnami/solr] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33435) ([537f842](https://github.com/bitnami/charts/commit/537f842cd75f07bab23b261697a89a47be5e65e7)), closes [#33435](https://github.com/bitnami/charts/issues/33435)
+
+## <small>9.6.2 (2025-05-07)</small>
+
+* [bitnami/solr] Add persistentvolumeclaim retention on solr statefulset (#33310) ([34ee22f](https://github.com/bitnami/charts/commit/34ee22fa3bc6d59cb3969a76d7655515e8969049)), closes [#33310](https://github.com/bitnami/charts/issues/33310)
+* Fix typo mentioning Geode in Solr and Zookeeper (#32987) ([9dd4289](https://github.com/bitnami/charts/commit/9dd42891c2c9f5ed339e5dbc1506a13f29e0d45c)), closes [#32987](https://github.com/bitnami/charts/issues/32987)
+
+## <small>9.6.1 (2025-04-09)</small>
+
+* [bitnami/solr] Release 9.6.1 (#32893) ([0326481](https://github.com/bitnami/charts/commit/0326481eb281ec144bc172c14ed160bdd6239a25)), closes [#32893](https://github.com/bitnami/charts/issues/32893)
 
 ## 9.6.0 (2025-04-04)
 

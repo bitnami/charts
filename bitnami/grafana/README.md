@@ -20,8 +20,6 @@ Looking to use Grafana in production? Try [VMware Tanzu Application Catalog](htt
 
 This chart bootstraps a [grafana](https://github.com/bitnami/containers/tree/main/bitnami/grafana) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.

@@ -1,8 +1,16 @@
 # Changelog
 
+## 20.0.2 (2025-05-13)
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#33641](https://github.com/bitnami/charts/pull/33641))
+
+## <small>20.0.1 (2025-05-06)</small>
+
+* [bitnami/nginx] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33413) ([b946af2](https://github.com/bitnami/charts/commit/b946af26c1d520d34d8282d150ba32437b254efa)), closes [#33413](https://github.com/bitnami/charts/issues/33413)
+
 ## 20.0.0 (2025-04-24)
 
-* [bitnami/nginx] Release 20.0.0 ([#33169](https://github.com/bitnami/charts/pull/33169))
+* [bitnami/nginx] Release 20.0.0 (#33169) ([c935715](https://github.com/bitnami/charts/commit/c9357150af548e9982f711e7b68b82dc77487031)), closes [#33169](https://github.com/bitnami/charts/issues/33169)
 
 ## <small>19.1.1 (2025-04-16)</small>
 

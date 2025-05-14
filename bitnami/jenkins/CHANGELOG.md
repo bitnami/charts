@@ -1,8 +1,16 @@
 # Changelog
 
-## 13.6.5 (2025-04-30)
+## 13.6.7 (2025-05-13)
 
-* [bitnami/jenkins] Release 13.6.5 ([#33271](https://github.com/bitnami/charts/pull/33271))
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#33628](https://github.com/bitnami/charts/pull/33628))
+
+## <small>13.6.6 (2025-05-06)</small>
+
+* [bitnami/jenkins] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33377 ([66a0b1d](https://github.com/bitnami/charts/commit/66a0b1d098d97725c81c175c9e340f94ca213b57)), closes [#33377](https://github.com/bitnami/charts/issues/33377)
+
+## <small>13.6.5 (2025-04-30)</small>
+
+* [bitnami/jenkins] Release 13.6.5 (#33271) ([8aaf090](https://github.com/bitnami/charts/commit/8aaf090090c351a94314e437d70bf7c5e2f19856)), closes [#33271](https://github.com/bitnami/charts/issues/33271)
 
 ## <small>13.6.4 (2025-04-30)</small>
 

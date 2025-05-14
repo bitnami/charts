@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: kong
-      image: docker.io/bitnami/kong:3.9.0-debian-12-r25
+      image: docker.io/bitnami/kong:3.9.0-debian-12-r26
     - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.4.4-debian-12-r3
+      image: docker.io/bitnami/kong-ingress-controller:3.4.4-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 3.9.0
 dependencies:
@@ -26,7 +26,9 @@ dependencies:
   name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 12.x.x
-description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
+description: Kong is an open source Microservice API gateway and platform designed
+  for managing microservices requests of high-availability, fault-tolerance, and distributed
+  systems.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
@@ -44,4 +46,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 15.4.3
+version: 15.4.5

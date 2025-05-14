@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.3.6 (2025-05-03)
+## 9.3.8 (2025-05-13)
 
-* [bitnami/matomo] Release 9.3.6 ([#33314](https://github.com/bitnami/charts/pull/33314))
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#33637](https://github.com/bitnami/charts/pull/33637))
+
+## <small>9.3.7 (2025-05-07)</small>
+
+* [bitnami/matomo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33396) ([e267482](https://github.com/bitnami/charts/commit/e2674820eb9e6e0a9442e52212c601119ff18ca7)), closes [#33396](https://github.com/bitnami/charts/issues/33396)
+
+## <small>9.3.6 (2025-05-03)</small>
+
+* [bitnami/matomo] Release 9.3.6 (#33314) ([5976be1](https://github.com/bitnami/charts/commit/5976be1ecb807f0fd3a13b8a889da4054d7c84bf)), closes [#33314](https://github.com/bitnami/charts/issues/33314)
 
 ## <small>9.3.5 (2025-05-03)</small>
 

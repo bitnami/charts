@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: flink
-      image: docker.io/bitnami/flink:2.0.0-debian-12-r4
+      image: docker.io/bitnami/flink:2.0.0-debian-12-r5
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 2.0.0
 dependencies:
@@ -16,7 +16,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
+description: Apache Flink is a framework and distributed processing engine for stateful
+  computations over unbounded and bounded data streams.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/flink/img/flink-stack-220x234.png
 keywords:
@@ -29,4 +30,4 @@ maintainers:
 name: flink
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flink
-version: 2.0.1
+version: 2.0.3

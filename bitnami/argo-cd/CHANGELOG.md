@@ -1,8 +1,37 @@
 # Changelog
 
-## 7.3.6 (2025-04-22)
+## 9.0.3 (2025-05-13)
 
-* [bitnami/argo-cd] Release 7.3.6 ([#33128](https://github.com/bitnami/charts/pull/33128))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33675](https://github.com/bitnami/charts/pull/33675))
+
+## <small>9.0.2 (2025-05-13)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33665) ([4d1d7c3](https://github.com/bitnami/charts/commit/4d1d7c379fd42c0a196925816cd7b2f0a1770898)), closes [#33665](https://github.com/bitnami/charts/issues/33665)
+
+## <small>9.0.1 (2025-05-13)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33662) ([7338c3c](https://github.com/bitnami/charts/commit/7338c3c3e735052654bdf2aa34aa031869db8755)), closes [#33662](https://github.com/bitnami/charts/issues/33662)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## 9.0.0 (2025-05-08)
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33561) ([dc9d93c](https://github.com/bitnami/charts/commit/dc9d93c0a6f8fa77f3aa7475428904f2ace3b365)), closes [#33561](https://github.com/bitnami/charts/issues/33561)
+
+## 8.0.0 (2025-05-07)
+
+* [bitnami/argo-cd] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33500) ([8a930f5](https://github.com/bitnami/charts/commit/8a930f5bf8e24160c337799d4d2da411db479de8)), closes [#33500](https://github.com/bitnami/charts/issues/33500)
+
+## <small>7.3.8 (2025-05-07)</small>
+
+* [bitnami/argo-cd] Release 7.3.8 (#33506) ([a6ea6f0](https://github.com/bitnami/charts/commit/a6ea6f0975c92a1430895f5d813ad92dbc20f7f9)), closes [#33506](https://github.com/bitnami/charts/issues/33506)
+
+## <small>7.3.7 (2025-05-06)</small>
+
+* [bitnami/argo-cd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33337 ([81eeb64](https://github.com/bitnami/charts/commit/81eeb64efc5548ed46b369612b23abe401644670)), closes [#33337](https://github.com/bitnami/charts/issues/33337)
+
+## <small>7.3.6 (2025-04-22)</small>
+
+* [bitnami/argo-cd] Release 7.3.6 (#33128) ([5468fc3](https://github.com/bitnami/charts/commit/5468fc3144ea9ccc2733c21b030cf5c0c11474ef)), closes [#33128](https://github.com/bitnami/charts/issues/33128)
 
 ## <small>7.3.5 (2025-04-09)</small>
 
