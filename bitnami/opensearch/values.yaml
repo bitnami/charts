@@ -199,7 +199,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.19.2-debian-12-r1
+  tag: 3.0.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -723,7 +723,7 @@ master:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1261,7 +1261,7 @@ data:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1800,7 +1800,7 @@ coordinating:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -2302,7 +2302,7 @@ ingest:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -2887,7 +2887,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.19.2-debian-12-r0
+    tag: 3.0.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
