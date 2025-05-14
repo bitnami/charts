@@ -157,7 +157,14 @@ data:
         layerinfo: redis
       maintenance:
         uploadpurging:
+          {{- if .Values.persistence.imageChartStorage.uploadpurging.enabled }}
+          enabled: true
+          age: {{ .Values.persistence.imageChartStorage.uploadpurging.age }}
+          interval: {{ .Values.persistence.imageChartStorage.uploadpurging.interval }}
+          dryrun: {{ .Values.persistence.imageChartStorage.uploadpurging.dryrun }}
+          {{- else }}
           enabled: false
+          {{- end }}
       delete:
         enabled: true
       redirect:
