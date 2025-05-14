@@ -574,13 +574,13 @@ Validates the image tag version is equal or higher than 2.0.0
 Checks whether the scheduler object has to be an statefulset or a deployment depending on the configured executors
 */}}
 {{- define "airflow.scheduler.requiresStatefulset" -}}
-{{- $configuredExecutors := (ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor)) -}}
+{{- $configuredExecutors := ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor) -}}
 {{- $statefulsetExecutors := list "SequentialExecutor" "LocalExecutor" "LocalCeleryExecutor" "LocalKubernetesExecutor" -}}
 {{- $statefulset := false -}}
 {{- range $executor := $configuredExecutors -}}
-{{- if (has $executor $statefulsetExecutors) -}}
-{{- $statefulset = true -}}
-{{- end -}}
+    {{- if (has $executor $statefulsetExecutors) -}}
+        {{- $statefulset = true -}}
+    {{- end -}}
 {{- end -}}
 {{- if $statefulset -}}
 true
@@ -592,14 +592,14 @@ Validates deprecated executors on Airflow 3 are not used
 https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html#breaking-changes
 */}}
 {{- define "airflow.validateValues.executors" -}}
-{{- $configuredExecutors := (ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor)) -}}
+{{- $configuredExecutors := ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor) -}}
 {{- $deprecatedExecutors := list "SequentialExecutor" "CeleryKubernetesExecutor" "LocalKubernetesExecutor" -}}
 {{- $executorsError := list -}}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
     {{- range $executor := $configuredExecutors -}}
-    {{- if (has $executor $deprecatedExecutors) -}}
-    {{- $executorsError = append $executorsError $executor -}}
-    {{- end -}}
+        {{- if (has $executor $deprecatedExecutors) -}}
+            {{- $executorsError = append $executorsError $executor -}}
+        {{- end -}}
     {{- end -}}
 {{- end -}}
 {{/* configuredExecutors can't be empty */}}
@@ -607,7 +607,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_
 airflow: executors
     You need to provide at least one value for the '.executor' parameter.
 {{- end -}}
-{{- if (not (empty $executorsError)) -}}
+{{- if not (empty $executorsError) -}}
 airflow: executors
     The next executors have been deprecated starting with Airflow 3.0.0 and can't be used:
     {{- range $executorsError }}

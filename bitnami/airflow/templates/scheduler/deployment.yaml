@@ -5,8 +5,8 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
 {{- $isStatefulset := (include "airflow.scheduler.requiresStatefulset" .) -}}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: {{ if $isStatefulset }}StatefulSet{{ else }}Deployment{{ end }}
+apiVersion: {{ ternary (include "common.capabilities.statefulset.apiVersion" .) (include "common.capabilities.deployment.apiVersion" .) $isStatefulset }}
+kind: {{ ternary "StatefulSet" "Deployment" $isStatefulset }}
 metadata:
   name: {{ template "airflow.scheduler.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -27,11 +27,7 @@ spec:
   replicas: {{ .Values.scheduler.replicaCount }}
   {{- end }}
   {{- if .Values.scheduler.updateStrategy }}
-  {{- if $isStatefulset }}
-  updateStrategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
-  {{- else }}
-  strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
-  {{- end }}
+  {{ ternary "updateStrategy" "strategy" $isStatefulset }}: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
