@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
-{{- $isStatefulset := (include "airflow.scheduler.requiresStatefulset" .) -}}
+{{- $isStatefulset := (eq "true" (include "airflow.scheduler.requiresStatefulset" .)) -}}
 apiVersion: {{ ternary (include "common.capabilities.statefulset.apiVersion" .) (include "common.capabilities.deployment.apiVersion" .) $isStatefulset }}
 kind: {{ ternary "StatefulSet" "Deployment" $isStatefulset }}
 metadata:
