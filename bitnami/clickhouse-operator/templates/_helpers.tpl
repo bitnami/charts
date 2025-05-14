@@ -148,33 +148,12 @@ Return the name of the ClickHouse credentials secret
 {{- end -}}
 
 {{/*
-Return the secret key that contains the ClickHouse admin username
-*/}}
-{{- define "clickhouse-operator.secret.usernameKey" -}}
-{{- if and .Values.auth.existingSecret .Values.auth.existingSecretUsernameKey -}}
-    {{- print (tpl .Values.auth.existingSecretUsernameKey .) -}}
-{{- else -}}
-    {{- print "username" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the secret key that contains the ClickHouse admin password
-*/}}
-{{- define "clickhouse-operator.secret.passwordKey" -}}
-{{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
-    {{- print (tpl .Values.auth.existingSecretPasswordKey .) -}}
-{{- else -}}
-    {{- print "password" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "clickhouse-operator.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "clickhouse-operator.validateValues.extraVolumes" .) -}}
+{{- $messages := append $messages (include "clickhouse-operator.validateValues.ipFamily" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -191,5 +170,15 @@ Validate values of ClickHouse Operator - Incorrect extra volume settings
 clickhouse-operator: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
     the extraVolumeMounts value
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of ClickHouse Operator - Incorrect extra volume settings
+*/}}
+{{- define "clickhouse-operator.validateValues.ipFamily" -}}
+{{- if not (or .Values.ipFamily.enableIpv4 .Values.ipFamily.enableIpv6) -}}
+clickhouse-operator: missing-ip-families
+    You did not specify any allowed IP Family, please set at least one of ipFamily.enableIpv4=true or ipFamily.enableIpv6=true
 {{- end -}}
 {{- end -}}

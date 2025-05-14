@@ -1,8 +1,16 @@
 # Changelog
 
+## 26.0.2 (2025-05-09)
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#33592](https://github.com/bitnami/charts/pull/33592))
+
+## <small>26.0.1 (2025-05-06)</small>
+
+* [bitnami/moodle] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33407) ([502482e](https://github.com/bitnami/charts/commit/502482e304fc70f6286939b5eb050ff92fc37ec6)), closes [#33407](https://github.com/bitnami/charts/issues/33407)
+
 ## 26.0.0 (2025-04-30)
 
-* [bitnami/moodle] Release 26.0.0 ([#33267](https://github.com/bitnami/charts/pull/33267))
+* [bitnami/moodle] Release 26.0.0 (#33267) ([e83e3be](https://github.com/bitnami/charts/commit/e83e3be7a4c094947e7b1012d828e157c92c6bc5)), closes [#33267](https://github.com/bitnami/charts/issues/33267)
 
 ## <small>25.2.2 (2025-04-16)</small>
 

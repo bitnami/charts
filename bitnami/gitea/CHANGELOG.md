@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.2.3 (2025-04-09)
+## 3.2.7 (2025-05-13)
 
-* [bitnami/gitea] Release 3.2.3 ([#32905](https://github.com/bitnami/charts/pull/32905))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33622](https://github.com/bitnami/charts/pull/33622))
+
+## <small>3.2.6 (2025-05-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33558) ([cf1e13b](https://github.com/bitnami/charts/commit/cf1e13bcd7c791faedb003185ab2c50c0f5dd487)), closes [#33558](https://github.com/bitnami/charts/issues/33558)
+
+## <small>3.2.5 (2025-05-07)</small>
+
+* [bitnami/gitea] Release 3.2.5 (#33479) ([a1595ee](https://github.com/bitnami/charts/commit/a1595eee53e221b0b22cbdef0db922dc72ef825d)), closes [#33479](https://github.com/bitnami/charts/issues/33479)
+
+## <small>3.2.4 (2025-05-06)</small>
+
+* [bitnami/gitea] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33365) ([6850abe](https://github.com/bitnami/charts/commit/6850abe386dcae0781ee5b1f4e61b548784a292b)), closes [#33365](https://github.com/bitnami/charts/issues/33365)
+
+## <small>3.2.3 (2025-04-09)</small>
+
+* [bitnami/gitea] Release 3.2.3 (#32905) ([cf465ce](https://github.com/bitnami/charts/commit/cf465ce64050d29fdd2ead91540bfa185b836bb3)), closes [#32905](https://github.com/bitnami/charts/issues/32905)
 
 ## <small>3.2.2 (2025-04-08)</small>
 

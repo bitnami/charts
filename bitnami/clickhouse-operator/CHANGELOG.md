@@ -1,8 +1,25 @@
 # Changelog
 
-## 0.1.6 (2025-04-29)
+## 0.2.1 (2025-05-13)
 
-* [bitnami/clickhouse-operator] fix: :bug: Change default operator user ([#33247](https://github.com/bitnami/charts/pull/33247))
+* [clickhouse-operator] bugfix: remove unused parameters ([#33627](https://github.com/bitnami/charts/pull/33627))
+
+## 0.2.0 (2025-05-12)
+
+* [bitnami/clickhouse-operator] feat: :sparkles: Allow setting IP Families (#33606) ([9c8e84c](https://github.com/bitnami/charts/commit/9c8e84c91704c6abebc029a5dbd1003678342d45)), closes [#33606](https://github.com/bitnami/charts/issues/33606)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>0.1.8 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] Release 0.1.8 (#33470) ([406dcc6](https://github.com/bitnami/charts/commit/406dcc6bcfa614950ff41cd0f22c1e72fc543f9b)), closes [#33470](https://github.com/bitnami/charts/issues/33470)
+
+## <small>0.1.7 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 refere ([6e26520](https://github.com/bitnami/charts/commit/6e265202caf4130181697af3fc28ae680a786e4f)), closes [#33346](https://github.com/bitnami/charts/issues/33346)
+
+## <small>0.1.6 (2025-04-29)</small>
+
+* [bitnami/clickhouse-operator] fix: :bug: Change default operator user (#33247) ([f46836c](https://github.com/bitnami/charts/commit/f46836c1d5afef413e950e731d55cb4a445d4f50)), closes [#33247](https://github.com/bitnami/charts/issues/33247)
 
 ## <small>0.1.5 (2025-04-16)</small>
 

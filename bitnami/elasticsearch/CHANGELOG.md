@@ -1,8 +1,16 @@
 # Changelog
 
-## 22.0.1 (2025-04-30)
+## 22.0.3 (2025-05-07)
 
-* [bitnami/elasticsearch] Update kibana subchart ([#33256](https://github.com/bitnami/charts/pull/33256))
+* [bitnami/elasticsearch] Release 22.0.3 ([#33547](https://github.com/bitnami/charts/pull/33547))
+
+## <small>22.0.2 (2025-05-06)</small>
+
+* [bitnami/elasticsearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([97dc9b1](https://github.com/bitnami/charts/commit/97dc9b1af8160f11f01df6d24cf041c22b4f62d3)), closes [#33356](https://github.com/bitnami/charts/issues/33356)
+
+## <small>22.0.1 (2025-04-30)</small>
+
+* [bitnami/elasticsearch] Update kibana subchart (#33256) ([628723c](https://github.com/bitnami/charts/commit/628723c5629d638280f4e69af6ef6bf0e6f3539c)), closes [#33256](https://github.com/bitnami/charts/issues/33256)
 
 ## 22.0.0 (2025-04-29)
 

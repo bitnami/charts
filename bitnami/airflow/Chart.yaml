@@ -2,21 +2,21 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: service
   category: WorkFlow
-  licenses: Apache-2.0
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:3.0.0-debian-12-r3
+      image: docker.io/bitnami/airflow:3.0.1-debian-12-r1
     - name: statsd-exporter
-      image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r15
+      image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r16
+  licenses: Apache-2.0
+  tanzuCategory: service
 apiVersion: v2
-appVersion: 3.0.0
+appVersion: 3.0.1
 dependencies:
 - condition: redis.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.x.x
+  version: 21.x.x
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -26,7 +26,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
+description: Apache Airflow is a tool to express and execute workflows as directed
+  acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress
+  and handle task dependencies.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
@@ -40,4 +42,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 23.0.2
+version: 24.0.3

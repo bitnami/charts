@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.1.1 (2025-04-23)
+## 3.1.3 (2025-05-13)
 
-* [bitnami/fluent-bit] Release 3.1.1 ([#33151](https://github.com/bitnami/charts/pull/33151))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#33674](https://github.com/bitnami/charts/pull/33674))
+
+## <small>3.1.2 (2025-05-06)</small>
+
+* [bitnami/fluent-bit] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([412517d](https://github.com/bitnami/charts/commit/412517d16ac16572752b4f142991d26693da4d55)), closes [#33361](https://github.com/bitnami/charts/issues/33361)
+
+## <small>3.1.1 (2025-04-23)</small>
+
+* [bitnami/fluent-bit] Release 3.1.1 (#33151) ([79e0e18](https://github.com/bitnami/charts/commit/79e0e185755f4b4b058ac3697761025df6c03532)), closes [#33151](https://github.com/bitnami/charts/issues/33151)
 
 ## 3.1.0 (2025-04-21)
 

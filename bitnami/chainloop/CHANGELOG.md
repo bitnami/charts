@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.2.24 (2025-04-24)
+## 4.0.2 (2025-05-13)
 
-* [bitnami/chainloop] Release 2.2.24 ([#33154](https://github.com/bitnami/charts/pull/33154))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#33676](https://github.com/bitnami/charts/pull/33676))
+
+## <small>4.0.1 (2025-05-08)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#33580) ([96bd035](https://github.com/bitnami/charts/commit/96bd0359f33e40510525041094eca73a55bc3378)), closes [#33580](https://github.com/bitnami/charts/issues/33580)
+
+## 4.0.0 (2025-05-07)
+
+* [bitnami/chainloop] Release 4.0.0 (#33548) ([c78166d](https://github.com/bitnami/charts/commit/c78166deba01659cecea6eb2c0bf19783ea15fe1)), closes [#33548](https://github.com/bitnami/charts/issues/33548)
+
+## <small>3.0.2 (2025-05-07)</small>
+
+* [bitnami/chainloop] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([ad1a8c7](https://github.com/bitnami/charts/commit/ad1a8c784c38bdbf23a2c4726ab388667f961c12)), closes [#33343](https://github.com/bitnami/charts/issues/33343)
+
+## <small>3.0.1 (2025-05-07)</small>
+
+* [bitnami/chainloop] Release 3.0.1 (#33472) ([f25f59e](https://github.com/bitnami/charts/commit/f25f59e33c8f5527df67e52b46b9396337a21828)), closes [#33472](https://github.com/bitnami/charts/issues/33472)
+
+## 3.0.0 (2025-05-05)
+
+* [bitnami/chainloop] chore!: :recycle: :boom: :arrow_up: Bump k8s requirements to 1.23 (#33322) ([0d4828e](https://github.com/bitnami/charts/commit/0d4828ee1afc36208f34fc34166a73a77196defe)), closes [#33322](https://github.com/bitnami/charts/issues/33322)
+
+## <small>2.2.24 (2025-04-24)</small>
+
+* [bitnami/chainloop] Release 2.2.24 (#33154) ([b0dcaf6](https://github.com/bitnami/charts/commit/b0dcaf6f4452fd21550adfe50805e6748e3fa07d)), closes [#33154](https://github.com/bitnami/charts/issues/33154)
 
 ## <small>2.2.23 (2025-04-01)</small>
 

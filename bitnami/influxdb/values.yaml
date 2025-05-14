@@ -74,22 +74,22 @@ diagnosticMode:
   ##
   args:
     - infinity
-## @section InfluxDB&trade; parameters
+## @section InfluxDB(TM) parameters
 
-## Bitnami InfluxDB&trade; image
+## Bitnami InfluxDB(TM) image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
-## @param image.registry [default: REGISTRY_NAME] InfluxDB&trade; image registry
-## @param image.repository [default: REPOSITORY_NAME/influxdb] InfluxDB&trade; image repository
-## @skip image.tag InfluxDB&trade; image tag (immutable tags are recommended)
-## @param image.digest InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-## @param image.pullPolicy InfluxDB&trade; image pull policy
+## @param image.registry [default: REGISTRY_NAME] InfluxDB(TM) image registry
+## @param image.repository [default: REPOSITORY_NAME/influxdb] InfluxDB(TM) image repository
+## @skip image.tag InfluxDB(TM) image tag (immutable tags are recommended)
+## @param image.digest InfluxDB(TM) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy InfluxDB(TM) image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
 ##
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.11-debian-12-r18
+  tag: 2.7.11-debian-12-r19
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -108,31 +108,31 @@ image:
 ## Authentication parameters
 ##
 auth:
-  ## @param auth.enabled Enable/disable authentication (Variable to keep compatibility with InfluxDB&trade; v1, in v2 it will be ignored)
+  ## @param auth.enabled Enable/disable authentication (Variable to keep compatibility with InfluxDB(TM) v1, in v2 it will be ignored)
   ##
   enabled: true
   ## @param auth.usePasswordFiles Whether to use files to provide secrets instead of env vars.
   ##
   usePasswordFiles: true
-  ## InfluxDB&trade; admin credentials
+  ## InfluxDB(TM) admin credentials
   ##
   admin:
-    ## @param auth.admin.username InfluxDB&trade; admin user name
+    ## @param auth.admin.username InfluxDB(TM) admin user name
     ##
     username: admin
-    ## @param auth.admin.password InfluxDB&trade; admin user's password
+    ## @param auth.admin.password InfluxDB(TM) admin user's password
     ##
     password: ""
-    ## @param auth.admin.token InfluxDB&trade; admin user's token. Only valid with InfluxDB&trade; v2
+    ## @param auth.admin.token InfluxDB(TM) admin user's token. Only valid with InfluxDB(TM) v2
     ##
     token: ""
-    ## @param auth.admin.org InfluxDB&trade; admin user's org. Only valid with InfluxDB&trade; v2
+    ## @param auth.admin.org InfluxDB(TM) admin user's org. Only valid with InfluxDB(TM) v2
     ##
     org: primary
-    ## @param auth.admin.bucket InfluxDB&trade; admin user's bucket. Only valid with InfluxDB&trade; v2
+    ## @param auth.admin.bucket InfluxDB(TM) admin user's bucket. Only valid with InfluxDB(TM) v2
     ##
     bucket: primary
-    ## @param auth.admin.retention InfluxDB&trade; admin user's bucket retention. Only valid with InfluxDB&trade; v2
+    ## @param auth.admin.retention InfluxDB(TM) admin user's bucket retention. Only valid with InfluxDB(TM) v2
     ##
     retention: ""
   ## @param auth.createUserToken Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
@@ -142,13 +142,13 @@ auth:
   ## See more influxdb 2.0 auth ref: https://docs.influxdata.com/influxdb/v2.0/security/tokens/
   ##
   createUserToken: false
-  ## InfluxDB&trade; credentials for user with 'admin' privileges on the db specified at 'database' parameter
+  ## InfluxDB(TM) credentials for user with 'admin' privileges on the db specified at 'database' parameter
   ##
   user:
-    ## @param auth.user.username Name for InfluxDB&trade; user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`
+    ## @param auth.user.username Name for InfluxDB(TM) user with 'admin' privileges on the bucket specified at `auth.user.bucket` and `auth.user.org` or `auth.admin.org`
     ##
     username: ""
-    ## @param auth.user.password InfluxDB&trade; password for `user.name` user
+    ## @param auth.user.password InfluxDB(TM) password for `user.name` user
     ##
     password: ""
     ## @param auth.user.org Org to be created on first run
@@ -158,24 +158,24 @@ auth:
     ## already create. If it is not null a new bucket will be created.
     ##
     bucket: ""
-  ## InfluxDB&trade; credentials for user with 'read' privileges on the db specified at 'database' parameter
-  ## @param auth.readUser.username Name for InfluxDB&trade; user with 'read' privileges on the bucket specified at `auth.user.bucket`
-  ## @param auth.readUser.password InfluxDB&trade; password for `auth.readUser.username` user
+  ## InfluxDB(TM) credentials for user with 'read' privileges on the db specified at 'database' parameter
+  ## @param auth.readUser.username Name for InfluxDB(TM) user with 'read' privileges on the bucket specified at `auth.user.bucket`
+  ## @param auth.readUser.password InfluxDB(TM) password for `auth.readUser.username` user
   ##
   readUser:
     username: ""
     password: ""
-  ## InfluxDB&trade; credentials for user with 'write' privileges on the db specified at 'database' parameter
-  ## @param auth.writeUser.username Name for InfluxDB&trade; user with 'read' privileges on the bucket specified at `auth.user.bucket`
-  ## @param auth.writeUser.password InfluxDB&trade; password for `auth.writeUser.username` user
+  ## InfluxDB(TM) credentials for user with 'write' privileges on the db specified at 'database' parameter
+  ## @param auth.writeUser.username Name for InfluxDB(TM) user with 'read' privileges on the bucket specified at `auth.user.bucket`
+  ## @param auth.writeUser.password InfluxDB(TM) password for `auth.writeUser.username` user
   ##
   writeUser:
     username: ""
     password: ""
-  ## @param auth.existingSecret Name of existing Secret object with InfluxDB&trade; credentials (`auth.admin.password`, `auth.user.password`, `auth.readUser.password`, and `auth.writeUser.password` will be ignored and picked up from this secret)
+  ## @param auth.existingSecret Name of existing Secret object with InfluxDB(TM) credentials (`auth.admin.password`, `auth.user.password`, `auth.readUser.password`, and `auth.writeUser.password` will be ignored and picked up from this secret)
   ##
   existingSecret: ""
-## InfluxDB&trade; backend parameters
+## InfluxDB(TM) backend parameters
 ##
 influxdb:
   ## @param influxdb.configuration Specify content for influxdb.conf
@@ -187,7 +187,7 @@ influxdb:
   ##   ...
   ##
   configuration: ""
-  ## @param influxdb.existingConfiguration Name of existing ConfigMap object with the InfluxDB&trade; configuration (`influxdb.configuration` will be ignored).
+  ## @param influxdb.existingConfiguration Name of existing ConfigMap object with the InfluxDB(TM) configuration (`influxdb.configuration` will be ignored).
   ##
   existingConfiguration: ""
   ## @param influxdb.initdbScripts Dictionary of initdb scripts
@@ -204,11 +204,11 @@ influxdb:
   ## @param influxdb.initdbScriptsSecret Secret with initdb scripts that contain sensitive information (Note: can be used with `initdbScriptsConfigMap` or `initdbScripts`)
   ##
   initdbScriptsSecret: ""
-  ## @param influxdb.podAffinityPreset InfluxDB&trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param influxdb.podAffinityPreset InfluxDB(TM) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param influxdb.podAntiAffinityPreset InfluxDB&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## @param influxdb.podAntiAffinityPreset InfluxDB(TM) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
@@ -216,52 +216,52 @@ influxdb:
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param influxdb.nodeAffinityPreset.type InfluxDB&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ## @param influxdb.nodeAffinityPreset.type InfluxDB(TM) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
     type: ""
-    ## @param influxdb.nodeAffinityPreset.key InfluxDB&trade; Node label key to match Ignored if `affinity` is set.
+    ## @param influxdb.nodeAffinityPreset.key InfluxDB(TM) Node label key to match Ignored if `affinity` is set.
     ## E.g.
     ## key: "kubernetes.io/e2e-az-name"
     ##
     key: ""
-    ## @param influxdb.nodeAffinityPreset.values InfluxDB&trade; Node label values to match. Ignored if `affinity` is set.
+    ## @param influxdb.nodeAffinityPreset.values InfluxDB(TM) Node label values to match. Ignored if `affinity` is set.
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param influxdb.affinity InfluxDB&trade; Affinity for pod assignment
+  ## @param influxdb.affinity InfluxDB(TM) Affinity for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
   ##
   affinity: {}
-  ## @param influxdb.nodeSelector InfluxDB&trade; Node labels for pod assignment
+  ## @param influxdb.nodeSelector InfluxDB(TM) Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param influxdb.tolerations InfluxDB&trade; Tolerations for pod assignment
+  ## @param influxdb.tolerations InfluxDB(TM) Tolerations for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param influxdb.podAnnotations Annotations for InfluxDB&trade; pods
+  ## @param influxdb.podAnnotations Annotations for InfluxDB(TM) pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param influxdb.podLabels Extra labels for InfluxDB&trade; pods
+  ## @param influxdb.podLabels Extra labels for InfluxDB(TM) pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
   ## @param influxdb.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param influxdb.hostAliases InfluxDB&trade; pods host aliases
+  ## @param influxdb.hostAliases InfluxDB(TM) pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param influxdb.revisionHistoryLimit InfluxDB&trade; statefulset/deployment revision history limit
+  ## @param influxdb.revisionHistoryLimit InfluxDB(TM) statefulset/deployment revision history limit
   ##
   revisionHistoryLimit: 10
-  ## @param influxdb.updateStrategy.type InfluxDB&trade; statefulset/deployment strategy type
+  ## @param influxdb.updateStrategy.type InfluxDB(TM) statefulset/deployment strategy type
   ## Statefulset ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## Deployment ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
@@ -270,7 +270,7 @@ influxdb:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param influxdb.priorityClassName InfluxDB&trade; pods' priorityClassName
+  ## @param influxdb.priorityClassName InfluxDB(TM) pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param influxdb.schedulerName Name of the k8s scheduler (other than default)
@@ -282,17 +282,17 @@ influxdb:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
-  ## @param influxdb.podManagementPolicy podManagementPolicy to manage scaling operation of InfluxDB&trade; pods
+  ## @param influxdb.podManagementPolicy podManagementPolicy to manage scaling operation of InfluxDB(TM) pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param influxdb.podSecurityContext.enabled Enabled InfluxDB&trade; pods' Security Context
+  ## @param influxdb.podSecurityContext.enabled Enabled InfluxDB(TM) pods' Security Context
   ## @param influxdb.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param influxdb.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param influxdb.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param influxdb.podSecurityContext.fsGroup Set InfluxDB&trade; pod's Security Context fsGroup
+  ## @param influxdb.podSecurityContext.fsGroup Set InfluxDB(TM) pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -326,7 +326,7 @@ influxdb:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## InfluxDB&trade; pods' resource requests and limits
+  ## InfluxDB(TM) pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
@@ -353,20 +353,20 @@ influxdb:
   ## @param influxdb.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param influxdb.lifecycleHooks for the InfluxDB&trade; container(s) to automate configuration before or after startup
+  ## @param influxdb.lifecycleHooks for the InfluxDB(TM) container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB&trade;
+  ## @param influxdb.extraEnvVars Array containing extra env vars to configure InfluxDB(TM)
   ## For example:
   ## extraEnvVars:
   ##  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
   ##    value: "true"
   ##
   extraEnvVars: []
-  ## @param influxdb.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for InfluxDB&trade; nodes
+  ## @param influxdb.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for InfluxDB(TM) nodes
   ##
   extraEnvVarsCM: ""
-  ## @param influxdb.extraEnvVarsSecret Name of existing Secret containing extra env vars for InfluxDB&trade; nodes
+  ## @param influxdb.extraEnvVarsSecret Name of existing Secret containing extra env vars for InfluxDB(TM) nodes
   ##
   extraEnvVarsSecret: ""
   ## @param influxdb.extraVolumes Array of extra volumes to be added to the deployment (evaluated as template). Requires setting extraVolumeMounts
@@ -375,13 +375,13 @@ influxdb:
   ## @param influxdb.extraVolumeMounts Array of extra volume mounts to be added to the container (evaluated as template). Normally used with extraVolumes.
   ##
   extraVolumeMounts: []
-  ## @param influxdb.containerPorts.http InfluxDB&trade; container HTTP port
-  ## @param influxdb.containerPorts.rpc InfluxDB&trade; container RPC port
+  ## @param influxdb.containerPorts.http InfluxDB(TM) container HTTP port
+  ## @param influxdb.containerPorts.rpc InfluxDB(TM) container RPC port
   ##
   containerPorts:
     http: 8086
     rpc: 8088
-  ## Configure extra options for InfluxDB&trade; containers' liveness, readiness and startup probes
+  ## Configure extra options for InfluxDB(TM) containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param influxdb.startupProbe.enabled Enable startupProbe
   ## @param influxdb.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
@@ -434,7 +434,7 @@ influxdb:
   ## @param influxdb.customReadinessProbe Override default readiness probe
   ##
   customReadinessProbe: {}
-  ## @param influxdb.sidecars Add additional sidecar containers to the InfluxDB&trade; pod(s)
+  ## @param influxdb.sidecars Add additional sidecar containers to the InfluxDB(TM) pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -445,7 +445,7 @@ influxdb:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param influxdb.initContainers Add additional init containers to the InfluxDB&trade; pod(s)
+  ## @param influxdb.initContainers Add additional init containers to the InfluxDB(TM) pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -471,8 +471,8 @@ influxdb:
     ## @param influxdb.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## @param influxdb.service.ports.http InfluxDB&trade; HTTP port
-    ## @param influxdb.service.ports.rpc InfluxDB&trade; RPC port
+    ## @param influxdb.service.ports.http InfluxDB(TM) HTTP port
+    ## @param influxdb.service.ports.rpc InfluxDB(TM) RPC port
     ##
     ports:
       http: 8086
@@ -499,14 +499,14 @@ influxdb:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param influxdb.service.externalTrafficPolicy InfluxDB&trade; service external traffic policy
+    ## @param influxdb.service.externalTrafficPolicy InfluxDB(TM) service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param influxdb.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param influxdb.service.annotations Annotations for InfluxDB&trade; service
+    ## @param influxdb.service.annotations Annotations for InfluxDB(TM) service
     ##
     annotations: {}
     ## @param influxdb.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
@@ -689,7 +689,7 @@ metrics:
     ## @param metrics.service.type Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)
     ##
     type: ClusterIP
-    ## @param metrics.service.port InfluxDB&trade; Prometheus port
+    ## @param metrics.service.port InfluxDB(TM) Prometheus port
     ##
     port: 9122
     ## @param metrics.service.nodePort Kubernetes HTTP node port
@@ -934,9 +934,9 @@ volumePermissions:
   securityContext:
     seLinuxOptions: {}
     runAsUser: 0
-## @section InfluxDB&trade; backup parameters
+## @section InfluxDB(TM) backup parameters
 backup:
-  ## @param backup.enabled Enable InfluxDB&trade; backup
+  ## @param backup.enabled Enable InfluxDB(TM) backup
   ##
   enabled: false
   ## @param backup.directory Directory where backups are stored
@@ -980,7 +980,7 @@ backup:
     ##
     annotations: {}
   ## Cronjob configuration
-  ## This cronjob is used to create InfluxDB&trade; backups
+  ## This cronjob is used to create InfluxDB(TM) backups
   ##
   cronjob:
     ## @param backup.cronjob.schedule Schedule in Cron format to save snapshots
@@ -1014,11 +1014,11 @@ backup:
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB&trade; backup pods
+    ## @param backup.cronjob.podSecurityContext.enabled Enable security context for InfluxDB(TM) backup pods
     ## @param backup.cronjob.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
     ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
     ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
-    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the InfluxDB(TM) filesystem
     ##
     podSecurityContext:
       enabled: true
@@ -1133,7 +1133,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.517.0-debian-12-r3
+        tag: 0.521.0-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1186,7 +1186,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.71.0-debian-12-r3
+        tag: 2.72.0-debian-12-r1
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1243,7 +1243,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.26.0-debian-12-r3
+        tag: 2.27.10-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##

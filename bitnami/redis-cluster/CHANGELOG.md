@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.5.4 (2025-04-29)
+## 12.0.3 (2025-05-13)
 
-* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling ([#33250](https://github.com/bitnami/charts/pull/33250))
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#33667](https://github.com/bitnami/charts/pull/33667))
+
+## <small>12.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33649) ([d75776d](https://github.com/bitnami/charts/commit/d75776d265c727d7819af8d79d8ab408d4524d9e)), closes [#33649](https://github.com/bitnami/charts/issues/33649)
+
+## <small>12.0.1 (2025-05-07)</small>
+
+* [bitnami/redis-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([cdadc03](https://github.com/bitnami/charts/commit/cdadc03d3d4c232253c2a9ae0d5148a3d1c4a64e)), closes [#33429](https://github.com/bitnami/charts/issues/33429)
+
+## 12.0.0 (2025-05-06)
+
+* [bitnami/redis-cluster] Release 12.0.0 (#33456) ([583c0b6](https://github.com/bitnami/charts/commit/583c0b6e1a1377f8ea387597c623ac490a329822)), closes [#33456](https://github.com/bitnami/charts/issues/33456)
+
+## <small>11.5.4 (2025-04-30)</small>
+
+* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling (#33250) ([69aea26](https://github.com/bitnami/charts/commit/69aea26249970f032782d60e19446e7209b32bce)), closes [#33250](https://github.com/bitnami/charts/issues/33250)
 
 ## <small>11.5.3 (2025-04-24)</small>
 

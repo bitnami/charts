@@ -20,8 +20,6 @@ Looking to use OpenSearch in production? Try [VMware Tanzu Application Catalog](
 
 This chart bootstraps a [OpenSearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -387,7 +385,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `master.startupProbe.successThreshold`                     | Minimum consecutive successes for the probe to be considered successful after having failed (master nodes pod)                                                                                                                  | `1`                 |
 | `master.startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                                                                                       | `5`                 |
 | `master.livenessProbe.enabled`                             | Enable/disable the liveness probe (master-eligible nodes pod)                                                                                                                                                                   | `true`              |
-| `master.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (master-eligible nodes pod)                                                                                                                                                            | `90`                |
+| `master.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (master-eligible nodes pod)                                                                                                                                                            | `180`               |
 | `master.livenessProbe.periodSeconds`                       | How often to perform the probe (master-eligible nodes pod)                                                                                                                                                                      | `10`                |
 | `master.livenessProbe.timeoutSeconds`                      | When the probe times out (master-eligible nodes pod)                                                                                                                                                                            | `5`                 |
 | `master.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)                                                                                                         | `1`                 |
@@ -518,7 +516,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `data.startupProbe.successThreshold`                     | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                                                                                                | `1`                 |
 | `data.startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                                                                                   | `5`                 |
 | `data.livenessProbe.enabled`                             | Enable/disable the liveness probe (data nodes pod)                                                                                                                                                                          | `true`              |
-| `data.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (data nodes pod)                                                                                                                                                                   | `90`                |
+| `data.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (data nodes pod)                                                                                                                                                                   | `180`               |
 | `data.livenessProbe.periodSeconds`                       | How often to perform the probe (data nodes pod)                                                                                                                                                                             | `10`                |
 | `data.livenessProbe.timeoutSeconds`                      | When the probe times out (data nodes pod)                                                                                                                                                                                   | `5`                 |
 | `data.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)                                                                                                                | `1`                 |
@@ -649,7 +647,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `coordinating.startupProbe.successThreshold`                     | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)                                                                                                                   | `1`              |
 | `coordinating.startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                                                                                                   | `5`              |
 | `coordinating.livenessProbe.enabled`                             | Enable/disable the liveness probe (coordinating-only nodes pod)                                                                                                                                                                             | `true`           |
-| `coordinating.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (coordinating-only nodes pod)                                                                                                                                                                      | `90`             |
+| `coordinating.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (coordinating-only nodes pod)                                                                                                                                                                      | `180`            |
 | `coordinating.livenessProbe.periodSeconds`                       | How often to perform the probe (coordinating-only nodes pod)                                                                                                                                                                                | `10`             |
 | `coordinating.livenessProbe.timeoutSeconds`                      | When the probe times out (coordinating-only nodes pod)                                                                                                                                                                                      | `5`              |
 | `coordinating.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)                                                                                                                   | `1`              |
@@ -773,7 +771,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `ingest.startupProbe.successThreshold`                     | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)                                                                                                             | `1`                       |
 | `ingest.startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe to be considered failed after having succeeded                                                                                                                                       | `5`                       |
 | `ingest.livenessProbe.enabled`                             | Enable/disable the liveness probe (ingest-only nodes pod)                                                                                                                                                                       | `true`                    |
-| `ingest.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (ingest-only nodes pod)                                                                                                                                                                | `90`                      |
+| `ingest.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated (ingest-only nodes pod)                                                                                                                                                                | `180`                     |
 | `ingest.livenessProbe.periodSeconds`                       | How often to perform the probe (ingest-only nodes pod)                                                                                                                                                                          | `10`                      |
 | `ingest.livenessProbe.timeoutSeconds`                      | When the probe times out (ingest-only nodes pod)                                                                                                                                                                                | `5`                       |
 | `ingest.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)                                                                                                             | `1`                       |
@@ -1107,6 +1105,19 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/opens
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This major version updates the Opensearch image and Opensearch Dashboard from version 2.x to 3.x. Follow the [official instructions](https://docs.opensearch.org/docs/latest/install-and-configure/upgrade-opensearch/index/) to upgrade to 3.x.
+
+In addition, this new version of the chart removes the `metrics` related values:
+
+- `master.metrics.*`
+- `data.metrics.*`
+- `coordinating.metrics.*`
+- `ingest.metrics.*`
+
+The reason for this change is because the bitnami/opensearch container 3.x no longer contains the prometheus-exporter plugin, which hasn't released a new version since Opensearch 2.17.x and is not supported in Opensearch 3.x.
 
 ### To 1.5.0
 
