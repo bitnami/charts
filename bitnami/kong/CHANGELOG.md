@@ -1,8 +1,13 @@
 # Changelog
 
-## 15.4.5 (2025-05-13)
+## 15.4.6 (2025-05-14)
 
-* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#33639](https://github.com/bitnami/charts/pull/33639))
+* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageUtilization" ([#33699](https://github.com/bitnami/charts/pull/33699))
+
+## <small>15.4.5 (2025-05-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#33639) ([2b4e8f8](https://github.com/bitnami/charts/commit/2b4e8f8e2688a3b78f411a8b8c0aac65f65cb208)), closes [#33639](https://github.com/bitnami/charts/issues/33639)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>15.4.4 (2025-05-06)</small>
 
