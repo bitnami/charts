@@ -575,7 +575,7 @@ Checks whether the scheduler object has to be an statefulset or a deployment dep
 */}}
 {{- define "airflow.scheduler.requiresStatefulset" -}}
 {{- $configuredExecutors := (ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor)) -}}
-{{- $statefulsetExecutors := list "SequentialExecutor" "LocalExecutor" "LocalKubernetesExecutor" -}}
+{{- $statefulsetExecutors := list "SequentialExecutor" "LocalExecutor" "LocalCeleryExecutor" "LocalKubernetesExecutor" -}}
 {{- $statefulset := false -}}
 {{- range $executor := $configuredExecutors -}}
 {{- if (has $executor $statefulsetExecutors) -}}
@@ -593,7 +593,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_
 */}}
 {{- define "airflow.validateValues.executors" -}}
 {{- $configuredExecutors := (ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor)) -}}
-{{- $deprecatedExecutors := list "SequentialExecutor" "LocalCeleryExecutor" "LocalKubernetesExecutor" -}}
+{{- $deprecatedExecutors := list "SequentialExecutor" "CeleryKubernetesExecutor" "LocalKubernetesExecutor" -}}
 {{- $executorsError := list -}}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
     {{- range $executor := $configuredExecutors -}}
