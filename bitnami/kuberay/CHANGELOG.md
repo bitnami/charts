@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.11 (2025-05-13)
+## 1.4.11 (2025-05-14)
 
 * [bitnami/kuberay] Release 1.4.11 ([#33481](https://github.com/bitnami/charts/pull/33481))
 
