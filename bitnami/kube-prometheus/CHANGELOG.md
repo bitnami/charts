@@ -2,11 +2,12 @@
 
 ## 11.1.12 (2025-05-14)
 
-* [bitnami/kube-prometheus] Add support for `nameValidationScheme` ([#33691](https://github.com/bitnami/charts/pull/33691)), closes #33660
+* [bitnami/kube-prometheus] Add support for nameValidationScheme ([#33691](https://github.com/bitnami/charts/pull/33691))
 
-## 11.1.11 (2025-05-12)
+## <small>11.1.11 (2025-05-12)</small>
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#33610](https://github.com/bitnami/charts/pull/33610))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#33610) ([99ee8ad](https://github.com/bitnami/charts/commit/99ee8ad962d0c08cc0b049dfac7b9dc6a3a126bf)), closes [#33610](https://github.com/bitnami/charts/issues/33610)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.1.10 (2025-05-07)</small>
 
