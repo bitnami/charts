@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.0.2 (2025-05-13)
+## 26.0.2 (2025-05-14)
 
 * [bitnami/harbor] update tracing environment variables and escaping ([#33680](https://github.com/bitnami/charts/pull/33680))
 
