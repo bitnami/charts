@@ -4,8 +4,9 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
+{{- $isStatefulset := (include "airflow.scheduler.requiresStatefulset" .) -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: Deployment
+kind: {{ if $isStatefulset }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ template "airflow.scheduler.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -15,6 +16,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | trim | nindent 4 }}
   {{- end }}
 spec:
+  {{- if $isStatefulset }}
+  serviceName: {{ include "airflow.scheduler.serviceName" . }}
+  {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
@@ -23,7 +27,11 @@ spec:
   replicas: {{ .Values.scheduler.replicaCount }}
   {{- end }}
   {{- if .Values.scheduler.updateStrategy }}
+  {{- if $isStatefulset }}
+  updateStrategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
+  {{- else }}
   strategy: {{- toYaml .Values.scheduler.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- end }}
   template:
     metadata:
@@ -72,7 +80,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
-        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- if and .Values.dags.enabled }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
@@ -235,7 +243,7 @@ spec:
               mountPath: /opt/bitnami/airflow/config/pod_template.yaml
               subPath: pod_template.yaml
             {{- end }}
-            {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+            {{- if and .Values.dags.enabled }}
             {{- include "airflow.dags.volumeMounts" . | nindent 12 }}
             {{- end }}
             {{- if .Values.plugins.enabled }}
@@ -247,7 +255,7 @@ spec:
             {{- if .Values.scheduler.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- if and .Values.dags.enabled }}
         {{- include "airflow.defaultSidecars.syncDAGs" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}
@@ -284,7 +292,7 @@ spec:
           configMap:
             name: {{ printf "%s-pod-template" (include "common.names.fullname" .) }}
         {{- end }}
-        {{- if and .Values.dags.enabled (not .Values.dagProcessor.enabled) }}
+        {{- if and .Values.dags.enabled }}
         {{- include "airflow.dags.volumes" . | nindent 8 }}
         {{- end }}
         {{- if .Values.plugins.enabled }}

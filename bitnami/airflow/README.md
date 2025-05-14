@@ -67,6 +67,8 @@ redis.enabled=false
 
 The CeleryKubernetesExecutor (introduced in Airflow 2.0) is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
+> The `CeleryKubernetesExecutor` has been deprecated starting with Airflow 3.0.0.
+
 #### LocalExecutor
 
 The Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
@@ -80,6 +82,8 @@ redis.enabled=false
 
 The LocalKubernetesExecutor (introduced in Airflow 2.3) is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
 
+> The `LocalKubernetesExecutor` has been deprecated starting with Airflow 3.0.0.
+
 #### SequentialExecutor
 
 This executor will only run one task instance at a time in the Scheduler pods. For production use case, please use other executors. To enable `SequentialExecutor` set the following parameters.
@@ -88,6 +92,8 @@ This executor will only run one task instance at a time in the Scheduler pods. F
 executor=SequentialExecutor
 redis.enabled=false
 ```
+
+> The `SequentialExecutor` has been deprecated starting with Airflow 3.0.0.
 
 ### Update credentials
 
@@ -410,7 +416,7 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `auth.secretKey`                                                                              | Secret key to run your flask app                                                                                                                                                                                                                                                                                                     | `""`                      |
 | `auth.jwtSecretKey`                                                                           | JWT secret key to run your flask app                                                                                                                                                                                                                                                                                                 | `""`                      |
 | `auth.existingSecret`                                                                         | Name of an existing secret to use for Airflow credentials                                                                                                                                                                                                                                                                            | `""`                      |
-| `executor`                                                                                    | Airflow executor. Allowed values: `SequentialExecutor`, `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `CeleryKubernetesExecutor` and `LocalKubernetesExecutor`                                                                                                                                                            | `CeleryExecutor`          |
+| `executor`                                                                                    | Airflow executor. Allowed values: `LocalExecutor`, `CeleryExecutor`, `KubernetesExecutor`, `SequentialExecutor` (Airflow 2.x only), `CeleryKubernetesExecutor` (Airflow 2.x only) and `LocalKubernetesExecutor` (Airflow 2.x only)                                                                                                   | `CeleryExecutor`          |
 | `loadExamples`                                                                                | Switch to load some Airflow examples                                                                                                                                                                                                                                                                                                 | `false`                   |
 | `configuration`                                                                               | Specify content for Airflow config file (auto-generated based on other parameters otherwise)                                                                                                                                                                                                                                         | `{}`                      |
 | `overrideConfiguration`                                                                       | Airflow common configuration override. Values defined here takes precedence over the ones defined at `configuration`                                                                                                                                                                                                                 | `{}`                      |
