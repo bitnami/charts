@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.0.5 (2025-05-15)
+## 3.0.6 (2025-05-15)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#33652](https://github.com/bitnami/charts/pull/33652))
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#33733](https://github.com/bitnami/charts/pull/33733))
+
+## <small>3.0.5 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#33652) ([8b9a514](https://github.com/bitnami/charts/commit/8b9a514fd5bb6ed5492b7f3707f71d80b9305a43)), closes [#33652](https://github.com/bitnami/charts/issues/33652)
 
 ## <small>3.0.4 (2025-05-06)</small>
 
