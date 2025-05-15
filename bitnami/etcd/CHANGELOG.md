@@ -4,9 +4,9 @@
 
 * [bitnami/etcd] fix type of GOMAXPROCS in envs ([#33477](https://github.com/bitnami/charts/pull/33477))
 
-## 11.3.4 (2025-05-08)
+## <small>11.3.4 (2025-05-08)</small>
 
-* [bitnami/etcd]fix(cronjob-defrag):Remove JWT restrictions ([#33321](https://github.com/bitnami/charts/pull/33321))
+* [bitnami/etcd]fix(cronjob-defrag):Remove JWT restrictions (#33321) ([02d7b94](https://github.com/bitnami/charts/commit/02d7b94f68d17fc6ebdc9f7431510b6d6d12f444)), closes [#33321](https://github.com/bitnami/charts/issues/33321)
 
 ## <small>11.3.3 (2025-05-07)</small>
 
