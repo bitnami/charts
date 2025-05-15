@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.1.12 (2025-05-14)
+## 11.1.12 (2025-05-15)
 
 * [bitnami/kube-prometheus] Add support for nameValidationScheme ([#33691](https://github.com/bitnami/charts/pull/33691))
 
