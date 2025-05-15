@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.4 (2025-05-13)
+## 32.2.5 (2025-05-15)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33633](https://github.com/bitnami/charts/pull/33633))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33735](https://github.com/bitnami/charts/pull/33735))
+
+## <small>32.2.4 (2025-05-13)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33633) ([2d79d6a](https://github.com/bitnami/charts/commit/2d79d6a20fa209e0ff81be5739f581c7e6957921)), closes [#33633](https://github.com/bitnami/charts/issues/33633)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>32.2.3 (2025-05-06)</small>
 
