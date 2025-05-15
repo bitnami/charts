@@ -2,7 +2,7 @@
 
 ## 12.0.1 (2025-05-14)
 
-* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.admin.password is not set ([#33672](https://github.com/bitnami/charts/pull/33672))
+* [bitnami/grafana] Grafana uniq dashboard volumes ([#33689](https://github.com/bitnami/charts/pull/33689))
 
 ## 12.0.0 (2025-05-12)
 
