@@ -1,12 +1,8 @@
 # Changelog
 
-## 3.0.5 (2025-05-13)
+## 3.0.4 (2025-05-06)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#33652](https://github.com/bitnami/charts/pull/33652))
-
-## <small>3.0.4 (2025-05-06)</small>
-
-* [bitnami/valkey] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33443) ([81a1707](https://github.com/bitnami/charts/commit/81a1707cc7c34b9f294c6cc1959e266989f50f56)), closes [#33443](https://github.com/bitnami/charts/issues/33443)
+* [bitnami/valkey] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33443](https://github.com/bitnami/charts/pull/33443))
 
 ## <small>3.0.3 (2025-04-28)</small>
 
