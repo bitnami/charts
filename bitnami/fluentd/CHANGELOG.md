@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.1.7 (2025-05-12)
+## 7.1.8 (2025-05-15)
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#33611](https://github.com/bitnami/charts/pull/33611))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#33717](https://github.com/bitnami/charts/pull/33717))
+
+## <small>7.1.7 (2025-05-12)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33611) ([008f88d](https://github.com/bitnami/charts/commit/008f88dcdb1abc09ae64f9510ba46605d6a6cebf)), closes [#33611](https://github.com/bitnami/charts/issues/33611)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>7.1.6 (2025-05-07)</small>
 
