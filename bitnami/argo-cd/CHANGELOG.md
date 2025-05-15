@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.4 (2025-05-14)
+## 9.0.5 (2025-05-15)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33700](https://github.com/bitnami/charts/pull/33700))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33721](https://github.com/bitnami/charts/pull/33721))
+
+## <small>9.0.4 (2025-05-14)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33700) ([90355e1](https://github.com/bitnami/charts/commit/90355e188f6e26183edfcbd6d6076e3a3b52dcb5)), closes [#33700](https://github.com/bitnami/charts/issues/33700)
 
 ## <small>9.0.3 (2025-05-13)</small>
 
