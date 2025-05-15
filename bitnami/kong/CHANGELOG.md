@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.4.6 (2025-05-14)
+## 15.4.6 (2025-05-15)
 
 * [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageUtilization" ([#33699](https://github.com/bitnami/charts/pull/33699))
 
