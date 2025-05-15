@@ -4,6 +4,10 @@
 
 * [bitnami/grafana] fix metrics namespace include ([#33714](https://github.com/bitnami/charts/pull/33714))
 
+## <small>12.0.1 (2025-05-15)</small>
+
+* [bitnami/grafana] Grafana uniq dashboard volumes (#33689) ([e7e3012](https://github.com/bitnami/charts/commit/e7e3012f25807031502221ec6d83d00d1100d597)), closes [#33689](https://github.com/bitnami/charts/issues/33689)
+
 ## 12.0.0 (2025-05-12)
 
 * [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33604) ([4229d77](https://github.com/bitnami/charts/commit/4229d7766abffbc8cf3f299016d1dc4d0be8796c)), closes [#33604](https://github.com/bitnami/charts/issues/33604)
