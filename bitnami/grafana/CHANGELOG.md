@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.1 (2025-05-14)
+## 12.0.2 (2025-05-15)
 
-* [bitnami/grafana] Grafana uniq dashboard volumes ([#33689](https://github.com/bitnami/charts/pull/33689))
+* [bitnami/grafana] fix metrics namespace include ([#33714](https://github.com/bitnami/charts/pull/33714))
+
+## <small>12.0.1 (2025-05-15)</small>
+
+* [bitnami/grafana] Grafana uniq dashboard volumes (#33689) ([e7e3012](https://github.com/bitnami/charts/commit/e7e3012f25807031502221ec6d83d00d1100d597)), closes [#33689](https://github.com/bitnami/charts/issues/33689)
 
 ## 12.0.0 (2025-05-12)
 
