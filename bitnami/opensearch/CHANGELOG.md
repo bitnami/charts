@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.0 (2025-05-13)
+## 2.0.1 (2025-05-15)
 
-* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#33589](https://github.com/bitnami/charts/pull/33589))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#33718](https://github.com/bitnami/charts/pull/33718))
+
+## 2.0.0 (2025-05-14)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33589) ([b63c8ad](https://github.com/bitnami/charts/commit/b63c8ad0e34a11e00caa250725386c5e117a87cc)), closes [#33589](https://github.com/bitnami/charts/issues/33589)
 
 ## <small>1.9.4 (2025-05-08)</small>
 
