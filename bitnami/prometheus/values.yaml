@@ -1647,6 +1647,9 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## @param server.rbac.includeDefaultRules Specifies whether to include default rules from official prometheus helm chart, https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/templates/clusterrole.yaml
+    ##
+    includeDefaultRules: true
     ## @param server.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
