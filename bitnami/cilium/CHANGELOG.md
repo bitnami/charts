@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.1.10 (2025-05-13)
+## 2.1.11 (2025-05-15)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33655](https://github.com/bitnami/charts/pull/33655))
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33719](https://github.com/bitnami/charts/pull/33719))
+
+## <small>2.1.10 (2025-05-13)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33655) ([bebf87b](https://github.com/bitnami/charts/commit/bebf87b2d4e0c6352807f70775ac0d919754b6ae)), closes [#33655](https://github.com/bitnami/charts/issues/33655)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.1.9 (2025-05-06)</small>
 
