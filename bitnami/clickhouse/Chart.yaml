@@ -5,7 +5,7 @@ annotations:
   category: Database
   images: |
     - name: clickhouse
-      image: docker.io/bitnami/clickhouse:25.4.3-debian-12-r0
+      image: docker.io/bitnami/clickhouse:25.4.4-debian-12-r0
     - name: clickhouse-keeper
       image: docker.io/bitnami/clickhouse-keeper:25.4.4-debian-12-r0
     - name: os-shell
@@ -13,7 +13,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 25.4.3
+appVersion: 25.4.4
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
