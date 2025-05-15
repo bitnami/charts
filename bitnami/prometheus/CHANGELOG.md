@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.6 (2025-05-09)
+## 2.0.7 (2025-05-15)
 
-* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map object and string ([#33525](https://github.com/bitnami/charts/pull/33525))
+* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac ([#33722](https://github.com/bitnami/charts/pull/33722))
+
+## <small>2.0.6 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map ob ([ed61248](https://github.com/bitnami/charts/commit/ed61248fa488374a95716a98775ba4de813bb215)), closes [#33525](https://github.com/bitnami/charts/issues/33525)
 
 ## <small>2.0.5 (2025-05-08)</small>
 
