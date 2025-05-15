@@ -1,8 +1,13 @@
 # Changelog
 
+## 12.0.1 (2025-05-14)
+
+* [bitnami/grafana] Grafana uniq dashboard volumes ([#33689](https://github.com/bitnami/charts/pull/33689))
+
 ## 12.0.0 (2025-05-12)
 
-* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#33604](https://github.com/bitnami/charts/pull/33604))
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33604) ([4229d77](https://github.com/bitnami/charts/commit/4229d7766abffbc8cf3f299016d1dc4d0be8796c)), closes [#33604](https://github.com/bitnami/charts/issues/33604)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.6.7 (2025-05-07)</small>
 
