@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.1.0 (2025-05-15)
+## 26.1.0 (2025-05-16)
 
 * [bitnami/harbor]feat: Allow different Redis instance per component ([#33715](https://github.com/bitnami/charts/pull/33715))
 
