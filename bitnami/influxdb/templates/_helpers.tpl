@@ -5,51 +5,29 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{/* vim: set filetype=mustache: */}}
 
-
 {{/*
-Return the proper InfluxDB&trade; image name
+Return the proper InfluxDB&trade; Core image name
 */}}
 {{- define "influxdb.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Return the proper init container volume-permissions image name
+Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "influxdb.volumePermissions.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper gcloud-sdk image name
-*/}}
-{{- define "gcloudSdk.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.google.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper azure-cli image name
-*/}}
-{{- define "azureCli.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.azure.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper aws-cli image name
-*/}}
-{{- define "awsCli.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backup.uploadProviders.aws.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.defaultInitContainers.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.backup.uploadProviders.google.image .Values.backup.uploadProviders.azure.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the ServiceAccount to use
 */}}
 {{- define "influxdb.serviceAccountName" -}}
 {{- if or .Values.serviceAccount.enabled .Values.serviceAccount.create -}}
@@ -60,74 +38,53 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Return the InfluxDB&trade; credentials secret.
+Get the InfluxDB&trade; Core Store secret name
 */}}
-{{- define "influxdb.secretName" -}}
-{{- if .Values.auth.existingSecret -}}
-    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- define "influxdb.store.secret.name" -}}
+{{- if eq .Values.objectStore "s3" }}
+    {{- if .Values.s3.auth.existingSecret -}}
+        {{- tpl .Values.s3.auth.existingSecret . -}}
+    {{- else }}
+        {{- printf "%s-s3" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- else if eq .Values.objectStore "google" }}
+    {{- if .Values.google.auth.existingSecret -}}
+        {{- tpl .Values.google.auth.existingSecret . -}}
+    {{- else }}
+        {{- printf "%s-google" (include "common.names.fullname" .) -}}
+    {{- end -}}
+{{- else if eq .Values.objectStore "azure" }}
+    {{- if .Values.azure.auth.existingSecret -}}
+        {{- tpl .Values.azure.auth.existingSecret . -}}
+    {{- else }}
+        {{- printf "%s-azure" (include "common.names.fullname" .) -}}
+    {{- end -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the InfluxDB&trade; backup S3 secret.
+Returns true if a secret should be created for InfluxDB&trade; Core Store credentials
 */}}
-{{- define "influxdb.backup.secretName" -}}
-{{- if .Values.backup.uploadProviders.aws.existingSecret -}}
-    {{- printf "%s" (tpl .Values.backup.uploadProviders.aws.existingSecret $) -}}
-{{- else -}}
-    {{- printf "%s-backup-aws" (include "common.names.fullname" .) -}}
+{{- define "influxdb.store.secret.create" -}}
+{{- if or (and (eq .Values.objectStore "s3") (not .Values.s3.auth.existingSecret)) (and (eq .Values.objectStore "google") (not .Values.google.auth.existingSecret)) (and (eq .Values.objectStore "azure") (not .Values.azure.auth.existingSecret)) }}
+true
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return the InfluxDB&trade; configuration configmap.
-*/}}
-{{- define "influxdb.configmapName" -}}
-{{- if .Values.influxdb.existingConfiguration -}}
-    {{- printf "%s" (tpl .Values.influxdb.existingConfiguration $) -}}
-{{- else -}}
-    {{- printf "%s" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the InfluxDB&trade; PVC name.
-*/}}
-{{- define "influxdb.claimName" -}}
-{{- if .Values.persistence.existingClaim }}
-    {{- printf "%s" (tpl .Values.persistence.existingClaim $) -}}
-{{- else -}}
-    {{- printf "%s" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the InfluxDB&trade; backup PVC name.
-*/}}
-{{- define "influxdb.backup.claimName" -}}
-{{- if and .Values.backup.persistence.ownConfig .Values.backup.persistence.existingClaim }}
-    {{- printf "%s" (tpl .Values.backup.persistence.existingClaim $) -}}
-{{- else -}}
-    {{- printf "%s-backups" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the InfluxDB&trade; initialization scripts configmap.
+Return the InfluxDB&trade; Core initialization scripts ConfigMap name.
 */}}
 {{- define "influxdb.initdbScriptsConfigmapName" -}}
-{{- if .Values.influxdb.initdbScriptsCM -}}
-    {{- printf "%s" (tpl .Values.influxdb.initdbScriptsCM $) -}}
+{{- if .Values.initdbScriptsCM -}}
+    {{- print (tpl .Values.initdbScriptsCM .) -}}
 {{- else -}}
     {{- printf "%s-initdb-scripts" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the InfluxDB&trade; initialization scripts secret.
+Return the InfluxDB&trade; Core initialization scripts Secret name
 */}}
 {{- define "influxdb.initdbScriptsSecret" -}}
-{{- printf "%s" (tpl .Values.influxdb.initdbScriptsSecret $) -}}
+{{- print (tpl .Values.initdbScriptsSecret .) -}}
 {{- end -}}
