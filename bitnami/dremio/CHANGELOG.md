@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.2 (2025-05-06)
+## 2.0.0 (2025-05-16)
 
-* [bitnami/dremio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33353](https://github.com/bitnami/charts/pull/33353))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#33756](https://github.com/bitnami/charts/pull/33756))
+
+## <small>1.0.2 (2025-05-06)</small>
+
+* [bitnami/dremio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33353) ([8512cf8](https://github.com/bitnami/charts/commit/8512cf815308c38e2cd98a6534569afa45edcb67)), closes [#33353](https://github.com/bitnami/charts/issues/33353)
 
 ## <small>1.0.1 (2025-04-25)</small>
 
