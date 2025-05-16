@@ -1160,6 +1160,10 @@ service:
   headless:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
+   # Explicitly set the Service type so clusters with Kyverno “restrict-nodeport”
+   # (which requires spec.type to be present) will accept the manifest.
+   # Do **not** change the default unless you really need something else.
+    type: ClusterIP    
     annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   ## If "ClientIP", consecutive client requests will be directed to the same Pod
