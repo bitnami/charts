@@ -38,4 +38,4 @@ maintainers:
 name: kafka
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 32.2.6
+version: 32.2.7
