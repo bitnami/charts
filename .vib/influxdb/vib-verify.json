@@ -63,7 +63,8 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "name": "influxdb"
+              "name": "influxdb",
+              "database": "vib"
             }
           }
         },
