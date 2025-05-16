@@ -493,6 +493,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "harbor.validateValues.exposureType" .) -}}
 {{- $messages := append $messages (include "harbor.validateValues.redisTLS" .) -}}
 {{- $messages := append $messages (include "harbor.validateValues.redisMutualTLS" .) -}}
+{{- $messages := append $messages (include "harbor.validateValues.externalRedis" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -544,6 +545,18 @@ harbor: Redis TLS
 harbor: Redis Mutual TLS
     At the moment Harbor does not support this configuration. Please set
     redis.tls.authClients to false (--set redis.tls.authClients=false)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Harbor - externalRedis configuration */}}
+{{- define "harbor.validateValues.externalRedis" -}}
+{{- if and .Values.externalRedis.instancePerComponent ( or ( not .Values.externalRedis.core.host ) ( not .Values.externalRedis.jobservice.host ) ( not .Values.externalRedis.trivy.host ) ( not .Values.externalRedis.registry.host ) ) -}}
+harbor: External Redis instance per Harbor component
+    Following values are mandatory when externalRedis.instancePerComponent is set:
+      * externalRedis.core.host
+      * externalRedis.jobservice.host
+      * externalRedis.trivy.host
+      * externalRedis.registry.host
 {{- end -}}
 {{- end -}}
 
