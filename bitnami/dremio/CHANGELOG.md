@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.0.1 (2025-05-16)
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#33761](https://github.com/bitnami/charts/pull/33761))
+
 ## 2.0.0 (2025-05-16)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#33756](https://github.com/bitnami/charts/pull/33756))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#33756) ([d210adf](https://github.com/bitnami/charts/commit/d210adf595a8b6deb798cfdb0d8b7934a59fe6c7)), closes [#33756](https://github.com/bitnami/charts/issues/33756)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>1.0.2 (2025-05-06)</small>
 
