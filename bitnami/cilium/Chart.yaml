@@ -9,7 +9,7 @@ annotations:
     - name: cilium-operator
       image: docker.io/bitnami/cilium-operator:1.17.4-debian-12-r1
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.32.6-debian-12-r0
+      image: docker.io/bitnami/cilium-proxy:1.32.6-debian-12-r1
     - name: hubble-relay
       image: docker.io/bitnami/hubble-relay:1.17.4-debian-12-r2
     - name: hubble-ui
