@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.5 (2025-05-15)
+## 11.3.6 (2025-05-16)
 
-* [bitnami/etcd] fix type of GOMAXPROCS in envs ([#33477](https://github.com/bitnami/charts/pull/33477))
+* [bitnami/etcd] Allow release namespace to be overridden ([#33550](https://github.com/bitnami/charts/pull/33550))
+
+## <small>11.3.5 (2025-05-16)</small>
+
+* [bitnami/etcd] fix type of GOMAXPROCS in envs (#33477) ([0a6e907](https://github.com/bitnami/charts/commit/0a6e907ab91b4ed81541b6243d981289deee636d)), closes [#33477](https://github.com/bitnami/charts/issues/33477)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.3.4 (2025-05-08)</small>
 
