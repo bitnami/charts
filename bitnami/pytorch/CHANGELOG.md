@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.9 (2025-05-06)
+## 4.3.10 (2025-05-13)
 
-* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33425](https://github.com/bitnami/charts/pull/33425))
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#33657](https://github.com/bitnami/charts/pull/33657))
+
+## <small>4.3.9 (2025-05-06)</small>
+
+* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33425 ([e20b5e3](https://github.com/bitnami/charts/commit/e20b5e3ee4d4eb6f4fae1db2f518432927283687)), closes [#33425](https://github.com/bitnami/charts/issues/33425)
 
 ## <small>4.3.8 (2025-04-23)</small>
 

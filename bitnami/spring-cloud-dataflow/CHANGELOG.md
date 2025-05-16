@@ -1,8 +1,18 @@
 # Changelog
 
-## 37.0.1 (2025-05-06)
+## 37.0.3 (2025-05-15)
 
-* [bitnami/spring-cloud-dataflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33438](https://github.com/bitnami/charts/pull/33438))
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references ([#33734](https://github.com/bitnami/charts/pull/33734))
+
+## <small>37.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mysql] Update MySQL docs (#33613) ([b0ca2e2](https://github.com/bitnami/charts/commit/b0ca2e239a09b9e9eca7fe2f67b0f85b3f5d696c)), closes [#33613](https://github.com/bitnami/charts/issues/33613)
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33647) ([861fb2e](https://github.com/bitnami/charts/commit/861fb2e132dfdb0d1ff0131f9e70d609f74663de)), closes [#33647](https://github.com/bitnami/charts/issues/33647)
+
+## <small>37.0.1 (2025-05-06)</small>
+
+* [bitnami/spring-cloud-dataflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 refe ([3dc1f8e](https://github.com/bitnami/charts/commit/3dc1f8e114ce5a787d21308d0072683712c264e5)), closes [#33438](https://github.com/bitnami/charts/issues/33438)
 
 ## 37.0.0 (2025-04-29)
 

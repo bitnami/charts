@@ -6,11 +6,19 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Create a global name for the chart to use and parse with other naming functions
+Please use instead of "common.names.fullname" to preserve support for .Values.global.postgresql.fullnameOverride
+*/}}
+{{- define "postgresql.v1.chart.fullname" -}}
+{{- default (include "common.names.fullname" .) .Values.global.postgresql.fullnameOverride -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name for PostgreSQL Primary objects
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "postgresql.v1.primary.fullname" -}}
-{{- $fullname := default (include "common.names.fullname" .) .Values.global.postgresql.fullnameOverride -}}
+{{- $fullname := include "postgresql.v1.chart.fullname" . -}}
 {{- ternary (printf "%s-%s" $fullname .Values.primary.name | trunc 63 | trimSuffix "-") $fullname (eq .Values.architecture "replication") -}}
 {{- end -}}
 
@@ -19,7 +27,7 @@ Create a default fully qualified app name for PostgreSQL read-only replicas obje
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "postgresql.v1.readReplica.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) .Values.readReplicas.name | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "postgresql.v1.chart.fullname" .) .Values.readReplicas.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -97,7 +105,7 @@ Get the password secret.
 {{- else if .Values.auth.existingSecret -}}
     {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s" (include "common.names.fullname" .) -}}
+    {{- printf "%s" (include "postgresql.v1.chart.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -157,7 +165,7 @@ Return true if a secret object should be created
 */}}
 {{- define "postgresql.v1.createSecret" -}}
 {{- $customUser := include "postgresql.v1.username" . -}}
-{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "common.names.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary (coalesce .Values.global.postgresql.auth.postgresPassword .Values.auth.postgresPassword .Values.global.postgresql.auth.password .Values.auth.password) (coalesce .Values.global.postgresql.auth.postgresPassword .Values.auth.postgresPassword) (or (empty $customUser) (eq $customUser "postgres"))) "context" $) -}}
+{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "postgresql.v1.chart.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary (coalesce .Values.global.postgresql.auth.postgresPassword .Values.auth.postgresPassword .Values.global.postgresql.auth.password .Values.auth.password) (coalesce .Values.global.postgresql.auth.postgresPassword .Values.auth.postgresPassword) (or (empty $customUser) (eq $customUser "postgres"))) "context" $) -}}
 {{- if and (not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret)) (or $postgresPassword .Values.auth.enablePostgresUser (and (not (empty $customUser)) (ne $customUser "postgres")) (eq .Values.architecture "replication") (and .Values.ldap.enabled (or .Values.ldap.bind_password .Values.ldap.bindpw))) -}}
     {{- true -}}
 {{- end -}}
@@ -181,10 +189,10 @@ Return the secret with previous PostgreSQL credentials
         {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
     {{- else if .Values.passwordUpdateJob.previousPasswords.postgresPassword -}}
         {{- /* The secret with the new password is managed externally */ -}}
-        {{- printf "%s-previous-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+        {{- printf "%s-previous-secret" (include "postgresql.v1.chart.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- /* The secret with the new password is managed by the helm chart. We use the current secret name as it has the old password */ -}}
-        {{- include "common.names.fullname" . -}}
+        {{- include "postgresql.v1.chart.fullname" . -}}
     {{- end -}}
 {{- end -}}
 
@@ -194,7 +202,7 @@ Return the secret with new PostgreSQL credentials
 {{- define "postgresql.v1.update-job.newSecretName" -}}
     {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.postgresPassword) -}}
         {{- /* The secret with the new password is managed by the helm chart. We create a new secret as the current one has the old password */ -}}
-        {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+        {{- printf "%s-new-secret" (include "postgresql.v1.chart.fullname" .) | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
         {{- /* The secret with the new password is managed externally */ -}}
         {{- include "postgresql.v1.secretName" . -}}
@@ -287,7 +295,7 @@ Return true if a configmap object should be created for PostgreSQL read replica 
  */}}
 {{- define "postgresql.v1.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "postgresql.v1.chart.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -445,7 +453,7 @@ Return the path to the CA cert file.
 */}}
 {{- define "postgresql.v1.tlsSecretName" -}}
 {{- if .Values.tls.autoGenerated -}}
-    {{- printf "%s-crt" (include "common.names.fullname" .) -}}
+    {{- printf "%s-crt" (include "postgresql.v1.chart.fullname" .) -}}
 {{- else -}}
     {{ tpl (required "A secret containing TLS certificates is required when TLS is enabled" .Values.tls.certificatesSecret) . }}
 {{- end -}}

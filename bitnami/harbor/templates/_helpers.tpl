@@ -520,10 +520,10 @@ harbor: Redis Mutual TLS
 
 {{/* lists all tracing related environment variables except for TRACE_SERVICE_NAME, which should be set separately */}}
 {{- define "harbor.tracing.envvars" -}}
-TRACE_ENABLE: {{ .Values.tracing.enabled | quote }}
+TRACE_ENABLED: {{ .Values.tracing.enabled | quote }}
 TRACE_SAMPLE_RATE: {{ .Values.tracing.sampleRate | quote }}
 TRACE_NAMESPACE: {{ .Values.tracing.namespace | quote }}
-TRACE_ATTRIBUTES: {{ .Values.tracing.attributes | toJson }}
+TRACE_ATTRIBUTES: {{ .Values.tracing.attributes | toJson | squote }}
 {{- if .Values.tracing.jaeger.enabled }}
 TRACE_JAEGER_ENDPOINT: {{ .Values.tracing.jaeger.endpoint | quote }}
 TRACE_JAEGER_USERNAME: {{ .Values.tracing.jaeger.username | quote }}

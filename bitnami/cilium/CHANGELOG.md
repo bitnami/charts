@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.9 (2025-05-06)
+## 2.1.10 (2025-05-13)
 
-* [bitnami/cilium] Release 2.1.9 ([#33469](https://github.com/bitnami/charts/pull/33469))
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33655](https://github.com/bitnami/charts/pull/33655))
+
+## <small>2.1.9 (2025-05-06)</small>
+
+* [bitnami/cilium] Release 2.1.9 (#33469) ([38c6023](https://github.com/bitnami/charts/commit/38c6023a92a11ae98f16badcccd3838da69bc9fd)), closes [#33469](https://github.com/bitnami/charts/issues/33469)
 
 ## <small>2.1.8 (2025-05-06)</small>
 

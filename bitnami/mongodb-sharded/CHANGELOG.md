@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.5 (2025-05-06)
+## 9.2.6 (2025-05-13)
 
-* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33406](https://github.com/bitnami/charts/pull/33406))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#33638](https://github.com/bitnami/charts/pull/33638))
+
+## <small>9.2.5 (2025-05-06)</small>
+
+* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([07e1ed1](https://github.com/bitnami/charts/commit/07e1ed1be815ad1edd28babc745ef230ece66c31)), closes [#33406](https://github.com/bitnami/charts/issues/33406)
 
 ## <small>9.2.4 (2025-05-01)</small>
 

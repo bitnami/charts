@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.2 (2025-05-07)
+## 12.1.0 (2025-05-14)
 
-* [bitnami/kibana] Release 12.0.2 ([#33499](https://github.com/bitnami/charts/pull/33499))
+* [bitnami/kibana] Add overwrite parameter to import saved objects managing ([#33282](https://github.com/bitnami/charts/pull/33282))
+
+## <small>12.0.2 (2025-05-07)</small>
+
+* [bitnami/kibana] Release 12.0.2 (#33499) ([c461c0a](https://github.com/bitnami/charts/commit/c461c0a50b8519e07f7e975d9ea66dd1061159f5)), closes [#33499](https://github.com/bitnami/charts/issues/33499)
 
 ## <small>12.0.1 (2025-05-06)</small>
 

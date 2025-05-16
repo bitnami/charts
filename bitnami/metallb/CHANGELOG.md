@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.12 (2025-05-07)
+## 6.4.13 (2025-05-15)
 
-* [bitnami/metallb] Release 6.4.12 ([#33534](https://github.com/bitnami/charts/pull/33534))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#33707](https://github.com/bitnami/charts/pull/33707))
+
+## <small>6.4.12 (2025-05-07)</small>
+
+* [bitnami/metallb] Release 6.4.12 (#33534) ([e1fe319](https://github.com/bitnami/charts/commit/e1fe319645d8288b2a3aafa0bac41433639a8d1d)), closes [#33534](https://github.com/bitnami/charts/issues/33534)
 
 ## <small>6.4.11 (2025-05-06)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.7 (2025-05-06)
+## 11.3.8 (2025-05-13)
 
-* [bitnami/apache] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33334](https://github.com/bitnami/charts/pull/33334))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#33629](https://github.com/bitnami/charts/pull/33629))
+
+## <small>11.3.7 (2025-05-06)</small>
+
+* [bitnami/apache] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33334) ([b7f58b1](https://github.com/bitnami/charts/commit/b7f58b18d955f39db4996c1c1a3d1f1f463fe210)), closes [#33334](https://github.com/bitnami/charts/issues/33334)
 
 ## <small>11.3.6 (2025-04-26)</small>
 

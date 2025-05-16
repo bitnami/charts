@@ -1000,6 +1000,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 This major version makes it possible to customize the user & password to be used by Pgpool-II for performing Stream Replication Checks and sets the default user to `sr_check_user`. Previously, the user was hardcoded to `repmgr`, reusing the same user used by Repmgr. This change allows for a more flexible & secure configuration, as the user used by Pgpool-II can be different from the one used by Repmgr.
 
+This major version includes a security fix for [GHSA-mx38-x658-5fwj](https://github.com/bitnami/charts/security/advisories/GHSA-mx38-x658-5fwj) and CVE-2025-22248. Upgrading to this or higher versions is recommended.
+
 Given users' creation is skipped when there's existing data, upgrading from `15.x` to `16.x` will fail when persistence is enabled unless the user is created manually or the `pgpool.srCheckUsername` and `pgpool.srCheckPassword` parameters are set to the same values as the `postgresql.repmgrUsername` and `postgresql.repmgrPassword` parameters:
 
 - Manually create the user:

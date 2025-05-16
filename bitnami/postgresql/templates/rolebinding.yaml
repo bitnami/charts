@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: RoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "postgresql.v1.chart.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 roleRef:
   kind: Role
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "postgresql.v1.chart.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount

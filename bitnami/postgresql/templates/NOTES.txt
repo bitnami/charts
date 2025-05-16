@@ -28,7 +28,7 @@ In order to replicate the container startup scripts execute this command:
 {{- else }}
 
 {{- $customUser := include "postgresql.v1.username" . }}
-{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "common.names.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary .Values.auth.postgresPassword .Values.auth.password  (eq $customUser "postgres")) "context" $) -}}
+{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "postgresql.v1.chart.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary .Values.auth.postgresPassword .Values.auth.password  (eq $customUser "postgres")) "context" $) -}}
 {{- $authEnabled := and (not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret)) (or $postgresPassword .Values.auth.enablePostgresUser (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
 {{- if not $authEnabled }}
 
@@ -68,11 +68,11 @@ To get the password for "{{ default "postgres" $customUser }}" run:
 To connect to your database run the following command:
     {{- if $authEnabled }}
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+    kubectl run {{ include "postgresql.v1.chart.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
       --command -- psql --host {{ include "postgresql.v1.primary.fullname" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.v1.service.port" . }}
     {{- else }}
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} \
+    kubectl run {{ include "postgresql.v1.chart.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ $releaseNamespace }} --image {{ include "postgresql.v1.image" . }} \
       --command -- psql --host {{ include "postgresql.v1.primary.fullname" . }} -d {{- if include "postgresql.v1.database" . }} {{ include "postgresql.v1.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.v1.service.port" . }}
     {{- end }}
 
