@@ -206,7 +206,7 @@ spec:
             {{- end }}
             {{- if .Values.maxProcs }}
             - name: GOMAXPROCS
-              value: {{ .Values.maxProcs }}
+              value: {{ .Values.maxProcs | quote }}
             {{- end }}
             {{- if gt $replicaCount 1 }}
             - name: ETCD_INITIAL_CLUSTER_TOKEN

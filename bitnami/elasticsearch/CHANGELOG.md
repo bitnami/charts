@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.3 (2025-05-07)
+## 22.0.4 (2025-05-12)
 
-* [bitnami/elasticsearch] Release 22.0.3 ([#33547](https://github.com/bitnami/charts/pull/33547))
+* [bitnami/elasticsearch] add shareProcessNamespace support ([#33232](https://github.com/bitnami/charts/pull/33232))
+
+## <small>22.0.3 (2025-05-07)</small>
+
+* [bitnami/elasticsearch] Release 22.0.3 (#33547) ([338e18a](https://github.com/bitnami/charts/commit/338e18a44389a547e16154e0c74abee522a68e77)), closes [#33547](https://github.com/bitnami/charts/issues/33547)
 
 ## <small>22.0.2 (2025-05-06)</small>
 

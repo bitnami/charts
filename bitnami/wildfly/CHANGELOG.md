@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.5 (2025-05-06)
+## 24.0.6 (2025-05-15)
 
-* [bitnami/wildfly] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33448](https://github.com/bitnami/charts/pull/33448))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#33724](https://github.com/bitnami/charts/pull/33724))
+
+## <small>24.0.5 (2025-05-06)</small>
+
+* [bitnami/wildfly] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33448 ([ec8802e](https://github.com/bitnami/charts/commit/ec8802e1a337503834208604cdb3f90914436f9b)), closes [#33448](https://github.com/bitnami/charts/issues/33448)
 
 ## <small>24.0.4 (2025-04-22)</small>
 

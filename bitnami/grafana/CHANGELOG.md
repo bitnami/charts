@@ -2,7 +2,7 @@
 
 ## 12.0.2 (2025-05-15)
 
-* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.admin.password is not set ([#33672](https://github.com/bitnami/charts/pull/33672))
+* [bitnami/grafana] fix metrics namespace include ([#33714](https://github.com/bitnami/charts/pull/33714))
 
 ## <small>12.0.1 (2025-05-15)</small>
 
