@@ -138,9 +138,11 @@ externalAccess.enabled=true
 externalAccess.broker.service.type=LoadBalancer
 externalAccess.controller.service.type=LoadBalancer
 externalAccess.broker.service.ports.external=9094
-externalAccess.controller.service.containerPorts.external=9094
+externalAccess.controller.service.ports.external=9094
 defaultInitContainers.autoDiscovery.enabled=true
 serviceAccount.create=true
+broker.automountServiceAccountToken=true
+controller.automountServiceAccountToken=true
 rbac.create=true
 ```
 
