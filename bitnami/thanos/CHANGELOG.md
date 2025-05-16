@@ -1,8 +1,8 @@
 # Changelog
 
-## 16.0.6 (2025-05-07)
+## <small>16.0.6 (2025-05-07)</small>
 
-* [bitnami/thanos] Release 16.0.6 ([#33544](https://github.com/bitnami/charts/pull/33544))
+* [bitnami/thanos] Release 16.0.6 (#33544) ([c00f5d8](https://github.com/bitnami/charts/commit/c00f5d8074ad84eee1af26bdd73bce1f9aa1cad8)), closes [#33544](https://github.com/bitnami/charts/issues/33544)
 
 ## <small>16.0.5 (2025-05-06)</small>
 
