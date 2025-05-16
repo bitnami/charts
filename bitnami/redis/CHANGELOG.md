@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.1.3 (2025-05-15)
+## 21.1.3 (2025-05-16)
 
 * [bitnami/redis] Fix newlines in sentinel.conf ([#33704](https://github.com/bitnami/charts/pull/33704))
 
