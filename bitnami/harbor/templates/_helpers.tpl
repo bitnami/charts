@@ -338,7 +338,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/* Get Redis secret with the CA certificate */}}
 {{- define "harbor.redis.caSecretName" -}}
   {{- $externalRedis := ternary ( get .context.Values.externalRedis .component ) .context.Values.externalRedis .context.Values.externalRedis.instancePerComponent -}}
-  {{- if and .content.Values.redis.enabled .content.Values.redis.tls.enabled .content.Values.redis.tls.existingSecret -}}
+  {{- if and .context.Values.redis.enabled .content.Values.redis.tls.enabled .context.Values.redis.tls.existingSecret -}}
     {{- print (tpl .content.Values.redis.tls.existingSecret .) -}}
   {{- else if and $externalRedis.tls.enabled $externalRedis.tls.existingSecret -}}
     {{- print (tpl $externalRedis.tls.existingSecret .) -}}
@@ -350,8 +350,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/* Get key in Redis secret with the CA certificate */}}
 {{- define "harbor.redis.caFileName" -}}
   {{- $externalRedis := ternary ( get .context.Values.externalRedis .component ) .context.Values.externalRedis .context.Values.externalRedis.instancePerComponent -}}
-  {{- if and .Values.redis.enabled .Values.redis.tls.enabled .Values.redis.tls.certCAFilename -}}
-    {{- print (tpl .Values.redis.tls.certCAFilename .) -}}
+  {{- if and .context.Values.redis.enabled .context.Values.redis.tls.enabled .context.Values.redis.tls.certCAFilename -}}
+    {{- print (tpl .context.Values.redis.tls.certCAFilename .) -}}
   {{- else if and $externalRedis.tls.enabled $externalRedis.tls.certCAFilename -}}
     {{- print (tpl $externalRedis.tls.certCAFilename .) -}}
   {{- else -}}
