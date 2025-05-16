@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2025-05-15)
+## 2.0.2 (2025-05-16)
 
-* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#33718](https://github.com/bitnami/charts/pull/33718))
+* [bitnami/opensearch] opensearch: Increase resourcesPreset for master, coordinating and ingest nodes ([#33742](https://github.com/bitnami/charts/pull/33742))
+
+## <small>2.0.1 (2025-05-16)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33718) ([3055a4f](https://github.com/bitnami/charts/commit/3055a4fb35be793d25f2b5ed4e9d2d882631604e)), closes [#33718](https://github.com/bitnami/charts/issues/33718)
 
 ## 2.0.0 (2025-05-14)
 
