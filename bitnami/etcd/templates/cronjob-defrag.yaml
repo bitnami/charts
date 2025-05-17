@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ printf "%s-defrag" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defrag.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if or .Values.defrag.cronjob.annotations .Values.commonAnnotations }}
@@ -115,12 +115,12 @@ spec:
                   cmd="etcdctl --command-timeout=60s ${flags[@]}"
                   {{- $etcdFullname := include "common.names.fullname" . }}
                   {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
-                  {{- $namespace := .Release.Namespace }}
+                  {{- $namespace := include "common.names.namespace" . }}
                   {{- $clusterDomain := .Values.clusterDomain }}
                   {{- $port := int .Values.service.ports.client }}
                   {{- $endpointStr := "" }}
                   {{- $replicaCount := (int .Values.replicaCount) }}
-                  {{- $releaseNamespace := .Release.Namespace }}
+                  {{- $releaseNamespace := include "common.names.namespace" . }}
                   {{- range $iEndpoint, $e := until $replicaCount }}
                   {{- $endpoint := printf "%s://%s-%d.%s.%s.svc.%s:%d" (include "etcd.peerProtocol" $) $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
                   {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
