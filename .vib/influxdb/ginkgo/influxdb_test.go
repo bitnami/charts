@@ -30,9 +30,8 @@ var _ = Describe("Influxdb", Ordered, func() {
 		c = kubernetes.NewForConfigOrDie(conf)
 	})
 
-	When("an index is created and Influxdb is scaled down to 0 replicas and back up", func() {
-		It("should have access to the created index", func() {
-
+	When("time series data is written and Influxdb is scaled down to 0 replicas and back up", func() {
+		It("should have access to query the written data", func() {
 			getAvailableReplicas := func(ss *appsv1.Deployment) int32 { return ss.Status.AvailableReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
@@ -59,12 +58,11 @@ var _ = Describe("Influxdb", Ordered, func() {
 			// Use current time for allowing the test suite to repeat
 			jobSuffix := time.Now().Format("20060102150405")
 
-			By("creating a job to create a new index")
-			createDBJobName := fmt.Sprintf("%s-put-%s",
+			By("creating a job to write data")
+			createDBJobName := fmt.Sprintf("%s-write-%s",
 				deployName, jobSuffix)
-			indexName := fmt.Sprintf("test%s", jobSuffix)
 
-			err = createJob(ctx, c, createDBJobName, port, image, fmt.Sprintf("influx write 'cpu_error,host=bitnami-server value=\"%s\"'", indexName))
+			err = createJob(ctx, c, createDBJobName, port, image, "write", `home,room=Living\ Room temp=21.1,hum=35.9,co=0i 1747036800`)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
@@ -87,14 +85,14 @@ var _ = Describe("Influxdb", Ordered, func() {
 				return c.AppsV1().Deployments(namespace).Get(ctx, deployName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			By("creating a job check the index")
-			deleteDBJobName := fmt.Sprintf("%s-get-%s",
+			By("creating a job to query the data")
+			queryJobName := fmt.Sprintf("%s-query-%s",
 				deployName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, port, image, fmt.Sprintf("influx query 'from(bucket:\"%s\") |> range(start:-20m)' | grep %s", bucket, indexName))
+			err = createJob(ctx, c, queryJobName, port, image, "query", "SELECT * FROM home")
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
+				return c.BatchV1().Jobs(namespace).Get(ctx, queryJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 		})
 	})

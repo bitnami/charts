@@ -55,22 +55,6 @@
           }
         },
         {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/influxdb/cypress"
-            },
-            "endpoint": "lb-influxdb-http",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "influxAdmin",
-              "password": "RootP4ssw0rd",
-              "bucket": "primary",
-              "org": "primary"
-            }
-          }
-        },
-        {
           "action_id": "ginkgo",
           "params": {
             "resources": {
@@ -80,9 +64,7 @@
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
               "name": "influxdb",
-              "token": "4dm1nT0k3n",
-              "org": "testOrganization",
-              "bucket": "testBucket"
+              "database": "vib"
             }
           }
         },
