@@ -22,7 +22,7 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup execute this command:
 
-    loki -config.file=/bitnami/grafana-loki/conf/loki.yaml
+    loki -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
 
 {{- else }}
 
