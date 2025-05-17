@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.5 (2025-05-15)
+## 32.2.6 (2025-05-16)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33735](https://github.com/bitnami/charts/pull/33735))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33762](https://github.com/bitnami/charts/pull/33762))
+
+## <small>32.2.5 (2025-05-15)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33735) ([3f8fa3d](https://github.com/bitnami/charts/commit/3f8fa3dc4840800c3d85551a21b34d4b709237d5)), closes [#33735](https://github.com/bitnami/charts/issues/33735)
 
 ## <small>32.2.4 (2025-05-13)</small>
 
