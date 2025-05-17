@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.0.7 (2025-05-15)
+## 2.0.7 (2025-05-17)
 
-* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac ([#33722](https://github.com/bitnami/charts/pull/33722))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#33764](https://github.com/bitnami/charts/pull/33764))
 
 ## <small>2.0.6 (2025-05-12)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.5.7 (2025-05-13)
+## 16.5.8 (2025-05-15)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33636](https://github.com/bitnami/charts/pull/33636))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33731](https://github.com/bitnami/charts/pull/33731))
+
+## <small>16.5.7 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33636) ([1bb5123](https://github.com/bitnami/charts/commit/1bb512381fad37e2b27f686f50bc5aa57243d38d)), closes [#33636](https://github.com/bitnami/charts/issues/33636)
 
 ## <small>16.5.6 (2025-05-06)</small>
 

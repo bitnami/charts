@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.1.1 (2025-05-15)
+## 21.1.3 (2025-05-16)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33713](https://github.com/bitnami/charts/pull/33713))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33749](https://github.com/bitnami/charts/pull/33749))
+
+## <small>21.1.2 (2025-05-15)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33732) ([51b8b03](https://github.com/bitnami/charts/commit/51b8b0362db5fc14d7e61cc0342a9695b7d00459)), closes [#33732](https://github.com/bitnami/charts/issues/33732)
+
+## <small>21.1.1 (2025-05-15)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33713) ([7e47d9c](https://github.com/bitnami/charts/commit/7e47d9c7df6521d59791d2326a5d369cd46fbed1)), closes [#33713](https://github.com/bitnami/charts/issues/33713)
 
 ## 21.1.0 (2025-05-14)
 

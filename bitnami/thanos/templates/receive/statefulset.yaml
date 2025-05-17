@@ -187,7 +187,7 @@ spec:
             - name: OBJSTORE_CONFIG
               valueFrom:
                 secretKeyRef:
-                  key: objstore.yml
+                  key: {{ include "thanos.objstoreSecretKey" . }}
                   name: {{ include "thanos.objstoreSecretName" . }}
             {{- end }}
             {{- if .Values.receive.extraEnvVars }}
