@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_securitypolicies.yaml
-# Version: 1.3.3
+# Version: 1.4.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.1
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: securitypolicies.gateway.envoyproxy.io
 spec:
   group: gateway.envoyproxy.io
@@ -188,6 +188,46 @@ spec:
                           maxLength: 253
                           minLength: 1
                           type: string
+                        operation:
+                          description: |-
+                            Operation specifies the operation of a request, such as HTTP methods.
+                            If not specified, all operations are matched on.
+                          properties:
+                            methods:
+                              description: |-
+                                Methods are the HTTP methods of the request.
+                                If multiple methods are specified, all specified methods are allowed or denied, based on the action of the rule.
+                              items:
+                                description: |-
+                                  HTTPMethod describes how to select a HTTP route by matching the HTTP
+                                  method as defined by
+                                  [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-4) and
+                                  [RFC 5789](https://datatracker.ietf.org/doc/html/rfc5789#section-2).
+                                  The value is expected in upper case.
+
+                                  Note that values may be added to this enum, implementations
+                                  must ensure that unknown values will not cause a crash.
+
+                                  Unknown values here must result in the implementation setting the
+                                  Accepted Condition for the Route to `status: False`, with a
+                                  Reason of `UnsupportedValue`.
+                                enum:
+                                - GET
+                                - HEAD
+                                - POST
+                                - PUT
+                                - DELETE
+                                - CONNECT
+                                - OPTIONS
+                                - TRACE
+                                - PATCH
+                                type: string
+                              maxItems: 16
+                              minItems: 1
+                              type: array
+                          required:
+                          - methods
+                          type: object
                         principal:
                           description: |-
                             Principal specifies the client identity of a request.
@@ -213,6 +253,39 @@ spec:
                                   A CIDR can be an IPv4 address range such as "192.168.1.0/24" or an IPv6 address range such as "2001:0db8:11a3:09d7::/64".
                                 pattern: ((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/([0-9]+))|((([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\/([0-9]+))
                                 type: string
+                              minItems: 1
+                              type: array
+                            headers:
+                              description: |-
+                                Headers authorize the request based on user identity extracted from custom headers.
+                                If multiple headers are specified, all headers must match for the rule to match.
+                              items:
+                                description: AuthorizationHeaderMatch specifies how
+                                  to match against the value of an HTTP header within
+                                  a authorization rule.
+                                properties:
+                                  name:
+                                    description: |-
+                                      Name of the HTTP header.
+                                      The header name is case-insensitive unless PreserveHeaderCase is set to true.
+                                      For example, "Foo" and "foo" are considered the same header.
+                                    maxLength: 256
+                                    minLength: 1
+                                    type: string
+                                  values:
+                                    description: |-
+                                      Values are the values that the header must match.
+                                      If multiple values are specified, the rule will match if any of the values match.
+                                    items:
+                                      type: string
+                                    maxItems: 256
+                                    minItems: 1
+                                    type: array
+                                required:
+                                - name
+                                - values
+                                type: object
+                              maxItems: 256
                               minItems: 1
                               type: array
                             jwt:
@@ -301,8 +374,9 @@ spec:
                                 rule: (has(self.claims) || has(self.scopes))
                           type: object
                           x-kubernetes-validations:
-                          - message: at least one of clientCIDRs or jwt must be specified
-                            rule: (has(self.clientCIDRs) || has(self.jwt))
+                          - message: at least one of clientCIDRs, jwt, or headers
+                              must be specified
+                            rule: (has(self.clientCIDRs) || has(self.jwt) || has(self.headers))
                       required:
                       - action
                       - principal
@@ -313,6 +387,13 @@ spec:
                 description: BasicAuth defines the configuration for the HTTP Basic
                   Authentication.
                 properties:
+                  forwardUsernameHeader:
+                    description: |-
+                      This field specifies the header name to forward a successfully authenticated user to
+                      the backend. The header will be added to the request with the username as the value.
+
+                      If it is not specified, the username will not be forwarded.
+                    type: string
                   users:
                     description: |-
                       The Kubernetes secret which contains the username-password pairs in
@@ -682,6 +763,21 @@ spec:
                                 maximum: 4294967295
                                 minimum: 0
                                 type: integer
+                              perEndpoint:
+                                description: PerEndpoint defines Circuit Breakers
+                                  that will apply per-endpoint for an upstream cluster
+                                properties:
+                                  maxConnections:
+                                    default: 1024
+                                    description: MaxConnections configures the maximum
+                                      number of connections that Envoy will establish
+                                      per-endpoint to the referenced backend defined
+                                      within a xRoute rule.
+                                    format: int64
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
                             type: object
                           connection:
                             description: Connection includes backend connection settings.
@@ -722,6 +818,17 @@ spec:
                                 description: |-
                                   DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                                   Defaults to 30 seconds.
+                                type: string
+                              lookupFamily:
+                                description: |-
+                                  LookupFamily determines how Envoy would resolve DNS for Routes where the backend is specified as a fully qualified domain name (FQDN).
+                                  If set, this configuration overrides other defaults.
+                                enum:
+                                - IPv4
+                                - IPv6
+                                - IPv4Preferred
+                                - IPv6Preferred
+                                - IPv4AndIPv6
                                 type: string
                               respectDnsTtl:
                                 description: |-
@@ -942,6 +1049,16 @@ spec:
                                     Checker type is GRPC.
                                   rule: 'has(self.grpc) ? self.type == ''GRPC'' :
                                     true'
+                              panicThreshold:
+                                description: |-
+                                  When number of unhealthy endpoints for a backend reaches this threshold
+                                  Envoy will disregard health status and balance across all endpoints.
+                                  It's designed to prevent a situation in which host failures cascade throughout the cluster
+                                  as load increases. If not set, the default value is 50%. To disable panic mode, set value to `0`.
+                                format: int32
+                                maximum: 100
+                                minimum: 0
+                                type: integer
                               passive:
                                 description: Passive passive check configuration
                                 properties:
@@ -1563,6 +1680,21 @@ spec:
                                 maximum: 4294967295
                                 minimum: 0
                                 type: integer
+                              perEndpoint:
+                                description: PerEndpoint defines Circuit Breakers
+                                  that will apply per-endpoint for an upstream cluster
+                                properties:
+                                  maxConnections:
+                                    default: 1024
+                                    description: MaxConnections configures the maximum
+                                      number of connections that Envoy will establish
+                                      per-endpoint to the referenced backend defined
+                                      within a xRoute rule.
+                                    format: int64
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
                             type: object
                           connection:
                             description: Connection includes backend connection settings.
@@ -1603,6 +1735,17 @@ spec:
                                 description: |-
                                   DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                                   Defaults to 30 seconds.
+                                type: string
+                              lookupFamily:
+                                description: |-
+                                  LookupFamily determines how Envoy would resolve DNS for Routes where the backend is specified as a fully qualified domain name (FQDN).
+                                  If set, this configuration overrides other defaults.
+                                enum:
+                                - IPv4
+                                - IPv6
+                                - IPv4Preferred
+                                - IPv6Preferred
+                                - IPv4AndIPv6
                                 type: string
                               respectDnsTtl:
                                 description: |-
@@ -1823,6 +1966,16 @@ spec:
                                     Checker type is GRPC.
                                   rule: 'has(self.grpc) ? self.type == ''GRPC'' :
                                     true'
+                              panicThreshold:
+                                description: |-
+                                  When number of unhealthy endpoints for a backend reaches this threshold
+                                  Envoy will disregard health status and balance across all endpoints.
+                                  It's designed to prevent a situation in which host failures cascade throughout the cluster
+                                  as load increases. If not set, the default value is 50%. To disable panic mode, set value to `0`.
+                                format: int32
+                                maximum: 100
+                                minimum: 0
+                                type: integer
                               passive:
                                 description: Passive passive check configuration
                                 properties:
@@ -2212,7 +2365,12 @@ spec:
                         description: |-
                           Path is the path of the HTTP External Authorization service.
                           If path is specified, the authorization request will be sent to that path,
-                          or else the authorization request will be sent to the root path.
+                          or else the authorization request will use the path of the original request.
+
+                          Please note that the original request path will be appended to the path specified here.
+                          For example, if the original request path is "/hello", and the path specified here is "/auth",
+                          then the path of the authorization request will be "/auth/hello". If the path is not specified,
+                          the path of the authorization request will be "/hello".
                         type: string
                     type: object
                     x-kubernetes-validations:
@@ -2339,6 +2497,63 @@ spec:
                             the JWT issuer is not checked.
                           maxLength: 253
                           type: string
+                        localJWKS:
+                          description: LocalJWKS defines how to get the JSON Web Key
+                            Sets (JWKS) from a local source.
+                          properties:
+                            inline:
+                              description: Inline contains the value as an inline
+                                string.
+                              type: string
+                            type:
+                              default: Inline
+                              description: |-
+                                Type is the type of method to use to read the body value.
+                                Valid values are Inline and ValueRef, default is Inline.
+                              enum:
+                              - Inline
+                              - ValueRef
+                              type: string
+                            valueRef:
+                              description: |-
+                                ValueRef is a reference to a local ConfigMap that contains the JSON Web Key Sets (JWKS).
+
+                                The value of key `jwks` in the ConfigMap will be used.
+                                If the key is not found, the first value in the ConfigMap will be used.
+                              properties:
+                                group:
+                                  description: |-
+                                    Group is the group of the referent. For example, "gateway.networking.k8s.io".
+                                    When unspecified or empty string, core API group is inferred.
+                                  maxLength: 253
+                                  pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                  type: string
+                                kind:
+                                  description: Kind is kind of the referent. For example
+                                    "HTTPRoute" or "Service".
+                                  maxLength: 63
+                                  minLength: 1
+                                  pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
+                                  type: string
+                                name:
+                                  description: Name is the name of the referent.
+                                  maxLength: 253
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - group
+                              - kind
+                              - name
+                              type: object
+                          required:
+                          - type
+                          type: object
+                          x-kubernetes-validations:
+                          - message: Exactly one of inline or valueRef must be set
+                              with correct type.
+                            rule: (self.type == 'Inline' && has(self.inline) && !has(self.valueRef))
+                              || (self.type == 'ValueRef' && !has(self.inline) &&
+                              has(self.valueRef))
                         name:
                           description: |-
                             Name defines a unique name for the JWT provider. A name can have a variety of forms,
@@ -2572,6 +2787,22 @@ spec:
                                       maximum: 4294967295
                                       minimum: 0
                                       type: integer
+                                    perEndpoint:
+                                      description: PerEndpoint defines Circuit Breakers
+                                        that will apply per-endpoint for an upstream
+                                        cluster
+                                      properties:
+                                        maxConnections:
+                                          default: 1024
+                                          description: MaxConnections configures the
+                                            maximum number of connections that Envoy
+                                            will establish per-endpoint to the referenced
+                                            backend defined within a xRoute rule.
+                                          format: int64
+                                          maximum: 4294967295
+                                          minimum: 0
+                                          type: integer
+                                      type: object
                                   type: object
                                 connection:
                                   description: Connection includes backend connection
@@ -2613,6 +2844,17 @@ spec:
                                       description: |-
                                         DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                                         Defaults to 30 seconds.
+                                      type: string
+                                    lookupFamily:
+                                      description: |-
+                                        LookupFamily determines how Envoy would resolve DNS for Routes where the backend is specified as a fully qualified domain name (FQDN).
+                                        If set, this configuration overrides other defaults.
+                                      enum:
+                                      - IPv4
+                                      - IPv6
+                                      - IPv4Preferred
+                                      - IPv6Preferred
+                                      - IPv4AndIPv6
                                       type: string
                                     respectDnsTtl:
                                       description: |-
@@ -2845,6 +3087,16 @@ spec:
                                           the Health Checker type is GRPC.
                                         rule: 'has(self.grpc) ? self.type == ''GRPC''
                                           : true'
+                                    panicThreshold:
+                                      description: |-
+                                        When number of unhealthy endpoints for a backend reaches this threshold
+                                        Envoy will disregard health status and balance across all endpoints.
+                                        It's designed to prevent a situation in which host failures cascade throughout the cluster
+                                        as load increases. If not set, the default value is 50%. To disable panic mode, set value to `0`.
+                                      format: int32
+                                      maximum: 100
+                                      minimum: 0
+                                      type: integer
                                     passive:
                                       description: Passive passive check configuration
                                       properties:
@@ -3244,13 +3496,16 @@ spec:
                               !has(self.backendSettings.retry.retryOn.httpStatusCodes):true):true):true
                       required:
                       - name
-                      - remoteJWKS
                       type: object
                       x-kubernetes-validations:
                       - message: claimToHeaders must be specified if recomputeRoute
-                          is enabled
+                          is enabled.
                         rule: '(has(self.recomputeRoute) && self.recomputeRoute) ?
                           size(self.claimToHeaders) > 0 : true'
+                      - message: either remoteJWKS or localJWKS must be specified.
+                        rule: has(self.remoteJWKS) || has(self.localJWKS)
+                      - message: remoteJWKS and localJWKS cannot both be specified.
+                        rule: '!(has(self.remoteJWKS) && has(self.localJWKS))'
                     maxItems: 4
                     minItems: 1
                     type: array
@@ -3594,6 +3849,21 @@ spec:
                                 maximum: 4294967295
                                 minimum: 0
                                 type: integer
+                              perEndpoint:
+                                description: PerEndpoint defines Circuit Breakers
+                                  that will apply per-endpoint for an upstream cluster
+                                properties:
+                                  maxConnections:
+                                    default: 1024
+                                    description: MaxConnections configures the maximum
+                                      number of connections that Envoy will establish
+                                      per-endpoint to the referenced backend defined
+                                      within a xRoute rule.
+                                    format: int64
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
                             type: object
                           connection:
                             description: Connection includes backend connection settings.
@@ -3634,6 +3904,17 @@ spec:
                                 description: |-
                                   DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                                   Defaults to 30 seconds.
+                                type: string
+                              lookupFamily:
+                                description: |-
+                                  LookupFamily determines how Envoy would resolve DNS for Routes where the backend is specified as a fully qualified domain name (FQDN).
+                                  If set, this configuration overrides other defaults.
+                                enum:
+                                - IPv4
+                                - IPv6
+                                - IPv4Preferred
+                                - IPv6Preferred
+                                - IPv4AndIPv6
                                 type: string
                               respectDnsTtl:
                                 description: |-
@@ -3854,6 +4135,16 @@ spec:
                                     Checker type is GRPC.
                                   rule: 'has(self.grpc) ? self.type == ''GRPC'' :
                                     true'
+                              panicThreshold:
+                                description: |-
+                                  When number of unhealthy endpoints for a backend reaches this threshold
+                                  Envoy will disregard health status and balance across all endpoints.
+                                  It's designed to prevent a situation in which host failures cascade throughout the cluster
+                                  as load increases. If not set, the default value is 50%. To disable panic mode, set value to `0`.
+                                format: int32
+                                maximum: 100
+                                minimum: 0
+                                type: integer
                               passive:
                                 description: Passive passive check configuration
                                 properties:
@@ -4409,6 +4700,39 @@ spec:
                       minLength: 1
                       pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
                       type: string
+                    matchExpressions:
+                      description: MatchExpressions is a list of label selector requirements.
+                        The requirements are ANDed.
+                      items:
+                        description: |-
+                          A label selector requirement is a selector that contains values, a key, and an operator that
+                          relates the key and values.
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: |-
+                              operator represents a key's relationship to a set of values.
+                              Valid operators are In, NotIn, Exists and DoesNotExist.
+                            type: string
+                          values:
+                            description: |-
+                              values is an array of string values. If the operator is In or NotIn,
+                              the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                              the values array must be empty. This array is replaced during a strategic
+                              merge patch.
+                            items:
+                              type: string
+                            type: array
+                            x-kubernetes-list-type: atomic
+                        required:
+                        - key
+                        - operator
+                        type: object
+                      type: array
+                      x-kubernetes-list-type: atomic
                     matchLabels:
                       additionalProperties:
                         type: string
@@ -4417,7 +4741,6 @@ spec:
                       type: object
                   required:
                   - kind
-                  - matchLabels
                   type: object
                   x-kubernetes-validations:
                   - message: group must be gateway.networking.k8s.io
