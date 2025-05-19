@@ -16,6 +16,7 @@ listeners: {{ include "kafka.listeners" (dict "isController" true "context" .) }
 listener.security.protocol.map: {{ include "kafka.securityProtocolMap" (dict "isController" true "context" .) }}
 {{- if not .Values.controller.controllerOnly }}
 advertised.listeners: {{ include "kafka.advertisedListeners" . }}
+inter.broker.listener.name: {{ .Values.listeners.interbroker.name }}
 {{- end }}
 # Kafka data logs directory
 log.dir: {{ printf "%s/data" .Values.controller.persistence.mountPath }}
@@ -24,7 +25,7 @@ logs.dir: {{ .Values.controller.logPersistence.mountPath }}
 # KRaft node role
 process.roles: {{ ternary "controller" "controller,broker" .Values.controller.controllerOnly }}
 # Common Kafka Configuration
-{{ include "kafka.commonConfig" (dict "isController" true "context" .) }}
+{{ include "kafka.commonConfig" . }}
 {{- end -}}
 {{- end -}}
 

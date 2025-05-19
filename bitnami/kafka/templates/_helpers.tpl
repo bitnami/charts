@@ -539,72 +539,68 @@ Returns the controller quorum bootstrap servers based on the number of controlle
 Section of the server.properties shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-{{- if (not (and .isController .context.Values.controller.controllerOnly)) -}}
-inter.broker.listener.name: {{ .context.Values.listeners.interbroker.name }}
-{{- end }}
-controller.listener.names: {{ .context.Values.listeners.controller.name }}
-controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" .context }}
-{{- if include "kafka.sslEnabled" .context }}
+controller.listener.names: {{ .Values.listeners.controller.name }}
+controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" . }}
+{{- if include "kafka.sslEnabled" . }}
 # TLS configuration
 ssl.keystore.type: JKS
 ssl.truststore.type: JKS
 ssl.keystore.location: /opt/bitnami/kafka/config/certs/kafka.keystore.jks
 ssl.truststore.location: /opt/bitnami/kafka/config/certs/kafka.truststore.jks
-ssl.client.auth: {{ .context.Values.tls.sslClientAuth }}
-ssl.endpoint.identification.algorithm: {{ .context.Values.tls.endpointIdentificationAlgorithm }}
+ssl.client.auth: {{ .Values.tls.sslClientAuth }}
+ssl.endpoint.identification.algorithm: {{ .Values.tls.endpointIdentificationAlgorithm }}
 {{- end }}
-{{- if (include "kafka.saslEnabled" .context) }}
+{{- if (include "kafka.saslEnabled" .) }}
 # Listeners SASL JAAS configuration
-sasl.enabled.mechanisms: {{ upper .context.Values.sasl.enabledMechanisms }}
-{{- if regexFind "SASL" (upper .context.Values.listeners.interbroker.protocol) }}
-sasl.mechanism.inter.broker.protocol: {{ upper .context.Values.sasl.interBrokerMechanism }}
+sasl.enabled.mechanisms: {{ upper .Values.sasl.enabledMechanisms }}
+{{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+sasl.mechanism.inter.broker.protocol: {{ upper .Values.sasl.interBrokerMechanism }}
 {{- end }}
-{{- if regexFind "SASL" (upper .context.Values.listeners.controller.protocol) }}
-sasl.mechanism.controller.protocol: {{ upper .context.Values.sasl.controllerMechanism }}
+{{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
+sasl.mechanism.controller.protocol: {{ upper .Values.sasl.controllerMechanism }}
 {{- end }}
-{{- $listeners := list .context.Values.listeners.client .context.Values.listeners.interbroker .context.Values.listeners.controller }}
-{{- range $i := .context.Values.listeners.extraListeners }}
+{{- $listeners := list .Values.listeners.client .Values.listeners.interbroker .Values.listeners.controller }}
+{{- range $i := .Values.listeners.extraListeners }}
 {{- $listeners = append $listeners $i }}
 {{- end }}
-{{- if .context.Values.externalAccess.enabled }}
-{{- $listeners = append $listeners .context.Values.listeners.external }}
+{{- if .Values.externalAccess.enabled }}
+{{- $listeners = append $listeners .Values.listeners.external }}
 {{- end }}
-{{- $context := .context }}
 {{- range $listener := $listeners }}
   {{- if and $listener.sslClientAuth (regexFind "SSL" (upper $listener.protocol)) }}
 listener.name.{{lower $listener.name}}.ssl.client.auth: {{ $listener.sslClientAuth }}
   {{- end }}
   {{- if regexFind "SASL" (upper $listener.protocol) }}
-    {{- range $mechanism := splitList "," $context.Values.sasl.enabledMechanisms }}
+    {{- range $mechanism := splitList "," $.Values.sasl.enabledMechanisms }}
       {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
-      {{- if and (eq (upper $mechanism) "OAUTHBEARER") (or (eq $listener.name $context.Values.listeners.interbroker.name) (eq $listener.name $context.Values.listeners.controller.name)) }}
+      {{- if and (eq (upper $mechanism) "OAUTHBEARER") (or (eq $listener.name $.Values.listeners.interbroker.name) (eq $listener.name $.Values.listeners.controller.name)) }}
 listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class: org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
       {{- end }}
       {{- $saslJaasConfig := list $securityModule }}
-      {{- if eq $listener.name $context.Values.listeners.interbroker.name }}
+      {{- if eq $listener.name $.Values.listeners.interbroker.name }}
         {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $context.Values.sasl.interbroker.clientId) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.interbroker.clientId) }}
           {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"interbroker-client-secret-placeholder\"") }}
         {{- else }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $context.Values.sasl.interbroker.user) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.interbroker.user) }}
           {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"interbroker-password-placeholder\"") }}
         {{- end }}
-      {{- else if eq $listener.name $context.Values.listeners.controller.name }}
+      {{- else if eq $listener.name $.Values.listeners.controller.name }}
         {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $context.Values.sasl.controller.clientId) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.controller.clientId) }}
           {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"controller-client-secret-placeholder\"") }}
         {{- else }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $context.Values.sasl.controller.user) }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.controller.user) }}
           {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"controller-password-placeholder\"") }}
         {{- end }}
       {{- end }}
       {{- if eq (upper $mechanism) "PLAIN" }}
-        {{- if eq $listener.name $context.Values.listeners.interbroker.name }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"interbroker-password-placeholder\"" $context.Values.sasl.interbroker.user) }}
-        {{- else if eq $listener.name $context.Values.listeners.controller.name }}
-          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"controller-password-placeholder\"" $context.Values.sasl.controller.user) }}
+        {{- if eq $listener.name $.Values.listeners.interbroker.name }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"interbroker-password-placeholder\"" $.Values.sasl.interbroker.user) }}
+        {{- else if eq $listener.name $.Values.listeners.controller.name }}
+          {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"controller-password-placeholder\"" $.Values.sasl.controller.user) }}
         {{- end }}
-        {{- range $i, $user := $context.Values.sasl.client.users }}
+        {{- range $i, $user := $.Values.sasl.client.users }}
           {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"password-placeholder-%d\"" $user (int $i)) }}
         {{- end }}
       {{- end }}
@@ -615,11 +611,11 @@ listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.
     {{- end }}
   {{- end }}
 {{- end }}
-{{- if regexFind "OAUTHBEARER" .context.Values.sasl.enabledMechanisms }}
-sasl.oauthbearer.token.endpoint.url: {{ .context.Values.sasl.oauthbearer.tokenEndpointUrl }}
-sasl.oauthbearer.jwks.endpoint.url: {{ .context.Values.sasl.oauthbearer.jwksEndpointUrl }}
-sasl.oauthbearer.expected.audience: {{ .context.Values.sasl.oauthbearer.expectedAudience }}
-sasl.oauthbearer.sub.claim.name: {{ .context.Values.sasl.oauthbearer.subClaimName }}
+{{- if regexFind "OAUTHBEARER" .Values.sasl.enabledMechanisms }}
+sasl.oauthbearer.token.endpoint.url: {{ .Values.sasl.oauthbearer.tokenEndpointUrl }}
+sasl.oauthbearer.jwks.endpoint.url: {{ .Values.sasl.oauthbearer.jwksEndpointUrl }}
+sasl.oauthbearer.expected.audience: {{ .Values.sasl.oauthbearer.expectedAudience }}
+sasl.oauthbearer.sub.claim.name: {{ .Values.sasl.oauthbearer.subClaimName }}
 {{- end }}
 {{- end }}
 {{- end -}}
