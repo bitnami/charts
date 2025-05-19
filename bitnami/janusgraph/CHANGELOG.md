@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.3 (2025-05-06)
+## 1.4.4 (2025-05-16)
 
-* [bitnami/janusgraph] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33376](https://github.com/bitnami/charts/pull/33376))
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#33759](https://github.com/bitnami/charts/pull/33759))
+
+## <small>1.4.3 (2025-05-06)</small>
+
+* [bitnami/janusgraph] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([13c6491](https://github.com/bitnami/charts/commit/13c649109e42ad575c7fbe7f52b02e48fd52c123)), closes [#33376](https://github.com/bitnami/charts/issues/33376)
 
 ## <small>1.4.2 (2025-04-25)</small>
 
