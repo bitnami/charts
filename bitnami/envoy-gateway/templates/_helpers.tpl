@@ -50,6 +50,13 @@ Return the proper Certificate Generation init-job fullname
 {{- end -}}
 
 {{/*
+Return the proper Certificate Generation init-job fullname (with namespace)
+*/}}
+{{- define "envoy-gateway.certgen.fullname.namespace" -}}
+{{- printf "%s-%s" (include "common.names.fullname.namespace" .) "certgen" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use (Certificate Generation init-job)
 */}}
 {{- define "envoy-gateway.certgen.serviceAccountName" -}}
