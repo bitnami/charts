@@ -14,8 +14,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-prometheus
 ```
 
-> [!TIP]
-> Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.prometheus-operator-cnab) to see the listing on Azure Marketplace.
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.prometheus-operator-cnab) to see the listing on Azure Marketplace.
 
 Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
@@ -436,6 +435,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.shards`                                                   | Number of Prometheus shards desired                                                                                                                                                                                                                   | `1`                          |
 | `prometheus.logLevel`                                                 | Log level for Prometheus                                                                                                                                                                                                                              | `info`                       |
 | `prometheus.logFormat`                                                | Log format for Prometheus                                                                                                                                                                                                                             | `logfmt`                     |
+| `prometheus.nameValidationScheme`                                     | Specifies the validation scheme for metric and label names                                                                                                                                                                                            | `UTF8`                       |
 | `prometheus.podMetadata`                                              | Standard object's metadata                                                                                                                                                                                                                            | `{}`                         |
 | `prometheus.remoteRead`                                               | The remote_read spec configuration for Prometheus                                                                                                                                                                                                     | `[]`                         |
 | `prometheus.remoteWrite`                                              | The remote_write spec configuration for Prometheus                                                                                                                                                                                                    | `[]`                         |

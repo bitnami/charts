@@ -2,7 +2,7 @@
 
 ## 21.1.3 (2025-05-16)
 
-* [bitnami/redis] Fix newlines in sentinel.conf ([#33704](https://github.com/bitnami/charts/pull/33704))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33749](https://github.com/bitnami/charts/pull/33749))
 
 ## <small>21.1.2 (2025-05-15)</small>
 
