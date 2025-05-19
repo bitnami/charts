@@ -1,0 +1,61 @@
+# This Helm chart is based on the original chart from the Apache Software Foundation.
+# Modifications have been made by PO-YU SHEN on 2025/04/29.
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.externalDatabase.enabled .Values.externalDatabase.initDatabase .Release.IsInstall }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "common.names.fullname" . }}-init-database
+  namespace: {{ include "common.names.namespace" . }}
+spec:
+  ttlSecondsAfterFinished: 43200 # 12 hr
+  backoffLimit: 4
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels ) "context" . ) }}
+  template:
+    metadata:
+      labels:  {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: streampark
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
+    spec:
+      containers:
+      - name: init-database
+        image: {{ template "streampark.database.image" . }}
+        env: {{- include "streampark.database.env" . | nindent 12 }}
+        command:
+        - /bin/sh
+        - /tmp/scripts/init-database.sh
+        volumeMounts:
+          - name: streampark-sql-scripts
+            mountPath: /tmp
+          - name: streampark-scripts
+            mountPath: /tmp/scripts
+      restartPolicy: Never
+      volumes:
+        - name: streampark-sql-scripts
+          configMap:
+            name: streampark-sql-scripts
+        - name: streampark-scripts
+          configMap:
+            name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+{{- end }}

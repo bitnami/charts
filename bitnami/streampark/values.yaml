@@ -1,0 +1,637 @@
+# This Helm chart is based on the original chart from the Apache Software Foundation.
+# Modifications have been made by PO-YU SHEN on 2025/04/29.
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+##
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## @section StreamPark parameters
+##
+## @param image.registry StreamPark image registry
+## @param image.repository StreamPark image repository
+## @skip  image.tag StreamPark image tag (immutable tags are recommended)
+## @param image.digest StreamPark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy StreamPark image pull policy
+## @param image.pullSecrets Specify docker-registry secret names as an array
+## @param image.debug Specify if debug logs should be enabled
+##
+image:
+  registry: docker.io
+  repository: bitnami/streampark
+  tag: 2.1.5
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Reg: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## Reg: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g.
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Set to true if you would like to see extra information on logs
+  ##
+  debug: false
+
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## @param deploymentAnnotations Annotations to deployment only
+##
+deploymentAnnotations: {}
+
+## @param jobAnnotations Annotations to job only
+##
+jobAnnotations: {}
+
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
+
+## @param extraEnvVars Extra environment variables to be set on StreamPark container
+## e.g.
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM: ""
+
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
+
+## @param replicaCount Number of StreamPark replicas to deploy
+##
+replicaCount: 1
+
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Reg: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Reg: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+
+## Node affinity preset
+## Reg: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set.
+  ## e.g.
+  ## key: "kubernetes.io/e2e-az-name"
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+  ## e.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+
+## @param affinity Affinity for pod assignment
+## Reg: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## @param nodeSelector Node labels for pod assignment
+## Reg: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}
+
+## @param tolerations Tolerations for pod assignment
+## Reg: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+
+## SecurityContext for StreamPark pod
+## Reg: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+##
+podSecurityContext:
+  ## @param podSecurityContext.enabled Enabled Security Context in StreamPark pod
+  ##
+  enabled: false
+  ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ##
+  fsGroupChangePolicy: Always
+  ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ##
+  sysctls: []
+  ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
+  ##
+  supplementalGroups: []
+  ## @param podSecurityContext.fsGroup Set Security Context fsGroup in StreamPark pod
+  ##
+  fsGroup: 1001
+
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+##
+resourcesPreset: "micro"
+
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## e.g.
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
+
+## @param extraVolumes Optionally specify extra list of additional volumes for StreamPark pods
+##
+extraVolumes: []
+
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for StreamPark container(s)
+##
+extraVolumeMounts: []
+
+## @param existingConfigmap Name of existing ConfigMap for StreamPark configuration
+## WARNING: data in configMap should be like following example
+## data:
+##   config.yaml: |-
+##     ......
+##   logback-spring.xml: |-
+##     ......
+##
+existingConfigmap: ""
+
+## @section Exposure parameters
+##
+## Service configuration
+##
+service:
+  ## @param service.type Kubernetes service type
+  ##
+  type: ClusterIP
+  ## @param service.nodePorts Specify the nodePort values for the LoadBalancer and NodePort service types.
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ##
+  nodePorts: ""
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## e.g.
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  sessionAffinityConfig: {}
+  ## @param service.clusterIP StreamPark service clusterIP IP
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP loadBalancerIP for the service on cloud (optional)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
+  ## Ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g.:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Enable client source IP preservation
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for StreamPark service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra port to expose on StreamPark service
+  ##
+  extraPorts: []
+
+## StreamPark ingress parameters
+## Reg: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for StreamPark
+  ##
+  enabled: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## Reg: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.hostname Ingress hostname
+  ##
+  hostname: streampark.local
+  ## @param ingress.path Default path for the ingress record
+  ##
+  path: "/"
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.servicePort Backend service port to use
+  ##
+  servicePort: http
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## Reg: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.labels Additional labels for the Ingress resource.
+  ##
+  labels: {}
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" (tpl .Values.ingress.hostname .) }}`
+  ## You can:
+  ##   - Use the `ingress.tlsSecretName` parameter to point the TLS secret you already have
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ##
+  tls: true
+  ## @param ingress.tlsSecretName Existing secret name for TLS certificate
+  ## 
+  tlsSecretName: ""
+  ## @param ingress.secrets You can use this block to create a new secret with your own cert and key pair.
+  ## e.g.
+  ## secrets:
+  ## - name: streampark.local-tls
+  ##   key: |-
+  ##     -----BEGIN RSA PRIVATE KEY-----
+  ##     ...
+  ##     -----END RSA PRIVATE KEY-----
+  ##   certificate: |-
+  ##     -----BEGIN CERTIFICATE-----
+  ##     ...
+  ##     -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: streampark.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths Any additional arbitrary paths that may need to be added to the ingress under the main host.
+  ## For example: The ALB ingress controller requires a special rule for handling SSL redirection.
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
+  ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## extraTls:
+  ## - hosts:
+  ##     - streampark.local
+  ##   secretName: streampark.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## Reg: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g.
+  ## extraRules:
+  ## - host: streampark.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: streampark
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section RBAC parameters
+##
+## ServiceAccount attached on StreamPark Pod
+##
+serviceAccount:
+  ## @param serviceAccount.create Create ServiceAccount or not
+  ## If set it `false`, you should create a ServiceAccount and write in `serviceAccount.name`. Or we will use the `default` one.
+  ##
+  create: true
+  ## @param serviceAccount.name Name of the ServiceAccount you create or wante to be.
+  ## If not set and create is true, a name is generated using the fullname template
+  ##
+  name: "streampark"
+  ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+  ## @param serviceAccount.extraLabels Additional labels for the ServiceAccount
+  ##
+  extraLabels: {}
+
+## Specifies whether RBAC resources should be created
+##
+rbac:
+  ## @param rbac.create Whether to create required Role and RoleBinding or not
+  ## If set it `false`, you should create required RBAC permission for StreamPark service account by yourself.
+  ## Ref: https://github.com/apache/streampark/blob/v2.1.5/helm/streampark/templates/rbac.yaml
+  ##
+  create: true
+
+## @section StreamPark configuration
+##
+## Configuration for `config.yaml` in StreamPark
+##
+streamParkConfiguration:
+  ## @param streamParkConfiguration.timezone Timezone in StreamPark container
+  ## Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  ##
+  timezone: "Asia/Taipei"
+  ## @param streamParkConfiguration.streampark Configuration for `streampark` filed in the `/streampark/conf/config.yaml`
+  ## We will poste whole contents into `streampark` field in `config.yaml` directly.
+  ## Ref: https://github.com/apache/streampark/blob/v2.1.5/helm/streampark/conf/config.yaml
+  ## e.g.
+  ## streampark:
+  ##   workspace:
+  ##     # Local workspace, storage of clone projects and compiled projects,Do not set under $APP_HOME. Set it to a directory outside of $APP_HOME.
+  ##     local: /tmp/streampark
+  ##     # The root hdfs path of the jars, Same as yarn.provided.lib.dirs for flink on yarn-application and Same as --jars for spark on yarn
+  ##     remote: hdfs:///streampark/
+  ##   proxy:
+  ##     # lark proxy address, default https://open.feishu.cn
+  ##     lark-url:
+  ##     # hadoop yarn proxy path, e.g: knox process address https://streampark.com:8443/proxy/yarn
+  ##     yarn-url:
+  ##   yarn:
+  ##     # For flink on yarn or spark on yarn, monitoring job status from yarn, it is necessary to set hadoop.http.authentication.type
+  ##     http-auth: 'simple'  # default simple, or kerberos
+  ##   # For flink on yarn or spark on yarn, HADOOP_USER_NAME
+  ##   hadoopUser: hdfs
+  ##   # For flink on k8s ingress setting, If an ingress controller is specified in the configuration, the ingress class kubernetes.io/ingress.class must be specified when creating the ingress, since there are often multiple ingress controllers in a production environment.
+  ##   flingIngressClass: nginx
+  ##
+  streampark: {}
+  ## @param streamParkConfiguration.ldap Configuration for StreamPark authentication via LDAP
+  ## We will poste whole contents into `ldap` field in `config.yaml` directly.
+  ## Ref: https://github.com/apache/streampark/blob/v2.1.5/helm/streampark/conf/config.yaml
+  ## e.g.
+  ## ldap:
+  ##   baseDN: "dc=streampark,dc=com"
+  ##   username: "cn=Manager,dc=streampark,dc=com"
+  ##   password: "streampark"
+  ##   urls: "ldap://99.99.99.99:389"
+  ##   user:
+  ##     emailAttribute: mail
+  ##     identityAttribute: uid
+  ##
+  ldap: {}
+  ## @param streamParkConfiguration.sso Configuration for StreamPark authentication via SSO
+  ## We will poste whole contents into `sso.pac4j` field in `config.yaml` directly, so it should be written in pac4j format.
+  ## Supported parameters for pac4j: https://github.com/pac4j/pac4j/blob/master/documentation/docs/config-module.md
+  ## e.g.
+  ## sso:
+  ##   callbackUrl: ""
+  ##   clientsProperties:
+  ##     principalNameAttribute: email
+  ##     oidc:
+  ##       type: google
+  ##       id: xxx
+  ##       secret: xxx
+  ##       useNonce: true
+  ##
+  sso: {}
+  ## @param streamParkConfiguration.securityKerberos Flink on yarn or spark on yarn, when the hadoop cluster enable kerberos authentication, it is necessary to set up Kerberos authentication related parameters.
+  ## We will poste whole contents into `security.kerberos` field in `config.yaml` directly.
+  ## Ref: https://github.com/apache/streampark/blob/v2.1.5/helm/streampark/conf/config.yaml
+  ## e.g.
+  ## securityKerberos:
+  ##   login:
+  ##     enable: true
+  ##     debug: false
+  ##     keytab: "/path/to/keytab/file"
+  ##     krb5: "/path/to/krb5.conf"
+  ##     principal: "/path/to/kerberos/principal/file"
+  ##   ttl: 2h # unit [s|m|h|d]
+  securityKerberos: {}
+  ## @param streamParkConfiguration.logbackSpring Override the default `logback-spring.xml` configuration
+  ## e.g.
+  ## logbackSpring: |
+  ##   <?xml version="1.0" encoding="UTF-8"?>
+  ##   <configuration scan="true" scanPeriod="60 seconds" debug="false">
+  ##     <root level="INFO">
+  ##         <appender-ref ref="STDOUT"/>
+  ##         <appender-ref ref="INFO"/>
+  ##         <appender-ref ref="WARN"/>
+  ##         <appender-ref ref="ERROR"/>
+  ##         <appender-ref ref="DEBUG"/>
+  ##         <appender-ref ref="TRACE"/>
+  ##     </root>
+  ##   </configuration>
+  logbackSpring: ""
+
+## @section Docker server parameters
+##
+## Configuration for Docker host
+##
+dockerInDocker:
+  ## @param dockerInDocker.create Create dind deployment or not
+  ## If set it `false`, please provide your own Docker server with `dockerInDocker.externalHost` and `dockerInDocker.externalPort`
+  ##
+  create: true
+  ## Image for dind container
+  ## @param dockerInDocker.image.registry Image registry
+  ## @param dockerInDocker.image.repository Image repository
+  ## @param dockerInDocker.image.tag Image tag (immutable tags are recommended)
+  ## @skip dockerInDocker.image.digest Image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dockerInDocker.image.pullPolicy Image pull policy
+  ## @param dockerInDocker.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: docker
+    tag: dind
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Reg: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## Reg: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g.
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param dockerInDocker.extraEnvVars Extra environment variables for dind container
+  ##
+  extraEnvVars: []
+  ## Create persistent volume for storing Docker images
+  ##
+  persistence:
+    ## @param dockerInDocker.persistence.accessModes Access mode for persistent volume
+    ##
+    accessModes: ReadWriteOnce
+    ## @param dockerInDocker.persistence.storageClass StorageClass for persistent volume
+    ##
+    storageClass: ""
+    ## @param dockerInDocker.persistence.volumeMode Volume mode for persistent volume
+    ##
+    volumeMode: "Filesystem"
+    ## @param dockerInDocker.persistence.size Storage size for persistent volume
+    ##
+    size: 10Gi
+  ## @param dockerInDocker.externalHost Host name or IP address for external Docker server
+  ##
+  externalHost: ""
+  ## @param dockerInDocker.externalPort Port number for external Docker server
+  ##
+  externalPort: 2375
+
+## @section External database parameters
+##
+## Confuguration for accessing external Database.
+## Please make sure there is a `streampark` database in your external DB instance.
+## 
+externalDatabase:
+  ## @param externalDatabase.enabled Using external database
+  ##
+  enabled: false
+  ## @param externalDatabase.type Specify database either `pgsql` or `mysql`
+  ##
+  type: pgsql
+  ## @param externalDatabase.host Hostname or IP address for external database
+  ##
+  host: psql.host
+  ## @param externalDatabase.port Port number for accessing database
+  ##
+  port: 5432
+  ## @param externalDatabase.user User name used by StreamPark accessing database
+  ##
+  user: streampark
+  ## You can choose to provide password in following two ways:
+  ## 1) Write down password directly in values file
+  ## @param externalDatabase.password Password for previous user
+  ##
+  ## 2) Refer to existing Secret storing the password
+  ## @param externalDatabase.existingSecret Secret name which stores the password
+  ## @param externalDatabase.existingSecretPasswordKey Key in the Secret which stores the password values
+  ##
+  password: CHANGEME
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+  ## @param externalDatabase.initDatabase Initialize external database with our job
+  ## If set it `fasle`, you should initialize schema and data in the remote database by your own.
+  ## Please refer to SQL scripts: https://github.com/apache/streampark/tree/v2.1.5/streampark-console/streampark-console-service/src/main/assembly/script
+  ##
+  initDatabase: true
+  ## Image used for determining external database is ready or not
+  ## @param externalDatabase.image.registry Image registry
+  ## @param externalDatabase.image.repository Image repository
+  ## @param externalDatabase.image.tag Image tag
+  ## @skip externalDatabase.image.digest Image digest
+  ## @param externalDatabase.image.pullPolicy Image pullPolicy
+  ## 
+  image:
+    registry: docker.io
+    repository: postgres
+    tag: 17.4
+    digest: ""
+    pullPolicy: IfNotPresent
+
+## Subchart for PostgreSQL
+## By default, we will create a postgresql as database for StreamPark. If you want to use an external database or MySQL instead, please actively disable this setting.
+## @skip postgresql Values for binatmi postgresql
+##
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "CHANGEME"
+    username: streampark
+    password: "CHANGEME"
+    database: streampark
+    secretKeys:
+      userPasswordKey: password
+  architecture: standalone
+  primary:
+    initdb:
+      scriptsConfigMap: streampark-sql-scripts
+
+## Subchart for MySQL
+## @skip mysql Values for binatmi mysql
+##
+mysql:
+  enabled: false
+  auth:
+    rootPassword: "CHANGEME"
+    createDatabase: true
+    username: streampark
+    password: "CHANGEME"
+    database: streampark
+  architecture: standalone
+  ## Recommended parameters preventing timeout in startup
+  primary:
+    startupProbe:
+      failureThreshold: 20
+      initialDelaySeconds: 300
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+  initdbScriptsConfigMap: streampark-sql-scripts

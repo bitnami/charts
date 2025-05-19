@@ -1,0 +1,74 @@
+# This Helm chart is based on the original chart from the Apache Software Foundation.
+# Modifications have been made by PO-YU SHEN on 2025/04/29.
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-origin-config" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streampark
+data:
+  logback-spring.xml: |
+    {{- tpl (.Files.Get "conf/logback-spring.xml") . | nindent 4 }}
+  config.yaml: |
+    {{- tpl (.Files.Get "conf/config.yaml") . | nindent 4 }}
+---
+{{- end }}
+{{- if or (and .Values.externalDatabase.enabled .Values.externalDatabase.initDatabase) .Values.postgresql.enabled .Values.mysql.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streampark-sql-scripts
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streampark
+data:
+  init.sql: |
+    {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "pgsql") }}
+    {{- tpl (.Files.Get "scripts/db-schema/pgsql-schema.sql") . | nindent 4 }}
+    {{- tpl (.Files.Get "scripts/db-data/pgsql-data.sql") . | nindent 4 }}
+    {{- else }}
+    {{- tpl (.Files.Get "scripts/db-schema/mysql-schema.sql") . | nindent 4 }}
+    {{- tpl (.Files.Get "scripts/db-data/mysql-data.sql") . | nindent 4 }}
+    {{- end }}
+---
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streampark
+data:
+  waiting-database.sh: |
+    {{- tpl (.Files.Get "scripts/waiting-database.sh") . | nindent 4 }}
+  generate-config.sh: |
+    {{- tpl (.Files.Get "scripts/generate-config.sh") . | nindent 4 }}
+  {{- if and .Values.externalDatabase.enabled .Values.externalDatabase.initDatabase }}
+  init-database.sh: |
+    {{- tpl (.Files.Get "scripts/init-database.sh") . | nindent 4 }}
+  {{- end }}

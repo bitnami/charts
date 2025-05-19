@@ -1,0 +1,249 @@
+# This Helm chart is based on the original chart from the Apache Software Foundation.
+# Modifications have been made by PO-YU SHEN on 2025/04/29.
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streampark
+  {{- if or .Values.deploymentAnnotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations ) "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: streampark
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: streampark
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
+    spec:
+      serviceAccountName: {{ include "streampark.serviceAccountName" . }}
+      {{- include "streampark.imagePullSecrets" . | nindent 6 -}}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken | default true}}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.podAffinityPreset }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        - name: generate-config
+          image: busybox:latest
+          env: {{- include "streampark.database.env" . | nindent 12 }}
+          command: 
+          - /bin/sh
+          - /tmp/scripts/generate-config.sh
+          volumeMounts:
+            - name: streampark-origin-config
+              mountPath: /tmp
+            - name: streampark-conf
+              mountPath: /streampark/conf
+            - name: streampark-scripts
+              mountPath: /tmp/scripts
+        {{- if or .Values.postgresql.enabled .Values.mysql.enabled .Values.externalDatabase.enabled }}
+        - name: waiting-database
+          image: {{ template "streampark.database.image" . }}
+          env: {{- include "streampark.database.env" . | nindent 12 }}
+          command: 
+          - /bin/sh
+          - /tmp/scripts/waiting-database.sh
+          volumeMounts:
+            - name: streampark-scripts
+              mountPath: /tmp/scripts
+        {{- end }}
+      containers:
+        - name: streampark
+          image: {{ template "streampark.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "TZ"
+              value: {{ .Values.streamParkConfiguration.timezone | default "Asia/Taipei" }}
+            - name: "LC_ALL"
+              value: "en_US.UTF-8"
+            - name: "DOCKER_HOST"
+              value: {{ include "streampark.dind.host" . }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 10000
+              protocol: TCP
+          securityContext:
+            privileged: false
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 10000
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 20
+            failureThreshold: 12
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 10000
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 20
+            failureThreshold: 12
+            successThreshold: 1
+          volumeMounts:
+            - name: streampark-conf
+              mountPath: /streampark/conf
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: streampark-origin-config
+          configMap:
+            {{- if .Values.existingConfigmap }}
+            name: {{ .Values.existingConfigmap }}
+            {{- else }}
+            name: {{ printf "%s-origin-config" (include "common.names.fullname" .) }}
+            {{- end }}
+        - name: streampark-conf
+          emptyDir:
+            sizeLimit: 50Mi
+        - name: streampark-scripts
+          configMap:
+            name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+---
+{{- if .Values.dockerInDocker.create }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}-dind
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: streampark-dind
+  {{- if or .Values.deploymentAnnotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.merge" ( dict "values" ( list .Values.commonAnnotations ) "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: 1
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: streampark-dind
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: streampark-dind
+        app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
+    spec:
+      restartPolicy: Always
+      {{- if eq .Values.dockerInDocker.persistence.accessModes "ReadWriteOnce" }}
+      strategy: 
+        type: Recreate
+      {{- end }}
+      containers:
+        - name: dind
+          image: {{ template "streampark.image.dind" . }}
+          imagePullPolicy: {{ .Values.dockerInDocker.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          args:
+            - dockerd
+            - --host=unix:///var/run/docker.sock
+            - --host=tcp://0.0.0.0:2375
+          {{- if .Values.dockerInDocker.extraEnvVars }}
+          env:
+            {{- include "common.tplvalues.render" (dict "value" .Values.dockerInDocker.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: tcp
+              containerPort: 2375
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - docker
+              - info
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+              - docker
+              - info
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: dind-volume
+              mountPath: /var/lib/docker
+      volumes:
+        - name: dind-volume
+          persistentVolumeClaim:
+            claimName: {{ template "common.names.fullname" . }}-dind-pvc
+{{- end}}

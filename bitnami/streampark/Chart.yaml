@@ -1,0 +1,44 @@
+# This Helm chart is based on the original chart from the Apache Software Foundation.
+# Modifications have been made by PO-YU SHEN on 2025/04/29.
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+apiVersion: v2
+name: streampark
+description: A Helm chart for the Apache StreamPark
+home: https://streampark.apache.org
+icon: https://streampark.apache.org/image/logo_name.png
+type: application
+version: 2.1.5
+appVersion: 2.1.5
+dependencies:
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: ~12.12.10
+- condition: mysql.enabled
+  name: mysql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: ~12.3.0
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.30.0
