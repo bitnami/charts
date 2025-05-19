@@ -15,6 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.server.rbac.includeDefaultRules }}
   # These rules come from <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/templates/clusterrole.yaml>
   - apiGroups:
       - ""
@@ -53,6 +54,7 @@ rules:
       - "/metrics"
     verbs:
       - get
+  {{- end }}
   {{- if .Values.server.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.server.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
