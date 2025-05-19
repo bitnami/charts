@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.12 (2025-05-07)
+## 2.4.13 (2025-05-13)
 
-* [bitnami/flux] Release 2.4.12 ([#33473](https://github.com/bitnami/charts/pull/33473))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#33683](https://github.com/bitnami/charts/pull/33683))
+
+## <small>2.4.12 (2025-05-07)</small>
+
+* [bitnami/flux] Release 2.4.12 (#33473) ([c1db9da](https://github.com/bitnami/charts/commit/c1db9da7567881f995727d6dc8402ea9d647f56a)), closes [#33473](https://github.com/bitnami/charts/issues/33473)
 
 ## <small>2.4.11 (2025-05-06)</small>
 

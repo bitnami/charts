@@ -1,8 +1,17 @@
 # Changelog
 
-## 15.4.4 (2025-05-06)
+## 15.4.6 (2025-05-16)
 
-* [bitnami/kong] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33385](https://github.com/bitnami/charts/pull/33385))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#33744](https://github.com/bitnami/charts/pull/33744))
+
+## <small>15.4.5 (2025-05-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#33639) ([2b4e8f8](https://github.com/bitnami/charts/commit/2b4e8f8e2688a3b78f411a8b8c0aac65f65cb208)), closes [#33639](https://github.com/bitnami/charts/issues/33639)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>15.4.4 (2025-05-06)</small>
+
+* [bitnami/kong] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33385) ([5f5777c](https://github.com/bitnami/charts/commit/5f5777c60f21116a4871ce4a3af3b379bf3044dc)), closes [#33385](https://github.com/bitnami/charts/issues/33385)
 
 ## <small>15.4.3 (2025-04-30)</small>
 

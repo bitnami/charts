@@ -1,8 +1,25 @@
 # Changelog
 
-## 22.2.16 (2025-05-06)
+## 23.0.3 (2025-05-16)
 
-* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33364](https://github.com/bitnami/charts/pull/33364))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#33755](https://github.com/bitnami/charts/pull/33755))
+
+## <small>23.0.2 (2025-05-14)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33684) ([6eb9ac6](https://github.com/bitnami/charts/commit/6eb9ac6c58f1fdbfee96e8234f6130012630ed23)), closes [#33684](https://github.com/bitnami/charts/issues/33684)
+
+## <small>23.0.1 (2025-05-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33670) ([12cb4c8](https://github.com/bitnami/charts/commit/12cb4c83b5c5fd9575700dc987e2862f9be070bc)), closes [#33670](https://github.com/bitnami/charts/issues/33670)
+
+## 23.0.0 (2025-05-12)
+
+* [bitnami/ghost] Update MySQL subchart (#33609) ([574a85b](https://github.com/bitnami/charts/commit/574a85bcddac878eb99dd7f4960be3480841a75d)), closes [#33609](https://github.com/bitnami/charts/issues/33609)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>22.2.16 (2025-05-06)</small>
+
+* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33364) ([609e1db](https://github.com/bitnami/charts/commit/609e1db564adb895c89b8d08abd01cbfd5bd68c3)), closes [#33364](https://github.com/bitnami/charts/issues/33364)
 
 ## <small>22.2.15 (2025-04-25)</small>
 

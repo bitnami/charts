@@ -109,7 +109,7 @@ image:
 clickHouseImage:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 25.4.2-debian-12-r0
+  tag: 25.4.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -136,7 +136,7 @@ clickHouseImage:
 keeperImage:
   registry: docker.io
   repository: bitnami/clickhouse-keeper
-  tag: 25.4.2-debian-12-r0
+  tag: 25.4.4-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -152,18 +152,19 @@ keeperImage:
   ##
   pullSecrets: []
 ## Authentication
-## @param auth.username ClickHouse Admin username
-## @param auth.password ClickHouse Admin password
-## @param auth.existingSecret Name of a secret containing the Admin credentials
-## @param auth.existingSecretUsernameKey Name of the key inside the existing secret containing the Admin username
-## @param auth.existingSecretPasswordKey Name of the key inside the existing secret containing the Admin password
+## @param auth.username ClickHouse Operator username
+## @param auth.password ClickHouse Operator password
+## @param auth.existingSecret Name of a secret containing the ClickHouse Operator credentials (expected keys: `username` and `password`)
 ##
 auth:
   username: clickhouse_operator
   password: ""
   existingSecret: ""
-  existingSecretUsernameKey: ""
-  existingSecretPasswordKey: ""
+## @param ipFamily.enableIpv4 Enable IPv4 addresses
+## @param ipFamily.enableIpv6 Enable IPv6 listening
+ipFamily:
+  enableIpv4: true
+  enableIpv6: true
 ## @param replicaCount Number of ClickHouse Operator replicas to deploy
 ##
 replicaCount: 1
@@ -657,7 +658,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/clickhouse-operator-metrics-exporter
-    tag: 0.24.5-debian-12-r3
+    tag: 0.24.5-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

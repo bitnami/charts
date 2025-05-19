@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.6.7 (2025-05-07)
+## 12.0.3 (2025-05-16)
 
-* [bitnami/grafana] Release 11.6.7 ([#33480](https://github.com/bitnami/charts/pull/33480))
+* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.admin.password is not set ([#33672](https://github.com/bitnami/charts/pull/33672))
+
+## <small>12.0.2 (2025-05-15)</small>
+
+* [bitnami/grafana] fix metrics namespace include (#33714) ([5a23570](https://github.com/bitnami/charts/commit/5a23570b164643efc1c55ae8aed6bc586a9738be)), closes [#33714](https://github.com/bitnami/charts/issues/33714)
+
+## <small>12.0.1 (2025-05-15)</small>
+
+* [bitnami/grafana] Grafana uniq dashboard volumes (#33689) ([e7e3012](https://github.com/bitnami/charts/commit/e7e3012f25807031502221ec6d83d00d1100d597)), closes [#33689](https://github.com/bitnami/charts/issues/33689)
+
+## 12.0.0 (2025-05-12)
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33604) ([4229d77](https://github.com/bitnami/charts/commit/4229d7766abffbc8cf3f299016d1dc4d0be8796c)), closes [#33604](https://github.com/bitnami/charts/issues/33604)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.6.7 (2025-05-07)</small>
+
+* [bitnami/grafana] Release 11.6.7 (#33480) ([e6f2524](https://github.com/bitnami/charts/commit/e6f25246b6bc970e8b7496fd5f09739f15d18b3f)), closes [#33480](https://github.com/bitnami/charts/issues/33480)
 
 ## <small>11.6.6 (2025-05-06)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.16 (2025-05-08)
+## 12.0.0 (2025-05-12)
 
-* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#33555](https://github.com/bitnami/charts/pull/33555))
+* [bitnami/argo-workflows] Update MySQL subchart ([#33612](https://github.com/bitnami/charts/pull/33612))
+
+## <small>11.1.16 (2025-05-08)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#33555) ([8fbddc6](https://github.com/bitnami/charts/commit/8fbddc628df7162b278a5ce0cd185d52dd08825e)), closes [#33555](https://github.com/bitnami/charts/issues/33555)
 
 ## <small>11.1.15 (2025-05-07)</small>
 

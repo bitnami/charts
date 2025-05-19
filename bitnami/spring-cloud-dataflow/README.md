@@ -786,7 +786,7 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ### To 37.0.0
 
-This version uses the MariaDB version provided by the bitnami/mariadb subchart, PostgreSQL 11.4.x, instead of overriding it with version 10.11.x.
+This version uses the MariaDB version provided by the bitnami/mariadb subchart, MariaDB 11.4.x, instead of overriding it with version 10.11.x.
 
 ### To 36.0.0
 

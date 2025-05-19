@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.7.1 (2025-05-08)
+## 16.7.4 (2025-05-13)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#33577](https://github.com/bitnami/charts/pull/33577))
+* [bitnami/postgresql] Support for global postgresql fullnameOverride ([#33616](https://github.com/bitnami/charts/pull/33616))
+
+## <small>16.7.3 (2025-05-13)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33619) ([ab01617](https://github.com/bitnami/charts/commit/ab0161760fa3754e64945e5a94fd95866c8b929e)), closes [#33619](https://github.com/bitnami/charts/issues/33619)
+
+## <small>16.7.2 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33598) ([6fa611b](https://github.com/bitnami/charts/commit/6fa611bcc3611666ac322d421ed6c2a0eb10646c)), closes [#33598](https://github.com/bitnami/charts/issues/33598)
+
+## <small>16.7.1 (2025-05-08)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33577) ([71ca86a](https://github.com/bitnami/charts/commit/71ca86a822cee8d5125cab0cc7b8adc43d3f115f)), closes [#33577](https://github.com/bitnami/charts/issues/33577)
 
 ## 16.7.0 (2025-05-08)
 
