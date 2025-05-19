@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.6 (2025-05-15)
+## 0.1.6 (2025-05-19)
 
 * [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#33725](https://github.com/bitnami/charts/pull/33725))
 
