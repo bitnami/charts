@@ -73,6 +73,16 @@ This chart installs a deployment with the following configuration:
 - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
 - **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
 
+### Configure the Object Store
+
+InfluxDB&trade; Core supports different storage systems to store Parquet files (refer to [upstream documentation](https://docs.influxdata.com/influxdb3/core/reference/config-options/#object-store) for more information about the supported object stores) that we can divide into three categories:
+
+- Memory: This is the default object store. It stores all data in memory and is not persistent. This is suitable for testing and development purposes.
+- File: This object store stores data in files on the local filesystem.
+- Cloud: This object store stores data in a cloud provider's object storage service (e.g., AWS S3, Google Cloud Storage, Azure Blob Storage).
+
+This chart allows you to configure the object store using the `objectStore` parameter. If you're using a Cloud storage, there are additional parameters to configure such as the Cloud specific credentials or the bucket name.
+
 ### Resource requests and limits
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
