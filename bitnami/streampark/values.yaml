@@ -1,3 +1,6 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
 # This Helm chart is based on the original chart from the Apache Software Foundation.
 # Modifications have been made by PO-YU SHEN on 2025/04/29.
 #
@@ -15,10 +18,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-
-# Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
 ##
@@ -40,8 +39,8 @@ extraDeploy: []
 
 ## @section StreamPark parameters
 ##
-## @param image.registry StreamPark image registry
-## @param image.repository StreamPark image repository
+## @param image.registry [default: REGISTRY_NAME] StreamPark image registry
+## @param image.repository [default: REPOSITORY_NAME/streampark] StreamPark image repository
 ## @skip  image.tag StreamPark image tag (immutable tags are recommended)
 ## @param image.digest StreamPark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy StreamPark image pull policy
@@ -496,8 +495,8 @@ dockerInDocker:
   ##
   create: true
   ## Image for dind container
-  ## @param dockerInDocker.image.registry Image registry
-  ## @param dockerInDocker.image.repository Image repository
+  ## @param dockerInDocker.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param dockerInDocker.image.repository [default: REPOSITORY_NAME/docker] Image repository
   ## @param dockerInDocker.image.tag Image tag (immutable tags are recommended)
   ## @skip dockerInDocker.image.digest Image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dockerInDocker.image.pullPolicy Image pull policy
@@ -583,8 +582,8 @@ externalDatabase:
   ##
   initDatabase: true
   ## Image used for determining external database is ready or not
-  ## @param externalDatabase.image.registry Image registry
-  ## @param externalDatabase.image.repository Image repository
+  ## @param externalDatabase.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param externalDatabase.image.repository [default: REPOSITORY_NAME/postgres] Image repository
   ## @param externalDatabase.image.tag Image tag
   ## @skip externalDatabase.image.digest Image digest
   ## @param externalDatabase.image.pullPolicy Image pullPolicy
