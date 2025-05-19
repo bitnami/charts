@@ -1,12 +1,8 @@
 # Changelog
 
-## 13.2.5 (2025-05-19)
+## 13.2.4 (2025-05-06)
 
-* [bitnami/milvus] Release 13.2.5 ([#33543](https://github.com/bitnami/charts/pull/33543))
-
-## <small>13.2.4 (2025-05-06)</small>
-
-* [bitnami/milvus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33401) ([c9dc0e5](https://github.com/bitnami/charts/commit/c9dc0e5a73faedc0f0180c64b239ae2380289363)), closes [#33401](https://github.com/bitnami/charts/issues/33401)
+* [bitnami/milvus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33401](https://github.com/bitnami/charts/pull/33401))
 
 ## <small>13.2.3 (2025-04-28)</small>
 
