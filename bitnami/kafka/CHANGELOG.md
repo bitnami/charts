@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.6 (2025-05-16)
+## 32.2.7 (2025-05-19)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33762](https://github.com/bitnami/charts/pull/33762))
+* [bitnami/kafka][bitnami/charts/issues/32851] Update controller and broker configuration when enabling controller.controllerOnly ([#33740](https://github.com/bitnami/charts/pull/33740))
+
+## <small>32.2.6 (2025-05-17)</small>
+
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33762) ([3053762](https://github.com/bitnami/charts/commit/30537620a0291f4875304761c5f43da61b9a4c5f)), closes [#33762](https://github.com/bitnami/charts/issues/33762)
 
 ## <small>32.2.5 (2025-05-15)</small>
 
