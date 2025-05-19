@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.0.1 (2025-05-08)
+## 24.1.0 (2025-05-14)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33572](https://github.com/bitnami/charts/pull/33572))
+* [bitnami/airflow] Validate executors and fix LocalExecutor ([#33696](https://github.com/bitnami/charts/pull/33696))
+
+## <small>24.0.3 (2025-05-13)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33681) ([0486d35](https://github.com/bitnami/charts/commit/0486d357b19db6482cb423ad0dbcbe96b2ef74db)), closes [#33681](https://github.com/bitnami/charts/issues/33681)
+
+## <small>24.0.2 (2025-05-12)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33617) ([96d1206](https://github.com/bitnami/charts/commit/96d1206faf46aa9b9e45f82eb49bc468248bfa64)), closes [#33617](https://github.com/bitnami/charts/issues/33617)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>24.0.1 (2025-05-08)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33572) ([9daa628](https://github.com/bitnami/charts/commit/9daa628a3e71a75a154775e971952d27614b4122)), closes [#33572](https://github.com/bitnami/charts/issues/33572)
 
 ## 24.0.0 (2025-05-07)
 

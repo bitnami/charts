@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.4 (2025-05-06)
+## 25.1.5 (2025-05-13)
 
-* [bitnami/parse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33419](https://github.com/bitnami/charts/pull/33419))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#33568](https://github.com/bitnami/charts/pull/33568))
+
+## <small>25.1.4 (2025-05-06)</small>
+
+* [bitnami/parse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33419) ([188a39d](https://github.com/bitnami/charts/commit/188a39d8630bf05e17d4d7ad24aa347680090f4b)), closes [#33419](https://github.com/bitnami/charts/issues/33419)
 
 ## <small>25.1.3 (2025-05-01)</small>
 

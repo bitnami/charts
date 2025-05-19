@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.4 (2025-05-06)
+## 4.2.5 (2025-05-13)
 
-* [bitnami/apisix] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33335](https://github.com/bitnami/charts/pull/33335))
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references ([#33651](https://github.com/bitnami/charts/pull/33651))
+
+## <small>4.2.4 (2025-05-06)</small>
+
+* [bitnami/apisix] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33335) ([21f0df7](https://github.com/bitnami/charts/commit/21f0df7910ce9f5849889a77e6c4923e165153ff)), closes [#33335](https://github.com/bitnami/charts/issues/33335)
 
 ## <small>4.2.3 (2025-05-01)</small>
 

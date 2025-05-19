@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.0.5 (2025-05-08)
+## 2.0.7 (2025-05-17)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#33570](https://github.com/bitnami/charts/pull/33570))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#33764](https://github.com/bitnami/charts/pull/33764))
+
+## <small>2.0.6 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map ob ([ed61248](https://github.com/bitnami/charts/commit/ed61248fa488374a95716a98775ba4de813bb215)), closes [#33525](https://github.com/bitnami/charts/issues/33525)
+
+## <small>2.0.5 (2025-05-08)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#33570) ([4e3ea1e](https://github.com/bitnami/charts/commit/4e3ea1ed5d632e3b82904d6a77f672fd50139831)), closes [#33570](https://github.com/bitnami/charts/issues/33570)
 
 ## <small>2.0.4 (2025-05-07)</small>
 
