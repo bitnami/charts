@@ -1,3 +1,5 @@
+image:
+  debug: true
 objectStore: file
 databases: foo
 containerPorts:

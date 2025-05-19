@@ -38,7 +38,7 @@ func TestInfluxdb(t *testing.T) {
 	RunSpecs(t, "Influxdb Persistence Test Suite")
 }
 
-func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, action string, query string) error {
+func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, action, token, query string) error {
 	securityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
@@ -67,12 +67,16 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Image: image,
 							Command: []string{
 								"bash", "-ec",
-								fmt.Sprintf("influxdb3 %s --database %s --host $INFLUX_HOST --token=$(</bitnami/influxdb/.token) \"%s\"", action, database, query),
+								fmt.Sprintf("influxdb3 %s --database %s --host $INFLUX_HOST --token $ADMIN_TOKEN '%s'", action, database, query),
 							},
 							Env: []v1.EnvVar{
 								{
 									Name:  "INFLUX_HOST",
 									Value: fmt.Sprintf("http://%s:%s", deployName, port),
+								},
+								{
+									Name:  "ADMIN_TOKEN",
+									Value: token,
 								},
 							},
 							SecurityContext: securityContext,
