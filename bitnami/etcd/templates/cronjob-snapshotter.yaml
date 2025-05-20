@@ -9,7 +9,7 @@ apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
   name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -88,7 +88,7 @@ spec:
                   value: "yes"
                 - name: MY_STS_NAME
                   value: {{ include "common.names.fullname" . | quote }}
-                {{- $releaseNamespace := .Release.Namespace }}
+                {{- $releaseNamespace := include "common.names.namespace" . }}
                 {{- $etcdFullname := include "common.names.fullname" . }}
                 {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
                 {{- $clusterDomain := .Values.clusterDomain }}
