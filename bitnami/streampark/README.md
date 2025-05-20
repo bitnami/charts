@@ -171,41 +171,41 @@ If you need to upgrade database to meet [system requirement](https://streampark.
 
 ### StreamPark parameters
 
-| Name                                     | Description                                                                                                                                                                                                       | Value                |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`                         | StreamPark image registry                                                                                                                                                                                         | `docker.io`          |
-| `image.repository`                       | StreamPark image repository                                                                                                                                                                                       | `bitnami/streampark` |
-| `image.digest`                           | StreamPark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                        | `""`                 |
-| `image.pullPolicy`                       | StreamPark image pull policy                                                                                                                                                                                      | `IfNotPresent`       |
-| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                                                                                  | `[]`                 |
-| `image.debug`                            | Specify if debug logs should be enabled                                                                                                                                                                           | `false`              |
-| `commonLabels`                           | Labels to add to all deployed objects                                                                                                                                                                             | `{}`                 |
-| `commonAnnotations`                      | Annotations to add to all deployed objects                                                                                                                                                                        | `{}`                 |
-| `deploymentAnnotations`                  | Annotations to deployment only                                                                                                                                                                                    | `{}`                 |
-| `jobAnnotations`                         | Annotations to job only                                                                                                                                                                                           | `{}`                 |
-| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                                                                                                                | `true`               |
-| `extraEnvVars`                           | Extra environment variables to be set on StreamPark container                                                                                                                                                     | `[]`                 |
-| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                                                                                                                                                              | `""`                 |
-| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                                                                                                                                                                 | `""`                 |
-| `replicaCount`                           | Number of StreamPark replicas to deploy                                                                                                                                                                           | `1`                  |
-| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                 |
-| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                          | `soft`               |
-| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                         | `""`                 |
-| `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                                                                                                                                            | `""`                 |
-| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                         | `[]`                 |
-| `affinity`                               | Affinity for pod assignment                                                                                                                                                                                       | `{}`                 |
-| `nodeSelector`                           | Node labels for pod assignment                                                                                                                                                                                    | `{}`                 |
-| `tolerations`                            | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                 |
-| `podSecurityContext.enabled`             | Enabled Security Context in StreamPark pod                                                                                                                                                                        | `false`              |
-| `podSecurityContext.fsGroupChangePolicy` | Set filesystem group change policy                                                                                                                                                                                | `Always`             |
-| `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`                 |
-| `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                                                                                                                       | `[]`                 |
-| `podSecurityContext.fsGroup`             | Set Security Context fsGroup in StreamPark pod                                                                                                                                                                    | `1001`               |
-| `resourcesPreset`                        | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`              |
-| `resources`                              | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                 |
-| `extraVolumes`                           | Optionally specify extra list of additional volumes for StreamPark pods                                                                                                                                           | `[]`                 |
-| `extraVolumeMounts`                      | Optionally specify extra list of additional volumeMounts for StreamPark container(s)                                                                                                                              | `[]`                 |
-| `existingConfigmap`                      | Name of existing ConfigMap for StreamPark configuration                                                                                                                                                           | `""`                 |
+| Name                                     | Description                                                                                                                                                                                                       | Value                        |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `image.registry`                         | StreamPark image registry                                                                                                                                                                                         | `REGISTRY_NAME`              |
+| `image.repository`                       | StreamPark image repository                                                                                                                                                                                       | `REPOSITORY_NAME/streampark` |
+| `image.digest`                           | StreamPark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                        | `""`                         |
+| `image.pullPolicy`                       | StreamPark image pull policy                                                                                                                                                                                      | `IfNotPresent`               |
+| `image.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                                                                                                  | `[]`                         |
+| `image.debug`                            | Specify if debug logs should be enabled                                                                                                                                                                           | `false`                      |
+| `commonLabels`                           | Labels to add to all deployed objects                                                                                                                                                                             | `{}`                         |
+| `commonAnnotations`                      | Annotations to add to all deployed objects                                                                                                                                                                        | `{}`                         |
+| `deploymentAnnotations`                  | Annotations to deployment only                                                                                                                                                                                    | `{}`                         |
+| `jobAnnotations`                         | Annotations to job only                                                                                                                                                                                           | `{}`                         |
+| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                                                                                                                | `true`                       |
+| `extraEnvVars`                           | Extra environment variables to be set on StreamPark container                                                                                                                                                     | `[]`                         |
+| `extraEnvVarsCM`                         | Name of existing ConfigMap containing extra env vars                                                                                                                                                              | `""`                         |
+| `extraEnvVarsSecret`                     | Name of existing Secret containing extra env vars                                                                                                                                                                 | `""`                         |
+| `replicaCount`                           | Number of StreamPark replicas to deploy                                                                                                                                                                           | `1`                          |
+| `podAffinityPreset`                      | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                         |
+| `podAntiAffinityPreset`                  | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                          | `soft`                       |
+| `nodeAffinityPreset.type`                | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                         | `""`                         |
+| `nodeAffinityPreset.key`                 | Node label key to match. Ignored if `affinity` is set.                                                                                                                                                            | `""`                         |
+| `nodeAffinityPreset.values`              | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                         | `[]`                         |
+| `affinity`                               | Affinity for pod assignment                                                                                                                                                                                       | `{}`                         |
+| `nodeSelector`                           | Node labels for pod assignment                                                                                                                                                                                    | `{}`                         |
+| `tolerations`                            | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                         |
+| `podSecurityContext.enabled`             | Enabled Security Context in StreamPark pod                                                                                                                                                                        | `false`                      |
+| `podSecurityContext.fsGroupChangePolicy` | Set filesystem group change policy                                                                                                                                                                                | `Always`                     |
+| `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`                         |
+| `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                                                                                                                       | `[]`                         |
+| `podSecurityContext.fsGroup`             | Set Security Context fsGroup in StreamPark pod                                                                                                                                                                    | `1001`                       |
+| `resourcesPreset`                        | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                      |
+| `resources`                              | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                         |
+| `extraVolumes`                           | Optionally specify extra list of additional volumes for StreamPark pods                                                                                                                                           | `[]`                         |
+| `extraVolumeMounts`                      | Optionally specify extra list of additional volumeMounts for StreamPark container(s)                                                                                                                              | `[]`                         |
+| `existingConfigmap`                      | Name of existing ConfigMap for StreamPark configuration                                                                                                                                                           | `""`                         |
 
 ### Exposure parameters
 
@@ -263,39 +263,39 @@ If you need to upgrade database to meet [system requirement](https://streampark.
 
 ### Docker server parameters
 
-| Name                                      | Description                                        | Value           |
-| ----------------------------------------- | -------------------------------------------------- | --------------- |
-| `dockerInDocker.create`                   | Create dind deployment or not                      | `true`          |
-| `dockerInDocker.image.registry`           | Image registry                                     | `docker.io`     |
-| `dockerInDocker.image.repository`         | Image repository                                   | `docker`        |
-| `dockerInDocker.image.tag`                | Image tag (immutable tags are recommended)         | `dind`          |
-| `dockerInDocker.image.pullPolicy`         | Image pull policy                                  | `IfNotPresent`  |
-| `dockerInDocker.image.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`            |
-| `dockerInDocker.extraEnvVars`             | Extra environment variables for dind container     | `[]`            |
-| `dockerInDocker.persistence.accessModes`  | Access mode for persistent volume                  | `ReadWriteOnce` |
-| `dockerInDocker.persistence.storageClass` | StorageClass for persistent volume                 | `""`            |
-| `dockerInDocker.persistence.volumeMode`   | Volume mode for persistent volume                  | `Filesystem`    |
-| `dockerInDocker.persistence.size`         | Storage size for persistent volume                 | `10Gi`          |
-| `dockerInDocker.externalHost`             | Host name or IP address for external Docker server | `""`            |
-| `dockerInDocker.externalPort`             | Port number for external Docker server             | `2375`          |
+| Name                                      | Description                                        | Value                    |
+| ----------------------------------------- | -------------------------------------------------- | ------------------------ |
+| `dockerInDocker.create`                   | Create dind deployment or not                      | `true`                   |
+| `dockerInDocker.image.registry`           | Image registry                                     | `REGISTRY_NAME`          |
+| `dockerInDocker.image.repository`         | Image repository                                   | `REPOSITORY_NAME/docker` |
+| `dockerInDocker.image.tag`                | Image tag (immutable tags are recommended)         | `dind`                   |
+| `dockerInDocker.image.pullPolicy`         | Image pull policy                                  | `IfNotPresent`           |
+| `dockerInDocker.image.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                     |
+| `dockerInDocker.extraEnvVars`             | Extra environment variables for dind container     | `[]`                     |
+| `dockerInDocker.persistence.accessModes`  | Access mode for persistent volume                  | `ReadWriteOnce`          |
+| `dockerInDocker.persistence.storageClass` | StorageClass for persistent volume                 | `""`                     |
+| `dockerInDocker.persistence.volumeMode`   | Volume mode for persistent volume                  | `Filesystem`             |
+| `dockerInDocker.persistence.size`         | Storage size for persistent volume                 | `10Gi`                   |
+| `dockerInDocker.externalHost`             | Host name or IP address for external Docker server | `""`                     |
+| `dockerInDocker.externalPort`             | Port number for external Docker server             | `2375`                   |
 
 ### External database parameters
 
-| Name                                         | Description                                        | Value          |
-| -------------------------------------------- | -------------------------------------------------- | -------------- |
-| `externalDatabase.enabled`                   | Using external database                            | `false`        |
-| `externalDatabase.type`                      | Specify database either `pgsql` or `mysql`         | `pgsql`        |
-| `externalDatabase.host`                      | Hostname or IP address for external database       | `psql.host`    |
-| `externalDatabase.port`                      | Port number for accessing database                 | `5432`         |
-| `externalDatabase.user`                      | User name used by StreamPark accessing database    | `streampark`   |
-| `externalDatabase.password`                  | Password for previous user                         | `CHANGEME`     |
-| `externalDatabase.existingSecret`            | Secret name which stores the password              | `""`           |
-| `externalDatabase.existingSecretPasswordKey` | Key in the Secret which stores the password values | `""`           |
-| `externalDatabase.initDatabase`              | Initialize external database with our job          | `true`         |
-| `externalDatabase.image.registry`            | Image registry                                     | `docker.io`    |
-| `externalDatabase.image.repository`          | Image repository                                   | `postgres`     |
-| `externalDatabase.image.tag`                 | Image tag                                          | `17.4`         |
-| `externalDatabase.image.pullPolicy`          | Image pullPolicy                                   | `IfNotPresent` |
+| Name                                         | Description                                        | Value                      |
+| -------------------------------------------- | -------------------------------------------------- | -------------------------- |
+| `externalDatabase.enabled`                   | Using external database                            | `false`                    |
+| `externalDatabase.type`                      | Specify database either `pgsql` or `mysql`         | `pgsql`                    |
+| `externalDatabase.host`                      | Hostname or IP address for external database       | `psql.host`                |
+| `externalDatabase.port`                      | Port number for accessing database                 | `5432`                     |
+| `externalDatabase.user`                      | User name used by StreamPark accessing database    | `streampark`               |
+| `externalDatabase.password`                  | Password for previous user                         | `CHANGEME`                 |
+| `externalDatabase.existingSecret`            | Secret name which stores the password              | `""`                       |
+| `externalDatabase.existingSecretPasswordKey` | Key in the Secret which stores the password values | `""`                       |
+| `externalDatabase.initDatabase`              | Initialize external database with our job          | `true`                     |
+| `externalDatabase.image.registry`            | Image registry                                     | `REGISTRY_NAME`            |
+| `externalDatabase.image.repository`          | Image repository                                   | `REPOSITORY_NAME/postgres` |
+| `externalDatabase.image.tag`                 | Image tag                                          | `17.4`                     |
+| `externalDatabase.image.pullPolicy`          | Image pullPolicy                                   | `IfNotPresent`             |
 
 ## Know Issues
 
