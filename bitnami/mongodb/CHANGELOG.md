@@ -1,8 +1,14 @@
 # Changelog
 
-## 16.5.8 (2025-05-15)
+## 16.5.9 (2025-05-20)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33731](https://github.com/bitnami/charts/pull/33731))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33788](https://github.com/bitnami/charts/pull/33788))
+
+## <small>16.5.8 (2025-05-16)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33731) ([c2e3866](https://github.com/bitnami/charts/commit/c2e38660de6d95d6f752d0dda14ed17fde173448)), closes [#33731](https://github.com/bitnami/charts/issues/33731)
 
 ## <small>16.5.7 (2025-05-13)</small>
 
