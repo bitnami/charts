@@ -60,12 +60,17 @@ spec:
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.command "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.certgen.args "context" $) | nindent 12 }}
-          {{- else }}
           args:
-            - certgen
-          {{- end }}
+            {{- $args := list "certgen" }}
+            {{- if .Values.args }}
+            {{- $args = concat $args (list (include "common.tplvalues.render" (dict "value" .Values.certgen.args "context" $))) }}
+            {{- end }}
+            {{- if not .Values.topologyInjector.enabled }}
+            {{- $args = append $args "--disable-topology-injector" }}
+            {{- end }}
+            {{- range $arg := $args }}
+            - {{ $arg }}
+            {{- end }}
           env:
             - name: ENVOY_GATEWAY_NAMESPACE
               valueFrom:
