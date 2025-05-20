@@ -279,6 +279,15 @@ If you need to upgrade database to meet [system requirement](https://streampark.
 | `dockerInDocker.externalHost`             | Host name or IP address for external Docker server | `""`                     |
 | `dockerInDocker.externalPort`             | Port number for external Docker server             | `2375`                   |
 
+### Busybox parameters
+
+| Name                       | Description      | Value                     |
+| -------------------------- | ---------------- | ------------------------- |
+| `busybox.image.registry`   | Image registry   | `REGISTRY_NAME`           |
+| `busybox.image.repository` | Image repository | `REPOSITORY_NAME/busybox` |
+| `busybox.image.tag`        | Image tag        | `latest`                  |
+| `busybox.image.pullPolicy` | Image pullPolicy | `IfNotPresent`            |
+
 ### External database parameters
 
 | Name                                         | Description                                        | Value                      |
