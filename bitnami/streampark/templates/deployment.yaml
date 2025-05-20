@@ -71,7 +71,8 @@ spec:
       {{- end }}
       initContainers:
         - name: generate-config
-          image: busybox:latest
+          image: {{ template "streampark.busybox.image" . }}
+          imagePullPolicy: {{ .Values.busybox.image.pullPolicy }}
           env: {{- include "streampark.database.env" . | nindent 12 }}
           command: 
           - /bin/sh

@@ -30,6 +30,13 @@ Return the proper StreamPark image name
 {{- end -}}
 
 {{/*
+Return the proper busybox image name
+*/}}
+{{- define "streampark.busybox.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.busybox.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper image name for init database job
 */}}
 {{- define "streampark.database.image" -}}

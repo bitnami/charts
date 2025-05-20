@@ -544,6 +544,25 @@ dockerInDocker:
   ##
   externalPort: 2375
 
+## @skip Busybox parameters
+##
+## Confuguration for running init sripts in init conatiner
+## 
+busybox:
+  ## Image used for running init sripts
+  ## @param busybox.image.registry [default: REGISTRY_NAME] Image registry
+  ## @param busybox.image.repository [default: REPOSITORY_NAME/busybox] Image repository
+  ## @param busybox.image.tag Image tag
+  ## @skip busybox.image.digest Image digest
+  ## @param busybox.image.pullPolicy Image pullPolicy
+  ## 
+  image:
+    registry: docker.io
+    repository: busybox
+    tag: latest
+    digest: ""
+    pullPolicy: IfNotPresent
+
 ## @section External database parameters
 ##
 ## Confuguration for accessing external Database.
