@@ -55,7 +55,7 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if eq .Values.objectStore "file" }}}
+      {{- if eq .Values.objectStore "file" }}
       podManagementPolicy: {{ .Values.podManagementPolicy }}
       {{- end }}
       {{- if .Values.schedulerName }}
