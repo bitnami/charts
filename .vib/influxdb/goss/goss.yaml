@@ -23,7 +23,7 @@ command:
     stdout:
       - "success"
   influxdb3-query:
-    exec: bash -c "cat /bitnami/influxdb/.token | xargs -I{} influxdb3 query --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token {} 'SELECT * FROM home'"
+    exec: bash -c "sleep 3; cat /bitnami/influxdb/.token | xargs -I{} influxdb3 query --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token {} 'SELECT * FROM home'"
     exit-status: 0
     stdout:
       - "Living Room"
