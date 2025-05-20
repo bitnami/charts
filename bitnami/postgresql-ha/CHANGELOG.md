@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.0.5 (2025-05-15)
+## 16.0.6 (2025-05-20)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33705](https://github.com/bitnami/charts/pull/33705))
+* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db ([#33786](https://github.com/bitnami/charts/pull/33786))
+
+## <small>16.0.5 (2025-05-15)</small>
+
+* [bitnami-postgresql-ha] docs: document security fix on 16.0.0 (#33659) ([9d71b3a](https://github.com/bitnami/charts/commit/9d71b3ad0c5598932670d59c7d118d7a0c496d54)), closes [#33659](https://github.com/bitnami/charts/issues/33659)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33705) ([a2fac0d](https://github.com/bitnami/charts/commit/a2fac0de6560264e16c1632a4795a1b111630f0b)), closes [#33705](https://github.com/bitnami/charts/issues/33705)
 
 ## <small>16.0.4 (2025-05-12)</small>
 
