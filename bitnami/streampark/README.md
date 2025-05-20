@@ -94,7 +94,7 @@ Therefore, we should specify the Docker engine in following 2 ways:
       externalPort: 2375
     ```
 
-The Docker engine will be directly specified as environment variable `DOCKER_HOST` in `templates/deployment.yaml`.
+The Docker engine will be directly specified as environment variable `DOCKER_HOST` in [StreamPark deployment](./templates/deployment.yaml).
 
 > NOTICE: For security reasons, Docker in Docker (DinD) is typically disabled on Kubernetes clusters in most public cloud environments. This is because DinD can introduce potential security vulnerabilities. To work around this limitation, you can create a dedicated `dind` service on a separate cloud instance and configure StreamPark to use this service for building container images.
 
