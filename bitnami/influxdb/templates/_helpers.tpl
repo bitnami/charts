@@ -30,7 +30,7 @@ Return the proper Docker Image Registry Secret Names
 Create the name of the ServiceAccount to use
 */}}
 {{- define "influxdb.serviceAccountName" -}}
-{{- if or .Values.serviceAccount.enabled .Values.serviceAccount.create -}}
+{{- if .Values.serviceAccount.create -}}
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}

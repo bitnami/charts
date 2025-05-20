@@ -436,6 +436,8 @@ There's no upgrade path from previous release. Quoting [this upstream blog post]
 
 On this major version we also removed support for overriding configuration via configuration files, given InfluxDB&trade; Core 3 is designed to be configured via CLI flags and environment variables exclusively. Backup jobs were also removed, as store should be managed by the object store in the new architecture.
 
+Finally, this major version drops support for authentication based on users / password. Instead, a single admin token is used to authenticate every request.
+
 ### To 6.5.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).

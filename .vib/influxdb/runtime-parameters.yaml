@@ -1,5 +1,3 @@
-image:
-  debug: true
 objectStore: file
 databases: foo
 containerPorts:
@@ -112,6 +110,14 @@ serviceAccount:
 #         containers:
 #         - name: seaweedfs
 #           image: docker.io/bitnami/seaweedfs:latest
+#           securityContext:
+#             runAsNonRoot: true
+#             privileged: false
+#             allowPrivilegeEscalation: false
+#             capabilities:
+#               drop: ["ALL"]
+#             seccompProfile:
+#               type: "RuntimeDefault"
 #           command:
 #           - weed
 #           args:

@@ -55,6 +55,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if eq .Values.objectStore "file" }}}
+      podManagementPolicy: {{ .Values.podManagementPolicy }}
+      {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
@@ -104,6 +107,8 @@ spec:
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: INFLUXDB_OBJECT_STORE
               value: {{ .Values.objectStore | quote }}
+            - name: INFLUXDB_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
             {{- if ne .Values.objectStore "memory" }}
             - name: INFLUXDB_DATA_DIR
               value: {{ printf "%s/data" .Values.persistence.mountPath | quote }}
@@ -200,7 +205,6 @@ spec:
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" .) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
-          {{- $startupTimeout := sub (int .Values.startupProbe.timeoutSeconds) 1 }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
               port: http
@@ -208,7 +212,6 @@ spec:
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" .) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
-          {{- $livenessTimeout := sub (int .Values.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
               port: http
@@ -218,7 +221,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             {{- if and .Values.auth.createAdminToken (ne .Values.objectStore "memory") }}
-            {{- $readinessTimeout := sub (int .Values.readinessProbe.timeoutSeconds) 1 }}
+            {{- $readinessTimeout := max (sub (int .Values.readinessProbe.timeoutSeconds) 1) 1 }}
             exec:
               command:
                 - bash
@@ -291,12 +294,18 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}
         {{- end }}
-  {{- if and .Values.persistence.enabled (eq .Values.objectStore "file") }}
+{{- if and .Values.persistence.enabled (eq .Values.objectStore "file") }}
+        {{- if .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.persistence.existingClaim . }}
+        {{- end }}
   {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
     whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
+  {{- if not .Values.persistence.existingClaim }}
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -321,3 +330,4 @@ spec:
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
         {{- end -}}
   {{- end }}
+{{- end }}

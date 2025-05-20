@@ -387,6 +387,10 @@ priorityClassName: ""
 ## @param revisionHistoryLimit InfluxDB(TM) Core deployment revision history limit
 ##
 revisionHistoryLimit: 10
+## @param podManagementPolicy StatefulSet pod management policy
+## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
+##
+podManagementPolicy: OrderedReady
 ## @param schedulerName Name of the k8s scheduler (other than default)
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -712,6 +716,9 @@ metrics:
     ## namespace: monitoring
     ##
     namespace: ""
+    ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+    ##
+    labels: {}
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ## e.g:

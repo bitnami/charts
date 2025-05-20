@@ -66,7 +66,7 @@ To connect to your database from outside the cluster execute the following comma
 1. Get the InfluxDB&trade; Core API URL and associate InfluxDB&trade; Core hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "InfluxDB&trade; Core API URL: http{{ if .Values.master.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}{{ .Values.ingress.path }}"
+   echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}{{ .Values.ingress.path }}"
    echo "$CLUSTER_IP  {{ tpl .Values.ingress.hostname . }}" | sudo tee -a /etc/hosts
 
 {{- else }}
