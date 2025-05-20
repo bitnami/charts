@@ -106,7 +106,7 @@ spec:
               value: {{ .Values.objectStore | quote }}
             {{- if ne .Values.objectStore "memory" }}
             - name: INFLUXDB_DATA_DIR
-              value: {{ .Values.persistence.mountPath | quote }}
+              value: {{ printf "%s/data" .Values.persistence.mountPath | quote }}
             {{- end }}
             - name: INFLUXDB_NODE_ID
               {{- if eq .Values.objectStore "file" }}
