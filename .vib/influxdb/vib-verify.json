@@ -49,7 +49,7 @@
             "vars_file": "influxdb/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-influxdb"
+                "workload": "sts-influxdb"
               }
             }
           }
