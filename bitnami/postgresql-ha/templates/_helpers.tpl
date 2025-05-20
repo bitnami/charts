@@ -87,15 +87,6 @@ Return the PostgreSQL database to create
 {{- end -}}
 
 {{/*
-Return true if PostgreSQL postgres user password has been provided
-*/}}
-{{- define "postgresql-ha.postgresqlPasswordProvided" -}}
-{{- if not (empty (coalesce ((.Values.global).postgresql).postgresPassword .Values.postgresql.postgresPassword) | default "") -}}
-    {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the Pgpool Admin username
 */}}
 {{- define "postgresql-ha.pgpoolAdminUsername" -}}
