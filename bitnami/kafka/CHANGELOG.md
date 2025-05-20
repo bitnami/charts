@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.7 (2025-05-19)
+## 32.2.8 (2025-05-20)
 
-* [bitnami/kafka][bitnami/charts/issues/32851] Update controller and broker configuration when enabling controller.controllerOnly ([#33740](https://github.com/bitnami/charts/pull/33740))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33789](https://github.com/bitnami/charts/pull/33789))
+
+## <small>32.2.7 (2025-05-19)</small>
+
+* [bitnami/kafka][bitnami/charts/issues/32851] Update controller and broker configuration when enablin ([bfcd44f](https://github.com/bitnami/charts/commit/bfcd44f0c679cec8573fe5ff949cccf8a77de33b)), closes [#33740](https://github.com/bitnami/charts/issues/33740)
 
 ## <small>32.2.6 (2025-05-17)</small>
 
