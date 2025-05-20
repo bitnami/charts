@@ -5,15 +5,15 @@ annotations:
   category: DeveloperTools
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r2
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r44
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r45
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r14
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r15
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r14
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.5-debian-12-r15
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r15
+      image: docker.io/bitnami/spring-cloud-skipper:2.11.5-debian-12-r16
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 37.0.3
+version: 37.0.4
