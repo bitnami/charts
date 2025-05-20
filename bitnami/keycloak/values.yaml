@@ -1054,7 +1054,7 @@ metrics:
     endpoints:
       - path: '{{ include "keycloak.httpPath" . }}metrics'
       - path: '{{ include "keycloak.httpPath" . }}realms/{{ .Values.adminRealm }}/metrics'
-        port: http
+        port: '{{ ternary "https" "http" (eq .Values.metrics.serviceMonitor.scheme "https") }}'
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
