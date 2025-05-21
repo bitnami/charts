@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Prometheus](https://prometheus.io) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -677,6 +675,7 @@ server:
 | `server.persistence.selector`                                     | Selector to match an existing Persistent Volume for Prometheus data PVC                                                                                                                                                                       | `{}`                         |
 | `server.persistence.dataSource`                                   | Custom PVC data source                                                                                                                                                                                                                        | `{}`                         |
 | `server.rbac.create`                                              | Specifies whether RBAC resources should be created                                                                                                                                                                                            | `true`                       |
+| `server.rbac.includeDefaultRules`                                 | Specifies whether to include default rules from official prometheus helm chart                                                                                                                                                                | `true`                       |
 | `server.rbac.rules`                                               | Custom RBAC rules to set                                                                                                                                                                                                                      | `[]`                         |
 
 ### Init Container Parameters

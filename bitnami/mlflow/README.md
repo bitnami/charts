@@ -22,8 +22,6 @@ This chart bootstraps a [MLflow](https://github.com/bitnami/containers/tree/main
 
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.19+

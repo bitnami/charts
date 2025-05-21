@@ -1,8 +1,16 @@
 # Changelog
 
+## 6.0.2 (2025-05-15)
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#33723](https://github.com/bitnami/charts/pull/33723))
+
+## <small>6.0.1 (2025-05-08)</small>
+
+* [bitnami/appsmith] Release 5.2.12 (#33504) ([7206142](https://github.com/bitnami/charts/commit/7206142871caa01816cbbfb73f644f957d86121b)), closes [#33504](https://github.com/bitnami/charts/issues/33504)
+
 ## 6.0.0 (2025-05-07)
 
-* [bitnami/appsmith] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33497](https://github.com/bitnami/charts/pull/33497))
+* [bitnami/appsmith] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33497) ([6bf0667](https://github.com/bitnami/charts/commit/6bf0667369e158065bda2c10af5b2fc53709371e)), closes [#33497](https://github.com/bitnami/charts/issues/33497)
 
 ## <small>5.2.11 (2025-05-06)</small>
 

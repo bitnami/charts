@@ -20,8 +20,6 @@ Looking to use Bitnami Object Storage based on MinIO&reg; Operator in production
 
 This chart bootstraps a [Bitnami Object Storage based on MinIO&reg; Operator](https://github.com/bitnami/containers/tree/main/bitnami/minio-operator) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

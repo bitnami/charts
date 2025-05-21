@@ -1,8 +1,34 @@
 # Changelog
 
+## 16.0.6 (2025-05-20)
+
+* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db ([#33786](https://github.com/bitnami/charts/pull/33786))
+
+## <small>16.0.5 (2025-05-15)</small>
+
+* [bitnami-postgresql-ha] docs: document security fix on 16.0.0 (#33659) ([9d71b3a](https://github.com/bitnami/charts/commit/9d71b3ad0c5598932670d59c7d118d7a0c496d54)), closes [#33659](https://github.com/bitnami/charts/issues/33659)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33705) ([a2fac0d](https://github.com/bitnami/charts/commit/a2fac0de6560264e16c1632a4795a1b111630f0b)), closes [#33705](https://github.com/bitnami/charts/issues/33705)
+
+## <small>16.0.4 (2025-05-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33618) ([1eeb981](https://github.com/bitnami/charts/commit/1eeb9813ed3a5fd7791ace98ae352bcea57244e4)), closes [#33618](https://github.com/bitnami/charts/issues/33618)
+
+## <small>16.0.3 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33599) ([c995d17](https://github.com/bitnami/charts/commit/c995d17abcf310a3f843bf21ce9004598f6c8b8e)), closes [#33599](https://github.com/bitnami/charts/issues/33599)
+
+## <small>16.0.2 (2025-05-08)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33576) ([42b31bd](https://github.com/bitnami/charts/commit/42b31bd7a265c41ade320b5a897348bdf7d44a0c)), closes [#33576](https://github.com/bitnami/charts/issues/33576)
+
+## <small>16.0.1 (2025-05-08)</small>
+
+* [bitnami/postgresql-ha] ci: improve stability on Ginkgo tests (#33567) ([6d8bc54](https://github.com/bitnami/charts/commit/6d8bc54fc027517e3861a82e6fe4e96141bfc7b2)), closes [#33567](https://github.com/bitnami/charts/issues/33567)
+
 ## 16.0.0 (2025-05-08)
 
-* [bitnami/postgresql-ha] feat: Customizable Stream Replication Check credentials ([#33552](https://github.com/bitnami/charts/pull/33552))
+* [bitnami/postgresql-ha] feat: Customizable Stream Replication Check credentials (#33552) ([cff2e93](https://github.com/bitnami/charts/commit/cff2e93f9da96f82ad9d97d2d35a7324b54d0931)), closes [#33552](https://github.com/bitnami/charts/issues/33552)
 
 ## <small>15.3.17 (2025-05-07)</small>
 

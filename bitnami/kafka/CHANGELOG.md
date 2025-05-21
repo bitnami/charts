@@ -1,8 +1,31 @@
 # Changelog
 
-## 32.2.3 (2025-05-06)
+## 32.2.8 (2025-05-20)
 
-* [bitnami/kafka] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33379](https://github.com/bitnami/charts/pull/33379))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33789](https://github.com/bitnami/charts/pull/33789))
+
+## <small>32.2.7 (2025-05-19)</small>
+
+* [bitnami/kafka][bitnami/charts/issues/32851] Update controller and broker configuration when enablin ([bfcd44f](https://github.com/bitnami/charts/commit/bfcd44f0c679cec8573fe5ff949cccf8a77de33b)), closes [#33740](https://github.com/bitnami/charts/issues/33740)
+
+## <small>32.2.6 (2025-05-17)</small>
+
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33762) ([3053762](https://github.com/bitnami/charts/commit/30537620a0291f4875304761c5f43da61b9a4c5f)), closes [#33762](https://github.com/bitnami/charts/issues/33762)
+
+## <small>32.2.5 (2025-05-15)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33735) ([3f8fa3d](https://github.com/bitnami/charts/commit/3f8fa3dc4840800c3d85551a21b34d4b709237d5)), closes [#33735](https://github.com/bitnami/charts/issues/33735)
+
+## <small>32.2.4 (2025-05-13)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33633) ([2d79d6a](https://github.com/bitnami/charts/commit/2d79d6a20fa209e0ff81be5739f581c7e6957921)), closes [#33633](https://github.com/bitnami/charts/issues/33633)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>32.2.3 (2025-05-06)</small>
+
+* [bitnami/kafka] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33379) ([12ee35a](https://github.com/bitnami/charts/commit/12ee35a7256e3f0872fbaba0c921ffd9a21d3f4a)), closes [#33379](https://github.com/bitnami/charts/issues/33379)
 
 ## <small>32.2.2 (2025-04-28)</small>
 

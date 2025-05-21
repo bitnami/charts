@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.6.5 (2025-05-06)
+## 24.7.0 (2025-05-19)
 
-* [bitnami/keycloak] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33380](https://github.com/bitnami/charts/pull/33380))
+* [bitnami/keycloak] Improvements to Keycloak cache handling ([#32885](https://github.com/bitnami/charts/pull/32885))
+
+## <small>24.6.7 (2025-05-13)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33671) ([15a8f8a](https://github.com/bitnami/charts/commit/15a8f8a55a365316236d089a3f802f7364a4d060)), closes [#33671](https://github.com/bitnami/charts/issues/33671)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>24.6.6 (2025-05-08)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33565) ([e750bc1](https://github.com/bitnami/charts/commit/e750bc1d7f2228c15181e003b6589eff8133d155)), closes [#33565](https://github.com/bitnami/charts/issues/33565)
+
+## <small>24.6.5 (2025-05-06)</small>
+
+* [bitnami/keycloak] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3338 ([c347b21](https://github.com/bitnami/charts/commit/c347b21d2da034bce20f223f6bc2b7db9514b6d4)), closes [#33380](https://github.com/bitnami/charts/issues/33380)
 
 ## <small>24.6.4 (2025-05-05)</small>
 

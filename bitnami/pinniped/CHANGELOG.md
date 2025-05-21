@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.16 (2025-05-07)
+## 2.4.17 (2025-05-19)
 
-* [bitnami/pinniped] Release 2.4.16 ([#33493](https://github.com/bitnami/charts/pull/33493))
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#33781](https://github.com/bitnami/charts/pull/33781))
+
+## <small>2.4.16 (2025-05-07)</small>
+
+* [bitnami/pinniped] Release 2.4.16 (#33493) ([6265fac](https://github.com/bitnami/charts/commit/6265facd75dc9d81a05efec0d2d12200c5fd716c)), closes [#33493](https://github.com/bitnami/charts/issues/33493)
 
 ## <small>2.4.15 (2025-05-06)</small>
 

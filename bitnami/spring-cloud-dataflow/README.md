@@ -18,8 +18,6 @@ Looking to use Spring Cloud Data Flow in production? Try [VMware Tanzu Applicati
 
 This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -788,7 +786,7 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ### To 37.0.0
 
-This version uses the MariaDB version provided by the bitnami/mariadb subchart, PostgreSQL 11.4.x, instead of overriding it with version 10.11.x.
+This version uses the MariaDB version provided by the bitnami/mariadb subchart, MariaDB 11.4.x, instead of overriding it with version 10.11.x.
 
 ### To 36.0.0
 

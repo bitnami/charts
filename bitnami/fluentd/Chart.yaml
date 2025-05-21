@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: fluentd
-      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r14
+      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r18
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 1.18.0
 dependencies:
@@ -16,7 +16,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
+description: Fluentd collects events from various data sources and writes them to
+  files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/fluentd/img/fluentd-stack-220x234.png
 keywords:
@@ -31,4 +32,4 @@ maintainers:
 name: fluentd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluentd
-version: 7.1.6
+version: 7.1.8

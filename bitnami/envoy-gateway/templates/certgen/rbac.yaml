@@ -43,4 +43,46 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "envoy-gateway.certgen.serviceAccountName" . }}
+---
+{{- if .Values.topologyInjector.enabled }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ template "envoy-gateway.certgen.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  annotations:  {{- include "common.tplvalues.render" ( dict "value" .Values.topologyInjector.annotations .Values.commonAnnotations "context" $ ) | nindent 4 }}
+rules:
+  - apiGroups:
+    - admissionregistration.k8s.io
+    resources:
+    - mutatingwebhookconfigurations
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - mutatingwebhookconfigurations
+    resourceNames:
+      - 'envoy-gateway-topology-injector.{{ include "common.names.namespace" . }}'
+    verbs:
+      - update
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "envoy-gateway.certgen.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.topologyInjector.annotations .Values.commonAnnotations "context" $ ) | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "envoy-gateway.certgen.fullname.namespace" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "envoy-gateway.certgen.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
+{{- end }}
 {{- end }}

@@ -1,8 +1,25 @@
 # Changelog
 
-## 25.0.1 (2025-05-06)
+## 26.0.2 (2025-05-14)
 
-* [bitnami/harbor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33373](https://github.com/bitnami/charts/pull/33373))
+* [bitnami/harbor] update tracing environment variables and escaping ([#33680](https://github.com/bitnami/charts/pull/33680))
+
+## <small>26.0.1 (2025-05-09)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33596) ([0259db0](https://github.com/bitnami/charts/commit/0259db0c2f6d7eae28777399bf075fbb0bcb6b65)), closes [#33596](https://github.com/bitnami/charts/issues/33596)
+
+## 26.0.0 (2025-05-09)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33502) ([1fe91e0](https://github.com/bitnami/charts/commit/1fe91e0de5f7f343c31ff8bd8ac44ace87253207)), closes [#33502](https://github.com/bitnami/charts/issues/33502)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>25.0.2 (2025-05-08)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33559) ([d227e59](https://github.com/bitnami/charts/commit/d227e59dcef940f9c126b2729d3b7e7a256a6196)), closes [#33559](https://github.com/bitnami/charts/issues/33559)
+
+## <small>25.0.1 (2025-05-06)</small>
+
+* [bitnami/harbor] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33373) ([77d860c](https://github.com/bitnami/charts/commit/77d860cfc93b3fa321ab0ed047914fbe9f4b04a7)), closes [#33373](https://github.com/bitnami/charts/issues/33373)
 
 ## 25.0.0 (2025-04-29)
 

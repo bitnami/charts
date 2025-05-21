@@ -80,6 +80,7 @@ spec:
   logLevel: {{ .Values.prometheus.logLevel }}
   logFormat: {{ .Values.prometheus.logFormat }}
   listenLocal: {{ .Values.prometheus.listenLocal }}
+  nameValidationScheme: {{ .Values.prometheus.nameValidationScheme }}
   enableAdminAPI: {{ .Values.prometheus.enableAdminAPI }}
   {{- if .Values.prometheus.enableFeatures }}
   enableFeatures:

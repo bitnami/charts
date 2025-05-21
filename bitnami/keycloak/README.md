@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Keycloak](https://github.com/bitnami/containers/tree/main/bitnami/keycloak) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -688,12 +686,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Keycloak Cache parameters
 
-| Name                                     | Description                                                                         | Value        |
-| ---------------------------------------- | ----------------------------------------------------------------------------------- | ------------ |
-| `cache.enabled`                          | Switch to enable or disable the keycloak distributed cache for kubernetes.          | `true`       |
-| `cache.stackName`                        | Set infinispan cache stack to use                                                   | `kubernetes` |
-| `cache.stackFile`                        | Set infinispan cache stack filename to use                                          | `""`         |
-| `cache.useHeadlessServiceWithAppVersion` | Set to true to create the headless service used for ispn containing the app version | `false`      |
+| Name                                     | Description                                                                                                                             | Value            |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cache.enabled`                          | Switch to enable or disable the keycloak distributed cache for kubernetes.                                                              | `true`           |
+| `cache.stack`                            | Set infinispan cache stack to use, sets KC_CACHE_STACK (<https://www.keycloak.org/server/all-config?q=cache-stack>)                     | `kubernetes`     |
+| `cache.configFile`                       | Set infinispan cache stack config filename sets KC_CACHE_CONFIG_FILE (<https://www.keycloak.org/server/all-config?q=cache-config-file>) | `cache-ispn.xml` |
+| `cache.useHeadlessServiceWithAppVersion` | Set to true to create the headless service used for ispn containing the app version                                                     | `false`          |
 
 ### Keycloak Logging parameters
 

@@ -1,8 +1,29 @@
 # Changelog
 
-## 0.1.8 (2025-05-06)
+## 0.2.4 (2025-05-16)
 
-* [bitnami/clickhouse-operator] Release 0.1.8 ([#33470](https://github.com/bitnami/charts/pull/33470))
+* [clickhouse-operator] ci: remove hack on runtime parameters ([#33753](https://github.com/bitnami/charts/pull/33753))
+
+## <small>0.2.3 (2025-05-15)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#33720) ([855e5a0](https://github.com/bitnami/charts/commit/855e5a022177e138a7dbf5fe31f7bbab2dc66209)), closes [#33720](https://github.com/bitnami/charts/issues/33720)
+
+## <small>0.2.2 (2025-05-15)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#33631) ([6b0af73](https://github.com/bitnami/charts/commit/6b0af73be803ed24dff8a04315f05670ba7ae3ef)), closes [#33631](https://github.com/bitnami/charts/issues/33631)
+
+## <small>0.2.1 (2025-05-13)</small>
+
+* [clickhouse-operator] bugfix: remove unused parameters (#33627) ([78c1161](https://github.com/bitnami/charts/commit/78c1161fd0a8a5b13111440b77daa8f4cb738e9a)), closes [#33627](https://github.com/bitnami/charts/issues/33627)
+
+## 0.2.0 (2025-05-12)
+
+* [bitnami/clickhouse-operator] feat: :sparkles: Allow setting IP Families (#33606) ([9c8e84c](https://github.com/bitnami/charts/commit/9c8e84c91704c6abebc029a5dbd1003678342d45)), closes [#33606](https://github.com/bitnami/charts/issues/33606)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>0.1.8 (2025-05-06)</small>
+
+* [bitnami/clickhouse-operator] Release 0.1.8 (#33470) ([406dcc6](https://github.com/bitnami/charts/commit/406dcc6bcfa614950ff41cd0f22c1e72fc543f9b)), closes [#33470](https://github.com/bitnami/charts/issues/33470)
 
 ## <small>0.1.7 (2025-05-06)</small>
 

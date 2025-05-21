@@ -25,8 +25,6 @@ This Helm chart has been developed based on [bitnami/postgresql](https://github.
 - A new deployment, service have been added to deploy [Pgpool-II](https://pgpool.net/mediawiki/index.php/Main_Page) to act as proxy for PostgreSQL backend. It helps to reduce connection overhead, acts as a load balancer for PostgreSQL, and ensures database node failover.
 - Replacing `bitnami/postgresql` with `bitnami/postgresql-repmgr` which includes and configures [repmgr](https://repmgr.org/). Repmgr ensures standby nodes assume the primary role when the primary node is unhealthy.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Differences between the PostgreSQL-HA and PostgreSQL Helm charts
 
 There are two different ways to deploy a PostgreSQL cluster, using the PostgreSQL Helm chart or the PostgreSQL High Availability (HA) Helm chart. Both solutions provide a simple and reliable way to run PostgreSQL in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
@@ -1001,6 +999,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 ### To 16.0.0
 
 This major version makes it possible to customize the user & password to be used by Pgpool-II for performing Stream Replication Checks and sets the default user to `sr_check_user`. Previously, the user was hardcoded to `repmgr`, reusing the same user used by Repmgr. This change allows for a more flexible & secure configuration, as the user used by Pgpool-II can be different from the one used by Repmgr.
+
+This major version includes a security fix for [GHSA-mx38-x658-5fwj](https://github.com/bitnami/charts/security/advisories/GHSA-mx38-x658-5fwj) and CVE-2025-22248. Upgrading to this or higher versions is recommended.
 
 Given users' creation is skipped when there's existing data, upgrading from `15.x` to `16.x` will fail when persistence is enabled unless the user is created manually or the `pgpool.srCheckUsername` and `pgpool.srCheckPassword` parameters are set to the same values as the `postgresql.repmgrUsername` and `postgresql.repmgrPassword` parameters:
 

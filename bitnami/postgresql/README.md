@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.postgresql-cnab) to see the listing on Azure Marketplace.
+
 Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
@@ -21,8 +23,6 @@ Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](
 This chart bootstraps a [PostgreSQL](https://github.com/bitnami/containers/tree/main/bitnami/postgresql) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 For HA, please see [this repo](https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha)
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -349,6 +349,7 @@ If you already have data in it, you will fail to sync to standby nodes for all c
 | `global.defaultStorageClass`                               | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
 | `global.storageClass`                                      | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
 | `global.security.allowInsecureImages`                      | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.postgresql.fullnameOverride`                       | Full chart name (overrides `fullnameOverride`)                                                                                                                                                                                                                                                                                                                      | `""`    |
 | `global.postgresql.auth.postgresPassword`                  | Password for the "postgres" admin user (overrides `auth.postgresPassword`)                                                                                                                                                                                                                                                                                          | `""`    |
 | `global.postgresql.auth.username`                          | Name for a custom user to create (overrides `auth.username`)                                                                                                                                                                                                                                                                                                        | `""`    |
 | `global.postgresql.auth.password`                          | Password for the custom user to create (overrides `auth.password`)                                                                                                                                                                                                                                                                                                  | `""`    |

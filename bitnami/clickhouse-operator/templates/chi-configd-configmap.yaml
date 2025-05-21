@@ -25,8 +25,12 @@ data:
   # Ref: https://github.com/Altinity/clickhouse-operator/tree/master/deploy/builder/templates-config/chi/config.d
   01-clickhouse-01-listen.xml: |
     <yandex>
-        <listen_host>::</listen_host>
+        {{- if .Values.ipFamily.enableIpv4 }}
         <listen_host>0.0.0.0</listen_host>
+        {{- end }}
+        {{- if .Values.ipFamily.enableIpv6 }}
+        <listen_host>::</listen_host>
+        {{- end }}
         <listen_try>1</listen_try>
     </yandex>
   01-clickhouse-02-logger.xml: |

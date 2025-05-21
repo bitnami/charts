@@ -1,11 +1,11 @@
-# Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_backendtrafficpolicies.yaml
-# Version: 1.3.2
+# Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_backendtrafficpolicies.yaml
+# Version: 1.4.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.1
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: backendtrafficpolicies.gateway.envoyproxy.io
 spec:
   group: gateway.envoyproxy.io
@@ -100,6 +100,20 @@ spec:
                     maximum: 4294967295
                     minimum: 0
                     type: integer
+                  perEndpoint:
+                    description: PerEndpoint defines Circuit Breakers that will apply
+                      per-endpoint for an upstream cluster
+                    properties:
+                      maxConnections:
+                        default: 1024
+                        description: MaxConnections configures the maximum number
+                          of connections that Envoy will establish per-endpoint to
+                          the referenced backend defined within a xRoute rule.
+                        format: int64
+                        maximum: 4294967295
+                        minimum: 0
+                        type: integer
+                    type: object
                 type: object
               compression:
                 description: The compression config for the http streams.
@@ -164,6 +178,17 @@ spec:
                     description: |-
                       DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                       Defaults to 30 seconds.
+                    type: string
+                  lookupFamily:
+                    description: |-
+                      LookupFamily determines how Envoy would resolve DNS for Routes where the backend is specified as a fully qualified domain name (FQDN).
+                      If set, this configuration overrides other defaults.
+                    enum:
+                    - IPv4
+                    - IPv6
+                    - IPv4Preferred
+                    - IPv6Preferred
+                    - IPv4AndIPv6
                     type: string
                   respectDnsTtl:
                     description: |-
@@ -425,6 +450,16 @@ spec:
                     - message: The grpc field can only be set if the Health Checker
                         type is GRPC.
                       rule: 'has(self.grpc) ? self.type == ''GRPC'' : true'
+                  panicThreshold:
+                    description: |-
+                      When number of unhealthy endpoints for a backend reaches this threshold
+                      Envoy will disregard health status and balance across all endpoints.
+                      It's designed to prevent a situation in which host failures cascade throughout the cluster
+                      as load increases. If not set, the default value is 50%. To disable panic mode, set value to `0`.
+                    format: int32
+                    maximum: 100
+                    minimum: 0
+                    type: integer
                   passive:
                     description: Passive passive check configuration
                     properties:
@@ -513,6 +548,21 @@ spec:
                       Default: TerminateConnection
                     type: string
                 type: object
+              httpUpgrade:
+                description: |-
+                  HTTPUpgrade defines the configuration for HTTP protocol upgrades.
+                  If not specified, the default upgrade configuration(websocket) will be used.
+                items:
+                  properties:
+                    type:
+                      description: |-
+                        Type is the case-insensitive type of protocol upgrade.
+                        e.g. `websocket`, `CONNECT`, `spdy/3.1` etc.
+                      type: string
+                  required:
+                  - type
+                  type: object
+                type: array
               loadBalancer:
                 description: |-
                   LoadBalancer policy to apply when routing traffic from the gateway to
@@ -630,6 +680,14 @@ spec:
                     LeastRequest load balancers.
                   rule: 'self.type in [''Random'', ''ConsistentHash''] ? !has(self.slowStart)
                     : true '
+              mergeType:
+                description: |-
+                  MergeType determines how this configuration is merged with existing BackendTrafficPolicy
+                  configurations targeting a parent resource. When set, this configuration will be merged
+                  into a parent BackendTrafficPolicy (i.e. the one targeting a Gateway or Listener).
+                  This field cannot be set when targeting a parent resource (Gateway).
+                  If unset, no merging occurs, and only the most specific configuration takes effect.
+                type: string
               proxyProtocol:
                 description: ProxyProtocol enables the Proxy Protocol when communicating
                   with the backend.
@@ -707,7 +765,10 @@ spec:
                                             values within the header.
                                           type: boolean
                                         name:
-                                          description: Name of the HTTP header.
+                                          description: |-
+                                            Name of the HTTP header.
+                                            The header name is case-insensitive unless PreserveHeaderCase is set to true.
+                                            For example, "Foo" and "foo" are considered the same header.
                                           maxLength: 256
                                           minLength: 1
                                           type: string
@@ -722,8 +783,7 @@ spec:
                                           type: string
                                         value:
                                           description: |-
-                                            Value within the HTTP header. Due to the
-                                            case-insensitivity of header names, "foo" and "Foo" are considered equivalent.
+                                            Value within the HTTP header.
                                             Do not set this field when Type="Distinct", implying matching on any/all unique
                                             values within the header.
                                           maxLength: 1024
@@ -889,6 +949,12 @@ spec:
                               - requests
                               - unit
                               type: object
+                            shared:
+                              description: |-
+                                Shared determines whether this rate limit rule applies across all the policy targets.
+                                If set to true, the rule is treated as a common bucket and is shared across all policy targets (xRoutes).
+                                Default: false.
+                              type: boolean
                           required:
                           - limit
                           type: object
@@ -948,7 +1014,10 @@ spec:
                                             values within the header.
                                           type: boolean
                                         name:
-                                          description: Name of the HTTP header.
+                                          description: |-
+                                            Name of the HTTP header.
+                                            The header name is case-insensitive unless PreserveHeaderCase is set to true.
+                                            For example, "Foo" and "foo" are considered the same header.
                                           maxLength: 256
                                           minLength: 1
                                           type: string
@@ -963,8 +1032,7 @@ spec:
                                           type: string
                                         value:
                                           description: |-
-                                            Value within the HTTP header. Due to the
-                                            case-insensitivity of header names, "foo" and "Foo" are considered equivalent.
+                                            Value within the HTTP header.
                                             Do not set this field when Type="Distinct", implying matching on any/all unique
                                             values within the header.
                                           maxLength: 1024
@@ -1130,6 +1198,12 @@ spec:
                               - requests
                               - unit
                               type: object
+                            shared:
+                              description: |-
+                                Shared determines whether this rate limit rule applies across all the policy targets.
+                                If set to true, the rule is treated as a common bucket and is shared across all policy targets (xRoutes).
+                                Default: false.
+                              type: boolean
                           required:
                           - limit
                           type: object
@@ -1149,6 +1223,31 @@ spec:
                     type: string
                 required:
                 - type
+                type: object
+              requestBuffer:
+                description: |-
+                  RequestBuffer allows the gateway to buffer and fully receive each request from a client before continuing to send the request
+                  upstream to the backends. This can be helpful to shield your backend servers from slow clients, and also to enforce a maximum size per request
+                  as any requests larger than the buffer size will be rejected.
+
+                  This can have a negative performance impact so should only be enabled when necessary.
+
+                  When enabling this option, you should also configure your connection buffer size to account for these request buffers. There will also be an
+                  increase in memory usage for Envoy that should be accounted for in your deployment settings.
+                properties:
+                  limit:
+                    allOf:
+                    - pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    - pattern: ^[1-9]+[0-9]*([EPTGMK]i|[EPTGMk])?$
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: |-
+                      Limit specifies the maximum allowed size in bytes for each incoming request buffer.
+                      If exceeded, the request will be rejected with HTTP 413 Content Too Large.
+
+                      Accepts values in resource.Quantity format (e.g., "10Mi", "500Ki").
+                    x-kubernetes-int-or-string: true
                 type: object
               responseOverride:
                 description: |-
@@ -1500,6 +1599,39 @@ spec:
                       minLength: 1
                       pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
                       type: string
+                    matchExpressions:
+                      description: MatchExpressions is a list of label selector requirements.
+                        The requirements are ANDed.
+                      items:
+                        description: |-
+                          A label selector requirement is a selector that contains values, a key, and an operator that
+                          relates the key and values.
+                        properties:
+                          key:
+                            description: key is the label key that the selector applies
+                              to.
+                            type: string
+                          operator:
+                            description: |-
+                              operator represents a key's relationship to a set of values.
+                              Valid operators are In, NotIn, Exists and DoesNotExist.
+                            type: string
+                          values:
+                            description: |-
+                              values is an array of string values. If the operator is In or NotIn,
+                              the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                              the values array must be empty. This array is replaced during a strategic
+                              merge patch.
+                            items:
+                              type: string
+                            type: array
+                            x-kubernetes-list-type: atomic
+                        required:
+                        - key
+                        - operator
+                        type: object
+                      type: array
+                      x-kubernetes-list-type: atomic
                     matchLabels:
                       additionalProperties:
                         type: string
@@ -1508,7 +1640,6 @@ spec:
                       type: object
                   required:
                   - kind
-                  - matchLabels
                   type: object
                   x-kubernetes-validations:
                   - message: group must be gateway.networking.k8s.io
@@ -1541,6 +1672,101 @@ spec:
                       Defaults to 9.
                     format: int32
                     type: integer
+                type: object
+              telemetry:
+                description: |-
+                  Telemetry configures the telemetry settings for the policy target (Gateway or xRoute).
+                  This will override the telemetry settings in the EnvoyProxy resource.
+                properties:
+                  tracing:
+                    description: Tracing configures the tracing settings for the backend
+                      or HTTPRoute.
+                    properties:
+                      customTags:
+                        additionalProperties:
+                          properties:
+                            environment:
+                              description: |-
+                                Environment adds value from environment variable to each span.
+                                It's required when the type is "Environment".
+                              properties:
+                                defaultValue:
+                                  description: DefaultValue defines the default value
+                                    to use if the environment variable is not set.
+                                  type: string
+                                name:
+                                  description: Name defines the name of the environment
+                                    variable which to extract the value from.
+                                  type: string
+                              required:
+                              - name
+                              type: object
+                            literal:
+                              description: |-
+                                Literal adds hard-coded value to each span.
+                                It's required when the type is "Literal".
+                              properties:
+                                value:
+                                  description: Value defines the hard-coded value
+                                    to add to each span.
+                                  type: string
+                              required:
+                              - value
+                              type: object
+                            requestHeader:
+                              description: |-
+                                RequestHeader adds value from request header to each span.
+                                It's required when the type is "RequestHeader".
+                              properties:
+                                defaultValue:
+                                  description: DefaultValue defines the default value
+                                    to use if the request header is not set.
+                                  type: string
+                                name:
+                                  description: Name defines the name of the request
+                                    header which to extract the value from.
+                                  type: string
+                              required:
+                              - name
+                              type: object
+                            type:
+                              default: Literal
+                              description: Type defines the type of custom tag.
+                              enum:
+                              - Literal
+                              - Environment
+                              - RequestHeader
+                              type: string
+                          required:
+                          - type
+                          type: object
+                        description: |-
+                          CustomTags defines the custom tags to add to each span.
+                          If provider is kubernetes, pod name and namespace are added by default.
+                        type: object
+                      samplingFraction:
+                        description: |-
+                          SamplingFraction represents the fraction of requests that should be
+                          selected for tracing if no prior sampling decision has been made.
+
+                          This will take precedence over sampling fraction on EnvoyProxy if set.
+                        properties:
+                          denominator:
+                            default: 100
+                            format: int32
+                            minimum: 1
+                            type: integer
+                          numerator:
+                            format: int32
+                            minimum: 0
+                            type: integer
+                        required:
+                        - numerator
+                        type: object
+                        x-kubernetes-validations:
+                        - message: numerator must be less than or equal to denominator
+                          rule: self.numerator <= self.denominator
+                    type: object
                 type: object
               timeout:
                 description: Timeout settings for the backend connections.

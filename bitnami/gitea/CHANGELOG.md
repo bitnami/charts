@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.2.5 (2025-05-07)
+## 3.2.7 (2025-05-13)
 
-* [bitnami/gitea] Release 3.2.5 ([#33479](https://github.com/bitnami/charts/pull/33479))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33622](https://github.com/bitnami/charts/pull/33622))
+
+## <small>3.2.6 (2025-05-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33558) ([cf1e13b](https://github.com/bitnami/charts/commit/cf1e13bcd7c791faedb003185ab2c50c0f5dd487)), closes [#33558](https://github.com/bitnami/charts/issues/33558)
+
+## <small>3.2.5 (2025-05-07)</small>
+
+* [bitnami/gitea] Release 3.2.5 (#33479) ([a1595ee](https://github.com/bitnami/charts/commit/a1595eee53e221b0b22cbdef0db922dc72ef825d)), closes [#33479](https://github.com/bitnami/charts/issues/33479)
 
 ## <small>3.2.4 (2025-05-06)</small>
 

@@ -20,8 +20,6 @@ Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https:
 
 This chart bootstraps a [etcd](https://github.com/bitnami/containers/tree/main/bitnami/etcd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -359,6 +357,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace template                                     | `""`            |
 | `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                            | `cluster.local` |

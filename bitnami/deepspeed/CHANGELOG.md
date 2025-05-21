@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.3.11 (2025-05-07)
+## 2.3.13 (2025-05-19)
 
-* [bitnami/deepspeed] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33351](https://github.com/bitnami/charts/pull/33351))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#33785](https://github.com/bitnami/charts/pull/33785))
+
+## <small>2.3.12 (2025-05-13)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#33650) ([dd28a06](https://github.com/bitnami/charts/commit/dd28a06a854175322b382ec5eb3ae030cf5ac46d)), closes [#33650](https://github.com/bitnami/charts/issues/33650)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>2.3.11 (2025-05-07)</small>
+
+* [bitnami/deepspeed] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([a3c7b3f](https://github.com/bitnami/charts/commit/a3c7b3ffa42bb0944786a286d25c90e7e3be550b)), closes [#33351](https://github.com/bitnami/charts/issues/33351)
 
 ## <small>2.3.10 (2025-04-18)</small>
 

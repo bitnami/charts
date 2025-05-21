@@ -1,8 +1,23 @@
 # Changelog
 
-## 11.1.10 (2025-05-07)
+## 11.1.13 (2025-05-17)
 
-* [bitnami/kube-prometheus] Release 11.1.10 ([#33508](https://github.com/bitnami/charts/pull/33508))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#33765](https://github.com/bitnami/charts/pull/33765))
+
+## <small>11.1.12 (2025-05-16)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kube-prometheus] Add support for nameValidationScheme (#33691) ([9630300](https://github.com/bitnami/charts/commit/9630300d9f1dbee5005c8f247439bc5f400777f9)), closes [#33691](https://github.com/bitnami/charts/issues/33691)
+
+## <small>11.1.11 (2025-05-12)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#33610) ([99ee8ad](https://github.com/bitnami/charts/commit/99ee8ad962d0c08cc0b049dfac7b9dc6a3a126bf)), closes [#33610](https://github.com/bitnami/charts/issues/33610)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.1.10 (2025-05-07)</small>
+
+* [bitnami/kube-prometheus] Release 11.1.10 (#33508) ([7d20a0c](https://github.com/bitnami/charts/commit/7d20a0c9642f9c26a0ab3668938a1e03a4216d33)), closes [#33508](https://github.com/bitnami/charts/issues/33508)
 
 ## <small>11.1.9 (2025-05-06)</small>
 

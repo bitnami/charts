@@ -14,13 +14,13 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.kafka-cnab) to see the listing on Azure Marketplace.
+
 Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
 This chart bootstraps a [Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -138,9 +138,11 @@ externalAccess.enabled=true
 externalAccess.broker.service.type=LoadBalancer
 externalAccess.controller.service.type=LoadBalancer
 externalAccess.broker.service.ports.external=9094
-externalAccess.controller.service.containerPorts.external=9094
+externalAccess.controller.service.ports.external=9094
 defaultInitContainers.autoDiscovery.enabled=true
 serviceAccount.create=true
+broker.automountServiceAccountToken=true
+controller.automountServiceAccountToken=true
 rbac.create=true
 ```
 
