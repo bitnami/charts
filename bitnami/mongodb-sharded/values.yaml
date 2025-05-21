@@ -605,7 +605,7 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param configsvr.persistence.selector Persistent Volume selector
+    ## @param configsvr.persistence.selector Selector to match an existing Persistent Volume for Config Server data PVC
     ## A label query over volumes to consider for binding (e.g. when using local volumes)
     ##
     selector: {}
