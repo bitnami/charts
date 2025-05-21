@@ -177,7 +177,7 @@ kubectl scale deployment [Deployment Name] -n [Namespace] --replica 0
 - If the current version is `2.1.3`, you need to execute `2.1.4.sql` → `2.1.5.sql`.
 - If the current version is `2.1.4`, you only need to execute `2.1.5.sql`.
 
-1. Restart or upgrade Streampark service
+2. Restart or upgrade Streampark service
 
 ```bash
 kubectl scale deployment [Deployment Name] -n [Namespace] --replica 1
