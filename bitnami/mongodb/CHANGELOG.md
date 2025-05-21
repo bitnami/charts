@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.5.10 (2025-05-20)
+## 16.5.10 (2025-05-21)
 
 * [bitnami/mongodb] generate-tls-certs init container should respect tls securityContext ([#33803](https://github.com/bitnami/charts/pull/33803))
 
