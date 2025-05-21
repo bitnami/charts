@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.0.0 (2025-05-20)
+## 7.0.0 (2025-05-21)
 
 * [bitnami/influxdb] feat: InfluxDB 3 major version ([#33743](https://github.com/bitnami/charts/pull/33743))
 
