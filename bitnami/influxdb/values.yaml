@@ -909,7 +909,7 @@ rbac:
 ## @section InfluxDB(TM) Core "create-admin-token" K8s Job parameters
 ##
 createAdminTokenJob:
-  ## @param createAdminTokenJob.enabled Whether to create a random admin token using a K8s job (ignored if `objectStore` is set to `memory` or `auth.enabled` is set to `false`). Warning: do not use if Helm hooks aren't supported in your environment
+  ## @param createAdminTokenJob.enabled Whether to create a random admin token using a K8s job (ignored if `objectStore` is set to `memory` or `auth.enabled` is set to `false`). Warning: do not use this feature if Helm hooks aren't supported in your environment
   ##
   enabled: true
   ## Bitnami Kubectl image
@@ -937,12 +937,38 @@ createAdminTokenJob:
   ## @param createAdminTokenJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
+  ## Configure InfluxDB(TM) Core "create-admin-token" job's containers (only main one) Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param createAdminTokenJob.containerSecurityContext.enabled Enable InfluxDB(TM) Core "create-admin-token" job's containers' Security Context
+  ## @param createAdminTokenJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param createAdminTokenJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param createAdminTokenJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param createAdminTokenJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param createAdminTokenJob.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param createAdminTokenJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param createAdminTokenJob.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param createAdminTokenJob.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param createAdminTokenJob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## InfluxDB(TM) Core "create-admin-token" job's container resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param createAdminTokenJob.resourcesPreset Set InfluxDB(TM) Core "create-admin-token" job's container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if createAdminTokenJob.resources is set (createAdminTokenJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "micro"
+  resourcesPreset: "nano"
   ## @param createAdminTokenJob.resources Set InfluxDB(TM) Core "create-admin-token" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## E.g:
   ## resources:

@@ -61,7 +61,7 @@ spec:
       schedulerName: {{ .Values.createAdminTokenJob.schedulerName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      # We use the same security context as the main container to avoid permission issues on shared PVC
+      # We use the same security context as InfluxDB pods to avoid permission issues on shared PVC
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       initContainers:
@@ -72,13 +72,14 @@ spec:
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          # We use the same security context as the main container to avoid permission issues on shared PVC
+          # We use the same security context as InfluxDB containers to avoid permission issues on shared PVC
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
-          {{- if .Values.createAdminTokenJob.resources }}
-          resources: {{- toYaml .Values.createAdminTokenJob.resources | nindent 12 }}
-          {{- else if ne .Values.createAdminTokenJob.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.createAdminTokenJob.resourcesPreset) | nindent 12 }}
+          # We also use the same resources as InfluxDB to ensure we can start InfluxDB in background
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -91,6 +92,7 @@ spec:
               trap "influxdb_stop" EXIT
               influxdb_start_bg
               influxdb3_create_admin_token
+              chmod 444 $INFLUXDB_AUTOGEN_ADMIN_TOKEN_FILE
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
@@ -169,9 +171,8 @@ spec:
         - name: kubectl
           image: {{ include "influxdb.createAdminToken.image" . }}
           imagePullPolicy: {{ .Values.createAdminTokenJob.image.pullPolicy }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          # We use the same security context as the main container to avoid permission issues on shared PVC
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" .) | nindent 12 }}
+          {{- if .Values.createAdminTokenJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.createAdminTokenJob.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.createAdminTokenJob.resources }}
           resources: {{- toYaml .Values.createAdminTokenJob.resources | nindent 12 }}

@@ -60,17 +60,12 @@ spec:
       {{- if .Values.createAdminTokenJob.schedulerName }}
       schedulerName: {{ .Values.createAdminTokenJob.schedulerName }}
       {{- end }}
-      {{- if .Values.podSecurityContext.enabled }}
-      # We use the same security context as the main container to avoid permission issues on shared PVC
-      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" .) | nindent 8 }}
-      {{- end }}
       containers:
         - name: kubectl
           image: {{ include "influxdb.createAdminToken.image" . }}
           imagePullPolicy: {{ .Values.createAdminTokenJob.image.pullPolicy }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          # We use the same security context as the main container to avoid permission issues on shared PVC
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" .) | nindent 12 }}
+          {{- if .Values.createAdminTokenJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.createAdminTokenJob.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.createAdminTokenJob.resources }}
           resources: {{- toYaml .Values.createAdminTokenJob.resources | nindent 12 }}
@@ -85,4 +80,5 @@ spec:
             - {{ include "common.names.fullname" . }}
             - --namespace
             - {{ include "common.names.namespace" . }}
+            - --ignore-not-found
 {{- end }}
