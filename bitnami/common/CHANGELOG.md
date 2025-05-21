@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.31.1 (2025-05-07)
+## 2.31.2 (2025-05-19)
 
-* [bitnami/common] chore: :recycle: Remove unused helpers ([#33496](https://github.com/bitnami/charts/pull/33496))
+* [bitnami/common] Prevent release name from breaking DNS naming specification ([#33773](https://github.com/bitnami/charts/pull/33773))
+
+## <small>2.31.1 (2025-05-07)</small>
+
+* [bitnami/common] chore: :recycle: Remove unused helpers (#33496) ([d96e16a](https://github.com/bitnami/charts/commit/d96e16aa1e2f1d42de829330f5c0dbc1c4666493)), closes [#33496](https://github.com/bitnami/charts/issues/33496)
 
 ## 2.31.0 (2025-05-05)
 

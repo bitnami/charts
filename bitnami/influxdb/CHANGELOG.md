@@ -1,8 +1,21 @@
 # Changelog
 
-## 6.6.12 (2025-05-13)
+## 6.6.15 (2025-05-21)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33654](https://github.com/bitnami/charts/pull/33654))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33806](https://github.com/bitnami/charts/pull/33806))
+
+## <small>6.6.14 (2025-05-19)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33771) ([9b9aea7](https://github.com/bitnami/charts/commit/9b9aea70ab497f534a2395fcb409ef22233916f6)), closes [#33771](https://github.com/bitnami/charts/issues/33771)
+
+## <small>6.6.13 (2025-05-15)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33737) ([800375b](https://github.com/bitnami/charts/commit/800375b153cad7c744b58a9112c6f87d24dda3f9)), closes [#33737](https://github.com/bitnami/charts/issues/33737)
+
+## <small>6.6.12 (2025-05-13)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33654) ([61b330a](https://github.com/bitnami/charts/commit/61b330aa4f93c52321e12c690153688c101213a9)), closes [#33654](https://github.com/bitnami/charts/issues/33654)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>6.6.11 (2025-05-07)</small>
 

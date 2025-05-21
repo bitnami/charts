@@ -1,8 +1,23 @@
 # Changelog
 
-## 16.5.7 (2025-05-13)
+## 16.5.10 (2025-05-21)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33636](https://github.com/bitnami/charts/pull/33636))
+* [bitnami/mongodb] Add ability to configure SA for backup ([#33112](https://github.com/bitnami/charts/pull/33112))
+
+## <small>16.5.9 (2025-05-20)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33788) ([4fdeeab](https://github.com/bitnami/charts/commit/4fdeeabffdc2d05a3a5343b88ba6ae078cb8b601)), closes [#33788](https://github.com/bitnami/charts/issues/33788)
+
+## <small>16.5.8 (2025-05-16)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33731) ([c2e3866](https://github.com/bitnami/charts/commit/c2e38660de6d95d6f752d0dda14ed17fde173448)), closes [#33731](https://github.com/bitnami/charts/issues/33731)
+
+## <small>16.5.7 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33636) ([1bb5123](https://github.com/bitnami/charts/commit/1bb512381fad37e2b27f686f50bc5aa57243d38d)), closes [#33636](https://github.com/bitnami/charts/issues/33636)
 
 ## <small>16.5.6 (2025-05-06)</small>
 

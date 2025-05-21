@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.11-debian-12-r19
+  tag: 2.7.11-debian-12-r20
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -907,7 +907,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r45
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1133,7 +1133,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.521.0-debian-12-r0
+        tag: 0.523.0-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1186,7 +1186,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.72.0-debian-12-r1
+        tag: 2.73.0-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##
@@ -1243,7 +1243,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.27.10-debian-12-r0
+        tag: 2.27.10-debian-12-r1
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##

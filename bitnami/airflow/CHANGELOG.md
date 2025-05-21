@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.3 (2025-05-13)
+## 24.1.0 (2025-05-14)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33681](https://github.com/bitnami/charts/pull/33681))
+* [bitnami/airflow] Validate executors and fix LocalExecutor ([#33696](https://github.com/bitnami/charts/pull/33696))
+
+## <small>24.0.3 (2025-05-13)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33681) ([0486d35](https://github.com/bitnami/charts/commit/0486d357b19db6482cb423ad0dbcbe96b2ef74db)), closes [#33681](https://github.com/bitnami/charts/issues/33681)
 
 ## <small>24.0.2 (2025-05-12)</small>
 
