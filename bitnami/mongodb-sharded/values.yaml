@@ -1467,7 +1467,7 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
-    ## @param shardsvr.persistence.selector Persistent Volume selector
+    ## @param shardsvr.persistence.selector Selector to match an existing Persistent Volume for Shard data PVC
     ## A label query over volumes to consider for binding (e.g. when using local volumes)
     ## Selector can be defined with static and dynamic options:
     ## selector:
