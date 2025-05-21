@@ -909,7 +909,7 @@ rbac:
 ## @section InfluxDB(TM) Core "create-admin-token" K8s Job parameters
 ##
 createAdminTokenJob:
-  ## @param createAdminTokenJob.enabled Whether to create a random admin token using a K8s job (ignored if `objectStore` is set to `memory` or `auth.enabled` is set to `false`)
+  ## @param createAdminTokenJob.enabled Whether to create a random admin token using a K8s job (ignored if `objectStore` is set to `memory` or `auth.enabled` is set to `false`). Warning: do not use if Helm hooks aren't supported in your environment
   ##
   enabled: true
   ## Bitnami Kubectl image
