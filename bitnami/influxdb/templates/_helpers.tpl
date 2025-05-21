@@ -20,10 +20,17 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the "create-admin-token" job image)
+*/}}
+{{- define "influxdb.createAdminToken.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.createAdminTokenJob.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "influxdb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.createAdminTokenJob.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -34,6 +41,17 @@ Create the name of the ServiceAccount to use
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the ServiceAccount to use on "create-admin-token" job pods
+*/}}
+{{- define "influxdb.createAdminTokenJob.serviceAccountName" -}}
+{{- if .Values.createAdminTokenJob.serviceAccount.create -}}
+    {{ default (printf "%s-create-admin-token" (include "common.names.fullname" .)) .Values.createAdminTokenJob.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.createAdminTokenJob.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -109,4 +127,30 @@ Return the InfluxDB&trade; Core initialization scripts Secret name
 */}}
 {{- define "influxdb.initdbScriptsSecret" -}}
 {{- print (tpl .Values.initdbScriptsSecret .) -}}
+{{- end -}}
+
+{{/*
+Compile all warnings into a single message.
+*/}}
+{{- define "influxdb.validateValues" -}}
+{{- $messages := list -}}
+{{- $messages := append $messages (include "influxdb.validateValues.replicaCount" .) -}}
+{{- $messages := without $messages "" -}}
+{{- $message := join "\n" $messages -}}
+
+{{- if $message -}}
+{{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of InfluxDB&trade; Core - replicaCount
+*/}}
+{{- define "influxdb.validateValues.replicaCount" -}}
+{{- if and (or (eq .Values.objectStore "file") (eq .Values.objectStore "memory")) (or .Values.autoscaling.hpa.enabled (gt (int .Values.replicaCount) 1)) }}
+replicaCount:
+    Running multiple InfluxDB(TM) Core replicas is not supported when using
+    the file or memory object store. Please ensure you run a single replica
+    and HPA is disabled (--set replicaCount=1,autoscaling.hpa.enabled=false).
+{{- end -}}
 {{- end -}}

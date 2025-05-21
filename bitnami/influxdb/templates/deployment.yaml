@@ -3,8 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-apiVersion: {{ ternary (include "common.capabilities.statefulset.apiVersion" .) (include "common.capabilities.deployment.apiVersion" .) (eq .Values.objectStore "file") }}
-kind: {{ ternary "StatefulSet" "Deployment" (eq .Values.objectStore "file") }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -15,15 +15,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and (ne .Values.objectStore "memory") (not .Values.autoscaling.hpa.enabled) }}
+  {{- if and (ne .Values.objectStore "file") (ne .Values.objectStore "memory") (not .Values.autoscaling.hpa.enabled) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- if .Values.updateStrategy }}
-  {{ ternary "updateStrategy" "strategy" (eq .Values.objectStore "file") }}: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- end }}
-  {{- if eq .Values.objectStore "file" }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
@@ -54,9 +51,6 @@ spec:
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
-      {{- if eq .Values.objectStore "file" }}
-      podManagementPolicy: {{ .Values.podManagementPolicy }}
       {{- end }}
       {{- if .Values.schedulerName }}
       schedulerName: {{ .Values.schedulerName }}
@@ -109,23 +103,29 @@ spec:
               value: {{ .Values.objectStore | quote }}
             - name: INFLUXDB_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
-            {{- if ne .Values.objectStore "memory" }}
+            - name: INFLUXDB_HTTP_AUTH_ENABLED
+              value: {{ ternary "true" "false" .Values.auth.enabled | quote }}
+            {{- if eq .Values.objectStore "file" }}
             - name: INFLUXDB_DATA_DIR
               value: {{ printf "%s/data" .Values.persistence.mountPath | quote }}
             {{- end }}
             - name: INFLUXDB_NODE_ID
-              {{- if eq .Values.objectStore "file" }}
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-              {{- else }}
               value: {{ .Values.nodeId | quote }}
-              {{- end }}
-            - name: INFLUXDB_CREATE_ADMIN_TOKEN
-              value: {{ ternary "yes" "no" (and .Values.auth.createAdminToken (ne .Values.objectStore "memory")) | quote }}
-            {{- if and .Values.databases .Values.auth.createAdminToken (ne .Values.objectStore "memory") }}
+            {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
+            {{- if .Values.usePasswordFiles }}
+            - name: INFLUXDB_ADMIN_TOKEN_FILE
+              value: "/opt/bitnami/influxdb/secrets/admin-token"
+            {{- else }}
+            - name: INFLUXDB_ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "common.names.fullname" . }}
+                  key: admin-token
+            {{- end }}
+            {{- if .Values.databases }}
             - name: INFLUXDB_DATABASES
               value: {{ .Values.databases | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: INFLUXDB3_TLS_CERT
@@ -146,9 +146,9 @@ spec:
             {{- end }}
             {{- if .Values.usePasswordFiles }}
             - name: AWS_ACCESS_KEY_ID_FILE
-              value: "/opt/bitnami/influxdb/secrets/s3-access-key-id"
+              value: "/opt/bitnami/influxdb/store-secrets/s3-access-key-id"
             - name: AWS_SECRET_ACCESS_KEY_FILE
-              value: "/opt/bitnami/influxdb/secrets/s3-secret-access-key"
+              value: "/opt/bitnami/influxdb/store-secrets/s3-secret-access-key"
             {{- else }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -164,7 +164,7 @@ spec:
             {{- else if eq .Values.objectStore "google" }}
             {{- if .Values.usePasswordFiles }}
             - name: GOOGLE_SERVICE_ACCOUNT_FILE
-              value: "/opt/bitnami/influxdb/secrets/google-service-account-key"
+              value: "/opt/bitnami/influxdb/store-secrets/google-service-account-key"
             {{- else }}
             - name: GOOGLE_SERVICE_ACCOUNT
               valueFrom:
@@ -177,7 +177,7 @@ spec:
               value: {{ .Values.azure.account | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: AZURE_STORAGE_ACCESS_KEY_FILE
-              value: "/opt/bitnami/influxdb/secrets/azure-storage-access-key"
+              value: "/opt/bitnami/influxdb/store-secrets/azure-storage-access-key"
             {{- else }}
             - name: AZURE_STORAGE_ACCESS_KEY
               valueFrom:
@@ -233,8 +233,10 @@ spec:
                 - bash
                 - -c
                 - |
-                  token=$(<{{ .Values.persistence.mountPath }}/.token)
-                  timeout {{ $readinessTimeout }}s curl -sSL -H "Authorization: Bearer $token" http://127.0.0.1:{{ .Values.containerPorts.http }}/health
+                  {{- if .Values.usePasswordFiles }}
+                  INFLUXDB_ADMIN_TOKEN="$(<INFLUXDB_ADMIN_TOKEN_FILE)"
+                  {{- end -}}
+                  timeout {{ $readinessTimeout }}s curl -sSL -H "Authorization: Bearer $INFLUXDB_ADMIN_TOKEN" http://127.0.0.1:{{ .Values.containerPorts.http }}/health
             {{- else }}
             tcpSocket:
               port: http
@@ -250,18 +252,14 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if ne .Values.objectStore "memory" }}
-            - mountPath: {{ .Values.persistence.mountPath }}              
-            {{- if and .Values.persistence.enabled (eq .Values.objectStore "file") }}
-              name: data
-            {{- else }}
-              name: empty-dir
-              subPath: app-data
-            {{- end }}
+            {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles }}
+            - name: secret
+              mountPath: /opt/bitnami/influxdb/secrets
+              readOnly: true
             {{- end }}
             {{- if and (or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure")) .Values.usePasswordFiles }}
             - name: store-secret
-              mountPath: /opt/bitnami/influxdb/secrets
+              mountPath: /opt/bitnami/influxdb/store-secrets
               readOnly: true
             {{- end }}
             {{- if .Values.tls.enabled }}
@@ -280,6 +278,10 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
+            {{- if eq .Values.objectStore "file" }}
+            - mountPath: {{ .Values.persistence.mountPath }}              
+              name: data
+            {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
           {{- end }}
@@ -289,6 +291,12 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles }}
+        - name: secret
+          secret:
+            secretName: {{ template "common.names.fullname" . }}
+            defaultMode: 256
+        {{- end }}
         {{- if and (or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure")) .Values.usePasswordFiles }}
         - name: store-secret
           secret:
@@ -318,40 +326,12 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}
         {{- end }}
-{{- if and .Values.persistence.enabled (eq .Values.objectStore "file") }}
-        {{- if .Values.persistence.existingClaim }}
+        {{- if eq .Values.objectStore "file" }}
         - name: data
+          {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ tpl .Values.persistence.existingClaim . }}
+            claimName: {{ (tpl .Values.persistence.existingClaim .) | default (include "common.names.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
         {{- end }}
-  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
-  persistentVolumeClaimRetentionPolicy:
-    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
-    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
-  {{- end }}
-  {{- if not .Values.persistence.existingClaim }}
-  volumeClaimTemplates:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: data
-        {{- if .Values.persistence.annotations }}
-        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
-        {{- end }}
-        {{- if .Values.persistence.labels }}
-        labels: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
-        {{- end }}
-      spec:
-        accessModes:
-        {{- range .Values.persistence.accessModes }}
-          - {{ . | quote }}
-        {{- end }}
-        resources:
-          requests:
-            storage: {{ .Values.persistence.size | quote }}
-        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
-        {{- if .Values.persistence.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
-        {{- end -}}
-  {{- end }}
-{{- end }}

@@ -4,6 +4,19 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
 
+{{- if and (not .Values.auth.enabled) (or (contains .Values.service.type "NodePort") (contains .Values.service.type "LoadBalancer")) }}
+-------------------------------------------------------------------------------
+ WARNING
+
+    By not enabling "auth.enabled" you have most likely exposed the
+    InfluxDB(TM) Core service externally without any authentication mechanism.
+
+    For security reasons, we strongly suggest that you enable authentication
+    setting the "auth.enabled" parameter to "true".
+
+-------------------------------------------------------------------------------
+{{- end }}
+
 ** Please be patient while the chart is being deployed **
 
 {{- if .Values.diagnosticMode.enabled }}
@@ -27,21 +40,21 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-InfluxDB&trade; Core can be accessed through following DNS name from within your cluster:
+InfluxDB(TM) Core can be accessed through following DNS name from within your cluster:
 
     {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
 
-{{- if and .Values.auth.createAdminToken (ne .Values.objectStore "memory") }}
+{{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
 
 To get the admin token, run:
 
-    export ADMIN_TOKEN=$(kubectl exec --namespace {{ include "common.names.namespace" . }} {{ ternary "sts" "deploy" (eq .Values.objectStore "file") }}/{{ include "common.names.fullname" . }} -- cat {{ .Values.persistence.mountPath }}/.token)
+    export ADMIN_TOKEN=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.admin-token}" | base64 -d)
 
-{{- else }}
+{{- else if .Values.auth.enabled }}
 
 No admin token was created, you can generate it running:
 
-    kubectl exec --namespace {{ include "common.names.namespace" . }} {{ ternary "sts" "deploy" (eq .Values.objectStore "file") }}/{{ include "common.names.fullname" . }} -- influxdb3 create token --admin --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.tls.enabled }}--tls-ca /opt/bitnami/influxdb/certs/ca/tls.crt{{ end }}
+    kubectl exec --namespace {{ include "common.names.namespace" . }} deploy/{{ include "common.names.fullname" . }} -- influxdb3 create token --admin --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.tls.enabled }}--tls-ca /opt/bitnami/influxdb/certs/ca/tls.crt{{ end }}
 
 Please ensure you note it down!
 
@@ -50,7 +63,7 @@ Please ensure you note it down!
 To connect to your database, create a client pod:
 
     kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --restart='Never' \
-        {{ if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
+        {{ if .Values.auth.enabled }}--env ADMIN_TOKEN=$ADMIN_TOKEN {{ end }}{{ if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
         --command -- sleep infinity
         
 {{- if .Values.tls.enabled }}
@@ -65,11 +78,11 @@ Copy your CA TLS certificates to the pod:
 Run any desired CLI command:
 
     kubectl exec --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client \
-        -- influxdb3 --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} --token <admin-token> {{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
+        -- influxdb3 --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.auth.enabled }}--token $ADMIN_TOKEN {{ end }}{{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
 
 {{- if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to InfluxDB&trade; Core server(s).
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to InfluxDB(TM) Core server(s).
 
 {{- end }}
 
@@ -77,22 +90,22 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if .Values.ingress.enabled }}
 
-1. Get the InfluxDB&trade; Core API URL and associate InfluxDB&trade; Core hostname to your cluster external IP:
+1. Get the InfluxDB(TM) Core API URL and associate InfluxDB(TM) Core hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}{{ .Values.ingress.path }}"
+   echo "InfluxDB(TM) Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://{{ tpl .Values.ingress.hostname . }}{{ .Values.ingress.path }}"
    echo "$CLUSTER_IP  {{ tpl .Values.ingress.hostname . }}" | sudo tee -a /etc/hosts
 
 {{- else }}
 {{- $port := .Values.service.ports.http | toString }}
 
-1. Get the InfluxDB&trade; Core API URL by running these commands:
+1. Get the InfluxDB(TM) Core API URL by running these commands:
 
 {{- if contains "NodePort" .Values.service.type }}
 
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$NODE_IP:$NODE_PORT/"
+    echo "InfluxDB(TM) Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -100,28 +113,33 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ include "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}"
+    echo "InfluxDB(TM) Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ $port }}:{{ $port }} &
-    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}"
+    echo "InfluxDB(TM) Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}"
 
 {{- end }}
 {{- end }}
 
-2. Access the InfluxDB&trade; Core API URL using the CLI:
+2. Access the InfluxDB(TM) Core API URL using the CLI:
 
-    influxdb3 <command> --host <influxdb-api-url> --token <admin-token> {{ if .Values.tls.enabled }}--tls-ca <path-to-tls-ca>{{ end }}
+    influxdb3 <command> --host <influxdb-api-url> {{ if .Values.auth.enabled }}--token <admin-token> {{ end }}{{ if .Values.tls.enabled }}--tls-ca <path-to-tls-ca>{{ end }}
 
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.createAdminTokenJob.image }}
 {{- $resourcesSections := list "" }}
 {{- if .Values.defaultInitContainers.volumePermissions.enabled }}
   {{- $resourcesSections = append $resourcesSections "defaultInitContainers.volumePermissions" }}
 {{- end }}
+{{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
+  {{- $resourcesSections = append $resourcesSections "createAdminTokenJob" }}
+{{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourcesSections "context" .) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "context" .) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "context" .) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.createAdminTokenJob.image) "context" .) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image .Values.createAdminTokenJob.image) "context" .) }}
+{{- include "influxdb.validateValues" . }}

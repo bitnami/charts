@@ -7,23 +7,30 @@ file:
     filetype: directory
     mode: "2775"
     owner: root
+  # This file shouldn't exist given the token is created
+  # using a K8s Job
   /bitnami/influxdb/.token:
-    exists: true
-    filetype: file
-    mode: "0600"
+    exists: false
+addr:
+  tcp://influxdb:{{ .Vars.service.ports.http }}:
+    reachable: true
+    timeout: 10000
+  tcp://127.0.0.1:{{ .Vars.containerPorts.http }}:
+    reachable: true
+    timeout: 10000
 command:
   influxdb3-show-databases:
-    exec: bash -c "cat /bitnami/influxdb/.token | xargs influxdb3 show databases --host http://127.0.0.1:{{ .Vars.containerPorts.http }} --token"
+    exec: bash -c ". /opt/bitnami/scripts/influxdb-env.sh; influxdb3 show databases --host http://127.0.0.1:{{ .Vars.containerPorts.http }} --token \$INFLUXDB_ADMIN_TOKEN"
     exit-status: 0
     stdout:
       - "{{ .Vars.databases }}"
   influxdb3-write:
-    exec: bash -c "cat /bitnami/influxdb/.token | xargs -I{} influxdb3 write --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token {} 'home,room=Living\ Room temp=21.1,hum=35.9,co=0i 1747036800'"
+    exec: bash -c ". /opt/bitnami/scripts/influxdb-env.sh; influxdb3 write --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token \$INFLUXDB_ADMIN_TOKEN 'home,room=Living\ Room temp=21.1,hum=35.9,co=0i 1747036800'"
     exit-status: 0
     stdout:
       - "success"
   influxdb3-query:
-    exec: bash -c "sleep 3; cat /bitnami/influxdb/.token | xargs -I{} influxdb3 query --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token {} 'SELECT * FROM home'"
+    exec: bash -c "sleep 3; . /opt/bitnami/scripts/influxdb-env.sh; influxdb3 query --database {{ .Vars.databases }} --host http://influxdb:{{ .Vars.service.ports.http }} --token \$INFLUXDB_ADMIN_TOKEN 'SELECT * FROM home'"
     exit-status: 0
     stdout:
       - "Living Room"

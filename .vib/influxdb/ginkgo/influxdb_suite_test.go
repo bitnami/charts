@@ -26,7 +26,7 @@ var (
 
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&deployName, "name", "", "name of the primary statefulset")
+	flag.StringVar(&deployName, "name", "", "name of the Influxdb deployment")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.StringVar(&database, "database", "", "name of the database to be used")
 	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
