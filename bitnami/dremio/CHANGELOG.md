@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.3 (2025-05-20)
+## 2.0.3 (2025-05-21)
 
 * [bitnami/dremio] fix: ingress to wrong port ([#33804](https://github.com/bitnami/charts/pull/33804))
 
