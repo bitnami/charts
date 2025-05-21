@@ -5,9 +5,9 @@ annotations:
   category: Database
   images: |
     - name: clickhouse
-      image: docker.io/bitnami/clickhouse:25.4.4-debian-12-r0
+      image: docker.io/bitnami/clickhouse:25.4.5-debian-12-r0
     - name: clickhouse-keeper
-      image: docker.io/bitnami/clickhouse-keeper:25.4.4-debian-12-r1
+      image: docker.io/bitnami/clickhouse-keeper:25.4.5-debian-12-r0
     - name: clickhouse-operator
       image: docker.io/bitnami/clickhouse-operator:0.24.5-debian-12-r4
     - name: clickhouse-operator-metrics-exporter
@@ -38,4 +38,4 @@ name: clickhouse-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/clickhouse-operator
 - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator
-version: 0.2.4
+version: 0.2.5

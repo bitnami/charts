@@ -109,7 +109,7 @@ image:
 clickHouseImage:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 25.4.4-debian-12-r0
+  tag: 25.4.5-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -136,7 +136,7 @@ clickHouseImage:
 keeperImage:
   registry: docker.io
   repository: bitnami/clickhouse-keeper
-  tag: 25.4.4-debian-12-r1
+  tag: 25.4.5-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
