@@ -263,21 +263,25 @@ If you need to upgrade database to meet [system requirement](https://streampark.
 
 ### Docker server parameters
 
-| Name                                      | Description                                        | Value                    |
-| ----------------------------------------- | -------------------------------------------------- | ------------------------ |
-| `dockerInDocker.create`                   | Create dind deployment or not                      | `true`                   |
-| `dockerInDocker.image.registry`           | Image registry                                     | `REGISTRY_NAME`          |
-| `dockerInDocker.image.repository`         | Image repository                                   | `REPOSITORY_NAME/docker` |
-| `dockerInDocker.image.tag`                | Image tag (immutable tags are recommended)         | `dind`                   |
-| `dockerInDocker.image.pullPolicy`         | Image pull policy                                  | `IfNotPresent`           |
-| `dockerInDocker.image.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                     |
-| `dockerInDocker.extraEnvVars`             | Extra environment variables for dind container     | `[]`                     |
-| `dockerInDocker.persistence.accessModes`  | Access mode for persistent volume                  | `ReadWriteOnce`          |
-| `dockerInDocker.persistence.storageClass` | StorageClass for persistent volume                 | `""`                     |
-| `dockerInDocker.persistence.volumeMode`   | Volume mode for persistent volume                  | `Filesystem`             |
-| `dockerInDocker.persistence.size`         | Storage size for persistent volume                 | `10Gi`                   |
-| `dockerInDocker.externalHost`             | Host name or IP address for external Docker server | `""`                     |
-| `dockerInDocker.externalPort`             | Port number for external Docker server             | `2375`                   |
+| Name                                      | Description                                        | Value                     |
+| ----------------------------------------- | -------------------------------------------------- | ------------------------- |
+| `dockerInDocker.create`                   | Create dind deployment or not                      | `true`                    |
+| `dockerInDocker.image.registry`           | Image registry                                     | `REGISTRY_NAME`           |
+| `dockerInDocker.image.repository`         | Image repository                                   | `REPOSITORY_NAME/docker`  |
+| `dockerInDocker.image.tag`                | Image tag (immutable tags are recommended)         | `dind`                    |
+| `dockerInDocker.image.pullPolicy`         | Image pull policy                                  | `IfNotPresent`            |
+| `dockerInDocker.image.pullSecrets`        | Specify docker-registry secret names as an array   | `[]`                      |
+| `dockerInDocker.extraEnvVars`             | Extra environment variables for dind container     | `[]`                      |
+| `dockerInDocker.persistence.accessModes`  | Access mode for persistent volume                  | `ReadWriteOnce`           |
+| `dockerInDocker.persistence.storageClass` | StorageClass for persistent volume                 | `""`                      |
+| `dockerInDocker.persistence.volumeMode`   | Volume mode for persistent volume                  | `Filesystem`              |
+| `dockerInDocker.persistence.size`         | Storage size for persistent volume                 | `10Gi`                    |
+| `dockerInDocker.externalHost`             | Host name or IP address for external Docker server | `""`                      |
+| `dockerInDocker.externalPort`             | Port number for external Docker server             | `2375`                    |
+| `busybox.image.registry`                  | Image registry                                     | `REGISTRY_NAME`           |
+| `busybox.image.repository`                | Image repository                                   | `REPOSITORY_NAME/busybox` |
+| `busybox.image.tag`                       | Image tag                                          | `latest`                  |
+| `busybox.image.pullPolicy`                | Image pullPolicy                                   | `IfNotPresent`            |
 
 ### External database parameters
 
