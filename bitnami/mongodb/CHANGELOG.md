@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.9 (2025-05-20)
+## 16.5.10 (2025-05-21)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#33788](https://github.com/bitnami/charts/pull/33788))
+* [bitnami/mongodb] Add ability to configure SA for backup ([#33112](https://github.com/bitnami/charts/pull/33112))
+
+## <small>16.5.9 (2025-05-20)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33788) ([4fdeeab](https://github.com/bitnami/charts/commit/4fdeeabffdc2d05a3a5343b88ba6ae078cb8b601)), closes [#33788](https://github.com/bitnami/charts/issues/33788)
 
 ## <small>16.5.8 (2025-05-16)</small>
 
