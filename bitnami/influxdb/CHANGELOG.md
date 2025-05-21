@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.6.15 (2025-05-21)
+## 7.0.0 (2025-05-21)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33806](https://github.com/bitnami/charts/pull/33806))
+* [bitnami/influxdb] feat: InfluxDB 3 major version ([#33743](https://github.com/bitnami/charts/pull/33743))
+
+## <small>6.6.15 (2025-05-21)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33806) ([4a7dfd0](https://github.com/bitnami/charts/commit/4a7dfd0f7669ff4445772c6346c5e3b6bf0a92dc)), closes [#33806](https://github.com/bitnami/charts/issues/33806)
 
 ## <small>6.6.14 (2025-05-19)</small>
 
