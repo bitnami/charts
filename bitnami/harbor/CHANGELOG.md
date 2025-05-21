@@ -1,5 +1,9 @@
 # Changelog
 
+## 26.1.0 (2025-05-21)
+
+* [bitnami/harbor] Add revisionHistoryLimit configuration property for all Harbor deployments
+
 ## 26.0.2 (2025-05-14)
 
 * [bitnami/harbor] update tracing environment variables and escaping ([#33680](https://github.com/bitnami/charts/pull/33680))
