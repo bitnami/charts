@@ -5,9 +5,9 @@ annotations:
   category: DeveloperTools
   images: |
     - name: chainloop-artifact-cas
-      image: docker.io/bitnami/chainloop-artifact-cas:1.4.1-debian-12-r1
+      image: docker.io/bitnami/chainloop-artifact-cas:1.4.2-debian-12-r0
     - name: chainloop-control-plane
-      image: docker.io/bitnami/chainloop-control-plane:1.4.1-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane:1.4.2-debian-12-r0
     - name: chainloop-control-plane-migrations
       image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.2-debian-12-r0
     - name: dex
@@ -15,7 +15,7 @@ annotations:
   license: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 1.4.1
+appVersion: 1.4.2
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
