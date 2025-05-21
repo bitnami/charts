@@ -41,8 +41,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
   Default user in StreamPark will be 'admin' with password 'streampark'.
 
-{{- $imageList := list .Values.image .Values.busybox.image .Values.dockerInDocker.image .Values.externalDatabase.image }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" $imageList "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" $imageList "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.busybox.image .Values.dockerInDocker.image .Values.externalDatabase.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.busybox.image .Values.dockerInDocker.image .Values.externalDatabase.image) "context" $) }}

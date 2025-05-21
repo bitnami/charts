@@ -1,18 +1,22 @@
 # Bitnami package for StreamPark
+
 Apache StreamPark™ is a user-friendly streaming application development framework and one-stop cloud-native real-time computing platform.
 
 [Learn more about StreamPark](https://streampark.apache.org/)
 
 ## Introduction
+
 This chart bootstrap a StreamPark deployment on a Kubernetes cluster using the Helm package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
+
 - Kubernetes 1.23+
 - Helm 3.8.0+
 
 ## Installing the Chart
+
 To install the chart with the release name `my-release`:
 
 ```console
@@ -26,16 +30,19 @@ It will deploy a StreamPark and a PostgreSQL instance on the Kubernetes cluster.
 ## Configuration and installation details
 
 ### Resource requests and limits
+
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
+
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
 ### Use an external database
+
 To make StreamPark connect to an external database (e.g., a managed database service or a centralized database server), disable the internal database options by setting `postgresql.enabled` and `mysql.enabled` to `false`. Then, provide the connection details for your external database using the `externalDatabase.*` parameters. Here is an example:
 
 > WARNING: Please make sure there is already a database named `streampark` in the external database instance.
@@ -60,102 +67,121 @@ externalDatabase:
     pullPolicy: IfNotPresent
 ```
 
-To initialize the required schema and data in the external database, you have two options: 
+To initialize the required schema and data in the external database, you have two options:
 
-  * Enable `externalDatabase.initDatabase` to use our provided initialization job
-  * Perform the initialization manually using the SQL scripts located at [SQL scripts](https://github.com/apache/streampark/tree/v2.1.5/streampark-console/streampark-console-service/src/main/assembly/script)
+- Enable `externalDatabase.initDatabase` to use our provided initialization job
+- Perform the initialization manually using the SQL scripts located at [SQL scripts](https://github.com/apache/streampark/tree/v2.1.5/streampark-console/streampark-console-service/src/main/assembly/script)
 
 The initialization job is created and executed only during the initial installation. If the initialization fails for any reason, you will need to either reinstall the chart again or redeploy the initialization job only. Please follow these steps to redeploy initialization job:
 
 1. Retrieve the Job YAML
-    ```bash
-    kubectl get job -n [NAMESPACE] [JOB NAME] -o yaml > job.yaml
-    ```
-2. Delete failed Job
-    ```bash
-    kubectl delete job -n [NAMESPACE] [JOB NAME]
-    ```
-3. Re-deploy a new Job with previous YAML
-    ```bash
-    kubectl apply -f job.yaml
-    ```
+
+```bash
+kubectl get job -n [NAMESPACE] [JOB NAME] -o yaml > job.yaml
+```
+
+1. Delete failed Job
+
+```bash
+kubectl delete job -n [NAMESPACE] [JOB NAME]
+```
+    
+1. Re-deploy a new Job with previous YAML
+
+```bash
+kubectl apply -f job.yaml
+```
 
 ### Docker engine
+
 When a user submits a job, StreamPark automatically builds a container image for the job using a Docker engine. This image encapsulates the job's code and dependencies. The resulting image is then pushed to an external artifact registry, such as Docker Hub or a private registry. Flink subsequently pulls this image from the registry and uses it to launch a Flink Session, providing a consistent and reproducible execution environment.
 
 Therefore, we should specify the Docker engine in following 2 ways:
 
-  * Enabling `dockerInDocker.create` to create a DinD (Docker in Docker) Pod with privileged mode
-  * Provision additional Docker engine with following values
-    ```yaml
-    dockerInDocker:
-      create: false
-      externalHost: "your-docker-engine.local"
-      externalPort: 2375
-    ```
+- Enabling `dockerInDocker.create` to create a DinD (Docker in Docker) Pod with privileged mode
+- Provision additional Docker engine with following values
+
+```yaml
+dockerInDocker:
+create: false
+externalHost: "your-docker-engine.local"
+externalPort: 2375
+```
 
 The Docker engine will be directly specified as environment variable `DOCKER_HOST` in `templates/deployment.yaml`.
 
 > NOTICE: For security reasons, Docker in Docker (DinD) is typically disabled on Kubernetes clusters in most public cloud environments. This is because DinD can introduce potential security vulnerabilities. To work around this limitation, you can create a dedicated `dind` service on a separate cloud instance and configure StreamPark to use this service for building container images.
 
 ### Configure TLS Secrets for use with Ingress
+
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases :
 
-  * Use the `ingress.tlsSecretName` parameter to point the TLS secret you already have
-    ```yaml
-    ingress:
-      tls: true
-      # The TLS secret must contain keys named tls.crt and tls.key that contain the certificate and private key to use for TLS.
-      tlsSecretName: "your-secret-name"
-    ```
-  * Use the `ingress.secrets` parameter to create this TLS secret, and it will be attached on ingress automatically
-    ```yaml
-    ingress:
-      tls: true
-      secrets:
-      - name: streampark.local-tls # specify to your hostname instead of 'streampark.local'
-        certificate: |-
-          -----BEGIN CERTIFICATE-----
-          ...
-          -----END CERTIFICATE-----
-        key: |-
-          -----BEGIN RSA PRIVATE KEY-----
-          ...
-          -----END RSA PRIVATE KEY-----
-    ```
-  * Rely on cert-manager to create it by setting the [corresponding annotations](https://cert-manager.io/docs/usage/ingress/#supported-annotations)
-    ```yaml
-    ingress:
-      tls: true
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
-    ```
-  * Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
-    ```yaml
-    ingress:
-      tls: true
-      selfSigned: true
-    ```
+- Use the `ingress.tlsSecretName` parameter to point the TLS secret you already have
+
+```yaml
+ingress:
+  tls: true
+  # The TLS secret must contain keys named tls.crt and tls.key that contain the certificate and private key to use for TLS.
+  tlsSecretName: "your-secret-name"
+```
+
+- Use the `ingress.secrets` parameter to create this TLS secret, and it will be attached on ingress automatically
+
+```yaml
+ingress:
+  tls: true
+  secrets:
+  - name: streampark.local-tls # specify to your hostname instead of 'streampark.local'
+    certificate: |-
+      -----BEGIN CERTIFICATE-----
+      ...
+      -----END CERTIFICATE-----
+    key: |-
+      -----BEGIN RSA PRIVATE KEY-----
+      ...
+      -----END RSA PRIVATE KEY-----
+```
+
+- Rely on cert-manager to create it by setting the [corresponding annotations](https://cert-manager.io/docs/usage/ingress/#supported-annotations)
+
+```yaml
+ingress:
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+```
+
+- Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+
+```yaml
+ingress:
+  tls: true
+  selfSigned: true
+```
 
 ### Upgrade
+
 If you need to upgrade database to meet [system requirement](https://streampark.apache.org/docs/get-started/installation), here is how you can do steps by steps :
 
 1. Stop Streampark service
-    ```bash
-    kubectl scale deployment [Deployment Name] -n [Namespace] --replica 0
-    ```
 
-2. According to how you install database, upgrade database version by your own.
+```bash
+kubectl scale deployment [Deployment Name] -n [Namespace] --replica 0
+```
 
-3. Download [Streampark release](https://streampark.apache.org/download/) to get SQL scripts and upgrade database in sequences :
-    * If the current version is `2.1.2`, you need to execute the scripts in the following order: `2.1.3.sql` → `2.1.4.sql` → `2.1.5.sql`.
-    * If the current version is `2.1.3`, you need to execute `2.1.4.sql` → `2.1.5.sql`.
-    * If the current version is `2.1.4`, you only need to execute `2.1.5.sql`.
+1. According to how you install database, upgrade database version by your own.
 
-4. Restart or upgrade Streampark service
-    ```bash
-    kubectl scale deployment [Deployment Name] -n [Namespace] --replica 1
-    ```
+1. Download [Streampark release](https://streampark.apache.org/download/) to get SQL scripts and upgrade database in sequences:
+
+- If the current version is `2.1.2`, you need to execute the scripts in the following order: `2.1.3.sql` → `2.1.4.sql` → `2.1.5.sql`.
+- If the current version is `2.1.3`, you need to execute `2.1.4.sql` → `2.1.5.sql`.
+- If the current version is `2.1.4`, you only need to execute `2.1.5.sql`.
+
+1. Restart or upgrade Streampark service
+
+```bash
+kubectl scale deployment [Deployment Name] -n [Namespace] --replica 1
+```
 
 ## Parameters
 
@@ -304,6 +330,7 @@ If you need to upgrade database to meet [system requirement](https://streampark.
 ## Know Issues
 
 ### SSO configuration
+
 **Description** : According to the [config.yaml](https://github.com/apache/streampark/blob/v2.1.5/helm/streampark/conf/config.yaml), there is no any corresponding field for SSO configuration like the original [application-sso.yml](https://streampark.apache.org/docs/platform/sso#how-to-enable-sso-login). Since `application-*.yml` is deprecated in v2.1.5, we still not know how to inject SSO related parameters in `config.yaml`.
 
 **Follow Up** : [Issues on GitHub](https://github.com/apache/streampark/issues/4237)
