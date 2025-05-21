@@ -1,6 +1,3 @@
-# Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
-
 # This Helm chart is based on the original chart from the Apache Software Foundation.
 # Modifications have been made by PO-YU SHEN on 2025/04/29.
 #
@@ -19,10 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-** Please be patient while the chart StreamPark {{ .Chart.AppVersion }} is being deployed **
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
 
-ChartVersion:{{ .Chart.Version }}[refers to the release version]
-appVersion:{{ .Chart.Version }}[refers to the code version]
+** Please be patient while the chart is being deployed **
 
 {{- if .Values.ingress.enabled }}
 
@@ -42,3 +40,9 @@ appVersion:{{ .Chart.Version }}[refers to the code version]
 {{- end }}
 
   Default user in StreamPark will be 'admin' with password 'streampark'.
+
+{{- $imageList := list .Values.image .Values.busybox.image .Values.dockerInDocker.image .Values.externalDatabase.image }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" $imageList "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" $imageList "context" $) }}
