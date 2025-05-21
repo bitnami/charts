@@ -67,7 +67,6 @@ Run any desired CLI command:
     kubectl exec --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client \
         -- influxdb3 --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} --token <admin-token> {{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
 
-
 {{- if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}
 
 Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to InfluxDB&trade; Core server(s).
