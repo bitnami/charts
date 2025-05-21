@@ -1243,7 +1243,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.27.10-debian-12-r1
+        tag: 2.27.20-debian-12-r0
         digest: ""
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
         ##

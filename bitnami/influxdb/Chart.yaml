@@ -5,7 +5,7 @@ annotations:
   category: Database
   images: |
     - name: aws-cli
-      image: docker.io/bitnami/aws-cli:2.27.10-debian-12-r1
+      image: docker.io/bitnami/aws-cli:2.27.20-debian-12-r0
     - name: azure-cli
       image: docker.io/bitnami/azure-cli:2.73.0-debian-12-r0
     - name: google-cloud-sdk
@@ -39,4 +39,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.6.15
+version: 6.6.16
