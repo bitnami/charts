@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.6.15 (2025-05-20)
+## 6.6.15 (2025-05-21)
 
 * [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33806](https://github.com/bitnami/charts/pull/33806))
 
