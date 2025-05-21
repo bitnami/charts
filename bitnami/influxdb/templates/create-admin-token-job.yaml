@@ -184,22 +184,22 @@ spec:
             - -ec
             - |
               encoded_token="$(tr -d '\n' < /shared/token | base64 -w 0)"
-              patch_payload=$(cat <<EOF
-              [
-                {
-                  "op": "add",
-                  "path": "/data",
-                  "value": {
-                    "admin-token": "${encoded_token}"
-                  }
-                }
-              ]
+              cat <<EOF | kubectl create -f -
+              apiVersion: v1
+              kind: Secret
+              type: Opaque
+              metadata:
+                name: {{ include "common.names.fullname" . }}
+                namespace: {{ include "common.names.namespace" . | quote }}
+                labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 18 }}
+                  app.kubernetes.io/part-of: influxdb
+                  app.kubernetes.io/component: influxdb
+                {{- if .Values.commonAnnotations }}
+                annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 18 }}
+                {{- end }}
+              data:
+                admin-token: $encoded_token
               EOF
-              )
-              kubectl patch secret {{ include "common.names.fullname" . }} \
-                --namespace {{ include "common.names.namespace" . }} \
-                --type=json \
-                --patch "$patch_payload"
           volumeMounts:
             - name: empty-dir
               mountPath: /shared

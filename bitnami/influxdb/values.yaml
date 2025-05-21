@@ -247,7 +247,7 @@ extraContainerPorts: []
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "medium"
+resourcesPreset: "small"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -942,7 +942,7 @@ createAdminTokenJob:
   ## @param createAdminTokenJob.resourcesPreset Set InfluxDB(TM) Core "create-admin-token" job's container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if createAdminTokenJob.resources is set (createAdminTokenJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "small"
+  resourcesPreset: "micro"
   ## @param createAdminTokenJob.resources Set InfluxDB(TM) Core "create-admin-token" job's container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## E.g:
   ## resources:

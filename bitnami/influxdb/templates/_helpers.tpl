@@ -56,6 +56,17 @@ Create the name of the ServiceAccount to use on "create-admin-token" job pods
 {{- end -}}
 
 {{/*
+Create the name of the ServiceAccount to use on "delete-admin-token" job pods
+*/}}
+{{- define "influxdb.deleteAdminTokenJob.serviceAccountName" -}}
+{{- if .Values.createAdminTokenJob.serviceAccount.create -}}
+    {{ default (printf "%s-delete-admin-token" (include "common.names.fullname" .)) .Values.createAdminTokenJob.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.createAdminTokenJob.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the InfluxDB&trade; Core Store secret name
 */}}
 {{- define "influxdb.store.secret.name" -}}
