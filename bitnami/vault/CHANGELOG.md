@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.7.9 (2025-05-09)
+## 1.7.10 (2025-05-21)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#33594](https://github.com/bitnami/charts/pull/33594))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#33791](https://github.com/bitnami/charts/pull/33791))
+
+## <small>1.7.9 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33594) ([7a93af2](https://github.com/bitnami/charts/commit/7a93af29d76c865a334893977f4de5bd5383f04f)), closes [#33594](https://github.com/bitnami/charts/issues/33594)
 
 ## <small>1.7.8 (2025-05-07)</small>
 

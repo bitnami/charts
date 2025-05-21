@@ -2,25 +2,27 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: service
   category: Database
-  licenses: Apache-2.0
   images: |
     - name: clickhouse
-      image: docker.io/bitnami/clickhouse:25.4.2-debian-12-r0
+      image: docker.io/bitnami/clickhouse:25.4.5-debian-12-r0
     - name: clickhouse-keeper
-      image: docker.io/bitnami/clickhouse-keeper:25.4.2-debian-12-r0
+      image: docker.io/bitnami/clickhouse-keeper:25.4.5-debian-12-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r43
+      image: docker.io/bitnami/os-shell:12-debian-12-r45
+  licenses: Apache-2.0
+  tanzuCategory: service
 apiVersion: v2
-appVersion: 25.4.2
+appVersion: 25.4.5
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
   version: 2.x.x
-description: ClickHouse is an open-source column-oriented OLAP database management system. Use it to boost your database performance while providing linear scalability and hardware efficiency.
+description: ClickHouse is an open-source column-oriented OLAP database management
+  system. Use it to boost your database performance while providing linear scalability
+  and hardware efficiency.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
 keywords:
@@ -32,4 +34,4 @@ maintainers:
 name: clickhouse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/clickhouse
-version: 9.2.2
+version: 9.2.3

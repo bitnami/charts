@@ -2,7 +2,7 @@
 
 ## 16.5.10 (2025-05-21)
 
-* [bitnami/mongodb] generate-tls-certs init container should respect tls securityContext ([#33803](https://github.com/bitnami/charts/pull/33803))
+* [bitnami/mongodb] Add ability to configure SA for backup ([#33112](https://github.com/bitnami/charts/pull/33112))
 
 ## <small>16.5.9 (2025-05-20)</small>
 

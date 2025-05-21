@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.4 (2025-05-06)
+## 32.2.5 (2025-05-21)
 
-* [bitnami/redmine] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33430](https://github.com/bitnami/charts/pull/33430))
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#33809](https://github.com/bitnami/charts/pull/33809))
+
+## <small>32.2.4 (2025-05-06)</small>
+
+* [bitnami/redmine] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33430 ([62bad3d](https://github.com/bitnami/charts/commit/62bad3d380fa3272eaf988d15b4f11062017531c)), closes [#33430](https://github.com/bitnami/charts/issues/33430)
 
 ## <small>32.2.3 (2025-04-21)</small>
 

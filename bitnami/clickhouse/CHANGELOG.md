@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.2 (2025-05-06)
+## 9.2.3 (2025-05-20)
 
-* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33345](https://github.com/bitnami/charts/pull/33345))
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#33601](https://github.com/bitnami/charts/pull/33601))
+
+## <small>9.2.2 (2025-05-07)</small>
+
+* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([6924c7c](https://github.com/bitnami/charts/commit/6924c7cec199259b74f06c3d9eba4cba80cfbede)), closes [#33345](https://github.com/bitnami/charts/issues/33345)
 
 ## <small>9.2.1 (2025-05-05)</small>
 

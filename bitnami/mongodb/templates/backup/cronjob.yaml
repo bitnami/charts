@@ -70,6 +70,7 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           enableServiceLinks: {{ .Values.enableServiceLinks }}
+          serviceAccountName: {{ .Values.backup.cronjob.serviceAccount.name | quote }}
           {{- if .Values.tls.enabled }}
           initContainers:
             - name: generate-tls-certs
