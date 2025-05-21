@@ -85,7 +85,7 @@ kubectl get job -n [NAMESPACE] [JOB NAME] -o yaml > job.yaml
 ```bash
 kubectl delete job -n [NAMESPACE] [JOB NAME]
 ```
-    
+
 1. Re-deploy a new Job with previous YAML
 
 ```bash
