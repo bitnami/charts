@@ -127,6 +127,12 @@ spec:
             - name: INFLUXDB_DATABASES
               value: {{ .Values.databases | quote }}
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: INFLUXDB3_TLS_CERT
+              value: "/opt/bitnami/influxdb/certs/server/tls.crt"
+            - name: INFLUXDB3_TLS_KEY
+              value: "/opt/bitnami/influxdb/certs/server/tls.key"
+            {{- end }}
             {{- if or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure") }}
             - name: INFLUXDB3_BUCKET
               value: {{ .Values.bucket | quote }}
@@ -258,6 +264,14 @@ spec:
               mountPath: /opt/bitnami/influxdb/secrets
               readOnly: true
             {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: ca-certs
+              mountPath: /opt/bitnami/influxdb/certs/ca
+              readOnly: true
+            - name: server-certs
+              mountPath: /opt/bitnami/influxdb/certs/server
+              readOnly: true
+            {{- end }}
             {{- if or .Values.initdbScripts .Values.initdbScriptsCM }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -279,6 +293,16 @@ spec:
         - name: store-secret
           secret:
             secretName: {{ template "influxdb.store.secret.name" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: ca-certs
+          secret:
+            secretName: {{ template "influxdb.tls.ca.secretName" . }}
+            defaultMode: 256
+        - name: server-certs
+          secret:
+            secretName: {{ template "influxdb.tls.server.secretName" . }}
             defaultMode: 256
         {{- end }}
         {{- if or .Values.initdbScripts .Values.initdbScriptsCM }}

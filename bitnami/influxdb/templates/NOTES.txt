@@ -41,17 +41,32 @@ To get the admin token, run:
 
 No admin token was created, you can generate it running:
 
-    kubectl exec --namespace {{ include "common.names.namespace" . }} {{ ternary "sts" "deploy" (eq .Values.objectStore "file") }}/{{ include "common.names.fullname" . }} -- influxdb3 create token --admin --host http://127.0.0.1:{{ .Values.containerPorts.http }}
+    kubectl exec --namespace {{ include "common.names.namespace" . }} {{ ternary "sts" "deploy" (eq .Values.objectStore "file") }}/{{ include "common.names.fullname" . }} -- influxdb3 create token --admin --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.tls.enabled }}--tls-ca /opt/bitnami/influxdb/certs/ca/tls.crt{{ end }}
 
 Please ensure you note it down!
 
 {{- end }}
 
-To connect to your database run the following commands:
+To connect to your database, create a client pod:
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ include "common.names.namespace" . }} \
+    kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --restart='Never' \
         {{ if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{ end }}--image {{ include "influxdb.image" . }} \
-        --command -- influxdb3 --host http://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} --token <admin-token>
+        --command -- sleep infinity
+        
+{{- if .Values.tls.enabled }}
+
+Copy your CA TLS certificates to the pod:
+
+    kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "influxdb.tls.ca.secretName" . }} -o json | jq -r '.data["tls.crt"]' | base64 --decode > /tmp/tls.crt
+    kubectl cp --namespace {{ include "common.names.namespace" . }} /tmp/tls.crt {{ include "common.names.fullname" . }}-client:/tmp/tls.crt
+
+{{- end }}
+
+Run any desired CLI command:
+
+    kubectl exec --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client \
+        -- influxdb3 --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} --token <admin-token> {{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
+
 
 {{- if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}
 
@@ -78,7 +93,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo "InfluxDB&trade; Core API URL: http://$NODE_IP:$NODE_PORT/"
+    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
@@ -86,19 +101,19 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ include "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    echo "InfluxDB&trade; Core API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}"
+    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://$SERVICE_IP{{- if ne $port "80" }}:{{ $port }}{{ end }}"
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ $port }}:{{ $port }} &
-    echo "InfluxDB&trade; Core API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}"
+    echo "InfluxDB&trade; Core API URL: http{{ if .Values.ingress.tls }}s{{ end }}://127.0.0.1{{- if ne $port "80" }}:{{ $port }}{{ end }}"
 
 {{- end }}
 {{- end }}
 
 2. Access the InfluxDB&trade; Core API URL using the CLI:
 
-    influxdb3 <command> --host <influxdb-api-url> --token <admin-token>
+    influxdb3 <command> --host <influxdb-api-url> --token <admin-token> {{ if .Values.tls.enabled }}--tls-ca <path-to-tls-ca>{{ end }}
 
 {{- end }}
 
