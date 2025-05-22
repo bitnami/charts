@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.9 (2025-05-06)
+## 9.4.0 (2025-05-22)
 
-* [bitnami/spark] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33437](https://github.com/bitnami/charts/pull/33437))
+* [bitnami/spark] Spark optional worker ([#33834](https://github.com/bitnami/charts/pull/33834))
+
+## <small>9.3.9 (2025-05-06)</small>
+
+* [bitnami/spark] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33437) ([75a7f53](https://github.com/bitnami/charts/commit/75a7f53e026a329b52df51ab952156e1c8641de2)), closes [#33437](https://github.com/bitnami/charts/issues/33437)
 
 ## <small>9.3.8 (2025-05-05)</small>
 
