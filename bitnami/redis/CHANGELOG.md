@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.6 (2025-05-22)
+## 21.1.8 (2025-05-22)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33825](https://github.com/bitnami/charts/pull/33825))
+* [bitnami/redis] Sentinel - use external announce IP in prestop hooks #33828 ([#33829](https://github.com/bitnami/charts/pull/33829))
+
+## <small>21.1.6 (2025-05-22)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33825) ([9b34897](https://github.com/bitnami/charts/commit/9b34897bab192ea829865d4a8ddfde9beab48199)), closes [#33825](https://github.com/bitnami/charts/issues/33825)
 
 ## <small>21.1.5 (2025-05-20)</small>
 
