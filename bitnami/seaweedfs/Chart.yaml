@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: mariadb
-      image: docker.io/bitnami/mariadb:11.4.6-debian-12-r0
+      image: docker.io/bitnami/mariadb:11.4.6-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r43
+      image: docker.io/bitnami/os-shell:12-debian-12-r45
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r3
+      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r4
     - name: seaweedfs
-      image: docker.io/bitnami/seaweedfs:3.87.0-debian-12-r1
+      image: docker.io/bitnami/seaweedfs:3.87.0-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -51,4 +51,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 4.8.8
+version: 4.8.9
