@@ -542,7 +542,15 @@ data:
     sentinel_failover_finished() {
       REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
       REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+      {{- if .Values.sentinel.externalAccess.enabled }}
+      if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
+        [[ "$REDIS_MASTER_HOST" != "$REDIS_CLUSTER_ANNOUNCE_IP" ]]
+      else
+        [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+      fi
+      {{- else }}
       [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+      {{- end }}
     }
 
     REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
@@ -625,7 +633,15 @@ data:
     sentinel_failover_finished() {
         REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
         REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+        {{- if .Values.sentinel.externalAccess.enabled }}
+        if [[ -n "${REDIS_CLUSTER_ANNOUNCE_IP}" ]]; then
+          [[ "$REDIS_MASTER_HOST" != "$REDIS_CLUSTER_ANNOUNCE_IP" ]]
+        else
+          [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+        fi
+        {{- else }}
         [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+        {{- end }}
     }
 
     REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
