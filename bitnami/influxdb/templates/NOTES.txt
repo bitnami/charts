@@ -44,11 +44,11 @@ InfluxDB(TM) Core can be accessed through following DNS name from within your cl
 
     {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
 
-{{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
+{{- if and .Values.auth.enabled (ne .Values.objectStore "memory") (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
 
 To get the admin token, run:
 
-    export ADMIN_TOKEN=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.admin-token}" | base64 -d)
+    export ADMIN_TOKEN=$(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "influxdb.secret.name" . }} -o jsonpath="{.data.{{ include "influxdb.secret.adminTokenKey" . }}}" | base64 -d)
 
 {{- else if .Values.auth.enabled }}
 
@@ -78,7 +78,7 @@ Copy your CA TLS certificates to the pod:
 Run any desired CLI command:
 
     kubectl exec --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client \
-        -- influxdb3 --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.auth.enabled }}--token $ADMIN_TOKEN {{ end }}{{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
+        -- influxdb3 <command> --host http{{ if .Values.tls.enabled }}s{{ end }}://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http }} {{ if .Values.auth.enabled }}--token $ADMIN_TOKEN {{ end }}{{ if .Values.tls.enabled }}--tls-ca /tmp/tls.crt{{ end }}
 
 {{- if and .Values.networkPolicy.enabled (not .Values.networkPolicy.allowExternal) }}
 

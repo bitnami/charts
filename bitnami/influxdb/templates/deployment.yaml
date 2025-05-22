@@ -111,16 +111,16 @@ spec:
             {{- end }}
             - name: INFLUXDB_NODE_ID
               value: {{ .Values.nodeId | quote }}
-            {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
+            {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
             {{- if .Values.usePasswordFiles }}
             - name: INFLUXDB_ADMIN_TOKEN_FILE
-              value: "/opt/bitnami/influxdb/secrets/admin-token"
+              value: {{ printf "/opt/bitnami/influxdb/secrets/%s" (include "influxdb.secret.adminTokenKey" .) }}
             {{- else }}
             - name: INFLUXDB_ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
-                  key: admin-token
+                  name: {{ template "influxdb.secret.name" . }}
+                  key: {{ template "influxdb.secret.adminTokenKey" . }}
             {{- end }}
             {{- if .Values.databases }}
             - name: INFLUXDB_DATABASES
@@ -252,7 +252,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles }}
+            {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
             - name: secret
               mountPath: /opt/bitnami/influxdb/secrets
               readOnly: true
@@ -291,10 +291,10 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.auth.enabled .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles }}
+        {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
         - name: secret
           secret:
-            secretName: {{ template "common.names.fullname" . }}
+            secretName: {{ template "influxdb.secret.name" . }}
             defaultMode: 256
         {{- end }}
         {{- if and (or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure")) .Values.usePasswordFiles }}

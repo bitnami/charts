@@ -67,6 +67,28 @@ Create the name of the ServiceAccount to use on "delete-admin-token" job pods
 {{- end -}}
 
 {{/*
+Return the InfluxDB&trade; Core secret name
+*/}}
+{{- define "influxdb.secret.name" -}}
+{{- if .Values.auth.existingSecret -}}
+    {{- tpl .Values.auth.existingSecret . -}}
+{{- else }}
+    {{- include "common.names.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret key that contains the InfluxDB&trade; Core admin token
+*/}}
+{{- define "influxdb.secret.adminTokenKey" -}}
+{{- if and .Values.auth.existingSecret .Values.auth.existingSecretAdminTokenKey -}}
+    {{- tpl .Values.auth.existingSecretAdminTokenKey . -}}
+{{- else -}}
+    {{- print "admin-token" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the InfluxDB&trade; Core Store secret name
 */}}
 {{- define "influxdb.store.secret.name" -}}
@@ -146,6 +168,7 @@ Compile all warnings into a single message.
 {{- define "influxdb.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "influxdb.validateValues.replicaCount" .) -}}
+{{- $messages := append $messages (include "influxdb.validateValues.auth.existingSecret" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -163,5 +186,32 @@ replicaCount:
     Running multiple InfluxDB(TM) Core replicas is not supported when using
     the file or memory object store. Please ensure you run a single replica
     and HPA is disabled (--set replicaCount=1,autoscaling.hpa.enabled=false).
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of InfluxDB&trade; Core - auth.existingSecret
+*/}}
+{{- define "influxdb.validateValues.auth.existingSecret" -}}
+{{- if and .Values.auth.enabled .Values.auth.existingSecret }}
+{{- if .Values.createAdminTokenJob.enabled }}
+auth.existingSecret:
+    Consuming the admin token from a secret is incompatible with running
+    a K8s job to create it. Please disable the job (--set createAdminTokenJob.enabled=false)
+    or unset the existingSecret value (--set auth.existingSecret="").
+{{- end -}}
+{{- if eq .Values.objectStore "memory" }}
+auth.existingSecret:
+    Consuming the admin token from a secret is incompatible with using
+    the memory object store given there's no existing data.
+    Please ensure you unset the existingSecret value (--set auth.existingSecret="").
+{{- else if and (eq .Values.objectStore "file") (or (not .Values.persistence.enabled) (not .Values.persistence.existingClaim)) }}
+auth.existingSecret:
+    Consuming the admin token from a secret is incompatible with using
+    the file object store with no previously existing data. Please ensure
+    you set the PVC name with your existing data (--set persistence.enabled=true
+    --set persistence.existingClaim=<PVC_NAME>) or unset the existingSecret value
+    (--set auth.existingSecret="").
+{{- end -}}
 {{- end -}}
 {{- end -}}
