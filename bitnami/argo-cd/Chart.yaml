@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: argo-cd
-      image: docker.io/bitnami/argo-cd:3.0.2-debian-12-r0
+      image: docker.io/bitnami/argo-cd:3.0.3-debian-12-r0
     - name: dex
       image: docker.io/bitnami/dex:2.43.0-debian-12-r0
     - name: os-shell
@@ -15,7 +15,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 3.0.2
+appVersion: 3.0.3
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -40,4 +40,4 @@ maintainers:
 name: argo-cd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 9.0.8
+version: 9.0.9
