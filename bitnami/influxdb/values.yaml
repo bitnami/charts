@@ -113,7 +113,7 @@ auth:
   ## @param auth.existingSecret Name of existing Secret containing the admin token (only supported if store data is pre-populated)
   ##
   existingSecret: ""
-  ## @param auth.existingSecretAdminTokenKey Name of the key inside the existing secret containing the admin token
+  ## @param auth.existingSecretAdminTokenKey Name of the key inside the existing secret containing the admin token (admin-token as default if not provided)
   ##
   existingSecretAdminTokenKey: ""
 ## @param tls.enabled Enable TLS configuration for InfluxDB(TM) Core
