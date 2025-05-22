@@ -17,6 +17,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.jobservice.replicaCount }}
+  revisionHistoryLimit: {{ .Values.jobservice.revisionHistoryLimit }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobservice.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

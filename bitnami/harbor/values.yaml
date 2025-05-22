@@ -909,6 +909,9 @@ nginx:
   ## @param nginx.replicaCount Number of NGINX replicas
   ##
   replicaCount: 1
+  ## @param nginx.revisionHistoryLimit Number of old replicasets to retain for NGINX deployment
+  ##
+  revisionHistoryLimit: 10
   ## Configure extra options for NGINX containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param nginx.livenessProbe.enabled Enable livenessProbe on NGINX containers
@@ -1270,6 +1273,9 @@ portal:
   ## @param portal.replicaCount Number of Harbor Portal replicas
   ##
   replicaCount: 1
+  ## @param portal.revisionHistoryLimit Number of old replicasets to retain for Harbor Portal deployment
+  ##
+  revisionHistoryLimit: 10
   ## Configure extra options for Harbor Portal containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param portal.livenessProbe.enabled Enable livenessProbe on Harbor Portal containers
@@ -1699,6 +1705,9 @@ core:
   ## @param core.replicaCount Number of Harbor Core replicas
   ##
   replicaCount: 1
+  ## @param core.revisionHistoryLimit Number of old replicasets to retain for Harbor Core deployment
+  ##
+  revisionHistoryLimit: 10
   ## Configure extra options for Harbor Core containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param core.livenessProbe.enabled Enable livenessProbe on Harbor Core containers
@@ -2098,6 +2107,9 @@ jobservice:
   ## @param jobservice.replicaCount Number of Harbor Jobservice replicas
   ##
   replicaCount: 1
+  ## @param jobservice.revisionHistoryLimit Number of old replicasets to retain for Harbor Jobservice deployment
+  ##
+  revisionHistoryLimit: 10
   ## Configure extra options for Harbor Jobservice containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param jobservice.livenessProbe.enabled Enable livenessProbe on Harbor Jobservice containers
@@ -2471,6 +2483,9 @@ registry:
   ## @param registry.replicaCount Number of Harbor Registry replicas
   ##
   replicaCount: 1
+  ## @param registry.revisionHistoryLimit Number of old replicasets to retain for Harbor Registry deployment
+  ##
+  revisionHistoryLimit: 10
   ## Configure Harbor Registry pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param registry.podSecurityContext.enabled Enabled Harbor Registry pods' Security Context
@@ -3490,6 +3505,9 @@ exporter:
   ## @param exporter.replicaCount The replica count
   ##
   replicaCount: 1
+  ## @param exporter.revisionHistoryLimit Number of old replicasets to retain for Harbor Exporter deployment
+  ##
+  revisionHistoryLimit: 10
   ## Harbor Exporter containers' liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param exporter.livenessProbe.enabled Enable livenessProbe
