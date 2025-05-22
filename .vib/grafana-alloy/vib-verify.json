@@ -1,0 +1,69 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "credentials": [
+          {
+            "url": "{VIB_ENV_CHARTS_REGISTRY}",
+            "authn": {
+              "username": "{VIB_ENV_CHARTS_REGISTRY_USERNAME}",
+              "password": "{VIB_ENV_CHARTS_REGISTRY_PASSWORD}"
+            }
+          }
+        ],
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/grafana-alloy"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/grafana-alloy"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4",
+            "worker_nodes_instance_count": 1
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "wait": {
+              "file": "grafana-alloy/goss/goss-wait.yaml"
+            },
+            "tests_file": "grafana-alloy/goss/goss.yaml",
+            "remote": {
+              "pod": {
+                "workload": "ds-grafana-alloy"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "kubescape",
+          "params": {
+            "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
+          }
+        }
+      ]
+    }
+  }
+}

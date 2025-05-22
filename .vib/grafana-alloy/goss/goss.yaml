@@ -1,0 +1,30 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}-/healthy:
+    status: 200
+    body:
+      - /All Alloy components are healthy./
+  http://grafana-alloy:{{ .Vars.service.ports.http }}-/healthy:
+    status: 200
+    body:
+      - /All Alloy components are healthy./
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/metrics:
+    status: 200
+    body:
+      - /alloy_build_info/
+  http://grafana-alloy:{{ .Vars.service.ports.http }}/metrics:
+    status: 200
+    body:
+      - /alloy_build_info/
+file:
+  /opt/bitnami/grafana-alloy/conf/config.alloy:
+    exists: true
+    filetype: symlink
+  /var/log:
+    exists: true
+    filetype: directory
+  /var/lib/docker/containers:
+    exists: true
+    filetype: directory
