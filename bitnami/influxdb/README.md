@@ -1,10 +1,10 @@
-<!--- app-name: InfluxDB&trade; Core -->
+<!--- app-name: InfluxDB&trade; InfluxDB&trade; Core -->
 
 # Bitnami Stack for InfluxDB&trade; Core
 
 InfluxDB&trade; Core is an open source time-series database. It is a core component of the FDAP (Apache Flight, DataFusion, Arrow, and Parquet) stack.
 
-[Overview of InfluxDB&trade; Core](https://www.influxdata.com/products/influxdb-overview)
+[Overview of InfluxDB&trade; InfluxDB&trade; Core](https://www.influxdata.com/products/influxdb-overview)
 
 InfluxDB&trade; is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
 
