@@ -1,32 +1,154 @@
-auth:
+objectStore: file
+databases: foo
+containerPorts:
+  http: 8181
+containerSecurityContext:
   enabled: true
-  admin:
-    username: influxAdmin
-    password: RootP4ssw0rd
-    token: 4dm1nT0k3n
-    org: primary
-    bucket: primary
-  createUserToken: true
-  user:
-    username: testUser
-    password: ComplicatedPassword123!4
-    org: testOrganization
-    bucket: testBucket
-influxdb:
-  service:
-    type: LoadBalancer
-    ports:
-      http: 80
-      rpc: 8089
-  containerPorts:
-    http: 8086
-    rpc: 8089
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1002
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1002
+  runAsUser: 1002
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
 serviceAccount:
   create: true
   automountServiceAccountToken: true
+# Block commented until https://github.com/influxdata/influxdb/issues/26425 is resolved
+# objectStore: s3
+# bucket: influxdb
+# s3:
+#   auth:
+#     accessKeyId: some-access-key-id
+#     secretAccessKey: some-secret-access-key
+#     existingSecret: seaweedfs
+#   defaultRegion: us-east-1
+#   endpoint: http://seaweedfs:8333
+# args:
+#   - /opt/bitnami/scripts/influxdb/run.sh
+#   - --aws-allow-http
+#   - --aws-skip-signature
+# extraDeploy:
+# - |
+#   apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     name: seaweedfs
+#     labels:
+#       app.kubernetes.io/part-of: influxdb
+#       app.kubernetes.io/component: seaweedfs
+#   type: Opaque
+#   data:
+#     s3-access-key-id: {{ .Values.s3.auth.accessKeyId | b64enc | quote }}
+#     s3-secret-access-key: {{ .Values.s3.auth.secretAccessKey | b64enc | quote }}
+# - apiVersion: apps/v1
+#   kind: StatefulSet
+#   metadata:
+#     name: seaweedfs
+#     labels:
+#       app.kubernetes.io/part-of: influxdb
+#       app.kubernetes.io/component: seaweedfs
+#   spec:
+#     replicas: 1
+#     selector:
+#       matchLabels:
+#         app.kubernetes.io/part-of: influxdb
+#         app.kubernetes.io/component: seaweedfs
+#     serviceName: seaweedfs
+#     template:
+#       metadata:
+#         labels:
+#           app.kubernetes.io/part-of: influxdb
+#           app.kubernetes.io/component: seaweedfs
+#       spec:
+#         initContainers:
+#         - name: auth-config-init
+#           image: docker.io/bitnami/seaweedfs:latest
+#           command:
+#           - bash
+#           args:
+#           - -ec
+#           - |
+#             cat > "/s3/config.json" <<EOF
+#             {
+#               "identities": [
+#                 {
+#                   "name": "admin",
+#                   "credentials": [
+#                     {
+#                       "accessKey": "${ADMIN_ACCESS_KEY_ID}",
+#                       "secretKey": "${ADMIN_SECRET_ACCESS_KEY}"
+#                     }
+#                   ],
+#                   "actions": [
+#                     "Admin",
+#                     "Read",
+#                     "List",
+#                     "Tagging",
+#                     "Write"
+#                   ]
+#                 }
+#               ]
+#             }
+#             EOF
+#           env:
+#           - name: ADMIN_ACCESS_KEY_ID
+#             valueFrom:
+#               secretKeyRef:
+#                 name: seaweedfs
+#                 key: s3-access-key-id
+#           - name: ADMIN_SECRET_ACCESS_KEY
+#             valueFrom:
+#               secretKeyRef:
+#                 name: seaweedfs
+#                 key: s3-secret-access-key
+#           volumeMounts:
+#           - name: empty-dir
+#             mountPath: /s3
+#             subPath: s3-dir
+#         containers:
+#         - name: seaweedfs
+#           image: docker.io/bitnami/seaweedfs:latest
+#           securityContext:
+#             runAsNonRoot: true
+#             privileged: false
+#             allowPrivilegeEscalation: false
+#             capabilities:
+#               drop: ["ALL"]
+#             seccompProfile:
+#               type: "RuntimeDefault"
+#           command:
+#           - weed
+#           args:
+#           - server
+#           - -s3
+#           - "-s3.port=8333"
+#           - "-s3.config=/s3/config.json"
+#           ports:
+#           - name: http
+#             containerPort: 8333
+#           volumeMounts:
+#           - mountPath: /s3
+#             name: empty-dir
+#             subPath: s3-dir
+#             readOnly: true
+#         volumes:
+#         - name: empty-dir
+#           emptyDir: {}
+# - apiVersion: v1
+#   kind: Service
+#   metadata:
+#     name: seaweedfs
+#     labels:
+#       app.kubernetes.io/part-of: influxdb
+#       app.kubernetes.io/component: seaweedfs
+#   spec:
+#     type: ClusterIP
+#     ports:
+#     - name: http
+#       port: 8333
+#       targetPort: http
+#     selector:
+#       app.kubernetes.io/part-of: influxdb
+#       app.kubernetes.io/component: seaweedfs

@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.0.2 (2025-05-14)
+## 26.0.3 (2025-05-22)
 
-* [bitnami/harbor] update tracing environment variables and escaping ([#33680](https://github.com/bitnami/charts/pull/33680))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33831](https://github.com/bitnami/charts/pull/33831))
+
+## <small>26.0.2 (2025-05-14)</small>
+
+* [bitnami/harbor] update tracing environment variables and escaping (#33680) ([c9ec3e0](https://github.com/bitnami/charts/commit/c9ec3e08d161e0b34c0453cba28e9380911ac92c)), closes [#33680](https://github.com/bitnami/charts/issues/33680)
 
 ## <small>26.0.1 (2025-05-09)</small>
 

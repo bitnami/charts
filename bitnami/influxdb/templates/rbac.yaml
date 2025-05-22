@@ -1,0 +1,78 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") .Values.rbac.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-create-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: create-admin-token
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-install" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.commonAnnotations $defaultAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-create-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: create-admin-token
+  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-install" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.commonAnnotations $defaultAnnotations) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+roleRef:
+  kind: Role
+  name: {{ printf "%s-create-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "influxdb.createAdminTokenJob.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . }}
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
+metadata:
+  name: {{ printf "%s-delete-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: delete-admin-token
+  {{- $defaultAnnotations := dict "helm.sh/hook" "post-delete" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.commonAnnotations $defaultAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["delete"]
+---
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: RoleBinding
+metadata:
+  name: {{ printf "%s-delete-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: delete-admin-token
+  {{- $defaultAnnotations := dict "helm.sh/hook" "post-delete" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.commonAnnotations $defaultAnnotations) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+roleRef:
+  kind: Role
+  name: {{ printf "%s-delete-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "influxdb.deleteAdminTokenJob.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . }}
+{{- end }}

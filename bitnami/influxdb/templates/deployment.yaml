@@ -8,345 +8,330 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
     app.kubernetes.io/component: influxdb
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
-  revisionHistoryLimit: {{ .Values.influxdb.revisionHistoryLimit }}
-  {{- if .Values.influxdb.updateStrategy }}
-  strategy: {{- toYaml .Values.influxdb.updateStrategy | nindent 4 }}
+  {{- if and (ne .Values.objectStore "file") (ne .Values.objectStore "memory") (not .Values.autoscaling.hpa.enabled) }}
+  replicas: {{ .Values.replicaCount }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.influxdb.podLabels .Values.commonLabels ) "context" . ) }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.updateStrategy }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 6 }}
+      app.kubernetes.io/part-of: influxdb
       app.kubernetes.io/component: influxdb
   template:
     metadata:
-      {{- if .Values.influxdb.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
-      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      annotations:
+        {{- if include "influxdb.store.secret.create" . }}
+        checksum/store-secret: {{ include (print .Template.BasePath "/store-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" .) | nindent 8 }}
+        app.kubernetes.io/part-of: influxdb
         app.kubernetes.io/component: influxdb
     spec:
       {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
-      {{- if .Values.influxdb.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.hostAliases "context" $) | nindent 8 }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.influxdb.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.influxdb.affinity "context" $) | nindent 8 }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.influxdb.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.influxdb.nodeAffinityPreset.type "key" .Values.influxdb.nodeAffinityPreset.key "values" .Values.influxdb.nodeAffinityPreset.values) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "influxdb" "customLabels" $podLabels "context" .) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if .Values.influxdb.schedulerName }}
-      schedulerName: {{ .Values.influxdb.schedulerName }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
       {{- end }}
-      {{- if .Values.influxdb.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
-      priorityClassName: {{ .Values.influxdb.priorityClassName | quote }}
-      {{- if .Values.influxdb.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.nodeSelector "context" $) | nindent 8 }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.influxdb.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.influxdb.podSecurityContext.enabled }}
-      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.podSecurityContext "context" $) | nindent 8 }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-        - name: init-chmod-data
-          image: {{ include "influxdb.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-            - -c
-            - |
-              mkdir -p /bitnami/influxdb/{data,meta,wal}
-              chmod 700 /bitnami/influxdb/{data,meta,wal}
-              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-              chown -R `id -u`:`id -G | cut -d " " -f2` /bitnami/influxdb
-              {{- else }}
-              chown -R {{ .Values.influxdb.containerSecurityContext.runAsUser }}:{{ .Values.influxdb.podSecurityContext.fsGroup }} /bitnami/influxdb
-              {{- end }}
-          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext:
-          {{- else }}
-          securityContext:
-            runAsUser: {{ .Values.volumePermissions.securityContext.runAsUser }}
-          {{- end }}
-          volumeMounts:
-            - name: data
-              mountPath: /bitnami/influxdb
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
+        {{- if and .Values.defaultInitContainers.volumePermissions.enabled .Values.persistence.enabled (eq .Values.objectStore "file") }}
+        {{- include "influxdb.defaultInitContainers.volumePermissions" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.influxdb.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | trim | nindent 8 }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" .) | trim | nindent 8 }}
         {{- end }}
       containers:
         - name: influxdb
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.influxdb.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" .) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" .) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.command "context" $) | nindent 12 }}
+          {{- if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" .) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.args "context" $) | nindent 12 }}
+          {{- if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" .) | nindent 12 }}
           {{- end }}
-          {{- if .Values.influxdb.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.lifecycleHooks "context" $) | nindent 12 }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" .) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+            - name: INFLUXDB_OBJECT_STORE
+              value: {{ .Values.objectStore | quote }}
+            - name: INFLUXDB_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
             - name: INFLUXDB_HTTP_AUTH_ENABLED
-              value: {{ .Values.auth.enabled | quote }}
-            - name: INFLUXDB_CREATE_USER_TOKEN
-              value: {{ ternary "yes" "no" .Values.auth.createUserToken | quote }}
-            {{- if .Values.auth.admin.username }}
-            - name: INFLUXDB_ADMIN_USER
-              value: {{ .Values.auth.admin.username | quote }}
+              value: {{ ternary "true" "false" .Values.auth.enabled | quote }}
+            {{- if eq .Values.objectStore "file" }}
+            - name: INFLUXDB_DATA_DIR
+              value: {{ printf "%s/data" .Values.persistence.mountPath | quote }}
             {{- end }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: INFLUXDB_ADMIN_USER_PASSWORD_FILE
-              value: "/opt/bitnami/influxdb/secrets/admin-user-password"
-            - name: INFLUXDB_ADMIN_USER_TOKEN_FILE
-              value: "/opt/bitnami/influxdb/secrets/admin-user-token"
+            - name: INFLUXDB_NODE_ID
+              value: {{ .Values.nodeId | quote }}
+            {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: INFLUXDB_ADMIN_TOKEN_FILE
+              value: {{ printf "/opt/bitnami/influxdb/secrets/%s" (include "influxdb.secret.adminTokenKey" .) }}
             {{- else }}
-            - name: INFLUXDB_ADMIN_USER_PASSWORD
+            - name: INFLUXDB_ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "influxdb.secretName" . }}
-                  key: admin-user-password
-            - name: INFLUXDB_ADMIN_USER_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "influxdb.secretName" . }}
-                  key: admin-user-token
+                  name: {{ template "influxdb.secret.name" . }}
+                  key: {{ template "influxdb.secret.adminTokenKey" . }}
             {{- end }}
-            - name: INFLUXDB_ADMIN_BUCKET
-              value: {{ .Values.auth.admin.bucket | quote }}
-            - name: INFLUXDB_ADMIN_ORG
-              value: {{ .Values.auth.admin.org | quote }}
-            {{- if .Values.auth.admin.retention }}
-            - name: INFLUXDB_ADMIN_RETENTION
-              value: {{ .Values.auth.admin.retention | quote }}
+            {{- if .Values.databases }}
+            - name: INFLUXDB_DATABASES
+              value: {{ .Values.databases | quote }}
             {{- end }}
-            {{- if .Values.auth.user.username }}
-            - name: INFLUXDB_USER
-              value: {{ .Values.auth.user.username | quote }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: INFLUXDB_USER_PASSWORD_FILE
-              value: "/opt/bitnami/influxdb/secrets/user-password"
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: INFLUXDB3_TLS_CERT
+              value: "/opt/bitnami/influxdb/certs/server/tls.crt"
+            - name: INFLUXDB3_TLS_KEY
+              value: "/opt/bitnami/influxdb/certs/server/tls.key"
+            {{- end }}
+            {{- if or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure") }}
+            - name: INFLUXDB3_BUCKET
+              value: {{ .Values.bucket | quote }}
+            {{- end }}
+            {{- if eq .Values.objectStore "s3" }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.s3.defaultRegion | quote }}
+            {{- if .Values.s3.endpoint }}
+            - name: AWS_ENDPOINT
+              value: {{ .Values.s3.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.usePasswordFiles }}
+            - name: AWS_ACCESS_KEY_ID_FILE
+              value: "/opt/bitnami/influxdb/store-secrets/s3-access-key-id"
+            - name: AWS_SECRET_ACCESS_KEY_FILE
+              value: "/opt/bitnami/influxdb/store-secrets/s3-secret-access-key"
             {{- else }}
-            - name: INFLUXDB_USER_PASSWORD
+            - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "influxdb.secretName" . }}
-                  key: user-password
+                  name: {{ template "influxdb.store.secret.name" . }}
+                  key: s3-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "influxdb.store.secret.name" . }}
+                  key: s3-secret-access-key
             {{- end }}
-            {{- end }}
-            {{- if .Values.auth.user.bucket }}
-            - name: INFLUXDB_USER_BUCKET
-              value: {{ .Values.auth.user.bucket | quote }}
-            {{- end }}
-            {{- if .Values.auth.user.org }}
-            - name: INFLUXDB_USER_ORG
-              value: {{ .Values.auth.user.org | quote }}
-            {{- end }}
-            {{- if .Values.auth.readUser.username }}
-            - name: INFLUXDB_READ_USER
-              value: {{ .Values.auth.readUser.username | quote }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: INFLUXDB_READ_USER_PASSWORD_FILE
-              value: "/opt/bitnami/influxdb/secrets/read-user-password"
+            {{- else if eq .Values.objectStore "google" }}
+            {{- if .Values.usePasswordFiles }}
+            - name: GOOGLE_SERVICE_ACCOUNT_FILE
+              value: "/opt/bitnami/influxdb/store-secrets/google-service-account-key"
             {{- else }}
-            - name: INFLUXDB_READ_USER_PASSWORD
+            - name: GOOGLE_SERVICE_ACCOUNT
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "influxdb.secretName" . }}
-                  key: read-user-password
+                  name: {{ template "influxdb.store.secret.name" . }}
+                  key: google-service-account-key
             {{- end }}
-            {{- end }}
-            {{- if .Values.auth.writeUser.username }}
-            - name: INFLUXDB_WRITE_USER
-              value: {{ .Values.auth.writeUser.username | quote }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: INFLUXDB_WRITE_USER_PASSWORD_FILE
-              value: "/opt/bitnami/influxdb/secrets/write-user-password"
+            {{- else if eq .Values.objectStore "azure" }}
+            - name: AZURE_STORAGE_ACCOUNT
+              value: {{ .Values.azure.account | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: AZURE_STORAGE_ACCESS_KEY_FILE
+              value: "/opt/bitnami/influxdb/store-secrets/azure-storage-access-key"
             {{- else }}
-            - name: INFLUXDB_WRITE_USER_PASSWORD
+            - name: AZURE_STORAGE_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "influxdb.secretName" . }}
-                  key: write-user-password
+                  name: {{ template "influxdb.store.secret.name" . }}
+                  key: azure-storage-access-key
             {{- end }}
             {{- end }}
-            {{- if .Values.auth.user.bucket }}
-            - name: INFLUXDB_DB
-              value: {{ .Values.auth.user.bucket | quote }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" .) | nindent 12 }}
             {{- end }}
-            {{- if .Values.influxdb.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
-            {{- if .Values.influxdb.extraEnvVarsCM }}
+            {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.influxdb.extraEnvVarsCM }}
+                name: {{ .Values.extraEnvVarsCM }}
             {{- end }}
-            {{- if .Values.influxdb.extraEnvVarsSecret }}
+            {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.influxdb.extraEnvVarsSecret }}
+                name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.influxdb.containerPorts.http }}
+              containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
-            - name: rpc
-              containerPort: {{ .Values.influxdb.containerPorts.rpc }}
-              protocol: TCP
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" .) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.influxdb.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.influxdb.startupProbe.enabled }}
-          {{- $startupTimeout := sub (int .Values.influxdb.startupProbe.timeoutSeconds) 1 }}
-          startupProbe: {{- omit .Values.influxdb.startupProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - bash
-                - -c
-                - |
-                  . /opt/bitnami/scripts/libinfluxdb.sh
-
-                  influxdb_env
-
-                  {{- if .Values.auth.enabled }}
-                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
-                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
-                  {{- end }}
-
-                  timeout {{ $startupTimeout }}s influx --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }} ping
-          {{- end }}
-          {{- if .Values.influxdb.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.influxdb.livenessProbe.enabled }}
-          {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
-          livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
-            httpGet:
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" .) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
+            tcpSocket:
               port: http
-              path: /
           {{- end }}
-          {{- if .Values.influxdb.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.influxdb.readinessProbe.enabled }}
-          {{- $readinessTimeout := sub (int .Values.influxdb.readinessProbe.timeoutSeconds) 1 }}
-          readinessProbe: {{- omit .Values.influxdb.readinessProbe "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" .) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
+          livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" .) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
+            {{- if and .Values.auth.createAdminToken (ne .Values.objectStore "memory") }}
+            {{- $readinessTimeout := max (sub (int .Values.readinessProbe.timeoutSeconds) 1) 1 }}
             exec:
               command:
                 - bash
                 - -c
                 - |
-                  . /opt/bitnami/scripts/libinfluxdb.sh
-
-                  influxdb_env
-
-                  {{- if .Values.auth.enabled }}
-                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
-                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
-                  {{- end }}
-
-                  timeout {{ $readinessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
+                  {{- if .Values.usePasswordFiles }}
+                  INFLUXDB_ADMIN_TOKEN="$(<INFLUXDB_ADMIN_TOKEN_FILE)"
+                  {{- end -}}
+                  timeout {{ $readinessTimeout }}s curl -sSL -H "Authorization: Bearer $INFLUXDB_ADMIN_TOKEN" http://127.0.0.1:{{ .Values.containerPorts.http }}/health
+            {{- else }}
+            tcpSocket:
+              port: http
+            {{- end }}
           {{- end }}
           {{- end }}
-          {{- if .Values.influxdb.resources }}
-          resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
-          {{- else if ne .Values.influxdb.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.influxdb.resourcesPreset) | nindent 12 }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
-            - name: influxdb-config
-              mountPath: /opt/bitnami/influxdb/etc
-            {{- else }}
-            - name: empty-dir
-              mountPath: /opt/bitnami/influxdb/etc
-              subPath: app-conf-dir
+            {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
+            - name: secret
+              mountPath: /opt/bitnami/influxdb/secrets
+              readOnly: true
             {{- end }}
-            {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
+            {{- if and (or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure")) .Values.usePasswordFiles }}
+            - name: store-secret
+              mountPath: /opt/bitnami/influxdb/store-secrets
+              readOnly: true
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: ca-certs
+              mountPath: /opt/bitnami/influxdb/certs/ca
+              readOnly: true
+            - name: server-certs
+              mountPath: /opt/bitnami/influxdb/certs/server
+              readOnly: true
+            {{- end }}
+            {{- if or .Values.initdbScripts .Values.initdbScriptsCM }}
             - name: custom-init-scripts
-              mountPath: /docker-entrypoint-initdb.d/
+              mountPath: /docker-entrypoint-initdb.d
             {{- end }}
-            {{- if .Values.influxdb.initdbScriptsSecret }}
+            {{- if .Values.initdbScriptsSecret }}
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/secret
             {{- end }}
-            {{- if  .Values.auth.usePasswordFiles }}
-            - name: influxdb-credentials
-              mountPath: /opt/bitnami/influxdb/secrets/
+            {{- if eq .Values.objectStore "file" }}
+            - mountPath: {{ .Values.persistence.mountPath }}              
+              name: data
             {{- end }}
-            {{- if .Values.persistence.enabled }}
-            - name: data
-              mountPath: /bitnami/influxdb
-            {{- end }}
-          {{- if .Values.influxdb.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
           {{- end }}
-        {{- if .Values.influxdb.sidecars }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.sidecars "context" $) | trim | nindent 8 }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" .) | trim | nindent 8 }}
         {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
-        - name: influxdb-config
-          configMap:
-            name: {{ include "influxdb.configmapName" . }}
+        {{- if and .Values.auth.enabled (ne .Values.objectStore "memory") .Values.usePasswordFiles (or .Values.auth.existingSecret .Values.createAdminTokenJob.enabled) }}
+        - name: secret
+          secret:
+            secretName: {{ template "influxdb.secret.name" . }}
+            defaultMode: 256
         {{- end }}
-        {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
+        {{- if and (or (eq .Values.objectStore "s3") (eq .Values.objectStore "google") (eq .Values.objectStore "azure")) .Values.usePasswordFiles }}
+        - name: store-secret
+          secret:
+            secretName: {{ template "influxdb.store.secret.name" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: ca-certs
+          secret:
+            secretName: {{ template "influxdb.tls.ca.secretName" . }}
+            defaultMode: 256
+        - name: server-certs
+          secret:
+            secretName: {{ template "influxdb.tls.server.secretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if or .Values.initdbScripts .Values.initdbScriptsCM }}
         - name: custom-init-scripts
           configMap:
             name: {{ include "influxdb.initdbScriptsConfigmapName" . }}
         {{- end }}
-        {{- if .Values.influxdb.initdbScriptsSecret }}
+        {{- if .Values.initdbScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
             secretName: {{ template "influxdb.initdbScriptsSecret" . }}
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
-        - name: influxdb-credentials
-          secret:
-            secretName: {{ include "influxdb.secretName" . }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}
         {{- end }}
+        {{- if eq .Values.objectStore "file" }}
         - name: data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "influxdb.claimName" . }}
+            claimName: {{ (tpl .Values.persistence.existingClaim .) | default (include "common.names.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}
-        {{- if .Values.influxdb.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
