@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.2.5 (2025-05-19)
+## 13.2.5 (2025-05-22)
 
 * [bitnami/milvus] Release 13.2.5 ([#33543](https://github.com/bitnami/charts/pull/33543))
 
