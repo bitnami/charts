@@ -99,6 +99,8 @@ Any further change in the credentials require manual intervention, pleaser refer
 - Create an admin token following [the upstream documentation](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/create) if no admin token was created during the first boot.
 - Regenerate the admin token following [the upstream documentation](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/regenerate).
 
+> Note: please ensure you update the token in the secret used by the chart if you regenerate the token.
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will add the required annotations on InfluxDB&trade; Core service to be automatically scraped by Prometheus.
