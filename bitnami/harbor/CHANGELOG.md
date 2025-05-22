@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.1.0 (2025-05-21)
+## 26.1.0 (2025-05-22)
 
 * [bitnami/harbor] add revisionHistoryLimit configuration property for deployments ([#33816](https://github.com/bitnami/charts/pull/33816))
 
