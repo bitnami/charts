@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.7.1 (2025-05-21)
+## 24.7.1 (2025-05-22)
 
 * [bitnami/keycloak] fix: preserve timestamps in init script ([#33812](https://github.com/bitnami/charts/pull/33812))
 
