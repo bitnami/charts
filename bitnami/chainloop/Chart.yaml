@@ -9,7 +9,7 @@ annotations:
     - name: chainloop-control-plane
       image: docker.io/bitnami/chainloop-control-plane:1.4.3-debian-12-r0
     - name: chainloop-control-plane-migrations
-      image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.2-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.3-debian-12-r0
     - name: dex
       image: docker.io/bitnami/dex:2.43.1-debian-12-r0
   license: Apache-2.0
