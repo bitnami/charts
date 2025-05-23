@@ -167,9 +167,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary (printf "%s-headless.%s.svc.%s" (include "harbor.redis.fullname" .context ) (include "common.names.namespace" .context) .context.Values.clusterDomain ) (printf "%s-master.%s.svc.%s" (include "harbor.redis.fullname" .context) (include "common.names.namespace" .context) .context.Values.clusterDomain ) .context.Values.redis.sentinel.enabled -}} 
 {{- else -}}
 {{- $externalRedis := ternary ( get .context.Values.externalRedis .component ) .context.Values.externalRedis .context.Values.externalRedis.instancePerComponent -}}
-{{- if .context.Values.externalRedis.instancePerComponent -}}
-{{- $externalRedis = get .context.Values.externalRedis .component -}}
-{{- end -}}
 {{- ternary (printf "%s" $externalRedis.sentinel.hosts) $externalRedis.host $externalRedis.sentinel.enabled -}}
 {{- end -}}
 {{- end -}}
