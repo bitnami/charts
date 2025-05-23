@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.2 (2025-05-22)
+## 7.0.3 (2025-05-23)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33842](https://github.com/bitnami/charts/pull/33842))
+* [bitnami/influxdb] bugfix: address limitations with read-only restrictive environments ([#33852](https://github.com/bitnami/charts/pull/33852))
+
+## <small>7.0.2 (2025-05-22)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33842) ([d06f954](https://github.com/bitnami/charts/commit/d06f95414a039530f74b16ddf7d140596e48e91d)), closes [#33842](https://github.com/bitnami/charts/issues/33842)
 
 ## <small>7.0.1 (2025-05-22)</small>
 

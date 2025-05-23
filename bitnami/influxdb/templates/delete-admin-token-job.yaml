@@ -81,4 +81,11 @@ spec:
             - --namespace
             - {{ include "common.names.namespace" . }}
             - --ignore-not-found
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
 {{- end }}
