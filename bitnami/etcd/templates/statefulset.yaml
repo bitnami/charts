@@ -148,8 +148,6 @@ spec:
                   fieldPath: metadata.name
             - name: MY_STS_NAME
               value: {{ include "common.names.fullname" . | quote }}
-            - name: ETCDCTL_API
-              value: "3"
             - name: ETCD_ON_K8S
               value: "yes"
             - name: ETCD_START_FROM_SNAPSHOT
@@ -185,7 +183,7 @@ spec:
               {{- end }}
             {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
-              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ include "common.names.namespace" . }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }}{{- if .Values.service.enabled }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ include "common.names.namespace" . }}.svc.{{ $clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}{{- end }}"
+              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ include "common.names.namespace" . }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }}{{- if .Values.service.enabled }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ include "common.names.namespace" . }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }}{{- end }}"
             - name: ETCD_LISTEN_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.containerPorts.client }}"
             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
