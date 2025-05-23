@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.8 (2025-05-17)
+## 2.1.0 (2025-05-23)
 
-* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac ([#33722](https://github.com/bitnami/charts/pull/33722))
+* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new values ([#33777](https://github.com/bitnami/charts/pull/33777))
+
+## <small>2.0.8 (2025-05-19)</small>
+
+* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac (#3372 ([cd9a26e](https://github.com/bitnami/charts/commit/cd9a26e5119370b678e18aa05582bc46dc22850f)), closes [#33722](https://github.com/bitnami/charts/issues/33722)
 
 ## <small>2.0.7 (2025-05-17)</small>
 
