@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.4.0 (2025-05-22)
+## 9.4.0 (2025-05-23)
 
 * [bitnami/spark] Spark optional worker ([#33834](https://github.com/bitnami/charts/pull/33834))
 
