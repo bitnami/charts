@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.2.5 (2025-05-22)
+## 13.2.6 (2025-05-23)
 
-* [bitnami/milvus] Release 13.2.5 ([#33543](https://github.com/bitnami/charts/pull/33543))
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#33854](https://github.com/bitnami/charts/pull/33854))
+
+## <small>13.2.5 (2025-05-22)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/milvus] Release 13.2.5 (#33543) ([33469b7](https://github.com/bitnami/charts/commit/33469b7b6a28f0d89ac3d35f0ea608b0ab4a0708)), closes [#33543](https://github.com/bitnami/charts/issues/33543)
 
 ## <small>13.2.4 (2025-05-06)</small>
 
