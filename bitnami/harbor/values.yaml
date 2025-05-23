@@ -3938,7 +3938,7 @@ externalRedis:
     existingSecret: ""
     certCAFilename: ""
   ## Redis&reg; sentinel configuration
-  ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
+  ## @param externalRedis.sentinel.enabled If external redis with sentinel is used, set it to `true`
   ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
   ## @param externalRedis.sentinel.hosts Sentinel hosts and ports in the format
   ##
@@ -3946,6 +3946,104 @@ externalRedis:
     enabled: false
     masterSet: "mymaster"
     hosts: ""
+  ## @param externalRedis.instancePerComponent Configure a Redis&reg; per Harbor component
+  instancePerComponent: false
+  ## @param externalRedis.core.host Redis&reg; host for core service
+  ## @param externalRedis.core.port Redis&reg; port number for core service
+  ## @param externalRedis.core.password Redis&reg; password for core service
+  ## @param externalRedis.core.index Index for core database
+  ## @param externalRedis.core.tls.enabled Enable Redis TLS traffic for core service
+  ## @param externalRedis.core.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for core service
+  ## @param externalRedis.core.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.core.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.core.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.core.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  core:
+    host: ""
+    port: 6379
+    password: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.jobservice.host Redis&reg; host for jobService service
+  ## @param externalRedis.jobservice.port Redis&reg; port number for jobService service
+  ## @param externalRedis.jobservice.password Redis&reg; password for jobService service
+  ## @param externalRedis.jobservice.index Index for jobService database
+  ## @param externalRedis.jobservice.tls.enabled Enable Redis TLS traffic for jobService service
+  ## @param externalRedis.jobservice.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for jobService service
+  ## @param externalRedis.jobservice.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.jobservice.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.jobservice.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.jobservice.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  jobservice:
+    host: ""
+    port: 6379
+    password: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.registry.host Redis&reg; host for registry service
+  ## @param externalRedis.registry.port Redis&reg; port number for registry service
+  ## @param externalRedis.registry.password Redis&reg; password for registry service
+  ## @param externalRedis.registry.index Index for registry database
+  ## @param externalRedis.registry.tls.enabled Enable Redis TLS traffic for registry service
+  ## @param externalRedis.registry.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for registry service
+  ## @param externalRedis.registry.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.registry.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.registry.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.registry.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  registry:
+    host: ""
+    port: 6379
+    password: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.trivy.host Redis&reg; host for trivy service
+  ## @param externalRedis.trivy.port Redis&reg; port number for trivy service
+  ## @param externalRedis.trivy.password Redis&reg; password for trivy service
+  ## @param externalRedis.trivy.index Index for trivy database
+  ## @param externalRedis.trivy.tls.enabled Enable Redis TLS traffic for trivy service
+  ## @param externalRedis.trivy.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for trivy service
+  ## @param externalRedis.trivy.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.trivy.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.trivy.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.trivy.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  trivy:
+    host: ""
+    port: 6379
+    password: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
 ## @section Harbor metrics parameters
 ##
 metrics:

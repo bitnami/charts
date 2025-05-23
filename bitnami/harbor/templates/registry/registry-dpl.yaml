@@ -278,6 +278,7 @@ spec:
               subPath: pk.pem
             {{- end }}
             {{- end }}
+            {{- include "harbor.redis.caVolumeMount" ( dict "context" . "component" "registry" ) | nindent 12 }}
             {{- if .Values.registry.server.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -425,6 +426,7 @@ spec:
               subPath: gcs-key.json
             {{- end }}
             {{- end }}
+            {{- include "harbor.redis.caVolumeMount" ( dict "context" . "component" "registry" ) | nindent 12 }}
             {{- if .Values.registry.controller.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -494,6 +496,7 @@ spec:
                 path: pk.pem
         {{- end }}
         {{- end }}
+      {{- include "harbor.redis.caVolume" ( dict "context" . "component" "registry" ) | nindent 8 }}
       {{- if .Values.registry.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.registry.extraVolumes "context" $) | nindent 8 }}
       {{- end }}
