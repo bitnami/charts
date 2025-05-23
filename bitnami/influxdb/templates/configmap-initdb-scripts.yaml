@@ -3,17 +3,18 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (.Values.influxdb.initdbScripts) (not .Values.influxdb.initdbScriptsCM) }}
+{{- if and .Values.initdbScripts (not .Values.initdbScriptsCM) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}-initdb-scripts
+  name: {{ printf "%s-initdb-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
     app.kubernetes.io/component: influxdb
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 data:
-  {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.initdbScripts "context" $) | nindent 2 }}
+  {{ include "common.tplvalues.render" (dict "value" .Values.initdbScripts "context" .) | nindent 2 }}
 {{- end }}

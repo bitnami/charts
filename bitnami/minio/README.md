@@ -14,8 +14,7 @@ Disclaimer: All software products, projects and company names are trademark&trad
 helm install my-release oci://registry-1.docker.io/bitnamicharts/minio
 ```
 
-> [!TIP]
-> Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.minio-cnab) to see the listing on Azure Marketplace.
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.minio-cnab) to see the listing on Azure Marketplace.
 
 Looking to use Bitnami Object Storage based on MinIOreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 

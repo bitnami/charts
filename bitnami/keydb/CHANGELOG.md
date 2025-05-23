@@ -1,8 +1,21 @@
 # Changelog
 
-## 0.5.7 (2025-05-13)
+## 0.5.10 (2025-05-22)
 
-* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#33634](https://github.com/bitnami/charts/pull/33634))
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#33823](https://github.com/bitnami/charts/pull/33823))
+
+## <small>0.5.9 (2025-05-19)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33746) ([cbd1f29](https://github.com/bitnami/charts/commit/cbd1f2976e1869f1db3e7f4769a7bd6899bf4788)), closes [#33746](https://github.com/bitnami/charts/issues/33746)
+
+## <small>0.5.8 (2025-05-15)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33706) ([38c7ba6](https://github.com/bitnami/charts/commit/38c7ba65672f4e79c2f9d71a82df479f2d5c6e05)), closes [#33706](https://github.com/bitnami/charts/issues/33706)
+
+## <small>0.5.7 (2025-05-13)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33634) ([826148b](https://github.com/bitnami/charts/commit/826148b6ef282ddf642e49ff880bc121a91b6c72)), closes [#33634](https://github.com/bitnami/charts/issues/33634)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.5.6 (2025-05-06)</small>
 

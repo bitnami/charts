@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.2.5 (2025-05-06)
+## 9.2.7 (2025-05-21)
 
-* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33406](https://github.com/bitnami/charts/pull/33406))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#33820](https://github.com/bitnami/charts/pull/33820))
+
+## <small>9.2.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#33638) ([3e654df](https://github.com/bitnami/charts/commit/3e654dfd3e3d86723b6f56ae14418b0dbd649559)), closes [#33638](https://github.com/bitnami/charts/issues/33638)
+
+## <small>9.2.5 (2025-05-06)</small>
+
+* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([07e1ed1](https://github.com/bitnami/charts/commit/07e1ed1be815ad1edd28babc745ef230ece66c31)), closes [#33406](https://github.com/bitnami/charts/issues/33406)
 
 ## <small>9.2.4 (2025-05-01)</small>
 

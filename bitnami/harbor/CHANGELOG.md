@@ -1,8 +1,8 @@
 # Changelog
 
-## 26.1.0 (2025-05-16)
+## 26.0.3 (2025-05-22)
 
-* [bitnami/harbor]feat: Allow different Redis instance per component ([#33715](https://github.com/bitnami/charts/pull/33715))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33831](https://github.com/bitnami/charts/pull/33831))
 
 ## <small>26.0.2 (2025-05-14)</small>
 
