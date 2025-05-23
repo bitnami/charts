@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.2.4 (2025-05-06)
+## 13.2.6 (2025-05-23)
 
-* [bitnami/milvus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33401](https://github.com/bitnami/charts/pull/33401))
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#33854](https://github.com/bitnami/charts/pull/33854))
+
+## <small>13.2.5 (2025-05-22)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/milvus] Release 13.2.5 (#33543) ([33469b7](https://github.com/bitnami/charts/commit/33469b7b6a28f0d89ac3d35f0ea608b0ab4a0708)), closes [#33543](https://github.com/bitnami/charts/issues/33543)
+
+## <small>13.2.4 (2025-05-06)</small>
+
+* [bitnami/milvus] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33401) ([c9dc0e5](https://github.com/bitnami/charts/commit/c9dc0e5a73faedc0f0180c64b239ae2380289363)), closes [#33401](https://github.com/bitnami/charts/issues/33401)
 
 ## <small>13.2.3 (2025-04-28)</small>
 

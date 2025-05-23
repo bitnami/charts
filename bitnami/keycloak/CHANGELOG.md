@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.7.1 (2025-05-22)
+
+* [bitnami/keycloak] fix: preserve timestamps in init script ([#33812](https://github.com/bitnami/charts/pull/33812))
+
 ## 24.7.0 (2025-05-19)
 
-* [bitnami/keycloak] Improvements to Keycloak cache handling ([#32885](https://github.com/bitnami/charts/pull/32885))
+* [bitnami/keycloak] Improvements to Keycloak cache handling (#32885) ([b2500eb](https://github.com/bitnami/charts/commit/b2500ebf9a4b983f8975d0d426a9c1473453fe1f)), closes [#32885](https://github.com/bitnami/charts/issues/32885)
 
 ## <small>24.6.7 (2025-05-13)</small>
 

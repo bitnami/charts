@@ -9,7 +9,7 @@ annotations:
     - name: redis-cluster
       image: docker.io/bitnami/redis-cluster:8.0.1-debian-12-r2
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.72.1-debian-12-r0
+      image: docker.io/bitnami/redis-exporter:1.73.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
@@ -35,4 +35,4 @@ maintainers:
 name: redis-cluster
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
-version: 12.0.5
+version: 12.0.6

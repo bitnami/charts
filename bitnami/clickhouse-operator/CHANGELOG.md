@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.2.4 (2025-05-16)
+## 0.2.6 (2025-05-22)
 
-* [clickhouse-operator] ci: remove hack on runtime parameters ([#33753](https://github.com/bitnami/charts/pull/33753))
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#33847](https://github.com/bitnami/charts/pull/33847))
+
+## <small>0.2.5 (2025-05-20)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#33799) ([b6deded](https://github.com/bitnami/charts/commit/b6deded029c34ce30819a60474734a4d256f6800)), closes [#33799](https://github.com/bitnami/charts/issues/33799)
+
+## <small>0.2.4 (2025-05-16)</small>
+
+* [clickhouse-operator] ci: remove hack on runtime parameters (#33753) ([7edc66f](https://github.com/bitnami/charts/commit/7edc66f61983d7a91f692d7c881b82d8086845a0)), closes [#33753](https://github.com/bitnami/charts/issues/33753)
 
 ## <small>0.2.3 (2025-05-15)</small>
 

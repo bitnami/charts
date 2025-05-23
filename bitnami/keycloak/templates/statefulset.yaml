@@ -104,10 +104,10 @@ spec:
               info "Copying writable dirs to empty dir"
               # In order to not break the application functionality we need to make some
               # directories writable, so we need to copy it to an empty dir volume
-              cp -r --preserve=mode /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
-              cp -r --preserve=mode /opt/bitnami/keycloak/data /emptydir/app-data-dir
-              cp -r --preserve=mode /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
-              cp -r --preserve=mode /opt/bitnami/keycloak/themes /emptydir/app-themes-dir
+              cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/lib/quarkus /emptydir/app-quarkus-dir
+              cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/data /emptydir/app-data-dir
+              cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/providers /emptydir/app-providers-dir
+              cp -r --preserve=mode,timestamps /opt/bitnami/keycloak/themes /emptydir/app-themes-dir
               info "Copy operation completed"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
