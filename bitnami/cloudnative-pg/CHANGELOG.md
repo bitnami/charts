@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.12 (2025-05-13)
+## 0.1.13 (2025-05-23)
 
-* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#33630](https://github.com/bitnami/charts/pull/33630))
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#33862](https://github.com/bitnami/charts/pull/33862))
+
+## <small>0.1.12 (2025-05-13)</small>
+
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references (#33630) ([69f7c35](https://github.com/bitnami/charts/commit/69f7c35b71e880bd8068ef549a4e9ab775c298b3)), closes [#33630](https://github.com/bitnami/charts/issues/33630)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.11 (2025-05-07)</small>
 
