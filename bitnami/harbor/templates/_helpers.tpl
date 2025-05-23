@@ -180,11 +180,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.redis.sentinel.enabled" -}}
-  {{- $sentinel := .context.Values.redis.sentinel -}}
-  {{- if not .context.Values.redis.enabled -}}
-    {{- $sentinel = ternary (get .context.Values.externalRedis .component ).sentinel .context.Values.externalRedis.sentinel .context.Values.externalRedis.instancePerComponent -}}
-  {{- end -}}
-  {{- ternary "true" "" $sentinel.enabled -}}
+{{- if or (and .context.Values.redis.enabled .context.Values.redis.sentinel) (and (not .context.Values.redis.enabled) (ternary (get .context.Values.externalRedis .component ).sentinel .context.Values.externalRedis.sentinel .context.Values.externalRedis.instancePerComponent)) -}}
+true
+{{- end -}}
 {{- end -}}
 
 {{- define "harbor.redis.sentinel.masterSet" -}}
