@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.1.8 (2025-05-22)
+## 21.1.7 (2025-05-23)
 
 * [bitnami/redis] Sentinel - use external announce IP in prestop hooks #33828 ([#33829](https://github.com/bitnami/charts/pull/33829))
 
