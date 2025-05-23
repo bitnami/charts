@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.7.2 (2025-05-22)
+## 24.7.2 (2025-05-23)
 
 * [bitnami/keycloak] Keycloak generate certificate global cluster domain support ([#33843](https://github.com/bitnami/charts/pull/33843))
 
