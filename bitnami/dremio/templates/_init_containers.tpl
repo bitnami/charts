@@ -22,7 +22,7 @@ Init container definition for generating the configuration
     - -ec
     - |
       set -e
-      {{- if .context.Values.usePasswordFiles }}
+      {{- if .Values.usePasswordFiles }}
       # We need to load all the secret env vars to the system
       for file in $(find /bitnami/dremio/secrets -type f); do
           env_var_name="$(basename $file)"
