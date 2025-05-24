@@ -658,6 +658,7 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `service.annotations`                   | Service annotations. Evaluated as a template                                                                                     | `{}`                     |
 | `service.annotationsHeadless`           | Headless Service annotations. Evaluated as a template                                                                            | `{}`                     |
 | `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
+| `service.headless.type`                 | Explicit Kubernetes Service type for the headless service. Needed in clusters with admission policies that require spec.type to be set.
 | `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.trafficDistribution`           | Traffic Distribution provides another                                                                                            | `PreferClose`            |
