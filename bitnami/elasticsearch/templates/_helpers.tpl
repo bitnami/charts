@@ -54,11 +54,16 @@ Required for the Kibana subchart to find Elasticsearch service.
 */}}
 {{- define "elasticsearch.service.name" -}}
 {{- if .Values.global.kibanaEnabled -}}
-    {{- $name := .Values.global.elasticsearch.service.name -}}
-    {{- if contains $name .Release.Name -}}
-    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+    {{- if .Values.global.elasticsearch.service.fullname -}}
+        {{- .Values.global.elasticsearch.service.fullname | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
-    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+        {{- $name := .Values.global.elasticsearch.service.name -}}
+        {{- $releaseName := regexReplaceAll "(-?[^a-z\\d\\-])+-?" (lower .Release.Name) "-" -}}
+        {{- if contains $name $releaseName -}}
+        {{- $releaseName | trunc 63 | trimSuffix "-" -}}
+        {{- else -}}
+        {{- printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
+        {{- end -}}
     {{- end -}}
 {{- else -}}
     {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}

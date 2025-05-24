@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.4 (2025-05-12)
+## 22.1.0 (2025-05-19)
 
-* [bitnami/elasticsearch] add shareProcessNamespace support ([#33232](https://github.com/bitnami/charts/pull/33232))
+* [bitnami/elasticsearch] Service name ([#33775](https://github.com/bitnami/charts/pull/33775))
+
+## <small>22.0.4 (2025-05-16)</small>
+
+* [bitnami/elasticsearch] add shareProcessNamespace support (#33232) ([023476f](https://github.com/bitnami/charts/commit/023476f5c0b12cb7527548e8a5a3b1ca985a55e4)), closes [#33232](https://github.com/bitnami/charts/issues/33232)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>22.0.3 (2025-05-07)</small>
 
