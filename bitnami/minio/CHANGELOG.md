@@ -1,12 +1,8 @@
 # Changelog
 
-## 16.0.11 (2025-05-24)
+## 16.0.10 (2025-05-07)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#33870](https://github.com/bitnami/charts/pull/33870))
-
-## <small>16.0.10 (2025-05-07)</small>
-
-* [bitnami/minio] Release 16.0.10 (#33488) ([055477f](https://github.com/bitnami/charts/commit/055477f89bc7da14e5674c15f1f280f9ae0bdf0c)), closes [#33488](https://github.com/bitnami/charts/issues/33488)
+* [bitnami/minio] Release 16.0.10 ([#33488](https://github.com/bitnami/charts/pull/33488))
 
 ## <small>16.0.9 (2025-05-07)</small>
 
