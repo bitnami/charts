@@ -1,4 +1,4 @@
-# Source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v{{version}}/config/crd/standard/dnsendpoint.yaml
+# Source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v{version}/config/crd/standard/dnsendpoint.yaml
 # Version: 0.17.0
 # Conditional: .Values.crd.create
 {{- if .Values.crd.create }}
