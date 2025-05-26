@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.1.1 (2025-05-18)
+
+* [bitnami/airflow] update README to match deprecated values ([#33602](https://github.com/bitnami/charts/pull/33602))
+
 ## 24.1.0 (2025-05-14)
 
-* [bitnami/airflow] Validate executors and fix LocalExecutor ([#33696](https://github.com/bitnami/charts/pull/33696))
+* [bitnami/airflow] Validate executors and fix LocalExecutor (#33696) ([56e2e5f](https://github.com/bitnami/charts/commit/56e2e5f15cf318cf7d973da4c694623cbb142ed0)), closes [#33696](https://github.com/bitnami/charts/issues/33696)
 
 ## <small>24.0.3 (2025-05-13)</small>
 
