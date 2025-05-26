@@ -1,0 +1,42 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Did you know there are enterprise versions of the Bitnami catalog? For enhanced secure software supply chain features, unlimited pulls from Docker, LTS support, or application customization, see Bitnami Premium or Tanzu Application Catalog. See https://www.arrow.com/globalecs/na/vendors/bitnami for more information.
+
+** Please be patient while the chart is being deployed **
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Check the Grafana k6 Operator documentation for instructions on how to deploy TestRun objects.
+
+https://grafana.com/docs/k6/latest/set-up/set-up-distributed-k6/usage/executing-k6-scripts-with-testrun-crd/
+
+{{- if .Values.rbac.create }}
+{{- if .Values.watchAllNamespaces }}
+WARNING: Grafana k6 Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit accessed namespaces by setting watchAllNamespaces = false
+{{- else }}
+
+Grafana k6 Operator will ONLY access resources in the {{ include "common.names.namespace" . }} namespace. It won't access resources in other namespaces. You can configure this behavior by setting watchAllNamespaces=true.
+
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
+{{- include "common.warnings.rollingTag" .Values.metrics.authProxy.image }}
+{{- end }}
+{{- include "common.warnings.rollingTag" .Values.runnerImage }}
+{{- include "common.warnings.rollingTag" .Values.starterImage }}
+{{- include "grafana-k6-operator.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "metrics.authProxy") "context" $) }}
+{{- $checkImages := (list .Values.runnerImage .Values.starterImage .Values.image) }}
+{{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
+{{- $checkImages = append $checkImages .Values.metrics.authProxy.image }}
+{{- end }}
+{{- include "common.warnings.modifiedImages" (dict "images" $checkImages "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" $checkImages "context" $) }}
