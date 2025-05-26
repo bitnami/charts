@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.6 (2025-05-20)
+## 16.0.7 (2025-05-26)
 
-* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db ([#33786](https://github.com/bitnami/charts/pull/33786))
+* [bitnami/postgresql-ha] Update domain name value for PGPOOL_BACKEND_NODES ([#33607](https://github.com/bitnami/charts/pull/33607))
+
+## <small>16.0.6 (2025-05-20)</small>
+
+* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db (#337 ([3dfc34f](https://github.com/bitnami/charts/commit/3dfc34feaa7a4846e6b1a308221053f879627f2f)), closes [#33786](https://github.com/bitnami/charts/issues/33786)
 
 ## <small>16.0.5 (2025-05-15)</small>
 
