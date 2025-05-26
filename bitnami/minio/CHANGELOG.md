@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.11 (2025-05-25)
+## 16.0.11 (2025-05-26)
 
 * [bitnami/minio] :zap: :arrow_up: Update dependency references ([#33870](https://github.com/bitnami/charts/pull/33870))
 
