@@ -26,7 +26,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - cilium-database
-  version: 11.x.x
+  version: 12.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -54,4 +54,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 2.1.12
+version: 3.0.0
