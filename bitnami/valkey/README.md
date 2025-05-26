@@ -147,7 +147,7 @@ When installing the chart with `architecture=standalone`, it will deploy a stand
 
 #### Primary-Replicas with Sentinel
 
-When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Valkey primary StatefulSet (only one primary allowed) and a Valkey replicas StatefulSet. In this case, the pods will contain an extra container with Valkey Sentinel. This container will form a cluster of Valkey Sentinel nodes, which will promote a new primary in case the actual one fails.
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy single Valkey StatefulSet. In this case, the pods will contain an extra container with Valkey Sentinel. This container will form a cluster of Valkey Sentinel nodes, which will promote a new primary in case the actual one fails.
 
 On graceful termination of the Valkey primary pod, a failover of the primary is initiated to promote a new primary. The Valkey Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.valkeyShutdownWaitFailover=true` is set (the default), the Valkey container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new primary.
 
