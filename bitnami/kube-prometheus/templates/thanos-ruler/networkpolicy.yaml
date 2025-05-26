@@ -1,0 +1,113 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "kube-prometheus.thanosRuler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{ include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{ include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: thanos-ruler
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.thanosRuler.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Communicate with other ruler instances via headless service
+    - ports:
+        - port: {{ .Values.thanosRuler.containerPorts.http }}
+        - port: {{ .Values.thanosRuler.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{ include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: thanos-ruler
+    {{- if .Values.minio.enabled }}
+    # Communicate with minio
+    - ports:
+        - port: {{ .Values.minio.service.ports.api }}
+        - port: {{ .Values.minio.service.ports.api }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+              app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- end }}
+    {{- if .Values.query.enabled }}
+    # Communicate with query
+    - ports:
+        - port: {{ .Values.query.service.ports.http }}
+        - port: {{ .Values.query.containerPorts.http }}
+        - port: {{ .Values.query.serviceGrpc.ports.grpc }}
+        - port: {{ .Values.query.containerPorts.grpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: query
+    {{- end }}
+    {{- if .Values.queryFrontend.enabled }}
+    # Communicate with query-frontend
+    - ports:
+        - port: {{ .Values.queryFrontend.service.ports.http }}
+        - port: {{ .Values.queryFrontend.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: query-frontend
+
+    {{- end }}
+    {{- if .Values.thanosRuler.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.thanosRuler.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.thanosRuler.containerPorts.http }}
+        - port: {{ .Values.thanosRuler.service.ports.http }}
+        - port: {{ .Values.thanosRuler.containerPorts.grpc }}
+        - port: {{ .Values.thanosRuler.service.ports.grpc }}
+      {{- if not .Values.thanosRuler.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "kube-prometheus.thanosRuler.fullname" . }}-client: "true"
+        {{- if .Values.thanosRuler.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.thanosRuler.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.thanosRuler.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.thanosRuler.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.thanosRuler.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.thanosRuler.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -45,6 +45,11 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-alertmanager" (include "kube-prometheus.name" .) -}}
 {{- end -}}
 
+{{/* Name suffixed with Thanos Ruler */}}
+{{- define "kube-prometheus.thanosRuler.name" -}}
+{{- printf "%s-thanos-ruler" (include "kube-prometheus.name" .) -}}
+{{- end -}}
+
 {{/* Fullname suffixed with operator */}}
 {{- define "kube-prometheus.operator.fullname" -}}
 {{- printf "%s-operator" (include "kube-prometheus.fullname" .) -}}
@@ -63,6 +68,11 @@ If release name contains chart name it will be used as a full name.
 {{/* Fullname suffixed with blackbox-exporter */}}
 {{- define "kube-prometheus.blackboxExporter.fullname" -}}
 {{- printf "%s-blackbox-exporter" (include "kube-prometheus.fullname" .) -}}
+{{- end -}}
+
+{{/* Fullname suffixed with Thanos Ruler */}}
+{{- define "kube-prometheus.thanosRuler.fullname" -}}
+{{- printf "%s-thanos-ruler" (include "kube-prometheus.fullname" .) -}}
 {{- end -}}
 
 {{/* Fullname suffixed with thanos */}}
@@ -105,6 +115,14 @@ Labels for blackbox-exporter
 {{- define "kube-prometheus.blackboxExporter.labels" -}}
 {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
 app.kubernetes.io/component: blackbox-exporter
+{{- end -}}
+
+{{/*
+Labels for Thanos Ruler
+*/}}
+{{- define "kube-prometheus.thanosRuler.labels" -}}
+{{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
+app.kubernetes.io/component: thanos-ruler
 {{- end -}}
 
 {{/*
@@ -170,6 +188,17 @@ app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 
 {{/*
+matchLabels for Thanos Ruler
+*/}}
+{{- define "kube-prometheus.thanosRuler.matchLabels" -}}
+{{- if or .Values.thanosRuler.podMetadata.labels .Values.commonLabels }}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.podMetadata.labels .Values.commonLabels ) "context" . ) }}
+{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
+{{ end -}}
+app.kubernetes.io/component: thanos-ruler
+{{- end -}}
+
+{{/*
 Return the proper Prometheus Operator image name
 */}}
 {{- define "kube-prometheus.image" -}}
@@ -199,6 +228,13 @@ Return the proper Thanos Image name
 */}}
 {{- define "kube-prometheus.prometheus.thanosImage" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.prometheus.thanos.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
+Return the proper Thanos Ruler Image name
+*/}}
+{{- define "kube-prometheus.thanosRuler.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.thanosRuler.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -256,6 +292,17 @@ Create the name of the prometheus service account to use
 {{- end -}}
 
 {{/*
+Create the name of the Thanos Ruler service account to use
+*/}}
+{{- define "kube-prometheus.thanosRuler.serviceAccountName" -}}
+{{- if .Values.thanosRuler.serviceAccount.create -}}
+    {{- default (include "kube-prometheus.thanosRuler.fullname" .) .Values.thanosRuler.serviceAccount.name -}}
+{{- else -}}
+    {{- default "default" .Values.thanosRuler.serviceAccount.name -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the alertmanager service account to use
 */}}
 {{- define "kube-prometheus.alertmanager.serviceAccountName" -}}
@@ -277,11 +324,24 @@ Return the etcd configuration configmap
 {{- end -}}
 {{- end -}}
 
+{{/* Validate values of Thanos - Ruler configuration */}}
+{{- define "thanosRuler.validateValues.queryConfig" -}}
+{{ if and .Values.thanosRuler.enabled (not .Values.thanosRuler.queryConfig.existingSecret.name) (not .Values.thanosRuler.queryConfig.config) -}}
+Thanos: Ruler configuration
+    When enabling Thanos Ruler component, you must provide a valid query configuration.
+    There are two alternatives to provide it:
+      1) Through an existing secret whose details are specified by 'thanosRuler.queryConfig.existingSecret'
+      2) Through the 'thanosRuler.queryConfig.config' parameter
+    Configuration format is described under https://thanos.io/tip/components/rule.md/#query-api
+{{- end -}}
+{{- end -}}
+
 {{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kube-prometheus.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "thanosRuler.validateValues.queryConfig" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
