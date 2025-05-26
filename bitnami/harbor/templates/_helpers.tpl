@@ -209,6 +209,15 @@ true
 {{- ternary "5" (ternary (get .Values.externalRedis "trivy" ).index .Values.externalRedis.trivyAdapterDatabaseIndex .Values.externalRedis.instancePerComponent) .Values.redis.enabled -}}
 {{- end -}}
 
+{{- define "harbor.redis.username" -}}
+{{- if .context.Values.redis.enabled -}}
+  {{- print "default" -}}
+{{- else -}}
+  {{- $externalRedis := ternary ( get .context.Values.externalRedis .component ) .context.Values.externalRedis .context.Values.externalRedis.instancePerComponent -}}
+  {{- default "default" $externalRedis.username -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "harbor.redis.rawPassword" -}}
   {{- $externalRedis := ternary ( get .context.Values.externalRedis .component ) .context.Values.externalRedis .context.Values.externalRedis.instancePerComponent -}}
   {{- if and (not .context.Values.redis.enabled) $externalRedis.password -}}
@@ -241,16 +250,16 @@ true
   {{- $component := "jobservice" -}}
   {{- $args := dict "context" . "component" $component -}}
   {{- if not (include "harbor.redis.sentinel.enabled" $args)  -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- end -}}
   {{- else -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.jobserviceDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -260,16 +269,16 @@ true
   {{- $component := "registry" -}}
   {{- $args := dict "context" . "component" $component -}}
   {{- if not (include "harbor.redis.sentinel.enabled" $args)  -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- end -}}
   {{- else -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.registryDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.registryDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -278,16 +287,16 @@ true
   {{- $component := "trivy" -}}
   {{- $args := dict "context" . "component" $component -}}
   {{- if not (include "harbor.redis.sentinel.enabled" $args)  -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- end -}}
   {{- else -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.trivyAdapterDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -296,16 +305,16 @@ true
   {{- $component := "core" -}}
   {{- $args := dict "context" . "component" $component -}}
   {{- if not (include "harbor.redis.sentinel.enabled" $args)  -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- end -}}
   {{- else -}}
-    {{- if (include "harbor.redis.escapedRawPassword" $args ) -}}
-      {{- printf "%s://default:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.escapedRawPassword" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+    {{- if (include "harbor.redis.escapedRawPassword" $args) -}}
+      {{- printf "%s://%s:%s@%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.username" $args) (include "harbor.redis.escapedRawPassword" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- else -}}
-      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args ) (include "harbor.redis.host" $args ) (include "harbor.redis.port" $args ) (include "harbor.redis.sentinel.masterSet" $args ) (include "harbor.redis.coreDatabaseIndex" . ) -}}
+      {{- printf "%s://%s:%s/%s/%s" (include "harbor.redis.scheme" $args) (include "harbor.redis.host" $args) (include "harbor.redis.port" $args) (include "harbor.redis.sentinel.masterSet" $args) (include "harbor.redis.coreDatabaseIndex" . ) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

@@ -3916,6 +3916,7 @@ redis:
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host
 ## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.username Redis&reg; username (for Redis&reg;6 ACL)
 ## @param externalRedis.password Redis&reg; password
 ## @param externalRedis.coreDatabaseIndex Index for core database
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
@@ -3928,6 +3929,7 @@ redis:
 externalRedis:
   host: localhost
   port: 6379
+  username: ""
   password: ""
   coreDatabaseIndex: "0"
   jobserviceDatabaseIndex: "1"
@@ -3950,6 +3952,7 @@ externalRedis:
   instancePerComponent: false
   ## @param externalRedis.core.host Redis&reg; host for core service
   ## @param externalRedis.core.port Redis&reg; port number for core service
+  ## @param externalRedis.core.username Redis&reg; username for core service (for Redis&reg;6 ACL)
   ## @param externalRedis.core.password Redis&reg; password for core service
   ## @param externalRedis.core.index Index for core database
   ## @param externalRedis.core.tls.enabled Enable Redis TLS traffic for core service
@@ -3962,6 +3965,7 @@ externalRedis:
   core:
     host: ""
     port: 6379
+    username: ""
     password: ""
     index: 0
     tls:
@@ -3974,6 +3978,7 @@ externalRedis:
       hosts: ""
   ## @param externalRedis.jobservice.host Redis&reg; host for jobService service
   ## @param externalRedis.jobservice.port Redis&reg; port number for jobService service
+  ## @param externalRedis.jobservice.username Redis&reg; username for core service (for Redis&reg;6 ACL)
   ## @param externalRedis.jobservice.password Redis&reg; password for jobService service
   ## @param externalRedis.jobservice.index Index for jobService database
   ## @param externalRedis.jobservice.tls.enabled Enable Redis TLS traffic for jobService service
@@ -3986,6 +3991,7 @@ externalRedis:
   jobservice:
     host: ""
     port: 6379
+    username: ""
     password: ""
     index: 0
     tls:
@@ -3998,6 +4004,7 @@ externalRedis:
       hosts: ""
   ## @param externalRedis.registry.host Redis&reg; host for registry service
   ## @param externalRedis.registry.port Redis&reg; port number for registry service
+  ## @param externalRedis.registry.username Redis&reg; username for core service (for Redis&reg;6 ACL)
   ## @param externalRedis.registry.password Redis&reg; password for registry service
   ## @param externalRedis.registry.index Index for registry database
   ## @param externalRedis.registry.tls.enabled Enable Redis TLS traffic for registry service
@@ -4010,6 +4017,7 @@ externalRedis:
   registry:
     host: ""
     port: 6379
+    username: ""
     password: ""
     index: 0
     tls:
@@ -4022,6 +4030,7 @@ externalRedis:
       hosts: ""
   ## @param externalRedis.trivy.host Redis&reg; host for trivy service
   ## @param externalRedis.trivy.port Redis&reg; port number for trivy service
+  ## @param externalRedis.trivy.username Redis&reg; username for core service (for Redis&reg;6 ACL)
   ## @param externalRedis.trivy.password Redis&reg; password for trivy service
   ## @param externalRedis.trivy.index Index for trivy database
   ## @param externalRedis.trivy.tls.enabled Enable Redis TLS traffic for trivy service
@@ -4034,6 +4043,7 @@ externalRedis:
   trivy:
     host: ""
     port: 6379
+    username: ""
     password: ""
     index: 0
     tls:
