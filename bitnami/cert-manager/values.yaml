@@ -514,6 +514,11 @@ webhook:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+  ## @param webhook.timeoutSeconds [default: 30] How many seconds the webhook should wait for a response before timing out
+  ## ref: https://cert-manager.io/docs/troubleshooting/webhook/#error-context-deadline-exceeded
+  ## Default value is configured to 30 seconds (the maximum value allowed by Kubernetes)
+  ##
+  timeoutSeconds: 30
   ## Webhook containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param webhook.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
