@@ -38,5 +38,5 @@ Grafana k6 Operator will ONLY access resources in the {{ include "common.names.n
 {{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
 {{- $checkImages = append $checkImages .Values.metrics.authProxy.image }}
 {{- end }}
-{{- include "common.warnings.modifiedImages" (dict "images" image metrics.authProxy.image runnerImage starterImage "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list image metrics.authProxy.image runnerImage starterImage) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" $checkImages "context" $) }}
