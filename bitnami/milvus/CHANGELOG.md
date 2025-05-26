@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.6 (2025-05-23)
+## 14.0.0 (2025-05-26)
 
-* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#33854](https://github.com/bitnami/charts/pull/33854))
+* [bitnami/milvus] Update ETCD subchart ([#33877](https://github.com/bitnami/charts/pull/33877))
+
+## <small>13.2.6 (2025-05-23)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#33854) ([7715762](https://github.com/bitnami/charts/commit/77157629dde5db3fe814f387815a8151e67d1945)), closes [#33854](https://github.com/bitnami/charts/issues/33854)
 
 ## <small>13.2.5 (2025-05-22)</small>
 
