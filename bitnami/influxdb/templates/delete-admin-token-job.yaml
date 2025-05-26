@@ -1,0 +1,91 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.auth.enabled (not .Values.auth.existingSecret) .Values.createAdminTokenJob.enabled (ne .Values.objectStore "memory") }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-delete-admin-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: delete-admin-token
+  {{- $defaultAnnotations := dict "helm.sh/hook" "post-delete" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.createAdminTokenJob.annotations .Values.commonAnnotations $defaultAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.createAdminTokenJob.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.createAdminTokenJob.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: influxdb
+        app.kubernetes.io/component: delete-admin-token
+      {{- if .Values.createAdminTokenJob.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "influxdb.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      automountServiceAccountToken: {{ .Values.createAdminTokenJob.automountServiceAccountToken }}
+      serviceAccountName: {{ include "influxdb.deleteAdminTokenJob.serviceAccountName" . }}
+      {{- if .Values.createAdminTokenJob.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.createAdminTokenJob.podAffinityPreset "component" "delete-admin-token" "customLabels" $podLabels "topologyKey" .Values.createAdminTokenJob.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.createAdminTokenJob.podAntiAffinityPreset "component" "delete-admin-token" "customLabels" $podLabels "topologyKey" .Values.createAdminTokenJob.topologyKey "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.createAdminTokenJob.nodeAffinityPreset.type "key" .Values.createAdminTokenJob.nodeAffinityPreset.key "values" .Values.createAdminTokenJob.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.createAdminTokenJob.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.createAdminTokenJob.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.priorityClassName }}
+      priorityClassName: {{ .Values.createAdminTokenJob.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.createAdminTokenJob.schedulerName }}
+      schedulerName: {{ .Values.createAdminTokenJob.schedulerName }}
+      {{- end }}
+      containers:
+        - name: kubectl
+          image: {{ include "influxdb.createAdminToken.image" . }}
+          imagePullPolicy: {{ .Values.createAdminTokenJob.image.pullPolicy }}
+          {{- if .Values.createAdminTokenJob.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.createAdminTokenJob.containerSecurityContext "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.createAdminTokenJob.resources }}
+          resources: {{- toYaml .Values.createAdminTokenJob.resources | nindent 12 }}
+          {{- else if ne .Values.createAdminTokenJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.createAdminTokenJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - kubectl
+          args:
+            - delete
+            - secret
+            - {{ include "common.names.fullname" . }}
+            - --namespace
+            - {{ include "common.names.namespace" . }}
+            - --ignore-not-found
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+{{- end }}

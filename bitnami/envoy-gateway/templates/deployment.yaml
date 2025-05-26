@@ -147,6 +147,10 @@ spec:
               containerPort: 19001
             - name: http-health
               containerPort: 8081
+            {{- if .Values.topologyInjector.enabled }}
+            - name: http-webhook
+              containerPort: 9443
+            {{- end }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}

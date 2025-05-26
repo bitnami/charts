@@ -14,6 +14,8 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.mongodb-cnab) to see the listing on Azure Marketplace.
+
 Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
@@ -829,6 +831,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                                                                                                 | `""`                |
 | `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                                                                                                           | `OnFailure`         |
 | `backup.cronjob.backoffLimit`                                      | Set the cronjob parameter backoffLimit                                                                                                                                                                            | `6`                 |
+| `backup.cronjob.serviceAccount.name`                               | Set the cronjob parameter serviceAccountName. If you change from the default values make sure that the SA already exists.                                                                                         | `default`           |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`              |
 | `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`              |

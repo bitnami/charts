@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: ProjectManagement
-  licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r43
+      image: docker.io/bitnami/os-shell:12-debian-12-r45
     - name: redmine
-      image: docker.io/bitnami/redmine:6.0.5-debian-12-r1
+      image: docker.io/bitnami/redmine:6.0.5-debian-12-r3
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 6.0.5
 dependencies:
@@ -26,7 +26,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
+description: Redmine is an open source management application. It includes a tracking
+  issue system, Gantt charts for a visual view of projects and deadlines, and supports
+  SCM integration for version control.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
@@ -44,4 +46,4 @@ maintainers:
 name: redmine
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redmine
-version: 32.2.4
+version: 32.2.5

@@ -184,12 +184,6 @@ extraDeploy:
                   - name: default-volume-claim
                     mountPath: /bitnami/clickhouse-keeper
                   # Hack required for read-only fs
-                  - name: chk-vib-deploy-confd-vib-0-0
-                    mountPath: /opt/bitnami/clickhouse-keeper/etc/conf.d
-                  - name: chk-vib-common-configd
-                    mountPath: /opt/bitnami/clickhouse-keeper/etc/keeper_config.d
-                  - name: chk-vib-common-usersd
-                    mountPath: /opt/bitnami/clickhouse-keeper/etc/users.d
                   - name: empty-dir
                     mountPath: /opt/bitnami/clickhouse-keeper/etc
                     subPath: app-conf-dir

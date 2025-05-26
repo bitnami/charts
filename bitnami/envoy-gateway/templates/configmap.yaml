@@ -35,6 +35,11 @@ provider:
           - {{ $namespace }}
           {{- end }}
       {{- end }}
+
+{{- if not .Values.topologyInjector.enabled }}
+proxyTopologyInjector:
+  disabled: true
+{{- end }}
 admin:
   address:
     port: {{ .Values.containerPorts.admin }}

@@ -1,8 +1,19 @@
 # Changelog
 
-## 9.2.2 (2025-05-06)
+## 9.2.4 (2025-05-22)
 
-* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33345](https://github.com/bitnami/charts/pull/33345))
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#33846](https://github.com/bitnami/charts/pull/33846))
+
+## <small>9.2.3 (2025-05-20)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#33601) ([788718d](https://github.com/bitnami/charts/commit/788718d0999fa2ebb8953eb604e3df5226f7c84c)), closes [#33601](https://github.com/bitnami/charts/issues/33601)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>9.2.2 (2025-05-07)</small>
+
+* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([6924c7c](https://github.com/bitnami/charts/commit/6924c7cec199259b74f06c3d9eba4cba80cfbede)), closes [#33345](https://github.com/bitnami/charts/issues/33345)
 
 ## <small>9.2.1 (2025-05-05)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 6.0.1 (2025-05-08)
+## 6.0.3 (2025-05-22)
 
-* [bitnami/appsmith] Release 6.0.1 ([#33504](https://github.com/bitnami/charts/pull/33504))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#33833](https://github.com/bitnami/charts/pull/33833))
+
+## <small>6.0.2 (2025-05-15)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33723) ([6bfaa98](https://github.com/bitnami/charts/commit/6bfaa98784529bc830024a33137c109aa363ba05)), closes [#33723](https://github.com/bitnami/charts/issues/33723)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>6.0.1 (2025-05-08)</small>
+
+* [bitnami/appsmith] Release 5.2.12 (#33504) ([7206142](https://github.com/bitnami/charts/commit/7206142871caa01816cbbfb73f644f957d86121b)), closes [#33504](https://github.com/bitnami/charts/issues/33504)
 
 ## 6.0.0 (2025-05-07)
 

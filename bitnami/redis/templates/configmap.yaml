@@ -59,8 +59,12 @@ data:
     {{- $userSecret := .Values.auth.acl.userSecret -}}
     {{- range .Values.auth.acl.users }}
     {{- $userPassword := .password | default "" }}
-    {{- $secretPassword := (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $))}}
-    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else if $userPassword }}#{{ sha256sum $userPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- if $userSecret }}
+    {{- $secretPassword := include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $) }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- else }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $userPassword }}#{{ sha256sum $userPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- end }}
     {{- end }}
     {{- end }}
     {{- end }}

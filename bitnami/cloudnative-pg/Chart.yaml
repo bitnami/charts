@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: cloudnative-pg
-      image: docker.io/bitnami/cloudnative-pg:1.25.1-debian-12-r6
+      image: docker.io/bitnami/cloudnative-pg:1.26.0-debian-12-r0
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r3
+      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 1.25.1
+appVersion: 1.26.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ maintainers:
 name: cloudnative-pg
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
-version: 0.1.12
+version: 0.1.14

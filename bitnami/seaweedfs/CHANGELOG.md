@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.8.7 (2025-05-07)
+## 4.8.9 (2025-05-21)
 
-* [bitnami/seaweedfs] Release 4.8.7 ([#33539](https://github.com/bitnami/charts/pull/33539))
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#33810](https://github.com/bitnami/charts/pull/33810))
+
+## <small>4.8.8 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#33646) ([cadc9b9](https://github.com/bitnami/charts/commit/cadc9b9fe8e3168aa177dd7ae50ea1244f1d0877)), closes [#33646](https://github.com/bitnami/charts/issues/33646)
+
+## <small>4.8.7 (2025-05-07)</small>
+
+* [bitnami/seaweedfs] Release 4.8.7 (#33539) ([b54fa9d](https://github.com/bitnami/charts/commit/b54fa9dcfbc769bcee71b1e9fd4f5abe14755760)), closes [#33539](https://github.com/bitnami/charts/issues/33539)
 
 ## <small>4.8.6 (2025-05-06)</small>
 

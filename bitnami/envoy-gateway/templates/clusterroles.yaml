@@ -129,6 +129,19 @@ rules:
       - backendtlspolicies/status
     verbs:
       - update
+  {{- if .Values.topologyInjector.enabled }}
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/binding
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  {{- end }}
   {{- end }}
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}

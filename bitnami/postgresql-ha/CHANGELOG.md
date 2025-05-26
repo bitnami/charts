@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.0.4 (2025-05-12)
+## 16.0.7 (2025-05-26)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33618](https://github.com/bitnami/charts/pull/33618))
+* [bitnami/postgresql-ha] Update domain name value for PGPOOL_BACKEND_NODES ([#33607](https://github.com/bitnami/charts/pull/33607))
+
+## <small>16.0.6 (2025-05-20)</small>
+
+* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db (#337 ([3dfc34f](https://github.com/bitnami/charts/commit/3dfc34feaa7a4846e6b1a308221053f879627f2f)), closes [#33786](https://github.com/bitnami/charts/issues/33786)
+
+## <small>16.0.5 (2025-05-15)</small>
+
+* [bitnami-postgresql-ha] docs: document security fix on 16.0.0 (#33659) ([9d71b3a](https://github.com/bitnami/charts/commit/9d71b3ad0c5598932670d59c7d118d7a0c496d54)), closes [#33659](https://github.com/bitnami/charts/issues/33659)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33705) ([a2fac0d](https://github.com/bitnami/charts/commit/a2fac0de6560264e16c1632a4795a1b111630f0b)), closes [#33705](https://github.com/bitnami/charts/issues/33705)
+
+## <small>16.0.4 (2025-05-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33618) ([1eeb981](https://github.com/bitnami/charts/commit/1eeb9813ed3a5fd7791ace98ae352bcea57244e4)), closes [#33618](https://github.com/bitnami/charts/issues/33618)
 
 ## <small>16.0.3 (2025-05-09)</small>
 
@@ -20,7 +33,6 @@
 ## 16.0.0 (2025-05-08)
 
 * [bitnami/postgresql-ha] feat: Customizable Stream Replication Check credentials (#33552) ([cff2e93](https://github.com/bitnami/charts/commit/cff2e93f9da96f82ad9d97d2d35a7324b54d0931)), closes [#33552](https://github.com/bitnami/charts/issues/33552)
-* Security fix for [GHSA-mx38-x658-5fwj](https://github.com/bitnami/charts/security/advisories/GHSA-mx38-x658-5fwj) and CVE-2025-22248.
 
 ## <small>15.3.17 (2025-05-07)</small>
 

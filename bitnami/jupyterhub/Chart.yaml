@@ -5,13 +5,13 @@ annotations:
   category: MachineLearning
   images: |
     - name: configurable-http-proxy
-      image: docker.io/bitnami/configurable-http-proxy:4.6.3-debian-12-r9
+      image: docker.io/bitnami/configurable-http-proxy:4.6.3-debian-12-r10
     - name: jupyter-base-notebook
-      image: docker.io/bitnami/jupyter-base-notebook:5.3.0-debian-12-r2
+      image: docker.io/bitnami/jupyter-base-notebook:5.3.0-debian-12-r4
     - name: jupyterhub
-      image: docker.io/bitnami/jupyterhub:5.3.0-debian-12-r5
+      image: docker.io/bitnami/jupyterhub:5.3.0-debian-12-r8
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r43
+      image: docker.io/bitnami/os-shell:12-debian-12-r45
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
@@ -40,4 +40,4 @@ maintainers:
 name: jupyterhub
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 9.0.9
+version: 9.0.11
