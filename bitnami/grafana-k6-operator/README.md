@@ -51,7 +51,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the Grafana k6 Operator native Prometheus endpoint in a `metrics` service, which can be configured under the `metrics.service` section. It will have the necessary annotations to be automatically scraped by Prometheus.
 
-It is possible to set RBAC-based authentication to this endpoint by setting `authProxy.enabled=true`, this will deploy a sidecar with `kube-rbac-proxy` and only the authorized ServiceAccounts will be able to access the metrics.
+It is possible to set RBAC-based authentication to this endpoint by setting `authProxy.enabled=true`, this will deploy a sidecar with [kube-rbac-proxy](https://github.com/brancz/kube-rbac-proxy) and only the authorized ServiceAccounts will be able to access the metrics.
 
 #### Prometheus requirements
 
