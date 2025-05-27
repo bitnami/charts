@@ -9,7 +9,7 @@ annotations:
     - name: chainloop-control-plane
       image: docker.io/bitnami/chainloop-control-plane:1.4.4-debian-12-r0
     - name: chainloop-control-plane-migrations
-      image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.4-debian-12-r0
+      image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.5-debian-12-r0
     - name: dex
       image: docker.io/bitnami/dex:2.43.1-debian-12-r0
   license: Apache-2.0
@@ -65,4 +65,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane-migrations
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-artifact-cas
 - https://github.com/chainloop-dev/chainloop
-version: 4.0.10
+version: 4.0.11
