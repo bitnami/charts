@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.5.0 (2025-05-26)
+## 1.5.0 (2025-05-27)
 
 * [bitnami/cert-manager] added webhook.timeoutSeconds ([#33890](https://github.com/bitnami/charts/pull/33890))
 
