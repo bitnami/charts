@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.11 (2025-05-13)
+## 2.0.12 (2025-05-27)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#33642](https://github.com/bitnami/charts/pull/33642))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#33919](https://github.com/bitnami/charts/pull/33919))
+
+## <small>2.0.11 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33642) ([739257b](https://github.com/bitnami/charts/commit/739257b97477968deb9a19ab0ff32b7f6a973dab)), closes [#33642](https://github.com/bitnami/charts/issues/33642)
 
 ## <small>2.0.10 (2025-05-07)</small>
 
