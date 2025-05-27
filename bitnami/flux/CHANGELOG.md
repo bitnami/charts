@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.4.13 (2025-05-13)
+## 2.4.14 (2025-05-27)
 
-* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#33683](https://github.com/bitnami/charts/pull/33683))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#33908](https://github.com/bitnami/charts/pull/33908))
+
+## <small>2.4.13 (2025-05-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33683) ([072b13e](https://github.com/bitnami/charts/commit/072b13efddd2a3f790a34dcf97ebedf776156045)), closes [#33683](https://github.com/bitnami/charts/issues/33683)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.4.12 (2025-05-07)</small>
 
