@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.8 (2025-05-26)
+## 16.0.8 (2025-05-27)
 
 * [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password ([#32857](https://github.com/bitnami/charts/pull/32857))
 
