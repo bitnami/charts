@@ -121,7 +121,12 @@ spec:
                 command:
                   - /bin/bash
                   - -ec
-                  - /opt/bitnami/scripts/start-scripts/prestop-redis.sh
+                  - |
+                    pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
+                    pod_index="${pod_index[-1]}"
+                    ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+                    export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+                    /opt/bitnami/scripts/start-scripts/prestop-redis.sh > /proc/1/fd/1
           {{- end }}
           {{- end }}
           {{- if .Values.replica.containerSecurityContext.enabled }}
@@ -348,7 +353,12 @@ spec:
                 command:
                   - /bin/bash
                   - -ec
-                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
+                  - |
+                    pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
+                    pod_index="${pod_index[-1]}"
+                    ips=($(echo "{{ .Values.sentinel.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+                    export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+                    /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh > /proc/1/fd/1
           {{- end }}
           {{- end }}
           {{- if .Values.sentinel.containerSecurityContext.enabled }}
