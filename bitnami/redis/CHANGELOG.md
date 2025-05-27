@@ -1,16 +1,8 @@
 # Changelog
 
-## 21.1.8 (2025-05-27)
+## 21.1.6 (2025-05-22)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33914](https://github.com/bitnami/charts/pull/33914))
-
-## <small>21.1.7 (2025-05-26)</small>
-
-* [bitnami/redis] bugfix: issue on ACL when no existing users secret is passed (#33876) ([193fd9f](https://github.com/bitnami/charts/commit/193fd9fba5a8234fcdd7a5001e28fac00214ec74)), closes [#33876](https://github.com/bitnami/charts/issues/33876)
-
-## <small>21.1.6 (2025-05-22)</small>
-
-* [bitnami/redis] :zap: :arrow_up: Update dependency references (#33825) ([9b34897](https://github.com/bitnami/charts/commit/9b34897bab192ea829865d4a8ddfde9beab48199)), closes [#33825](https://github.com/bitnami/charts/issues/33825)
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#33825](https://github.com/bitnami/charts/pull/33825))
 
 ## <small>21.1.5 (2025-05-20)</small>
 
