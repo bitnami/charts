@@ -1,12 +1,8 @@
 # Changelog
 
-## 16.7.5 (2025-05-27)
+## 16.7.4 (2025-05-13)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#33916](https://github.com/bitnami/charts/pull/33916))
-
-## <small>16.7.4 (2025-05-13)</small>
-
-* [bitnami/postgresql] Support for global postgresql fullnameOverride (#33616) ([7e006db](https://github.com/bitnami/charts/commit/7e006db0e1ed2d6dbc1bf1ffc3ebeac48726efa5)), closes [#33616](https://github.com/bitnami/charts/issues/33616)
+* [bitnami/postgresql] Support for global postgresql fullnameOverride ([#33616](https://github.com/bitnami/charts/pull/33616))
 
 ## <small>16.7.3 (2025-05-13)</small>
 
