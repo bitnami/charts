@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.11 (2025-05-16)
+## 2.1.12 (2025-05-27)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33719](https://github.com/bitnami/charts/pull/33719))
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33895](https://github.com/bitnami/charts/pull/33895))
+
+## <small>2.1.11 (2025-05-19)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33719) ([b374c97](https://github.com/bitnami/charts/commit/b374c976d4243f56f1cae687df38bd9208904424)), closes [#33719](https://github.com/bitnami/charts/issues/33719)
 
 ## <small>2.1.10 (2025-05-13)</small>
 
