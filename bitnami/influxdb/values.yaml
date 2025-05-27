@@ -62,6 +62,9 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param useHelmHooks Enable use of Helm hooks if needed, e.g. on pre-install jobs
+##
+useHelmHooks: true
 ## @param usePasswordFiles Mount credentials as files instead of using environment variables
 ##
 usePasswordFiles: true
@@ -92,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 3.0.3-debian-12-r4
+  tag: 3.0.3-debian-12-r5
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -177,7 +180,7 @@ s3:
     existingSecret: ""
   ## @param s3.defaultRegion AWS S3 default region
   ##
-  defaultRegion: us-east-1
+  defaultRegion: ""
   ## @param s3.endpoint AWS S3 endpoint
   ## Useful for S3-compatible storage providers
   ##
@@ -918,6 +921,9 @@ createAdminTokenJob:
   ## @param createAdminTokenJob.enabled Whether to create a random admin token using a K8s job (ignored if `objectStore` is set to `memory` or `auth.enabled` is set to `false`). Warning: do not use this feature if Helm hooks aren't supported in your environment
   ##
   enabled: true
+  ## @param createAdminTokenJob.cleanup Whether to create a K8s job to delete the admin token during Helm uninstall
+  ##
+  cleanup: true
   ## Bitnami Kubectl image
   ## @param createAdminTokenJob.image.registry [default: REGISTRY_NAME] Kubectl image registry
   ## @param createAdminTokenJob.image.repository [default: REPOSITORY_NAME/os-shell] Kubectl image repository

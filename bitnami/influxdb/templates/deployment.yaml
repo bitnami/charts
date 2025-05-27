@@ -74,7 +74,7 @@ spec:
         {{- include "influxdb.defaultInitContainers.volumePermissions" . | nindent 8 }}
         {{- end }}
         {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" .) | trim | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" .) | nindent 8 }}
         {{- end }}
       containers:
         - name: influxdb
@@ -138,11 +138,15 @@ spec:
               value: {{ .Values.bucket | quote }}
             {{- end }}
             {{- if eq .Values.objectStore "s3" }}
+            {{- if .Values.s3.defaultRegion }}
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.s3.defaultRegion | quote }}
+            {{- end }}
             {{- if .Values.s3.endpoint }}
             - name: AWS_ENDPOINT
               value: {{ .Values.s3.endpoint | quote }}
+            - name: AWS_ALLOW_HTTP
+              value: {{ ternary "false" "true" (contains "https" .Values.s3.endpoint) | quote }}
             {{- end }}
             {{- if .Values.usePasswordFiles }}
             - name: AWS_ACCESS_KEY_ID_FILE
