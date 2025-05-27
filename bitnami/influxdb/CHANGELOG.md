@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.3 (2025-05-23)
+## 7.1.0 (2025-05-27)
 
-* [bitnami/influxdb] bugfix: address limitations with read-only restrictive environments ([#33852](https://github.com/bitnami/charts/pull/33852))
+* [bitnami/influxdb] ci: enable S3 storage on VIB testing ([#33900](https://github.com/bitnami/charts/pull/33900))
+
+## <small>7.0.3 (2025-05-23)</small>
+
+* [bitnami/influxdb] bugfix: address limitations with read-only restrictive environments (#33852) ([ca6d3ba](https://github.com/bitnami/charts/commit/ca6d3ba87f395ca75c8ce09052d1f06f06787fe0)), closes [#33852](https://github.com/bitnami/charts/issues/33852)
 
 ## <small>7.0.2 (2025-05-22)</small>
 
