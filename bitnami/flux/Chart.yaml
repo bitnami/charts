@@ -13,7 +13,7 @@ annotations:
     - name: fluxcd-kustomize-controller
       image: docker.io/bitnami/fluxcd-kustomize-controller:1.5.1-debian-12-r8
     - name: fluxcd-notification-controller
-      image: docker.io/bitnami/fluxcd-notification-controller:1.5.0-debian-12-r11
+      image: docker.io/bitnami/fluxcd-notification-controller:1.6.0-debian-12-r0
     - name: fluxcd-source-controller
       image: docker.io/bitnami/fluxcd-source-controller:1.6.0-debian-12-r0
     - name: os-shell
@@ -45,4 +45,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 2.4.15
+version: 2.4.16
