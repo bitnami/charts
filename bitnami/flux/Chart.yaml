@@ -9,7 +9,7 @@ annotations:
     - name: fluxcd-image-automation-controller
       image: docker.io/bitnami/fluxcd-image-automation-controller:0.40.0-debian-12-r11
     - name: fluxcd-image-reflector-controller
-      image: docker.io/bitnami/fluxcd-image-reflector-controller:0.34.0-debian-12-r11
+      image: docker.io/bitnami/fluxcd-image-reflector-controller:0.35.0-debian-12-r0
     - name: fluxcd-kustomize-controller
       image: docker.io/bitnami/fluxcd-kustomize-controller:1.5.1-debian-12-r8
     - name: fluxcd-notification-controller
@@ -45,4 +45,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 2.4.14
+version: 2.4.15
