@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.12 (2025-05-27)
+## 3.0.0 (2025-05-27)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33895](https://github.com/bitnami/charts/pull/33895))
+* [bitnami/cilium] Update ETCD subchart ([#33879](https://github.com/bitnami/charts/pull/33879))
+
+## <small>2.1.12 (2025-05-27)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33895) ([f11c343](https://github.com/bitnami/charts/commit/f11c3430724347a8ff177f6ed917d5d97815a685)), closes [#33895](https://github.com/bitnami/charts/issues/33895)
 
 ## <small>2.1.11 (2025-05-19)</small>
 
