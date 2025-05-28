@@ -126,6 +126,9 @@ spec:
             - /bitnami/scripts/generate-certs.sh
           args:
             - -s {{ include "mongodb.arbiter.service.nameOverride" . }}
+          {{- if .Values.tls.securityContext }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tls.securityContext "context" $) | nindent 12 }}
+          {{- end }}
         {{- end }}
       containers:
         - name: mongodb-arbiter
