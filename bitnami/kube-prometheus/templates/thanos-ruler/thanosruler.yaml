@@ -60,21 +60,21 @@ spec:
 {{- end}}
 {{- if .Values.thanosRuler.alertmanagersConfig.existingSecret.name }}
   alertmanagersConfig:
-    key: "{{.Values.thanosRuler.alertmanagersConfig.existingSecret.key }}"
-    name: "{{.Values.thanosRuler.alertmanagersConfig.existingSecret.name }}"
+    key: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.name . | quote }}
 {{- else if .Values.thanosRuler.alertmanagersConfig.secret }}
   alertmanagersConfig:
     key: alertmanagers-config.yaml
-    name: {{ include "kube-prometheus.thanosRuler.fullname" . }}-alertmanagers-config
+    name: {{ printf "%s-alertmanagers-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- if .Values.thanosRuler.queryConfig.existingSecret.name }}
   queryConfig:
-    key: "{{.Values.thanosRuler.queryConfig.existingSecret.key }}"
-    name: "{{.Values.thanosRuler.queryConfig.existingSecret.name }}"
+    key: {{ tpl .Values.thanosRuler.queryConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.queryConfig.existingSecret.name . | quote }}
 {{- else if .Values.thanosRuler.queryConfig.config }}
   queryConfig:
     key: query-config.yaml
-    name: {{ include "kube-prometheus.thanosRuler.fullname" . }}-query-config
+    name: {{ printf "%s-query-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- if .Values.thanosRuler.resources }}
   resources: {{ toYaml .Values.thanosRuler.resources | nindent 4 }}
