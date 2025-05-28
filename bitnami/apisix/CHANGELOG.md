@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1 (2025-05-28)
+
+* [bitnami/apisix] Add dnsPolicy configuration support for dataPlane and controlPlane [#33926](https://github.com/bitnami/charts/pull/33926)
+
 ## 5.0.0 (2025-05-26)
 
 * [bitnami/apisix] Update ETCD subchart ([#33878](https://github.com/bitnami/charts/pull/33878))
