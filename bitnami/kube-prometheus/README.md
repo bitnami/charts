@@ -1022,7 +1022,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `thanosRuler.containers`                                  | Containers allows injecting additional containers or modifying operator generated containers                                       | `[]`                     |
 | `thanosRuler.initContainers`                              | InitContainers allows adding initContainers to the pod definition                                                                  | `[]`                     |
 | `thanosRuler.priorityClassName`                           | Priority class assigned to the Pods                                                                                                | `""`                     |
-| `thanosRuler.portName`                                    | Port name used for the pods and governing service. Defaults to web                                                                 | `web`                    |
+| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `web`                    |
 | `thanosRuler.web`                                         | Defines the configuration of the ThanosRuler web server                                                                            | `{}`                     |
 | `thanosRuler.remoteWrite`                                 | Defines the list of remote write configurations                                                                                    | `{}`                     |
 
