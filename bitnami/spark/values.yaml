@@ -137,6 +137,9 @@ hostNetwork: false
 ## Spark master specific configuration
 ##
 master:
+  ## @param master.enabled Deploy master statefulset
+  ##
+  enabled: true
   ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for master
   ##
   existingConfigmap: ""
@@ -482,6 +485,9 @@ master:
 ## Spark worker specific configuration
 ##
 worker:
+  ## @param worker.enabled Deploy worker resources
+  ##
+  enabled: true
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for workers
   ##
   existingConfigmap: ""

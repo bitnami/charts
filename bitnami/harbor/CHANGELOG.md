@@ -1,8 +1,16 @@
 # Changelog
 
+## 26.3.0 (2025-05-26)
+
+* [bitnami/harbor] feat: add support for consuming Redis passwords from existing secrets ([#33884](https://github.com/bitnami/charts/pull/33884))
+
+## 26.2.0 (2025-05-26)
+
+* [bitnami/harbor] Add support for Redis ACL (#33875) ([d31996e](https://github.com/bitnami/charts/commit/d31996e4a1c80875f01269b2834cf9fb2a30a999)), closes [#33875](https://github.com/bitnami/charts/issues/33875)
+
 ## 26.1.0 (2025-05-23)
 
-* [bitnami/harbor]feat: Allow different Redis instance per component ([#33715](https://github.com/bitnami/charts/pull/33715))
+* [bitnami/harbor]feat: Allow different Redis instance per component (#33715) ([69d03e9](https://github.com/bitnami/charts/commit/69d03e9b7edcf18da912327737ac73353dadc999)), closes [#33715](https://github.com/bitnami/charts/issues/33715)
 
 ## <small>26.0.3 (2025-05-22)</small>
 

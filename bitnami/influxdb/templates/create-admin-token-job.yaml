@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: influxdb
     app.kubernetes.io/component: create-admin-token
-  {{- $defaultAnnotations := dict "helm.sh/hook" "pre-install" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+  {{- $defaultAnnotations := ternary (dict "helm.sh/hook" "pre-install" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded") (dict) .Values.useHelmHooks }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.createAdminTokenJob.annotations .Values.commonAnnotations $defaultAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
 spec:
@@ -89,6 +89,21 @@ spec:
               . /opt/bitnami/scripts/influxdb-env.sh
               . /opt/bitnami/scripts/libinfluxdb.sh
 
+              {{- if eq .Values.objectStore "s3" }}
+              check_s3() {
+                  if curl --max-time 5 -k "$AWS_ENDPOINT" | grep "RequestId"; then
+                      return 0
+                  else
+                      return 1
+                  fi
+              }
+              info "Waiting for S3 to be ready..."
+              if ! retry_while check_s3; then
+                  error "Error connecting to S3"
+                  exit 1
+              fi
+              {{- end }}
+
               trap "influxdb_stop" EXIT
               influxdb_start_bg
               influxdb3_create_admin_token
@@ -109,11 +124,15 @@ spec:
               value: {{ .Values.bucket | quote }}
             {{- end }}
             {{- if eq .Values.objectStore "s3" }}
+            {{- if .Values.s3.defaultRegion }}
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.s3.defaultRegion | quote }}
+            {{- end }}
             {{- if .Values.s3.endpoint }}
             - name: AWS_ENDPOINT
               value: {{ .Values.s3.endpoint | quote }}
+            - name: AWS_ALLOW_HTTP
+              value: {{ ternary "false" "true" (contains "https" .Values.s3.endpoint) | quote }}
             {{- end }}
             {{- if .Values.usePasswordFiles }}
             - name: AWS_ACCESS_KEY_ID_FILE
