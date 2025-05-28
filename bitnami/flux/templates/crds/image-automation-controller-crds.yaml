@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/image-automation-controller/releases/download/v{version}/image-automation-controller.crds.yaml
-# Version: 0.40.0
+# Version: 0.41.0
 # VersionOf: fluxcd-image-automation-controller
 # Conditional: .Values.imageAutomationController.installCRDs
 {{- if .Values.imageAutomationController.installCRDs }}
@@ -695,6 +695,9 @@ spec:
                 additionalProperties:
                   description: ImageRef represents an image reference.
                   properties:
+                    digest:
+                      description: Digest is the image's digest.
+                      type: string
                     name:
                       description: Name is the bare image's name.
                       type: string
