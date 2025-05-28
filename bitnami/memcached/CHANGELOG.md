@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.8.3 (2025-05-13)
+## 7.8.4 (2025-05-28)
 
-* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#33635](https://github.com/bitnami/charts/pull/33635))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#33947](https://github.com/bitnami/charts/pull/33947))
+
+## <small>7.8.3 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#33635) ([a4d8554](https://github.com/bitnami/charts/commit/a4d855426d3a7bd89dc1b3d3a6e24b82e1d96b7d)), closes [#33635](https://github.com/bitnami/charts/issues/33635)
 
 ## <small>7.8.2 (2025-05-06)</small>
 
