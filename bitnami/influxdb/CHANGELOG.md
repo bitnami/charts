@@ -1,8 +1,12 @@
 # Changelog
 
+## 7.1.1 (2025-05-28)
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33950](https://github.com/bitnami/charts/pull/33950))
+
 ## 7.1.0 (2025-05-27)
 
-* [bitnami/influxdb] ci: enable S3 storage on VIB testing ([#33900](https://github.com/bitnami/charts/pull/33900))
+* [bitnami/influxdb] ci: enable S3 storage on VIB testing (#33900) ([e58cbd3](https://github.com/bitnami/charts/commit/e58cbd3e9b2891172701a3d1a0e9c22745f0e039)), closes [#33900](https://github.com/bitnami/charts/issues/33900)
 
 ## <small>7.0.3 (2025-05-23)</small>
 
