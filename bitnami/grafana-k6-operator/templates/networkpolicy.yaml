@@ -39,11 +39,11 @@ spec:
         {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
         - port: {{ $port }}
         {{- end }}
-    # MinIO(R) instances have the label v1.min.io/tenant: .*
+    # K6 instances have the label k6_cr: .*
     - to:
         - podSelector:
             matchExpressions:
-              - key: v1.min.io/tenant
+              - key: k6_cr
                 operator: Exists
         {{- if not .Values.watchAllNamespaces }}
           namespaceSelector:
@@ -60,20 +60,25 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.metrics }}
-        {{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
-        - port: {{ .Values.metrics.authProxy.containerPorts.https }}
-        {{- end }}
         {{- range .Values.extraContainerPorts }}
         - port: {{ . }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
+        - port: {{ .Values.metrics.authProxy.containerPorts.https }}
+        {{- range .Values.authProxy.extraContainerPorts }}
+        - port: {{ . }}
+        {{- end }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: grafana-k6-operator
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
-              {{ template "common.names.fullname" . }}-client: "true"
+              {{ template "grafana-tempo.ingester.fullname" . }}-ingester: "true"
+        {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
