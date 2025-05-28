@@ -20,7 +20,7 @@ spec:
   replicas: {{ .Values.thanosRuler.replicaCount }}
   listenLocal: {{ .Values.thanosRuler.listenLocal }}
   {{- if .Values.thanosRuler.service.additionalHeadless }}
-  serviceName: {{ include "kube-prometheus.thanosRuler.fullname" . }}-headless
+  serviceName: { printf "%s-headless" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- end }}
   serviceAccountName: {{ include "kube-prometheus.thanosRuler.serviceAccountName" . }}
 {{- if .Values.thanosRuler.externalPrefix }}
