@@ -1,6 +1,6 @@
 <!--- app-name: Discourse&reg; -->
 
-# Discourse(R) packaged by Bitnami
+# Discourse&reg; packaged by Bitnami
 
 Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 
