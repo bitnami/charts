@@ -65,7 +65,7 @@ spec:
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
         - port: {{ .Values.metrics.authProxy.containerPorts.https }}
-        {{- range .Values.authProxy.extraContainerPorts }}
+        {{- range .Values.metrics.authProxy.extraContainerPorts }}
         - port: {{ . }}
         {{- end }}
         {{- end }}
@@ -77,7 +77,7 @@ spec:
         {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
-              {{ template "grafana-tempo.ingester.fullname" . }}-ingester: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
         {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
