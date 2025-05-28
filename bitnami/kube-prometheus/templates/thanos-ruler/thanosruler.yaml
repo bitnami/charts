@@ -94,12 +94,12 @@ spec:
 {{- end }}
 {{- if .Values.thanosRuler.objectStorageConfig.existingSecret.name }}
   objectStorageConfig:
-    key: "{{.Values.thanosRuler.objectStorageConfig.existingSecret.key }}"
-    name: "{{.Values.thanosRuler.objectStorageConfig.existingSecret.name }}"
+    key: {{ tpl .Values.thanosRuler.objectStorageConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.objectStorageConfig.existingSecret.name . | quote }}
 {{- else if .Values.thanosRuler.objectStorageConfig.config }}
   objectStorageConfig:
     key: object-storage-config.yaml
-    name: {{ template "kube-prometheus.thanosRuler.name" . }}-objectstorage-config
+    name: {{ printf "%s-objectstorage-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- if .Values.thanosRuler.labels }}
   labels:
