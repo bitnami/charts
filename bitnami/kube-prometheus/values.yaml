@@ -3857,9 +3857,9 @@ thanosRuler:
   ## @param thanosRuler.priorityClassName Priority class assigned to the Pods
   ##
   priorityClassName: ""
-  ## @param thanosRuler.portName Port name used for the pods and governing service. Defaults to web
+  ## @param thanosRuler.portName Port name used for the pods and governing service
   ##
-  portName: "web"
+  portName: web
   ## @param thanosRuler.web Defines the configuration of the ThanosRuler web server
   ##
   web: {}
