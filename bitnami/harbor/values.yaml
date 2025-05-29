@@ -35,8 +35,8 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common Parameters
-##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -44,7 +44,10 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param kubeVersion Override Kubernetes version reported by .Capabilities
 ##
 kubeVersion: ""
 ## @param clusterDomain Kubernetes Cluster Domain
@@ -59,29 +62,33 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
-## Enable diagnostic mode in the deployment(s)/statefulset(s)
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
 ##
 diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
   enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
-  ##
   command:
     - sleep
-  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
-  ##
   args:
     - infinity
+
 ## @section Harbor common parameters
-##
 
 ## @param adminPassword The initial password of Harbor admin. Change it from portal after launching Harbor
 ##
 adminPassword: ""
+## @param existingSecret Name of existing Secret containing the Harbor admin password
+##
+existingSecret: ""
+## @param existingSecretAdminPasswordKey Name of the key inside the existing secret containing the Harbor admin password (HARBOR_ADMIN_PASSWORD as default if not provided)
+##
+existingSecretAdminPasswordKey: ""
 ## @param externalURL The external URL for Harbor Core service
 ## It is used to
 ## 1) populate the docker/helm commands showed on portal
+## 2) populate the token service URL returned to docker client
 ##
 ## Format: protocol://domain[:port]. Usually:
 ## 1) if "exposureType" is "ingress", the "domain" should be
@@ -134,11 +141,11 @@ ipFamily:
   ##
   ipv4:
     enabled: true
+
 ## @section Traffic Exposure Parameters
-##
 
 ## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy ]
-## Use "proxy" to use a deploy NGINX proxy in front of Harbor services
+## Use "proxy" to deploy NGINX proxy in front of Harbor services
 ## Use "ingress" to use an Ingress Controller as proxy
 ##
 exposureType: proxy
@@ -1613,29 +1620,20 @@ core:
   ## @param core.uaaSecret If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecret: ""
-  ## @param core.secretKey The key used for encryption. Must be a string of 16 chars
-  ## e.g:
-  ## secretKey: "not-a-secure-string"
-  ##
-  secretKey: ""
-  ## @param core.secret Secret used when the core server communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
+  ## @param core.secret Secret used for core server communicates with other components. Must be a string of 16 chars.
+  ## @param core.secretKey Secret key used for communications encryption. Must be a string of 16 chars
+  ## @param core.existingSecret Existing secret for core (expected keys: `secret` and `secretKey`)
   ##
   secret: ""
+  secretKey: ""
+  existingSecret: ""
   ## @param core.tokenKey Key of the certificate used for token encryption/decryption.
-  ##
-  tokenKey: ""
   ## @param core.tokenCert Certificate used for token encryption/decryption.
-  ##
-  tokenCert: ""
   ## @param core.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set
   ##
+  tokenKey: ""
+  tokenCert: ""
   secretName: ""
-  ## @param core.existingSecret Existing secret for core
-  ## The secret must contain the keys:
-  ## `secret` (required),
-  ## `secretKey` (required),
-  ##
-  existingSecret: ""
   ## @param core.existingEnvVarsSecret Existing secret for core envvars
   ## The secret must contain the keys:
   ## `CSRF_KEY` (optional - alternatively auto-generated),
@@ -2047,15 +2045,10 @@ jobservice:
   ## @param jobservice.jobLogger The logger for jobs: `file`, `database` or `stdout`
   ##
   jobLogger: file
-  ## @param jobservice.secret Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
-  ## If a secret key is not specified, Helm will generate one.
-  ## Must be a string of 16 chars.
+  ## @param jobservice.secret Secret used for job service communicates with other components. Must be a string of 16 chars.
+  ## @param jobservice.existingSecret Existing secret for jobservice (expected key: `secret`)
   ##
   secret: ""
-  ## @param jobservice.existingSecret Existing secret for jobservice
-  ## The secret must contain the keys:
-  ## `secret` (required),
-  ##
   existingSecret: ""
   ## @param jobservice.existingEnvVarsSecret Existing secret for jobservice envvars
   ## The secret must contain the keys:
