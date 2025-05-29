@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.9 (2025-05-27)
+## 32.2.10 (2025-05-29)
 
-* bitnami/kafka Update the 32.0.0 release notes with more breaking changes ([#33893](https://github.com/bitnami/charts/pull/33893))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33967](https://github.com/bitnami/charts/pull/33967))
+
+## <small>32.2.9 (2025-05-28)</small>
+
+* bitnami/kafka Update the 32.0.0 release notes with more breaking changes (#33893) ([e4d5530](https://github.com/bitnami/charts/commit/e4d553012bbc076a27088176852695ade23920d5)), closes [#33893](https://github.com/bitnami/charts/issues/33893)
 
 ## <small>32.2.8 (2025-05-20)</small>
 
