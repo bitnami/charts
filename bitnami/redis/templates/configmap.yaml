@@ -88,11 +88,11 @@ data:
     {{- end }}
     {{- if .Values.auth.acl.sentinel }}
     # Sentinel ACL configuration, only for users with password
-    {{- $userSecret := .Values.auth.acl.userSecret -}}
-    {{- range .Values.auth.acl.users -}}
-    {{- $userPassword := .password | default "" -}}
-    {{- $secretPassword := ternary "" (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $)) (empty $userSecret) -}}
-    {{ if or $userPassword $secretPassword }}
+    {{- $userSecret := .Values.auth.acl.userSecret }}
+    {{- range .Values.auth.acl.users }}
+    {{- $userPassword := .password | default "" }}
+    {{- $secretPassword := ternary "" (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $)) (empty $userSecret) }}
+    {{- if or $userPassword $secretPassword }}
     user {{ .username }} {{ default "on" .enabled }} #{{ coalesce $secretPassword $userPassword | sha256sum }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
     sentinel sentinel-pass {{ coalesce $secretPassword $userPassword }}
