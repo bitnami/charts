@@ -13,7 +13,7 @@ Set the http prefix if the externalURl doesn't have it
 {{- if hasPrefix "http" $templatedExternalUrl -}}
     {{- print $templatedExternalUrl -}}
 {{- else -}}
-    {{- printf "%s://%s" (ternary "https" "http" (or (and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled) (and (eq .Values.exposureType "ingress") .Values.ingress.core.tls)) $templatedExternalUrl -}}
+    {{- printf "%s://%s" (ternary "https" "http" (or (and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled) (and (eq .Values.exposureType "ingress") .Values.ingress.core.tls))) $templatedExternalUrl -}}
 {{- end -}}
 {{- end -}}
 
