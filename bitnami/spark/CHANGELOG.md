@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.4.0 (2025-05-23)
+## 9.4.1 (2025-05-29)
 
-* [bitnami/spark] Spark optional worker ([#33834](https://github.com/bitnami/charts/pull/33834))
+* [bitnami/spark] :zap: :arrow_up: Update dependency references ([#33955](https://github.com/bitnami/charts/pull/33955))
+
+## 9.4.0 (2025-05-27)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/spark] Spark optional worker (#33834) ([0a81802](https://github.com/bitnami/charts/commit/0a8180230d6541074638a929b9a8d589bfc4e2ab)), closes [#33834](https://github.com/bitnami/charts/issues/33834)
 
 ## <small>9.3.9 (2025-05-06)</small>
 
