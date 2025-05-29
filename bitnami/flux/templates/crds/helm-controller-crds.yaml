@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/helm-controller/releases/download/v{version}/helm-controller.crds.yaml
-# Version: 1.3.0
+# Version: 1.2.0
 # VersionOf: fluxcd-helm-controller
 # Conditional: .Values.helmController.installCRDs
 {{- if .Values.helmController.installCRDs }}
