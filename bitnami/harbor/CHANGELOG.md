@@ -1,8 +1,12 @@
 # Changelog
 
+## 26.4.1 (2025-05-29)
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33968](https://github.com/bitnami/charts/pull/33968))
+
 ## 26.4.0 (2025-05-29)
 
-* [bitnami/harbor] feat: add support for consuming admin password from existing secret ([#33956](https://github.com/bitnami/charts/pull/33956))
+* [bitnami/harbor] feat: add support for consuming admin password from existing secret (#33956) ([fd3d9a6](https://github.com/bitnami/charts/commit/fd3d9a6bfeb495dc46e17ac29923646c51c67ca6)), closes [#33956](https://github.com/bitnami/charts/issues/33956)
 
 ## <small>26.3.1 (2025-05-29)</small>
 
