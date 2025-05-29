@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.5 (2025-05-27)
+## 0.4.5 (2025-05-29)
 
 * [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#33924](https://github.com/bitnami/charts/pull/33924))
 
