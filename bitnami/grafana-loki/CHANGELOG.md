@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.9 (2025-05-15)
+## 4.8.10 (2025-05-22)
 
-* [bitnami/grafana-loki] dataDir value substitution instead of static config ([#33668](https://github.com/bitnami/charts/pull/33668))
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#33850](https://github.com/bitnami/charts/pull/33850))
+
+## <small>4.8.9 (2025-05-19)</small>
+
+* [bitnami/grafana-loki] dataDir value substitution instead of static config (#33668) ([ba11956](https://github.com/bitnami/charts/commit/ba1195649e2085ed8f410add025b7498f8578c50)), closes [#33668](https://github.com/bitnami/charts/issues/33668)
 
 ## <small>4.8.8 (2025-05-13)</small>
 

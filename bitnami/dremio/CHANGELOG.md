@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.1 (2025-05-16)
+## 2.0.3 (2025-05-21)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#33761](https://github.com/bitnami/charts/pull/33761))
+* [bitnami/dremio] fix: ingress to wrong port ([#33804](https://github.com/bitnami/charts/pull/33804))
+
+## <small>2.0.1 (2025-05-16)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#33761) ([2a6b0ba](https://github.com/bitnami/charts/commit/2a6b0ba70ae3702d635ae8dae59914e432210c96)), closes [#33761](https://github.com/bitnami/charts/issues/33761)
 
 ## 2.0.0 (2025-05-16)
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.17 (2025-05-13)
+## 9.0.18 (2025-05-22)
 
-* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#33640](https://github.com/bitnami/charts/pull/33640))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#33839](https://github.com/bitnami/charts/pull/33839))
+
+## <small>9.0.17 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#33640) ([2b5f801](https://github.com/bitnami/charts/commit/2b5f801f622b3503fb532fe41401896974e05c97)), closes [#33640](https://github.com/bitnami/charts/issues/33640)
 
 ## <small>9.0.16 (2025-05-07)</small>
 

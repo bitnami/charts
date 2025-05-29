@@ -695,6 +695,12 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param server.scrapePrometheusHost Specifies whether to include prometheus host scraping job
+  ##
+  scrapePrometheusHost: true
+  ## @param server.scrapeAlertmanagerHost Specifies whether to include alertmanager host scraping job
+  ##
+  scrapeAlertmanagerHost: true
   ## @param server.configuration [string] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
   ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
@@ -718,9 +724,11 @@ server:
     remote_write: {{- include "common.tplvalues.render" (dict "value" .Values.server.remoteWrite "context" $) | nindent 4 }}
     {{- end }}
     scrape_configs:
+    {{- if .Values.server.scrapePrometheusHost }}
       - job_name: prometheus
       {{- include "prometheus.scrape_config" (dict "component" "server" "context" $) | nindent 4 }}
-    {{- if .Values.alertmanager.enabled }}
+    {{- end }}
+    {{- if and .Values.alertmanager.enabled .Values.server.scrapeAlertmanagerHost }}
       - job_name: alertmanager
         {{- include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
     {{- end }}

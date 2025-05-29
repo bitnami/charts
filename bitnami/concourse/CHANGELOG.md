@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.1.31 (2025-05-16)
+## 5.1.32 (2025-05-23)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#33754](https://github.com/bitnami/charts/pull/33754))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#33868](https://github.com/bitnami/charts/pull/33868))
+
+## <small>5.1.31 (2025-05-16)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#33754) ([efe9468](https://github.com/bitnami/charts/commit/efe94689d045c518a84580da4653a2e7607b272d)), closes [#33754](https://github.com/bitnami/charts/issues/33754)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>5.1.30 (2025-05-08)</small>
 

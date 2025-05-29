@@ -82,8 +82,6 @@ spec:
               env:
                 - name: BITNAMI_DEBUG
                   value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-                - name: ETCDCTL_API
-                  value: "3"
                 - name: ETCD_ON_K8S
                   value: "yes"
                 - name: MY_STS_NAME

@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.6 (2025-05-16)
+## 12.0.0 (2025-05-23)
 
-* [bitnami/etcd] Allow release namespace to be overridden ([#33550](https://github.com/bitnami/charts/pull/33550))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#33840](https://github.com/bitnami/charts/pull/33840))
+
+## <small>11.3.6 (2025-05-19)</small>
+
+* [bitnami/etcd] Allow release namespace to be overridden (#33550) ([b14c079](https://github.com/bitnami/charts/commit/b14c0794110027fb4198f9529c1b43ae34213d9c)), closes [#33550](https://github.com/bitnami/charts/issues/33550)
 
 ## <small>11.3.5 (2025-05-16)</small>
 

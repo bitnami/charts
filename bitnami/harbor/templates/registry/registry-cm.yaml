@@ -163,11 +163,13 @@ data:
       redirect:
         disable: {{ .Values.persistence.imageChartStorage.disableredirect }}
     redis:
-      addr: "{{ template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}"
-      {{- if ne "" (include "harbor.redis.sentinel.masterSet" .) }}
-      sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" . }}"
+      addr: "{{ template "harbor.redis.host" ( dict "context" . "component" "registry" ) }}:{{ template "harbor.redis.port" ( dict "context" . "component" "registry" ) }}"
+      {{- if ne "" (include "harbor.redis.sentinel.masterSet" ( dict "context" . "component" "registry" ) ) }}
+      sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" ( dict "context" . "component" "registry" ) }}"
       {{- end }}
-      {{- if and (eq .Values.externalRedis.sentinel.enabled false) (eq .Values.redis.sentinel.enabled false) }}
+      {{- $externalRedis := ternary ( get .Values.externalRedis "registry" ) .Values.externalRedis .Values.externalRedis.instancePerComponent }}
+      enableTLS: {{ or .Values.redis.tls.enabled $externalRedis.tls.enabled }}
+      {{- if not (include "harbor.redis.sentinel.enabled" ( dict "context" . "component" "registry" )) }}
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
       {{- end }}
     http:

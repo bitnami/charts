@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.0.2 (2025-05-06)
+## 16.0.3 (2025-05-23)
 
-* [bitnami/rabbitmq] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33426](https://github.com/bitnami/charts/pull/33426))
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#33860](https://github.com/bitnami/charts/pull/33860))
+
+## <small>16.0.2 (2025-05-06)</small>
+
+* [bitnami/rabbitmq] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3342 ([9ca5aa5](https://github.com/bitnami/charts/commit/9ca5aa5e3312617ce24d85efe33cc1d696495a25)), closes [#33426](https://github.com/bitnami/charts/issues/33426)
+* [bitnami/rabbitmq] fixed validation for memoryHighWatermark using resourcesPreset (#33186) ([c864596](https://github.com/bitnami/charts/commit/c86459615a6a5bf186b08e5c70cf7d9b74dbfbea)), closes [#33186](https://github.com/bitnami/charts/issues/33186)
 
 ## 16.0.0 (2025-04-23)
 

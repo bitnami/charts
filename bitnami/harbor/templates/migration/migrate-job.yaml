@@ -54,18 +54,25 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.core.image.debug | quote }}
+            {{- if .Values.existingSecret }}
+            - name: HARBOR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ tpl .Values.existingSecret . }}
+                  key: {{ template "harbor.secret.adminPasswordKey" . }}
+            {{- end }}
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret }}
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.externalDatabase.existingSecret }}
+                  name: {{ tpl .Values.externalDatabase.existingSecret . }}
                   key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
             {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.coreOverridesJsonSecret" . }}
+                  name: {{ include "harbor.core.overridesJsonSecret" . }}
                   key: overrides.json
             {{- end }}
             {{- if .Values.migration.extraEnvVars }}
@@ -75,11 +82,7 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.core" .) }}
             - secretRef:
-                {{- if .Values.core.existingEnvVarsSecret }}
-                name: {{ .Values.core.existingEnvVarsSecret }}
-                {{- else }}
-                name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-                {{- end }}
+                name: {{ template "harbor.core.envvars.secretName" . }}
             {{- if .Values.migration.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.migration.extraEnvVarsCM }}
@@ -127,24 +130,13 @@ spec:
                 path: app.conf
         - name: token-service-private-key
           secret:
-            {{- if .Values.core.secretName }}
-            secretName: {{ .Values.core.secretName }}
-            {{- else }}
-            secretName: {{ template "harbor.core" . }}
-            {{- end }}
+            secretName: {{ template "harbor.core.token.secretName" . }}
         - name: secret-key
           secret:
-            {{- if .Values.core.existingSecret }}
-            secretName: {{ .Values.core.existingSecret }}
+            secretName: {{ template "harbor.core.secretName" . }}
             items:
               - key: secretKey
                 path: key
-            {{- else }}
-            secretName: {{ include "harbor.core" . }}
-            items:
-              - key: secretKey
-                path: key
-            {{- end }}
         {{- if .Values.internalTLS.caBundleSecret }}
         {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}

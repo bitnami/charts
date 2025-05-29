@@ -117,38 +117,29 @@ spec:
               value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
-                {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
                 secretKeyRef:
+                {{- if and .Values.externalDatabase.existingSecret (not .Values.postgresql.enabled) }}
                   name: {{ .Values.externalDatabase.existingSecret }}
                   key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
                 {{- else }}
-                {{- if .Values.core.existingEnvVarsSecret }}
-                secretKeyRef:
-                  name: {{ .Values.core.existingEnvVarsSecret }}
-                  key: POSTGRESQL_PASSWORD
-                {{- else }}
-                secretKeyRef:
-                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                  name: {{ template "harbor.core.envvars.secretName" . }}
                   key: POSTGRESQL_PASSWORD
                 {{- end }}
-                {{- end }}
+            {{- if .Values.existingSecret }}
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.core.existingEnvVarsSecret }}
-                  name: {{ .Values.core.existingEnvVarsSecret }}
-                  {{- else }}
-                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-                  {{- end }}
-                  key: HARBOR_ADMIN_PASSWORD
+                  name: {{ tpl .Values.existingSecret . }}
+                  key: {{ template "harbor.secret.adminPasswordKey" . }}
+            {{- end }}
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
-                name: "{{ include "harbor.exporter" . }}-envvars"
+                name: {{ printf "%s-envvars" (include "harbor.core" .) }}
             - secretRef:
-                name: "{{ include "harbor.exporter" . }}-envvars"
+                name: {{ template "harbor.core.envvars.secretName" . }}
             {{- if .Values.exporter.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}

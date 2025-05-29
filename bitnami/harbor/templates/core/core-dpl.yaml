@@ -119,38 +119,33 @@ spec:
               value: {{ ternary "true" "false" .Values.core.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
-                {{- if .Values.core.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.core.existingSecret }}
+                  name: {{ template "harbor.core.secretName" . }}
                   key: secret
-                {{- else }}
-                secretKeyRef:
-                  name: {{ include "harbor.core" . }}
-                  key: secret
-                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
-                {{- if .Values.jobservice.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.jobservice.existingSecret }}
+                  name: {{ template "harbor.jobservice.secretName" . }}
                   key: secret
-                {{- else }}
+            {{- if .Values.existingSecret }}
+            - name: HARBOR_ADMIN_PASSWORD
+              valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.jobservice" . }}
-                  key: secret
-                {{- end }}
+                  name: {{ tpl .Values.existingSecret . }}
+                  key: {{ template "harbor.secret.adminPasswordKey" . }}
+            {{- end }}
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.existingSecret }}
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.externalDatabase.existingSecret }}
+                  name: {{ tpl .Values.externalDatabase.existingSecret . }}
                   key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
             {{- end }}
             {{- if or .Values.core.configOverwriteJson .Values.core.configOverwriteJsonSecret }}
             - name: CONFIG_OVERWRITE_JSON
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.coreOverridesJsonSecret" . }}
+                  name: {{ include "harbor.core.overridesJsonSecret" . }}
                   key: overrides.json
             {{- end }}
             {{- if .Values.internalTLS.enabled }}
@@ -170,11 +165,7 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.core" .) }}
             - secretRef:
-                {{- if .Values.core.existingEnvVarsSecret }}
-                name: {{ .Values.core.existingEnvVarsSecret }}
-                {{- else }}
-                name: {{ printf "%s-envvars" (include "harbor.core" .) }}
-                {{- end }}
+                name: {{ template "harbor.core.envvars.secretName" . }}
             {{- if .Values.core.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.core.extraEnvVarsCM "context" $) }}
@@ -254,7 +245,7 @@ spec:
               mountPath: /etc/core/auth-ca/auth-ca.crt
               subPath: auth-ca.crt
             {{- end }}
-            {{- include "harbor.redis.caVolumeMount" . | nindent 12 }}
+            {{- include "harbor.redis.caVolumeMount" ( dict "context" . "component" "core" ) | nindent 12 }}
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -275,24 +266,13 @@ spec:
                 path: app.conf
         - name: token-service-private-key
           secret:
-            {{- if .Values.core.secretName }}
-            secretName: {{ .Values.core.secretName }}
-            {{- else }}
-            secretName: {{ template "harbor.core" . }}
-            {{- end }}
+            secretName: {{ template "harbor.core.token.secretName" . }}
         - name: secret-key
           secret:
-            {{- if .Values.core.existingSecret }}
-            secretName: {{ .Values.core.existingSecret }}
+            secretName: {{ template "harbor.core.secretName" . }}
             items:
               - key: secretKey
                 path: key
-            {{- else }}
-            secretName: {{ include "harbor.core" . }}
-            items:
-              - key: secretKey
-                path: key
-            {{- end }}
         {{- if .Values.internalTLS.caBundleSecret }}
         {{- include "harbor.caBundleVolume" . | nindent 8 }}
         {{- end }}
@@ -322,7 +302,7 @@ spec:
               - key: ca.crt
                 path: auth-ca.crt
         {{- end }}
-      {{- include "harbor.redis.caVolume" . | nindent 8 }}
+      {{- include "harbor.redis.caVolume" ( dict "context" . "component" "core" ) | nindent 8 }}
       {{- if .Values.core.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.core.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

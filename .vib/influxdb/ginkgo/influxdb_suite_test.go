@@ -19,22 +19,16 @@ var (
 	kubeconfig     string
 	deployName     string
 	namespace      string
-	username       string
-	password       string
-	token          string
-	org            string
-	bucket         string
+	database       string
 	timeoutSeconds int
 	timeout        time.Duration
 )
 
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&deployName, "name", "", "name of the primary statefulset")
+	flag.StringVar(&deployName, "name", "", "name of the Influxdb deployment")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
-	flag.StringVar(&org, "org", "", "admin organization")
-	flag.StringVar(&token, "token", "", "token for accessing the installation")
-	flag.StringVar(&bucket, "bucket", "", "bucket for inserting the data")
+	flag.StringVar(&database, "database", "", "name of the database to be used")
 	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
@@ -44,7 +38,7 @@ func TestInfluxdb(t *testing.T) {
 	RunSpecs(t, "Influxdb Persistence Test Suite")
 }
 
-func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, stmt string) error {
+func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, action, token, query string) error {
 	securityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
@@ -73,23 +67,16 @@ func createJob(ctx context.Context, c kubernetes.Interface, name string, port st
 							Image: image,
 							Command: []string{
 								"bash", "-ec",
-								stmt},
+								fmt.Sprintf("influxdb3 %s --database %s --host $INFLUX_HOST --token $ADMIN_TOKEN '%s'", action, database, query),
+							},
 							Env: []v1.EnvVar{
-								{
-									Name:  "INFLUX_TOKEN",
-									Value: token,
-								},
-								{
-									Name:  "INFLUX_ORG",
-									Value: org,
-								},
-								{
-									Name:  "INFLUX_BUCKET_NAME",
-									Value: bucket,
-								},
 								{
 									Name:  "INFLUX_HOST",
 									Value: fmt.Sprintf("http://%s:%s", deployName, port),
+								},
+								{
+									Name:  "ADMIN_TOKEN",
+									Value: token,
 								},
 							},
 							SecurityContext: securityContext,

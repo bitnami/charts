@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/image-reflector-controller/releases/download/v{version}/image-reflector-controller.crds.yaml
-# Version: 0.34.0
+# Version: 0.35.0
 # VersionOf: fluxcd-image-reflector-controller
 # Conditional: .Values.imageReflectorController.installCRDs
 {{- if .Values.imageReflectorController.installCRDs }}
@@ -241,6 +241,25 @@ spec:
               ImagePolicySpec defines the parameters for calculating the
               ImagePolicy.
             properties:
+              digestReflectionPolicy:
+                default: Never
+                description: |-
+                  DigestReflectionPolicy governs the setting of the `.status.latestRef.digest` field.
+
+                  Never: The digest field will always be set to the empty string.
+
+                  IfNotPresent: The digest field will be set to the digest of the elected
+                  latest image if the field is empty and the image did not change.
+
+                  Always: The digest field will always be set to the digest of the elected
+                  latest image.
+
+                  Default: Never.
+                enum:
+                - Always
+                - IfNotPresent
+                - Never
+                type: string
               filterTags:
                 description: |-
                   FilterTags enables filtering for only a subset of tags based on a set of
@@ -273,6 +292,15 @@ spec:
                 required:
                 - name
                 type: object
+              interval:
+                description: |-
+                  Interval is the length of time to wait between
+                  refreshing the digest of the latest tag when the
+                  reflection policy is set to "Always".
+
+                  Defaults to 10m.
+                pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
+                type: string
               policy:
                 description: |-
                   Policy gives the particulars of the policy to be followed in
@@ -326,6 +354,15 @@ spec:
             - imageRepositoryRef
             - policy
             type: object
+            x-kubernetes-validations:
+            - message: spec.interval is only accepted when spec.digestReflectionPolicy
+                is set to 'Always'
+              rule: '!has(self.interval) || (has(self.digestReflectionPolicy) && self.digestReflectionPolicy
+                == ''Always'')'
+            - message: spec.interval must be set when spec.digestReflectionPolicy
+                is set to 'Always'
+              rule: has(self.interval) || !has(self.digestReflectionPolicy) || self.digestReflectionPolicy
+                != 'Always'
           status:
             default:
               observedGeneration: -1
@@ -392,7 +429,28 @@ spec:
                   LatestImage gives the first in the list of images scanned by
                   the image repository, when filtered and ordered according to
                   the policy.
+
+                  Deprecated: Replaced by the composite "latestRef" field.
                 type: string
+              latestRef:
+                description: |-
+                  LatestRef gives the first in the list of images scanned by
+                  the image repository, when filtered and ordered according
+                  to the policy.
+                properties:
+                  digest:
+                    description: Digest is the image's digest.
+                    type: string
+                  name:
+                    description: Name is the bare image's name.
+                    type: string
+                  tag:
+                    description: Tag is the image's tag.
+                    type: string
+                required:
+                - name
+                - tag
+                type: object
               observedGeneration:
                 format: int64
                 type: integer
@@ -400,7 +458,27 @@ spec:
                 description: |-
                   ObservedPreviousImage is the observed previous LatestImage. It is used
                   to keep track of the previous and current images.
+
+                  Deprecated: Replaced by the composite "observedPreviousRef" field.
                 type: string
+              observedPreviousRef:
+                description: |-
+                  ObservedPreviousRef is the observed previous LatestRef. It is used
+                  to keep track of the previous and current images.
+                properties:
+                  digest:
+                    description: Digest is the image's digest.
+                    type: string
+                  name:
+                    description: Name is the bare image's name.
+                    type: string
+                  tag:
+                    description: Tag is the image's tag.
+                    type: string
+                required:
+                - name
+                - tag
+                type: object
             type: object
         type: object
     served: true

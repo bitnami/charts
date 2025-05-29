@@ -1,8 +1,17 @@
 # Changelog
 
-## 0.1.10 (2025-05-07)
+## 0.1.12 (2025-05-24)
 
-* [bitnami/minio-operator] Release 0.1.10 ([#33535](https://github.com/bitnami/charts/pull/33535))
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#33872](https://github.com/bitnami/charts/pull/33872))
+
+## <small>0.1.11 (2025-05-24)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#33871) ([7d8f076](https://github.com/bitnami/charts/commit/7d8f076ce918ea800f9e6430aade1a804deb9c01)), closes [#33871](https://github.com/bitnami/charts/issues/33871)
+
+## <small>0.1.10 (2025-05-07)</small>
+
+* [bitnami/minio-operator] Release 0.1.10 (#33535) ([d8f1f93](https://github.com/bitnami/charts/commit/d8f1f93b9876c1537d2758c67121364f450dd2f7)), closes [#33535](https://github.com/bitnami/charts/issues/33535)
 
 ## <small>0.1.9 (2025-05-07)</small>
 

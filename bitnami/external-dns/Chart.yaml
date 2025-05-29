@@ -5,11 +5,11 @@ annotations:
   category: DeveloperTools
   images: |
     - name: external-dns
-      image: docker.io/bitnami/external-dns:0.16.1-debian-12-r6
+      image: docker.io/bitnami/external-dns:0.17.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.16.1
+appVersion: 0.17.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -30,4 +30,4 @@ maintainers:
 name: external-dns
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/external-dns
-version: 8.8.2
+version: 8.8.3

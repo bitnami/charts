@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.3.8 (2025-05-13)
+## 11.3.10 (2025-05-28)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#33629](https://github.com/bitnami/charts/pull/33629))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#33938](https://github.com/bitnami/charts/pull/33938))
+
+## <small>11.3.9 (2025-05-27)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#33905) ([fc48eb9](https://github.com/bitnami/charts/commit/fc48eb93cacfa1875cce3dabe11326d13ba2b2a0)), closes [#33905](https://github.com/bitnami/charts/issues/33905)
+
+## <small>11.3.8 (2025-05-13)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#33629) ([07b2170](https://github.com/bitnami/charts/commit/07b21703df246dfcb170db37792485be4cd022e8)), closes [#33629](https://github.com/bitnami/charts/issues/33629)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.3.7 (2025-05-06)</small>
 

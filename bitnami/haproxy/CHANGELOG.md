@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.21 (2025-05-07)
+## 2.2.22 (2025-05-28)
 
-* [bitnami/haproxy] Release 2.2.21 ([#33491](https://github.com/bitnami/charts/pull/33491))
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#33944](https://github.com/bitnami/charts/pull/33944))
+
+## <small>2.2.21 (2025-05-07)</small>
+
+* [bitnami/haproxy] Release 2.2.21 (#33491) ([6aaad85](https://github.com/bitnami/charts/commit/6aaad85480fdc3a9f10f30891e9de996a2760eb7)), closes [#33491](https://github.com/bitnami/charts/issues/33491)
 
 ## <small>2.2.20 (2025-05-06)</small>
 

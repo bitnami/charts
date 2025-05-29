@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.8.2 (2025-05-06)
+## 13.8.3 (2025-05-28)
 
-* [bitnami/zookeeper] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33451](https://github.com/bitnami/charts/pull/33451))
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#33935](https://github.com/bitnami/charts/pull/33935))
+
+## <small>13.8.2 (2025-05-06)</small>
+
+* [bitnami/zookeeper] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([b1a5d07](https://github.com/bitnami/charts/commit/b1a5d07324528761af498d56da55ebaa2d20abcf)), closes [#33451](https://github.com/bitnami/charts/issues/33451)
 
 ## <small>13.8.1 (2025-04-28)</small>
 

@@ -6,6 +6,10 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued, therefore, this Helm chart will be deprecated as well.
+
 ## TL;DR
 
 ```console

@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.6.7 (2025-05-13)
+## 13.6.8 (2025-05-28)
 
-* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#33628](https://github.com/bitnami/charts/pull/33628))
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#33940](https://github.com/bitnami/charts/pull/33940))
+
+## <small>13.6.7 (2025-05-13)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#33628) ([a4a6181](https://github.com/bitnami/charts/commit/a4a61813c3bbda80d3c469db5114b02695de23e6)), closes [#33628](https://github.com/bitnami/charts/issues/33628)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>13.6.6 (2025-05-06)</small>
 
