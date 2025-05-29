@@ -1,8 +1,12 @@
 # Changelog
 
+## 12.0.1 (2025-05-29)
+
+* [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob definition ([#33981](https://github.com/bitnami/charts/pull/33981))
+
 ## 12.0.0 (2025-05-07)
 
-* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33505](https://github.com/bitnami/charts/pull/33505))
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33505) ([8501340](https://github.com/bitnami/charts/commit/8501340dac19dbffe07789f4faae139131a5a091)), closes [#33505](https://github.com/bitnami/charts/issues/33505)
 
 ## <small>11.0.2 (2025-05-06)</small>
 
