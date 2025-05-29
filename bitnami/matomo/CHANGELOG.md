@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.3.8 (2025-05-13)
+## 9.3.9 (2025-05-29)
 
-* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#33637](https://github.com/bitnami/charts/pull/33637))
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#33972](https://github.com/bitnami/charts/pull/33972))
+
+## <small>9.3.8 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#33637) ([9efe4a6](https://github.com/bitnami/charts/commit/9efe4a68614e249bd6b5361470cb7e08ab8df842)), closes [#33637](https://github.com/bitnami/charts/issues/33637)
 
 ## <small>9.3.7 (2025-05-07)</small>
 
