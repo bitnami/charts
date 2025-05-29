@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 21.1.8
+version: 21.1.9
