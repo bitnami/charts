@@ -1,8 +1,12 @@
 # Changelog
 
-## 37.0.4 (2025-05-20)
+## 37.0.5 (2025-05-29)
 
-* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references ([#33793](https://github.com/bitnami/charts/pull/33793))
+* Deprecate Spring Cloud ([#33958](https://github.com/bitnami/charts/pull/33958))
+
+## <small>37.0.4 (2025-05-20)</small>
+
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33793) ([67deb62](https://github.com/bitnami/charts/commit/67deb626e62f6da42035c75ce329a09dd915e1b0)), closes [#33793](https://github.com/bitnami/charts/issues/33793)
 
 ## <small>37.0.3 (2025-05-15)</small>
 

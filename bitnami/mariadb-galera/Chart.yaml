@@ -5,13 +5,13 @@ annotations:
   category: Database
   images: |
     - name: mariadb-galera
-      image: docker.io/bitnami/mariadb-galera:11.4.6-debian-12-r0
+      image: docker.io/bitnami/mariadb-galera:11.4.7-debian-12-r0
     - name: mysqld-exporter
-      image: docker.io/bitnami/mysqld-exporter:0.17.2-debian-12-r8
+      image: docker.io/bitnami/mysqld-exporter:0.17.2-debian-12-r9
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 11.4.6
+appVersion: 11.4.7
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ maintainers:
 name: mariadb-galera
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
-version: 14.2.5
+version: 14.2.6

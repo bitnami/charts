@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.6 (2025-05-15)
+## 24.0.7 (2025-05-28)
 
-* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#33724](https://github.com/bitnami/charts/pull/33724))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#33949](https://github.com/bitnami/charts/pull/33949))
+
+## <small>24.0.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33724) ([addf9e6](https://github.com/bitnami/charts/commit/addf9e6f6515936d8ffb2b1f2fce7897aba39f70)), closes [#33724](https://github.com/bitnami/charts/issues/33724)
 
 ## <small>24.0.5 (2025-05-06)</small>
 

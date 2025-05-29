@@ -92,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb-sharded
-  tag: 8.0.9-debian-12-r0
+  tag: 8.0.9-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -259,7 +259,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r45
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -605,6 +605,10 @@ configsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param configsvr.persistence.selector Selector to match an existing Persistent Volume for Config Server data PVC
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
@@ -1463,6 +1467,17 @@ shardsvr:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     annotations: {}
+    ## @param shardsvr.persistence.selector Selector to match an existing Persistent Volume for Shard data PVC
+    ## A label query over volumes to consider for binding (e.g. when using local volumes)
+    ## Selector can be defined with static and dynamic options:
+    ## selector:
+    ##   matchLabels:
+    ##     app: web
+    ##     shard: shard{{ .Index }}
+    ##
+    ## shard{{ .Index }} will be substituted to shard0, shard1 accordingly
+    ##
+    selector: {}
   ## Persistent Volume Claim Retention Policy
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
@@ -1780,7 +1795,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.44.0-debian-12-r5
+    tag: 0.44.0-debian-12-r6
     digest: ""
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.

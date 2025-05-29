@@ -148,26 +148,14 @@ spec:
               value: {{ ternary "true" "false" .Values.jobservice.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
-                {{- if .Values.core.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.core.existingSecret }}
+                  name: {{ template "harbor.core.secretName" . }}
                   key: secret
-                {{- else }}
-                secretKeyRef:
-                  name: {{ include "harbor.core" . }}
-                  key: secret
-                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
-                {{- if .Values.jobservice.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.jobservice.existingSecret }}
+                  name: {{ template "harbor.jobservice.secretName" . }}
                   key: secret
-                {{- else }}
-                secretKeyRef:
-                  name: {{ include "harbor.jobservice" . }}
-                  key: secret
-                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -255,7 +243,7 @@ spec:
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/jobservice
             {{- end }}
-            {{- include "harbor.redis.caVolumeMount" . | nindent 12 }}
+            {{- include "harbor.redis.caVolumeMount" ( dict "context" . "component" "jobservice" ) | nindent 12 }}
             {{- if .Values.internalTLS.caBundleSecret }}
             {{- include "harbor.caBundleVolumeMount" . | nindent 12 }}
             {{- end }}
@@ -286,7 +274,7 @@ spec:
           secret:
             secretName: {{ include "harbor.jobservice.tls.secretName" . }}
         {{- end }}
-      {{- include "harbor.redis.caVolume" . | nindent 8 }}
+      {{- include "harbor.redis.caVolume" ( dict "context" . "component" "jobservice" ) | nindent 8 }}
       {{- if .Values.jobservice.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

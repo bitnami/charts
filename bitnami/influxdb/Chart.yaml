@@ -4,33 +4,29 @@
 annotations:
   category: Database
   images: |
-    - name: aws-cli
-      image: docker.io/bitnami/aws-cli:2.27.10-debian-12-r1
-    - name: azure-cli
-      image: docker.io/bitnami/azure-cli:2.73.0-debian-12-r0
-    - name: google-cloud-sdk
-      image: docker.io/bitnami/google-cloud-sdk:0.523.0-debian-12-r0
     - name: influxdb
-      image: docker.io/bitnami/influxdb:2.7.11-debian-12-r20
+      image: docker.io/bitnami/influxdb:3.1.0-debian-12-r0
+    - name: kubectl
+      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r2
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r45
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 2.7.11
+appVersion: 3.1.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
   version: 2.x.x
-description: InfluxDB(TM) is an open source time-series database. It is a core component
-  of the TICK (Telegraf, InfluxDB(TM), Chronograf, Kapacitor) stack.
+description: InfluxDB(TM) Core is an open source time-series database. It is a core
+  component of the FDAP (Apache Flight, DataFusion, Arrow, and Parquet) stack.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/influxdb/img/influxdb-stack-220x234.png
 keywords:
 - influxdb
-- tick
+- fdap
 - database
 - timeseries
 maintainers:
@@ -39,4 +35,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.6.15
+version: 7.1.1

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.5 (2025-05-07)
+## 2.0.6 (2025-05-29)
 
-* [bitnami/grafana-mimir] Release 2.0.5 ([#33514](https://github.com/bitnami/charts/pull/33514))
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#33964](https://github.com/bitnami/charts/pull/33964))
+
+## <small>2.0.5 (2025-05-07)</small>
+
+* [bitnami/grafana-mimir] Release 2.0.5 (#33514) ([200a738](https://github.com/bitnami/charts/commit/200a7389e257d1a3868071128884a10c53e48cfb)), closes [#33514](https://github.com/bitnami/charts/issues/33514)
 
 ## <small>2.0.4 (2025-05-06)</small>
 
