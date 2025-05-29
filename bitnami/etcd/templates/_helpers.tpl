@@ -203,7 +203,7 @@ etcd: disasterRecovery
 
 {{- define "etcd.token.jwtToken" -}}
 {{- if (include "etcd.token.createSecret" .) -}}
-{{- $jwtToken := lookup "v1" "Secret" .Release.Namespace (printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) -}}
+{{- $jwtToken := lookup "v1" "Secret" (include "common.names.namespace" .) (printf "%s-jwt-token" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" ) -}}
 {{- if $jwtToken -}}
 {{ index $jwtToken "data" "jwt-token.pem" | b64dec }}
 {{- else -}}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 37.0.3 (2025-05-15)
+## 37.0.4 (2025-05-20)
 
-* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references ([#33734](https://github.com/bitnami/charts/pull/33734))
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references ([#33793](https://github.com/bitnami/charts/pull/33793))
+
+## <small>37.0.3 (2025-05-15)</small>
+
+* [bitnami/spring-cloud-dataflow] :zap: :arrow_up: Update dependency references (#33734) ([d4b9512](https://github.com/bitnami/charts/commit/d4b9512348c2887052eb17b77d125deb6ed26355)), closes [#33734](https://github.com/bitnami/charts/issues/33734)
 
 ## <small>37.0.2 (2025-05-13)</small>
 

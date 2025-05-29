@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.4 (2025-05-06)
+## 1.3.5 (2025-05-27)
 
-* [bitnami/zipkin] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33450](https://github.com/bitnami/charts/pull/33450))
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#33925](https://github.com/bitnami/charts/pull/33925))
+
+## <small>1.3.4 (2025-05-06)</small>
+
+* [bitnami/zipkin] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33450) ([c6d9976](https://github.com/bitnami/charts/commit/c6d99763f46a2e590d1f113f39133dd78cd507a0)), closes [#33450](https://github.com/bitnami/charts/issues/33450)
 
 ## <small>1.3.3 (2025-04-27)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 9.0.6 (2025-05-16)
+## 9.0.12 (2025-05-28)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33745](https://github.com/bitnami/charts/pull/33745))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#33941](https://github.com/bitnami/charts/pull/33941))
+
+## <small>9.0.11 (2025-05-27)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33913) ([ea83baa](https://github.com/bitnami/charts/commit/ea83baa53cf47ad605791dd96b28a5beb2c2f50a)), closes [#33913](https://github.com/bitnami/charts/issues/33913)
+
+## <small>9.0.10 (2025-05-22)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33835) ([0ffafa3](https://github.com/bitnami/charts/commit/0ffafa362c5aae46e7ff9f91a28f5e2e89cf6029)), closes [#33835](https://github.com/bitnami/charts/issues/33835)
+
+## <small>9.0.9 (2025-05-21)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33822) ([16598ac](https://github.com/bitnami/charts/commit/16598acabe1ad0194d7775c5212e21b451fc7a6e)), closes [#33822](https://github.com/bitnami/charts/issues/33822)
+
+## <small>9.0.8 (2025-05-19)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33783) ([9f3119f](https://github.com/bitnami/charts/commit/9f3119fb789ab032492fb40b63f0bd3c3b761a72)), closes [#33783](https://github.com/bitnami/charts/issues/33783)
+
+## <small>9.0.7 (2025-05-19)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33780) ([4f26bc1](https://github.com/bitnami/charts/commit/4f26bc10d6a8d87f7df58f56b5a43bc30eed9fe0)), closes [#33780](https://github.com/bitnami/charts/issues/33780)
+
+## <small>9.0.6 (2025-05-16)</small>
+
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#33745) ([91cdd71](https://github.com/bitnami/charts/commit/91cdd7109c5d6af658b434494fdc650a12e097d3)), closes [#33745](https://github.com/bitnami/charts/issues/33745)
 
 ## <small>9.0.5 (2025-05-15)</small>
 

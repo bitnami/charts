@@ -115,7 +115,7 @@ sidecarImage:
 minioImage:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2025.4.22-debian-12-r1
+  tag: 2025.5.24-debian-12-r1
   digest: ""
 ## Bitnami KES;reg; image version
 ## ref: https://hub.docker.com/r/bitnami/kes/tags/

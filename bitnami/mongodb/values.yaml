@@ -139,7 +139,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 8.0.9-debian-12-r0
+  tag: 8.0.9-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -265,7 +265,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.28.0-debian-12-r0
+    tag: 1.28.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -857,7 +857,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.33.1-debian-12-r0
+      tag: 1.33.1-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -906,7 +906,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r44
+      tag: 12-debian-12-r45
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1417,6 +1417,9 @@ backup:
     restartPolicy: OnFailure
     ## @param backup.cronjob.backoffLimit Set the cronjob parameter backoffLimit
     backoffLimit: 6
+    ## @param backup.cronjob.serviceAccount.name Set the cronjob parameter serviceAccountName. If you change from the default values make sure that the SA already exists.
+    serviceAccount:
+      name: "default"
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1632,7 +1635,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r44
+    tag: 12-debian-12-r45
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2432,7 +2435,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.44.0-debian-12-r5
+    tag: 0.44.0-debian-12-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

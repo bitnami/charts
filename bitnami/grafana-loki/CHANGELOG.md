@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.8.8 (2025-05-13)
+## 4.8.10 (2025-05-22)
 
-* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#33632](https://github.com/bitnami/charts/pull/33632))
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#33850](https://github.com/bitnami/charts/pull/33850))
+
+## <small>4.8.9 (2025-05-19)</small>
+
+* [bitnami/grafana-loki] dataDir value substitution instead of static config (#33668) ([ba11956](https://github.com/bitnami/charts/commit/ba1195649e2085ed8f410add025b7498f8578c50)), closes [#33668](https://github.com/bitnami/charts/issues/33668)
+
+## <small>4.8.8 (2025-05-13)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#33632) ([3d2c31e](https://github.com/bitnami/charts/commit/3d2c31e50c1c140229b33cb7f43834f1b3ded3a7)), closes [#33632](https://github.com/bitnami/charts/issues/33632)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>4.8.7 (2025-05-07)</small>
 
