@@ -2,7 +2,7 @@
 
 # Grafana k6 Operator
 
-Grafana k6 Operator is a Kubernetes operator that enables running distributed k6 load tests in a cluster, automating test execution and scaling for performance validation
+Grafana k6 Operator is a Kubernetes operator that enables running distributed k6 load tests in a cluster, automating test execution and scaling for performance validation.
 
 [Overview of Grafana k6 Operator](https://k6.io/)
 
