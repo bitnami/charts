@@ -27,7 +27,7 @@ jobs:
           curl -X GET -GLkso "${TEMP_FILE}" "${WORKFLOW_RUNS_URL}" \
             -d "status=failure" -d "actor=bitnami-bot" -d "created=>$(date -d '-3 day' '+%Y-%m-%d')" -d "per_page=100"
           readarray -t retriable_runs_ids < <(jq --argjson runs ${MAX_RUNS_ATTEMPS} \
-            '.workflow_runs[] | select((.run_attempt < $runs) and (.display_title | contains("Release"))).id' "${TEMP_FILE}")
+            '.workflow_runs[] | select((.run_attempt < $runs) and (.display_title | contains("Update dependency references"))).id' "${TEMP_FILE}")
 
           echo "Found ${#retriable_runs_ids[@]} failed runs that need to be retried"
           if [[ ${#retriable_runs_ids[@]} -gt ${MAX_RETRY_SLOTS} ]]; then
