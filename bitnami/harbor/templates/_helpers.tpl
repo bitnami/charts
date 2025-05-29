@@ -560,7 +560,7 @@ harbor: Redis Mutual TLS
 
 {{/* Validate values of Harbor - externalRedis configuration */}}
 {{- define "harbor.validateValues.externalRedis" -}}
-{{- if and .Values.externalRedis.instancePerComponent ( or ( not .Values.externalRedis.core.host ) ( not .Values.externalRedis.jobservice.host ) ( not .Values.externalRedis.trivy.host ) ( not .Values.externalRedis.registry.host ) ) -}}
+{{- if and .Values.externalRedis.instancePerComponent ( or ( not .Values.externalRedis.core.host ) ( not .Values.externalRedis.jobservice.host ) ( and .Values.externalRedis.trivy.enabled ( not .Values.externalRedis.trivy.host ) ) ( not .Values.externalRedis.registry.host ) ) -}}
 harbor: External Redis instance per Harbor component
     Following values are mandatory when externalRedis.instancePerComponent is set:
       * externalRedis.core.host
