@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.3.1 (2025-05-29)
+## 26.4.0 (2025-05-29)
 
-* [bitnami/harbor]fix(validateValues.externalRedis): Check if trivy is enabled ([#33953](https://github.com/bitnami/charts/pull/33953))
+* [bitnami/harbor] feat: add support for consuming admin password from existing secret ([#33956](https://github.com/bitnami/charts/pull/33956))
+
+## <small>26.3.1 (2025-05-29)</small>
+
+* [bitnami/harbor]fix(validateValues.externalRedis): Check if trivy is enabled (#33953) ([2d7b32c](https://github.com/bitnami/charts/commit/2d7b32caf4be715bfc23535fd4d1381ffa31c833)), closes [#33953](https://github.com/bitnami/charts/issues/33953)
 
 ## 26.3.0 (2025-05-26)
 
