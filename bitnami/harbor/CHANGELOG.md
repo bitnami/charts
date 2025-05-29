@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.4.1 (2025-05-29)
+## 26.5.0 (2025-05-29)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33968](https://github.com/bitnami/charts/pull/33968))
+* [bitnami/harbor] add revisionHistoryLimit configuration property for deployments ([#33816](https://github.com/bitnami/charts/pull/33816))
+
+## <small>26.4.1 (2025-05-29)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33968) ([559b133](https://github.com/bitnami/charts/commit/559b1338e9127e86edd782e1c11c50b68d272689)), closes [#33968](https://github.com/bitnami/charts/issues/33968)
 
 ## 26.4.0 (2025-05-29)
 
