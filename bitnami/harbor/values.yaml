@@ -1627,7 +1627,7 @@ core:
   ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default
   ##
   sessionLifetime: ""
-  ## @param core.artifactPullAsyncFlushDuration Time (in seconds) for async update artifact pull_time and repository pull_count.
+  ## @param core.artifactPullAsyncFlushDuration Time (in seconds) for async update artifact pull_time and repository pull_count
   ##
   artifactPullAsyncFlushDuration: 10
   ## @param core.gdpr.deleteUser Enable/disable GDPR user deletion
