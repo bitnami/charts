@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: attu
-      image: docker.io/bitnami/attu:2.5.9-debian-12-r1
+      image: docker.io/bitnami/attu:2.5.10-debian-12-r0
     - name: milvus
       image: docker.io/bitnami/milvus:2.5.12-debian-12-r0
     - name: os-shell
@@ -51,4 +51,4 @@ maintainers:
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 14.0.0
+version: 14.0.1
