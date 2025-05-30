@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.8.11 (2025-05-29)
+## 4.8.12 (2025-05-30)
 
-* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#33963](https://github.com/bitnami/charts/pull/33963))
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#34000](https://github.com/bitnami/charts/pull/34000))
+
+## <small>4.8.11 (2025-05-29)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#33963) ([bbdcad4](https://github.com/bitnami/charts/commit/bbdcad4aec6ebe286802e039f70fafe7a6670963)), closes [#33963](https://github.com/bitnami/charts/issues/33963)
 
 ## <small>4.8.10 (2025-05-22)</small>
 
