@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.8 (2025-05-27)
+## 16.0.9 (2025-05-30)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33915](https://github.com/bitnami/charts/pull/33915))
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33983](https://github.com/bitnami/charts/pull/33983))
+
+## <small>16.0.8 (2025-05-27)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33915) ([adcb803](https://github.com/bitnami/charts/commit/adcb80334211c4a2fbb5aabd81ee0375bf470935)), closes [#33915](https://github.com/bitnami/charts/issues/33915)
 
 ## <small>16.0.7 (2025-05-26)</small>
 

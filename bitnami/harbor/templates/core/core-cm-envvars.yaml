@@ -63,3 +63,11 @@ data:
   TRACE_SERVICE_NAME: "harbor-core"
   {{- include "harbor.tracing.envvars" . | nindent 2}}
   {{- end }}
+  ARTIFACT_PULL_ASYNC_FLUSH_DURATION: {{ .Values.core.artifactPullAsyncFlushDuration | quote }}
+  GDPR_DELETE_USER: {{ ternary "true" "false" .Values.core.gdpr.deleteUser | quote }}
+  GDPR_AUDIT_LOGS: {{ ternary "true" "false" .Values.core.gdpr.auditLogsCompliant | quote }}
+  {{- if .Values.cache.enabled }}
+  CACHE_ENABLED: "true"
+  CACHE_EXPIRE_HOURS: {{ .Values.cache.expireHours | quote }}
+  {{- end }}
+  QUOTA_UPDATE_PROVIDER: {{ .Values.core.quotaUpdateProvider | quote }}

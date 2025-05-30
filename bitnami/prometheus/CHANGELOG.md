@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.1.0 (2025-05-23)
+## 2.1.1 (2025-05-28)
 
-* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new values ([#33777](https://github.com/bitnami/charts/pull/33777))
+* [bitname/prometheus] add cluster port to networkpolicy ([#33927](https://github.com/bitnami/charts/pull/33927))
 
 ## <small>2.0.8 (2025-05-19)</small>
 
