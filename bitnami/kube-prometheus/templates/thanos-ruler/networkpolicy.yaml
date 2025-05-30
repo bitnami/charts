@@ -33,48 +33,6 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Communicate with other ruler instances via headless service
-    - ports:
-        - port: {{ .Values.thanosRuler.containerPorts.http }}
-        - port: {{ .Values.thanosRuler.containerPorts.grpc }}
-      to:
-        - podSelector:
-            matchLabels: {{ include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: thanos-ruler
-    {{- if .Values.minio.enabled }}
-    # Communicate with minio
-    - ports:
-        - port: {{ .Values.minio.service.ports.api }}
-        - port: {{ .Values.minio.service.ports.api }}
-      to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: minio
-              app.kubernetes.io/instance: {{ .Release.Name }}
-    {{- end }}
-    {{- if .Values.query.enabled }}
-    # Communicate with query
-    - ports:
-        - port: {{ .Values.query.service.ports.http }}
-        - port: {{ .Values.query.containerPorts.http }}
-        - port: {{ .Values.query.serviceGrpc.ports.grpc }}
-        - port: {{ .Values.query.containerPorts.grpc }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: query
-    {{- end }}
-    {{- if .Values.queryFrontend.enabled }}
-    # Communicate with query-frontend
-    - ports:
-        - port: {{ .Values.queryFrontend.service.ports.http }}
-        - port: {{ .Values.queryFrontend.containerPorts.http }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: query-frontend
-
-    {{- end }}
     {{- if .Values.thanosRuler.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.thanosRuler.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
