@@ -148,6 +148,13 @@ ipFamily:
 cache:
   enabled: false
   expireHours: 24
+## Database common configuration
+## @param database.maxIdleConns The maximum number of connections in the idle connection pool per component
+## @param database.maxOpenConns The maximum number of open connections to the database per component
+##
+database:
+  maxIdleConns: 100
+  maxOpenConns: 900
 
 ## @section Traffic Exposure Parameters
 
@@ -458,6 +465,8 @@ persistence:
     ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
     ## @param persistence.imageChartStorage.s3.storageClass S3 storage type setting: Storage class
     ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
+    ## @param persistence.imageChartStorage.s3.multipartcopychunksize S3 storage type setting: Chunk size for multipart copy
+    ## @param persistence.imageChartStorage.s3.multipartcopymaxconcurrency S3 storage type setting: Maximum concurrency for multipart copy
     ## @param persistence.imageChartStorage.s3.multipartcopythresholdsize S3 storage type setting: Threshold size for multipart copy
     ##
     s3:
@@ -475,6 +484,8 @@ persistence:
       rootdirectory: ""
       storageClass: ""
       sse: ""
+      multipartcopychunksize: ""
+      multipartcopymaxconcurrency: ""
       multipartcopythresholdsize: ""
     ## Images/charts storage parameters when type is "swift"
     ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
@@ -3489,6 +3500,12 @@ exporter:
     ## Enable debug mode
     ##
     debug: false
+  ## @param exporter.cacheDuration Time (in seconds) collected values are cached for
+  ##
+  cacheDuration: 20
+  ## @param exporter.cacheCleanInterval Time (in seconds) after which the cache is cleaned
+  ##
+  cacheCleanInterval: 14400
   ## @param exporter.command Override default container command (useful when using custom images)
   ##
   command: []
