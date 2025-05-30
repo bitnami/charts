@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.0.8 (2025-05-30)
+
+* [bitnami/thanos] Allow statefulset annotations receive component ([#33988](https://github.com/bitnami/charts/pull/33988))
+
 ## 16.0.7 (2025-05-16)
 
 * [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
