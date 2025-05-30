@@ -1,8 +1,14 @@
 # Changelog
 
-## 16.7.5 (2025-05-27)
+## 16.7.6 (2025-05-30)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#33916](https://github.com/bitnami/charts/pull/33916))
+* [bitnami/postgresql] Update dependencies ([#33986](https://github.com/bitnami/charts/pull/33986))
+
+## <small>16.7.5 (2025-05-27)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33916) ([96adefd](https://github.com/bitnami/charts/commit/96adefd64d7296b21fd2f491cc14bef9f9e31548)), closes [#33916](https://github.com/bitnami/charts/issues/33916)
 
 ## <small>16.7.4 (2025-05-13)</small>
 
