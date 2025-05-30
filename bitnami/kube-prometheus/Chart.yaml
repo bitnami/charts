@@ -11,13 +11,13 @@ annotations:
     - name: prometheus
       image: docker.io/bitnami/prometheus:3.4.0-debian-12-r1
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.82.2-debian-12-r3
+      image: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r0
     - name: thanos
       image: docker.io/bitnami/thanos:0.38.0-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.82.2
+appVersion: 0.83.0
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
@@ -51,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.1.14
+version: 11.1.15
