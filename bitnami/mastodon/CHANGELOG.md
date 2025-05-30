@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.1 (2025-05-29)
+## 12.0.1 (2025-05-30)
 
 * [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob definition ([#33981](https://github.com/bitnami/charts/pull/33981))
 
