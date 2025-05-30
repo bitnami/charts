@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.8 (2025-05-26)
+## 0.2.9 (2025-05-29)
 
-* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#33886](https://github.com/bitnami/charts/pull/33886))
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#33962](https://github.com/bitnami/charts/pull/33962))
+
+## <small>0.2.8 (2025-05-26)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#33886) ([65756e1](https://github.com/bitnami/charts/commit/65756e1de4b795d0219beb173c176b5d133d227f)), closes [#33886](https://github.com/bitnami/charts/issues/33886)
 
 ## <small>0.2.7 (2025-05-26)</small>
 
