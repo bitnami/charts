@@ -20,7 +20,7 @@ spec:
   replicas: {{ .Values.thanosRuler.replicaCount }}
   listenLocal: {{ .Values.thanosRuler.listenLocal }}
   {{- if .Values.thanosRuler.service.additionalHeadless }}
-  serviceName: { printf "%s-headless" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ printf "%s-headless" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- end }}
   serviceAccountName: {{ include "kube-prometheus.thanosRuler.serviceAccountName" . }}
 {{- if .Values.thanosRuler.externalPrefix }}
@@ -29,8 +29,7 @@ spec:
   externalPrefix: "http://{{ tpl (index .Values.thanosRuler.ingress.hostname) . }}{{ .Values.thanosRuler.routePrefix }}"
 {{- end }}
 {{- if .Values.thanosRuler.additionalArgs }}
-  additionalArgs:
-{{ tpl (toYaml .Values.thanosRuler.additionalArgs) $ | indent 4 }}
+  additionalArgs: {{ tpl (toYaml .Values.thanosRuler.additionalArgs) . | nindent 4 }}
 {{- end }}
 {{- if .Values.thanosRuler.nodeSelector }}
   nodeSelector:
@@ -62,7 +61,7 @@ spec:
   alertmanagersConfig:
     key: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.key . | quote }}
     name: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.name . | quote }}
-{{- else if .Values.thanosRuler.alertmanagersConfig.secret }}
+{{- else if or .Values.thanosRuler.alertmanagersConfig.config .Values.alertmanager.enabled }}
   alertmanagersConfig:
     key: alertmanagers-config.yaml
     name: {{ printf "%s-alertmanagers-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -84,9 +83,8 @@ spec:
 {{- if .Values.thanosRuler.routePrefix }}
   routePrefix: "{{ .Values.thanosRuler.routePrefix }}"
 {{- end }}
-{{- if .Values.thanosRuler.securityContext }}
-  securityContext:
-    {{ toYaml .Values.thanosRuler.securityContext | nindent 4 }}
+{{- if .Values.thanosRuler.podSecurityContext.enabled }}
+  securityContext: {{ include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.thanosRuler.podSecurityContext "context" $) | nindent 4 }}
 {{- end }}
 {{- if .Values.thanosRuler.storage }}
   storage:

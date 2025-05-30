@@ -3446,6 +3446,7 @@ thanosRuler:
     ##
     allowExternal: true
     ## @param thanosRuler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ## If set to 'false', set 'extraEgress' to allow communicating to your Thanos Query/Frontend Query services.
     ##
     allowExternalEgress: true
     ## @param thanosRuler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
@@ -3480,12 +3481,12 @@ thanosRuler:
     ##                 values:
     ##                   - frontend
     ##
-    extraEgress: [ ]
+    extraEgress: []
     ## @param thanosRuler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param thanosRuler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
-    ingressNSMatchLabels: { }
-    ingressNSPodMatchLabels: { }
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param thanosRuler.routePrefix Prefix used to register routes. Useful for proxies that rewrite URLs.
   ##
   routePrefix: /
@@ -3607,28 +3608,20 @@ thanosRuler:
     ## @param thanosRuler.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-  ## Configure Security Context
+  ## Thanos Ruler pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param thanosRuler.securityContext Holds pod-level security attributes and common container settings. This defaults to the default PodSecurityContext
-  ##  Example:
-  ##  securityContext:
-  ##    runAsGroup: 1001
-  ##    runAsNonRoot: true
-  ##    runAsUser: 1001
-  ##    fsGroup: 1001
-  ##    seccompProfile:
-  ##    type: RuntimeDefault
-  securityContext: {}
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param thanosRuler.containerSecurityContext.enabled Enable container security context
-  ## @param thanosRuler.containerSecurityContext.runAsUser User ID for the container
-  ## @param thanosRuler.containerSecurityContext.runAsNonRoot Enable running as non-root
+  ## @param thanosRuler.podSecurityContext.enabled Enable security context
+  ## @param thanosRuler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param thanosRuler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param thanosRuler.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param thanosRuler.podSecurityContext.fsGroup Group ID for the container filesystem
   ##
-  containerSecurityContext:
+  podSecurityContext:
     enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
   ## @param thanosRuler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge).
   ## This is ignored if operator.resources is set (operator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -3668,8 +3661,9 @@ thanosRuler:
     existingSecret:
       name: ""
       key: ""
-    ## @param thanosRuler.alertmanagersConfig.config
+    ## @param thanosRuler.alertmanagersConfig.config Alert Manager configuration
     ## Unused if thanosRuler.alertmanagersConfig.existingSecret.name is configured
+    ## If empty, Thanos Ruler will use this chart's Alertmanager when 'alertmanager.enabled' is 'true'
     ## ref: https://thanos.io/tip/components/rule.md/#alertmanager
     ## e.g:
     ##   alertmanagers:
@@ -3739,9 +3733,14 @@ thanosRuler:
   ##
   clusterName: ""
   ## @param thanosRuler.additionalArgs Additional arguments for the ThanosRuler container.
+  ## @skip thanosRuler.additionalArgs
   ## It is intended for e.g. activating hidden flags which are not supported by the dedicated configuration options yet.
   ##
-  additionalArgs: []
+  additionalArgs:
+    - name: grpc-address
+      value: "0.0.0.0:{{ .Values.thanosRuler.containerPorts.grpc }}"
+    - name: http-address
+      value: "0.0.0.0:{{ .Values.thanosRuler.containerPorts.http }}"
   ## Thanos Ruler Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param thanosRuler.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Ruler
