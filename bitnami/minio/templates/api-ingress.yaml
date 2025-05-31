@@ -47,7 +47,7 @@ spec:
     {{- if and .Values.apiIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotationsMap )) .Values.apiIngress.selfSigned) }}
     - hosts:
         - {{ include "minio.apiIngress.hostname" . }}
-      secretName: {{ printf "%s-tls" (include "minio.apiIngress.hostname" .) }}
+      secretName: {{ printf "%s-api-tls" (include "minio.apiIngress.hostname" .) }}
     {{- end }}
     {{- if .Values.apiIngress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.apiIngress.extraTls "context" $ ) | nindent 4 }}
