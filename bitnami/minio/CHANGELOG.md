@@ -1,6 +1,10 @@
 # Changelog
 
-## 16.0.10 (2025-05-07)
+## 16.0.11 (2025-05-31)
+
+* [bitnami/minio] Release 16.0.11 ([#TODO](https://github.com/bitnami/charts/pull/TODO))
+
+## <small>16.0.10 (2025-05-07)</small>
 
 * [bitnami/minio] Release 16.0.10 ([#33488](https://github.com/bitnami/charts/pull/33488))
 
