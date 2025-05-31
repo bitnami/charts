@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.1.1 (2025-05-28)
+## 2.1.2 (2025-05-31)
 
-* [bitname/prometheus] add cluster port to networkpolicy ([#33927](https://github.com/bitnami/charts/pull/33927))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34020](https://github.com/bitnami/charts/pull/34020))
 
 ## <small>2.0.8 (2025-05-19)</small>
 
