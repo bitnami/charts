@@ -5,11 +5,11 @@ annotations:
   category: Analytics
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r7
+      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r8
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r8
+      image: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r9
     - name: prometheus
-      image: docker.io/bitnami/prometheus:3.4.0-debian-12-r1
+      image: docker.io/bitnami/prometheus:3.4.1-debian-12-r0
     - name: prometheus-operator
       image: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r1
     - name: thanos
@@ -51,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.1.16
+version: 11.1.17
