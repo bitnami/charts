@@ -470,6 +470,7 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 | `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`              |
 | `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`              |
 | `persistence.enabled`                              | Enable persistence using Persistent Volume Claims                              | `true`                |
+| `persistence.volumeName`                           | Name to assign the volume                                                      | `data`                |
 | `persistence.existingClaim`                        | Name of an existing PVC to use                                                 | `""`                  |
 | `persistence.storageClass`                         | Storage class of backing PVC                                                   | `""`                  |
 | `persistence.labels`                               | Persistent Volume Claim labels                                                 | `{}`                  |

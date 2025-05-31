@@ -36,6 +36,6 @@ Returns an init-container that changes the owner and group of the persistent vol
       find {{ $roleValues.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" |  xargs -r chown -R {{ $roleValues.containerSecurityContext.runAsUser }}:{{ $roleValues.podSecurityContext.fsGroup }}
       {{- end }}
   volumeMounts:
-    - name: data
+    - name: {{ $roleValues.persistence.volumeName }}
       mountPath: {{ $roleValues.persistence.mountPath }}
 {{- end -}}
