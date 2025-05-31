@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.6.21 (2025-05-29)
+## 11.6.22 (2025-05-30)
 
-* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#33974](https://github.com/bitnami/charts/pull/33974))
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#34010](https://github.com/bitnami/charts/pull/34010))
+
+## <small>11.6.21 (2025-05-29)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references (#33974) ([d263b13](https://github.com/bitnami/charts/commit/d263b13e12e81018908a9d0ba030738fee938b73)), closes [#33974](https://github.com/bitnami/charts/issues/33974)
 
 ## <small>11.6.20 (2025-05-07)</small>
 

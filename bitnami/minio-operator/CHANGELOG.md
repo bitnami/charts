@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.13 (2025-05-29)
+## 0.1.14 (2025-05-30)
 
-* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#33971](https://github.com/bitnami/charts/pull/33971))
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34012](https://github.com/bitnami/charts/pull/34012))
+
+## <small>0.1.13 (2025-05-29)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#33971) ([7919b14](https://github.com/bitnami/charts/commit/7919b146276db8d2723a84f2cc466fedf2361631)), closes [#33971](https://github.com/bitnami/charts/issues/33971)
 
 ## <small>0.1.12 (2025-05-24)</small>
 
