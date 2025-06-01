@@ -301,7 +301,9 @@ spec:
     whenScaled: {{ .Values.triggerer.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: logs
         {{- if or .Values.triggerer.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.triggerer.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}

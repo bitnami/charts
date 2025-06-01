@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.8 (2025-06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 2.0.7 (2025-05-30)
 
 * [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#33997](https://github.com/bitnami/charts/pull/33997))

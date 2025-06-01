@@ -212,7 +212,9 @@ spec:
           emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
