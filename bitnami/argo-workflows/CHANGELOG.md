@@ -1,8 +1,13 @@
 # Changelog
 
+## 12.0.1 (2025-06-02)
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#34032](https://github.com/bitnami/charts/pull/34032))
+
 ## 12.0.0 (2025-05-12)
 
-* [bitnami/argo-workflows] Update MySQL subchart ([#33612](https://github.com/bitnami/charts/pull/33612))
+* [bitnami/argo-workflows] Update MySQL subchart (#33612) ([1b26a9e](https://github.com/bitnami/charts/commit/1b26a9e0a9aae2c812fec428fa294c035c266d07)), closes [#33612](https://github.com/bitnami/charts/issues/33612)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.1.16 (2025-05-08)</small>
 
