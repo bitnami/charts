@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.14 (2025-06-02)
+## 4.4.15 (2025-06-02)
 
-* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#34039](https://github.com/bitnami/charts/pull/34039))
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#34044](https://github.com/bitnami/charts/pull/34044))
+
+## <small>4.4.14 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34039) ([747b183](https://github.com/bitnami/charts/commit/747b18376f857891c9c2d1ad73460a851d858253)), closes [#34039](https://github.com/bitnami/charts/issues/34039)
 
 ## <small>4.4.13 (2025-06-02)</small>
 
