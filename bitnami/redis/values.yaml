@@ -2045,6 +2045,9 @@ metrics:
     ## @param metrics.podMonitor.namespace The namespace in which the PodMonitor will be created
     ##
     namespace: ""
+    ## @param metrics.podMonitor.tlsConfig [object] TLS configuration used for scrape endpoints used by Prometheus
+    ##
+    tlsConfig: {}
     ## @param metrics.podMonitor.interval The interval at which metrics should be scraped
     ##
     interval: 30s
