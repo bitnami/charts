@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.11 (2025-05-31)
+## 16.0.11 (2025-06-02)
 
 * [bitnami/minio] fix: apiIngress tls values were ignored ([#34022](https://github.com/bitnami/charts/pull/34022))
 
