@@ -177,18 +177,16 @@ spec:
             - name: MINIO_DEFAULT_BUCKETS
               value: {{ .Values.defaultBuckets }}
             {{- end }}
+            - name: MINIO_API_PORT_NUMBER
+              value: {{ .Values.containerPorts.api | quote }}
             - name: MINIO_BROWSER
-              value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
+              value: "off"
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
-            - name: MINIO_CONSOLE_PORT_NUMBER
-              value: {{ .Values.containerPorts.console | quote }}
-            - name: MINIO_API_PORT_NUMBER
-              value: {{ .Values.containerPorts.api | quote }}
             - name: MINIO_DATA_DIR
               value: {{ ternary (printf "%s-0" $mountPath) $mountPath (gt $drivesPerNode 1) | quote }}
             {{- if .Values.extraEnvVars }}
@@ -206,10 +204,6 @@ spec:
           ports:
             - name: minio-api
               containerPort: {{ .Values.containerPorts.api }}
-              protocol: TCP
-            - name: minio-console
-              containerPort: {{ .Values.containerPorts.console }}
-              protocol: TCP
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}

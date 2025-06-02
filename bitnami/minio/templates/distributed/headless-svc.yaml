@@ -21,9 +21,6 @@ spec:
     - name: minio-api
       port: {{ .Values.service.ports.api }}
       targetPort: minio-api
-    - name: minio-console
-      port: {{ .Values.service.ports.console }}
-      targetPort: minio-console
   publishNotReadyAddresses: true
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

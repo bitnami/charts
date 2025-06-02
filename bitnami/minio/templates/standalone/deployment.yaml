@@ -138,24 +138,24 @@ spec:
                   name: {{ include "minio.secretName" . }}
                   key: {{ include "minio.rootPasswordKey" . }}
             {{- end }}
+            - name: MINIO_SKIP_CLIENT
+              value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}
             {{- if .Values.defaultBuckets }}
             - name: MINIO_DEFAULT_BUCKETS
               value: {{ .Values.defaultBuckets }}
             {{- end }}
+            - name: MINIO_API_PORT_NUMBER
+              value: {{ .Values.containerPorts.api | quote }}
             - name: MINIO_BROWSER
-              value: {{ ternary "off" "on" .Values.disableWebUI | quote }}
+              value: "off"
             - name: MINIO_PROMETHEUS_AUTH_TYPE
               value: {{ .Values.metrics.prometheusAuthType | quote }}
-            - name: MINIO_CONSOLE_PORT_NUMBER
-              value: {{ .Values.containerPorts.console | quote }}
             {{- if .Values.tls.mountPath }}
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
-            {{- if .Values.persistence.mountPath }}
             - name: MINIO_DATA_DIR
               value: {{ .Values.persistence.mountPath | quote }}
-            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -171,9 +171,6 @@ spec:
           ports:
             - name: minio-api
               containerPort: {{ .Values.containerPorts.api }}
-              protocol: TCP
-            - name: minio-console
-              containerPort: {{ .Values.containerPorts.console }}
               protocol: TCP
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
@@ -206,7 +203,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
-              port: minio-console
+              port: minio-api
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}

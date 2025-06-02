@@ -32,9 +32,7 @@ spec:
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.containerPorts.api }}
-        - port: {{ .Values.containerPorts.console }}
         - port: {{ .Values.service.ports.api }}
-        - port: {{ .Values.service.ports.console }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
@@ -45,7 +43,6 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.containerPorts.console }}
         - port: {{ .Values.containerPorts.api }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

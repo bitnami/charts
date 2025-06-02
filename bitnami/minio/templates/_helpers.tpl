@@ -6,11 +6,24 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Return the proper MinIO&reg; Console fullname
+*/}}
+{{- define "minio.console.fullname" -}}
+{{- printf "%s-console" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper MinIO&reg; image name
 */}}
 {{- define "minio.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- end -}}
 
+{{/*
+Return the proper MinIO&reg; Console image name
+*/}}
+{{- define "minio.console.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.console.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -31,7 +44,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "minio.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.clientImage .Values.volumePermissions.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.console.image .Values.clientImage .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -204,7 +217,7 @@ Return the secret containing MinIO TLS certificates
 */}}
 {{- define "minio.tlsSecretName" -}}
 {{- if .Values.tls.existingSecret -}}
-    {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
+    {{- tpl .Values.tls.existingSecret . -}}
 {{- else -}}
     {{- printf "%s-crt" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -229,32 +242,4 @@ Provisioning job labels (exclude matchLabels from standard labels)
 {{- $_ := unset $provisioningLabels . -}}
 {{- end -}}
 {{- print ($provisioningLabels | toYaml) -}}
-{{- end -}}
-
-{{/*
-Return the ingress anotation
-*/}}
-{{- define "minio.ingress.annotations" -}}
-{{ .Values.ingress.annotations | toYaml }}
-{{- end -}}
-
-{{/*
-Return the api ingress anotation
-*/}}
-{{- define "minio.apiIngress.annotations" -}}
-{{ .Values.apiIngress.annotations | toYaml }}
-{{- end -}}
-
-{{/*
-Return the ingress hostname
-*/}}
-{{- define "minio.ingress.hostname" -}}
-{{- tpl .Values.ingress.hostname $ -}}
-{{- end -}}
-
-{{/*
-Return the api ingress hostname
-*/}}
-{{- define "minio.apiIngress.hostname" -}}
-{{- tpl .Values.apiIngress.hostname $ -}}
 {{- end -}}
