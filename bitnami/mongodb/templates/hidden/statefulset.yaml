@@ -570,7 +570,9 @@ spec:
           {{- end }}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: datadir
         {{- if .Values.hidden.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.persistence.annotations "context" $) | nindent 10 }}

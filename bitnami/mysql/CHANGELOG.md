@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.0.1 (2025-06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 13.0.0 (2025-05-12)
 
 * [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#33608](https://github.com/bitnami/charts/pull/33608))

@@ -275,7 +275,9 @@ spec:
           emptyDir: {}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: concourse-work-dir
         {{- if .Values.worker.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.persistence.annotations "context" $) | nindent 10 }}

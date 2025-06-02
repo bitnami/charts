@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.15 (2025-06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 2.3.14 (2025-05-23)
 
 * [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#33851](https://github.com/bitnami/charts/pull/33851))

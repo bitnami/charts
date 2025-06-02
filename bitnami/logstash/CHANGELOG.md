@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.2 (2025-06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 7.0.2 (2025-05-06)
 
 * [bitnami/logstash] Release 7.0.2 ([#33465](https://github.com/bitnami/charts/pull/33465))

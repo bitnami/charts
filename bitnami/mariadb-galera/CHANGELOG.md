@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.2.7 (2025=06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 14.2.6 (2025-05-23)
 
 * [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#33855](https://github.com/bitnami/charts/pull/33855))

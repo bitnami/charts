@@ -368,7 +368,9 @@ spec:
         {{- end }}
   {{- if $executorValues.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if or $executorValues.persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" $executorValues.persistence.annotations $.Values.commonAnnotations "context" $) | fromYaml }}

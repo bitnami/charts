@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.4 (2025-06-01)
+
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 2.0.3 (2025-05-21)
 
 * [bitnami/dremio] fix: ingress to wrong port ([#33804](https://github.com/bitnami/charts/pull/33804))

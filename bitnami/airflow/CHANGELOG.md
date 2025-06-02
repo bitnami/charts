@@ -1,5 +1,8 @@
 # Changelog
 
+## 24.1.2 (2025-06-01)
+* Declare `kind` and `apiVersion` for `volumeClaimTemplate`s as these are hydrated by k8s API and can cause sync issues with GitOps tools ([#34025](https://github.com/bitnami/charts/pull/34054))
+
 ## 24.1.1 (2025-05-18)
 
 * [bitnami/airflow] update README to match deprecated values ([#33602](https://github.com/bitnami/charts/pull/33602))
