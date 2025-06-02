@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: grafana-alloy
+      image: docker.io/bitnami/grafana-alloy:1.8.3-debian-12-r1
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: "1.8.3"
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: Grafana Alloy combines the strengths of the leading collectors into one place.
+  Whether observing applications, infrastructure, or both, Grafana Alloy can collect, process,
+  and export telemetry signals to scale and future-proof your observability approach.
+home: https://bitnami.com
+icon: https://grafana.com/media/docs/alloy/alloy_icon.png
+keywords:
+- analytics
+- monitoring
+- metrics
+- logs
+- traces
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: grafana-alloy
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana-alloy
+version: 1.0.0

@@ -1,0 +1,23 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if empty .Values.existingConfigMap }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- with .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" . "context" $) | nindent 4 }}
+    app.kubernetes.io/component: grafana-alloy
+  {{- end }}
+  {{- with .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  {{ .Values.configMapKey }}: | {{ tpl .Values.configuration . | nindent 4 }}
+
+{{- end }}
