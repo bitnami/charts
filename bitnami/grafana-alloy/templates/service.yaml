@@ -3,6 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if .Values.service.extraPorts }}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,9 +42,9 @@ spec:
   {{- if .Values.service.sessionAffinityConfig }}
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
-  {{- with .Values.service.extraPorts }}
-  ports: {{ include "common.tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
-  {{- end }}
+  ports: {{ include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
   selector: {{ include "common.labels.matchLabels" (dict "customLabels" .Values.commonLabels "context" $) | nindent 4 }}
     app.kubernetes.io/component: grafana-alloy
     app.kubernetes.io/part-of: grafana-alloy
+
+{{- end }}
