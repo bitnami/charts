@@ -153,7 +153,7 @@ auth:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   username: user
-  ## @param auth.password RabbitMQ application password
+  ## @param auth.password RabbitMQ application password (after specifying the password, you will also need to change the erlangCookie to avoid the "Invalid credentials" error)
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
   password: ""
