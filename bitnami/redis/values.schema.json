@@ -2866,6 +2866,11 @@
                             "description": "The namespace in which the ServiceMonitor will be created",
                             "default": ""
                         },
+                        "tlsConfig": {
+                            "type": "object",
+                            "description": "TLS configuration used for scrape endpoints used by Prometheus",
+                            "default": {}
+                        },
                         "interval": {
                             "type": "string",
                             "description": "The interval at which metrics should be scraped",
