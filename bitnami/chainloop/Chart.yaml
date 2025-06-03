@@ -65,4 +65,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-control-plane-migrations
 - https://github.com/bitnami/containers/tree/main/bitnami/chainloop-artifact-cas
 - https://github.com/chainloop-dev/chainloop
-version: 4.0.12
+version: 4.0.13
