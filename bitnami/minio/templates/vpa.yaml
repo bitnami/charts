@@ -33,7 +33,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
-    apiVersion: {{ ternary (include "common.capabilities.statefulset.apiVersion" ) (include "common.capabilities.deployment.apiVersion" .) (eq .Values.mode "distributed") }}
+    apiVersion: {{ ternary (include "common.capabilities.statefulset.apiVersion" .) (include "common.capabilities.deployment.apiVersion" .) (eq .Values.mode "distributed") }}
     kind: {{ ternary "StatefulSet" "Deployment" (eq .Values.mode "distributed") }}
     name: {{ template "common.names.fullname" . }}
   {{- if .Values.autoscaling.vpa.updatePolicy }}

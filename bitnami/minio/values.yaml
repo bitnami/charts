@@ -210,36 +210,17 @@ schedulerName: ""
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
-## MinIO&reg; deployment parameters
-## Only when 'mode' is 'standalone'
+## @param updateStrategy.type MinIO&reg; deployment/statefulset update strategy type
+## Can be set to RollingUpdate or Recreate (deployment) | RollingUpdate or OnDelete (statefulset)
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
-deployment:
-  ## @param deployment.updateStrategy.type Deployment strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: Recreate
+updateStrategy:
+  type: RollingUpdate
 ## MinIO&reg; StatefulSet parameters
 ## Only when mode is 'distributed'
 ##
 statefulset:
-  ## @param statefulset.updateStrategy.type StatefulSet strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: RollingUpdate
   ## @param statefulset.podManagementPolicy StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#pod-management-policy
   ##
