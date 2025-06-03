@@ -1,12 +1,8 @@
 # Changelog
 
-## 17.0.1 (2025-06-03)
-
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34070](https://github.com/bitnami/charts/pull/34070))
-
 ## 17.0.0 (2025-06-03)
 
-* [bitnami/minio] feat: run Console UI as a separate component (#34037) ([9d122cd](https://github.com/bitnami/charts/commit/9d122cdc904ad90305caa0223d208d783bcb470b)), closes [#34037](https://github.com/bitnami/charts/issues/34037)
+* [bitnami/minio] feat: run Console UI as a separate component ([#34037](https://github.com/bitnami/charts/pull/34037))
 
 ## <small>16.0.11 (2025-06-02)</small>
 
