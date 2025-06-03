@@ -21,7 +21,7 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
 
   const fileToUpload = 'example.json';
   cy.get('#upload-main').should('be.visible').click();
-  cy.get('[label="Upload File"]').click();
+  cy.get('[label="Upload File"]').click({ force: true });
   cy.get('#object-list-wrapper').within(() => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
