@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.4.13 (2025-05-15)
+## 6.4.14 (2025-06-03)
 
-* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#33707](https://github.com/bitnami/charts/pull/33707))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34069](https://github.com/bitnami/charts/pull/34069))
+
+## <small>6.4.13 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#33707) ([4407ba6](https://github.com/bitnami/charts/commit/4407ba65aae5e2473bbc88c2d2e9f54b70d03db5)), closes [#33707](https://github.com/bitnami/charts/issues/33707)
 
 ## <small>6.4.12 (2025-05-07)</small>
 
