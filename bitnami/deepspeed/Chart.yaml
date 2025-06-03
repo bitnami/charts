@@ -5,15 +5,15 @@ annotations:
   category: MachineLearning
   images: |
     - name: deepspeed
-      image: docker.io/bitnami/deepspeed:0.16.9-debian-12-r0
+      image: docker.io/bitnami/deepspeed:0.17.0-debian-12-r0
     - name: git
-      image: docker.io/bitnami/git:2.49.0-debian-12-r7
+      image: docker.io/bitnami/git:2.49.0-debian-12-r8
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r45
+      image: docker.io/bitnami/os-shell:12-debian-12-r46
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.16.9
+appVersion: 0.17.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -38,4 +38,4 @@ name: deepspeed
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/deepspeed
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 2.3.14
+version: 2.3.15
