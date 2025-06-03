@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.1 (2025-06-02)
+## 12.0.1 (2025-06-03)
 
 * [etcd] add priorityClass to preupgrade-hook-job. ([#34035](https://github.com/bitnami/charts/pull/34035))
 
