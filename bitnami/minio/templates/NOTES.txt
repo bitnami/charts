@@ -49,20 +49,20 @@ To access the Minio(R) Console:
 {{- else if contains "LoadBalancer" .Values.console.service.type }}
 
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "minio.console.fullname" . }}'
 
    {{- $port:=.Values.console.service.ports.http | toString }}
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "minio.console.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
    echo "Minio(R) Console URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.console.service.ports.http }}{{ end }}"
 
 {{- else if contains "ClusterIP"  .Values.console.service.type }}
 
    echo "Minio(R) Console URL: http://127.0.0.1:{{ .Values.console.containerPorts.http }}"
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.console.containerPorts.http }}:{{ .Values.console.service.ports.http }}
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "minio.console.fullname" . }} {{ .Values.console.containerPorts.http }}:{{ .Values.console.service.ports.http }}
 
 {{- else if contains "NodePort" .Values.console.service.type }}
 
-   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "minio.console.fullname" . }})
    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
    echo "Minio(R) Console URL: http://$NODE_IP:$NODE_PORT"
 

@@ -49,7 +49,7 @@ var _ = Describe("Minio", Ordered, func() {
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, deployName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
-			port, err := utils.SvcGetPortByName(svc, "minio-api")
+			port, err := utils.SvcGetPortByName(svc, "api")
 			Expect(err).NotTo(HaveOccurred())
 
 			image, err := utils.DplGetContainerImage(dpl, "minio")

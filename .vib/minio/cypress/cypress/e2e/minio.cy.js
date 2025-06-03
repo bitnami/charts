@@ -7,19 +7,21 @@
 import { random } from '../support/utils';
 it('allows creating a bucket, uploading and retrieving a file', () => {
   cy.login();
-  cy.visit(`/buckets/add-bucket`);
+  cy.visit(`/browser`);
+  cy.get('#acknowledge-confirm').click();
+  cy.contains('button', 'Create a Bucket').should('be.visible').click();
   let bucketName='';
   cy.fixture('buckets').then((buckets) => {
     bucketName=`${buckets.newBucket.name}.${random}`;
     cy.get('#bucket-name').type(`${bucketName}`);
-    cy.contains('button', 'Create Bucket').click();
+    cy.get('#create-bucket').click();
     cy.visit(`/browser/${bucketName}`);
+    cy.get('#acknowledge-confirm').click();
   });
 
   const fileToUpload = 'example.json';
-  cy.get('#upload-main').click();
-  // Once the main button is clicked a tooltip overlaps with 'Upload File' button
-  cy.contains('Upload File').click({ force: true });
+  cy.get('#upload-main').should('be.visible').click();
+  cy.get('[label="Upload File"]').click();
   cy.get('#object-list-wrapper').within(() => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
