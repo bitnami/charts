@@ -15,7 +15,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 2025.4.22
+appVersion: 2025.4.24
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -39,4 +39,4 @@ maintainers:
 name: minio
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio
-version: 16.1.0
+version: 17.0.0

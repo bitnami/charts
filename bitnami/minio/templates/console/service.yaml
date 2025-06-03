@@ -41,9 +41,7 @@ spec:
   ports:
     - name: http
       port: {{ .Values.console.service.ports.http }}
-      {{- if not (eq .Values.console.service.ports.http .Values.console.containerPorts.http) }}
-      targetPort: {{ .Values.console.containerPorts.http }}
-      {{- end }}
+      targetPort: http
       {{- if and (or (eq .Values.console.service.type "NodePort") (eq .Values.console.service.type "LoadBalancer")) (not (empty .Values.console.service.nodePorts.http)) }}
       nodePort: {{ .Values.console.service.nodePorts.http }}
       {{- else if eq .Values.console.service.type "ClusterIP" }}
