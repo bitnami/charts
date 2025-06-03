@@ -1,1 +1,9 @@
-Thanks for deploying bitnami grafana-alloy helm chart
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+Thanks for deploying bitnami grafana-alloy helm chart :)
+
+extraContainerPorts: {{ ternary list (.Values.extraContainerPorts | toYaml | nindent 2) (empty .Values.extraContainerPorts) }}
+
+service.extraPorts: {{ ternary list (.Values.service.extraPorts | toYaml | nindent 2) (empty .Values.service.extraPorts) }}
