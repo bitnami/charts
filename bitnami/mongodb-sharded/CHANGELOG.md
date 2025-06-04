@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.2 (2025-06-03)
+## 9.3.3 (2025-06-04)
 
-* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34055](https://github.com/bitnami/charts/pull/34055))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34084](https://github.com/bitnami/charts/pull/34084))
+
+## <small>9.3.2 (2025-06-03)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34055) ([c1d1d77](https://github.com/bitnami/charts/commit/c1d1d77cb2671c03736fc534bac36b4889038bac)), closes [#34055](https://github.com/bitnami/charts/issues/34055)
 
 ## <small>9.3.1 (2025-06-02)</small>
 
