@@ -4227,6 +4227,10 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   statefulsetLabels: {}
+  ## @param receive.statefulsetAnnotations Thanos Receive statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param receive.podLabels Thanos Receive pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
