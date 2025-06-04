@@ -1865,6 +1865,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 15.0.0
+
+This major updates the `minio` subchart to its newest major, 17.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1700).
+
 ### To 14.0.0
 
 This major updates the `etcd` subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-1200).
