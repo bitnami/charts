@@ -571,7 +571,7 @@ initContainers: []
 pdb:
   create: true
   minAvailable: ""
-  maxUnavailable: ""    
+  maxUnavailable: ""
 ## ClickHouse Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ##
@@ -892,6 +892,9 @@ persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
   enabled: true
+  ## @param persistence.volumeName Name to assign the volume
+  ##
+  volumeName: data
   ## @param persistence.existingClaim Name of an existing PVC to use
   ##
   existingClaim: ""
