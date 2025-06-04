@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://127.0.0.1:{{ .Vars.containerPorts.http }}/-/healthy:
+  http://127.0.0.1:{{ .Vars.alloy.containerPorts.http }}/-/healthy:
     status: 200
     body:
       - /All Alloy components are healthy./
@@ -10,7 +10,7 @@ http:
     status: 200
     body:
       - /All Alloy components are healthy./
-  http://127.0.0.1:{{ .Vars.containerPorts.http }}/metrics:
+  http://127.0.0.1:{{ .Vars.alloy.containerPorts.http }}/metrics:
     status: 200
     body:
       - /alloy_build_info/
