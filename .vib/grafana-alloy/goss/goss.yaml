@@ -19,7 +19,7 @@ http:
     body:
       - /alloy_build_info/
 file:
-  /opt/bitnami/grafana-alloy/conf/config.alloy:
+  /opt/bitnami/grafana-alloy/config/config.alloy:
     exists: true
     filetype: symlink
   /var/log:
