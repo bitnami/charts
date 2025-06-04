@@ -6,22 +6,39 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if eq .Values.alloy.resourceType "deployment" }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
+{{- else if eq .Values.alloy.resourceType "statefulset" }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+{{- else }}
+apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
+kind: DaemonSet
+{{- end }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: alloy
     app.kubernetes.io/part-of: alloy
-  {{- if or .Values.deploymentAnnotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  {{- if or .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.autoscaling.hpa.enabled }}
+  {{- if and .Values.autoscaling.hpa.enabled (not (eq .Values.alloy.resourceType "daemonset")) }}
   replicas: {{ .Values.alloy.replicaCount }}
   {{- end }}
+  {{- if eq .Values.alloy.resourceType "statefulset" }}
+  podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- end }}
   {{- if .Values.updateStrategy }}
+  {{- if eq .Values.alloy.resourceType "deployment" }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- else if eq .Values.alloy.resourceType "statefulset" }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  serviceName: {{ template "common.names.fullname" . }}
+  {{- else }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) }}
   selector:
@@ -60,7 +77,7 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.schedulerName }}
+      {{- if .Values.schedulerName }} 
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.topologySpreadConstraints }}
@@ -280,4 +297,3 @@ spec:
         {{- if .Values.alloy.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-{{- end }}

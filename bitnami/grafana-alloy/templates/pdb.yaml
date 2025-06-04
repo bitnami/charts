@@ -26,4 +26,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: alloy
+      app.kubernetes.io/part-of: alloy
 {{- end }}

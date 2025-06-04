@@ -26,7 +26,6 @@ This chart bootstraps a [Grafana Alloy](https://github.com/grafana/alloy) deploy
 
 - Kubernetes 1.23+
 - Helm 3.8.0+
-- PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
 
@@ -124,10 +123,6 @@ no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
 ```
 
 Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
-
-### Backup and restore
-
-To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Parameters
 
@@ -373,6 +368,28 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `metrics.serviceMonitor.metricRelabelings`    | Specify additional relabeling of metrics                                                               | `[]`    |
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
+```console
+helm install my-release \
+  --set aggregator.port=24444 oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+The above command sets the aggregators to listen on port 24444.
+
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+
+```console
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/fluentd/values.yaml)
+
+## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
