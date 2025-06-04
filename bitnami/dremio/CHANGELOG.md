@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2025-05-21)
+## 3.0.0 (2025-06-04)
 
-* [bitnami/dremio] fix: ingress to wrong port ([#33804](https://github.com/bitnami/charts/pull/33804))
+* [bitnami/dremio] feat: major version due to Minio major bump ([#34086](https://github.com/bitnami/charts/pull/34086))
+
+## <small>2.0.3 (2025-05-23)</small>
+
+* [bitnami/dremio] fix: ingress to wrong port (#33804) ([4f9da2d](https://github.com/bitnami/charts/commit/4f9da2d78c799c7759a85d6af61f62b820237b6e)), closes [#33804](https://github.com/bitnami/charts/issues/33804)
 
 ## <small>2.0.1 (2025-05-16)</small>
 
