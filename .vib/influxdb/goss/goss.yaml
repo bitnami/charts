@@ -2,11 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
-  /bitnami/influxdb:
-    exists: true
-    filetype: directory
-    mode: "2775"
-    owner: root
   # This file shouldn't exist given the token is created
   # using a K8s Job
   /bitnami/influxdb/.token:

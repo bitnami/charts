@@ -42,6 +42,12 @@ spec:
     - ports:
         - port: {{ .Values.alertmanager.containerPorts.http }}
         - port: {{ .Values.alertmanager.service.ports.http }}
+        {{- if gt (int .Values.alertmanager.replicaCount) 1 }}
+        - port: {{ .Values.alertmanager.service.ports.cluster }}
+          protocol: TCP
+        - port: {{ .Values.alertmanager.service.ports.cluster }}
+          protocol: UDP
+        {{- end }}
       {{- if not .Values.alertmanager.networkPolicy.allowExternal }}
       from:
         - podSelector:

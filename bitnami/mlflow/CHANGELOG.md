@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.1.0 (2025-05-28)
+
+## 4.1.0 (2025-05-28)
 
 * [bitnami/mlflow] Adds resources to init containers ([#33910](https://github.com/bitnami/charts/pull/33910))
+
+## 4.0.0 (2025-06-04)
+
+* [bitnami/mlflow] feat: major version due to Minio major bump ([#34090](https://github.com/bitnami/charts/pull/34090))
 
 ## <small>3.0.7 (2025-05-08)</small>
 

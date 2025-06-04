@@ -147,26 +147,14 @@ spec:
               value: {{ ternary "true" "false" .Values.jobservice.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
-                {{- if .Values.core.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.core.existingSecret }}
+                  name: {{ template "harbor.core.secretName" . }}
                   key: secret
-                {{- else }}
-                secretKeyRef:
-                  name: {{ include "harbor.core" . }}
-                  key: secret
-                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
-                {{- if .Values.jobservice.existingSecret }}
                 secretKeyRef:
-                  name: {{ .Values.jobservice.existingSecret }}
+                  name: {{ template "harbor.jobservice.secretName" . }}
                   key: secret
-                {{- else }}
-                secretKeyRef:
-                  name: {{ include "harbor.jobservice" . }}
-                  key: secret
-                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"

@@ -97,7 +97,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 4.0.0-debian-12-r5
+  tag: 4.0.0-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2255,23 +2255,23 @@ provisioning:
   ## - >-
   ##   /opt/bitnami/kafka/bin/kafka-acls.sh
   ##   --bootstrap-server $KAFKA_SERVICE
-  ##   --command-config $CLIENT_CONF
+  ##   --command-config /shared/client.properties
   ##   --add
   ##   --allow-principal User:user
   ##   --consumer --topic *
   ## - "/opt/bitnami/kafka/bin/kafka-acls.sh
   ##      --bootstrap-server $KAFKA_SERVICE
-  ##      --command-config $CLIENT_CONF
+  ##      --command-config /shared/client.properties
   ##      --list"
   ##
   extraProvisioningCommands: []
   ## @param provisioning.parallel Number of provisioning commands to run at the same time
   ##
   parallel: 1
-  ## @param provisioning.preScript Extra bash script to run before topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations
+  ## @param provisioning.preScript Extra bash script to run before topic provisioning. /shared/client.properties is path to properties file with most needed configurations
   ##
   preScript: ""
-  ## @param provisioning.postScript Extra bash script to run after topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations
+  ## @param provisioning.postScript Extra bash script to run after topic provisioning. /shared/client.properties is path to properties file with most needed configurations
   ##
   postScript: ""
   ## Auth Configuration for kafka provisioning Job

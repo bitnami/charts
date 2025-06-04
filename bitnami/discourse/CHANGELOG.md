@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2025-05-28)
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#33931](https://github.com/bitnami/charts/pull/33931))
+
 ## 16.0.0 (2025-05-07)
 
-* [bitnami/discourse] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33501](https://github.com/bitnami/charts/pull/33501))
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33501) ([de6e982](https://github.com/bitnami/charts/commit/de6e982e0bebc1bcd8226cc98a76a43ab706983e)), closes [#33501](https://github.com/bitnami/charts/issues/33501)
 
 ## <small>15.1.15 (2025-05-06)</small>
 

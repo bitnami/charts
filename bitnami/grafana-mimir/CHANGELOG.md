@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.0.5 (2025-05-07)
+## 3.0.0 (2025-06-04)
 
-* [bitnami/grafana-mimir] Release 2.0.5 ([#33514](https://github.com/bitnami/charts/pull/33514))
+* [bitnami/grafana-mimir] feat: major version due to Minio major bump ([#34087](https://github.com/bitnami/charts/pull/34087))
+
+## <small>2.0.7 (2025-05-30)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#33997) ([dcc9889](https://github.com/bitnami/charts/commit/dcc98897c81cd170887867554a89ba4187f39791)), closes [#33997](https://github.com/bitnami/charts/issues/33997)
+
+## <small>2.0.6 (2025-05-29)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#33964) ([156851c](https://github.com/bitnami/charts/commit/156851ca47d393009874ddc2d4e75f5ab69092f3)), closes [#33964](https://github.com/bitnami/charts/issues/33964)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>2.0.5 (2025-05-07)</small>
+
+* [bitnami/grafana-mimir] Release 2.0.5 (#33514) ([200a738](https://github.com/bitnami/charts/commit/200a7389e257d1a3868071128884a10c53e48cfb)), closes [#33514](https://github.com/bitnami/charts/issues/33514)
 
 ## <small>2.0.4 (2025-05-06)</small>
 

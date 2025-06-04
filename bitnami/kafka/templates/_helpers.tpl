@@ -527,9 +527,16 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $port := int .Values.listeners.controller.containerPort }}
   {{- $bootstrapServers := list -}}
-  {{- range $i := until (int .Values.controller.replicaCount) -}}
-    {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-    {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+  {{- if and (.Values.controller.autoscaling) (.Values.controller.autoscaling.hpa) (.Values.controller.autoscaling.hpa.enabled) -}}
+    {{- range $i := until (int .Values.controller.autoscaling.hpa.maxReplicas) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+    {{- end -}}
+  {{- else -}}
+    {{- range $i := until (int .Values.controller.replicaCount) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+    {{- end -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
 {{- end -}}
