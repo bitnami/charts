@@ -33,12 +33,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
-    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     {{- if eq .Values.alloy.resourceType "deployment" }}
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     {{- else if eq .Values.alloy.resourceType "statefulset" }}
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     {{- else }}
+    apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
     kind: DaemonSet
     {{- end }}
     name: {{ include "common.names.fullname" . }}

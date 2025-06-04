@@ -7,11 +7,9 @@
 
 it('lists all components in a healthy state', () => {
   cy.visit('/');
-  // Wait for DOM content to load
-  cy.wait(10000);
 
-  cy.get('span[class*="HealthLabel"]').each(($span) => {
-    cy.wrap($span).should('have.text', 'healthy');
+  cy.get('span[class*="HealthLabel"]').each((span) => {
+    cy.wrap(span).should('have.text', 'healthy');
   });
 
   const members = ['endpointslices', 'pods', 'services', 'ingresses', 'endpoints', 'nodes']
@@ -30,7 +28,7 @@ it('lists all components in a healthy state', () => {
 it('clustering in a healthy state', () => {
   cy.visit('/clustering');
 
-  cy.get('span:not([class*="idName"])').each(($span) => {
-    cy.wrap($span).should('include.text', '✅');
+  cy.get('span:not([class*="idName"])').each((span) => {
+    cy.wrap(span).should('include.text', '✅');
   });
 });
