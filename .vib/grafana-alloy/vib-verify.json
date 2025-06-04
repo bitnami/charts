@@ -59,7 +59,7 @@
           "action_id": "cypress",
           "params": {
             "resources": {
-              "path": "/.vib/kibana/cypress"
+              "path": "/.vib/grafana-alloy/cypress"
             },
             "endpoint": "lb-grafana-alloy-http",
             "app_protocol": "HTTP"
