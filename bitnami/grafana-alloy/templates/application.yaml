@@ -24,7 +24,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.autoscaling.hpa.enabled (not (eq .Values.alloy.resourceType "daemonset")) }}
+  {{- if and (not .Values.autoscaling.hpa.enabled) (not (eq .Values.alloy.resourceType "daemonset")) }}
   replicas: {{ .Values.alloy.replicaCount }}
   {{- end }}
   {{- if eq .Values.alloy.resourceType "statefulset" }}
