@@ -622,11 +622,9 @@ service:
   ##
   type: LoadBalancer
   ## @param service.ports.http Grafana Alloy service HTTP port
-  ## @param service.ports.https Grafana Alloy service HTTPS port
   ##
   ports:
     http: 80
-    https: 443
   ## Node ports to expose
   ## @param service.nodePorts.http Node port for HTTP
   ## NOTE: choose port between <30000-32767>
