@@ -156,6 +156,9 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
+## ONLY FOR DAEMONSETS:
+## @param updateStrategy.type Grafana Alloy daemonset strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/#updating-a-daemonset
 ## ONLY FOR DEPLOYMENTS:
 ## @param updateStrategy.type Grafana Alloy deployment strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -164,6 +167,8 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
+  ## ONLY FOR DAEMONSETS:
+  ## Can be set to RollingUpdate or OnDelete
   ## ONLY FOR DEPLOYMENTS:
   ## Can be set to RollingUpdate or Recreate
   ## ONLY FOR STATEFULSETS:

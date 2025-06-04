@@ -30,14 +30,16 @@ spec:
   {{- if eq .Values.alloy.resourceType "statefulset" }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   {{- end }}
-  {{- if .Values.updateStrategy }}
-  {{- if eq .Values.alloy.resourceType "deployment" }}
-  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
-  {{- else if eq .Values.alloy.resourceType "statefulset" }}
-  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- if eq .Values.alloy.resourceType "statefulset" }}
   serviceName: {{ template "common.names.fullname" . }}
-  {{- else }}
+  {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- else if .Values.updateStrategy }}
+  {{- if eq .Values.alloy.resourceType "daemonset" }}
+  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  {{- else }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) }}
