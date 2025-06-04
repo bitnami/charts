@@ -58,6 +58,16 @@
           }
         },
         {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/kibana/cypress"
+            },
+            "endpoint": "lb-grafana-alloy-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
           "action_id": "kubescape",
           "params": {
             "threshold": {VIB_ENV_KUBESCAPE_SCORE_THRESHOLD}
