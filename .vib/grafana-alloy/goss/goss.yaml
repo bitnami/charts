@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://127.0.0.1:{{ .Vars.containerPorts.http }}-/healthy:
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/-/healthy:
     status: 200
     body:
       - /All Alloy components are healthy./
-  http://grafana-alloy:{{ .Vars.service.ports.http }}-/healthy:
+  http://grafana-alloy:{{ .Vars.service.ports.http }}/-/healthy:
     status: 200
     body:
       - /All Alloy components are healthy./

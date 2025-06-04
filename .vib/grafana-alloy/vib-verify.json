@@ -46,10 +46,8 @@
             "resources": {
               "path": "/.vib"
             },
-            "wait": {
-              "file": "grafana-alloy/goss/goss-wait.yaml"
-            },
             "tests_file": "grafana-alloy/goss/goss.yaml",
+            "vars_file": "grafana-alloy/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "ds-grafana-alloy"
