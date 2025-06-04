@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.12 (2025-06-03)
+## 9.0.12 (2025-06-04)
 
 * [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#34053](https://github.com/bitnami/charts/pull/34053))
 
