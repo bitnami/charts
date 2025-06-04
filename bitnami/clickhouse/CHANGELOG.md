@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.2.6 (2025-05-30)
+## 9.3.0 (2025-06-04)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34001](https://github.com/bitnami/charts/pull/34001))
+* [bitnami/clickhouse] Add persistence.volumeName ([#33991](https://github.com/bitnami/charts/pull/33991))
+
+## <small>9.2.7 (2025-06-03)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34067) ([c77cc95](https://github.com/bitnami/charts/commit/c77cc95447711fb5af803c033cd67424fc23a5fc)), closes [#34067](https://github.com/bitnami/charts/issues/34067)
+
+## <small>9.2.6 (2025-05-30)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34001) ([83007bd](https://github.com/bitnami/charts/commit/83007bd27de053be5ed3e8fb99481ceb064cd27a)), closes [#34001](https://github.com/bitnami/charts/issues/34001)
 
 ## <small>9.2.5 (2025-05-29)</small>
 

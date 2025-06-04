@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.0.7 (2025-05-16)
+## 17.0.0 (2025-06-04)
 
-* [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
+* [bitnami/thanos] feat: major version due to Minio major bump ([#34091](https://github.com/bitnami/charts/pull/34091))
+
+## <small>16.0.7 (2025-05-16)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/thanos] Allow custom objstore secret key in receive component (#33180) ([9a93d4f](https://github.com/bitnami/charts/commit/9a93d4ff1261a9a49cb94c69fd9597ba57668c58)), closes [#33180](https://github.com/bitnami/charts/issues/33180)
 
 ## <small>16.0.6 (2025-05-07)</small>
 

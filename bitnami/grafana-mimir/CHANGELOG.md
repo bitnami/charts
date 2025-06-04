@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.7 (2025-05-30)
+## 3.0.0 (2025-06-04)
 
-* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#33997](https://github.com/bitnami/charts/pull/33997))
+* [bitnami/grafana-mimir] feat: major version due to Minio major bump ([#34087](https://github.com/bitnami/charts/pull/34087))
+
+## <small>2.0.7 (2025-05-30)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#33997) ([dcc9889](https://github.com/bitnami/charts/commit/dcc98897c81cd170887867554a89ba4187f39791)), closes [#33997](https://github.com/bitnami/charts/issues/33997)
 
 ## <small>2.0.6 (2025-05-29)</small>
 

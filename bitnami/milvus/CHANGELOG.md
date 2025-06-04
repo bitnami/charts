@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.2 (2025-06-04)
+## 15.0.1 (2025-06-04)
 
 * [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34068](https://github.com/bitnami/charts/pull/34068))
+
+## 15.0.0 (2025-06-04)
+
+* [bitnami/milvus] feat: major version due to Minio major bump ([#34089](https://github.com/bitnami/charts/pull/34089))
 
 ## <small>14.0.1 (2025-05-30)</small>
 
