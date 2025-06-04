@@ -294,6 +294,6 @@ spec:
         {{- end }}
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.alloy.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

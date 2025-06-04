@@ -211,6 +211,9 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param extraVolumes Optionally specify extra list of additional volumes for the Grafana Alloy pods
+##
+extraVolumes: []
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
@@ -449,9 +452,6 @@ alloy:
   ## @param alloy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Grafana Alloy containers
   ##
   extraEnvVarsSecret: ""
-  ## @param alloy.extraVolumes Optionally specify extra list of additional volumes for the Grafana Alloy pods
-  ##
-  extraVolumes: []
   ## @param alloy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Grafana Alloy containers
   ##
   extraVolumeMounts: []
@@ -604,9 +604,6 @@ configReloader:
   ## @param configReloader.extraEnvVarsSecret Name of existing Secret containing extra env vars for ConfigMap Reload containers
   ##
   extraEnvVarsSecret: ""
-  ## @param configReloader.extraVolumes Optionally specify extra list of additional volumes for the extraEnvVarsSecret pods
-  ##
-  extraVolumes: []
   ## @param configReloader.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ConfigMap Reload containers
   ##
   extraVolumeMounts: []
