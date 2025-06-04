@@ -66,7 +66,7 @@ In order to replicate the container startup scripts execute this command:
 {{- end }}
 
 {{- include "grafana-alloy.validateValues" . }}
-{{- include "common.warnings.rollingTag" .Values.alloy.image .Values.configReloader.image }}
-{{- include "common.warnings.resources" (dict "sections" (list "alloy" "promtail" ) "context" $) }}
+{{- include "grafana-alloy.checkRollingTags" . -}}
+{{- include "common.warnings.resources" (dict "sections" (list "alloy" "configReloader" ) "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.alloy.image .Values.configReloader.image ) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.alloy.image .Values.configReloader.image ) "context" $) }}

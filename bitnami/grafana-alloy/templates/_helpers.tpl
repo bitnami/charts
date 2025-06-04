@@ -67,3 +67,11 @@ Compile all warnings into a single message.
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Check if there are rolling tags in the images
+*/}}
+{{- define "grafana-alloy.checkRollingTags" -}}
+{{- include "common.warnings.rollingTag" .Values.alloy.image }}
+{{- include "common.warnings.rollingTag" .Values.configReloader.image }}
+{{- end -}}
