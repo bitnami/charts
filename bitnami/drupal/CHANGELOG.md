@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.8 (2025-05-08)
+## 21.2.9 (2025-06-05)
 
-* [bitnami/drupal] Release 21.2.8 ([#33551](https://github.com/bitnami/charts/pull/33551))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34134](https://github.com/bitnami/charts/pull/34134))
+
+## <small>21.2.8 (2025-05-08)</small>
+
+* [bitnami/drupal] Release 21.2.8 (#33551) ([29bfd06](https://github.com/bitnami/charts/commit/29bfd06799a4a11c5b0b65614400042a9cf35f34)), closes [#33551](https://github.com/bitnami/charts/issues/33551)
 
 ## <small>21.2.7 (2025-05-06)</small>
 
