@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.pdb.create (not (eq .Values.alloy.resourceType "daemonset")) }}
+{{- if and .Values.pdb.create (not (eq .Values.resourceType "daemonset")) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

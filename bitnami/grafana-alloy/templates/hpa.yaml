@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.autoscaling.hpa.enabled (not (eq .Values.alloy.resourceType "daemonset")) }}
+{{- if and .Values.autoscaling.hpa.enabled (not (eq .Values.resourceType "daemonset")) }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -17,7 +17,7 @@ metadata:
   {{- end }}
 spec:
   scaleTargetRef:
-    {{- if eq .Values.alloy.resourceType "deployment" }}
+    {{- if eq .Values.resourceType "deployment" }}
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     {{- else }}

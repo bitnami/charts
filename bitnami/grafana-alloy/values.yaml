@@ -39,7 +39,13 @@ global:
 
 ## @section Common parameters
 ##
-
+## @param resourceType Type of controller to use for deploying Grafana Alloy in the cluster.
+## Must be one of 'daemonset', 'deployment', or 'statefulset'.
+##
+resourceType: 'daemonset'
+## @param replicaCount Number of pods to deploy. Ignored when resourceType is 'daemonset'.
+##
+replicaCount: 1
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -78,7 +84,6 @@ diagnosticMode:
     - sleep
   args:
     - infinity
-
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -317,14 +322,6 @@ alloy:
   ## @param alloy.extraConfig Append extra configuration to the default config file
   ##
   extraConfig: ""
-  ## @param alloy.resourceType Type of controller to use for deploying Grafana Alloy in the cluster.
-  ## Must be one of 'daemonset', 'deployment', or 'statefulset'.
-  ##
-  resourceType: 'daemonset'
-
-  ## @param alloy.replicaCount Number of pods to deploy. Ignored when alloy.resourceType is 'daemonset'.
-  ##
-  replicaCount: 1
   ## @param alloy.clustering.enabled Deploy Grafana Alloy in a cluster to allow for load distribution.
   ## @param alloy.clustering.name Name for the Grafana Alloy cluster. Used for differentiating between clusters.
   ## @param alloy.clustering.portName Name for the port used for clustering, useful if running inside an Istio Mesh
