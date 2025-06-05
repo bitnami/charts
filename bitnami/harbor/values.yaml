@@ -2495,6 +2495,16 @@ registry:
       ## that allows access to CloudFront
       ##
       privateKeySecret: my-secret
+  ## @param registry.uploadPurging.enabled Enable purging _upload directories
+  ## @param registry.uploadPurging.age Period of time to wait before removing files in _upload directories
+  ## @param registry.uploadPurging.interval Interval for purging operations
+  ## @param registry.uploadPurging.dryrun If true, the purge operation will not actually delete files, but will log what would be deleted
+  ##
+  uploadPurging:
+    enabled: true
+    age: 168h
+    interval: 24h
+    dryrun: false
   ## Use TLS in the container
   ##
   tls:
