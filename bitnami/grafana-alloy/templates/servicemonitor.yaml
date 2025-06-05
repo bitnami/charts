@@ -21,6 +21,8 @@ spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: alloy
+      app.kubernetes.io/part-of: alloy
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
