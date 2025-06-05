@@ -9,7 +9,7 @@ annotations:
     - name: cainjector
       image: docker.io/bitnami/cainjector:1.17.2-debian-12-r5
     - name: cert-manager
-      image: docker.io/bitnami/cert-manager:1.17.2-debian-12-r3
+      image: docker.io/bitnami/cert-manager:1.17.2-debian-12-r4
     - name: cert-manager-webhook
       image: docker.io/bitnami/cert-manager-webhook:1.17.2-debian-12-r4
   licenses: Apache-2.0
