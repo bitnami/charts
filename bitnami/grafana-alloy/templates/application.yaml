@@ -19,7 +19,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: alloy
     app.kubernetes.io/part-of: grafana-alloy
-  {{- if or .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- if or .Values.controllerAnnotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}

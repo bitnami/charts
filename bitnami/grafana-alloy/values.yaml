@@ -103,18 +103,10 @@ podSecurityContext:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param daemonsetAnnotations Annotations for Grafana Alloy daemonset
+## @param controllerAnnotations Annotations for Grafana Alloy controller
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
-daemonsetAnnotations: {}
-## @param deploymentAnnotations Annotations for Grafana Alloy deployment
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-deploymentAnnotations: {}
-## @param statefulsetAnnotations Annotations for Grafana Alloy statefulset
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-statefulsetAnnotations: {}
+controllerAnnotations: {}
 ## @param podLabels Extra labels for Grafana Alloy pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
