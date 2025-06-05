@@ -1,8 +1,13 @@
 # Changelog
 
+## 13.0.1 (2025-06-05)
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#34126](https://github.com/bitnami/charts/pull/34126))
+
 ## 13.0.0 (2025-06-04)
 
-* [bitnami/mastodon] feat: major version due to Minio major bump ([#34088](https://github.com/bitnami/charts/pull/34088))
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mastodon] feat: major version due to Minio major bump (#34088) ([0ee5707](https://github.com/bitnami/charts/commit/0ee57073d3245196ded9b8225b932e91ba4338c1)), closes [#34088](https://github.com/bitnami/charts/issues/34088)
 
 ## 12.0.0 (2025-05-07)
 
