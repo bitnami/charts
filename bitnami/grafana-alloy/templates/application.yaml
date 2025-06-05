@@ -115,7 +115,7 @@ spec:
           args:
             - run
             - /opt/bitnami/grafana-alloy/config/config.alloy
-            - --storage.path=/tmp/alloy
+            - --storage.path={{ .Values.alloy.storagePath }}
             - --server.http.listen-addr={{ .Values.alloy.listenAddr }}:{{ .Values.alloy.containerPorts.http }}
             - --server.http.ui-path-prefix={{ .Values.alloy.uiPathPrefix }}
             {{- if not .Values.alloy.enableReporting }}
@@ -222,8 +222,7 @@ spec:
               readOnly: true
             {{- end }}
             - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
+              mountPath: {{ .Values.alloy.storagePath }}
             {{- if .Values.alloy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}

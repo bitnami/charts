@@ -333,6 +333,9 @@ alloy:
   ## @param alloy.uiPathPrefix Base path where the UI is exposed.
   uiPathPrefix: /
 
+  ## @param alloy.storagePath Path to where Grafana Alloy stores data (for example, the Write-Ahead Log).
+  storagePath: /tmp/alloy
+
   ## @param alloy.enableReporting Enables sending Grafana Labs anonymous usage stats to help improve Grafana Alloy.
   enableReporting: true
 

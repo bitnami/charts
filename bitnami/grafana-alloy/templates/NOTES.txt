@@ -22,7 +22,7 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute this command:
 
-  /opt/bitnami/grafana-alloy/bin/alloy run /opt/bitnami/grafana-alloy/config/config.alloy --storage.path=/tmp/alloy
+  /opt/bitnami/grafana-alloy/bin/alloy run /opt/bitnami/grafana-alloy/config/config.alloy --storage.path={{ .Values.alloy.storagePath }}
 
 {{- else }}
 
