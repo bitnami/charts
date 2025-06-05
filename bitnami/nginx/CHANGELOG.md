@@ -2,7 +2,7 @@
 
 ## 20.1.5 (2025-06-05)
 
-* Nginx sm tls ([#34109](https://github.com/bitnami/charts/pull/34109))
+* [bitnami/nginx] Service Monitor support tlsConfig ([#34109](https://github.com/bitnami/charts/pull/34109))
 
 ## <small>20.0.5 (2025-05-30)</small>
 
