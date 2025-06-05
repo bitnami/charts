@@ -7,7 +7,7 @@ annotations:
     - name: chainloop-artifact-cas
       image: docker.io/bitnami/chainloop-artifact-cas:1.4.5-debian-12-r2
     - name: chainloop-control-plane
-      image: docker.io/bitnami/chainloop-control-plane:1.4.5-debian-12-r1
+      image: docker.io/bitnami/chainloop-control-plane:1.4.5-debian-12-r2
     - name: chainloop-control-plane-migrations
       image: docker.io/bitnami/chainloop-control-plane-migrations:1.4.5-debian-12-r0
     - name: dex
