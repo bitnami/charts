@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.17 (2025-06-04)
+## 16.5.18 (2025-06-05)
 
-* [bitnami/mongodb] generate-tls-certs init container should respect tls securityContext ([#33803](https://github.com/bitnami/charts/pull/33803))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34116](https://github.com/bitnami/charts/pull/34116))
+
+## <small>16.5.17 (2025-06-05)</small>
+
+* [bitnami/mongodb] generate-tls-certs init container should respect tls securityContext (#33803) ([e6d06e9](https://github.com/bitnami/charts/commit/e6d06e9bddcbdcf71dc3d35de44abed2276250a1)), closes [#33803](https://github.com/bitnami/charts/issues/33803)
 
 ## <small>16.5.16 (2025-06-03)</small>
 
