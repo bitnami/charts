@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.13 (2025-05-07)
+## 2.2.14 (2025-06-05)
 
-* [bitnami/multus-cni] Release 2.2.13 ([#33483](https://github.com/bitnami/charts/pull/33483))
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34117](https://github.com/bitnami/charts/pull/34117))
+
+## <small>2.2.13 (2025-05-07)</small>
+
+* [bitnami/multus-cni] Release 2.2.13 (#33483) ([573a103](https://github.com/bitnami/charts/commit/573a1030c5b1b31c9226c5f66822805a309294d9)), closes [#33483](https://github.com/bitnami/charts/issues/33483)
 
 ## <small>2.2.12 (2025-05-06)</small>
 
