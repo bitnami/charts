@@ -1,12 +1,8 @@
 # Changelog
 
-## 11.1.18 (2025-06-05)
+## 11.1.17 (2025-05-31)
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#34129](https://github.com/bitnami/charts/pull/34129))
-
-## <small>11.1.17 (2025-05-31)</small>
-
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#34021) ([0a547b7](https://github.com/bitnami/charts/commit/0a547b76b48d836e5ca1890afd16cfd3e62d66f0)), closes [#34021](https://github.com/bitnami/charts/issues/34021)
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#34021](https://github.com/bitnami/charts/pull/34021))
 
 ## <small>11.1.16 (2025-05-30)</small>
 
