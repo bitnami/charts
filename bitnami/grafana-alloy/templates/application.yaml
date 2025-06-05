@@ -170,7 +170,7 @@ spec:
           {{- else if .Values.alloy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /metrics
+              path: /-/healthy
               port: http
             initialDelaySeconds: {{ .Values.alloy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.alloy.livenessProbe.periodSeconds }}
@@ -183,7 +183,7 @@ spec:
           {{- else if .Values.alloy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /-/healthy
+              path: /-/ready
               port: http
             initialDelaySeconds: {{ .Values.alloy.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.alloy.readinessProbe.periodSeconds }}
@@ -196,7 +196,7 @@ spec:
           {{- else if .Values.alloy.startupProbe.enabled }}
           startupProbe:
             httpGet:
-              path: /-/healthy
+              path: /-/ready
               port: http
             initialDelaySeconds: {{ .Values.alloy.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.alloy.startupProbe.periodSeconds }}
@@ -272,18 +272,39 @@ spec:
           {{- if .Values.configReloader.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configReloader.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- end }}
+          livenessProbe:
+            command:
+              - pgrep
+              - "configmap"
+            initialDelaySeconds: {{ .Values.configreloader.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configreloader.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configreloader.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configreloader.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configreloader.livenessProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configReloader.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- end }}
+          readinessProbe:
+            command:
+              - pgrep
+              - "configmap"
+            initialDelaySeconds: {{ .Values.configreloader.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configreloader.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configreloader.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configreloader.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configreloader.readinessProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configReloader.startupProbe "enabled") "context" $) | nindent 12 }}
-          {{- end }}
+          startupProbe:
+            command:
+              - pgrep
+              - "configmap"
+            initialDelaySeconds: {{ .Values.configreloader.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configreloader.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configreloader.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configreloader.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.configreloader.startupProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
