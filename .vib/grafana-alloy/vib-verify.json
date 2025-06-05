@@ -50,7 +50,7 @@
             "vars_file": "grafana-alloy/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "ds-grafana-alloy"
+                "workload": "deploy-grafana-alloy"
               }
             }
           }
