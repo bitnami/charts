@@ -18,7 +18,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: alloy
-    app.kubernetes.io/part-of: alloy
+    app.kubernetes.io/part-of: grafana-alloy
   {{- if or .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
@@ -46,7 +46,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: alloy
-      app.kubernetes.io/part-of: alloy
+      app.kubernetes.io/part-of: grafana-alloy
   template:
     metadata:
       {{- if .Values.podAnnotations }}
@@ -54,7 +54,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: alloy
-        app.kubernetes.io/part-of: alloy
+        app.kubernetes.io/part-of: grafana-alloy
     spec:
       {{- include "grafana-alloy.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "grafana-alloy.serviceAccountName" . }}
