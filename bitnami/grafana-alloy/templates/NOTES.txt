@@ -22,24 +22,7 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute this command:
 
-            /opt/bitnami/grafana-alloy/bin/alloy run \
-            /opt/bitnami/grafana-alloy/config/config.alloy \
-            --storage.path=/tmp/alloy \
-            --server.http.listen-addr={{ .Values.alloy.listenAddr }}:{{ .Values.alloy.containerPorts.http }} \
-            --server.http.ui-path-prefix={{ .Values.alloy.uiPathPrefix }} \
-            {{- if not .Values.alloy.enableReporting }}
-            - --disable-reporting \
-            {{- end }}
-            {{- if .Values.alloy.clustering.enabled }}
-            --cluster.enabled=true \
-            --cluster.join-addresses={{ template "common.names.fullname" . }}-cluster \
-            {{- if .Values.alloy.clustering.name }}
-            --cluster.name={{ .Values.alloy.clustering.name }} \
-            {{- end }}
-            {{- end }}
-            {{- if .Values.alloy.stabilityLevel }}
-            --stability.level={{ .Values.alloy.stabilityLevel }}
-            {{- end }}
+  /opt/bitnami/grafana-alloy/bin/alloy run /opt/bitnami/grafana-alloy/config/config.alloy --storage.path=/tmp/alloy
 
 {{- else }}
 
