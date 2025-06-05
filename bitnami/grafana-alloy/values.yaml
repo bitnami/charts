@@ -348,8 +348,22 @@ alloy:
   mounts:
     varlog: false
     dockercontainers: false
-  ## Configure extra options for Grafana Alloy containers' liveness and readiness probes
+  ## Configure extra options for Grafana Alloy containers' startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param alloy.startupProbe.enabled Enable startupProbe on Grafana Alloy containers
+  ## @param alloy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param alloy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param alloy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param alloy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param alloy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 2
+    failureThreshold: 3
+    successThreshold: 1
   ## @param alloy.livenessProbe.enabled Enable livenessProbe on Grafana Alloy containers
   ## @param alloy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param alloy.livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -493,8 +507,22 @@ configReloader:
   ##
   existingConfigmap: ""
 
-  ## Configure extra options for ConfigMap Reload containers' liveness and readiness probes
+  ## Configure extra options for ConfigMap Reload containers' startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param configReloader.startupProbe.enabled Enable startupProbe on ConfigMap Reload containers
+  ## @param configReloader.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param configReloader.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param configReloader.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param configReloader.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param configReloader.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 2
+    failureThreshold: 3
+    successThreshold: 1
   ## @param configReloader.livenessProbe.enabled Enable livenessProbe on ConfigMap Reload containers
   ## @param configReloader.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param configReloader.livenessProbe.periodSeconds Period seconds for livenessProbe

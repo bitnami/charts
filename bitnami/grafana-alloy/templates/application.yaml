@@ -191,6 +191,19 @@ spec:
             successThreshold: {{ .Values.alloy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.alloy.readinessProbe.failureThreshold }}
           {{- end }}
+          {{- if .Values.alloy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.alloy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.alloy.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /-/healthy
+              port: http
+            initialDelaySeconds: {{ .Values.alloy.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.alloy.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.alloy.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.alloy.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.alloy.startupProbe.failureThreshold }}
+          {{- end }}
           {{- if .Values.alloy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.alloy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
@@ -265,6 +278,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configReloader.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.configReloader.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.configReloader.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.configReloader.startupProbe "enabled") "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.configReloader.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.lifecycleHooks "context" $) | nindent 12 }}
