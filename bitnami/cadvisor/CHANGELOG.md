@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.5 (2025-06-05)
+## 0.1.6 (2025-06-05)
 
-* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#34118](https://github.com/bitnami/charts/pull/34118))
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#34140](https://github.com/bitnami/charts/pull/34140))
+
+## <small>0.1.5 (2025-06-05)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34118) ([a77119e](https://github.com/bitnami/charts/commit/a77119e027f6bbe59e9e6e6f32741cd27cf710eb)), closes [#34118](https://github.com/bitnami/charts/issues/34118)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.4 (2025-05-07)</small>
 
