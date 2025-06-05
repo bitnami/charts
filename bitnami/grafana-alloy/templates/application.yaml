@@ -223,6 +223,10 @@ spec:
             {{- end }}
             - name: empty-dir
               mountPath: {{ .Values.alloy.storagePath }}
+              subPath: app-storage-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.alloy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
