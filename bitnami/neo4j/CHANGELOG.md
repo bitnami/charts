@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.4.4 (2025-05-27)
+## 0.4.5 (2025-05-29)
 
-* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#33922](https://github.com/bitnami/charts/pull/33922))
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#33924](https://github.com/bitnami/charts/pull/33924))
+
+## <small>0.4.4 (2025-05-27)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#33922) ([b741265](https://github.com/bitnami/charts/commit/b741265a44b0901a830038e145937f1814110076)), closes [#33922](https://github.com/bitnami/charts/issues/33922)
 
 ## <small>0.4.3 (2025-05-06)</small>
 

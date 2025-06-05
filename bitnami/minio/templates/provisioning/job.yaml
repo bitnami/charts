@@ -11,13 +11,14 @@ kind: Job
 metadata:
   name: {{ $fullname }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: minio-provisioning
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: provisioning
+    app.kubernetes.io/part-of: minio
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
     {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
     {{- end }}
 spec:
   {{- if .Values.provisioning.cleanupAfterFinished.enabled }}
@@ -27,9 +28,10 @@ spec:
   template:
     metadata:
       labels: {{- include "minio.labels.provisioning" . | nindent 8 }}
-        app.kubernetes.io/component: minio-provisioning
+        app.kubernetes.io/component: provisioning
+        app.kubernetes.io/part-of: minio
       {{- if .Values.provisioning.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" .) | nindent 8 }}
       {{- end }}
     spec:
       {{- include "minio.imagePullSecrets" . | nindent 6 }}
@@ -39,15 +41,15 @@ spec:
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
       {{- if .Values.provisioning.podSecurityContext.enabled }}
-      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" $) | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "minio.serviceAccountName" . }}
       initContainers:
         - name: wait-for-available-minio
           image: {{ include "minio.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.defaultInitContainers.volumePermissions.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -71,10 +73,10 @@ spec:
           image: {{ include "minio.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           {{- if .Values.provisioning.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" $) | nindent 12 }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.command "context" .) | nindent 12 }}
           {{- else }}
           command:
             - /bin/bash
@@ -251,7 +253,7 @@ spec:
               echo "End Minio provisioning";
           {{- end }}
           {{- if .Values.provisioning.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" $) | nindent 12 }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.args "context" .) | nindent 12 }}
           {{- end }}
           env:
             - name: MINIO_SCHEME
@@ -280,11 +282,11 @@ spec:
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" .) }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" .) }}
             {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
@@ -310,23 +312,25 @@ spec:
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: minio-certs
-              mountPath: {{ default "/certs" .Values.tls.mountPath }}
+            - name: tls-certs
+              mountPath: /certs
+              readOnly: true
             - name: minio-client-certs
               mountPath: /.mc/certs
+              readOnly: true
             {{- end }}
             {{- range $idx, $_ := .Values.provisioning.usersExistingSecrets }}
             - name: {{ printf "users-secret-%d" $idx }}
               mountPath: /opt/bitnami/minio/users/{{ $idx }}/
             {{- end }}
             {{- if .Values.provisioning.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" .) | nindent 12 }}
             {{- end }}
       {{- if .Values.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.provisioning.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" .) | nindent 8 }}
       {{- end }}
       volumes:
         - name: empty-dir
@@ -347,24 +351,29 @@ spec:
             secretName: {{ $userSecret }}
         {{- end }}
         {{- if .Values.tls.enabled }}
-        - name: minio-certs
-          secret:
-            secretName: {{ include "minio.tlsSecretName" . }}
-            items:
-            - key: tls.crt
-              path: public.crt
-            - key: tls.key
-              path: private.key
-            - key: ca.crt
-              path: CAs/public.crt
+        - name: tls-certs
+          projected:
+            sources:
+              - secret:
+                  name: {{ template "minio.tls.ca.secretName" . }}
+                  items:
+                    - key: tls.crt
+                      path: CAs/public.crt
+              - secret:
+                  name: {{ template "minio.tls.server.secretName" . }}
+                  items:
+                    - key: tls.crt
+                      path: public.crt
+                    - key: tls.key
+                      path: private.key
         - name: minio-client-certs
           secret:
-            secretName: {{ include "minio.tlsSecretName" . }}
+            secretName: {{ template "minio.tls.ca.secretName" . }}
             items:
-              - key: ca.crt
+              - key: tls.crt
                 path: CAs/public.crt
         {{- end }}
         {{- if .Values.provisioning.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" .) | nindent 8 }}
         {{- end }}
 {{- end }}

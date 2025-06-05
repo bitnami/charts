@@ -82,6 +82,12 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
         storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopychunksize }}
+        multipartcopychunksize: {{ .Values.persistence.imageChartStorage.s3.multipartcopychunksize }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopymaxconcurrency }}
+        multipartcopymaxconcurrency: {{ .Values.persistence.imageChartStorage.s3.multipartcopymaxconcurrency }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
         multipartcopythresholdsize: {{ .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
         {{- end }}

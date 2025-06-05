@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.14 (2025-05-23)
+## 2.3.15 (2025-06-03)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#33851](https://github.com/bitnami/charts/pull/33851))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34048](https://github.com/bitnami/charts/pull/34048))
+
+## <small>2.3.14 (2025-05-23)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#33851) ([33bb0fb](https://github.com/bitnami/charts/commit/33bb0fbb4dd324dca5764308208d2a46a8af5e11)), closes [#33851](https://github.com/bitnami/charts/issues/33851)
 
 ## <small>2.3.13 (2025-05-19)</small>
 

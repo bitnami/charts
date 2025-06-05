@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.7 (2025-05-22)
+## 1.0.0 (2025-06-02)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#33845](https://github.com/bitnami/charts/pull/33845))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#34045](https://github.com/bitnami/charts/pull/34045))
+
+## <small>0.1.7 (2025-05-22)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#33845) ([8147b2a](https://github.com/bitnami/charts/commit/8147b2ace9eae464b8199b94526e8e005ec37a2f)), closes [#33845](https://github.com/bitnami/charts/issues/33845)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.6 (2025-05-07)</small>
 

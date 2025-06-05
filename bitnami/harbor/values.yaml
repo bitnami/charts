@@ -141,6 +141,20 @@ ipFamily:
   ##
   ipv4:
     enabled: true
+## Cache layer configurations
+## @param cache.enabled Enable caching manifests in Redis for better performance on high concurrent pulling
+## @param cache.expireHours The time (in hours) to keep the cache
+##
+cache:
+  enabled: false
+  expireHours: 24
+## Database common configuration
+## @param database.maxIdleConns The maximum number of connections in the idle connection pool per component
+## @param database.maxOpenConns The maximum number of open connections to the database per component
+##
+database:
+  maxIdleConns: 100
+  maxOpenConns: 900
 
 ## @section Traffic Exposure Parameters
 
@@ -451,6 +465,8 @@ persistence:
     ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
     ## @param persistence.imageChartStorage.s3.storageClass S3 storage type setting: Storage class
     ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
+    ## @param persistence.imageChartStorage.s3.multipartcopychunksize S3 storage type setting: Chunk size for multipart copy
+    ## @param persistence.imageChartStorage.s3.multipartcopymaxconcurrency S3 storage type setting: Maximum concurrency for multipart copy
     ## @param persistence.imageChartStorage.s3.multipartcopythresholdsize S3 storage type setting: Threshold size for multipart copy
     ##
     s3:
@@ -468,6 +484,8 @@ persistence:
       rootdirectory: ""
       storageClass: ""
       sse: ""
+      multipartcopychunksize: ""
+      multipartcopymaxconcurrency: ""
       multipartcopythresholdsize: ""
     ## Images/charts storage parameters when type is "swift"
     ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
@@ -853,7 +871,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.28.0-debian-12-r1
+    tag: 1.28.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1614,9 +1632,21 @@ core:
     ## Enable debug mode
     ##
     debug: false
-  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default.
+  ## @param core.quotaUpdateProvider Provider for updating project quota (usage). Allowed values: `db`, `redis`
+  ##
+  quotaUpdateProvider: db
+  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default
   ##
   sessionLifetime: ""
+  ## @param core.artifactPullAsyncFlushDuration Time (in seconds) for async update artifact pull_time and repository pull_count
+  ##
+  artifactPullAsyncFlushDuration: 10
+  ## @param core.gdpr.deleteUser Enable/disable GDPR user deletion
+  ## @param core.gdpr.auditLogsCompliant Enable/disable GDPR audit logs compliance
+  ##
+  gdpr:
+    deleteUser: false
+    auditLogsCompliant: false
   ## @param core.uaaSecret If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecret: ""
@@ -2045,6 +2075,18 @@ jobservice:
   ## @param jobservice.jobLogger The logger for jobs: `file`, `database` or `stdout`
   ##
   jobLogger: file
+  ## @param jobservice.notification.webhookJobMaxRetry Maximum number of retries for webhook jobs
+  ## @param jobservice.notification.webhookJobHttpClientTimeout HTTP client timeout for webhook jobs (in seconds)
+  ##
+  notification:
+    webhookJobMaxRetry: 3
+    webhookJobHttpClientTimeout: 3
+  ## @param jobservice.reaper.maxUpdateHours Max time (in hours) to wait for a task to finish
+  ## @param jobservice.reaper.maxDanglingHours Max time (in hours) for execution in running state without new task created
+  ##
+  reaper:
+    maxUpdateHours: 24
+    maxDanglingHours: 168
   ## @param jobservice.secret Secret used for job service communicates with other components. Must be a string of 16 chars.
   ## @param jobservice.existingSecret Existing secret for jobservice (expected key: `secret`)
   ##
@@ -3458,6 +3500,12 @@ exporter:
     ## Enable debug mode
     ##
     debug: false
+  ## @param exporter.cacheDuration Time (in seconds) collected values are cached for
+  ##
+  cacheDuration: 20
+  ## @param exporter.cacheCleanInterval Time (in seconds) after which the cache is cleaned
+  ##
+  cacheCleanInterval: 14400
   ## @param exporter.command Override default container command (useful when using custom images)
   ##
   command: []

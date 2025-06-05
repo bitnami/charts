@@ -219,7 +219,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: data
+            - name: {{ $.Values.persistence.volumeName }}
               mountPath: {{ $.Values.persistence.mountPath }}
           {{- if or $.Values.configuration $.Values.existingConfigmap }}
             - name: configuration
@@ -325,10 +325,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" $.Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- if not $.Values.persistence.enabled }}
-        - name: data
+        - name: {{ $.Values.persistence.volumeName }}
           emptyDir: {}
 {{- else if $.Values.persistence.existingClaim }}
-        - name: data
+        - name: {{ $.Values.persistence.volumeName }}
           persistentVolumeClaim:
             claimName: {{ tpl $.Values.persistence.existingClaim $ }}
 {{- else }}
@@ -341,7 +341,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: data
+        name: {{ $.Values.persistence.volumeName }}
         {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}

@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.1.0 (2025-05-23)
+## 2.1.2 (2025-05-31)
 
-* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new values ([#33777](https://github.com/bitnami/charts/pull/33777))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34020](https://github.com/bitnami/charts/pull/34020))
 
 ## <small>2.0.8 (2025-05-19)</small>
 

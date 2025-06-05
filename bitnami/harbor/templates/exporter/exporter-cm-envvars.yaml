@@ -24,6 +24,8 @@ data:
   HARBOR_METRIC_NAMESPACE: harbor
   HARBOR_METRIC_SUBSYSTEM: exporter
   {{- end }}
+  HARBOR_EXPORTER_CACHE_TIME: {{ .Values.exporter.cacheDuration | quote }}
+  HARBOR_EXPORTER_CACHE_CLEAN_INTERVAL: {{ .Values.exporter.cacheCleanInterval | quote }}
   HARBOR_REDIS_NAMESPACE: {{ .Values.jobservice.redisNamespace | quote }}
   HARBOR_SERVICE_SCHEME: {{ ternary "https" "http" .Values.internalTLS.enabled | quote }}
   HARBOR_SERVICE_HOST: {{ include "harbor.core" . | quote }}
@@ -33,4 +35,6 @@ data:
   HARBOR_DATABASE_USERNAME: {{ include "harbor.database.username" . | quote }}
   HARBOR_DATABASE_DBNAME: {{ include "harbor.database.coreDatabase" . | quote }}
   HARBOR_DATABASE_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
+  HARBOR_DATABASE_MAX_IDLE_CONNS: {{ .Values.database.maxIdleConns | quote }}
+  HARBOR_DATABASE_MAX_OPEN_CONNS: {{ .Values.database.maxOpenConns | quote }}
 {{- end }}

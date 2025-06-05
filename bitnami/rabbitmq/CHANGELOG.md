@@ -1,8 +1,19 @@
 # Changelog
 
-## 16.0.3 (2025-05-23)
+## 16.0.5 (2025-06-02)
 
-* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#33860](https://github.com/bitnami/charts/pull/33860))
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#34031](https://github.com/bitnami/charts/pull/34031))
+
+## <small>16.0.4 (2025-05-30)</small>
+
+* [bitnami/rabbitmq] Update dependencies (#33985) ([f882b31](https://github.com/bitnami/charts/commit/f882b31ca02acff4767a3ee142edce535057d90c)), closes [#33985](https://github.com/bitnami/charts/issues/33985)
+
+## <small>16.0.3 (2025-05-23)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#33860) ([fd7de7d](https://github.com/bitnami/charts/commit/fd7de7d00b67501ed1a50d8abf1b725c234cbd59)), closes [#33860](https://github.com/bitnami/charts/issues/33860)
 
 ## <small>16.0.2 (2025-05-06)</small>
 

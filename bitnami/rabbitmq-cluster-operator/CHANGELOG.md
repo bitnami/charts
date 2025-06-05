@@ -1,8 +1,32 @@
 # Changelog
 
-## 4.4.11 (2025-05-13)
+## 4.4.17 (2025-06-03)
 
-* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#33644](https://github.com/bitnami/charts/pull/33644))
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#34063](https://github.com/bitnami/charts/pull/34063))
+
+## <small>4.4.16 (2025-06-03)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34054) ([7fbe110](https://github.com/bitnami/charts/commit/7fbe11075e5fd19d7700395574548e3ffd602794)), closes [#34054](https://github.com/bitnami/charts/issues/34054)
+
+## <small>4.4.15 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34044) ([57279bb](https://github.com/bitnami/charts/commit/57279bb84c674ba38abf302c0d2863bae168207f)), closes [#34044](https://github.com/bitnami/charts/issues/34044)
+
+## <small>4.4.14 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34039) ([747b183](https://github.com/bitnami/charts/commit/747b18376f857891c9c2d1ad73460a851d858253)), closes [#34039](https://github.com/bitnami/charts/issues/34039)
+
+## <small>4.4.13 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34036) ([55d3b67](https://github.com/bitnami/charts/commit/55d3b67c72cd6ccfee866631e98b1642e26f32f0)), closes [#34036](https://github.com/bitnami/charts/issues/34036)
+
+## <small>4.4.12 (2025-06-02)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#34030) ([09387be](https://github.com/bitnami/charts/commit/09387be464f3a831e6d0e7f965496764bead0a16)), closes [#34030](https://github.com/bitnami/charts/issues/34030)
+
+## <small>4.4.11 (2025-05-13)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#33644) ([cb75447](https://github.com/bitnami/charts/commit/cb7544718c618ca1572c66d869387c1f7f7c02f8)), closes [#33644](https://github.com/bitnami/charts/issues/33644)
 
 ## <small>4.4.10 (2025-05-09)</small>
 

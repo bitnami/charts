@@ -1,0 +1,79 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.console.enabled .Values.console.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "minio.console.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.console.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: console
+    app.kubernetes.io/part-of: minio
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.console.podLabels .Values.commonLabels) "context" .) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 6 }}
+      app.kubernetes.io/component: console
+      app.kubernetes.io/part-of: minio
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.console.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+    # Allow outbound connections to Minio(R) pods
+    - ports:
+        - port: {{ .Values.containerPorts.api }}
+        - port: {{ .Values.service.ports.api }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 14 }}
+    {{- if .Values.console.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.console.networkPolicy.extraEgress "context" .) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    # Allow inbound connections
+    - ports:
+        - port: {{ .Values.console.containerPorts.http }}
+      {{- if not .Values.console.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 14 }}
+        {{- if .Values.console.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ include "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.console.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.console.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
+        {{- if .Values.console.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.console.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
+          {{- if .Values.console.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.console.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.console.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.console.networkPolicy.extraIngress "context" .) | nindent 4 }}
+    {{- end }}
+{{- end }}

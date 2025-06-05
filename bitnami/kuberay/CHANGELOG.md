@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.11 (2025-05-26)
+## 1.4.12 (2025-05-28)
 
-* [bitnami/kuberay] Release 1.4.11 ([#33481](https://github.com/bitnami/charts/pull/33481))
+* fix(kuberay): wrong indentation in nodeAffinity element ([#33929](https://github.com/bitnami/charts/pull/33929))
+
+## <small>1.4.11 (2025-05-26)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/kuberay] Release 1.4.11 (#33481) ([5b3a24b](https://github.com/bitnami/charts/commit/5b3a24bb0bb33c11f7839bb793bf8ea82129bc75)), closes [#33481](https://github.com/bitnami/charts/issues/33481)
 
 ## <small>1.4.10 (2025-05-06)</small>
 
