@@ -123,7 +123,7 @@ spec:
             {{- end }}
             {{- if .Values.alloy.clustering.enabled }}
             - --cluster.enabled=true
-            - --cluster.join-addresses={{ template "common.names.fullname" . }}-cluster
+            - --cluster.join-addresses={{ printf "%s-cluster" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             {{- if .Values.alloy.clustering.name }}
             - --cluster.name={{ .Values.alloy.clustering.name }}
             {{- end }}

@@ -28,7 +28,12 @@ it('lists all components in a healthy state', () => {
 it('clustering in a healthy state', () => {
   cy.visit('/clustering');
 
-  cy.get('span:not([class*="idName"])').each((span) => {
-    cy.wrap(span).should('include.text', '✅');
-  });
+  cy.get('tr')
+    .filter(':contains("grafana-alloy-")')
+    .then((rows) => {
+      expect(rows).to.have.length(Cypress.env('replicaCount'));
+      cy.wrap(rows).each((row) => {
+        expect(row).to.contain('participant');
+      });
+    });
 });

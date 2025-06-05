@@ -1,3 +1,5 @@
+resourceType: deployment
+replicaCount: 2
 alloy:
   clustering:
     enabled: true
