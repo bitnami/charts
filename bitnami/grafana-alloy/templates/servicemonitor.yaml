@@ -29,7 +29,6 @@ spec:
   endpoints:
     - port: http
       path: "/metrics"
-      scheme: {{ ternary "HTTPS" "HTTP" .Values.alloy.https.enabled }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
