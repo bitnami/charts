@@ -7,7 +7,7 @@ annotations:
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.33.1-debian-12-r3
     - name: mongodb
-      image: docker.io/bitnami/mongodb:8.0.10-debian-12-r0
+      image: docker.io/bitnami/mongodb:8.0.10-debian-12-r1
     - name: mongodb-exporter
       image: docker.io/bitnami/mongodb-exporter:0.45.0-debian-12-r1
     - name: nginx
@@ -42,4 +42,4 @@ maintainers:
 name: mongodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 16.5.17
+version: 16.5.18
