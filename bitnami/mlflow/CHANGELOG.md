@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.0.1 (2025-06-06)
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34161](https://github.com/bitnami/charts/pull/34161))
+
 ## 4.0.0 (2025-06-04)
 
-* [bitnami/mlflow] feat: major version due to Minio major bump ([#34090](https://github.com/bitnami/charts/pull/34090))
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mlflow] feat: major version due to Minio major bump (#34090) ([095fda8](https://github.com/bitnami/charts/commit/095fda8c1d4adee4f6fdeccef26975dd6aefb332)), closes [#34090](https://github.com/bitnami/charts/issues/34090)
 
 ## <small>3.0.7 (2025-05-08)</small>
 
