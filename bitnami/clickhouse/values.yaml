@@ -130,7 +130,7 @@ defaultInitContainers:
       privileged: false
       allowPrivilegeEscalation: false
       capabilities:
-        add: []
+        add: ["CHOWN"]
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
