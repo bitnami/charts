@@ -347,8 +347,8 @@ alloy:
   ## @param alloy.mounts.dockercontainers Mount /var/lib/docker/containers from the host into the container for log
   ##
   mounts:
-    varlog: false
-    dockercontainers: false
+    varlog: true
+    dockercontainers: true
   ## Configure extra options for Grafana Alloy containers' startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param alloy.startupProbe.enabled Enable startupProbe on Grafana Alloy containers

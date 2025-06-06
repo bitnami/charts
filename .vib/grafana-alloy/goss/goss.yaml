@@ -22,12 +22,16 @@ file:
   /opt/bitnami/grafana-alloy/config/config.alloy:
     exists: true
     filetype: symlink
+  {{ if .Vars.alloy.mounts.varlog }}
   /var/log:
     exists: true
     filetype: directory
+  {{ end }}
+  {{ if .Vars.alloy.mounts.dockercontainers }}
   /var/lib/docker/containers:
     exists: true
     filetype: directory
+  {{ end }}
 command:
   {{- $uid := .Vars.alloy.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
