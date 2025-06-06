@@ -14,6 +14,9 @@ alloy:
     runAsUser: 1002
   containerPorts:
     http: 8081
+configReloader:
+  containerPorts:
+    http: 9999
 service:
   ports:
     http: 8081

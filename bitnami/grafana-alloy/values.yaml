@@ -495,6 +495,10 @@ configReloader:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param configReloader.containerPorts.http ConfigMap Reload HTTP container port
+  ##
+  containerPorts:
+    http: 9533
   ## @param configReloader.extraContainerPorts Optionally specify extra list of additional ports for ConfigMap Reload containers
   ## e.g:
   ## extraContainerPorts:
@@ -527,7 +531,7 @@ configReloader:
   ## @param configReloader.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 30
     timeoutSeconds: 2
@@ -541,7 +545,7 @@ configReloader:
   ## @param configReloader.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 30
     periodSeconds: 30
     timeoutSeconds: 2
