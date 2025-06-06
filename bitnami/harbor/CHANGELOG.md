@@ -1,8 +1,16 @@
 # Changelog
 
-## 26.7.1 (2025-06-06)
+## 26.7.3 (2025-06-06)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34175](https://github.com/bitnami/charts/pull/34175))
+* [bitnami/harbor] bugfix: amend ConfigMap & Secret references ([#34227](https://github.com/bitnami/charts/pull/34227))
+
+## <small>26.7.2 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34177) ([ad08bd5](https://github.com/bitnami/charts/commit/ad08bd5bdc86d99d7e467fb70674c09306faad94)), closes [#34177](https://github.com/bitnami/charts/issues/34177)
+
+## <small>26.7.1 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34175) ([8d335ad](https://github.com/bitnami/charts/commit/8d335adf2e80cc8526d6430a0eeca5e27e2a1458)), closes [#34175](https://github.com/bitnami/charts/issues/34175)
 
 ## 26.7.0 (2025-06-05)
 
