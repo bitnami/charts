@@ -3,10 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.resourceType "deployment" }}
+{{- $resourceType := lower .Values.resourceType -}}
+{{- if eq $resourceType "deployment" }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
-{{- else if eq .Values.resourceType "statefulset" }}
+{{- else if eq $resourceType "statefulset" }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 {{- else }}
@@ -24,19 +25,19 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and (not .Values.autoscaling.hpa.enabled) (not (eq .Values.resourceType "daemonset")) }}
+  {{- if and (not .Values.autoscaling.hpa.enabled) (not (eq $resourceType "daemonset")) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
-  {{- if eq .Values.resourceType "statefulset" }}
+  {{- if eq $resourceType "statefulset" }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   {{- end }}
-  {{- if eq .Values.resourceType "statefulset" }}
+  {{- if eq $resourceType "statefulset" }}
   serviceName: {{ template "common.names.fullname" . }}
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
   {{- else if .Values.updateStrategy }}
-  {{- if eq .Values.resourceType "daemonset" }}
+  {{- if eq $resourceType "daemonset" }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- else }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}

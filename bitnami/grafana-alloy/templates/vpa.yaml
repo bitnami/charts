@@ -33,10 +33,11 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
-    {{- if eq .Values.resourceType "deployment" }}
+    {{- $resourceType := lower .Values.resourceType -}}
+    {{- if eq $resourceType "deployment" }}
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    {{- else if eq .Values.resourceType "statefulset" }}
+    {{- else if eq $resourceType "statefulset" }}
     apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     {{- else }}
