@@ -11,9 +11,16 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: alloy
     app.kubernetes.io/part-of: grafana-alloy
+    {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+    {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
     prometheus.io/scrape: "true"
-  {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations) "context" .) }}
+    {{- end }}
+  {{- if or .Values.service.annotations .Values.commonAnnotations .Values.metrics.enabled .Values.metrics.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations .Values.metrics.annotations) "context" .) }}
+  {{- if .Values.metrics.enabled }}
+  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" .Values.service.ports.http "prometheus.io/path" "/metrics" }}
+  {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .) }}
+  {{- end }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
