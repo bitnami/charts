@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.12 (2025-06-05)
+## 11.3.13 (2025-06-06)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#34135](https://github.com/bitnami/charts/pull/34135))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#34158](https://github.com/bitnami/charts/pull/34158))
+
+## <small>11.3.12 (2025-06-05)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34135) ([846f3e0](https://github.com/bitnami/charts/commit/846f3e01a990f6777060462bfbc5c14c4f1d5d9f)), closes [#34135](https://github.com/bitnami/charts/issues/34135)
 
 ## <small>11.3.11 (2025-06-02)</small>
 
