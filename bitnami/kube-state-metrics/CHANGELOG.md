@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.8 (2025-05-07)
+## 5.0.9 (2025-06-06)
 
-* [bitnami/kube-state-metrics] Release 5.0.8 ([#33532](https://github.com/bitnami/charts/pull/33532))
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#34182](https://github.com/bitnami/charts/pull/34182))
+
+## <small>5.0.8 (2025-05-07)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.8 (#33532) ([f1de57e](https://github.com/bitnami/charts/commit/f1de57ebb454042196f7bd581dd793e454838f20)), closes [#33532](https://github.com/bitnami/charts/issues/33532)
 
 ## <small>5.0.7 (2025-05-06)</small>
 

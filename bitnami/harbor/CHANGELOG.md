@@ -1,8 +1,12 @@
 # Changelog
 
+## 26.7.1 (2025-06-06)
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34175](https://github.com/bitnami/charts/pull/34175))
+
 ## 26.7.0 (2025-06-05)
 
-* [bitnami/harbor] feat: add upstream features ([#34111](https://github.com/bitnami/charts/pull/34111))
+* [bitnami/harbor] feat: add upstream features (#34111) ([6d7a296](https://github.com/bitnami/charts/commit/6d7a29633e378485f719214718af51a113e3e6b6)), closes [#34111](https://github.com/bitnami/charts/issues/34111)
 
 ## <small>26.6.1 (2025-05-30)</small>
 
