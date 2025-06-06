@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.2.14 (2025-06-05)
+## 2.2.15 (2025-06-06)
 
-* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34117](https://github.com/bitnami/charts/pull/34117))
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34200](https://github.com/bitnami/charts/pull/34200))
+
+## <small>2.2.14 (2025-06-05)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34117) ([9f992ee](https://github.com/bitnami/charts/commit/9f992ee1c41c4a1ba2f7a1c8ecce37b461e0dfa0)), closes [#34117](https://github.com/bitnami/charts/issues/34117)
 
 ## <small>2.2.13 (2025-05-07)</small>
 
