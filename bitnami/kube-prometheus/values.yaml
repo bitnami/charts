@@ -3732,8 +3732,7 @@ thanosRuler:
   ## @param thanosRuler.clusterName Used to set the 'ruler_cluster' label
   ##
   clusterName: ""
-  ## @param thanosRuler.additionalArgs Additional arguments for the ThanosRuler container.
-  ## @skip thanosRuler.additionalArgs
+  ## @param thanosRuler.additionalArgs [array] Additional arguments for the ThanosRuler container.
   ## It is intended for e.g. activating hidden flags which are not supported by the dedicated configuration options yet.
   ##
   additionalArgs:
