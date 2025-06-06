@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.1.20 (2025-06-06)
+## 11.2.0 (2025-06-06)
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#34226](https://github.com/bitnami/charts/pull/34226))
+* [bitnami/kube-prometheus] add thanos ruler CR ([#33894](https://github.com/bitnami/charts/pull/33894))
+
+## <small>11.1.20 (2025-06-06)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#34226) ([216deca](https://github.com/bitnami/charts/commit/216deca7130e6306de8fcc234141787394e6f7eb)), closes [#34226](https://github.com/bitnami/charts/issues/34226)
 
 ## <small>11.1.19 (2025-06-06)</small>
 
@@ -28,7 +32,9 @@
 
 * [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#33973) ([7c26b2b](https://github.com/bitnami/charts/commit/7c26b2b03693415e98a3f392f5e5664c9aade185)), closes [#33973](https://github.com/bitnami/charts/issues/33973)
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#33765](https://github.com/bitnami/charts/pull/33765))
+## <small>11.1.13 (2025-05-17)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#33765) ([99d0f1b](https://github.com/bitnami/charts/commit/99d0f1bfeb460717a9edc37d3e70d652081997bf)), closes [#33765](https://github.com/bitnami/charts/issues/33765)
 
 ## <small>11.1.12 (2025-05-16)</small>
 
