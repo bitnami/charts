@@ -137,9 +137,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                name: {{ printf "%s-envvars" (include "harbor.exporter" .) }}
             - secretRef:
-                name: {{ template "harbor.core.envvars.secretName" . }}
+                name: {{ printf "%s-envvars" (include "harbor.exporter" .) }}
             {{- if .Values.exporter.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVarsSecret "context" $) }}
