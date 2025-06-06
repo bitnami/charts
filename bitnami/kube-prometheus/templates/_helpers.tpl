@@ -324,7 +324,7 @@ Return the etcd configuration configmap
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Thanos - Ruler configuration */}}
+{{/* Validate values of Thanos - Ruler query configuration */}}
 {{- define "thanosRuler.validateValues.queryConfig" -}}
 {{ if and .Values.thanosRuler.enabled (not .Values.thanosRuler.queryConfig.existingSecret.name) (not .Values.thanosRuler.queryConfig.config) -}}
 Thanos: Ruler configuration
@@ -336,12 +336,23 @@ Thanos: Ruler configuration
 {{- end -}}
 {{- end -}}
 
+{{/* Validate there is no overlap between Prometheus and Thanos Ruler selectors */}}
+{{- define "thanosRuler.validateValues.ruleSelectors" -}}
+{{ if and .Values.thanosRuler.enabled .Values.alertmanager.enabled .Values.prometheus.enabled (deepEqual .Values.prometheus.ruleNamespaceSelector .Values.thanosRuler.ruleNamespaceSelector) (deepEqual .Values.prometheus.ruleSelector .Values.thanosRuler.ruleSelector) -}}
+Thanos: Ruler selectors
+    Both Thanos Ruler and Prometheus are configured with the same rule selectors
+    This will lead to both sending the same alerts to Alertmanager
+    Please review 'thanosRuler.ruleNamespaceSelector' and 'thanosRuler.ruleSelector'
+{{- end -}}
+{{- end -}}
+
 {{/*
 Compile all warnings into a single message, and call fail.
 */}}
 {{- define "kube-prometheus.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "thanosRuler.validateValues.queryConfig" .) -}}
+{{- $messages := append $messages (include "thanosRuler.validateValues.ruleSelectors" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 

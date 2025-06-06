@@ -9,8 +9,9 @@ kind: Ingress
 metadata:
   name: {{ include "kube-prometheus.thanosRuler.fullname" . }}
   namespace: {{ include "common.names.namespace" . }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.ingress.labels .Values.commonLabels ) "context" . ) }}
-  labels: {{ include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
     app.kubernetes.io/component: thanos-ruler
   {{- if or .Values.thanosRuler.ingress.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.ingress.annotations .Values.commonAnnotations ) "context" . ) }}

@@ -41,7 +41,7 @@ spec:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.alertingEndpoints "context" $) | nindent 6 }}
-    {{- else if and .Values.alertmanager.enabled (not .Values.thanosRuler.enabled) }}
+    {{- else if .Values.alertmanager.enabled }}
       - namespace: {{ include "common.names.namespace" . | quote }}
         name: {{ template "kube-prometheus.alertmanager.fullname" . }}
         port: http
