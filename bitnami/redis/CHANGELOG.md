@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.2.0 (2025-06-05)
+## 21.2.0 (2025-06-06)
 
 * [bitnami/redis] Service Monitor support tlsConfig ([#34108](https://github.com/bitnami/charts/pull/34108))
 
