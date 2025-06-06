@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (.Values.thanosRuler.enabled) (.Values.thanosRuler.service.additionalHeadless) }}
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.service.additionalHeadless }}
 apiVersion: v1
 kind: Service
 metadata:
