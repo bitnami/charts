@@ -30,7 +30,7 @@ spec:
     # collection.
     - name: http
       port: {{ .Values.alloy.containerPorts.http }}
-      targetPort: {{ .Values.alloy.containerPorts.http }}
+      targetPort: http
       protocol: TCP
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
