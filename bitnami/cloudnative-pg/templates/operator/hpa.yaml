@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.autoscaling.hpa.enabled }}
+{{- if .Values.operator.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: {{ template "common.names.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.hpa.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.hpa.maxReplicas }}
+    name: {{ template "cloudnative-pg.operator.fullname" . }}
+  minReplicas: {{ .Values.operator.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.operator.autoscaling.hpa.maxReplicas }}
   metrics:
-    {{- if .Values.autoscaling.hpa.targetCPU }}
+    {{- if .Values.operator.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.hpa.targetCPU }}
+          averageUtilization: {{ .Values.operator.autoscaling.hpa.targetCPU }}
     {{- end }}
-    {{- if .Values.autoscaling.hpa.targetMemory }}
+    {{- if .Values.operator.autoscaling.hpa.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.hpa.targetMemory }}
+          averageUtilization: {{ .Values.operator.autoscaling.hpa.targetMemory }}
     {{- end }}
 {{- end }}

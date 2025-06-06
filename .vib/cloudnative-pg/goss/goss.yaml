@@ -2,11 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  https://cnpg-webhook-service:{{ .Vars.service.ports.webhook }}/readyz:
+  https://cnpg-webhook-service:{{ .Vars.operator.service.ports.webhook }}/readyz:
     status: 200
     allow-insecure: true
-  http://cloudnative-pg-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+  http://cloudnative-pg-operator-metrics:{{ .Vars.operator.metrics.service.ports.metrics }}/metrics:
     status: 200
+    body:
+      - /controller_runtime_reconcile_time_seconds_bucket/
+  https://cloudnative-pg-plugin-barman-cloud-metrics:{{ .Vars.pluginBarmanCloud.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    allow-insecure: true
     body:
       - /controller_runtime_reconcile_time_seconds_bucket/
 # Ports hardcoded in the operator
@@ -17,11 +22,9 @@ addr:
     reachable: true
   tcp://vib-cluster-example-ro:5432:
     reachable: true
-{{- $username := (index .Vars.extraDeploy 0).stringData.username }}
-{{- $password := (index .Vars.extraDeploy 0).stringData.password }}
 command:
-  check-auth-and-cluster-status:
-    exec: PGPASSWORD={{ $password }} psql -U {{ $username }} -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;"
+  check-backup-status:
+    exec: kubectl get backups
     exit-status: 0
     stdout:
-      - /2 rows/
+      - /backup-example.*completed/
