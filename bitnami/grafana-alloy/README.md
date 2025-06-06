@@ -43,6 +43,22 @@ The command deploys Grafana Alloy on the Kubernetes cluster in the default confi
 
 ## Configuration and installation details
 
+### Alloy configuration
+
+The Bitnami Grafana Alloy chart allows [providing a configuration](https://grafana.com/docs/alloy/latest/get-started/configuration-syntax/) using ConfigMaps. This is done using the `alloy.configuration` parameter. It is also possible to append the provided settings with the default configuration by using the `alloy.extraConfig` parameter. In the example below we add extra configuration parameters:
+
+```yaml
+alloy:
+  extraConfig:|
+    loki.write "local_loki" {
+      endpoint {
+        url = "http://loki:3100/loki/api/v1/push"
+      }
+  }
+```
+
+It is also possible to use an existing ConfigMap using the `alloy.existingConfigMap` parameter.
+
 ### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
