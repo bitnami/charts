@@ -48,7 +48,8 @@ Name of the Grafana Alloy ConfigMap
 
 {{/* Validate values of Grafana Alloy - resource type */}}
 {{- define "grafana-alloy.validateValues.resourceType" -}}
-{{- if and (not (eq .Values.resourceType "daemonset")) (not (eq .Values.resourceType "statefulset")) (not (eq .Values.resourceType "deployment")) -}}
+{{- $resourceType := lower .Values.resourceType -}}
+{{- if and (not (eq $resourceType "daemonset")) (not (eq $resourceType "statefulset")) (not (eq $resourceType "deployment")) -}}
 alloy: resource-type
     Alloy resource type {{ .Values.resourceType }} is not valid, only "daemonset", "statefulset", and "deployment" are allowed
 {{- end -}}
