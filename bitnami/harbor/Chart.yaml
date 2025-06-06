@@ -15,7 +15,7 @@ annotations:
     - name: harbor-portal
       image: docker.io/bitnami/harbor-portal:2.13.1-debian-12-r2
     - name: harbor-registry
-      image: docker.io/bitnami/harbor-registry:2.13.1-debian-12-r1
+      image: docker.io/bitnami/harbor-registry:2.13.1-debian-12-r2
     - name: harbor-registryctl
       image: docker.io/bitnami/harbor-registryctl:2.13.1-debian-12-r2
     - name: nginx
