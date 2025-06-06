@@ -1,12 +1,8 @@
 # Changelog
 
-## 1.7.12 (2025-06-06)
+## 1.7.11 (2025-05-30)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34223](https://github.com/bitnami/charts/pull/34223))
-
-## <small>1.7.11 (2025-05-30)</small>
-
-* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33982) ([86eedf9](https://github.com/bitnami/charts/commit/86eedf97c52efcb887f188919f30c54c61fcb4a1)), closes [#33982](https://github.com/bitnami/charts/issues/33982)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#33982](https://github.com/bitnami/charts/pull/33982))
 
 ## <small>1.7.10 (2025-05-21)</small>
 
