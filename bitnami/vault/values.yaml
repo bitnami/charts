@@ -95,7 +95,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.19.5-debian-12-r0
+    tag: 1.19.5-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -829,7 +829,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.5.0-debian-12-r24
+    tag: 1.5.0-debian-12-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1333,7 +1333,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.6.2-debian-12-r8
+    tag: 1.6.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1800,7 +1800,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r45
+    tag: 12-debian-12-r46
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

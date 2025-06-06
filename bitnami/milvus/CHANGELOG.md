@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.1 (2025-06-04)
+## 15.0.2 (2025-06-06)
 
-* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34068](https://github.com/bitnami/charts/pull/34068))
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34194](https://github.com/bitnami/charts/pull/34194))
+
+## <small>15.0.1 (2025-06-04)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#34068) ([7655ce3](https://github.com/bitnami/charts/commit/7655ce39df8fe96f4a188e74c74c4652393d2e73)), closes [#34068](https://github.com/bitnami/charts/issues/34068)
 
 ## 15.0.0 (2025-06-04)
 

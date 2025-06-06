@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.0.1 (2025-06-06)
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34222](https://github.com/bitnami/charts/pull/34222))
+
 ## 17.0.0 (2025-06-04)
 
-* [bitnami/thanos] feat: major version due to Minio major bump ([#34091](https://github.com/bitnami/charts/pull/34091))
+* [bitnami/thanos] feat: major version due to Minio major bump (#34091) ([f4be07e](https://github.com/bitnami/charts/commit/f4be07e37cdaac258143bf33ebac05ad31947c14)), closes [#34091](https://github.com/bitnami/charts/issues/34091)
 
 ## <small>16.0.7 (2025-05-16)</small>
 
