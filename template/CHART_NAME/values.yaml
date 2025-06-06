@@ -854,7 +854,7 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-    ## @param metrics.serviceMonitor.tlsConfig TLS configuration to use when scraping the endpoint
+    ## @param metrics.serviceMonitor.tlsConfig [object] TLS configuration used for scrape endpoints used by Prometheus
     ##
     tlsConfig: {}
     ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
