@@ -1889,7 +1889,7 @@ vmauth:
   image:
     registry: docker.io
     repository: bitnami/victoriametrics-vmauth
-    tag: 1.118.0-debian-12-r1
+    tag: 1.118.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
