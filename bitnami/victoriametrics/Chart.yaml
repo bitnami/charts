@@ -11,7 +11,7 @@ annotations:
     - name: victoriametrics-vmalert
       image: docker.io/bitnami/victoriametrics-vmalert:1.118.0-debian-12-r2
     - name: victoriametrics-vmauth
-      image: docker.io/bitnami/victoriametrics-vmauth:1.118.0-debian-12-r1
+      image: docker.io/bitnami/victoriametrics-vmauth:1.118.0-debian-12-r2
     - name: victoriametrics-vminsert
       image: docker.io/bitnami/victoriametrics-vminsert:1.118.0-debian-12-r2
     - name: victoriametrics-vmselect
@@ -40,4 +40,4 @@ maintainers:
 name: victoriametrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/victoriametrics
-version: 0.1.14
+version: 0.1.15
