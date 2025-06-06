@@ -1,8 +1,28 @@
 # Changelog
 
-## 32.2.8 (2025-05-20)
+## 32.2.13 (2025-06-06)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33789](https://github.com/bitnami/charts/pull/33789))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34185](https://github.com/bitnami/charts/pull/34185))
+
+## <small>32.2.12 (2025-06-03)</small>
+
+* [bitnami/kafka] Fix HPA controller logic to use maxReplicas to build controller.quorum.bootstrap.ser ([7cfb26d](https://github.com/bitnami/charts/commit/7cfb26d3c1663eead5eea81652b0f302954a4bbc)), closes [#33933](https://github.com/bitnami/charts/issues/33933)
+
+## <small>32.2.11 (2025-05-30)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34006) ([4287ec5](https://github.com/bitnami/charts/commit/4287ec583e7eda25eca91fbfec740983f6a9d736)), closes [#34006](https://github.com/bitnami/charts/issues/34006)
+
+## <small>32.2.10 (2025-05-29)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33967) ([d64b93d](https://github.com/bitnami/charts/commit/d64b93d0be6fdb2334bc1548856b9162d2c55b8e)), closes [#33967](https://github.com/bitnami/charts/issues/33967)
+
+## <small>32.2.9 (2025-05-28)</small>
+
+* bitnami/kafka Update the 32.0.0 release notes with more breaking changes (#33893) ([e4d5530](https://github.com/bitnami/charts/commit/e4d553012bbc076a27088176852695ade23920d5)), closes [#33893](https://github.com/bitnami/charts/issues/33893)
+
+## <small>32.2.8 (2025-05-20)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33789) ([d752de1](https://github.com/bitnami/charts/commit/d752de1c56cc496edbdfd9d4a2d4368d4e9527df)), closes [#33789](https://github.com/bitnami/charts/issues/33789)
 
 ## <small>32.2.7 (2025-05-19)</small>
 

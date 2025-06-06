@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.0.3 (2025-05-22)
+## 6.0.7 (2025-06-06)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#33833](https://github.com/bitnami/charts/pull/33833))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#34171](https://github.com/bitnami/charts/pull/34171))
+
+## <small>6.0.6 (2025-06-04)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34092) ([fba182b](https://github.com/bitnami/charts/commit/fba182b6df689b7a463ab378dc6787cada52b710)), closes [#34092](https://github.com/bitnami/charts/issues/34092)
+
+## <small>6.0.5 (2025-05-28)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33945) ([42062a7](https://github.com/bitnami/charts/commit/42062a72f2334dc26bc65d83d2df64e3355ddaa7)), closes [#33945](https://github.com/bitnami/charts/issues/33945)
+
+## <small>6.0.4 (2025-05-28)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33928) ([43af326](https://github.com/bitnami/charts/commit/43af326fd9811186845bdff59a7cd0edb08488dc)), closes [#33928](https://github.com/bitnami/charts/issues/33928)
+
+## <small>6.0.3 (2025-05-22)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33833) ([273a715](https://github.com/bitnami/charts/commit/273a71540bfd64baa4b58203a37448a0f3ae5ab9)), closes [#33833](https://github.com/bitnami/charts/issues/33833)
 
 ## <small>6.0.2 (2025-05-15)</small>
 

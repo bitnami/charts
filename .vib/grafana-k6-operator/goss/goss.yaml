@@ -1,0 +1,19 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+# As the tests are done in an external kubectl container we can only test the endpoint and the
+# deployed test run
+command:
+  # Check with kubectl that the deployed test run finished
+  check-testrun:
+    exec: kubectl get testruns
+    exit-status: 0
+    stdout:
+      - /testrun-sample.*finished/
+  # We cannot use goss built-in "http" directive because we need the SA token present in the
+  # container filesystem, so we need to use curl
+  check-metrics:
+    exec: 'curl -k --header "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://grafana-k6-operator-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics'
+    exit-status: 0
+    stdout:
+      - /workqueue_work_duration_second/

@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.1.0 (2025-05-23)
+## 2.1.3 (2025-06-05)
 
-* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new values ([#33777](https://github.com/bitnami/charts/pull/33777))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34130](https://github.com/bitnami/charts/pull/34130))
+
+## <small>2.1.2 (2025-05-31)</small>
+
+* [bitname/prometheus] add cluster port to networkpolicy (#33927) ([a4627ad](https://github.com/bitnami/charts/commit/a4627adf9d50c517c6131a4d3ee1a27c09ac5e46)), closes [#33927](https://github.com/bitnami/charts/issues/33927)
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34020) ([0887dda](https://github.com/bitnami/charts/commit/0887dda9df2638e76af0689d13e728ffa9025d78)), closes [#34020](https://github.com/bitnami/charts/issues/34020)
+* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new  ([bae4289](https://github.com/bitnami/charts/commit/bae4289bdb77c4acf14224f8c2818648bc28c6f5)), closes [#33777](https://github.com/bitnami/charts/issues/33777)
 
 ## <small>2.0.8 (2025-05-19)</small>
 

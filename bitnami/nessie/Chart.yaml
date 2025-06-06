@@ -5,11 +5,11 @@ annotations:
   category: Database
   images: |
     - name: nessie
-      image: docker.io/bitnami/nessie:0.104.1-debian-12-r0
+      image: docker.io/bitnami/nessie:0.104.1-debian-12-r2
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r43
+      image: docker.io/bitnami/os-shell:12-debian-12-r46
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r3
+      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r10
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
@@ -40,4 +40,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nessie
 - https://github.com/bitnami/containers/tree/main/bitnami/nessie
 - https://github.com/nessie/nessie
-version: 2.0.11
+version: 2.0.17

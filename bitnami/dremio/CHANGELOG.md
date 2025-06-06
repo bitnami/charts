@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.4 (2025-06-05)
+## 3.0.1 (2025-06-05)
 
 * [bitnami/dremio] Fix _init_containers.tpl incorrect variable ([#33752](https://github.com/bitnami/charts/pull/33752))
 

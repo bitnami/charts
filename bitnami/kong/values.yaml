@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.9.0-debian-12-r26
+  tag: 3.9.0-debian-12-r29
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -286,7 +286,9 @@ autoscaling:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: 80
+        target:
+          type: Utilization
+          averageUtilization: 80
 ## Kong Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param pdb.create Deploy a PodDisruptionBudget object for Kong deployment
@@ -674,7 +676,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.4.5-debian-12-r0
+    tag: 3.4.5-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -1,12 +1,15 @@
 # Source: https://raw.githubusercontent.com/Altinity/clickhouse-operator/refs/heads/{version}/deploy/helm/clickhouse-operator/crds/CustomResourceDefinition-clickhouseoperatorconfigurations.clickhouse.altinity.com.yaml
-# Version: 0.24.5
----
+# Version: 0.25.0
+# Template Parameters:
+#
+# NONE
+#
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: clickhouseoperatorconfigurations.clickhouse.altinity.com
   labels:
-    clickhouse.altinity.com/chop: 0.24.5
+    clickhouse.altinity.com/chop: 0.25.0
 spec:
   group: clickhouse.altinity.com
   scope: Namespaced
@@ -181,6 +184,47 @@ spec:
                               minimum: 1
                               maximum: 600
                               description: "Timout to perform SQL query from the operator to ClickHouse instances. In seconds."
+                    addons:
+                      type: object
+                      description: "Configuration addons specifies additional settings"
+                      properties:
+                        rules:
+                          type: array
+                          description: "Array of set of rules per specified ClickHouse versions"
+                          items:
+                            type: object
+                            properties:
+                              version:
+                                type: string
+                                description: "ClickHouse version expression"
+                              spec:
+                                type: object
+                                description: "spec"
+                                properties:
+                                  configuration:
+                                    type: object
+                                    description: "allows configure multiple aspects and behavior for `clickhouse-server` instance and also allows describe multiple `clickhouse-server` clusters inside one `chi` resource"
+                                    properties:
+                                      users:
+                                        type: object
+                                        description: "see same section from CR spec"
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      profiles:
+                                        type: object
+                                        description: "see same section from CR spec"
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      quotas:
+                                        type: object
+                                        description: "see same section from CR spec"
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      settings:
+                                        type: object
+                                        description: "see same section from CR spec"
+                                        x-kubernetes-preserve-unknown-fields: true
+                                      files:
+                                        type: object
+                                        description: "see same section from CR spec"
+                                        x-kubernetes-preserve-unknown-fields: true
                     metrics:
                       type: object
                       description: "parameters which use for connect to fetch metrics from clickhouse by clickhouse-operator"
@@ -323,6 +367,19 @@ spec:
                             include:
                               !!merge <<: *TypeStringBool
                               description: "Whether the operator during reconcile procedure should wait for a ClickHouse host to be included into a ClickHouse cluster"
+                            replicas:
+                              type: object
+                              description: "Whether the operator during reconcile procedure should wait for replicas to catch-up"
+                              properties:
+                                all:
+                                  !!merge <<: *TypeStringBool
+                                  description: "Whether the operator during reconcile procedure should wait for all replicas to catch-up"
+                                new:
+                                  !!merge <<: *TypeStringBool
+                                  description: "Whether the operator during reconcile procedure should wait for new replicas to catch-up"
+                                delay:
+                                  type: integer
+                                  description: "replication max absolute delay to consider replica is not delayed"
                 annotation:
                   type: object
                   description: "defines which metadata.annotations items will include or exclude during render StatefulSet, Pod, PVC resources"

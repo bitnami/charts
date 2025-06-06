@@ -1,8 +1,32 @@
 # Changelog
 
-## 4.0.9 (2025-05-23)
+## 4.0.15 (2025-06-05)
 
-* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#33865](https://github.com/bitnami/charts/pull/33865))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#34148](https://github.com/bitnami/charts/pull/34148))
+
+## <small>4.0.14 (2025-06-05)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34142) ([a38d48b](https://github.com/bitnami/charts/commit/a38d48be3fadf3bf9942f29047491b061b3316d6)), closes [#34142](https://github.com/bitnami/charts/issues/34142)
+
+## <small>4.0.13 (2025-06-03)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34065) ([e66efd1](https://github.com/bitnami/charts/commit/e66efd111f0345c5fafda16b3c604af8d28da7a2)), closes [#34065](https://github.com/bitnami/charts/issues/34065)
+
+## <small>4.0.12 (2025-06-03)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34059) ([0f59d49](https://github.com/bitnami/charts/commit/0f59d491f4f353f802185825fac41786597c4dad)), closes [#34059](https://github.com/bitnami/charts/issues/34059)
+
+## <small>4.0.11 (2025-05-27)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#33899) ([15fab30](https://github.com/bitnami/charts/commit/15fab301c72e589e6a35c8dd1f46ed421b44abbe)), closes [#33899](https://github.com/bitnami/charts/issues/33899)
+
+## <small>4.0.10 (2025-05-27)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#33896) ([ecde3a4](https://github.com/bitnami/charts/commit/ecde3a47bb25d47361b5a9a383e214d694f67e5d)), closes [#33896](https://github.com/bitnami/charts/issues/33896)
+
+## <small>4.0.9 (2025-05-23)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#33865) ([719f7d1](https://github.com/bitnami/charts/commit/719f7d130c8158889197b5c967b326c6ab4fa92e)), closes [#33865](https://github.com/bitnami/charts/issues/33865)
 
 ## <small>4.0.8 (2025-05-22)</small>
 
