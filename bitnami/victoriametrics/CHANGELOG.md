@@ -1,12 +1,8 @@
 # Changelog
 
-## 0.1.14 (2025-06-06)
+## 0.1.13 (2025-06-03)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34240](https://github.com/bitnami/charts/pull/34240))
-
-## <small>0.1.13 (2025-06-03)</small>
-
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34064) ([9dcc366](https://github.com/bitnami/charts/commit/9dcc366f8651b5c9bacd58e89946cc64ab13ef03)), closes [#34064](https://github.com/bitnami/charts/issues/34064)
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34064](https://github.com/bitnami/charts/pull/34064))
 
 ## <small>0.1.12 (2025-05-26)</small>
 

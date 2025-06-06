@@ -13,11 +13,11 @@ annotations:
     - name: victoriametrics-vmauth
       image: docker.io/bitnami/victoriametrics-vmauth:1.118.0-debian-12-r1
     - name: victoriametrics-vminsert
-      image: docker.io/bitnami/victoriametrics-vminsert:1.118.0-debian-12-r1
+      image: docker.io/bitnami/victoriametrics-vminsert:1.118.0-debian-12-r2
     - name: victoriametrics-vmselect
-      image: docker.io/bitnami/victoriametrics-vmselect:1.118.0-debian-12-r1
+      image: docker.io/bitnami/victoriametrics-vmselect:1.118.0-debian-12-r2
     - name: victoriametrics-vmstorage
-      image: docker.io/bitnami/victoriametrics-vmstorage:1.118.0-debian-12-r1
+      image: docker.io/bitnami/victoriametrics-vmstorage:1.118.0-debian-12-r2
   licenses: Apache-2.0
 apiVersion: v2
 appVersion: 1.118.0
