@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.13 (2025-06-06)
+## 21.2.0 (2025-06-06)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34214](https://github.com/bitnami/charts/pull/34214))
+* [bitnami/redis] Service Monitor support tlsConfig ([#34108](https://github.com/bitnami/charts/pull/34108))
+
+## <small>21.1.13 (2025-06-06)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34214) ([691094e](https://github.com/bitnami/charts/commit/691094e50763fa6ca3697ab5425988ccad6c7166)), closes [#34214](https://github.com/bitnami/charts/issues/34214)
 
 ## <small>21.1.12 (2025-06-06)</small>
 
