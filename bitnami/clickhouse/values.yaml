@@ -90,7 +90,7 @@ defaultInitContainers:
   volumePermissions:
     ## @param defaultInitContainers.volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
     ##
-    enabled: false
+    enabled: true
     ## @param defaultInitContainers.volumePermissions.image.registry [default: REGISTRY_NAME] "volume-permissions" init-containers' image registry
     ## @param defaultInitContainers.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] "volume-permissions" init-containers' image repository
     ## @skip defaultInitContainers.volumePermissions.image.tag "volume-permissions" init-containers' image tag (immutable tags are recommended)
@@ -130,7 +130,7 @@ defaultInitContainers:
       privileged: false
       allowPrivilegeEscalation: false
       capabilities:
-        add: []
+        add: ["CHOWN"]
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
