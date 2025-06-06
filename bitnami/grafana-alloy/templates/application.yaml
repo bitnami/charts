@@ -21,7 +21,7 @@ metadata:
     app.kubernetes.io/component: alloy
     app.kubernetes.io/part-of: grafana-alloy
   {{- if or .Values.controllerAnnotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.daemonsetAnnotations .Values.deploymentAnnotations .Values.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.controllerAnnotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
@@ -142,8 +142,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.alloy.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.alloy.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -255,8 +253,6 @@ spec:
             - -webhook-url=http://localhost:{{ .Values.alloy.containerPorts.http }}/-/reload
           {{- end }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.configReloader.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.configReloader.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -282,11 +278,11 @@ spec:
             command:
               - pgrep
               - "configmap"
-            initialDelaySeconds: {{ .Values.configreloader.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.configreloader.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.configreloader.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.configreloader.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.configreloader.livenessProbe.failureThreshold }}          {{- end }}
+            initialDelaySeconds: {{ .Values.configReloader.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configReloader.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configReloader.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configReloader.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configReloader.livenessProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.readinessProbe.enabled }}
@@ -294,11 +290,11 @@ spec:
             command:
               - pgrep
               - "configmap"
-            initialDelaySeconds: {{ .Values.configreloader.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.configreloader.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.configreloader.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.configreloader.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.configreloader.readinessProbe.failureThreshold }}          {{- end }}
+            initialDelaySeconds: {{ .Values.configReloader.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configReloader.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configReloader.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configReloader.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.configReloader.readinessProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.configReloader.startupProbe.enabled }}
@@ -306,11 +302,11 @@ spec:
             command:
               - pgrep
               - "configmap"
-            initialDelaySeconds: {{ .Values.configreloader.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.configreloader.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.configreloader.startupProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.configreloader.startupProbe.successThreshold }}
-            failureThreshold: {{ .Values.configreloader.startupProbe.failureThreshold }}          {{- end }}
+            initialDelaySeconds: {{ .Values.configReloader.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configReloader.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.configReloader.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.configReloader.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.configReloader.startupProbe.failureThreshold }}          {{- end }}
           {{- if .Values.configReloader.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.configReloader.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}

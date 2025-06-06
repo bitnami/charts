@@ -271,7 +271,6 @@ alloy:
 ## @skip alloy.image.tag Grafana Alloy image tag (immutable tags are recommended)
 ## @param alloy.image.pullPolicy Grafana Alloy image pull policy
 ## @param alloy.image.pullSecrets Grafana Alloy image pull secrets
-## @param alloy.image.debug Enable image debug mode
 ##
   image:
     registry: docker.io
@@ -290,7 +289,6 @@ alloy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    debug: false
   ## @param alloy.containerPorts.http Grafana Alloy HTTP container port
   ##
   containerPorts:
@@ -479,7 +477,6 @@ configReloader:
   ## @skip configReloader.image.tag ConfigMap Reload image tag (immutable tags are recommended)
   ## @param configReloader.image.pullPolicy ConfigMap Reload image pull policy
   ## @param configReloader.image.pullSecrets ConfigMap Reload image pull secrets
-  ## @param configReloader.image.debug Enable image debug mode
   ##
   image:
     registry: docker.io
@@ -498,7 +495,6 @@ configReloader:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    debug: false
   ## @param configReloader.extraContainerPorts Optionally specify extra list of additional ports for ConfigMap Reload containers
   ## e.g:
   ## extraContainerPorts:
@@ -506,9 +502,6 @@ configReloader:
   ##     containerPort: 9090
   ##
   extraContainerPorts: []
-  ## @param configReloader.existingConfigmap The name of an existing ConfigMap with your custom configuration for config reloader
-  ##
-  existingConfigmap: ""
 
   ## Configure extra options for ConfigMap Reload containers' startup, liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
