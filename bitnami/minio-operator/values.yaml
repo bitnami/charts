@@ -93,24 +93,24 @@ image:
   ## Enable debug mode
   ##
   debug: false
-## Bitnami minio-operator-sidecar image
+## Bitnami MinIO&reg; Operator sidecar image
 ## ref: https://hub.docker.com/r/bitnami/minio-operator-sidecar/tags/
-## @param sidecarImage.registry [default: REGISTRY_NAME] minio-operator-sidecar image registry
-## @param sidecarImage.repository [default: REPOSITORY_NAME/minio-operator-sidecar] minio-operator-sidecar image repository
-## @skip sidecarImage.tag minio-operator-sidecar image tag (immutable tags are recommended)
-## @param sidecarImage.digest minio-operator-sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param sidecarImage.registry [default: REGISTRY_NAME] MinIO&reg; Operator sidecar image registry
+## @param sidecarImage.repository [default: REPOSITORY_NAME/minio-operator-sidecar] MinIO&reg; Operator sidecar image repository
+## @skip sidecarImage.tag MinIO&reg; Operator sidecar image tag (immutable tags are recommended)
+## @param sidecarImage.digest MinIO&reg; Operator sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ##
 sidecarImage:
   registry: docker.io
   repository: bitnami/minio-operator-sidecar
   tag: 7.1.1-debian-12-r2
   digest: ""
-## Bitnami KES;reg; image version
+## Bitnami MinIO;reg; image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
-## @param minioImage.registry [default: REGISTRY_NAME] KES;reg; image registry
-## @param minioImage.repository [default: REPOSITORY_NAME/minio] KES;reg; image repository
-## @skip minioImage.tag KES;reg; image tag (immutable tags are recommended)
-## @param minioImage.digest KES;reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param minioImage.registry [default: REGISTRY_NAME] MinIO;reg; image registry
+## @param minioImage.repository [default: REPOSITORY_NAME/minio] MinIO;reg; image repository
+## @skip minioImage.tag MinIO;reg; image tag (immutable tags are recommended)
+## @param minioImage.digest MinIO;reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ##
 minioImage:
   registry: docker.io
