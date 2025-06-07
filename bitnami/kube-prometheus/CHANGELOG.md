@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.0 (2025-06-06)
+## 11.2.0 (2025-06-07)
 
 * [bitnami/kube-prometheus] add thanos ruler CR ([#33894](https://github.com/bitnami/charts/pull/33894))
 
