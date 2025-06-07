@@ -142,6 +142,13 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - servicebgpstatuses
+      - servicebgpstatuses/status
+    verbs:
+      - '*'
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
