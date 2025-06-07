@@ -51,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.1.20
+version: 11.2.0
