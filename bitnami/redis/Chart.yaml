@@ -11,7 +11,7 @@ annotations:
     - name: redis
       image: docker.io/bitnami/redis:8.0.2-debian-12-r3
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.73.0-debian-12-r2
+      image: docker.io/bitnami/redis-exporter:1.74.0-debian-12-r0
     - name: redis-sentinel
       image: docker.io/bitnami/redis-sentinel:8.0.2-debian-12-r2
   licenses: Apache-2.0
@@ -39,4 +39,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 21.2.0
+version: 21.2.1
