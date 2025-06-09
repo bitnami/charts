@@ -5,9 +5,9 @@ annotations:
   category: DeveloperTools
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r2
+      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r4
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r45
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r46
     - name: spring-cloud-dataflow
       image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r15
     - name: spring-cloud-dataflow-composed-task-runner
@@ -38,9 +38,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-# The Spring Cloud Data Flow chart is deprecated and no longer maintained.
 deprecated: true
-description: DEPRECATED Spring Cloud Data Flow is a microservices-based toolkit for building
+description: Spring Cloud Data Flow is a microservices-based toolkit for building
   streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
@@ -49,8 +48,7 @@ keywords:
 - dataflow
 - skipper
 - spring
-maintainers: []
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 37.0.5
+version: 37.0.6
