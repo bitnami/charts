@@ -1407,6 +1407,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
