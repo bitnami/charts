@@ -5,9 +5,9 @@ annotations:
   category: DeveloperTools
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r2
+      image: docker.io/bitnami/kubectl:1.33.1-debian-12-r4
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r45
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r46
     - name: spring-cloud-dataflow
       image: docker.io/bitnami/spring-cloud-dataflow:2.11.5-debian-12-r15
     - name: spring-cloud-dataflow-composed-task-runner
@@ -53,4 +53,4 @@ maintainers: []
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 37.0.5
+version: 37.0.6
