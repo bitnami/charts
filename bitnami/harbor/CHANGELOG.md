@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.7.4 (2025-06-09)
+## 26.7.5 (2025-06-09)
 
-* [bitnami/harbor] bugfix: use proper helper name ([#34259](https://github.com/bitnami/charts/pull/34259))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34264](https://github.com/bitnami/charts/pull/34264))
+
+## <small>26.7.4 (2025-06-09)</small>
+
+* [bitnami/harbor] bugfix: use proper helper name (#34259) ([f510161](https://github.com/bitnami/charts/commit/f5101619337fd6e371c4f9bbe267d61f9a3687bd)), closes [#34259](https://github.com/bitnami/charts/issues/34259)
 
 ## <small>26.7.3 (2025-06-06)</small>
 
