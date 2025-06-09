@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.0.7 (2025-06-06)
+## 20.0.8 (2025-06-09)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34206](https://github.com/bitnami/charts/pull/34206))
+* [bitnami/nginx] Allow wildcards in ingress.hostname parameter ([#34095](https://github.com/bitnami/charts/pull/34095))
+
+## <small>20.0.7 (2025-06-06)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34206) ([cbc61f9](https://github.com/bitnami/charts/commit/cbc61f961ab08156a64163ede0ccd1b8c902df8f)), closes [#34206](https://github.com/bitnami/charts/issues/34206)
 
 ## <small>20.0.6 (2025-06-06)</small>
 
