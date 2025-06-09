@@ -7,9 +7,9 @@ annotations:
     - name: harbor-adapter-trivy
       image: docker.io/bitnami/harbor-adapter-trivy:2.13.1-debian-12-r2
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.13.1-debian-12-r6
+      image: docker.io/bitnami/harbor-core:2.13.1-debian-12-r7
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.13.1-debian-12-r4
+      image: docker.io/bitnami/harbor-exporter:2.13.1-debian-12-r5
     - name: harbor-jobservice
       image: docker.io/bitnami/harbor-jobservice:2.13.1-debian-12-r4
     - name: harbor-portal
