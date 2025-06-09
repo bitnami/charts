@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.4.7 (2025-05-26)
+## 15.4.9 (2025-06-06)
 
-* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageUtilization" ([#33699](https://github.com/bitnami/charts/pull/33699))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34236](https://github.com/bitnami/charts/pull/34236))
+
+## <small>15.4.8 (2025-06-06)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34180) ([f55ddee](https://github.com/bitnami/charts/commit/f55ddeef220d20df79a7cb289d449fca586440af)), closes [#34180](https://github.com/bitnami/charts/issues/34180)
+
+## <small>15.4.7 (2025-05-26)</small>
+
+* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageU ([35e0089](https://github.com/bitnami/charts/commit/35e0089d15d0818d9ff3216863e7ea54d5303e6b)), closes [#33699](https://github.com/bitnami/charts/issues/33699)
 
 ## <small>15.4.6 (2025-05-16)</small>
 

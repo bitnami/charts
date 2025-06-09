@@ -1,8 +1,20 @@
 # Changelog
 
+## 17.0.3 (2025-06-06)
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34195](https://github.com/bitnami/charts/pull/34195))
+
+## <small>17.0.2 (2025-06-04)</small>
+
+* [bitnami/minio] bugfix: wrong svc port target on ingress (#34097) ([a4cefcd](https://github.com/bitnami/charts/commit/a4cefcd1e1bd46a5b18086facc3e559ad3f3ad78)), closes [#34097](https://github.com/bitnami/charts/issues/34097)
+
+## <small>17.0.1 (2025-06-03)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34070) ([383030c](https://github.com/bitnami/charts/commit/383030cf3e762b8e7988d7d4664d886b48bddac7)), closes [#34070](https://github.com/bitnami/charts/issues/34070)
+
 ## 17.0.0 (2025-06-03)
 
-* [bitnami/minio] feat: run Console UI as a separate component ([#34037](https://github.com/bitnami/charts/pull/34037))
+* [bitnami/minio] feat: run Console UI as a separate component (#34037) ([9d122cd](https://github.com/bitnami/charts/commit/9d122cdc904ad90305caa0223d208d783bcb470b)), closes [#34037](https://github.com/bitnami/charts/issues/34037)
 
 ## <small>16.0.11 (2025-06-02)</small>
 

@@ -163,7 +163,14 @@ data:
         layerinfo: redis
       maintenance:
         uploadpurging:
+          {{- if .Values.registry.uploadPurging.enabled }}
+          enabled: true
+          age: {{ .Values.registry.uploadPurging.age }}
+          interval: {{ .Values.registry.uploadPurging.interval }}
+          dryrun: {{ .Values.registry.uploadPurging.dryrun }}
+          {{- else }}
           enabled: false
+          {{- end }}
       delete:
         enabled: true
       redirect:
@@ -204,7 +211,9 @@ data:
         path: /etc/registry/passwd
     validation:
       disabled: true
-
+    compatibility:
+      schema1:
+        enabled: true
     {{- if .Values.registry.middleware.enabled }}
     {{- if eq .Values.registry.middleware.type "cloudFront" }}
     middleware:

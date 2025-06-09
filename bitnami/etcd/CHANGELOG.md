@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.0.1 (2025-06-03)
+## 12.0.3 (2025-06-06)
 
-* [etcd] add priorityClass to preupgrade-hook-job. ([#34035](https://github.com/bitnami/charts/pull/34035))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34244](https://github.com/bitnami/charts/pull/34244))
+
+## <small>12.0.2 (2025-06-05)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34152) ([321b964](https://github.com/bitnami/charts/commit/321b96464c71b78121e60b99c08d69eadfad9024)), closes [#34152](https://github.com/bitnami/charts/issues/34152)
+
+## <small>12.0.1 (2025-06-03)</small>
+
+* [etcd] add priorityClass to preupgrade-hook-job. (#34035) ([320d606](https://github.com/bitnami/charts/commit/320d6068c96f78f18e99446f3214afec6cffc3c6)), closes [#34035](https://github.com/bitnami/charts/issues/34035)
 
 ## 12.0.0 (2025-05-23)
 

@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.0.1 (2025-06-06)
+
+* [bitnami/dremio] Fix _init_containers.tpl incorrect variable ([#33752](https://github.com/bitnami/charts/pull/33752))
+
 ## 3.0.0 (2025-06-04)
 
-* [bitnami/dremio] feat: major version due to Minio major bump ([#34086](https://github.com/bitnami/charts/pull/34086))
+* [bitnami/dremio] feat: major version due to Minio major bump (#34086) ([f510f04](https://github.com/bitnami/charts/commit/f510f043d07c11985c04e395e28686930646c32b)), closes [#34086](https://github.com/bitnami/charts/issues/34086)
 
 ## <small>2.0.3 (2025-05-23)</small>
 
