@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.1 (2025-06-06)
+## 3.0.2 (2025-06-09)
 
-* [bitnami/dremio] Fix _init_containers.tpl incorrect variable ([#33752](https://github.com/bitnami/charts/pull/33752))
+* [bitnami/dremio] Disable MinIO Console ([#34265](https://github.com/bitnami/charts/pull/34265))
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/dremio] Fix _init_containers.tpl incorrect variable (#33752) ([6a4cb8c](https://github.com/bitnami/charts/commit/6a4cb8cca4177c8da6a672e2dcc0a8c628c88843)), closes [#33752](https://github.com/bitnami/charts/issues/33752)
 
 ## 3.0.0 (2025-06-04)
 
