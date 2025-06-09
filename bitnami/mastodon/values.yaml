@@ -1981,6 +1981,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 ## @section Elasticsearch chart configuration
 ## https://github.com/bitnami/charts/blob/main/bitnami/elasticsearch/values.yaml
 ##
