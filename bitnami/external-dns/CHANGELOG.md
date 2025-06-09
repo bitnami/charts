@@ -1393,7 +1393,7 @@
 
 ## <small>2.20.11 (2020-04-03)</small>
 
-*  [bitnami/external-dns] Fix markdown errors in README.md (#2208) ([556b602](https://github.com/bitnami/charts/commit/556b6028e199626d728366359526342fd4621e49)), closes [#2208](https://github.com/bitnami/charts/issues/2208)
+* [bitnami/external-dns] Fix markdown errors in README.md (#2208) ([556b602](https://github.com/bitnami/charts/commit/556b6028e199626d728366359526342fd4621e49)), closes [#2208](https://github.com/bitnami/charts/issues/2208)
 
 ## <small>2.20.10 (2020-03-27)</small>
 
@@ -1447,7 +1447,7 @@
 ## <small>1.5.6 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
+* Fix <https://github.com/helm/charts/pull/14199\#issuecomment-496883321> and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>1.5.5 (2019-05-28)</small>
