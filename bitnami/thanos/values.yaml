@@ -712,6 +712,7 @@ query:
   ## Thanos Query Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param query.autoscaling.enabled Enable autoscaling for Thanos Query
+  ## @param query.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Query
   ## @param query.autoscaling.minReplicas Minimum number of Thanos Query replicas
   ## @param query.autoscaling.maxReplicas Maximum number of Thanos Query replicas
   ## @param query.autoscaling.targetCPU Target CPU utilization percentage
@@ -726,6 +727,7 @@ query:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -1360,6 +1362,7 @@ queryFrontend:
   ## Thanos Query Frontend Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param queryFrontend.autoscaling.enabled Enable autoscaling for Thanos Query Frontend
+  ## @param queryFrontend.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Query Frontend
   ## @param queryFrontend.autoscaling.minReplicas Minimum number of Thanos Query Frontend replicas
   ## @param queryFrontend.autoscaling.maxReplicas Maximum number of Thanos Query Frontend replicas
   ## @param queryFrontend.autoscaling.targetCPU Target CPU utilization percentage
@@ -1367,6 +1370,7 @@ queryFrontend:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -1875,6 +1879,7 @@ bucketweb:
   ## Thanos Bucket Web Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param bucketweb.autoscaling.enabled Enable autoscaling for Thanos Bucket Web
+  ## @param bucketweb.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Bucket Web
   ## @param bucketweb.autoscaling.minReplicas Minimum number of Thanos Bucket Web replicas
   ## @param bucketweb.autoscaling.maxReplicas Maximum number of Thanos Bucket Web replicas
   ## @param bucketweb.autoscaling.targetCPU Target CPU utilization percentage
@@ -1882,6 +1887,7 @@ bucketweb:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -3047,6 +3053,7 @@ storegateway:
   ## Thanos Store Gateway Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
+  ## @param storegateway.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Store Gateway
   ## @param storegateway.autoscaling.minReplicas Minimum number of Thanos Store Gateway replicas
   ## @param storegateway.autoscaling.maxReplicas Maximum number of Thanos Store Gateway replicas
   ## @param storegateway.autoscaling.targetCPU Target CPU utilization percentage
@@ -3054,6 +3061,7 @@ storegateway:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -3808,6 +3816,7 @@ ruler:
   ## Thanos Ruler Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param ruler.autoscaling.enabled Enable autoscaling for Thanos Ruler
+  ## @param ruler.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Ruler
   ## @param ruler.autoscaling.minReplicas Minimum number of Thanos Ruler replicas
   ## @param ruler.autoscaling.maxReplicas Maximum number of Thanos Ruler replicas
   ## @param ruler.autoscaling.targetCPU Target CPU utilization percentage
@@ -3815,6 +3824,7 @@ ruler:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -4411,6 +4421,7 @@ receive:
   ## Thanos Receive Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receive.autoscaling.enabled Enable autoscaling for Thanos Receive
+  ## @param receive.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Receive
   ## @param receive.autoscaling.minReplicas Minimum number of Thanos Receive replicas
   ## @param receive.autoscaling.maxReplicas Maximum number of Thanos Receive replicas
   ## @param receive.autoscaling.targetCPU Target CPU utilization percentage
@@ -4418,6 +4429,7 @@ receive:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""
@@ -4869,6 +4881,7 @@ receiveDistributor:
   ## Thanos Receive Distributor Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receiveDistributor.autoscaling.enabled Enable autoscaling for Thanos Receive Distributor
+  ## @param receiveDistributor.autoscaling.createHorizontalPodAutoscaler Enable/disable creation of Horizontal Pod Autoscaler for Thanos Receive Distributor
   ## @param receiveDistributor.autoscaling.minReplicas Minimum number of Thanos Receive Distributor replicas
   ## @param receiveDistributor.autoscaling.maxReplicas Maximum number of Thanos Receive Distributor replicas
   ## @param receiveDistributor.autoscaling.targetCPU Target CPU utilization percentage
@@ -4876,6 +4889,7 @@ receiveDistributor:
   ##
   autoscaling:
     enabled: false
+    createHorizontalPodAutoscaler: true
     minReplicas: ""
     maxReplicas: ""
     targetCPU: ""

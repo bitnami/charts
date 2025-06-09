@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.receive.enabled .Values.receive.autoscaling.enabled }}
+{{- if and .Values.receive.enabled .Values.receive.autoscaling.enabled .Values.receive.autoscaling.createHorizontalPodAutoscaler }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
