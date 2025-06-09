@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.5 (2025-06-06)
+## 0.1.5 (2025-06-09)
 
 * [bitnami/grafana-k6-operator] :zap: :arrow_up: Update dependency references ([#34183](https://github.com/bitnami/charts/pull/34183))
 
