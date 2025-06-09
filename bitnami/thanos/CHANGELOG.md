@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.2 (2025-06-08)
+## 17.0.2 (2025-06-09)
 
 * [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components ([#34256](https://github.com/bitnami/charts/pull/34256))
 
