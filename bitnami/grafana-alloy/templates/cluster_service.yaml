@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   type: ClusterIP
-  clusterIP: {{ .Values.service.clusterIP }}
+  clusterIP: 'None'
   {{- if .Values.service.sessionAffinity }}
   sessionAffinity: {{ .Values.service.sessionAffinity }}
   {{- end }}
