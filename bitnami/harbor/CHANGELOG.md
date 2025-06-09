@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.7.3 (2025-06-06)
+## 26.7.4 (2025-06-09)
 
-* [bitnami/harbor] bugfix: amend ConfigMap & Secret references ([#34227](https://github.com/bitnami/charts/pull/34227))
+* [bitnami/harbor] bugfix: use proper helper name ([#34259](https://github.com/bitnami/charts/pull/34259))
+
+## <small>26.7.3 (2025-06-06)</small>
+
+* [bitnami/harbor] bugfix: amend ConfigMap & Secret references (#34227) ([1727128](https://github.com/bitnami/charts/commit/1727128e3ea49f113cb3c52ba424da911324ae1d)), closes [#34227](https://github.com/bitnami/charts/issues/34227)
 
 ## <small>26.7.2 (2025-06-06)</small>
 
