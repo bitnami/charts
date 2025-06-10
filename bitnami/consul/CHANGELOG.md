@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.4.17 (2025-05-07)
+## 11.4.19 (2025-06-05)
 
-* [bitnami/consul] Release 11.4.17 ([#33474](https://github.com/bitnami/charts/pull/33474))
+* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#34146](https://github.com/bitnami/charts/pull/34146))
+
+## <small>11.4.18 (2025-05-23)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#33864) ([c34a324](https://github.com/bitnami/charts/commit/c34a324c5da676ff7861f49b18c8527fdbcebdf3)), closes [#33864](https://github.com/bitnami/charts/issues/33864)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.4.17 (2025-05-07)</small>
+
+* [bitnami/consul] Release 11.4.17 (#33474) ([ce201e1](https://github.com/bitnami/charts/commit/ce201e13a95acf1b214be8a93144ceb61d16764d)), closes [#33474](https://github.com/bitnami/charts/issues/33474)
 
 ## <small>11.4.16 (2025-05-06)</small>
 

@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.nginx-cnab) to see the listing on Azure Marketplace.
+
 Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
@@ -408,6 +410,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `metrics.resources`                        | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                             |
 | `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                                                                                                       | `false`                          |
 | `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                                                                                                          | `""`                             |
+| `metrics.serviceMonitor.tlsConfig`         | TLS configuration used for scrape endpoints used by Prometheus                                                                                                                                                                    | `{}`                             |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                                 | `""`                             |
 | `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                                                                                                                      | `""`                             |
 | `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                                                                                                           | `""`                             |

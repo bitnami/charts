@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: flink
-      image: docker.io/bitnami/flink:2.0.0-debian-12-r5
+      image: docker.io/bitnami/flink:2.0.0-debian-12-r7
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: flink
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flink
-version: 2.0.3
+version: 2.0.4

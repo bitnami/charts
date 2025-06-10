@@ -74,7 +74,7 @@ spec:
               app.kubernetes.io/component: trivy
     # Allow outbound connections to redis
     - ports:
-        - port: {{ include "harbor.redis.port" . | trimAll "\"" | int }}
+        - port: {{ include "harbor.redis.port" (dict "context" . "component" "core") | trimAll "\"" | int }}
       {{- if .Values.redis.enabled }}
       to:
         - podSelector:

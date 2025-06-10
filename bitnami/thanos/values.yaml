@@ -9,7 +9,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -19,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -71,7 +69,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.38.0-debian-12-r3
+  tag: 0.38.0-debian-12-r4
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -5056,7 +5054,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r46
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -5109,3 +5107,7 @@ minio:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false

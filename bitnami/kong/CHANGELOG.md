@@ -1,8 +1,33 @@
 # Changelog
 
-## 15.4.4 (2025-05-06)
+## 15.4.10 (2025-06-10)
 
-* [bitnami/kong] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33385](https://github.com/bitnami/charts/pull/33385))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34292](https://github.com/bitnami/charts/pull/34292))
+
+## <small>15.4.9 (2025-06-06)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34236) ([8302fa7](https://github.com/bitnami/charts/commit/8302fa73984b0670f5d058f788a178b992ca9b83)), closes [#34236](https://github.com/bitnami/charts/issues/34236)
+
+## <small>15.4.8 (2025-06-06)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34180) ([f55ddee](https://github.com/bitnami/charts/commit/f55ddeef220d20df79a7cb289d449fca586440af)), closes [#34180](https://github.com/bitnami/charts/issues/34180)
+
+## <small>15.4.7 (2025-05-26)</small>
+
+* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageU ([35e0089](https://github.com/bitnami/charts/commit/35e0089d15d0818d9ff3216863e7ea54d5303e6b)), closes [#33699](https://github.com/bitnami/charts/issues/33699)
+
+## <small>15.4.6 (2025-05-16)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#33744) ([2d90e9e](https://github.com/bitnami/charts/commit/2d90e9e3c268653c62402103ae306b963fdd889f)), closes [#33744](https://github.com/bitnami/charts/issues/33744)
+
+## <small>15.4.5 (2025-05-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#33639) ([2b4e8f8](https://github.com/bitnami/charts/commit/2b4e8f8e2688a3b78f411a8b8c0aac65f65cb208)), closes [#33639](https://github.com/bitnami/charts/issues/33639)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>15.4.4 (2025-05-06)</small>
+
+* [bitnami/kong] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33385) ([5f5777c](https://github.com/bitnami/charts/commit/5f5777c60f21116a4871ce4a3af3b379bf3044dc)), closes [#33385](https://github.com/bitnami/charts/issues/33385)
 
 ## <small>15.4.3 (2025-04-30)</small>
 

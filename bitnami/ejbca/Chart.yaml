@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: CertificateAuthority
-  licenses: Apache-2.0
   images: |
     - name: ejbca
-      image: docker.io/bitnami/ejbca:9.1.1-debian-12-r5
+      image: docker.io/bitnami/ejbca:9.1.1-debian-12-r6
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
 appVersion: 9.1.1
 dependencies:
@@ -22,7 +22,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
+description: EJBCA is an enterprise class PKI Certificate Authority software, built
+  using Java (JEE) technology.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/ejbca/img/ejbca-stack-220x234.png
 keywords:
@@ -36,4 +37,4 @@ maintainers:
 name: ejbca
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 17.1.2
+version: 17.1.3

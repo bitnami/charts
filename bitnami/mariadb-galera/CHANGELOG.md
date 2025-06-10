@@ -1,8 +1,21 @@
 # Changelog
 
-## 14.2.4 (2025-05-06)
+## 14.2.7 (2025-06-06)
 
-* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33394](https://github.com/bitnami/charts/pull/33394))
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#34199](https://github.com/bitnami/charts/pull/34199))
+
+## <small>14.2.6 (2025-05-23)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#33855) ([076c26e](https://github.com/bitnami/charts/commit/076c26e9489bbb2460da1462fb12529f12f41d68)), closes [#33855](https://github.com/bitnami/charts/issues/33855)
+
+## <small>14.2.5 (2025-05-14)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mariadb-galera] Release 14.2.5 (#33553) ([5c50a37](https://github.com/bitnami/charts/commit/5c50a37a3cc3810cbdcd6aa989362c9b88ed6ac1)), closes [#33553](https://github.com/bitnami/charts/issues/33553)
+
+## <small>14.2.4 (2025-05-06)</small>
+
+* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([4d78a11](https://github.com/bitnami/charts/commit/4d78a1166ea7bc0cc61cec76feef94fa7c29d4e2)), closes [#33394](https://github.com/bitnami/charts/issues/33394)
 
 ## <small>14.2.3 (2025-05-01)</small>
 

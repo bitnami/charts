@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "kube-prometheus.thanosRuler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.thanosRuler.ingress.labels .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if or .Values.thanosRuler.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.thanosRuler.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  ingressClassName: {{ .Values.thanosRuler.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.thanosRuler.ingress.hostname }}
+    - host: {{ include "common.tplvalues.render" ( dict "value" .Values.thanosRuler.ingress.hostname "context" $ ) }}
+      http:
+        paths:
+          - path: {{ .Values.thanosRuler.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.thanosRuler.ingress.pathType }}
+            {{- end }}
+            backend: {{ include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanosRuler.fullname" .) "servicePort" "http" "context" .) | nindent 14 }}
+    {{- end }}
+    {{- range .Values.thanosRuler.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{ include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanosRuler.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.thanosRuler.ingress.extraRules }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.thanosRuler.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.thanosRuler.ingress.annotations )) .Values.thanosRuler.ingress.selfSigned)) .Values.thanosRuler.ingress.extraTls }}
+  tls:
+    {{- if and .Values.thanosRuler.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.thanosRuler.ingress.annotations )) .Values.thanosRuler.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.thanosRuler.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.thanosRuler.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.thanosRuler.ingress.extraTls }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

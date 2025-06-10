@@ -1,8 +1,77 @@
 # Changelog
 
-## 26.0.0 (2025-05-08)
+## 26.7.4 (2025-06-09)
 
-* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33502](https://github.com/bitnami/charts/pull/33502))
+* [bitnami/harbor] bugfix: use proper helper name ([#34259](https://github.com/bitnami/charts/pull/34259))
+
+## <small>26.7.3 (2025-06-06)</small>
+
+* [bitnami/harbor] bugfix: amend ConfigMap & Secret references (#34227) ([1727128](https://github.com/bitnami/charts/commit/1727128e3ea49f113cb3c52ba424da911324ae1d)), closes [#34227](https://github.com/bitnami/charts/issues/34227)
+
+## <small>26.7.2 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34177) ([ad08bd5](https://github.com/bitnami/charts/commit/ad08bd5bdc86d99d7e467fb70674c09306faad94)), closes [#34177](https://github.com/bitnami/charts/issues/34177)
+
+## <small>26.7.1 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34175) ([8d335ad](https://github.com/bitnami/charts/commit/8d335adf2e80cc8526d6430a0eeca5e27e2a1458)), closes [#34175](https://github.com/bitnami/charts/issues/34175)
+
+## 26.7.0 (2025-06-05)
+
+* [bitnami/harbor] feat: add upstream features (#34111) ([6d7a296](https://github.com/bitnami/charts/commit/6d7a29633e378485f719214718af51a113e3e6b6)), closes [#34111](https://github.com/bitnami/charts/issues/34111)
+
+## <small>26.6.1 (2025-05-30)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33999) ([3b24559](https://github.com/bitnami/charts/commit/3b245599ec312f2be028821bab86944016661fb5)), closes [#33999](https://github.com/bitnami/charts/issues/33999)
+
+## 26.6.0 (2025-05-30)
+
+* [bitnami/harbor] feat: add upstream features (#33984) ([2c5a628](https://github.com/bitnami/charts/commit/2c5a6284e90562e5292b320d18e9868e1d3505ee)), closes [#33984](https://github.com/bitnami/charts/issues/33984)
+
+## 26.5.0 (2025-05-29)
+
+* [bitnami/harbor] feat: add upstream features (#33977) ([2df994e](https://github.com/bitnami/charts/commit/2df994eedd314e45136f919a9c380494971ab4d7)), closes [#33977](https://github.com/bitnami/charts/issues/33977)
+
+## <small>26.4.1 (2025-05-29)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33968) ([559b133](https://github.com/bitnami/charts/commit/559b1338e9127e86edd782e1c11c50b68d272689)), closes [#33968](https://github.com/bitnami/charts/issues/33968)
+
+## 26.4.0 (2025-05-29)
+
+* [bitnami/harbor] feat: add support for consuming admin password from existing secret (#33956) ([fd3d9a6](https://github.com/bitnami/charts/commit/fd3d9a6bfeb495dc46e17ac29923646c51c67ca6)), closes [#33956](https://github.com/bitnami/charts/issues/33956)
+
+## <small>26.3.1 (2025-05-29)</small>
+
+* [bitnami/harbor]fix(validateValues.externalRedis): Check if trivy is enabled (#33953) ([2d7b32c](https://github.com/bitnami/charts/commit/2d7b32caf4be715bfc23535fd4d1381ffa31c833)), closes [#33953](https://github.com/bitnami/charts/issues/33953)
+
+## 26.3.0 (2025-05-26)
+
+* [bitnami/harbor] feat: add support for consuming Redis passwords from existing secrets (#33884) ([329a315](https://github.com/bitnami/charts/commit/329a315720361cb389dedd2f815cd1a119856211)), closes [#33884](https://github.com/bitnami/charts/issues/33884)
+
+## 26.2.0 (2025-05-26)
+
+* [bitnami/harbor] Add support for Redis ACL (#33875) ([d31996e](https://github.com/bitnami/charts/commit/d31996e4a1c80875f01269b2834cf9fb2a30a999)), closes [#33875](https://github.com/bitnami/charts/issues/33875)
+
+## 26.1.0 (2025-05-23)
+
+* [bitnami/harbor]feat: Allow different Redis instance per component (#33715) ([69d03e9](https://github.com/bitnami/charts/commit/69d03e9b7edcf18da912327737ac73353dadc999)), closes [#33715](https://github.com/bitnami/charts/issues/33715)
+
+## <small>26.0.3 (2025-05-22)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33831) ([5255329](https://github.com/bitnami/charts/commit/52553298a38a3480f84b31c93d067d9b51d0083e)), closes [#33831](https://github.com/bitnami/charts/issues/33831)
+
+## <small>26.0.2 (2025-05-14)</small>
+
+* [bitnami/harbor] update tracing environment variables and escaping (#33680) ([c9ec3e0](https://github.com/bitnami/charts/commit/c9ec3e08d161e0b34c0453cba28e9380911ac92c)), closes [#33680](https://github.com/bitnami/charts/issues/33680)
+
+## <small>26.0.1 (2025-05-09)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33596) ([0259db0](https://github.com/bitnami/charts/commit/0259db0c2f6d7eae28777399bf075fbb0bcb6b65)), closes [#33596](https://github.com/bitnami/charts/issues/33596)
+
+## 26.0.0 (2025-05-09)
+
+* [bitnami/harbor] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33502) ([1fe91e0](https://github.com/bitnami/charts/commit/1fe91e0de5f7f343c31ff8bd8ac44ace87253207)), closes [#33502](https://github.com/bitnami/charts/issues/33502)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>25.0.2 (2025-05-08)</small>
 

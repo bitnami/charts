@@ -1,8 +1,37 @@
 # Changelog
 
-## 3.0.5 (2025-05-06)
+## 3.0.12 (2025-06-08)
 
-* [bitnami/valkey-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33444](https://github.com/bitnami/charts/pull/33444))
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#34252](https://github.com/bitnami/charts/pull/34252))
+
+## <small>3.0.11 (2025-06-06)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34216) ([c4d9bfb](https://github.com/bitnami/charts/commit/c4d9bfb0df2690b31c2461f7f7e5f1ea3971b58e)), closes [#34216](https://github.com/bitnami/charts/issues/34216)
+
+## <small>3.0.10 (2025-05-22)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33826) ([a248d00](https://github.com/bitnami/charts/commit/a248d00d8a4dc7ba4fb53f6259f7d01a93c8c6a1)), closes [#33826](https://github.com/bitnami/charts/issues/33826)
+
+## <small>3.0.9 (2025-05-18)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33768) ([e0389ac](https://github.com/bitnami/charts/commit/e0389acd8d7a2fe8b1822c2a19cdd2cdfad7eeea)), closes [#33768](https://github.com/bitnami/charts/issues/33768)
+
+## <small>3.0.8 (2025-05-16)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33748) ([4a2d739](https://github.com/bitnami/charts/commit/4a2d739e2ace2c50ffb8961ce02b77549c34dd28)), closes [#33748](https://github.com/bitnami/charts/issues/33748)
+
+## <small>3.0.7 (2025-05-15)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33712) ([97270b5](https://github.com/bitnami/charts/commit/97270b5e120cff1148bc48056e2e2fed42a89edb)), closes [#33712](https://github.com/bitnami/charts/issues/33712)
+
+## <small>3.0.6 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33648) ([0b5a55e](https://github.com/bitnami/charts/commit/0b5a55e4c0d1c5ab60d246be1d70c2a087b71a30)), closes [#33648](https://github.com/bitnami/charts/issues/33648)
+
+## <small>3.0.5 (2025-05-07)</small>
+
+* [bitnami/valkey-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([1e19c13](https://github.com/bitnami/charts/commit/1e19c1350f7663fec99ba6d6aa899442272f577d)), closes [#33444](https://github.com/bitnami/charts/issues/33444)
 
 ## <small>3.0.4 (2025-05-05)</small>
 

@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/notification-controller/releases/download/v{version}/notification-controller.crds.yaml
-# Version: 1.5.0
+# Version: 1.6.0
 # VersionOf: fluxcd-notification-controller
 # Conditional: .Values.notificationController.installCRDs
 {{- if .Values.notificationController.installCRDs }}
@@ -306,12 +306,12 @@ spec:
                       description: |-
                         Name of the referent
                         If multiple resources are targeted `*` may be set.
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                     namespace:
                       description: Namespace of the referent
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                   required:
@@ -523,12 +523,12 @@ spec:
                       description: |-
                         Name of the referent
                         If multiple resources are targeted `*` may be set.
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                     namespace:
                       description: Namespace of the referent
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                   required:
@@ -1041,6 +1041,14 @@ spec:
                   should be posted.
                 maxLength: 2048
                 type: string
+              commitStatusExpr:
+                description: |-
+                  CommitStatusExpr is a CEL expression that evaluates to a string value
+                  that can be used to generate a custom commit status message for use
+                  with eligible Provider types (github, gitlab, gitea, bitbucketserver,
+                  bitbucket, azuredevops). Supported variables are: event, provider,
+                  and alert.
+                type: string
               interval:
                 description: |-
                   Interval at which to reconcile the Provider with its Secret references.
@@ -1063,6 +1071,13 @@ spec:
                 required:
                 - name
                 type: object
+              serviceAccountName:
+                description: |-
+                  ServiceAccountName is the name of the service account used to
+                  authenticate with services from cloud providers. An error is thrown if a
+                  static credential is also defined inside the Secret referenced by the
+                  SecretRef.
+                type: string
               suspend:
                 description: |-
                   Suspend tells the controller to suspend subsequent
@@ -1110,6 +1125,12 @@ spec:
             required:
             - type
             type: object
+            x-kubernetes-validations:
+            - message: spec.commitStatusExpr is only supported for the 'github', 'gitlab',
+                'gitea', 'bitbucketserver', 'bitbucket', 'azuredevops' provider types
+              rule: self.type == 'github' || self.type == 'gitlab' || self.type ==
+                'gitea' || self.type == 'bitbucketserver' || self.type == 'bitbucket'
+                || self.type == 'azuredevops' || !has(self.commitStatusExpr)
         type: object
     served: true
     storage: true
@@ -1225,12 +1246,12 @@ spec:
                       description: |-
                         Name of the referent
                         If multiple resources are targeted `*` may be set.
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                     namespace:
                       description: Namespace of the referent
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                   required:
@@ -1652,12 +1673,12 @@ spec:
                       description: |-
                         Name of the referent
                         If multiple resources are targeted `*` may be set.
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                     namespace:
                       description: Namespace of the referent
-                      maxLength: 53
+                      maxLength: 253
                       minLength: 1
                       type: string
                   required:

@@ -1,8 +1,17 @@
 # Changelog
 
-## 4.3.9 (2025-05-06)
+## 4.3.12 (2025-06-06)
 
-* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33425](https://github.com/bitnami/charts/pull/33425))
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#34164](https://github.com/bitnami/charts/pull/34164))
+
+## <small>4.3.10 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#33657) ([12626f2](https://github.com/bitnami/charts/commit/12626f2a27b2c863fa9abc6b74b72b0b021e2b7e)), closes [#33657](https://github.com/bitnami/charts/issues/33657)
+
+## <small>4.3.9 (2025-05-06)</small>
+
+* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33425 ([e20b5e3](https://github.com/bitnami/charts/commit/e20b5e3ee4d4eb6f4fae1db2f518432927283687)), closes [#33425](https://github.com/bitnami/charts/issues/33425)
 
 ## <small>4.3.8 (2025-04-23)</small>
 

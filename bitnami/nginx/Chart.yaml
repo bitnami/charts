@@ -2,16 +2,16 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Infrastructure
-  licenses: Apache-2.0
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.49.0-debian-12-r5
+      image: docker.io/bitnami/git:2.49.0-debian-12-r9
     - name: nginx
-      image: docker.io/bitnami/nginx:1.28.0-debian-12-r0
+      image: docker.io/bitnami/nginx:1.28.0-debian-12-r3
     - name: nginx-exporter
-      image: docker.io/bitnami/nginx-exporter:1.4.1-debian-12-r14
+      image: docker.io/bitnami/nginx-exporter:1.4.2-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
 appVersion: 1.28.0
 dependencies:
@@ -20,7 +20,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
+description: NGINX Open Source is a web server that can be also used as a reverse
+  proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to
+  its ability to provide faster content.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
@@ -35,4 +37,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 20.0.1
+version: 20.1.0

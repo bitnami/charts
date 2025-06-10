@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.0.3 (2025-05-09)
+## 7.0.5 (2025-06-06)
 
-* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#33591](https://github.com/bitnami/charts/pull/33591))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#34159](https://github.com/bitnami/charts/pull/34159))
+
+## <small>7.0.4 (2025-05-13)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#33682) ([16b2577](https://github.com/bitnami/charts/commit/16b25774b6cccbd92f7faafb249b3ab601628016)), closes [#33682](https://github.com/bitnami/charts/issues/33682)
+
+## <small>7.0.3 (2025-05-09)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#33591) ([28f779d](https://github.com/bitnami/charts/commit/28f779d47fd7d9c0eaabe1a38b45b163ef20f7a9)), closes [#33591](https://github.com/bitnami/charts/issues/33591)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>7.0.2 (2025-05-06)</small>
 

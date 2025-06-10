@@ -1,8 +1,37 @@
 # Changelog
 
-## 4.8.7 (2025-05-07)
+## 4.8.14 (2025-06-06)
 
-* [bitnami/grafana-loki] Release 4.8.7 ([#33476](https://github.com/bitnami/charts/pull/33476))
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#34212](https://github.com/bitnami/charts/pull/34212))
+
+## <small>4.8.13 (2025-06-06)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#34165) ([f09e04e](https://github.com/bitnami/charts/commit/f09e04eda65c3fbbd043e796f97f500b994563ad)), closes [#34165](https://github.com/bitnami/charts/issues/34165)
+
+## <small>4.8.12 (2025-05-30)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#34000) ([4aca48a](https://github.com/bitnami/charts/commit/4aca48af04bc093f5a78e022b4a3b03cbd47b802)), closes [#34000](https://github.com/bitnami/charts/issues/34000)
+
+## <small>4.8.11 (2025-05-29)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#33963) ([bbdcad4](https://github.com/bitnami/charts/commit/bbdcad4aec6ebe286802e039f70fafe7a6670963)), closes [#33963](https://github.com/bitnami/charts/issues/33963)
+
+## <small>4.8.10 (2025-05-22)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#33850) ([ec51491](https://github.com/bitnami/charts/commit/ec514912ab46afc3c2bb8f301f8e26f065676a31)), closes [#33850](https://github.com/bitnami/charts/issues/33850)
+
+## <small>4.8.9 (2025-05-19)</small>
+
+* [bitnami/grafana-loki] dataDir value substitution instead of static config (#33668) ([ba11956](https://github.com/bitnami/charts/commit/ba1195649e2085ed8f410add025b7498f8578c50)), closes [#33668](https://github.com/bitnami/charts/issues/33668)
+
+## <small>4.8.8 (2025-05-13)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#33632) ([3d2c31e](https://github.com/bitnami/charts/commit/3d2c31e50c1c140229b33cb7f43834f1b3ded3a7)), closes [#33632](https://github.com/bitnami/charts/issues/33632)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>4.8.7 (2025-05-07)</small>
+
+* [bitnami/grafana-loki] Release 4.8.7 (#33476) ([226fdbc](https://github.com/bitnami/charts/commit/226fdbcdaa03b1ad0a03eca9dfeff5177e20d432)), closes [#33476](https://github.com/bitnami/charts/issues/33476)
 
 ## <small>4.8.6 (2025-05-06)</small>
 

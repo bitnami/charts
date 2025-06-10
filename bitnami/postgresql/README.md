@@ -14,6 +14,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.postgresql-cnab) to see the listing on Azure Marketplace.
+
 Looking to use PostgreSQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
@@ -132,7 +134,7 @@ kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --fro
 The Bitnami PostgreSQL provides a password update job that will automatically change the PostgreSQL passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
 
 - The new passwords: this is configured using either `auth.postgresPassword`, `auth.password` and `auth.replicationPassword` (if applicable) or setting `auth.existingSecret`.
-- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdate.job.previousPasswords.postgresPassword`, `passwordUpdate.job.previousPasswords.password`, `passwordUpdate.job.previousPasswords.replicationPassword` (when applicable), or setting `passwordUpdateJob,previousPasswords.existingSecret`.
+- The previous passwords: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdateJob.previousPasswords.postgresPassword`, `passwordUpdateJob.previousPasswords.password`, `passwordUpdateJob.previousPasswords.replicationPassword` (when applicable), or setting `passwordUpdateJob.previousPasswords.existingSecret`.
 
 In the following example we update the password via values.yaml in a PostgreSQL installation with replication
 

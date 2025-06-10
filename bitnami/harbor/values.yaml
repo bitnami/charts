@@ -35,8 +35,8 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+
 ## @section Common Parameters
-##
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
@@ -44,7 +44,10 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname template with a string
 ##
 fullnameOverride: ""
-## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param kubeVersion Override Kubernetes version reported by .Capabilities
 ##
 kubeVersion: ""
 ## @param clusterDomain Kubernetes Cluster Domain
@@ -59,29 +62,33 @@ commonLabels: {}
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
-## Enable diagnostic mode in the deployment(s)/statefulset(s)
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
 ##
 diagnosticMode:
-  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
-  ##
   enabled: false
-  ## @param diagnosticMode.command Command to override all containers in the the deployment(s)/statefulset(s)
-  ##
   command:
     - sleep
-  ## @param diagnosticMode.args Args to override all containers in the the deployment(s)/statefulset(s)
-  ##
   args:
     - infinity
+
 ## @section Harbor common parameters
-##
 
 ## @param adminPassword The initial password of Harbor admin. Change it from portal after launching Harbor
 ##
 adminPassword: ""
+## @param existingSecret Name of existing Secret containing the Harbor admin password
+##
+existingSecret: ""
+## @param existingSecretAdminPasswordKey Name of the key inside the existing secret containing the Harbor admin password (HARBOR_ADMIN_PASSWORD as default if not provided)
+##
+existingSecretAdminPasswordKey: ""
 ## @param externalURL The external URL for Harbor Core service
 ## It is used to
 ## 1) populate the docker/helm commands showed on portal
+## 2) populate the token service URL returned to docker client
 ##
 ## Format: protocol://domain[:port]. Usually:
 ## 1) if "exposureType" is "ingress", the "domain" should be
@@ -134,11 +141,25 @@ ipFamily:
   ##
   ipv4:
     enabled: true
-## @section Traffic Exposure Parameters
+## Cache layer configurations
+## @param cache.enabled Enable caching manifests in Redis for better performance on high concurrent pulling
+## @param cache.expireHours The time (in hours) to keep the cache
 ##
+cache:
+  enabled: false
+  expireHours: 24
+## Database common configuration
+## @param database.maxIdleConns The maximum number of connections in the idle connection pool per component
+## @param database.maxOpenConns The maximum number of open connections to the database per component
+##
+database:
+  maxIdleConns: 100
+  maxOpenConns: 900
+
+## @section Traffic Exposure Parameters
 
 ## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy ]
-## Use "proxy" to use a deploy NGINX proxy in front of Harbor services
+## Use "proxy" to deploy NGINX proxy in front of Harbor services
 ## Use "ingress" to use an Ingress Controller as proxy
 ##
 exposureType: proxy
@@ -444,6 +465,8 @@ persistence:
     ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
     ## @param persistence.imageChartStorage.s3.storageClass S3 storage type setting: Storage class
     ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
+    ## @param persistence.imageChartStorage.s3.multipartcopychunksize S3 storage type setting: Chunk size for multipart copy
+    ## @param persistence.imageChartStorage.s3.multipartcopymaxconcurrency S3 storage type setting: Maximum concurrency for multipart copy
     ## @param persistence.imageChartStorage.s3.multipartcopythresholdsize S3 storage type setting: Threshold size for multipart copy
     ##
     s3:
@@ -461,6 +484,8 @@ persistence:
       rootdirectory: ""
       storageClass: ""
       sse: ""
+      multipartcopychunksize: ""
+      multipartcopymaxconcurrency: ""
       multipartcopythresholdsize: ""
     ## Images/charts storage parameters when type is "swift"
     ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
@@ -791,7 +816,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r46
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -846,7 +871,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.28.0-debian-12-r0
+    tag: 1.28.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1221,7 +1246,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.13.0-debian-12-r4
+    tag: 2.13.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1590,7 +1615,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.13.0-debian-12-r4
+    tag: 2.13.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1607,35 +1632,38 @@ core:
     ## Enable debug mode
     ##
     debug: false
-  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default.
+  ## @param core.quotaUpdateProvider Provider for updating project quota (usage). Allowed values: `db`, `redis`
+  ##
+  quotaUpdateProvider: db
+  ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default
   ##
   sessionLifetime: ""
+  ## @param core.artifactPullAsyncFlushDuration Time (in seconds) for async update artifact pull_time and repository pull_count
+  ##
+  artifactPullAsyncFlushDuration: 10
+  ## @param core.gdpr.deleteUser Enable/disable GDPR user deletion
+  ## @param core.gdpr.auditLogsCompliant Enable/disable GDPR audit logs compliance
+  ##
+  gdpr:
+    deleteUser: false
+    auditLogsCompliant: false
   ## @param core.uaaSecret If using external UAA auth which has a self signed cert, you can provide a pre-created secret containing it under the key `ca.crt`.
   ##
   uaaSecret: ""
-  ## @param core.secretKey The key used for encryption. Must be a string of 16 chars
-  ## e.g:
-  ## secretKey: "not-a-secure-string"
-  ##
-  secretKey: ""
-  ## @param core.secret Secret used when the core server communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
+  ## @param core.secret Secret used for core server communicates with other components. Must be a string of 16 chars.
+  ## @param core.secretKey Secret key used for communications encryption. Must be a string of 16 chars
+  ## @param core.existingSecret Existing secret for core (expected keys: `secret` and `secretKey`)
   ##
   secret: ""
+  secretKey: ""
+  existingSecret: ""
   ## @param core.tokenKey Key of the certificate used for token encryption/decryption.
-  ##
-  tokenKey: ""
   ## @param core.tokenCert Certificate used for token encryption/decryption.
-  ##
-  tokenCert: ""
   ## @param core.secretName Fill the name of a kubernetes secret if you want to use your own TLS certificate and private key for token encryption/decryption. The secret must contain two keys named: `tls.crt` - the certificate and `tls.key` - the private key. The default key pair will be used if it isn't set
   ##
+  tokenKey: ""
+  tokenCert: ""
   secretName: ""
-  ## @param core.existingSecret Existing secret for core
-  ## The secret must contain the keys:
-  ## `secret` (required),
-  ## `secretKey` (required),
-  ##
-  existingSecret: ""
   ## @param core.existingEnvVarsSecret Existing secret for core envvars
   ## The secret must contain the keys:
   ## `CSRF_KEY` (optional - alternatively auto-generated),
@@ -2021,7 +2049,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.13.0-debian-12-r5
+    tag: 2.13.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2047,15 +2075,22 @@ jobservice:
   ## @param jobservice.jobLogger The logger for jobs: `file`, `database` or `stdout`
   ##
   jobLogger: file
-  ## @param jobservice.secret Secret used when the job service communicates with other components. If a secret key is not specified, Helm will generate one. Must be a string of 16 chars.
-  ## If a secret key is not specified, Helm will generate one.
-  ## Must be a string of 16 chars.
+  ## @param jobservice.notification.webhookJobMaxRetry Maximum number of retries for webhook jobs
+  ## @param jobservice.notification.webhookJobHttpClientTimeout HTTP client timeout for webhook jobs (in seconds)
+  ##
+  notification:
+    webhookJobMaxRetry: 3
+    webhookJobHttpClientTimeout: 3
+  ## @param jobservice.reaper.maxUpdateHours Max time (in hours) to wait for a task to finish
+  ## @param jobservice.reaper.maxDanglingHours Max time (in hours) for execution in running state without new task created
+  ##
+  reaper:
+    maxUpdateHours: 24
+    maxDanglingHours: 168
+  ## @param jobservice.secret Secret used for job service communicates with other components. Must be a string of 16 chars.
+  ## @param jobservice.existingSecret Existing secret for jobservice (expected key: `secret`)
   ##
   secret: ""
-  ## @param jobservice.existingSecret Existing secret for jobservice
-  ## The secret must contain the keys:
-  ## `secret` (required),
-  ##
   existingSecret: ""
   ## @param jobservice.existingEnvVarsSecret Existing secret for jobservice envvars
   ## The secret must contain the keys:
@@ -2460,6 +2495,16 @@ registry:
       ## that allows access to CloudFront
       ##
       privateKeySecret: my-secret
+  ## @param registry.uploadPurging.enabled Enable purging _upload directories
+  ## @param registry.uploadPurging.age Period of time to wait before removing files in _upload directories
+  ## @param registry.uploadPurging.interval Interval for purging operations
+  ## @param registry.uploadPurging.dryrun If true, the purge operation will not actually delete files, but will log what would be deleted
+  ##
+  uploadPurging:
+    enabled: true
+    age: 168h
+    interval: 24h
+    dryrun: false
   ## Use TLS in the container
   ##
   tls:
@@ -2680,7 +2725,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.13.0-debian-12-r3
+      tag: 2.13.1-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2851,7 +2896,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.13.0-debian-12-r5
+      tag: 2.13.1-debian-12-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3016,7 +3061,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.13.0-debian-12-r3
+    tag: 2.13.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3448,7 +3493,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.13.0-debian-12-r4
+    tag: 2.13.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3465,6 +3510,12 @@ exporter:
     ## Enable debug mode
     ##
     debug: false
+  ## @param exporter.cacheDuration Time (in seconds) collected values are cached for
+  ##
+  cacheDuration: 20
+  ## @param exporter.cacheCleanInterval Time (in seconds) after which the cache is cleaned
+  ##
+  cacheCleanInterval: 14400
   ## @param exporter.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -3860,7 +3911,7 @@ externalDatabase:
 ## @param redis.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
 ## @param redis.auth.enabled Enable password authentication
 ## @param redis.auth.password Redis&reg; password
-## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials (expected key: `redis-password`)
 ## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
 ## @param redis.sentinel.enabled Use Redis&reg; Sentinel on Redis&reg; pods.
 ## @param redis.sentinel.masterSet Master set name
@@ -3916,7 +3967,9 @@ redis:
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host
 ## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.username Redis&reg; username (for Redis&reg; ACL)
 ## @param externalRedis.password Redis&reg; password
+## @param externalRedis.existingSecret The name of an existing secret with Redis&reg; credentials (expected key: `redis-password`)
 ## @param externalRedis.coreDatabaseIndex Index for core database
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
 ## @param externalRedis.registryDatabaseIndex Index for registry database
@@ -3928,7 +3981,9 @@ redis:
 externalRedis:
   host: localhost
   port: 6379
+  username: ""
   password: ""
+  existingSecret: ""
   coreDatabaseIndex: "0"
   jobserviceDatabaseIndex: "1"
   registryDatabaseIndex: "2"
@@ -3938,7 +3993,7 @@ externalRedis:
     existingSecret: ""
     certCAFilename: ""
   ## Redis&reg; sentinel configuration
-  ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
+  ## @param externalRedis.sentinel.enabled If external redis with sentinel is used, set it to `true`
   ## @param externalRedis.sentinel.masterSet Name of sentinel masterSet if sentinel is used
   ## @param externalRedis.sentinel.hosts Sentinel hosts and ports in the format
   ##
@@ -3946,6 +4001,120 @@ externalRedis:
     enabled: false
     masterSet: "mymaster"
     hosts: ""
+  ## @param externalRedis.instancePerComponent Configure a Redis&reg; per Harbor component
+  instancePerComponent: false
+  ## @param externalRedis.core.host Redis&reg; host for core service
+  ## @param externalRedis.core.port Redis&reg; port number for core service
+  ## @param externalRedis.core.username Redis&reg; username for core service (for Redis&reg;6 ACL)
+  ## @param externalRedis.core.password Redis&reg; password for core service
+  ## @param externalRedis.core.existingSecret The name of an existing secret with Redis&reg; credentials for core service (expected key: `redis-password`)
+  ## @param externalRedis.core.index Index for core database
+  ## @param externalRedis.core.tls.enabled Enable Redis TLS traffic for core service
+  ## @param externalRedis.core.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for core service
+  ## @param externalRedis.core.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.core.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.core.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.core.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  core:
+    host: ""
+    port: 6379
+    username: ""
+    password: ""
+    existingSecret: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.jobservice.host Redis&reg; host for jobService service
+  ## @param externalRedis.jobservice.port Redis&reg; port number for jobService service
+  ## @param externalRedis.jobservice.username Redis&reg; username for jobService service (for Redis&reg;6 ACL)
+  ## @param externalRedis.jobservice.password Redis&reg; password for jobService service
+  ## @param externalRedis.jobservice.existingSecret The name of an existing secret with Redis&reg; credentials for jobService service (expected key: `redis-password`)
+  ## @param externalRedis.jobservice.index Index for jobService database
+  ## @param externalRedis.jobservice.tls.enabled Enable Redis TLS traffic for jobService service
+  ## @param externalRedis.jobservice.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for jobService service
+  ## @param externalRedis.jobservice.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.jobservice.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.jobservice.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.jobservice.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  jobservice:
+    host: ""
+    port: 6379
+    username: ""
+    password: ""
+    existingSecret: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.registry.host Redis&reg; host for registry service
+  ## @param externalRedis.registry.port Redis&reg; port number for registry service
+  ## @param externalRedis.registry.username Redis&reg; username for registry service (for Redis&reg;6 ACL)
+  ## @param externalRedis.registry.password Redis&reg; password for registry service
+  ## @param externalRedis.registry.existingSecret The name of an existing secret with Redis&reg; credentials for registry service (expected key: `redis-password`)
+  ## @param externalRedis.registry.index Index for registry database
+  ## @param externalRedis.registry.tls.enabled Enable Redis TLS traffic for registry service
+  ## @param externalRedis.registry.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for registry service
+  ## @param externalRedis.registry.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.registry.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.registry.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.registry.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  registry:
+    host: ""
+    port: 6379
+    username: ""
+    password: ""
+    existingSecret: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
+  ## @param externalRedis.trivy.host Redis&reg; host for trivy service
+  ## @param externalRedis.trivy.port Redis&reg; port number for trivy service
+  ## @param externalRedis.trivy.username Redis&reg; username for trivy service (for Redis&reg;6 ACL)
+  ## @param externalRedis.trivy.password Redis&reg; password for trivy service
+  ## @param externalRedis.trivy.existingSecret The name of an existing secret with Redis&reg; credentials for trivy service (expected key: `redis-password`)
+  ## @param externalRedis.trivy.index Index for trivy database
+  ## @param externalRedis.trivy.tls.enabled Enable Redis TLS traffic for trivy service
+  ## @param externalRedis.trivy.tls.existingSecret The name of the existing secret that contains the Redis TLS certificates for trivy service
+  ## @param externalRedis.trivy.tls.certCAFilename Name of key in existing secret for the Redis CA certificate
+  ## @param externalRedis.trivy.sentinel.enabled If external redis with sentinel is used, set it to `true`
+  ## @param externalRedis.trivy.sentinel.masterSet Name of sentinel masterSet if sentinel is used
+  ## @param externalRedis.trivy.sentinel.hosts Sentinel hosts and ports in the format
+  ##
+  trivy:
+    host: ""
+    port: 6379
+    username: ""
+    password: ""
+    existingSecret: ""
+    index: 0
+    tls:
+      enabled: false
+      existingSecret: ""
+      certCAFilename: ""
+    sentinel:
+      enabled: false
+      masterSet: "mymaster"
+      hosts: ""
 ## @section Harbor metrics parameters
 ##
 metrics:

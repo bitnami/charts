@@ -148,28 +148,6 @@ Return the name of the ClickHouse credentials secret
 {{- end -}}
 
 {{/*
-Return the secret key that contains the ClickHouse admin username
-*/}}
-{{- define "clickhouse-operator.secret.usernameKey" -}}
-{{- if and .Values.auth.existingSecret .Values.auth.existingSecretUsernameKey -}}
-    {{- print (tpl .Values.auth.existingSecretUsernameKey .) -}}
-{{- else -}}
-    {{- print "username" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the secret key that contains the ClickHouse admin password
-*/}}
-{{- define "clickhouse-operator.secret.passwordKey" -}}
-{{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
-    {{- print (tpl .Values.auth.existingSecretPasswordKey .) -}}
-{{- else -}}
-    {{- print "password" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Compile all warnings into a single message.
 */}}
 {{- define "clickhouse-operator.validateValues" -}}

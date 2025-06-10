@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.6 (2025-05-12)
+## 25.1.7 (2025-06-07)
 
-* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#33615](https://github.com/bitnami/charts/pull/33615))
+* [bitnami/schema-registry] Remove duplicate @param entries from chart ([#34245](https://github.com/bitnami/charts/pull/34245))
+
+## <small>25.1.6 (2025-05-12)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#33615) ([67a2ddc](https://github.com/bitnami/charts/commit/67a2ddcc1b699ed3cbfb98122eec26655294c43a)), closes [#33615](https://github.com/bitnami/charts/issues/33615)
 
 ## <small>25.1.5 (2025-05-12)</small>
 

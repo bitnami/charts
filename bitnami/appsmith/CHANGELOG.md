@@ -1,8 +1,33 @@
 # Changelog
 
-## 6.0.1 (2025-05-08)
+## 6.0.7 (2025-06-06)
 
-* [bitnami/appsmith] Release 6.0.1 ([#33504](https://github.com/bitnami/charts/pull/33504))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#34171](https://github.com/bitnami/charts/pull/34171))
+
+## <small>6.0.6 (2025-06-04)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34092) ([fba182b](https://github.com/bitnami/charts/commit/fba182b6df689b7a463ab378dc6787cada52b710)), closes [#34092](https://github.com/bitnami/charts/issues/34092)
+
+## <small>6.0.5 (2025-05-28)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33945) ([42062a7](https://github.com/bitnami/charts/commit/42062a72f2334dc26bc65d83d2df64e3355ddaa7)), closes [#33945](https://github.com/bitnami/charts/issues/33945)
+
+## <small>6.0.4 (2025-05-28)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33928) ([43af326](https://github.com/bitnami/charts/commit/43af326fd9811186845bdff59a7cd0edb08488dc)), closes [#33928](https://github.com/bitnami/charts/issues/33928)
+
+## <small>6.0.3 (2025-05-22)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33833) ([273a715](https://github.com/bitnami/charts/commit/273a71540bfd64baa4b58203a37448a0f3ae5ab9)), closes [#33833](https://github.com/bitnami/charts/issues/33833)
+
+## <small>6.0.2 (2025-05-15)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#33723) ([6bfaa98](https://github.com/bitnami/charts/commit/6bfaa98784529bc830024a33137c109aa363ba05)), closes [#33723](https://github.com/bitnami/charts/issues/33723)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>6.0.1 (2025-05-08)</small>
+
+* [bitnami/appsmith] Release 5.2.12 (#33504) ([7206142](https://github.com/bitnami/charts/commit/7206142871caa01816cbbfb73f644f957d86121b)), closes [#33504](https://github.com/bitnami/charts/issues/33504)
 
 ## 6.0.0 (2025-05-07)
 

@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.job.apiVersion" . }}
 kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}-pre-upgrade
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: etcd-pre-upgrade-job
   {{- $defaultAnnotations := dict "helm.sh/hook" "pre-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation" }}
@@ -44,6 +44,9 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -64,7 +67,7 @@ spec:
         {{- $replicaCount := int .Values.replicaCount }}
         {{- $clientPort := int .Values.containerPorts.client }}
         {{- $etcdFullname := include "common.names.fullname" . }}
-        {{- $releaseNamespace := .Release.Namespace }}
+        {{- $releaseNamespace := include "common.names.namespace" . }}
         {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
         {{- $clusterDomain := .Values.clusterDomain }}
         {{- $etcdClientProtocol := include "etcd.clientProtocol" . }}

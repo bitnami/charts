@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.12 (2025-05-07)
+## 2.5.13 (2025-06-06)
 
-* [bitnami/sealed-secrets] Release 2.5.12 ([#33521](https://github.com/bitnami/charts/pull/33521))
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34219](https://github.com/bitnami/charts/pull/34219))
+
+## <small>2.5.12 (2025-05-07)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.12 (#33521) ([0680ad7](https://github.com/bitnami/charts/commit/0680ad793c30949a2547c504cc14f73fcf860a02)), closes [#33521](https://github.com/bitnami/charts/issues/33521)
 
 ## <small>2.5.11 (2025-05-06)</small>
 

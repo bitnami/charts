@@ -1,8 +1,27 @@
 # Changelog
 
-## 2.0.6 (2025-05-09)
+## 2.1.3 (2025-06-05)
 
-* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map object and string ([#33525](https://github.com/bitnami/charts/pull/33525))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34130](https://github.com/bitnami/charts/pull/34130))
+
+## <small>2.1.2 (2025-05-31)</small>
+
+* [bitname/prometheus] add cluster port to networkpolicy (#33927) ([a4627ad](https://github.com/bitnami/charts/commit/a4627adf9d50c517c6131a4d3ee1a27c09ac5e46)), closes [#33927](https://github.com/bitnami/charts/issues/33927)
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34020) ([0887dda](https://github.com/bitnami/charts/commit/0887dda9df2638e76af0689d13e728ffa9025d78)), closes [#34020](https://github.com/bitnami/charts/issues/34020)
+* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new  ([bae4289](https://github.com/bitnami/charts/commit/bae4289bdb77c4acf14224f8c2818648bc28c6f5)), closes [#33777](https://github.com/bitnami/charts/issues/33777)
+
+## <small>2.0.8 (2025-05-19)</small>
+
+* [bitnami/prometheus] Added variable whether to include the default cluster role rules in rbac (#3372 ([cd9a26e](https://github.com/bitnami/charts/commit/cd9a26e5119370b678e18aa05582bc46dc22850f)), closes [#33722](https://github.com/bitnami/charts/issues/33722)
+
+## <small>2.0.7 (2025-05-17)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#33764) ([df99230](https://github.com/bitnami/charts/commit/df992300dad78b876d90f9dd597796ea80b2c2d7)), closes [#33764](https://github.com/bitnami/charts/issues/33764)
+
+## <small>2.0.6 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/prometheus] Allow tpl for ingress hostnames and allow ingress annotations to be both map ob ([ed61248](https://github.com/bitnami/charts/commit/ed61248fa488374a95716a98775ba4de813bb215)), closes [#33525](https://github.com/bitnami/charts/issues/33525)
 
 ## <small>2.0.5 (2025-05-08)</small>
 

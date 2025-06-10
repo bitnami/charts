@@ -1,8 +1,17 @@
 # Changelog
 
-## 9.0.16 (2025-05-07)
+## 9.0.18 (2025-05-22)
 
-* [bitnami/nats] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33410](https://github.com/bitnami/charts/pull/33410))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#33839](https://github.com/bitnami/charts/pull/33839))
+
+## <small>9.0.17 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#33640) ([2b5f801](https://github.com/bitnami/charts/commit/2b5f801f622b3503fb532fe41401896974e05c97)), closes [#33640](https://github.com/bitnami/charts/issues/33640)
+
+## <small>9.0.16 (2025-05-07)</small>
+
+* [bitnami/nats] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33410) ([f2667b0](https://github.com/bitnami/charts/commit/f2667b0d8fa6772d6690abcf1f095edec02c07ec)), closes [#33410](https://github.com/bitnami/charts/issues/33410)
 
 ## <small>9.0.15 (2025-05-07)</small>
 

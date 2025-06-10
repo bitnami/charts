@@ -1,8 +1,31 @@
 # Changelog
 
-## 16.0.10 (2025-05-07)
+## 17.0.3 (2025-06-06)
 
-* [bitnami/minio] Release 16.0.10 ([#33488](https://github.com/bitnami/charts/pull/33488))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34195](https://github.com/bitnami/charts/pull/34195))
+
+## <small>17.0.2 (2025-06-04)</small>
+
+* [bitnami/minio] bugfix: wrong svc port target on ingress (#34097) ([a4cefcd](https://github.com/bitnami/charts/commit/a4cefcd1e1bd46a5b18086facc3e559ad3f3ad78)), closes [#34097](https://github.com/bitnami/charts/issues/34097)
+
+## <small>17.0.1 (2025-06-03)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34070) ([383030c](https://github.com/bitnami/charts/commit/383030cf3e762b8e7988d7d4664d886b48bddac7)), closes [#34070](https://github.com/bitnami/charts/issues/34070)
+
+## 17.0.0 (2025-06-03)
+
+* [bitnami/minio] feat: run Console UI as a separate component (#34037) ([9d122cd](https://github.com/bitnami/charts/commit/9d122cdc904ad90305caa0223d208d783bcb470b)), closes [#34037](https://github.com/bitnami/charts/issues/34037)
+
+## <small>16.0.11 (2025-06-02)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/minio] Update dependencies (#34029) ([f70e5be](https://github.com/bitnami/charts/commit/f70e5be7d646d522d336f1c70ce07776934ed26f)), closes [#34029](https://github.com/bitnami/charts/issues/34029)
+
+## <small>16.0.10 (2025-05-07)</small>
+
+* [bitnami/minio] Release 16.0.10 (#33488) ([055477f](https://github.com/bitnami/charts/commit/055477f89bc7da14e5674c15f1f280f9ae0bdf0c)), closes [#33488](https://github.com/bitnami/charts/issues/33488)
 
 ## <small>16.0.9 (2025-05-07)</small>
 
