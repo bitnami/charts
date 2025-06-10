@@ -5,13 +5,13 @@ annotations:
   category: WorkFlow
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:3.0.1-debian-12-r4
+      image: docker.io/bitnami/airflow:3.0.2-debian-12-r0
     - name: statsd-exporter
       image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r19
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 3.0.1
+appVersion: 3.0.2
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -42,4 +42,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 24.1.2
+version: 24.1.3
