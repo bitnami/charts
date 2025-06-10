@@ -5,7 +5,7 @@ annotations:
   category: WorkFlow
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:3.0.2-debian-12-r2
+      image: docker.io/bitnami/airflow:3.0.2-debian-12-r3
     - name: statsd-exporter
       image: docker.io/bitnami/statsd-exporter:0.28.0-debian-12-r20
   licenses: Apache-2.0
