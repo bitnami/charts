@@ -6,7 +6,7 @@
 
 ## <small>20.0.8 (2025-06-09)</small>
 
-* [bitnami/nginx] Allow wildcards in ingress.hostname parameter ([#34095](https://github.com/bitnami/charts/pull/34095))
+* [bitnami/nginx] Allow wildcards in ingress.hostname parameter (#34095) ([d4deec1](https://github.com/bitnami/charts/commit/d4deec169a66017c17e8f436cc0a992a500781d4)), closes [#34095](https://github.com/bitnami/charts/issues/34095)
 
 ## <small>20.0.7 (2025-06-06)</small>
 
