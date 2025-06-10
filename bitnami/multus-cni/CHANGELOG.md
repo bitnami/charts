@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.15 (2025-06-06)
+## 2.2.16 (2025-06-10)
 
-* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34200](https://github.com/bitnami/charts/pull/34200))
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34328](https://github.com/bitnami/charts/pull/34328))
+
+## <small>2.2.15 (2025-06-06)</small>
+
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34200) ([2376c60](https://github.com/bitnami/charts/commit/2376c609d5d269b1734a119381d421145e368e88)), closes [#34200](https://github.com/bitnami/charts/issues/34200)
 
 ## <small>2.2.14 (2025-06-05)</small>
 
