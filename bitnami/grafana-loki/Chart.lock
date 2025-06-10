@@ -1,18 +1,21 @@
 dependencies:
+- name: grafana-alloy
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 0.1.3
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.8.1
+  version: 7.8.5
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.8.1
+  version: 7.8.5
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.8.1
+  version: 7.8.5
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.8.1
+  version: 7.8.5
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.31.0
-digest: sha256:0312bce29b111de7f20dce7ff94982ee396abbfcb8cf8c4f8ac00cdc35463768
-generated: "2025-05-06T10:15:24.566828533+02:00"
+  version: 2.31.1
+digest: sha256:1e5b1ba00864328e628868ddaa60dc2de25eed80f0a68c35268dc8a52d408fd4
+generated: "2025-06-11T11:05:07.056098+02:00"
