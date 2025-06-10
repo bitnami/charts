@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.2.5 (2025-06-08)
+## 28.2.6 (2025-06-10)
 
-* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#34254](https://github.com/bitnami/charts/pull/34254))
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#34293](https://github.com/bitnami/charts/pull/34293))
+
+## <small>28.2.5 (2025-06-08)</small>
+
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#34254) ([8aa2c60](https://github.com/bitnami/charts/commit/8aa2c60571a39b7a96e48dfc74510972f35505b3)), closes [#34254](https://github.com/bitnami/charts/issues/34254)
 
 ## <small>28.2.4 (2025-05-09)</small>
 
