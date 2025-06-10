@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.5.14 (2025-06-06)
+## 4.5.15 (2025-06-10)
 
-* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references ([#34207](https://github.com/bitnami/charts/pull/34207))
+* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references ([#34320](https://github.com/bitnami/charts/pull/34320))
+
+## <small>4.5.14 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references (#34207) ([1e50698](https://github.com/bitnami/charts/commit/1e506985f75204fb74ae296d169fbee8ec9130b5)), closes [#34207](https://github.com/bitnami/charts/issues/34207)
 
 ## <small>4.5.13 (2025-05-07)</small>
 
