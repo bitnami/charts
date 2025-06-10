@@ -1643,6 +1643,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `minio.defaultBuckets`    | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                                                                                                  | `thanos` |
 | `minio.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`  |
 | `minio.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`     |
+| `minio.console.enabled`   | Enable MinIO&reg; Console                                                                                                                                                                                  | `false`  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

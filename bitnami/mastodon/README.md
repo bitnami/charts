@@ -823,6 +823,7 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `minio.service.type`               | MinIO&reg; service type                                                                                                          | `ClusterIP`                                            |
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                               | `""`                                                   |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                          | `80`                                                   |
+| `minio.console.enabled`            | Enable MinIO&reg; Console                                                                                                        | `false`                                                |
 
 ### Elasticsearch chart configuration
 

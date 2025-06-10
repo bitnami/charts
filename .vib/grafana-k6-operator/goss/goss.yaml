@@ -6,7 +6,7 @@
 command:
   # Check with kubectl that the deployed test run finished
   check-testrun:
-    exec: kubectl get testruns
+    exec: PATH=/opt/bitnami/kubectl/bin:$PATH kubectl get testruns
     exit-status: 0
     stdout:
       - /testrun-sample.*finished/

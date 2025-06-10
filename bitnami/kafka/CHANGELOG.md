@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.2.12 (2025-06-03)
+## 32.2.13 (2025-06-06)
 
-* [bitnami/kafka] Fix HPA controller logic to use maxReplicas to build controller.quorum.bootstrap.servers config ([#33933](https://github.com/bitnami/charts/pull/33933))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34185](https://github.com/bitnami/charts/pull/34185))
+
+## <small>32.2.12 (2025-06-03)</small>
+
+* [bitnami/kafka] Fix HPA controller logic to use maxReplicas to build controller.quorum.bootstrap.ser ([7cfb26d](https://github.com/bitnami/charts/commit/7cfb26d3c1663eead5eea81652b0f302954a4bbc)), closes [#33933](https://github.com/bitnami/charts/issues/33933)
 
 ## <small>32.2.11 (2025-05-30)</small>
 

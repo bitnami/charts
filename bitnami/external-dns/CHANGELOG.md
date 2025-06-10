@@ -1,8 +1,13 @@
 # Changelog
 
-## 8.8.3 (2025-05-26)
+## 8.8.4 (2025-06-05)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#33694](https://github.com/bitnami/charts/pull/33694))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34153](https://github.com/bitnami/charts/pull/34153))
+
+## <small>8.8.3 (2025-05-26)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#33694) ([266c765](https://github.com/bitnami/charts/commit/266c76501b2820fc395f64d8d9e52079357f5c56)), closes [#33694](https://github.com/bitnami/charts/issues/33694)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>8.8.2 (2025-05-07)</small>
 

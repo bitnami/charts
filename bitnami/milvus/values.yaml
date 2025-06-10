@@ -98,7 +98,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.5.13-debian-12-r0
+    tag: 2.5.13-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5425,6 +5425,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 ## @section kafka sub-chart paramaters
 ## https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##

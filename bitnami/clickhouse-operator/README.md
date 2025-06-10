@@ -155,6 +155,8 @@ extraDeploy:
     name: test
   spec:
     defaults:
+      storageManagement:
+        provisioner: Operator
       templates:
         podTemplate: default-clickhouse
         dataVolumeClaimTemplate: default-volume-claim
@@ -200,6 +202,8 @@ extraDeploy:
     name: test
   spec:
     defaults:
+      storageManagement:
+        provisioner: Operator
       templates:
         podTemplate: default-keeper
         dataVolumeClaimTemplate: default-volume-claim

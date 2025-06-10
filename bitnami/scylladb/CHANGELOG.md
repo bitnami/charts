@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.2 (2025-05-31)
+## 4.0.3 (2025-06-05)
 
-* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#34023](https://github.com/bitnami/charts/pull/34023))
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#34120](https://github.com/bitnami/charts/pull/34120))
+
+## <small>4.0.2 (2025-05-31)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#34023) ([76c10cf](https://github.com/bitnami/charts/commit/76c10cf217c5f37c4806bfc3b06683b849d8903f)), closes [#34023](https://github.com/bitnami/charts/issues/34023)
 
 ## <small>4.0.1 (2025-05-01)</small>
 

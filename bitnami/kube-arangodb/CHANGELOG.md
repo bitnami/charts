@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.13 (2025-05-20)
+## 0.1.14 (2025-06-06)
 
-* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references ([#33787](https://github.com/bitnami/charts/pull/33787))
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references ([#34181](https://github.com/bitnami/charts/pull/34181))
+
+## <small>0.1.13 (2025-05-20)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#33787) ([8c42156](https://github.com/bitnami/charts/commit/8c421566a09cdd63fcbc69f16e596a61df9bf324)), closes [#33787](https://github.com/bitnami/charts/issues/33787)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.12 (2025-05-08)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
+## 7.0.1 (2025-06-06)
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34208](https://github.com/bitnami/charts/pull/34208))
+
 ## 7.0.0 (2025-05-07)
 
-* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33507](https://github.com/bitnami/charts/pull/33507))
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33507) ([454dd1f](https://github.com/bitnami/charts/commit/454dd1fe99c2d120e780e92a25b1ea6c39e4b105)), closes [#33507](https://github.com/bitnami/charts/issues/33507)
 
 ## <small>6.2.14 (2025-05-07)</small>
 

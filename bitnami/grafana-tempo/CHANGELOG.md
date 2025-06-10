@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.6 (2025-05-13)
+## 4.0.7 (2025-06-06)
 
-* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#33653](https://github.com/bitnami/charts/pull/33653))
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#34169](https://github.com/bitnami/charts/pull/34169))
+
+## <small>4.0.6 (2025-05-13)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#33653) ([6f8e833](https://github.com/bitnami/charts/commit/6f8e8339d8d9cce79ed6def8ec38d6da92ff4eef)), closes [#33653](https://github.com/bitnami/charts/issues/33653)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>4.0.5 (2025-05-07)</small>
 

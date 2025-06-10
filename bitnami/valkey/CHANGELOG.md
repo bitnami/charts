@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.0.9 (2025-05-22)
+## 3.0.11 (2025-06-08)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#33827](https://github.com/bitnami/charts/pull/33827))
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#34248](https://github.com/bitnami/charts/pull/34248))
+
+## <small>3.0.10 (2025-06-06)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34189) ([6fa7396](https://github.com/bitnami/charts/commit/6fa7396b58ea4c9533dfc61f158e9d736346e097)), closes [#34189](https://github.com/bitnami/charts/issues/34189)
+* [bitnami/valkey] Fix info about Sentinel StatefulSet in README (#33881) ([ddc76cc](https://github.com/bitnami/charts/commit/ddc76cc1f4b83f1dad14315f3c7d3cdf17c120fc)), closes [#33881](https://github.com/bitnami/charts/issues/33881)
+
+## <small>3.0.9 (2025-05-22)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#33827) ([075989d](https://github.com/bitnami/charts/commit/075989dd653c0a01c6305bb3ab56b17f0788debf)), closes [#33827](https://github.com/bitnami/charts/issues/33827)
 
 ## <small>3.0.8 (2025-05-20)</small>
 

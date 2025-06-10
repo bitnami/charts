@@ -1,8 +1,13 @@
 # Changelog
 
-## 28.2.4 (2025-05-09)
+## 28.2.5 (2025-06-08)
 
-* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#33584](https://github.com/bitnami/charts/pull/33584))
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#34254](https://github.com/bitnami/charts/pull/34254))
+
+## <small>28.2.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#33584) ([30eb91a](https://github.com/bitnami/charts/commit/30eb91ab3f92114c6381db532a6bbf9925f533ed)), closes [#33584](https://github.com/bitnami/charts/issues/33584)
 
 ## <small>28.2.3 (2025-05-06)</small>
 

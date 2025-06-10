@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.0.3 (2025-05-16)
+## 12.0.5 (2025-06-06)
 
-* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.admin.password is not set ([#33672](https://github.com/bitnami/charts/pull/33672))
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#34173](https://github.com/bitnami/charts/pull/34173))
+
+## <small>12.0.4 (2025-05-22)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33848) ([8284435](https://github.com/bitnami/charts/commit/82844359f1211ba43c93bdcc2bae39125d8e169b)), closes [#33848](https://github.com/bitnami/charts/issues/33848)
+
+## <small>12.0.3 (2025-05-16)</small>
+
+* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.a ([5a3fe1c](https://github.com/bitnami/charts/commit/5a3fe1c98a8991f78373b3884f9c205f1585122f)), closes [#33672](https://github.com/bitnami/charts/issues/33672)
 
 ## <small>12.0.2 (2025-05-15)</small>
 

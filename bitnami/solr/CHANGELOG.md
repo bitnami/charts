@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.6.4 (2025-05-09)
+## 9.6.5 (2025-06-08)
 
-* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#33583](https://github.com/bitnami/charts/pull/33583))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#34253](https://github.com/bitnami/charts/pull/34253))
+
+## <small>9.6.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#33583) ([91aceee](https://github.com/bitnami/charts/commit/91aceee9beb02e970c02f2b624756548e3af24ea)), closes [#33583](https://github.com/bitnami/charts/issues/33583)
 
 ## <small>9.6.3 (2025-05-07)</small>
 

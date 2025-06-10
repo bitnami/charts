@@ -1,0 +1,48 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "kube-prometheus.thanosRuler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.thanosRuler.serviceMonitor.labels .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.thanosRuler.serviceMonitor.jobLabel }}
+  jobLabel: {{ .Values.thanosRuler.serviceMonitor.jobLabel }}
+  {{- end }}
+  endpoints:
+    - port: http
+      {{- if .Values.thanosRuler.serviceMonitor.interval }}
+      interval: {{ .Values.thanosRuler.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.thanosRuler.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.thanosRuler.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.thanosRuler.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{ toYaml .Values.thanosRuler.serviceMonitor.metricRelabelings | nindent 8 }}
+      {{- end }}
+      {{- if .Values.thanosRuler.serviceMonitor.relabelings }}
+      relabelings: {{ toYaml .Values.thanosRuler.serviceMonitor.relabelings | nindent 8 }}
+      {{- end }}
+      {{- if .Values.thanosRuler.serviceMonitor.https }}
+      scheme: https
+      {{- end }}
+      {{- if .Values.thanosRuler.serviceMonitor.extraParameters }}
+      {{ toYaml .Values.thanosRuler.serviceMonitor.extraParameters | nindent 6 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "common.names.namespace" . }}
+  selector:
+    matchLabels: {{- include "kube-prometheus.thanosRuler.matchLabels" . | nindent 6 }}
+{{- end }}

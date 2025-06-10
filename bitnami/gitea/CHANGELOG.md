@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.2.7 (2025-05-13)
+## 3.2.9 (2025-06-10)
 
-* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33622](https://github.com/bitnami/charts/pull/33622))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#34288](https://github.com/bitnami/charts/pull/34288))
+
+## <small>3.2.8 (2025-06-06)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34162) ([674aa77](https://github.com/bitnami/charts/commit/674aa77b463b119e3049d98beae4889b410a5e4f)), closes [#34162](https://github.com/bitnami/charts/issues/34162)
+
+## <small>3.2.7 (2025-05-13)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33622) ([9b09ecd](https://github.com/bitnami/charts/commit/9b09ecd3fe077dfc550daceacc25101e3b1ea2b5)), closes [#33622](https://github.com/bitnami/charts/issues/33622)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>3.2.6 (2025-05-08)</small>
 

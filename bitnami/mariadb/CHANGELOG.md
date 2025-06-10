@@ -1,8 +1,13 @@
 # Changelog
 
-## 20.5.6 (2025-05-23)
+## 20.5.7 (2025-06-06)
 
-* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#33856](https://github.com/bitnami/charts/pull/33856))
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#34201](https://github.com/bitnami/charts/pull/34201))
+
+## <small>20.5.6 (2025-05-23)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#33856) ([1af172a](https://github.com/bitnami/charts/commit/1af172a29a83ee96dd03e7eb602153b3a1d1e4a0)), closes [#33856](https://github.com/bitnami/charts/issues/33856)
 
 ## <small>20.5.5 (2025-05-08)</small>
 

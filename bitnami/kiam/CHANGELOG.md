@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.3.11 (2025-05-07)
+## 2.3.12 (2025-06-06)
 
-* [bitnami/kiam] Release 2.3.11 ([#33531](https://github.com/bitnami/charts/pull/33531))
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#34179](https://github.com/bitnami/charts/pull/34179))
 
 ## <small>2.3.10 (2025-05-06)</small>
 

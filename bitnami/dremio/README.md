@@ -1182,6 +1182,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                         |
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `9000`                                              |
+| `minio.console.enabled`            | Enable MinIO&reg; Console                                                                                                         | `false`                                             |
 
 ### Prometheus metrics parameters
 

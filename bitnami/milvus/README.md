@@ -1821,6 +1821,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                         |
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                |
+| `minio.console.enabled`            | Enable MinIO&reg; Console                                                                                                         | `false`                                             |
 
 ### kafka sub-chart paramaters
 

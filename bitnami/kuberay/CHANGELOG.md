@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.12 (2025-05-28)
+## 1.4.13 (2025-06-06)
 
-* fix(kuberay): wrong indentation in nodeAffinity element ([#33929](https://github.com/bitnami/charts/pull/33929))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34186](https://github.com/bitnami/charts/pull/34186))
+
+## <small>1.4.12 (2025-05-29)</small>
+
+* fix(kuberay): wrong indentation in nodeAffinity element (#33929) ([cc6d0e2](https://github.com/bitnami/charts/commit/cc6d0e29bf6319f6c39dbca7812fe0acc75ba8d4)), closes [#33929](https://github.com/bitnami/charts/issues/33929) [bitnami#33887](https://github.com/bitnami/issues/33887)
 
 ## <small>1.4.11 (2025-05-26)</small>
 

@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: node-exporter
-      image: docker.io/bitnami/node-exporter:1.9.1-debian-12-r5
+      image: docker.io/bitnami/node-exporter:1.9.1-debian-12-r8
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: node-exporter
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 4.5.13
+version: 4.5.14

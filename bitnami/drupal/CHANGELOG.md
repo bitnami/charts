@@ -1,8 +1,17 @@
 # Changelog
 
-## 21.2.8 (2025-05-08)
+## 21.2.10 (2025-06-06)
 
-* [bitnami/drupal] Release 21.2.8 ([#33551](https://github.com/bitnami/charts/pull/33551))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34176](https://github.com/bitnami/charts/pull/34176))
+
+## <small>21.2.9 (2025-06-05)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34134) ([cad0bf7](https://github.com/bitnami/charts/commit/cad0bf7670597148be076a4a5a403cfd0091fffb)), closes [#34134](https://github.com/bitnami/charts/issues/34134)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>21.2.8 (2025-05-08)</small>
+
+* [bitnami/drupal] Release 21.2.8 (#33551) ([29bfd06](https://github.com/bitnami/charts/commit/29bfd06799a4a11c5b0b65614400042a9cf35f34)), closes [#33551](https://github.com/bitnami/charts/issues/33551)
 
 ## <small>21.2.7 (2025-05-06)</small>
 

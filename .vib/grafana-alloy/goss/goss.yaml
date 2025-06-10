@@ -1,0 +1,49 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://127.0.0.1:{{ .Vars.alloy.containerPorts.http }}/-/healthy:
+    status: 200
+    body:
+      - /All Alloy components are healthy./
+  http://grafana-alloy:{{ .Vars.service.ports.http }}/-/healthy:
+    status: 200
+    body:
+      - /All Alloy components are healthy./
+  http://127.0.0.1:{{ .Vars.alloy.containerPorts.http }}/metrics:
+    status: 200
+    body:
+      - /alloy_build_info/
+  http://grafana-alloy:{{ .Vars.service.ports.http }}/metrics:
+    status: 200
+    body:
+      - /alloy_build_info/
+file:
+  /opt/bitnami/grafana-alloy/config/config.alloy:
+    exists: true
+    filetype: symlink
+  {{ if .Vars.alloy.mounts.varlog }}
+  /var/log:
+    exists: true
+    filetype: directory
+  {{ end }}
+  {{ if .Vars.alloy.mounts.dockercontainers }}
+  /var/lib/docker/containers:
+    exists: true
+    filetype: directory
+  {{ end }}
+command:
+  {{- $uid := .Vars.alloy.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}

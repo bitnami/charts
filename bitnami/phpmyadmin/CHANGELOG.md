@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.1.8 (2025-05-13)
+## 18.1.9 (2025-06-05)
 
-* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#33643](https://github.com/bitnami/charts/pull/33643))
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34132](https://github.com/bitnami/charts/pull/34132))
+
+## <small>18.1.8 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references (#33643) ([dc3285d](https://github.com/bitnami/charts/commit/dc3285d94cd18c8711b4729097004331e0e72549)), closes [#33643](https://github.com/bitnami/charts/issues/33643)
 
 ## <small>18.1.7 (2025-05-06)</small>
 
