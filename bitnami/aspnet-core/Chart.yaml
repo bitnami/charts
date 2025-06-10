@@ -5,7 +5,7 @@ annotations:
   category: DeveloperTools
   images: |
     - name: aspnet-core
-      image: docker.io/bitnami/aspnet-core:9.0.5-debian-12-r3
+      image: docker.io/bitnami/aspnet-core:9.0.6-debian-12-r0
     - name: dotnet-sdk
       image: docker.io/bitnami/dotnet-sdk:9.0.300-debian-12-r3
     - name: git
@@ -13,7 +13,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 9.0.5
+appVersion: 9.0.6
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: aspnet-core
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
-version: 7.0.5
+version: 7.0.6
