@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.0.11 (2025-05-21)
+## 9.0.14 (2025-06-05)
 
-* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#33815](https://github.com/bitnami/charts/pull/33815))
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#34124](https://github.com/bitnami/charts/pull/34124))
+
+## <small>9.0.13 (2025-06-05)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34123) ([92f6e0b](https://github.com/bitnami/charts/commit/92f6e0b5896eea27fb35c587337aa7d83bc31be2)), closes [#34123](https://github.com/bitnami/charts/issues/34123)
+
+## <small>9.0.12 (2025-06-04)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34053) ([5f2dcf7](https://github.com/bitnami/charts/commit/5f2dcf76a16b68ee44f71482a3bceb1132ac7a1c)), closes [#34053](https://github.com/bitnami/charts/issues/34053)
+
+## <small>9.0.11 (2025-05-21)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33815) ([51f8096](https://github.com/bitnami/charts/commit/51f80964a134560b54ccbad8d99611dfb64d7cd8)), closes [#33815](https://github.com/bitnami/charts/issues/33815)
 
 ## <small>9.0.10 (2025-05-21)</small>
 

@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: superset
-      image: docker.io/bitnami/superset:4.1.2-debian-12-r6
+      image: docker.io/bitnami/superset:4.1.2-debian-12-r8
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
@@ -38,4 +38,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/superset
 - https://github.com/bitnami/containers/tree/main/bitnami/superset
 - https://github.com/apache/superset
-version: 3.0.2
+version: 3.0.3

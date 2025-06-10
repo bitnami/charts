@@ -604,12 +604,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-## @param ingress.enabled                Enable ingress controller resource
-## @param ingress.hostname               Default host for the ingress resource
-## @param ingress.annotations            Ingress annotations
-## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
-## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
-## @param ingress.secrets Custom TLS certificates as secrets
 ## Configure the ingress resource that allows you to access Schema Registry
 ##
 ingress:

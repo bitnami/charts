@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.0.7 (2025-05-16)
+## 17.0.2 (2025-06-09)
 
-* [bitnami/thanos] Allow custom objstore secret key in receive component ([#33180](https://github.com/bitnami/charts/pull/33180))
+* [bitnami/thanos] Disable MinIO Console ([#34269](https://github.com/bitnami/charts/pull/34269))
+
+## <small>17.0.1 (2025-06-06)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34222) ([48654e6](https://github.com/bitnami/charts/commit/48654e6c16ca5e0f972cf94c1010fa94800a2f96)), closes [#34222](https://github.com/bitnami/charts/issues/34222)
+
+## 17.0.0 (2025-06-04)
+
+* [bitnami/thanos] feat: major version due to Minio major bump (#34091) ([f4be07e](https://github.com/bitnami/charts/commit/f4be07e37cdaac258143bf33ebac05ad31947c14)), closes [#34091](https://github.com/bitnami/charts/issues/34091)
+
+## <small>16.0.7 (2025-05-16)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/thanos] Allow custom objstore secret key in receive component (#33180) ([9a93d4f](https://github.com/bitnami/charts/commit/9a93d4ff1261a9a49cb94c69fd9597ba57668c58)), closes [#33180](https://github.com/bitnami/charts/issues/33180)
 
 ## <small>16.0.6 (2025-05-07)</small>
 

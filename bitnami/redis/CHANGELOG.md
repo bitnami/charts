@@ -1,8 +1,24 @@
 # Changelog
 
-## 21.1.12 (2025-05-31)
+## 21.2.2 (2025-06-10)
 
 * [bitnami/redis] Redis Helm Chart probes are failing ([#33957](https://github.com/bitnami/charts/pull/33957))
+
+## <small>21.2.1 (2025-06-08)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34249](https://github.com/bitnami/charts/pull/34249))
+
+## 21.2.0 (2025-06-06)
+
+* [bitnami/redis] Service Monitor support tlsConfig (#34108) ([7accf94](https://github.com/bitnami/charts/commit/7accf949e1c518bb803d2a3feddbd6f9e064519f)), closes [#34108](https://github.com/bitnami/charts/issues/34108)
+
+## <small>21.1.13 (2025-06-06)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34214) ([691094e](https://github.com/bitnami/charts/commit/691094e50763fa6ca3697ab5425988ccad6c7166)), closes [#34214](https://github.com/bitnami/charts/issues/34214)
+
+## <small>21.1.12 (2025-06-06)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34187) ([ca3e752](https://github.com/bitnami/charts/commit/ca3e7522f8711761f3d619751de0bc1e913d4735)), closes [#34187](https://github.com/bitnami/charts/issues/34187)
 
 ## <small>21.1.11 (2025-05-30)</small>
 

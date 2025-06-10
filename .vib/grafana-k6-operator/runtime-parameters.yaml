@@ -123,8 +123,8 @@ extraDeploy:
       name: http
       targetPort: 8080
 # As they are scratch containers, we need to deploy an extra container
-# for performing goss tests. We basically test that the metrics port
-# works, and also that the testrun was successfully executed
+# for performing goss tests.
+# To do so, we deploy an os-shell container with extra kubectl binary
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -142,6 +142,27 @@ extraDeploy:
       spec:
         serviceAccountName: '{{ include "grafana-k6-operator.serviceAccountName" . }}'
         automountServiceAccountToken: true
+        initContainers:
+        - name: copy-kubectl
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              cp /opt/bitnami/kubectl/bin/kubectl /out/kubectl
+          image: bitnami/kubectl
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /out
         containers:
         - name: kubectl
           command:
@@ -161,7 +182,7 @@ extraDeploy:
             timeoutSeconds: 1
             failureThreshold: 15
             successThreshold: 1
-          image: bitnami/kubectl
+          image: bitnami/os-shell:latest
           securityContext:
             runAsNonRoot: true
             privileged: false
@@ -172,7 +193,11 @@ extraDeploy:
               type: "RuntimeDefault"
           volumeMounts:
             - name: empty-dir
+              subpath: tmp-dir
               mountPath: /tmp
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /opt/bitnami/kubectl/bin
         volumes:
           - name: empty-dir
             emptyDir: {}

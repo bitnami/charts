@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: apache
-      image: docker.io/bitnami/apache:2.4.63-debian-12-r14
+      image: docker.io/bitnami/apache:2.4.63-debian-12-r16
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r6
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r9
     - name: git
-      image: docker.io/bitnami/git:2.49.0-debian-12-r7
+      image: docker.io/bitnami/git:2.49.0-debian-12-r9
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
@@ -38,4 +38,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 11.3.10
+version: 11.3.13

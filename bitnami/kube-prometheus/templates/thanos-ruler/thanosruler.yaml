@@ -1,0 +1,165 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.thanosRuler.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ThanosRuler
+metadata:
+  name: {{ template "kube-prometheus.thanosRuler.name" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  image: {{ include "kube-prometheus.thanosRuler.image" . }}
+  replicas: {{ .Values.thanosRuler.replicaCount }}
+  listenLocal: {{ .Values.thanosRuler.listenLocal }}
+  {{- if .Values.thanosRuler.service.additionalHeadless }}
+  serviceName: {{ printf "%s-headless" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
+  {{- end }}
+  serviceAccountName: {{ include "kube-prometheus.thanosRuler.serviceAccountName" . }}
+{{- if .Values.thanosRuler.externalPrefix }}
+  externalPrefix: "{{ tpl .Values.thanosRuler.externalPrefix . }}"
+{{- else if and .Values.thanosRuler.ingress.enabled .Values.thanosRuler.ingress.hostname }}
+  externalPrefix: "http://{{ tpl (index .Values.thanosRuler.ingress.hostname) . }}{{ .Values.thanosRuler.routePrefix }}"
+{{- end }}
+{{- if .Values.thanosRuler.additionalArgs }}
+  additionalArgs: {{ tpl (toYaml .Values.thanosRuler.additionalArgs) . | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.nodeSelector }}
+  nodeSelector:
+{{ toYaml .Values.thanosRuler.nodeSelector | indent 4 }}
+{{- end }}
+  paused: {{ .Values.thanosRuler.paused }}
+  logFormat: {{ .Values.thanosRuler.logFormat | quote  }}
+  logLevel:  {{ .Values.thanosRuler.logLevel | quote  }}
+  retention: {{ .Values.thanosRuler.retention | quote  }}
+{{- if .Values.thanosRuler.evaluationInterval }}
+  evaluationInterval: {{ .Values.thanosRuler.evaluationInterval }}
+{{- end }}
+{{- if .Values.thanosRuler.ruleNamespaceSelector }}
+  ruleNamespaceSelector:
+    {{ tpl (toYaml .Values.thanosRuler.ruleNamespaceSelector | nindent 4) . }}
+{{ else }}
+  ruleNamespaceSelector: {}
+{{- end }}
+{{- if .Values.thanosRuler.ruleSelector }}
+  ruleSelector:
+    {{ tpl (toYaml .Values.thanosRuler.ruleSelector | nindent 4) .}}
+{{ else }}
+  ruleSelector: {}
+{{- end }}
+{{- if .Values.thanosRuler.alertQueryUrl }}
+  alertQueryUrl: "{{ .Values.thanosRuler.alertQueryUrl }}"
+{{- end}}
+{{- if .Values.thanosRuler.alertmanagersConfig.existingSecret.name }}
+  alertmanagersConfig:
+    key: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.alertmanagersConfig.existingSecret.name . | quote }}
+{{- else if or .Values.thanosRuler.alertmanagersConfig.config .Values.alertmanager.enabled }}
+  alertmanagersConfig:
+    key: alertmanagers-config.yaml
+    name: {{ printf "%s-alertmanagers-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- if .Values.thanosRuler.queryConfig.existingSecret.name }}
+  queryConfig:
+    key: {{ tpl .Values.thanosRuler.queryConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.queryConfig.existingSecret.name . | quote }}
+{{- else if .Values.thanosRuler.queryConfig.config }}
+  queryConfig:
+    key: query-config.yaml
+    name: {{ printf "%s-query-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- if .Values.thanosRuler.resources }}
+  resources: {{ toYaml .Values.thanosRuler.resources | nindent 4 }}
+{{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}
+  resources: {{ include "common.resources.preset" (dict "type" .Values.thanosRuler.resourcesPreset) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.routePrefix }}
+  routePrefix: "{{ .Values.thanosRuler.routePrefix }}"
+{{- end }}
+{{- if .Values.thanosRuler.podSecurityContext.enabled }}
+  securityContext: {{ include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.thanosRuler.podSecurityContext "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.storage }}
+  storage:
+    {{ toYaml .Values.thanosRuler.storage | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.objectStorageConfig.existingSecret.name }}
+  objectStorageConfig:
+    key: {{ tpl .Values.thanosRuler.objectStorageConfig.existingSecret.key . | quote }}
+    name: {{ tpl .Values.thanosRuler.objectStorageConfig.existingSecret.name . | quote }}
+{{- else if .Values.thanosRuler.objectStorageConfig.config }}
+  objectStorageConfig:
+    key: object-storage-config.yaml
+    name: {{ printf "%s-objectstorage-config" (include "kube-prometheus.thanosRuler.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- if .Values.thanosRuler.labels }}
+  labels:
+    {{ tpl (toYaml .Values.thanosRuler.labels) $ | nindent 4 }}
+{{- end }}
+  podMetadata:
+    labels: {{ include "kube-prometheus.thanosRuler.matchLabels" . | nindent 6 }}
+    {{- if .Values.thanosRuler.podMetadata.annotations }}
+    annotations: {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.podMetadata.annotations "context" $) | nindent 6 }}
+    {{- end }}
+{{- if .Values.thanosRuler.affinity }}
+  affinity: {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.affinity "context" $) | nindent 4 }}
+{{- else }}
+  affinity:
+    {{- if not (empty .Values.thanosRuler.podAffinityPreset) }}
+    podAffinity: {{ include "common.affinities.pods" (dict "type" .Values.thanosRuler.podAffinityPreset "component" "thanos-ruler" "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if not (empty .Values.prometheus.podAntiAffinityPreset) }}
+    podAntiAffinity: {{ include "common.affinities.pods" (dict "type" .Values.thanosRuler.podAntiAffinityPreset "component" "thanos-ruler" "context" $) | nindent 6 }}
+    {{- end }}
+    {{- if not (empty .Values.prometheus.nodeAffinityPreset.values) }}
+    nodeAffinity: {{ include "common.affinities.nodes" (dict "type" .Values.thanosRuler.nodeAffinityPreset.type "key" .Values.prometheus.nodeAffinityPreset.key "values" .Values.thanosRuler.nodeAffinityPreset.values) | nindent 6 }}
+    {{- end }}
+{{- end }}
+{{- if .Values.prometheus.tolerations }}
+  tolerations: {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.tolerations "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.topologySpreadConstraints }}
+  topologySpreadConstraints: {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.topologySpreadConstraints "context" $) | nindent 4 }}
+{{- end }}
+{{- include "kube-prometheus.imagePullSecrets" . | nindent 2 }}
+{{- if .Values.thanosRuler.containers }}
+  containers:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.containers "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.initContainers }}
+  initContainers:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.initContainers "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.priorityClassName }}
+  priorityClassName: {{.Values.thanosRuler.priorityClassName }}
+{{- end }}
+{{- if .Values.thanosRuler.volumes }}
+  volumes:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.volumes "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.volumeMounts }}
+  volumeMounts:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.volumeMounts "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.alertDropLabels }}
+  alertDropLabels:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.alertDropLabels "context" $) | nindent 4 }}
+{{- end }}
+  portName: {{ .Values.thanosRuler.portName | quote }}
+{{- if .Values.thanosRuler.web }}
+  web:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.web "context" $) | nindent 4 }}
+{{- end }}
+{{- if .Values.thanosRuler.remoteWrite }}
+  remoteWrite:
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.remoteWrite "context" $) | nindent 4 }}
+{{- end }}
+{{- end }}

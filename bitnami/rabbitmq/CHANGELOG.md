@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.0.4 (2025-05-30)
+## 16.0.7 (2025-06-09)
 
-* [bitnami/rabbitmq] Update dependencies ([#33985](https://github.com/bitnami/charts/pull/33985))
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#34276](https://github.com/bitnami/charts/pull/34276))
+
+## <small>16.0.6 (2025-06-05)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34122) ([073e68a](https://github.com/bitnami/charts/commit/073e68ae186cf2844d608663f413b37c6732d830)), closes [#34122](https://github.com/bitnami/charts/issues/34122)
+
+## <small>16.0.5 (2025-06-02)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34031) ([8e3fe0b](https://github.com/bitnami/charts/commit/8e3fe0b70144eb8c11df19e525c53d1b63c0c52c)), closes [#34031](https://github.com/bitnami/charts/issues/34031)
+
+## <small>16.0.4 (2025-05-30)</small>
+
+* [bitnami/rabbitmq] Update dependencies (#33985) ([f882b31](https://github.com/bitnami/charts/commit/f882b31ca02acff4767a3ee142edce535057d90c)), closes [#33985](https://github.com/bitnami/charts/issues/33985)
 
 ## <small>16.0.3 (2025-05-23)</small>
 

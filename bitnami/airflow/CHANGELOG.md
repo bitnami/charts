@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.1 (2025-05-18)
+## 24.1.2 (2025-06-06)
 
-* [bitnami/airflow] update README to match deprecated values ([#33602](https://github.com/bitnami/charts/pull/33602))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34221](https://github.com/bitnami/charts/pull/34221))
+
+## <small>24.1.1 (2025-05-26)</small>
+
+* [bitnami/airflow] update README to match deprecated values (#33602) ([8622ccf](https://github.com/bitnami/charts/commit/8622ccfcb0445d63b25b915c9d18edeb1f72061a)), closes [#33602](https://github.com/bitnami/charts/issues/33602)
 
 ## 24.1.0 (2025-05-14)
 
