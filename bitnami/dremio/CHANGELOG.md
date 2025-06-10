@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.2 (2025-06-09)
+## 3.0.3 (2025-06-10)
 
-* [bitnami/dremio] Disable MinIO Console ([#34265](https://github.com/bitnami/charts/pull/34265))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#34303](https://github.com/bitnami/charts/pull/34303))
+
+## <small>3.0.2 (2025-06-09)</small>
+
+* [bitnami/dremio] Disable MinIO Console (#34265) ([7fecdb7](https://github.com/bitnami/charts/commit/7fecdb77d17db57ee0498ccb419639cb3a4e6f1f)), closes [#34265](https://github.com/bitnami/charts/issues/34265)
 
 ## <small>3.0.1 (2025-06-06)</small>
 
