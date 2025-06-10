@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.8.4 (2025-05-28)
+## 7.8.5 (2025-06-06)
 
-* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#33947](https://github.com/bitnami/charts/pull/33947))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#34191](https://github.com/bitnami/charts/pull/34191))
+
+## <small>7.8.4 (2025-05-28)</small>
+
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#33947) ([ce6c523](https://github.com/bitnami/charts/commit/ce6c523c75d55bb53af8655bbb53396d5ff7bbb3)), closes [#33947](https://github.com/bitnami/charts/issues/33947)
 
 ## <small>7.8.3 (2025-05-13)</small>
 

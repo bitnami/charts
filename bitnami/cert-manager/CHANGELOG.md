@@ -1,8 +1,17 @@
 # Changelog
 
-## 1.5.0 (2025-05-27)
+## 1.5.2 (2025-06-05)
 
-* [bitnami/cert-manager] added webhook.timeoutSeconds ([#33890](https://github.com/bitnami/charts/pull/33890))
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34141](https://github.com/bitnami/charts/pull/34141))
+
+## <small>1.5.1 (2025-06-05)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34128) ([ac8db5a](https://github.com/bitnami/charts/commit/ac8db5a63830f5ba3a70f5ac5c02cafec0d202de)), closes [#34128](https://github.com/bitnami/charts/issues/34128)
+
+## 1.5.0 (2025-05-29)
+
+* [bitnami/cert-manager] added webhook.timeoutSeconds (#33890) ([3e2b76e](https://github.com/bitnami/charts/commit/3e2b76e83e5227c47342e44a4180ea7a3e7ef182)), closes [#33890](https://github.com/bitnami/charts/issues/33890)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>1.4.16 (2025-05-07)</small>
 

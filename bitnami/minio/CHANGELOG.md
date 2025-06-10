@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.2 (2025-06-04)
+## 17.0.3 (2025-06-06)
 
-* [bitnami/minio] bugfix: wrong svc port target on ingress ([#34097](https://github.com/bitnami/charts/pull/34097))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34195](https://github.com/bitnami/charts/pull/34195))
+
+## <small>17.0.2 (2025-06-04)</small>
+
+* [bitnami/minio] bugfix: wrong svc port target on ingress (#34097) ([a4cefcd](https://github.com/bitnami/charts/commit/a4cefcd1e1bd46a5b18086facc3e559ad3f3ad78)), closes [#34097](https://github.com/bitnami/charts/issues/34097)
 
 ## <small>17.0.1 (2025-06-03)</small>
 

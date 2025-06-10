@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.11 (2025-05-07)
+## 1.2.12 (2025-06-06)
 
-* [bitnami/whereabouts] Release 1.2.11 ([#33522](https://github.com/bitnami/charts/pull/33522))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34230](https://github.com/bitnami/charts/pull/34230))
+
+## <small>1.2.11 (2025-05-07)</small>
+
+* [bitnami/whereabouts] Release 1.2.11 (#33522) ([9e8888b](https://github.com/bitnami/charts/commit/9e8888b5ef62e5e664b24fbf3abb73511adca1af)), closes [#33522](https://github.com/bitnami/charts/issues/33522)
 
 ## <small>1.2.10 (2025-05-06)</small>
 
