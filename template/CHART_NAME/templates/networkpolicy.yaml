@@ -4,8 +4,8 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.networkPolicy.enabled }}
-kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+kind: NetworkPolicy
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
