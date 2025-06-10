@@ -3,6 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if not .Values.alloy.existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -45,3 +46,4 @@ data:
     {{- if .Values.alloy.extraConfig }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alloy.extraConfig "context" .) | nindent 4 }}
     {{- end }}
+{{- end }}
