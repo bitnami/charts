@@ -6,7 +6,7 @@
 
 ## <small>0.1.2 (2025-06-10)</small>
 
-* [bitnami/grafana-alloy] Avoid ConfigMap creation if existing one ([#34305](https://github.com/bitnami/charts/pull/34305))
+* [bitnami/grafana-alloy] Avoid ConfigMap creating if existing one (#34305) ([5cfdd25](https://github.com/bitnami/charts/commit/5cfdd25b5df92747a8ee3492242abad89f437d7b)), closes [#34305](https://github.com/bitnami/charts/issues/34305)
 
 ## <small>0.1.1 (2025-06-09)</small>
 
