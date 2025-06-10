@@ -639,7 +639,7 @@ configReloader:
 service:
   ## @param service.type Grafana Alloy service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.ports.http Grafana Alloy service HTTP port
   ##
   ports:

@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.1 (2025-06-08)
+## 21.2.2 (2025-06-10)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34249](https://github.com/bitnami/charts/pull/34249))
+* [bitnami/redis] Redis Helm Chart probes are failing ([#33957](https://github.com/bitnami/charts/pull/33957))
+
+## <small>21.2.1 (2025-06-08)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34249) ([b53c05d](https://github.com/bitnami/charts/commit/b53c05d485d10398d09d894d0c77e007e45ca0ae)), closes [#34249](https://github.com/bitnami/charts/issues/34249)
 
 ## 21.2.0 (2025-06-06)
 

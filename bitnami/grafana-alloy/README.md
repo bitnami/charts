@@ -332,42 +332,42 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 
 ### Traffic Exposure Parameters
 
-| Name                                    | Description                                                                                                                      | Value          |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `service.type`                          | Grafana Alloy service type                                                                                                       | `LoadBalancer` |
-| `service.ports.http`                    | Grafana Alloy service HTTP port                                                                                                  | `80`           |
-| `service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`           |
-| `service.clusterIP`                     | Grafana Alloy service Cluster IP                                                                                                 | `""`           |
-| `service.loadBalancerIP`                | Grafana Alloy service Load Balancer IP                                                                                           | `""`           |
-| `service.loadBalancerSourceRanges`      | Grafana Alloy service Load Balancer sources                                                                                      | `[]`           |
-| `service.externalTrafficPolicy`         | Grafana Alloy service external traffic policy                                                                                    | `Cluster`      |
-| `service.annotations`                   | Additional custom annotations for Grafana Alloy service                                                                          | `{}`           |
-| `service.extraPorts`                    | Extra ports to expose in Grafana Alloy service (normally used with the `sidecars` value)                                         | `[]`           |
-| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`         |
-| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`           |
-| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`         |
-| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`         |
-| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`         |
-| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                        | `true`         |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`           |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`           |
-| `networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                              | `{}`           |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                        | `{}`           |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                    | `{}`           |
-| `ingress.enabled`                       | Enable ingress record generation for Grafana Alloy                                                                               | `false`        |
-| `ingress.pathType`                      | Ingress path type                                                                                                                | `Prefix`       |
-| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`           |
-| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `alloy.local`  |
-| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`           |
-| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`            |
-| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`           |
-| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`        |
-| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`        |
-| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`           |
-| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`           |
-| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`           |
-| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`           |
-| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`           |
+| Name                                    | Description                                                                                                                      | Value         |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `service.type`                          | Grafana Alloy service type                                                                                                       | `ClusterIP`   |
+| `service.ports.http`                    | Grafana Alloy service HTTP port                                                                                                  | `80`          |
+| `service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`          |
+| `service.clusterIP`                     | Grafana Alloy service Cluster IP                                                                                                 | `""`          |
+| `service.loadBalancerIP`                | Grafana Alloy service Load Balancer IP                                                                                           | `""`          |
+| `service.loadBalancerSourceRanges`      | Grafana Alloy service Load Balancer sources                                                                                      | `[]`          |
+| `service.externalTrafficPolicy`         | Grafana Alloy service external traffic policy                                                                                    | `Cluster`     |
+| `service.annotations`                   | Additional custom annotations for Grafana Alloy service                                                                          | `{}`          |
+| `service.extraPorts`                    | Extra ports to expose in Grafana Alloy service (normally used with the `sidecars` value)                                         | `[]`          |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`        |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`          |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`        |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`        |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`        |
+| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                        | `true`        |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`          |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`          |
+| `networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                              | `{}`          |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                        | `{}`          |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                    | `{}`          |
+| `ingress.enabled`                       | Enable ingress record generation for Grafana Alloy                                                                               | `false`       |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `Prefix`      |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`          |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `alloy.local` |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`          |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`           |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`          |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`       |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`       |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`          |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`          |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`          |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`          |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`          |
 
 ### Other Parameters
 

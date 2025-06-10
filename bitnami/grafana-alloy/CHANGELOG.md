@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2025-06-10)
+## 0.1.3 (2025-06-10)
 
 * [bitnami/grafana-alloy] Allow tpl ingress hostname ([#34289](https://github.com/bitnami/charts/pull/34289))
+
+## <small>0.1.2 (2025-06-10)</small>
+
+* [bitnami/grafana-alloy] Avoid ConfigMap creation if existing one ([#34305](https://github.com/bitnami/charts/pull/34305))
 
 ## <small>0.1.1 (2025-06-09)</small>
 
