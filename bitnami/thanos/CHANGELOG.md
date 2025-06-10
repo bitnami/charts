@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.1 (2025-06-06)
+## 17.0.2 (2025-06-09)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34222](https://github.com/bitnami/charts/pull/34222))
+* [bitnami/thanos] Disable MinIO Console ([#34269](https://github.com/bitnami/charts/pull/34269))
+
+## <small>17.0.1 (2025-06-06)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34222) ([48654e6](https://github.com/bitnami/charts/commit/48654e6c16ca5e0f972cf94c1010fa94800a2f96)), closes [#34222](https://github.com/bitnami/charts/issues/34222)
 
 ## 17.0.0 (2025-06-04)
 

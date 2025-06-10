@@ -2314,6 +2314,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 9000
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 
 ## @section Prometheus metrics parameters
 ##

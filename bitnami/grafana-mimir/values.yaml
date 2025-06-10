@@ -5043,6 +5043,10 @@ minio:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 ## @section External Memcached (Chunks) Parameters
 ##
 externalMemcachedChunks:
