@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.7.10 (2025-06-09)
+## 11.7.10 (2025-06-10)
 
 * [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#34286](https://github.com/bitnami/charts/pull/34286))
 
