@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.0.4 (2025-06-10)
+## 15.0.4 (2025-06-11)
 
 * [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34231](https://github.com/bitnami/charts/pull/34231))
 
