@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.0.11 (2025-06-10)
+## 23.0.11 (2025-06-11)
 
 * [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#34330](https://github.com/bitnami/charts/pull/34330))
 
