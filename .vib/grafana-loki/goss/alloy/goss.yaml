@@ -16,11 +16,9 @@ file:
     filetype: symlink
     contents:
     - 'http://grafana-loki-gateway'
-  {{ if .Vars.grafanaalloy.alloy.mounts.varlog }}
   /var/log:
     exists: true
     filetype: directory
-  {{ end }}
 command:
   {{- $uid := .Vars.grafanaalloy.alloy.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.grafanaalloy.podSecurityContext.fsGroup }}

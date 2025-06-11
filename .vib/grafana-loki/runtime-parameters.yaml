@@ -56,7 +56,6 @@ grafanaalloy:
       enabled: true
       runAsUser: 1002
   service:
-    type: LoadBalancer
     ports:
       http: 8081
   rbac:
