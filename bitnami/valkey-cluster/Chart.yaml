@@ -9,11 +9,11 @@ annotations:
     - name: redis-exporter
       image: docker.io/bitnami/redis-exporter:1.74.0-debian-12-r0
     - name: valkey-cluster
-      image: docker.io/bitnami/valkey-cluster:8.1.1-debian-12-r3
+      image: docker.io/bitnami/valkey-cluster:8.1.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
-appVersion: 8.1.1
+appVersion: 8.1.2
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -36,4 +36,4 @@ name: valkey-cluster
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster
 - https://github.com/bitnami/containers/tree/main/bitnami/vakey-cluster
-version: 3.0.12
+version: 3.0.13
