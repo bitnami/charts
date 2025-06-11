@@ -49,7 +49,7 @@
             "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "ds-grafana-loki-alloy"
+                "workload": "ds-grafana-loki-grafanaalloy"
               }
             }
           }
