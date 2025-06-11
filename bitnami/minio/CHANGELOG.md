@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.4 (2025-06-10)
+## 17.0.4 (2025-06-11)
 
 *  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is added ([#34311](https://github.com/bitnami/charts/pull/34311))
 
