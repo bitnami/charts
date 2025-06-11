@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.21 (2025-06-05)
+## 0.1.22 (2025-06-11)
 
-* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#34144](https://github.com/bitnami/charts/pull/34144))
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#34352](https://github.com/bitnami/charts/pull/34352))
+
+## <small>0.1.21 (2025-06-05)</small>
+
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references (#34144) ([8d87251](https://github.com/bitnami/charts/commit/8d87251d5f105eb021a9ed164e899f73852e2a39)), closes [#34144](https://github.com/bitnami/charts/issues/34144)
 
 ## <small>0.1.20 (2025-06-03)</small>
 
