@@ -15,7 +15,7 @@ file:
     exists: true
     filetype: symlink
     contents:
-    - /http://grafana-loki-gateway/
+    - 'http://grafana-loki-gateway'
   {{ if .Vars.grafanaalloy.alloy.mounts.varlog }}
   /var/log:
     exists: true
