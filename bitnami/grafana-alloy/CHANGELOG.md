@@ -2,7 +2,7 @@
 
 ## 0.1.3 (2025-06-10)
 
-* [bitnami/grafana-alloy] Allow tpl ingress hostname ([#34289](https://github.com/bitnami/charts/pull/34289))
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#34309](https://github.com/bitnami/charts/pull/34309))
 
 ## <small>0.1.2 (2025-06-10)</small>
 
