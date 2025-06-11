@@ -300,10 +300,10 @@ alloy:
   ##     containerPort: 9090
   ##
   extraContainerPorts: []
-  ## @param alloy.existingConfigmap The name of an existing ConfigMap with your custom configuration for Grafana Alloy
+  ## @param alloy.existingSecret The name of an existing Secret with your custom configuration for Grafana Alloy
   ##
-  existingConfigmap: ""
-  ## @param alloy.configuration Specify content for Grafan Alloy config file. Omitted if alloy.existingConfigmap is provided.
+  existingSecret: ""
+  ## @param alloy.configuration Specify content for Grafana Alloy config file. Omitted if alloy.existingSecret is provided.
   ## e.g:
   ## configuration: |-
   ##   ...
