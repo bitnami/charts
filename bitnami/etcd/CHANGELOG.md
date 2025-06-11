@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.3 (2025-06-06)
+## 12.0.4 (2025-06-11)
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34244](https://github.com/bitnami/charts/pull/34244))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34350](https://github.com/bitnami/charts/pull/34350))
+
+## <small>12.0.3 (2025-06-06)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34244) ([3359be4](https://github.com/bitnami/charts/commit/3359be42c419564ea972adf895828ce3da92052f)), closes [#34244](https://github.com/bitnami/charts/issues/34244)
 
 ## <small>12.0.2 (2025-06-05)</small>
 
