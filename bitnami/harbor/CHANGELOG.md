@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.7.5 (2025-06-09)
+## 26.7.5 (2025-06-11)
 
 * [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34264](https://github.com/bitnami/charts/pull/34264))
 
