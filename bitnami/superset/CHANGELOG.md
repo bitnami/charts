@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2025-06-09)
+## 3.0.4 (2025-06-12)
 
-* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#34274](https://github.com/bitnami/charts/pull/34274))
+* [bitnami/superset] Fix warnings during deployment ([#34374](https://github.com/bitnami/charts/pull/34374))
+
+## <small>3.0.3 (2025-06-09)</small>
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#34274) ([548bf19](https://github.com/bitnami/charts/commit/548bf19e2cb77c60610f83b2e213b1a156c16ae5)), closes [#34274](https://github.com/bitnami/charts/issues/34274)
 
 ## <small>3.0.2 (2025-05-28)</small>
 
