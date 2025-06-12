@@ -62,7 +62,7 @@ Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "superset.redis.fullname" -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "redis-master" "chartValues" .Values.redis "context" $) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -171,7 +171,11 @@ Add environment variables to configure database values
 Add environment variables to configure redis values
 */}}
 {{- define "superset.redis.host" -}}
-{{- ternary (include "superset.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s-master" (include "superset.redis.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" (tpl .Values.externalRedis.host $) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
