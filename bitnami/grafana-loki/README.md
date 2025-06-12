@@ -1366,14 +1366,6 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 
 | Name                                         | Description                                                                                                                                                             | Value                       |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `grafanaalloy.alloy.containerPorts.http`     | Grafana Alloy HTTP port                                                                                                                                                 | `8080`                      |
-| `grafanaalloy.alloy.createSecret`            | Create a Secret with the default configuration for Grafana Alloy to send logs to Loki.                                                                                  | `true`                      |
-| `grafanaalloy.alloy.existingSecret`          | The name of an existing Secret with your custom configuration for Grafana Alloy. If the grafanaalloy.alloy.createSecret is set, it will create a Secret with this name. | `grafana-loki-grafanaalloy` |
-| `grafanaalloy.alloy.configuration`           | Specify content for Grafana Alloy config file. Omitted if grafanaalloy.alloy.existingSecret is provided.                                                                | `""`                        |
-| `grafanaalloy.alloy.extraConfig`             | Append extra configuration to the default config file                                                                                                                   | `""`                        |
-| `grafanaalloy.alloy.clustering.enabled`      | Deploy Grafana Alloy in a cluster to allow for load distribution.                                                                                                       | `false`                     |
-| `grafanaalloy.alloy.clustering.name`         | Name for the Grafana Alloy cluster. Used for differentiating between clusters.                                                                                          | `""`                        |
-| `grafanaalloy.alloy.clustering.portName`     | Name for the port used for clustering, useful if running inside an Istio Mesh                                                                                           | `http`                      |
 | `grafanaalloy.alloy.stabilityLevel`          | Minimum stability level of components and behavior to enable. Must be                                                                                                   | `generally-available`       |
 | `grafanaalloy.alloy.listenAddr`              | Address to listen for traffic on. 0.0.0.0 exposes the UI to other containers.                                                                                           | `0.0.0.0`                   |
 | `grafanaalloy.alloy.uiPathPrefix`            | Base path where the UI is exposed.                                                                                                                                      | `/`                         |
@@ -1381,42 +1373,13 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `grafanaalloy.alloy.enableReporting`         | Enables sending Grafana Labs anonymous usage stats to help improve Grafana grafanaalloy.alloy.                                                                          | `true`                      |
 | `grafanaalloy.alloy.mounts.varlog`           | Mount /var/log from the host into the container for log collection.                                                                                                     | `true`                      |
 | `grafanaalloy.alloy.mounts.dockercontainers` | Mount /var/lib/docker/containers from the host into the container for log                                                                                               | `true`                      |
-
-### ConfigMap Reload parameters
-
-| Name                                              | Description                          | Value  |
-| ------------------------------------------------- | ------------------------------------ | ------ |
-| `grafanaalloy.configReloader.containerPorts.http` | ConfigMap Reload HTTP container port | `9533` |
-
-### Grafana Alloy Traffic Exposure Parameters
-
-| Name                                                       | Description                                                                                                                | Value       |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `grafanaalloy.service.type`                                | Alloy service type                                                                                                         | `ClusterIP` |
-| `grafanaalloy.service.ports.http`                          | Alloy HTTP service port                                                                                                    | `3100`      |
-| `grafanaalloy.service.nodePorts.http`                      | Node port for HTTP                                                                                                         | `""`        |
-| `grafanaalloy.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                | `{}`        |
-| `grafanaalloy.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                                                           | `None`      |
-| `grafanaalloy.service.clusterIP`                           | Alloy service Cluster IP                                                                                                   | `""`        |
-| `grafanaalloy.service.loadBalancerIP`                      | Alloy service Load Balancer IP                                                                                             | `""`        |
-| `grafanaalloy.service.loadBalancerSourceRanges`            | Alloy service Load Balancer sources                                                                                        | `[]`        |
-| `grafanaalloy.service.externalTrafficPolicy`               | Alloy service external traffic policy                                                                                      | `Cluster`   |
-| `grafanaalloy.service.annotations`                         | Additional custom annotations for Alloy service                                                                            | `{}`        |
-| `grafanaalloy.service.extraPorts`                          | Extra ports to expose in the Alloy service                                                                                 | `[]`        |
-| `grafanaalloy.rbac.create`                                 | Create RBAC rules                                                                                                          | `true`      |
-| `grafanaalloy.serviceAccount.create`                       | Enable creation of ServiceAccount for Alloy pods                                                                           | `true`      |
-| `grafanaalloy.serviceAccount.name`                         | The name of the ServiceAccount to use                                                                                      | `""`        |
-| `grafanaalloy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the grafanaalloy.serviceAccount.created                                        | `true`      |
-| `grafanaalloy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                       | `{}`        |
-| `grafanaalloy.networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                        | `true`      |
-| `grafanaalloy.networkPolicy.allowExternal`                 | Don't require server label for connections                                                                                 | `true`      |
-| `grafanaalloy.networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                                            | `true`      |
-| `grafanaalloy.networkPolicy.addExternalClientAccess`       | Allow access from pods with client label set to "true". Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.     | `true`      |
-| `grafanaalloy.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
-| `grafanaalloy.networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`        |
-| `grafanaalloy.networkPolicy.ingressPodMatchLabels`         | Labels to match to allow traffic from other pods. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.           | `{}`        |
-| `grafanaalloy.networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.     | `{}`        |
-| `grafanaalloy.networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true. | `{}`        |
+| `grafanaalloy.alloy.clustering.enabled`      | Deploy Grafana Alloy in a cluster to allow for load distribution.                                                                                                       | `false`                     |
+| `grafanaalloy.alloy.clustering.name`         | Name for the Grafana Alloy cluster. Used for differentiating between clusters.                                                                                          | `""`                        |
+| `grafanaalloy.alloy.clustering.portName`     | Name for the port used for clustering, useful if running inside an Istio Mesh                                                                                           | `http`                      |
+| `grafanaalloy.alloy.createSecret`            | Create a Secret with the default configuration for Grafana Alloy to send logs to Loki.                                                                                  | `true`                      |
+| `grafanaalloy.alloy.existingSecret`          | The name of an existing Secret with your custom configuration for Grafana Alloy. If the grafanaalloy.alloy.createSecret is set, it will create a Secret with this name. | `grafana-loki-grafanaalloy` |
+| `grafanaalloy.alloy.configuration`           | Specify content for Grafana Alloy config file. Omitted if grafanaalloy.alloy.existingSecret is provided.                                                                | `""`                        |
+| `grafanaalloy.alloy.extraConfig`             | Append extra configuration to the default config file                                                                                                                   | `""`                        |
 
 ### Init Container Parameters
 

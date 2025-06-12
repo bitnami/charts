@@ -4478,33 +4478,6 @@ grafanaalloy:
   ## @section Alloy container specific parameters
   ##
   alloy:
-    ## @param grafanaalloy.alloy.containerPorts.http Grafana Alloy HTTP port
-    ##
-    containerPorts:
-      http: 8080
-    ## @param grafanaalloy.alloy.createSecret Create a Secret with the default configuration for Grafana Alloy to send logs to Loki.
-    ##
-    createSecret: true
-    ## @param grafanaalloy.alloy.existingSecret The name of an existing Secret with your custom configuration for Grafana Alloy. If the grafanaalloy.alloy.createSecret is set, it will create a Secret with this name.
-    ##
-    existingSecret: "grafana-loki-grafanaalloy"
-    ## @param grafanaalloy.alloy.configuration Specify content for Grafana Alloy config file. Omitted if grafanaalloy.alloy.existingSecret is provided.
-    ## e.g:
-    ## configuration: |-
-    ##   ...
-    ##
-    configuration: ""
-    ## @param grafanaalloy.alloy.extraConfig Append extra configuration to the default config file
-    ##
-    extraConfig: ""
-    ## @param grafanaalloy.alloy.clustering.enabled Deploy Grafana Alloy in a cluster to allow for load distribution.
-    ## @param grafanaalloy.alloy.clustering.name Name for the Grafana Alloy cluster. Used for differentiating between clusters.
-    ## @param grafanaalloy.alloy.clustering.portName Name for the port used for clustering, useful if running inside an Istio Mesh
-    ##
-    clustering:
-      enabled: false
-      name: ""
-      portName: http
     ## @param grafanaalloy.alloy.stabilityLevel Minimum stability level of components and behavior to enable. Must be
     ##  one of "experimental", "public-preview", or "generally-available".
     stabilityLevel: "generally-available"
@@ -4522,158 +4495,29 @@ grafanaalloy:
     mounts:
       varlog: true
       dockercontainers: true
-
-  ## @section ConfigMap Reload parameters
-  ##
-  configReloader:
-    ## @param grafanaalloy.configReloader.containerPorts.http ConfigMap Reload HTTP container port
+    ## @param grafanaalloy.alloy.clustering.enabled Deploy Grafana Alloy in a cluster to allow for load distribution.
+    ## @param grafanaalloy.alloy.clustering.name Name for the Grafana Alloy cluster. Used for differentiating between clusters.
+    ## @param grafanaalloy.alloy.clustering.portName Name for the port used for clustering, useful if running inside an Istio Mesh
     ##
-    containerPorts:
-      http: 9533
-
-  ## @section Grafana Alloy Traffic Exposure Parameters
-  ##
-  ## Grafana Alloy service parameters
-  ##
-  service:
-    ## @param grafanaalloy.service.type Alloy service type
+    clustering:
+      enabled: false
+      name: ""
+      portName: http
+    ## @param grafanaalloy.alloy.createSecret Create a Secret with the default configuration for Grafana Alloy to send logs to Loki.
     ##
-    type: ClusterIP
-    ## @param grafanaalloy.service.ports.http Alloy HTTP service port
+    createSecret: true
+    ## @param grafanaalloy.alloy.existingSecret The name of an existing Secret with your custom configuration for Grafana Alloy. If the grafanaalloy.alloy.createSecret is set, it will create a Secret with this name.
     ##
-    ports:
-      http: 3100
-    ## Node ports to expose
-    ## NOTE: choose port between <30000-32767>
-    ## @param grafanaalloy.service.nodePorts.http Node port for HTTP
-    ##
-    nodePorts:
-      http: ""
-    ## @param grafanaalloy.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param grafanaalloy.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-    ##
-    sessionAffinity: None
-    ## @param grafanaalloy.service.clusterIP Alloy service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param grafanaalloy.service.loadBalancerIP Alloy service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param grafanaalloy.service.loadBalancerSourceRanges Alloy service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    existingSecret: "grafana-loki-grafanaalloy"
+    ## @param grafanaalloy.alloy.configuration Specify content for Grafana Alloy config file. Omitted if grafanaalloy.alloy.existingSecret is provided.
     ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
+    ## configuration: |-
+    ##   ...
     ##
-    loadBalancerSourceRanges: []
-    ## @param grafanaalloy.service.externalTrafficPolicy Alloy service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    configuration: ""
+    ## @param grafanaalloy.alloy.extraConfig Append extra configuration to the default config file
     ##
-    externalTrafficPolicy: Cluster
-    ## @param grafanaalloy.service.annotations Additional custom annotations for Alloy service
-    ##
-    annotations: {}
-    ## @param grafanaalloy.service.extraPorts Extra ports to expose in the Alloy service
-    ##
-    extraPorts: []
-
-  ## Create RBAC
-  ## @param grafanaalloy.rbac.create Create RBAC rules
-  ##
-  rbac:
-    create: true
-  ## Service account for Loki to use
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccount:
-    ## @param grafanaalloy.serviceAccount.create Enable creation of ServiceAccount for Alloy pods
-    ##
-    create: true
-    ## @param grafanaalloy.serviceAccount.name The name of the ServiceAccount to use
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
-    name: ""
-    ## @param grafanaalloy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the grafanaalloy.serviceAccount.created
-    ## Can be set to false if pods using this grafanaalloy.serviceAccount.do not need to use K8s API
-    ##
-    automountServiceAccountToken: true
-    ## @param grafanaalloy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
-    ##
-    annotations: {}
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param grafanaalloy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param grafanaalloy.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param grafanaalloy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param grafanaalloy.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.
-    ##
-    addExternalClientAccess: true
-    ## @param grafanaalloy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param grafanaalloy.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param grafanaalloy.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.
-    ## e.g:
-    ## ingressPodMatchLabels:
-    ##   my-client: "true"
-    #
-    ingressPodMatchLabels: {}
-    ## @param grafanaalloy.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.
-    ## @param grafanaalloy.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `grafanaalloy.networkPolicy.allowExternal` is true.
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
+    extraConfig: ""
 
 ## @section Init Container Parameters
 ##
