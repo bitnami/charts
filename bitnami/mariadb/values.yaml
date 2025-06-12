@@ -483,6 +483,32 @@ primary:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## MariaDB primary init container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param primary.initContainerSecurityContext.enabled MariaDB primary init container securityContext
+  ## @param primary.initContainerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in init container
+  ## @param primary.initContainerSecurityContext.runAsUser User ID for the MariaDB primary init container
+  ## @param primary.initContainerSecurityContext.runAsGroup Group ID for the MariaDB primary init container
+  ## @param primary.initContainerSecurityContext.runAsNonRoot Set primary init container's Security Context runAsNonRoot
+  ## @param primary.initContainerSecurityContext.privileged Set primary init container's Security Context privileged
+  ## @param primary.initContainerSecurityContext.allowPrivilegeEscalation Set primary init container's Security Context allowPrivilegeEscalation
+  ## @param primary.initContainerSecurityContext.readOnlyRootFilesystem Set init container's Security Context readOnlyRootFilesystem
+  ## @param primary.initContainerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param primary.initContainerSecurityContext.seccompProfile.type Set init container's Security Context seccomp profile
+  ##
+  initContainerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
