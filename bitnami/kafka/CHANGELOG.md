@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.2.16 (2025-06-11)
+## 32.2.16 (2025-06-12)
 
 * [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list ([#34359](https://github.com/bitnami/charts/pull/34359))
 
