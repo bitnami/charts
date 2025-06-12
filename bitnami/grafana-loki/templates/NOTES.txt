@@ -102,34 +102,6 @@ Installed components:
 {{- end }}
 {{- end }}
 
-{{- if .Values.grafanaalloy.enabled }}
-{{- if .Values.grafanaalloy.ingress.enabled }}
-
-2. Get the Alloy dashboard URL and associate its hostname to your cluster external IP:
-
-    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-    echo "Dashboard URL: http{{ if .Values.grafanaalloy.ingress.tls }}s{{ end }}://{{ .Values.grafanaalloy.ingress.hostname }}/"
-    echo "$CLUSTER_IP  {{ .Values.grafanaalloy.ingress.hostname }}" | sudo tee -a /etc/hosts
-
-{{- else }}
-
-2. Get the Alloy dashboard URL by running these commands:
-
-{{- if contains "NodePort" .Values.grafanaalloy.service.type }}
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "grafana-loki.grafana-alloy.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    echo "HTTP port at $NODE_IP:$NODE_PORT"
-{{- else if contains "LoadBalancer" .Values.grafanaalloy.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ template "grafana-loki.grafana-alloy.fullname" . }}'
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "grafana-loki.grafana-alloy.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    echo "HTTP port at $SERVICE_IP:{{ .Values.grafanaalloy.service.ports.http }}"
-{{- else if contains "ClusterIP" .Values.grafanaalloy.service.type }}
-    echo "HTTP port at 127.0.0.1:2020"
-    kubectl port-forward svc/{{ template "grafana-loki.grafana-alloy.fullname" . }} 2020:{{ .Values.grafanaalloy.service.ports.http }} &
-{{- end }}
-{{- end }}
-{{- end }}
 
 {{- include "grafana-loki.checkRollingTags" . }}
 {{- include "grafana-loki.validateValues" . }}
