@@ -120,7 +120,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 17.5.0-debian-12-r9
+    tag: 17.5.0-debian-12-r10
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
