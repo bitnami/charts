@@ -256,8 +256,6 @@ Check if there are rolling tags in the images
 */}}
 {{- define "grafana-loki.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.loki.image }}
-{{- include "common.warnings.rollingTag" .Values.grafanaalloy.alloy.image }}
-{{- include "common.warnings.rollingTag" .Values.grafanaalloy.configReloader.image }}
 {{- include "common.warnings.rollingTag" .Values.gateway.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}
