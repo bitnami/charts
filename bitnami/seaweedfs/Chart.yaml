@@ -9,7 +9,7 @@ annotations:
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r46
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r11
+      image: docker.io/bitnami/postgresql:17.5.0-debian-12-r12
     - name: seaweedfs
       image: docker.io/bitnami/seaweedfs:3.90.0-debian-12-r0
   licenses: Apache-2.0
@@ -51,4 +51,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 4.8.21
+version: 4.8.22
