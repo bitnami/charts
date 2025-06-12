@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.5.8 (2025-06-11)
+## 20.5.9 (2025-06-12)
 
-* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#34336](https://github.com/bitnami/charts/pull/34336))
+* [bitnami/mariadb] Add initContainerSecurityContext parameter for primary initContainer ([#34373](https://github.com/bitnami/charts/pull/34373))
+
+## <small>20.5.8 (2025-06-11)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#34336) ([cd273c8](https://github.com/bitnami/charts/commit/cd273c807587629b0d3fa91037f8f4628e698373)), closes [#34336](https://github.com/bitnami/charts/issues/34336)
 
 ## <small>20.5.7 (2025-06-06)</small>
 
