@@ -5,11 +5,11 @@ annotations:
   category: DeveloperTools
   images: |
     - name: sealed-secrets-controller
-      image: docker.io/bitnami/sealed-secrets-controller:0.29.0-debian-12-r5
+      image: docker.io/bitnami/sealed-secrets-controller:0.30.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.29.0
+appVersion: 0.30.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ name: sealed-secrets
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
 - https://github.com/bitnami-labs/sealed-secrets
-version: 2.5.13
+version: 2.5.14
