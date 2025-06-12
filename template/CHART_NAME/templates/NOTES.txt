@@ -33,11 +33,7 @@ In order to replicate the container startup scripts execute this command:
 {{- include "common.warnings.rollingTag" .Values.%%MAIN_OBJECT_BLOCK%%.image }}
 {{- include "common.warnings.rollingTag" .Values.%%OTHER_OBJECT_BLOCK%%.image }}
 {{- include "common.warnings.rollingTag" .Values.defaultInitContainers.volumePermissions.image }}
-{{- $resourcesSections := list "%%MAIN_OBJECT_BLOCK%%" "%%OTHER_OBJECT_BLOCK%%." }}
-{{- if .Values.defaultInitContainers.volumePermissions.enabled }}
-  {{- $resourcesSections = append $resourcesSections "defaultInitContainers.volumePermissions" }}
-{{- end }}
-{{- include "common.warnings.resources" (dict "sections" $resourcesSections "context" .) }}
+{{- include "common.warnings.resources" (dict "sections" (list "%%MAIN_OBJECT_BLOCK%%" "%%OTHER_OBJECT_BLOCK%%." "defaultInitContainers.volumePermissions") "context" .) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.%%MAIN_OBJECT_BLOCK%%.image .Values.%%OTHER_OBJECT_BLOCK%%.image .Values.defaultInitContainers.volumePermissions.image) "context" .) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.%%MAIN_OBJECT_BLOCK%%.image .Values.%%OTHER_OBJECT_BLOCK%%.image .Values.defaultInitContainers.volumePermissions.image) "context" .) }}
 {{- include "%%TEMPLATE_NAME%%.validateValues" . }}
