@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.0 (2025-06-11)
+## 5.0.0 (2025-06-12)
 
 * [bitnami/grafana-loki] Replace promtail with alloy ([#34338](https://github.com/bitnami/charts/pull/34338))
 
