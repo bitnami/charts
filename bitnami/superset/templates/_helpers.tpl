@@ -124,7 +124,11 @@ Get the configmap name
 Add environment variables to configure database values
 */}}
 {{- define "superset.database.host" -}}
-{{- ternary (include "superset.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+    {{- printf "%s-primary" (ternary (include "superset.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled) -}}
+{{- else -}}
+    {{- ternary (include "superset.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
