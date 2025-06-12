@@ -2,14 +2,15 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://grafana-alloy:{{ .Vars.grafanaalloy.service.ports.http }}/-/healthy:
+  http://grafana-loki-grafanaalloy:{{ .Vars.grafanaalloy.service.ports.http }}/-/healthy:
     status: 200
     body:
-      - /All Alloy components are healthy./
-  http://grafana-alloy:{{ .Vars.grafanaalloy.service.ports.http }}/metrics:
+      - 'All Alloy components are healthy.'
+  http://grafana-loki-grafanaalloy:{{ .Vars.grafanaalloy.service.ports.http }}/metrics:
     status: 200
     body:
-      - /alloy_build_info/
+      - 'alloy_build_info'
+      - 'loki_write_sent_bytes_total'
 file:
   /opt/bitnami/grafana-alloy/config/config.alloy:
     exists: true
@@ -32,5 +33,5 @@ command:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
-    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+    - /serviceaccount.*name.*grafana-loki-grafanaalloy/
   {{ end }}
