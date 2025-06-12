@@ -111,7 +111,7 @@ Return the proper Grafana Loki image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-loki.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.grafanaalloy.alloy.image .Values.grafanaalloy.configReloader.image .Values.volumePermissions.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
