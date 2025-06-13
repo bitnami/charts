@@ -11,7 +11,7 @@ annotations:
     - name: prometheus
       image: docker.io/bitnami/prometheus:3.4.1-debian-12-r2
     - name: thanos
-      image: docker.io/bitnami/thanos:0.38.0-debian-12-r4
+      image: docker.io/bitnami/thanos:0.38.0-debian-12-r5
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -39,4 +39,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
 - https://github.com/prometheus/prometheus
 - https://github.com/prometheus-community/helm-charts
-version: 2.1.6
+version: 2.1.7
