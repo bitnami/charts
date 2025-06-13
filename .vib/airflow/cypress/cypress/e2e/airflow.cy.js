@@ -21,7 +21,6 @@ it('allows triggering execution of a sample DAG', () => {
     cy.get('div').contains(new Date().toISOString().split('T')[0]);
   });
 });
-
 it('allows to create a user', () => {
   cy.login();
   cy.visit('/auth/users/add');
@@ -30,7 +29,7 @@ it('allows to create a user', () => {
     cy.get('#last_name').type(users.newUser.lastName);
     cy.get('#username').type(`${users.newUser.username}.${random}`);
     cy.get('#email').type(`${users.newUser.username}.${random}@email.com`);
-    cy.get('input[type="search"]').type(`${users.newUser.role}{enter}`);
+    cy.get('select[id="roles"]').select(`${users.newUser.role}`, {force: true});
     cy.get('#password').type(users.newUser.password);
     cy.get('#conf_password').type(users.newUser.password);
     cy.contains('Save').click();
