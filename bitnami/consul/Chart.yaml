@@ -5,7 +5,7 @@ annotations:
   category: DeveloperTools
   images: |
     - name: consul
-      image: docker.io/bitnami/consul:1.21.1-debian-12-r4
+      image: docker.io/bitnami/consul:1.21.1-debian-12-r5
     - name: consul-exporter
       image: docker.io/bitnami/consul-exporter:0.13.0-debian-12-r25
     - name: os-shell
