@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.8 (2025-06-12)
+## 0.4.8 (2025-06-13)
 
 * bitnami/neo4j Fix neo4j persistent existing claim ([#34369](https://github.com/bitnami/charts/pull/34369))
 
