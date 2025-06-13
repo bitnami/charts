@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: kube-state-metrics
-      image: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r15
+      image: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r16
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: kube-state-metrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 5.0.9
+version: 5.0.10
