@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.12 (2025-06-06)
+## 1.2.13 (2025-06-13)
 
-* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34230](https://github.com/bitnami/charts/pull/34230))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34499](https://github.com/bitnami/charts/pull/34499))
+
+## <small>1.2.12 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#34230) ([20cb7f2](https://github.com/bitnami/charts/commit/20cb7f2b686ae41b2b4ede879b3a5402e88743dc)), closes [#34230](https://github.com/bitnami/charts/issues/34230)
 
 ## <small>1.2.11 (2025-05-07)</small>
 
