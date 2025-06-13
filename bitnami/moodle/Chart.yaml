@@ -5,7 +5,7 @@ annotations:
   category: E-Learning
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r9
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r11
     - name: moodle
       image: docker.io/bitnami/moodle:5.0.1-debian-12-r0
     - name: os-shell
@@ -39,4 +39,4 @@ maintainers:
 name: moodle
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/moodle
-version: 26.0.4
+version: 26.0.5
