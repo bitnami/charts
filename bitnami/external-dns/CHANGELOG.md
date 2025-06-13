@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.8.4 (2025-06-05)
+## 8.8.5 (2025-06-13)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34153](https://github.com/bitnami/charts/pull/34153))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34398](https://github.com/bitnami/charts/pull/34398))
+
+## <small>8.8.4 (2025-06-05)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#34153) ([83517db](https://github.com/bitnami/charts/commit/83517db6abd21554647b7e5d6fc66b332194470b)), closes [#34153](https://github.com/bitnami/charts/issues/34153)
 
 ## <small>8.8.3 (2025-05-26)</small>
 
