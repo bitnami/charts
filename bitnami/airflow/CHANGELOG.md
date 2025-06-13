@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.1.3 (2025-06-12)
+## 24.1.3 (2025-06-13)
 
 * [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBuilder AUTH_LDAP ([#34382](https://github.com/bitnami/charts/pull/34382))
 
