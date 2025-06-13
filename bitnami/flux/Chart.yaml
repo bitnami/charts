@@ -11,9 +11,9 @@ annotations:
     - name: fluxcd-image-reflector-controller
       image: docker.io/bitnami/fluxcd-image-reflector-controller:0.35.1-debian-12-r4
     - name: fluxcd-kustomize-controller
-      image: docker.io/bitnami/fluxcd-kustomize-controller:1.6.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-kustomize-controller:1.6.0-debian-12-r4
     - name: fluxcd-notification-controller
-      image: docker.io/bitnami/fluxcd-notification-controller:1.6.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-notification-controller:1.6.0-debian-12-r4
     - name: fluxcd-source-controller
       image: docker.io/bitnami/fluxcd-source-controller:1.6.0-debian-12-r5
     - name: os-shell
