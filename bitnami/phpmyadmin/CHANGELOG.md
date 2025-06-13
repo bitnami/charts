@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.10 (2025-06-13)
+## 18.1.11 (2025-06-13)
 
-* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34392](https://github.com/bitnami/charts/pull/34392))
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34406](https://github.com/bitnami/charts/pull/34406))
+
+## <small>18.1.10 (2025-06-13)</small>
+
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references (#34392) ([3fe65dc](https://github.com/bitnami/charts/commit/3fe65dc5f93cde89f8d39409f1ab38a987104141)), closes [#34392](https://github.com/bitnami/charts/issues/34392)
 
 ## <small>18.1.9 (2025-06-05)</small>
 
