@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.16 (2025-06-09)
+## 0.1.17 (2025-06-13)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34277](https://github.com/bitnami/charts/pull/34277))
+* [bitnami/victoriametrics] bugfix: common.capabilities.vpa.apiVersion context ([#34381](https://github.com/bitnami/charts/pull/34381))
+
+## <small>0.1.16 (2025-06-09)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34277) ([770d769](https://github.com/bitnami/charts/commit/770d769c828d73865cd108cdf002638d46a400c2)), closes [#34277](https://github.com/bitnami/charts/issues/34277)
 
 ## <small>0.1.15 (2025-06-06)</small>
 
