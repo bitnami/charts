@@ -9,7 +9,7 @@ annotations:
     - name: envoy-gateway
       image: docker.io/bitnami/envoy-gateway:1.4.1-debian-12-r2
     - name: envoy-ratelimit
-      image: docker.io/bitnami/envoy-ratelimit:2025.5.29-debian-12-r2
+      image: docker.io/bitnami/envoy-ratelimit:2025.5.29-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
