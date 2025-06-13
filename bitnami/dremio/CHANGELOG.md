@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.4 (2025-06-12)
+## 3.0.4 (2025-06-13)
 
 * [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
 
