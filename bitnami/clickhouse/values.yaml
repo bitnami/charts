@@ -953,7 +953,7 @@ keeper:
   image:
     registry: docker.io
     repository: bitnami/clickhouse-keeper
-    tag: 25.5.2-debian-12-r0
+    tag: 25.5.2-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
