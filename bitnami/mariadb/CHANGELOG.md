@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.5.9 (2025-06-12)
+## 20.5.9 (2025-06-13)
 
 * [bitnami/mariadb] Add initContainerSecurityContext parameter for primary initContainer ([#34373](https://github.com/bitnami/charts/pull/34373))
 
