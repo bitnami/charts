@@ -103,7 +103,7 @@ image:
 sidecarImage:
   registry: docker.io
   repository: bitnami/minio-operator-sidecar
-  tag: 7.1.1-debian-12-r2
+  tag: 7.1.1-debian-12-r3
   digest: ""
 ## Bitnami MinIO&reg; image version
 ## ref: https://hub.docker.com/r/bitnami/minio/tags/
@@ -127,7 +127,7 @@ minioImage:
 kesImage:
   registry: docker.io
   repository: bitnami/kes
-  tag: 2025.3.12-debian-12-r7
+  tag: 2025.3.12-debian-12-r8
   digest: ""
 ## @param replicaCount Number of MinIO&reg; Operator replicas to deploy
 ##
