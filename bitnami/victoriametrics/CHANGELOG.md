@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.17 (2025-06-12)
+## 0.1.17 (2025-06-13)
 
 * [bitnami/victoriametrics] bugfix: common.capabilities.vpa.apiVersion context ([#34381](https://github.com/bitnami/charts/pull/34381))
 
