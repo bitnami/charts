@@ -638,10 +638,10 @@ primary:
   ##
   ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
   ##
-    whenScaled: Delete
+    whenScaled: Retain
   ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
   ##
-    whenDeleted: Delete
+    whenDeleted: Retain
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)
   ##
   extraVolumes: []
