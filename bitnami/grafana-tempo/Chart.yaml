@@ -7,7 +7,7 @@ annotations:
     - name: grafana-tempo
       image: docker.io/bitnami/grafana-tempo:2.8.0-debian-12-r0
     - name: grafana-tempo-query
-      image: docker.io/bitnami/grafana-tempo-query:2.8.0-debian-12-r0
+      image: docker.io/bitnami/grafana-tempo-query:2.8.0-debian-12-r1
     - name: grafana-tempo-vulture
       image: docker.io/bitnami/grafana-tempo-vulture:2.8.0-debian-12-r0
     - name: os-shell
@@ -42,4 +42,4 @@ maintainers:
 name: grafana-tempo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
-version: 4.0.8
+version: 4.0.9
