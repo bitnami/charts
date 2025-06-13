@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: configmap-reload
-      image: docker.io/bitnami/configmap-reload:0.15.0-debian-12-r7
+      image: docker.io/bitnami/configmap-reload:0.15.0-debian-12-r8
     - name: grafana-alloy
       image: docker.io/bitnami/grafana-alloy:1.9.1-debian-12-r1
   licenses: Apache-2.0
@@ -36,4 +36,4 @@ maintainers:
 name: grafana-alloy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-alloy
-version: 0.2.1
+version: 0.2.2
