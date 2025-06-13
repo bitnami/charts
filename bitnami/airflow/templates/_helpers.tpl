@@ -357,8 +357,13 @@ Add environment variables to configure airflow common values
 {{- if .Values.usePasswordFiles }}
 - name: AIRFLOW__CORE__FERNET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+- name: AIRFLOW__API__SECRET_KEY_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- else }}
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- end }}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
 - name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-jwt-secret-key"
