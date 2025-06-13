@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: elasticsearch
-      image: docker.io/bitnami/elasticsearch:9.0.2-debian-12-r0
+      image: docker.io/bitnami/elasticsearch:9.0.2-debian-12-r1
     - name: elasticsearch-exporter
       image: docker.io/bitnami/elasticsearch-exporter:1.9.0-debian-12-r12
     - name: os-shell
