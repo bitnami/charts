@@ -1,13 +1,8 @@
 # Changelog
 
-## 16.7.12 (2025-06-12)
+## 16.7.11 (2025-06-11)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#34377](https://github.com/bitnami/charts/pull/34377))
-
-## <small>16.7.11 (2025-06-11)</small>
-
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34353) ([ea1c058](https://github.com/bitnami/charts/commit/ea1c058afa569f454a2955380428a5276a89c885)), closes [#34353](https://github.com/bitnami/charts/issues/34353)
-* Fix incorrect value paths in password update job documentation (#34057) ([8e61c28](https://github.com/bitnami/charts/commit/8e61c28f6fabe634533eca525aa4ab35065f28b2)), closes [#34057](https://github.com/bitnami/charts/issues/34057)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#34353](https://github.com/bitnami/charts/pull/34353))
 
 ## <small>16.7.10 (2025-06-06)</small>
 
