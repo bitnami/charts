@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: harbor-adapter-trivy
-      image: docker.io/bitnami/harbor-adapter-trivy:2.13.1-debian-12-r2
+      image: docker.io/bitnami/harbor-adapter-trivy:2.13.1-debian-12-r3
     - name: harbor-core
       image: docker.io/bitnami/harbor-core:2.13.1-debian-12-r7
     - name: harbor-exporter
@@ -56,4 +56,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 26.7.5
+version: 26.7.6
