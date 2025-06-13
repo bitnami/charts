@@ -7,7 +7,7 @@ annotations:
     - name: apisix
       image: docker.io/bitnami/apisix:3.12.0-debian-12-r6
     - name: apisix-dashboard
-      image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-12-r74
+      image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-12-r75
     - name: apisix-ingress-controller
       image: docker.io/bitnami/apisix-ingress-controller:1.8.4-debian-12-r10
     - name: os-shell
