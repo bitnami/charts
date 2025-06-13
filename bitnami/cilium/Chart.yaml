@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: cilium
-      image: docker.io/bitnami/cilium:1.17.4-debian-12-r6
+      image: docker.io/bitnami/cilium:1.17.4-debian-12-r7
     - name: cilium-operator
-      image: docker.io/bitnami/cilium-operator:1.17.4-debian-12-r4
+      image: docker.io/bitnami/cilium-operator:1.17.4-debian-12-r5
     - name: cilium-proxy
-      image: docker.io/bitnami/cilium-proxy:1.32.6-debian-12-r4
+      image: docker.io/bitnami/cilium-proxy:1.32.6-debian-12-r5
     - name: hubble-relay
       image: docker.io/bitnami/hubble-relay:1.17.4-debian-12-r5
     - name: hubble-ui
@@ -54,4 +54,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 3.0.2
+version: 3.0.3
