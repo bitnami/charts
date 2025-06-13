@@ -275,7 +275,7 @@ alloy:
   image:
     registry: docker.io
     repository: bitnami/grafana-alloy
-    tag: 1.9.1-debian-12-r1
+    tag: 1.9.1-debian-12-r2
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
