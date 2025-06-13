@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.3 (2025-06-03)
+## 7.0.4 (2025-06-13)
 
-* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#34081](https://github.com/bitnami/charts/pull/34081))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#34465](https://github.com/bitnami/charts/pull/34465))
+
+## <small>7.0.3 (2025-06-03)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34081) ([164167b](https://github.com/bitnami/charts/commit/164167b0122f854bfad93167a771e8a3d3f2468b)), closes [#34081](https://github.com/bitnami/charts/issues/34081)
 
 ## <small>7.0.2 (2025-05-06)</small>
 
