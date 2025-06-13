@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.1 (2025-06-05)
+## 13.0.2 (2025-06-09)
 
-* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#34126](https://github.com/bitnami/charts/pull/34126))
+* [bitnami/mastodon] Disable MinIO Console ([#34266](https://github.com/bitnami/charts/pull/34266))
+
+## <small>13.0.1 (2025-06-05)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34126) ([f5df349](https://github.com/bitnami/charts/commit/f5df349c81da25bad94adeba8561f1b96372ccd7)), closes [#34126](https://github.com/bitnami/charts/issues/34126)
 
 ## 13.0.0 (2025-06-04)
 

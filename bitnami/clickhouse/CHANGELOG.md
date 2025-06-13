@@ -1,8 +1,16 @@
 # Changelog
 
+## 9.3.2 (2025-06-06)
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34242](https://github.com/bitnami/charts/pull/34242))
+
+## <small>9.3.1 (2025-06-06)</small>
+
+* [bitnami/clickhouse] Add CHOWN capability to volume-permissions init container (#34225) ([eb89ebc](https://github.com/bitnami/charts/commit/eb89ebc57f39a36e01e71140a51c263c5b232bd0)), closes [#34225](https://github.com/bitnami/charts/issues/34225)
+
 ## 9.3.0 (2025-06-04)
 
-* [bitnami/clickhouse] Add persistence.volumeName ([#33991](https://github.com/bitnami/charts/pull/33991))
+* [bitnami/clickhouse] Add persistence.volumeName (#33991) ([cc78215](https://github.com/bitnami/charts/commit/cc78215c73cf597e3b928019204edb48d7537521)), closes [#33991](https://github.com/bitnami/charts/issues/33991)
 
 ## <small>9.2.7 (2025-06-03)</small>
 

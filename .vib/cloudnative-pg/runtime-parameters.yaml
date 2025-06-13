@@ -35,14 +35,12 @@ extraDeploy:
           superuser: true
           passwordSecret:
             name: vib-cluster-example-user
-# 2) Deploy a MinIO(TM) instance to be used as ObjectStore for
-# backups
+# 2) Deploy a MinIO(TM) instance to be used as ObjectStore for backups
 - |
   apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: minio
-    namespace: "test"
     labels:
       app.kubernetes.io/instance: minio
       app.kubernetes.io/managed-by: Helm
@@ -297,6 +295,26 @@ extraDeploy:
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
+        - name: copy-kubectl
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              cp /opt/bitnami/kubectl/bin/kubectl /out/kubectl
+          image: bitnami/kubectl
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /out
         containers:
           - name: kubectl
             command:
@@ -316,7 +334,7 @@ extraDeploy:
               timeoutSeconds: 1
               failureThreshold: 15
               successThreshold: 1
-            image: bitnami/kubectl
+            image: bitnami/os-shell:latest
             securityContext:
               runAsNonRoot: true
               privileged: false
@@ -328,6 +346,9 @@ extraDeploy:
             volumeMounts:
               - name: empty-dir
                 mountPath: /tmp
+              - name: empty-dir
+                subPath: kubectl-bin
+                mountPath: /opt/bitnami/kubectl/bin
         volumes:
           - name: empty-dir
             emptyDir: {}
@@ -342,11 +363,13 @@ operator:
       ports:
         metrics: 2311
 pluginBarmanCloud:
+  enabled: true
   service:
     ports:
       grpc: 2218
   metrics:
     enabled: true
+    # Add the cloudnative-pg SA as allowed account because we need it for the goss tests
     allowedServiceAccounts:
       - name: '{{ include "cloudnative-pg.operator.serviceAccountName" $ }}'
         namespace: '{{ include "common.names.namespace" $ }}'

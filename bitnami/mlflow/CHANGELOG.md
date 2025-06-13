@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.0.1 (2025-06-06)
+## 4.0.4 (2025-06-09)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34161](https://github.com/bitnami/charts/pull/34161))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34283](https://github.com/bitnami/charts/pull/34283))
+
+## <small>4.0.3 (2025-06-09)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34281) ([a0911b3](https://github.com/bitnami/charts/commit/a0911b33c408592838da992d5b4668fb81c8c1de)), closes [#34281](https://github.com/bitnami/charts/issues/34281)
+
+## <small>4.0.2 (2025-06-09)</small>
+
+* [bitnami/mlflow] Disable MinIO Console (#34268) ([0c2c1ad](https://github.com/bitnami/charts/commit/0c2c1ad68eda6214fe89b8975d6b8c7285fe7c83)), closes [#34268](https://github.com/bitnami/charts/issues/34268)
+
+## <small>4.0.1 (2025-06-06)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34161) ([6cf7e89](https://github.com/bitnami/charts/commit/6cf7e89b33452be31a7774dca9ceaaed238e92a7)), closes [#34161](https://github.com/bitnami/charts/issues/34161)
 
 ## 4.0.0 (2025-06-04)
 

@@ -9,13 +9,10 @@ http:
     status: 200
     body:
       - /controller_runtime_reconcile_time_seconds_bucket/
-  https://cloudnative-pg-plugin-barman-cloud-metrics:{{ .Vars.pluginBarmanCloud.metrics.service.ports.metrics }}/metrics:
-    status: 200
-    allow-insecure: true
-    body:
-      - /controller_runtime_reconcile_time_seconds_bucket/
-# Ports hardcoded in the operator
 addr:
+  tcp://cloudnative-pg-plugin-barman-cloud:{{ .Vars.pluginBarmanCloud.service.ports.grpc }}:
+    reachable: true
+  # Ports hardcoded in the operator
   tcp://vib-cluster-example-r:5432:
     reachable: true
   tcp://vib-cluster-example-rw:5432:
@@ -23,8 +20,16 @@ addr:
   tcp://vib-cluster-example-ro:5432:
     reachable: true
 command:
+  # Check that the backup has the status succeeded
   check-backup-status:
-    exec: kubectl get backups
+    exec: PATH=/opt/bitnami/kubectl/bin:$PATH kubectl get backups
     exit-status: 0
     stdout:
       - /backup-example.*completed/
+  # plugin-barman-cloud metrics endpoints uses RBAC for authorization, so we cannot use goss built-in "http" directive because we need the SA token present in the
+  # container filesystem. Instead, we use curl
+  check-plugin-barman-cloud-metrics:
+    exec: 'curl -k --header "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"  https://cloudnative-pg-plugin-barman-cloud-metrics:{{ .Vars.pluginBarmanCloud.metrics.service.ports.metrics }}/metrics'
+    exit-status: 0
+    stdout:
+      - /objectstore/

@@ -1,8 +1,24 @@
 # Changelog
 
+## 3.0.4 (2025-06-13)
+
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34303) ([f5e9ccb](https://github.com/bitnami/charts/commit/f5e9ccb38d712460211fed98e05de6651c881904)), closes [#34303](https://github.com/bitnami/charts/issues/34303)
+
+## <small>3.0.2 (2025-06-09)</small>
+
+* [bitnami/dremio] Disable MinIO Console (#34265) ([7fecdb7](https://github.com/bitnami/charts/commit/7fecdb77d17db57ee0498ccb419639cb3a4e6f1f)), closes [#34265](https://github.com/bitnami/charts/issues/34265)
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/dremio] Fix _init_containers.tpl incorrect variable (#33752) ([6a4cb8c](https://github.com/bitnami/charts/commit/6a4cb8cca4177c8da6a672e2dcc0a8c628c88843)), closes [#33752](https://github.com/bitnami/charts/issues/33752)
+
 ## 3.0.0 (2025-06-04)
 
-* [bitnami/dremio] feat: major version due to Minio major bump ([#34086](https://github.com/bitnami/charts/pull/34086))
+* [bitnami/dremio] feat: major version due to Minio major bump (#34086) ([f510f04](https://github.com/bitnami/charts/commit/f510f043d07c11985c04e395e28686930646c32b)), closes [#34086](https://github.com/bitnami/charts/issues/34086)
 
 ## <small>2.0.3 (2025-05-23)</small>
 
