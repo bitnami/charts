@@ -44,6 +44,11 @@ spec:
     - name: metrics
       port: 9216
       targetPort: metrics
+      {{- if .Values.service.nodePorts.mongodb }}
+      nodePort: {{ add .Values.service.nodePorts.mongodb 1 }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- end }}
     {{- if .Values.service.extraPorts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
