@@ -11,11 +11,11 @@ annotations:
     - name: cilium-proxy
       image: docker.io/bitnami/cilium-proxy:1.32.6-debian-12-r5
     - name: hubble-relay
-      image: docker.io/bitnami/hubble-relay:1.17.4-debian-12-r5
+      image: docker.io/bitnami/hubble-relay:1.17.4-debian-12-r6
     - name: hubble-ui
       image: docker.io/bitnami/hubble-ui:0.13.2-debian-12-r10
     - name: hubble-ui-backend
-      image: docker.io/bitnami/hubble-ui-backend:0.13.2-debian-12-r13
+      image: docker.io/bitnami/hubble-ui-backend:0.13.2-debian-12-r14
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -54,4 +54,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
 - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
-version: 3.0.3
+version: 3.0.4
