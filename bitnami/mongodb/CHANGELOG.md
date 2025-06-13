@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.21 (2025-06-10)
+## 16.5.22 (2025-06-13)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34317](https://github.com/bitnami/charts/pull/34317))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34461](https://github.com/bitnami/charts/pull/34461))
+
+## <small>16.5.21 (2025-06-10)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34317) ([d0c306c](https://github.com/bitnami/charts/commit/d0c306cfb0319b45221911d2d8b505db1f5aee45)), closes [#34317](https://github.com/bitnami/charts/issues/34317)
 
 ## <small>16.5.20 (2025-06-06)</small>
 
