@@ -73,6 +73,7 @@ diagnosticMode:
   ##
   args:
     - infinity
+
 ## @section Common Grafana Loki Parameters
 ##
 loki:
@@ -4462,521 +4463,64 @@ tableManager:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-## @section Promtail Deployment Parameters
+
+## @section Grafana Alloy Deployment Parameters
 ##
-promtail:
-  ## @param promtail.enabled Deploy promtail
+grafanaalloy:
+  ## @param grafanaalloy.enabled Deploy Grafana Alloy
   ##
   enabled: true
-  ## Bitnami Promtail image
-  ## ref: https://hub.docker.com/r/bitnami/grafana-promtail/tags/
-  ## @param promtail.image.registry [default: REGISTRY_NAME] Grafana Promtail image registry
-  ## @param promtail.image.repository [default: REPOSITORY_NAME/promtail] Grafana Promtail image repository
-  ## @skip promtail.image.tag Grafana Promtail image tag (immutable tags are recommended)
-  ## @param promtail.image.digest Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param promtail.image.pullPolicy Grafana Promtail image pull policy
-  ## @param promtail.image.pullSecrets Grafana Promtail image pull secrets
+  ## @param grafanaalloy.resourceType Type of controller to use for deploying Grafana Alloy in the cluster.
+  ## Must be one of 'daemonset', 'deployment', or 'statefulset'.
   ##
-  image:
-    registry: docker.io
-    repository: bitnami/promtail
-    tag: 3.5.1-debian-12-r3
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  resourceType: 'daemonset'
+  ## @param grafanaalloy.replicaCount Number of pods to deploy. Ignored when grafanaalloy.resourceType is 'daemonset'.
+  ##
+  replicaCount: 1
+  ## @section Alloy container specific parameters
+  ##
+  alloy:
+    ## @param grafanaalloy.alloy.stabilityLevel Minimum stability level of components and behavior to enable. Must be
+    ##  one of "experimental", "public-preview", or "generally-available".
+    stabilityLevel: "generally-available"
+    ## @param grafanaalloy.alloy.listenAddr Address to listen for traffic on. 0.0.0.0 exposes the UI to other containers.
+    listenAddr: 0.0.0.0
+    ## @param grafanaalloy.alloy.uiPathPrefix Base path where the UI is exposed.
+    uiPathPrefix: /
+    ## @param grafanaalloy.alloy.storagePath Path to where Grafana Alloy stores data (for example, the Write-Ahead Log).
+    storagePath: /tmp/alloy
+    ## @param grafanaalloy.alloy.enableReporting Enables sending Grafana Labs anonymous usage stats to help improve Grafana grafanaalloy.alloy.
+    enableReporting: true
+    ## @param grafanaalloy.alloy.mounts.varlog Mount /var/log from the host into the container for log collection.
+    ## @param grafanaalloy.alloy.mounts.dockercontainers Mount /var/lib/docker/containers from the host into the container for log
     ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    mounts:
+      varlog: true
+      dockercontainers: true
+    ## @param grafanaalloy.alloy.clustering.enabled Deploy Grafana Alloy in a cluster to allow for load distribution.
+    ## @param grafanaalloy.alloy.clustering.name Name for the Grafana Alloy cluster. Used for differentiating between clusters.
+    ## @param grafanaalloy.alloy.clustering.portName Name for the port used for clustering, useful if running inside an Istio Mesh
+    ##
+    clustering:
+      enabled: false
+      name: ""
+      portName: http
+    ## @param grafanaalloy.alloy.createSecret Create a Secret with the default configuration for Grafana Alloy to send logs to Loki.
+    ##
+    createSecret: true
+    ## @param grafanaalloy.alloy.existingSecret The name of an existing Secret with your custom configuration for Grafana Alloy. If the grafanaalloy.alloy.createSecret is set, it will create a Secret with this name.
+    ##
+    existingSecret: "{{ ternary (printf \"%s-alloy\" (lower .Release.Name)) \"\" .Values.alloy.createSecret }}"
+    ## @param grafanaalloy.alloy.configuration Specify content for Grafana Alloy config file. Omitted if grafanaalloy.alloy.existingSecret is provided.
     ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
+    ## configuration: |-
+    ##   ...
     ##
-    pullSecrets: []
-  ## @param promtail.extraEnvVars Array with extra environment variables to add to promtail nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param promtail.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for promtail nodes
-  ##
-  extraEnvVarsCM: ""
-  ## @param promtail.extraEnvVarsSecret Name of existing Secret containing extra env vars for promtail nodes
-  ##
-  extraEnvVarsSecret: ""
-  ## @param promtail.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param promtail.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param promtail.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
-  ##
-  extraArgs: []
-  ## @param promtail.containerPorts.http Promtail HTTP port
-  ## @param promtail.containerPorts.grpc Promtail HTTP port
-  ##
-  containerPorts:
-    http: 8080
-    grpc: 9095
-  ## Configure extra options for Promtail containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param promtail.livenessProbe.enabled Enable livenessProbe on Promtail nodes
-  ## @param promtail.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param promtail.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param promtail.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param promtail.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param promtail.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-  ## @param promtail.readinessProbe.enabled Enable readinessProbe on Promtail nodes
-  ## @param promtail.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param promtail.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param promtail.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param promtail.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param promtail.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    successThreshold: 1
-    timeoutSeconds: 1
-  ## @param promtail.startupProbe.enabled Enable startupProbe on Promtail containers
-  ## @param promtail.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param promtail.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param promtail.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param promtail.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param promtail.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 15
-    successThreshold: 1
-  ## @param promtail.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param promtail.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param promtail.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## @param promtail.lifecycleHooks for the promtail container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## promtail resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param promtail.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "nano"
-  ## @param promtail.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param promtail.podSecurityContext.enabled Enabled Promtail pods' Security Context
-  ## @param promtail.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param promtail.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param promtail.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param promtail.podSecurityContext.fsGroup Set Promtail pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroupChangePolicy: Always
-    sysctls: []
-    supplementalGroups: []
-    fsGroup: 0
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param promtail.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param promtail.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param promtail.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param promtail.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param promtail.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param promtail.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param promtail.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param promtail.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param promtail.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param promtail.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: {}
-    runAsUser: 0
-    runAsGroup: 0
-    runAsNonRoot: false
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param promtail.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: true
-  ## @param promtail.hostAliases promtail pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param promtail.podLabels Extra labels for promtail pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param promtail.podAnnotations Annotations for promtail pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param promtail.podAffinityPreset Pod affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param promtail.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node promtail.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param promtail.nodeAffinityPreset.type Node affinity preset type. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`
+    configuration: ""
+    ## @param grafanaalloy.alloy.extraConfig Append extra configuration to the default config file
     ##
-    type: ""
-    ## @param promtail.nodeAffinityPreset.key Node label key to match. Ignored if `promtail.affinity` is set
-    ##
-    key: ""
-    ## @param promtail.nodeAffinityPreset.values Node label values to match. Ignored if `promtail.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param promtail.affinity Affinity for promtail pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `promtail.podAffinityPreset`, `promtail.podAntiAffinityPreset`, and `promtail.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param promtail.nodeSelector Node labels for Promtail pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param promtail.tolerations Tolerations for Promtail pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param promtail.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: []
-  ## @param promtail.priorityClassName Promtail pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param promtail.schedulerName Kubernetes pod scheduler registry
-  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param promtail.updateStrategy.type Promtail statefulset strategy type
-  ## @param promtail.updateStrategy.rollingUpdate [object,nullable] Promtail statefulset rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: null
-  ## @param promtail.extraVolumes Optionally specify extra list of additional volumes for the Promtail pod(s)
-  ##
-  extraVolumes: []
-  ## @param promtail.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the promtail container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param promtail.sidecars Add additional sidecar containers to the Promtail pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param promtail.initContainers Add additional init containers to the Promtail pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## @param promtail.enableServiceLinks Whether information about services should be injected into pod's environment variable
-  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
-  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
-  ##
-  enableServiceLinks: true
-  ## @param promtail.configuration [string] Promtail configuration
-  ##
-  configuration: |
-    server:
-      log_level: {{ .Values.promtail.logLevel }}
-      http_listen_port: {{ .Values.promtail.containerPorts.http }}
-      grpc_listen_port: {{ .Values.promtail.containerPorts.grpc }}
+    extraConfig: ""
 
-    clients:
-      - url: http://{{ include "grafana-loki.gateway.fullname" . }}:{{ .Values.gateway.service.ports.http }}/loki/api/v1/push
-        {{- if .Values.gateway.auth.enabled }}
-        basic_auth:
-          # The username to use for basic auth
-          username: {{ .Values.gateway.auth.username }}
-          password_file: /bitnami/promtail/conf/secrets/password
-        {{- end }}
-    positions:
-      filename: /run/promtail/positions.yaml
-
-    scrape_configs:
-      # See also https://github.com/grafana/loki/blob/master/production/ksonnet/promtail/scrape_config.libsonnet for reference
-      - job_name: kubernetes-pods
-        pipeline_stages:
-          - cri: {}
-        kubernetes_sd_configs:
-          - role: pod
-        relabel_configs:
-          - source_labels:
-              - __meta_kubernetes_pod_controller_name
-            regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
-            action: replace
-            target_label: __tmp_controller_name
-          - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_name
-              - __meta_kubernetes_pod_label_app
-              - __tmp_controller_name
-              - __meta_kubernetes_pod_name
-            regex: ^;*([^;]+)(;.*)?$
-            action: replace
-            target_label: app
-          - source_labels:
-              - __meta_kubernetes_pod_label_app_kubernetes_io_component
-              - __meta_kubernetes_pod_label_component
-            regex: ^;*([^;]+)(;.*)?$
-            action: replace
-            target_label: component
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_pod_node_name
-            target_label: node_name
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_namespace
-            target_label: namespace
-          - action: replace
-            replacement: $1
-            separator: /
-            source_labels:
-            - namespace
-            - app
-            target_label: job
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_pod_name
-            target_label: pod
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_pod_container_name
-            target_label: container
-          - action: replace
-            replacement: /var/log/pods/*$1/*.log
-            separator: /
-            source_labels:
-            - __meta_kubernetes_pod_uid
-            - __meta_kubernetes_pod_container_name
-            target_label: __path__
-          - action: replace
-            regex: true/(.*)
-            replacement: /var/log/pods/*$1/*.log
-            separator: /
-            source_labels:
-            - __meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash
-            - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
-            - __meta_kubernetes_pod_container_name
-            target_label: __path__
-  ## @param promtail.existingSecret Name of a Secret that contains the Promtail configuration
-  ##
-  existingSecret: ""
-  ## @param promtail.logLevel Promtail logging level
-  ##
-  logLevel: info
-  ## @section Promtail Traffic Exposure Parameters
-  ##
-
-  ## promtail service parameters
-  ##
-  service:
-    ## @param promtail.service.type Promtail service type
-    ##
-    type: ClusterIP
-    ## @param promtail.service.ports.http Promtail HTTP service port
-    ## @param promtail.service.ports.grpc Promtail gRPC service port
-    ##
-    ports:
-      http: 3100
-      grpc: 9095
-    ## Node ports to expose
-    ## NOTE: choose port between <30000-32767>
-    ## @param promtail.service.nodePorts.http Node port for HTTP
-    ##
-    nodePorts:
-      http: ""
-    ## @param promtail.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param promtail.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-    ##
-    sessionAffinity: None
-    ## @param promtail.service.clusterIP Promtail service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param promtail.service.loadBalancerIP Promtail service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param promtail.service.loadBalancerSourceRanges Promtail service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param promtail.service.externalTrafficPolicy Promtail service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param promtail.service.annotations Additional custom annotations for Promtail service
-    ##
-    annotations: {}
-    ## @param promtail.service.extraPorts Extra ports to expose in the Promtail service
-    ##
-    extraPorts: []
-  ## Network Policies
-  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param promtail.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
-    ##
-    enabled: true
-    ## @param promtail.networkPolicy.allowExternal Don't require server label for connections
-    ## The Policy model to apply. When set to false, only pods with the correct
-    ## server label will have network access to the ports server is listening
-    ## on. When true, server will accept connections from any source
-    ## (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param promtail.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param promtail.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `promtail.networkPolicy.allowExternal` is true.
-    ##
-    addExternalClientAccess: true
-    ## @param promtail.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
-    ##
-    kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param promtail.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    extraIngress: []
-    ## @param promtail.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param promtail.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `promtail.networkPolicy.allowExternal` is true.
-    ## e.g:
-    ## ingressPodMatchLabels:
-    ##   my-client: "true"
-    #
-    ingressPodMatchLabels: {}
-    ## @param promtail.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
-    ## @param promtail.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
-  ## Create RBAC
-  ## @param promtail.rbac.create Create RBAC rules
-  ##
-  rbac:
-    create: true
-  ## Service account for Loki to use
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccount:
-    ## @param promtail.serviceAccount.create Enable creation of ServiceAccount for Promtail pods
-    ##
-    create: true
-    ## @param promtail.serviceAccount.name The name of the ServiceAccount to use
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
-    name: ""
-    ## @param promtail.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created
-    ## Can be set to false if pods using this promtail.serviceAccount.do not need to use K8s API
-    ##
-    automountServiceAccountToken: false
-    ## @param promtail.serviceAccount.annotations Additional custom annotations for the ServiceAccount
-    ##
-    annotations: {}
 ## @section Init Container Parameters
 ##
 
