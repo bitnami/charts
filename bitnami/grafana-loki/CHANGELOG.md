@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.0.1 (2025-06-13)
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#34433](https://github.com/bitnami/charts/pull/34433))
+
 ## 5.0.0 (2025-06-13)
 
-* [bitnami/grafana-loki] Replace promtail with alloy ([#34338](https://github.com/bitnami/charts/pull/34338))
+* [bitnami/grafana-loki] Replace promtail with alloy (#34338) ([be47a45](https://github.com/bitnami/charts/commit/be47a45923483300e4360b1a39c0207dfed3b778)), closes [#34338](https://github.com/bitnami/charts/issues/34338)
 
 ## <small>4.8.15 (2025-06-10)</small>
 
