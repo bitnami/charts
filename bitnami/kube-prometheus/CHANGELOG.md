@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.4 (2025-06-13)
+## 11.2.4 (2025-06-14)
 
 * [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#34490](https://github.com/bitnami/charts/pull/34490))
 
