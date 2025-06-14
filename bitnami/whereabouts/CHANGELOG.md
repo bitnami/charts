@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.13 (2025-06-13)
+## 1.2.13 (2025-06-14)
 
 * [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34499](https://github.com/bitnami/charts/pull/34499))
 
