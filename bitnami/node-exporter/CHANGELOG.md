@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.5.16 (2025-06-13)
+## 4.5.16 (2025-06-14)
 
 * [bitnami/node-exporter] :zap: :arrow_up: Update dependency references ([#34477](https://github.com/bitnami/charts/pull/34477))
 
