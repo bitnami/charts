@@ -304,6 +304,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                                                                  | `""`                     |
 | `service.loadBalancerIP`           | Load balancer IP for the phpMyAdmin Service (optional, cloud specific)                                                           | `""`                     |
 | `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `service.targetPorts.http` | Target port for HTTP traffic                                                       | `8080`                     |
+| `service.targetPorts.https` | Target port for HTTPS traffic                                                       | `8443`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
 | `service.annotations`              | Provide any additional annotations that may be required for the PhpMyAdmin service                                               | `{}`                     |
