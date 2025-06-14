@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.7.12 (2025-06-13)
+## 16.7.12 (2025-06-14)
 
 * [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#34377](https://github.com/bitnami/charts/pull/34377))
 
