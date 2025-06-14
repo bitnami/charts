@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.19 (2025-06-13)
+## 0.1.19 (2025-06-14)
 
 * [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34500](https://github.com/bitnami/charts/pull/34500))
 
