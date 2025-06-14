@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.2.16 (2025-06-13)
+## 32.2.16 (2025-06-14)
 
 * [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34458](https://github.com/bitnami/charts/pull/34458))
 
