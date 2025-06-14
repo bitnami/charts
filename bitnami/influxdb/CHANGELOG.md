@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.4 (2025-06-13)
+## 7.1.4 (2025-06-14)
 
 * [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#34457](https://github.com/bitnami/charts/pull/34457))
 
