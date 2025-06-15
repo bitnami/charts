@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: multus-cni
-      image: docker.io/bitnami/multus-cni:4.2.1-debian-12-r2
+      image: docker.io/bitnami/multus-cni:4.2.1-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -31,4 +31,4 @@ maintainers:
 name: multus-cni
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 2.2.16
+version: 2.2.17

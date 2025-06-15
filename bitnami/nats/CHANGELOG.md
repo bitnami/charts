@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.0.18 (2025-05-22)
+## 9.0.20 (2025-06-13)
 
-* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#33839](https://github.com/bitnami/charts/pull/33839))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#34475](https://github.com/bitnami/charts/pull/34475))
+
+## <small>9.0.19 (2025-06-06)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34202) ([2082fad](https://github.com/bitnami/charts/commit/2082fad3449f295796c5e61896684b2c5567f86a)), closes [#34202](https://github.com/bitnami/charts/issues/34202)
+
+## <small>9.0.18 (2025-05-23)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#33839) ([5630c2e](https://github.com/bitnami/charts/commit/5630c2e5c662a613828e6c2f2f6bd11be1d1505c)), closes [#33839](https://github.com/bitnami/charts/issues/33839)
 
 ## <small>9.0.17 (2025-05-13)</small>
 
