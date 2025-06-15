@@ -191,9 +191,6 @@ spec:
             sources:
               - secret:
                   name: {{ include "superset.secretName" . }}
-                  items:
-                    - key: superset-secret-key
-                      path: superset-secret-key
               - secret:
                   name: {{ include "superset.redis.secretName" . }}
               {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
