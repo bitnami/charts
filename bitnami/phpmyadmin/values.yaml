@@ -389,6 +389,12 @@ service:
   ports:
     http: 80
     https: 443
+  ## @param service.targetPorts.http Service HTTP port
+  ## @param service.targetPorts.https Service HTTPS port
+  ##
+  targetPorts:
+    http: 8080
+    https: 8443
   ## Specify the nodePort values for the LoadBalancer and NodePort service types
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ## @param service.nodePorts.http Kubernetes http node port
