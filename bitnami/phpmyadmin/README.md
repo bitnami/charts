@@ -299,8 +299,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
 | `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
-| `service.targetPorts.http`         | Service HTTP port                                                                                                                | `8080`                   |
-| `service.targetPorts.https`        | Service HTTPS port                                                                                                               | `8443`                   |
+| `service.targetPorts.http`         | Service HTTP target port                                                                                                                | `8080`                   |
+| `service.targetPorts.https`        | Service HTTPS target port                                                                                                               | `8443`                   |
 | `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
 | `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
 | `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                                                                  | `""`                     |
