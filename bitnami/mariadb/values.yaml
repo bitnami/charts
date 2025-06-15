@@ -634,12 +634,10 @@ primary:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-  ## @param primary.persistentVolumeClaimRetentionPolicy Enable Persistent volume retention policy for Primary StatefulSet
-  ##
   ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
   ##
     whenScaled: Retain
-  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
   ##
     whenDeleted: Retain
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)
