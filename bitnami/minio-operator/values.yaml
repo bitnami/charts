@@ -127,7 +127,7 @@ minioImage:
 kesImage:
   registry: docker.io
   repository: bitnami/kes
-  tag: 2025.3.12-debian-12-r8
+  tag: 2025.3.12-debian-12-r9
   digest: ""
 ## @param replicaCount Number of MinIO&reg; Operator replicas to deploy
 ##
