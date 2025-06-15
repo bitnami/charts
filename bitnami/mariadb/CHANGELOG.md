@@ -2,7 +2,7 @@
 
 ## 20.5.10 (2025-06-15)
 
-* [bitnami/mariadb] Enable persistentVolumeClaimRetentionPolicy in the chart ([#34424](https://github.com/bitnami/charts/pull/34424))
+* [bitnami/mariadb] Add support for persistentVolumeClaimRetentionPolicy in primary StatefulSet ([#34424](https://github.com/bitnami/charts/pull/34424))
 
 ## <small>20.5.9 (2025-06-13)</small>
 
