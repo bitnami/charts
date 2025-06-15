@@ -4,7 +4,7 @@
 
 * Add support for overriding service.targetPort in phpMyAdmin chart ([#34502](https://github.com/bitnami/charts/pull/34502))
 
-## <small>18.1.11 (2025-06-13)</small>
+## 18.1.11 (2025-06-13)
 
 * [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34406](https://github.com/bitnami/charts/pull/34406))
 
