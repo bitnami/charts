@@ -18,7 +18,7 @@ jobs:
       - name: Retry "CI Pipeline" failed runs in releases PRs
         env:
           MAX_RETRY_SLOTS: 15
-          MAX_RUNS_ATTEMPS: 3
+          MAX_RUNS_ATTEMPS: ${{vars.MAX_RUNS_ATTEMPS}}
           TEMP_FILE: "${{runner.temp}}/failed_runs.json"
           WORKFLOW_RUNS_URL: "${{ github.api_url }}/repos/${{ github.repository }}/actions/workflows/35553382/runs"
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
