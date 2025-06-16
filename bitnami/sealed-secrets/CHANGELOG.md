@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.5.15 (2025-06-14)
+## 2.5.15 (2025-06-16)
 
 * [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34492](https://github.com/bitnami/charts/pull/34492))
 
