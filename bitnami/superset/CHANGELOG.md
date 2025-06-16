@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.4 (2025-06-12)
+## 3.0.4 (2025-06-16)
 
 * [bitnami/superset] Fix warnings during deployment ([#34374](https://github.com/bitnami/charts/pull/34374))
 
