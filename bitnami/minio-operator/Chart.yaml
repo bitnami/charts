@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: kes
-      image: docker.io/bitnami/kes:2025.3.12-debian-12-r7
+      image: docker.io/bitnami/kes:2025.3.12-debian-12-r8
     - name: minio
-      image: docker.io/bitnami/minio:2025.5.24-debian-12-r5
+      image: docker.io/bitnami/minio:2025.5.24-debian-12-r6
     - name: minio-operator
-      image: docker.io/bitnami/minio-operator:7.1.1-debian-12-r2
+      image: docker.io/bitnami/minio-operator:7.1.1-debian-12-r3
     - name: minio-operator-sidecar
-      image: docker.io/bitnami/minio-operator-sidecar:7.1.1-debian-12-r2
+      image: docker.io/bitnami/minio-operator-sidecar:7.1.1-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
@@ -36,4 +36,4 @@ maintainers:
 name: minio-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio-operator
-version: 0.1.16
+version: 0.1.18
