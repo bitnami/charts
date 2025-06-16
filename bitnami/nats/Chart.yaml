@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: nats
-      image: docker.io/bitnami/nats:2.11.4-debian-12-r1
+      image: docker.io/bitnami/nats:2.11.4-debian-12-r2
     - name: nats-exporter
-      image: docker.io/bitnami/nats-exporter:0.17.3-debian-12-r3
+      image: docker.io/bitnami/nats-exporter:0.17.3-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -34,4 +34,4 @@ maintainers:
 name: nats
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 9.0.19
+version: 9.0.20

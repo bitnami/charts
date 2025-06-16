@@ -5,7 +5,7 @@ annotations:
   category: MachineLearning
   images: |
     - name: configurable-http-proxy
-      image: docker.io/bitnami/configurable-http-proxy:5.0.1-debian-12-r0
+      image: docker.io/bitnami/configurable-http-proxy:5.0.1-debian-12-r1
     - name: jupyter-base-notebook
       image: docker.io/bitnami/jupyter-base-notebook:5.3.0-debian-12-r7
     - name: jupyterhub
@@ -40,4 +40,4 @@ maintainers:
 name: jupyterhub
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 9.0.15
+version: 9.0.16
