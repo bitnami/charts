@@ -18,15 +18,15 @@ jobs:
       - name: Retry "CI Pipeline" failed runs in releases PRs
         env:
           MAX_RETRY_SLOTS: 15
-          MAX_RUNS_ATTEMPS: ${{vars.MAX_RUNS_ATTEMPS}}
+          MAX_RUNS_ATTEMPTS: ${{vars.MAX_RUNS_ATTEMPTS}}
           TEMP_FILE: "${{runner.temp}}/failed_runs.json"
           WORKFLOW_RUNS_URL: "${{ github.api_url }}/repos/${{ github.repository }}/actions/workflows/35553382/runs"
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Obtain "CI Pipeline" failed runs executed by the bitnami-bot and filter those from release PRs with $MAX_RUNS_ATTEMPS or more attempts
+          # Obtain "CI Pipeline" failed runs executed by the bitnami-bot and filter those from release PRs with $MAX_RUNS_ATTEMPTS or more attempts
           curl -X GET -GLkso "${TEMP_FILE}" "${WORKFLOW_RUNS_URL}" \
             -d "status=failure" -d "actor=bitnami-bot" -d "created=>$(date -d '-3 day' '+%Y-%m-%d')" -d "per_page=100"
-          readarray -t retriable_runs_ids < <(jq --argjson runs ${MAX_RUNS_ATTEMPS} \
+          readarray -t retriable_runs_ids < <(jq --argjson runs ${MAX_RUNS_ATTEMPTS} \
             '.workflow_runs[] | select((.run_attempt < $runs) and (.display_title | contains("Update dependency references"))).id' "${TEMP_FILE}")
 
           echo "Found ${#retriable_runs_ids[@]} failed runs that need to be retried"
