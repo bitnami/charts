@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.1.12 (2025-06-15)
+## 18.1.12 (2025-06-16)
 
 * [bitnami/phpmyadmin] Add support for overriding service.targetPort in phpMyAdmin chart ([#34508](https://github.com/bitnami/charts/pull/34508))
 
