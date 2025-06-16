@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.5.13 (2025-06-06)
+## 2.5.14 (2025-06-12)
 
-* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34219](https://github.com/bitnami/charts/pull/34219))
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34371](https://github.com/bitnami/charts/pull/34371))
+
+## <small>2.5.13 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34219) ([22645d3](https://github.com/bitnami/charts/commit/22645d3c72b846fc78e75e3376157f3a25e40abd)), closes [#34219](https://github.com/bitnami/charts/issues/34219)
 
 ## <small>2.5.12 (2025-05-07)</small>
 

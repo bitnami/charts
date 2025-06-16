@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2025-06-10)
+## 3.0.4 (2025-06-13)
 
-* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34313](https://github.com/bitnami/charts/pull/34313))
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34443](https://github.com/bitnami/charts/pull/34443))
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34313) ([ae17ab8](https://github.com/bitnami/charts/commit/ae17ab842eab4f77068336672021f2e59c551137)), closes [#34313](https://github.com/bitnami/charts/issues/34313)
 
 ## <small>3.0.2 (2025-06-09)</small>
 

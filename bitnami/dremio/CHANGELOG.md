@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.3 (2025-06-10)
+## 3.0.4 (2025-06-13)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#34303](https://github.com/bitnami/charts/pull/34303))
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34303) ([f5e9ccb](https://github.com/bitnami/charts/commit/f5e9ccb38d712460211fed98e05de6651c881904)), closes [#34303](https://github.com/bitnami/charts/issues/34303)
 
 ## <small>3.0.2 (2025-06-09)</small>
 

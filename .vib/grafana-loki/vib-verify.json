@@ -45,11 +45,11 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "grafana-loki/goss/promtail/goss.yaml",
+            "tests_file": "grafana-loki/goss/alloy/goss.yaml",
             "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "ds-grafana-loki-promtail"
+                "workload": "ds-grafana-loki-grafanaalloy"
               }
             }
           }
