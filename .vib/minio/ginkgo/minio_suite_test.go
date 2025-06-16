@@ -69,7 +69,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 							Name:  "minio",
 							Image: image,
 							Command: []string{"bash", "-ec", fmt.Sprintf(
-								"mc config host add miniotest http://$MINIO_HOST:$MINIO_PORT $MINIO_USERNAME $MINIO_PASSWORD\n%s", stmt)},
+								"mc alias set miniotest http://$MINIO_HOST:$MINIO_PORT $MINIO_USERNAME $MINIO_PASSWORD\n%s", stmt)},
 							Env: []v1.EnvVar{
 								{
 									Name:  "MINIO_PASSWORD",

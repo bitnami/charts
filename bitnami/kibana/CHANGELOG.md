@@ -1,8 +1,17 @@
 # Changelog
 
+## 12.1.2 (2025-06-13)
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#34454](https://github.com/bitnami/charts/pull/34454))
+
+## <small>12.1.1 (2025-06-03)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34083) ([ef295dc](https://github.com/bitnami/charts/commit/ef295dcd770e2206e04b3145065bbe9ae82af67b)), closes [#34083](https://github.com/bitnami/charts/issues/34083)
+
 ## 12.1.0 (2025-05-14)
 
-* [bitnami/kibana] Add overwrite parameter to import saved objects managing ([#33282](https://github.com/bitnami/charts/pull/33282))
+* [bitnami/kibana] Add overwrite parameter to import saved objects managing (#33282) ([c8e3e76](https://github.com/bitnami/charts/commit/c8e3e76d9d2da66286eb512390ed7ce49199676b)), closes [#33282](https://github.com/bitnami/charts/issues/33282)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>12.0.2 (2025-05-07)</small>
 

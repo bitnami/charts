@@ -1,8 +1,24 @@
 # Changelog
 
-## 9.3.9 (2025-05-29)
+## 9.3.13 (2025-06-13)
 
-* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#33972](https://github.com/bitnami/charts/pull/33972))
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#34405](https://github.com/bitnami/charts/pull/34405))
+
+## <small>9.3.12 (2025-06-13)</small>
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#34388) ([abb4b57](https://github.com/bitnami/charts/commit/abb4b57324465d646e2e4bace6e1256b4f6d1c1e)), closes [#34388](https://github.com/bitnami/charts/issues/34388)
+
+## <small>9.3.11 (2025-06-09)</small>
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#34262) ([6b146ad](https://github.com/bitnami/charts/commit/6b146adb8f262ce155fc4107bb071c0a471f6500)), closes [#34262](https://github.com/bitnami/charts/issues/34262)
+
+## <small>9.3.10 (2025-06-05)</small>
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#34137) ([ebdd932](https://github.com/bitnami/charts/commit/ebdd93294fdc454b4f4f9bc155286b6bbe587692)), closes [#34137](https://github.com/bitnami/charts/issues/34137)
+
+## <small>9.3.9 (2025-05-29)</small>
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#33972) ([c3893bf](https://github.com/bitnami/charts/commit/c3893bf109c29c4408b4f330f2d21a0bc827ddf9)), closes [#33972](https://github.com/bitnami/charts/issues/33972)
 
 ## <small>9.3.8 (2025-05-13)</small>
 

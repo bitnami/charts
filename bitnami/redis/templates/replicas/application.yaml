@@ -237,7 +237,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+                - "/health/ping_liveness_local_and_master.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}"
           {{- end }}
           {{- if .Values.replica.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
@@ -252,7 +252,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+                - "/health/ping_readiness_local_and_master.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}"
           {{- end }}
           {{- end }}
           {{- if .Values.replica.resources }}

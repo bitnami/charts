@@ -26,6 +26,10 @@ spec:
   endpoints:
     - port: tcp-metrics
       path: "/metrics"
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      scheme: https
+      tlsConfig: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.tlsConfig "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

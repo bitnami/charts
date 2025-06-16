@@ -141,7 +141,6 @@ externalMemcachedChunks.port=11211
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
 | `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
-| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
 | `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
@@ -1418,6 +1417,7 @@ externalMemcachedChunks.port=11211
 | `minio.service.ports.api`                     | MinIO&reg; service port                                                                                                                                                                                    | `80`                                                                                                                                                    |
 | `minio.resourcesPreset`                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                                                                                                                                                 |
 | `minio.resources`                             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                                                                                                                                                    |
+| `minio.console.enabled`                       | Enable MinIO&reg; Console                                                                                                                                                                                  | `false`                                                                                                                                                 |
 
 ### External Memcached (Chunks) Parameters
 
@@ -1540,6 +1540,10 @@ Once the chart is installed the remote write endpoints for Prometheus or Grafana
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major updates the `minio` subchart to its newest major, 17.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1700).
 
 ### To 2.0.0
 

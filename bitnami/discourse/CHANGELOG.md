@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.0.1 (2025-05-28)
+## 16.0.2 (2025-06-12)
 
-* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#33931](https://github.com/bitnami/charts/pull/33931))
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#34370](https://github.com/bitnami/charts/pull/34370))
+
+## <small>16.0.1 (2025-05-28)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#33931) ([cad860e](https://github.com/bitnami/charts/commit/cad860e7e6b5d826fd15c1204b03eec39737e038)), closes [#33931](https://github.com/bitnami/charts/issues/33931)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## 16.0.0 (2025-05-07)
 

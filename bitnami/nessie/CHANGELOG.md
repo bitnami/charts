@@ -1,8 +1,28 @@
 # Changelog
 
-## 2.0.13 (2025-05-27)
+## 2.0.18 (2025-06-11)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#33923](https://github.com/bitnami/charts/pull/33923))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#34356](https://github.com/bitnami/charts/pull/34356))
+
+## <small>2.0.17 (2025-06-03)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34082) ([b8618ea](https://github.com/bitnami/charts/commit/b8618eaa19c98df0de955f48b6014216e77b4680)), closes [#34082](https://github.com/bitnami/charts/issues/34082)
+
+## <small>2.0.16 (2025-06-03)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34075) ([a0ae218](https://github.com/bitnami/charts/commit/a0ae21822a4102880be8a6779e37fb73f2596457)), closes [#34075](https://github.com/bitnami/charts/issues/34075)
+
+## <small>2.0.15 (2025-05-30)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34005) ([8c84a1c](https://github.com/bitnami/charts/commit/8c84a1cdd73dd14f095c5e4a2e411737c8218103)), closes [#34005](https://github.com/bitnami/charts/issues/34005)
+
+## <small>2.0.14 (2025-05-30)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33994) ([64d5255](https://github.com/bitnami/charts/commit/64d5255e3e549e29121c4a2f4709deef1b15de5a)), closes [#33994](https://github.com/bitnami/charts/issues/33994)
+
+## <small>2.0.13 (2025-05-27)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33923) ([96474ff](https://github.com/bitnami/charts/commit/96474ff13d799d95981269fce834c8adac41b6b4)), closes [#33923](https://github.com/bitnami/charts/issues/33923)
 
 ## <small>2.0.12 (2025-05-27)</small>
 

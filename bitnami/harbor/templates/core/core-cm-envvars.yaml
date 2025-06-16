@@ -25,6 +25,8 @@ data:
   POSTGRESQL_USERNAME: {{ include "harbor.database.username" . | quote }}
   POSTGRESQL_DATABASE: {{ include "harbor.database.coreDatabase" . | quote }}
   POSTGRESQL_SSLMODE: {{ include "harbor.database.sslmode" . | quote }}
+  POSTGRESQL_MAX_IDLE_CONNS: {{ .Values.database.maxIdleConns | quote }}
+  POSTGRESQL_MAX_OPEN_CONNS: {{ .Values.database.maxOpenConns | quote }}
   EXT_ENDPOINT: {{ include "harbor.externalUrl" . | quote }}
   CORE_URL: {{ include "harbor.core.url" . | quote }}
   JOBSERVICE_URL: {{ include "harbor.jobservice.url" . | quote }}

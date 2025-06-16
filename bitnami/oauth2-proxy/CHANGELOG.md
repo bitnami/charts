@@ -1,8 +1,21 @@
 # Changelog
 
+## 7.0.3 (2025-06-13)
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34480](https://github.com/bitnami/charts/pull/34480))
+
+## <small>7.0.2 (2025-06-10)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34327) ([0d0415b](https://github.com/bitnami/charts/commit/0d0415b7f5dbe5c1adde5ad2b01a431b349f3095)), closes [#34327](https://github.com/bitnami/charts/issues/34327)
+
+## <small>7.0.1 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34208) ([aa1accc](https://github.com/bitnami/charts/commit/aa1accc0d9d769e7954b1e076b8d55ddc3ee7c36)), closes [#34208](https://github.com/bitnami/charts/issues/34208)
+
 ## 7.0.0 (2025-05-07)
 
-* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33507](https://github.com/bitnami/charts/pull/33507))
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33507) ([454dd1f](https://github.com/bitnami/charts/commit/454dd1fe99c2d120e780e92a25b1ea6c39e4b105)), closes [#33507](https://github.com/bitnami/charts/issues/33507)
 
 ## <small>6.2.14 (2025-05-07)</small>
 

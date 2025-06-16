@@ -60,7 +60,7 @@
             "resources": {
               "path": "/.vib/minio/cypress"
             },
-            "endpoint": "lb-minio-minio-console",
+            "endpoint": "lb-minio-console-http",
             "app_protocol": "HTTP",
             "env": {
               "username": "test_admin",

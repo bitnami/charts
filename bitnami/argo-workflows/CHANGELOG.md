@@ -1,8 +1,33 @@
 # Changelog
 
+## 12.0.6 (2025-06-13)
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#34402](https://github.com/bitnami/charts/pull/34402))
+
+## <small>12.0.5 (2025-06-05)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34138) ([d434724](https://github.com/bitnami/charts/commit/d4347242b8ece4a7c54401c82684a34b24af0916)), closes [#34138](https://github.com/bitnami/charts/issues/34138)
+
+## <small>12.0.4 (2025-06-04)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34102) ([9b072ec](https://github.com/bitnami/charts/commit/9b072ecbd5072d0b75db514e97fca89f8569603d)), closes [#34102](https://github.com/bitnami/charts/issues/34102)
+
+## <small>12.0.3 (2025-06-03)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34079) ([4f28567](https://github.com/bitnami/charts/commit/4f285670473b876769e44b61d935a7f9d7f20371)), closes [#34079](https://github.com/bitnami/charts/issues/34079)
+
+## <small>12.0.2 (2025-06-03)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34058) ([ea9bffc](https://github.com/bitnami/charts/commit/ea9bffcd43bf25f13c9eebbb3d76decbf73abbfb)), closes [#34058](https://github.com/bitnami/charts/issues/34058)
+
+## <small>12.0.1 (2025-06-02)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34032) ([55f85c1](https://github.com/bitnami/charts/commit/55f85c1fdd9bd63403732288e2d62dd32b50fec0)), closes [#34032](https://github.com/bitnami/charts/issues/34032)
+
 ## 12.0.0 (2025-05-12)
 
-* [bitnami/argo-workflows] Update MySQL subchart ([#33612](https://github.com/bitnami/charts/pull/33612))
+* [bitnami/argo-workflows] Update MySQL subchart (#33612) ([1b26a9e](https://github.com/bitnami/charts/commit/1b26a9e0a9aae2c812fec428fa294c035c266d07)), closes [#33612](https://github.com/bitnami/charts/issues/33612)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>11.1.16 (2025-05-08)</small>
 
