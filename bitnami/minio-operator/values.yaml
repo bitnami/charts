@@ -117,18 +117,6 @@ minioImage:
   repository: bitnami/minio
   tag: 2025.5.24-debian-12-r6
   digest: ""
-## Bitnami KES&reg; image version
-## ref: https://hub.docker.com/r/bitnami/kes/tags/
-## @param kesImage.registry [default: REGISTRY_NAME] KES&reg; image registry
-## @param kesImage.repository [default: REPOSITORY_NAME/kes] KES&reg; image repository
-## @skip kesImage.tag KES&reg; image tag (immutable tags are recommended)
-## @param kesImage.digest KES&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-##
-kesImage:
-  registry: docker.io
-  repository: bitnami/kes
-  tag: 2025.3.12-debian-12-r8
-  digest: ""
 ## @param replicaCount Number of MinIO&reg; Operator replicas to deploy
 ##
 replicaCount: 1
