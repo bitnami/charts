@@ -213,7 +213,7 @@ operator:
   ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
   ##
   watchNamespaces: []
-  # @param operator.crNamespacedRbacEnable Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`
+  ## @param operator.crNamespacedRbacEnable Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`
   ##
   crNamespacedRbacEnable: true
   ## @param operator.enableBatchScheduler Enable batch scheduler component
