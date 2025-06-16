@@ -7,7 +7,7 @@ annotations:
     - name: kong
       image: docker.io/bitnami/kong:3.9.1-debian-12-r0
     - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.4.6-debian-12-r0
+      image: docker.io/bitnami/kong-ingress-controller:3.4.6-debian-12-r1
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
@@ -46,4 +46,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 15.4.10
+version: 15.4.11
