@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.6.25 (2025-06-14)
+## 11.6.25 (2025-06-16)
 
 * [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#34481](https://github.com/bitnami/charts/pull/34481))
 
