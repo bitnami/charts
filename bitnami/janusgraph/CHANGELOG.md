@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.4.4 (2025-05-16)
+## 1.4.5 (2025-06-10)
 
-* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#33759](https://github.com/bitnami/charts/pull/33759))
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#34300](https://github.com/bitnami/charts/pull/34300))
+
+## <small>1.4.4 (2025-05-16)</small>
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#33759) ([c1a055e](https://github.com/bitnami/charts/commit/c1a055ed9260656305f42c2a6f8730b39b23adac)), closes [#33759](https://github.com/bitnami/charts/issues/33759)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>1.4.3 (2025-05-06)</small>
 

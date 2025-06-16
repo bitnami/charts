@@ -1,8 +1,32 @@
 # Changelog
 
-## 0.1.13 (2025-06-03)
+## 0.1.19 (2025-06-13)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34064](https://github.com/bitnami/charts/pull/34064))
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34501](https://github.com/bitnami/charts/pull/34501))
+
+## <small>0.1.18 (2025-06-13)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34498) ([824c93f](https://github.com/bitnami/charts/commit/824c93f30ac6c4b5a96c80fdc7172ebc67575b91)), closes [#34498](https://github.com/bitnami/charts/issues/34498)
+
+## <small>0.1.17 (2025-06-13)</small>
+
+* [bitnami/victoriametrics] bugfix: common.capabilities.vpa.apiVersion context (#34381) ([f1ba77e](https://github.com/bitnami/charts/commit/f1ba77e9d46dfbeb9263ac773d2c293669228abb)), closes [#34381](https://github.com/bitnami/charts/issues/34381)
+
+## <small>0.1.16 (2025-06-09)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34277) ([770d769](https://github.com/bitnami/charts/commit/770d769c828d73865cd108cdf002638d46a400c2)), closes [#34277](https://github.com/bitnami/charts/issues/34277)
+
+## <small>0.1.15 (2025-06-06)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34243) ([fd37d2a](https://github.com/bitnami/charts/commit/fd37d2a0141b83098a8e73938dcaa655aa56b5d4)), closes [#34243](https://github.com/bitnami/charts/issues/34243)
+
+## <small>0.1.14 (2025-06-06)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34240) ([ccb1845](https://github.com/bitnami/charts/commit/ccb184544d8055c9658f5ad9e60f33e99ac4e7b6)), closes [#34240](https://github.com/bitnami/charts/issues/34240)
+
+## <small>0.1.13 (2025-06-03)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34064) ([9dcc366](https://github.com/bitnami/charts/commit/9dcc366f8651b5c9bacd58e89946cc64ab13ef03)), closes [#34064](https://github.com/bitnami/charts/issues/34064)
 
 ## <small>0.1.12 (2025-05-26)</small>
 

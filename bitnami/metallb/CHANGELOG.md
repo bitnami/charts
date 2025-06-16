@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.17 (2025-06-09)
+## 6.4.18 (2025-06-16)
 
 * [bitnami/metallb] Add RBAC permissions for new IPAddressPool and ServiceBGP resources ([#34233](https://github.com/bitnami/charts/pull/34233))
+
+## <small>6.4.17 (2025-06-13)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34466](https://github.com/bitnami/charts/pull/34466))
 
 ## <small>6.4.16 (2025-06-06)</small>
 

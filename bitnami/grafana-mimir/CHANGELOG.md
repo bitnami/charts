@@ -1,8 +1,20 @@
 # Changelog
 
-## 3.0.1 (2025-06-06)
+## 3.0.4 (2025-06-13)
 
-* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34163](https://github.com/bitnami/charts/pull/34163))
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34443](https://github.com/bitnami/charts/pull/34443))
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34313) ([ae17ab8](https://github.com/bitnami/charts/commit/ae17ab842eab4f77068336672021f2e59c551137)), closes [#34313](https://github.com/bitnami/charts/issues/34313)
+
+## <small>3.0.2 (2025-06-09)</small>
+
+* [bitnami/grafana-mimir] Disable MinIO Console (#34271) ([ed1abbb](https://github.com/bitnami/charts/commit/ed1abbbe1270c5a1a951659fa9926aafb2b98cf4)), closes [#34271](https://github.com/bitnami/charts/issues/34271)
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34163) ([9c81957](https://github.com/bitnami/charts/commit/9c819579e8288e9f1f2f16f1fae8acf19fda6a40)), closes [#34163](https://github.com/bitnami/charts/issues/34163)
 
 ## 3.0.0 (2025-06-04)
 

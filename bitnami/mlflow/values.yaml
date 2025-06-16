@@ -93,7 +93,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.22.0-debian-12-r5
+  tag: 2.22.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -122,7 +122,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.49.0-debian-12-r9
+  tag: 2.49.0-debian-12-r10
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1407,6 +1407,10 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false

@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.3 (2025-05-08)
+## 2.0.4 (2025-06-07)
 
-* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#33562](https://github.com/bitnami/charts/pull/33562))
+* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#34246](https://github.com/bitnami/charts/pull/34246))
+
+## <small>2.0.3 (2025-05-08)</small>
+
+* [bitnami/flink] :zap: :arrow_up: Update dependency references (#33562) ([06629ce](https://github.com/bitnami/charts/commit/06629ced21f3fdd860a8a2bb48823027925d5f19)), closes [#33562](https://github.com/bitnami/charts/issues/33562)
 
 ## <small>2.0.2 (2025-05-06)</small>
 
