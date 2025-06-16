@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-loki
-      image: docker.io/bitnami/grafana-loki:3.5.1-debian-12-r2
+      image: docker.io/bitnami/grafana-loki:3.5.1-debian-12-r3
     - name: nginx
       image: docker.io/bitnami/nginx:1.28.0-debian-12-r3
     - name: os-shell
@@ -61,4 +61,4 @@ maintainers:
 name: grafana-loki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
-version: 5.0.0
+version: 5.0.1

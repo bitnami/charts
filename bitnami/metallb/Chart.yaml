@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: metallb-controller
-      image: docker.io/bitnami/metallb-controller:0.15.2-debian-12-r1
+      image: docker.io/bitnami/metallb-controller:0.15.2-debian-12-r2
     - name: metallb-speaker
-      image: docker.io/bitnami/metallb-speaker:0.15.2-debian-12-r1
+      image: docker.io/bitnami/metallb-speaker:0.15.2-debian-12-r2
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -37,4 +37,4 @@ maintainers:
 name: metallb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 6.4.16
+version: 6.4.17
