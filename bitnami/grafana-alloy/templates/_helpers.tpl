@@ -36,11 +36,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Name of the Grafana Alloy ConfigMap
+Name of the Grafana Alloy Secret
 */}}
-{{- define "grafana-alloy.configmapName" -}}
-{{- if .Values.alloy.existingConfigmap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.alloy.existingConfigmap "context" $) -}}
+{{- define "grafana-alloy.secretName" -}}
+{{- if .Values.alloy.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alloy.existingSecret "context" $) -}}
 {{- else -}}
     {{- include "common.names.fullname" . -}}
 {{- end -}}

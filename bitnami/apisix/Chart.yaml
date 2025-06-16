@@ -7,9 +7,9 @@ annotations:
     - name: apisix
       image: docker.io/bitnami/apisix:3.12.0-debian-12-r6
     - name: apisix-dashboard
-      image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-12-r74
+      image: docker.io/bitnami/apisix-dashboard:3.0.1-debian-12-r75
     - name: apisix-ingress-controller
-      image: docker.io/bitnami/apisix-ingress-controller:1.8.4-debian-12-r8
+      image: docker.io/bitnami/apisix-ingress-controller:1.8.4-debian-12-r10
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r46
   licenses: Apache-2.0
@@ -48,4 +48,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
 - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
-version: 5.0.2
+version: 5.0.3
