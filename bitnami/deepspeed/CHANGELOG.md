@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.18 (2025-06-13)
+## 2.3.19 (2025-06-16)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34431](https://github.com/bitnami/charts/pull/34431))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34517](https://github.com/bitnami/charts/pull/34517))
+
+## <small>2.3.18 (2025-06-13)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34431) ([ceb1888](https://github.com/bitnami/charts/commit/ceb1888c277c9e3d22b9fb22499f3a9bf131fd17)), closes [#34431](https://github.com/bitnami/charts/issues/34431)
 
 ## <small>2.3.17 (2025-06-10)</small>
 
