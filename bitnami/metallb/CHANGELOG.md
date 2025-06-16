@@ -6,7 +6,7 @@
 
 ## <small>6.4.17 (2025-06-13)</small>
 
-* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34466](https://github.com/bitnami/charts/pull/34466))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34466) ([66e8dcf](https://github.com/bitnami/charts/commit/66e8dcfd86830855f47419a48b0bf09454759fab)), closes [#34466](https://github.com/bitnami/charts/issues/34466)
 
 ## <small>6.4.16 (2025-06-06)</small>
 
