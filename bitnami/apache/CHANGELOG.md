@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.15 (2025-06-13)
+## 11.3.15 (2025-06-16)
 
 * [bitnami/apache] :zap: :arrow_up: Update dependency references ([#34429](https://github.com/bitnami/charts/pull/34429))
 
