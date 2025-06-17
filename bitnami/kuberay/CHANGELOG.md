@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.14 (2025-06-16)
+## 1.4.14 (2025-06-17)
 
 * [bitnami/kuberay] Add feature toggle for Role/RoleBinding creation when operator.watchAllNamespaces is set to false ([#34333](https://github.com/bitnami/charts/pull/34333))
 
