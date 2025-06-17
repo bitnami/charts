@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.24 (2025-06-13)
+## 1.0.0 (2025-06-17)
 
-* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#34414](https://github.com/bitnami/charts/pull/34414))
+* [bitnami/cloudnative-pg] feat!: :boom: :heavy_plus_sign: Refactor and add barman ([#34509](https://github.com/bitnami/charts/pull/34509))
+
+## <small>0.1.24 (2025-06-13)</small>
+
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references (#34414) ([a7ef45e](https://github.com/bitnami/charts/commit/a7ef45efd7132d83b947c02c49199447b0d24d7f)), closes [#34414](https://github.com/bitnami/charts/issues/34414)
 
 ## <small>0.1.23 (2025-06-12)</small>
 
