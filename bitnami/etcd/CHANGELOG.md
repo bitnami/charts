@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.5 (2025-06-12)
+## 12.0.6 (2025-06-17)
 
-* [bitnami/etcd] Add values for etcd preUpgradeJob scheduling parameters ([#34367](https://github.com/bitnami/charts/pull/34367))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34427](https://github.com/bitnami/charts/pull/34427))
+
+## <small>12.0.5 (2025-06-16)</small>
+
+* [bitnami/etcd] Add values for etcd preUpgradeJob scheduling parameters (#34367) ([a68568b](https://github.com/bitnami/charts/commit/a68568bf913f20198f62f1c7435ebc2bf4f47670)), closes [#34367](https://github.com/bitnami/charts/issues/34367)
 
 ## <small>12.0.4 (2025-06-11)</small>
 
