@@ -90,6 +90,17 @@ Get the configuration secret.
 {{- end -}}
 
 {{/*
+Get the monitoring queries secret or configmap.
+*/}}
+{{- define "cloudnative-pg.operator.monitoringQueriesName" -}}
+{{- if .Values.operator.metrics.monitoringQueries.existingQueries -}}
+    {{- tpl .Values.operator.metrics.monitoringQueries.existingQueries $ -}}
+{{- else }}
+    {{- printf "%s-monitoring-queries" (include "cloudnative-pg.operator.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the configuration configmap.
 */}}
 {{- define "cloudnative-pg.operator.configmapName" -}}

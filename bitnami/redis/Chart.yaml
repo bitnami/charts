@@ -24,6 +24,11 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
+- name: rabbitmq
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 16.x.x
 description: Redis(R) is an open source, advanced key-value store. It is often referred
   to as a data structure server since keys can contain strings, hashes, lists, sets
   and sorted sets.

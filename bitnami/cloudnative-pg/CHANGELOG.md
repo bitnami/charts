@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (2025-06-16)
+## 1.0.0 (2025-06-17)
 
 * [bitnami/cloudnative-pg] feat!: :boom: :heavy_plus_sign: Refactor and add barman ([#34509](https://github.com/bitnami/charts/pull/34509))
 

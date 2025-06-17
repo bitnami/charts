@@ -124,6 +124,10 @@ spec:
             - name: PULL_SECRET_NAME
               value: {{ include "cloudnative-pg.operator.imagePullSecret" . | quote }}
             {{- end }}
+            {{- if .Values.operator.metrics.enabled }}
+            - name: {{ ternary "MONITORING_QUERIES_SECRET" "MONITORING_QUERIES_CONFIGMAP" .Values.operator.metrics.monitoringQueries.useSecret }}
+              value: {{ include "cloudnative-pg.operator.monitoringQueriesName" . | quote }}
+            {{- end }}
             {{- if not .Values.operator.watchAllNamespaces }}
             {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.operator.watchNamespaces }}
             - name: WATCH_NAMESPACE

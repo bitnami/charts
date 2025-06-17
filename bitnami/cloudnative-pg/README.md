@@ -57,9 +57,9 @@ It is also possible to use existing ConfigMaps and Secrets using the `operator.e
 
 ### Resource requests and limits
 
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `*.resources` (under the `operator` and `pluginBarmanCloud` sections) value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `*.resourcesPreset`  (under the `operator` and `pluginBarmanCloud` sections) values, which automatically sets the `*.resources`  (under the `operator` and `pluginBarmanCloud` sections) section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 ### Backup and restore
 
@@ -74,7 +74,9 @@ Check the upstream [plugin-barman-cloud](https://cloudnative-pg.io/plugin-barman
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `metrics.enabled` to true. This will expose the cloudnative-pg native Prometheus endpoint in a `metrics` service, which can be configured under the `metrics.service` section. It will have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `operator` and `pluginBarmanCloud` sections) to true. This will expose the cloudnative-pg native Prometheus endpoint in a `metrics` service, which can be configured under the `*.metrics.service` (under the `operator` and `pluginBarmanCloud` sections) section. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+For the PostgreSQL instances themselves, the chart deploys a monitoring queries ConfigMap or Secret with basic queries. These can be cofigured under the `operator.metrics.monitoringQueries` section.
 
 #### Prometheus requirements
 
@@ -82,7 +84,7 @@ It is necessary to have a working installation of Prometheus or Prometheus Opera
 
 #### Integration with Prometheus Operator
 
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `operator` and `pluginBarmanCloud` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
 
 ```text
 no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
@@ -98,41 +100,44 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Additional environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property:
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside the `operator` and `pluginBarmanCloud` sections:
 
 ```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: error
+operator:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
 ```
 
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside the `operator`, `apiserver` and `cluster` sections.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside the `operator` and `pluginBarmanCloud` sections.
 
 ### Sidecars
 
-If additional containers are needed in the same pod as cloudnative-pg (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter:
+If additional containers are needed in the same pod as cloudnative-pg (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator` and `pluginBarmanCloud` sections:
 
 ```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
+operator:
+  sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+    - name: portname
+      containerPort: 1234
 ```
 
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+If these sidecars export extra ports, extra port definitions can be added using the `*.service.extraPorts` parameter (where available), as shown in the example below:
 
 ```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
+operator:
+  service:
+    extraPorts:
+    - name: extraPort
+      port: 11311
+      targetPort: 11311
 ```
 
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter inside the `operator` and `pluginBarmanCloud` sections. Here is an example:
 
 ```yaml
 initContainers:
@@ -185,9 +190,9 @@ Check the [CloudNativePG official documentation](https://cloudnative-pg.io/docum
 
 ### Pod affinity
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+This chart allows you to set your custom affinity using the `affinity` parameter inside the `operator` and `pluginBarmanCloud` sections. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `operator`, `apiserver` and `cluster` sections.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `operator` and `pluginBarmanCloud` sections.
 
 ## Parameters
 
@@ -471,37 +476,33 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### TLS/SSL parameters
 
-| Name                                                                 | Description                                                                                                                                                            | Value     |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `pluginBarmanCloud.tls.server.existingSecret`                        | Existing secret that contains TLS certificates for the server                                                                                                          | `""`      |
-| `pluginBarmanCloud.tls.server.certFilename`                          | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)                                                                              | `tls.crt` |
-| `pluginBarmanCloud.tls.server.cert`                                  | TLS certificate. Ignored if `pluginBarmanCloud.tls.server.existingSecret` is set                                                                                       | `""`      |
-| `pluginBarmanCloud.tls.server.certKeyFilename`                       | The secret key from the existingSecret if 'key' key different from the default (tls.key)                                                                               | `tls.key` |
-| `pluginBarmanCloud.tls.server.key`                                   | TLS key. Ignored if `pluginBarmanCloud.tls.server.existingSecret` is set                                                                                               | `""`      |
-| `pluginBarmanCloud.tls.client.existingSecret`                        | Existing secret that contains TLS certificates for the client                                                                                                          | `""`      |
-| `pluginBarmanCloud.tls.client.certFilename`                          | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)                                                                              | `tls.crt` |
-| `pluginBarmanCloud.tls.client.certKeyFilename`                       | The secret key from the existingSecret if 'key' key different from the default (tls.key)                                                                               | `tls.key` |
-| `pluginBarmanCloud.tls.client.cert`                                  | TLS certificate. Ignored if `pluginBarmanCloud.tls.client.existingSecret` is set                                                                                       | `""`      |
-| `pluginBarmanCloud.tls.client.key`                                   | TLS key. Ignored if `pluginBarmanCloud.tls.client.existingSecret` is set                                                                                               | `""`      |
-| `pluginBarmanCloud.tls.autoGenerated.enabled`                        | Enable automatic generation of certificates for TLS                                                                                                                    | `true`    |
-| `pluginBarmanCloud.tls.autoGenerated.engine`                         | Mechanism to generate the certificates (allowed values: helm, cert-manager)                                                                                            | `helm`    |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.existingIssuer`     | The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)                                                                 | `""`      |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.existingIssuerKind` | Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)                                                                                              | `""`      |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.keyAlgorithm`       | Key algorithm for the certificates (only for `cert-manager` engine)                                                                                                    | `RSA`     |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.keySize`            | Key size for the certificates (only for `cert-manager` engine)                                                                                                         | `2048`    |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.duration`           | Duration for the certificates (only for `cert-manager` engine)                                                                                                         | `2160h`   |
-| `pluginBarmanCloud.tls.autoGenerated.certManager.renewBefore`        | Renewal period for the certificates (only for `cert-manager` engine)                                                                                                   | `360h`    |
-| `pluginBarmanCloud.autoscaling.vpa.enabled`                          | Enable VPA                                                                                                                                                             | `false`   |
-| `pluginBarmanCloud.autoscaling.vpa.annotations`                      | Annotations for VPA resource                                                                                                                                           | `{}`      |
-| `pluginBarmanCloud.autoscaling.vpa.controlledResources`              | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`      |
-| `pluginBarmanCloud.autoscaling.vpa.maxAllowed`                       | VPA Max allowed resources for the pod                                                                                                                                  | `{}`      |
-| `pluginBarmanCloud.autoscaling.vpa.minAllowed`                       | VPA Min allowed resources for the pod                                                                                                                                  | `{}`      |
-| `pluginBarmanCloud.autoscaling.vpa.updatePolicy.updateMode`          | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`    |
-| `pluginBarmanCloud.autoscaling.hpa.enabled`                          | Enable autoscaling for                                                                                                                                                 | `false`   |
-| `pluginBarmanCloud.autoscaling.hpa.minReplicas`                      | Minimum number of replicas                                                                                                                                             | `""`      |
-| `pluginBarmanCloud.autoscaling.hpa.maxReplicas`                      | Maximum number of replicas                                                                                                                                             | `""`      |
-| `pluginBarmanCloud.autoscaling.hpa.targetCPU`                        | Target CPU utilization percentage                                                                                                                                      | `""`      |
-| `pluginBarmanCloud.autoscaling.hpa.targetMemory`                     | Target Memory utilization percentage                                                                                                                                   | `""`      |
+| Name                                                                 | Description                                                                                                                                                            | Value   |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `pluginBarmanCloud.tls.server.existingSecret`                        | Existing secret that contains TLS certificates for the server                                                                                                          | `""`    |
+| `pluginBarmanCloud.tls.server.cert`                                  | TLS certificate. Ignored if `pluginBarmanCloud.tls.server.existingSecret` is set                                                                                       | `""`    |
+| `pluginBarmanCloud.tls.server.key`                                   | TLS key. Ignored if `pluginBarmanCloud.tls.server.existingSecret` is set                                                                                               | `""`    |
+| `pluginBarmanCloud.tls.client.existingSecret`                        | Existing secret that contains TLS certificates for the client                                                                                                          | `""`    |
+| `pluginBarmanCloud.tls.client.cert`                                  | TLS certificate. Ignored if `pluginBarmanCloud.tls.client.existingSecret` is set                                                                                       | `""`    |
+| `pluginBarmanCloud.tls.client.key`                                   | TLS key. Ignored if `pluginBarmanCloud.tls.client.existingSecret` is set                                                                                               | `""`    |
+| `pluginBarmanCloud.tls.autoGenerated.enabled`                        | Enable automatic generation of certificates for TLS                                                                                                                    | `true`  |
+| `pluginBarmanCloud.tls.autoGenerated.engine`                         | Mechanism to generate the certificates (allowed values: helm, cert-manager)                                                                                            | `helm`  |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.existingIssuer`     | The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)                                                                 | `""`    |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.existingIssuerKind` | Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)                                                                                              | `""`    |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.keyAlgorithm`       | Key algorithm for the certificates (only for `cert-manager` engine)                                                                                                    | `RSA`   |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.keySize`            | Key size for the certificates (only for `cert-manager` engine)                                                                                                         | `2048`  |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.duration`           | Duration for the certificates (only for `cert-manager` engine)                                                                                                         | `2160h` |
+| `pluginBarmanCloud.tls.autoGenerated.certManager.renewBefore`        | Renewal period for the certificates (only for `cert-manager` engine)                                                                                                   | `360h`  |
+| `pluginBarmanCloud.autoscaling.vpa.enabled`                          | Enable VPA                                                                                                                                                             | `false` |
+| `pluginBarmanCloud.autoscaling.vpa.annotations`                      | Annotations for VPA resource                                                                                                                                           | `{}`    |
+| `pluginBarmanCloud.autoscaling.vpa.controlledResources`              | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`    |
+| `pluginBarmanCloud.autoscaling.vpa.maxAllowed`                       | VPA Max allowed resources for the pod                                                                                                                                  | `{}`    |
+| `pluginBarmanCloud.autoscaling.vpa.minAllowed`                       | VPA Min allowed resources for the pod                                                                                                                                  | `{}`    |
+| `pluginBarmanCloud.autoscaling.vpa.updatePolicy.updateMode`          | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
+| `pluginBarmanCloud.autoscaling.hpa.enabled`                          | Enable autoscaling for                                                                                                                                                 | `false` |
+| `pluginBarmanCloud.autoscaling.hpa.minReplicas`                      | Minimum number of replicas                                                                                                                                             | `""`    |
+| `pluginBarmanCloud.autoscaling.hpa.maxReplicas`                      | Maximum number of replicas                                                                                                                                             | `""`    |
+| `pluginBarmanCloud.autoscaling.hpa.targetCPU`                        | Target CPU utilization percentage                                                                                                                                      | `""`    |
+| `pluginBarmanCloud.autoscaling.hpa.targetMemory`                     | Target Memory utilization percentage                                                                                                                                   | `""`    |
 
 ### plugin-barman-cloud Traffic Exposure Parameters
 

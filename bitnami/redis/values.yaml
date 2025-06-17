@@ -2342,3 +2342,9 @@ useExternalDNS:
   suffix: ""
   annotationKey: external-dns.alpha.kubernetes.io/
   additionalAnnotations: {}
+
+rabbitmq:
+  auth:
+    username: "dummy"
+    password: "dummy"
+    securePassword: false

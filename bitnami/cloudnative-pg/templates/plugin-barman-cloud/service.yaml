@@ -49,7 +49,7 @@ spec:
     - name: grpc
       port: {{ .Values.pluginBarmanCloud.service.ports.grpc }}
       protocol: TCP
-      {{- if and (or (eq .Values.pluginBarmanCloud.service.type "NodePort") (eq .Values.pluginBarmanCloud.service.type "LoadBalancer")) (not (empty .Values.pluginBarmanCloud.service.nodePorts.http)) }}
+      {{- if and (or (eq .Values.pluginBarmanCloud.service.type "NodePort") (eq .Values.pluginBarmanCloud.service.type "LoadBalancer")) (not (empty .Values.pluginBarmanCloud.service.nodePorts.grpc)) }}
       nodePort: {{ .Values.pluginBarmanCloud.service.nodePorts.grpc }}
       {{- else if eq .Values.pluginBarmanCloud.service.type "ClusterIP" }}
       nodePort: null
