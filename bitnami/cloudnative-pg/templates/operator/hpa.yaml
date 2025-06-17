@@ -8,7 +8,6 @@ apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ )
 kind: HorizontalPodAutoscaler
 metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

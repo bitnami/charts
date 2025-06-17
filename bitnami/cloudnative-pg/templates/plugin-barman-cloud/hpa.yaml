@@ -8,7 +8,6 @@ apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ )
 kind: HorizontalPodAutoscaler
 metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
-  namespace: {{ .Release.Namespace | quote }}
   {{- /* Updating app.kubernetes.io/name because to avoid "duplicate deployment" error: https://github.com/cloudnative-pg/cloudnative-pg/blob/9c2769815ff78cbfc28e2a2818f3a04add33477c/pkg/certs/operator_deployment.go#L120 */}}
   {{- $appNameLabels := dict "app.kubernetes.io/name" "plugin-barman-cloud" }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $appNameLabels .Values.commonLabels) "context" . ) }}

@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* Adding the helper here for better readability */}}
-{{/* Rules taken from https://github.com/cloudnative-pg/cloudnative-pg/blob/aoeuoeueao/config/manager/default-monitoring.yaml#L2 */}}
+{{/* Rules taken from https://github.com/cloudnative-pg/cloudnative-pg/blob/main/config/manager/default-monitoring.yaml#L2 */}}
 {{- define "cloudnative-pg.operator.defaultMonitoringQueries" -}}
 backends:
   query: |
