@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.2.24 (2025-06-11)
+## 2.2.26 (2025-06-16)
 
-* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#34351](https://github.com/bitnami/charts/pull/34351))
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#34515](https://github.com/bitnami/charts/pull/34515))
+
+## <small>2.2.25 (2025-06-13)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34447) ([d372fad](https://github.com/bitnami/charts/commit/d372fadbc066f148f6f18392f8be9493e5d4f84e)), closes [#34447](https://github.com/bitnami/charts/issues/34447)
+
+## <small>2.2.24 (2025-06-11)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34351) ([e165f98](https://github.com/bitnami/charts/commit/e165f984502d21e10a05499d895f83b2b189d375)), closes [#34351](https://github.com/bitnami/charts/issues/34351)
 
 ## <small>2.2.23 (2025-06-06)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.1.3 (2025-06-05)
+## 2.1.7 (2025-06-13)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34130](https://github.com/bitnami/charts/pull/34130))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34495](https://github.com/bitnami/charts/pull/34495))
+
+## <small>2.1.6 (2025-06-13)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34489) ([6f037ee](https://github.com/bitnami/charts/commit/6f037ee360e32101925bc748665b6f3b73565a27)), closes [#34489](https://github.com/bitnami/charts/issues/34489)
+
+## <small>2.1.5 (2025-06-13)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34387) ([01ea69e](https://github.com/bitnami/charts/commit/01ea69e530d0b62882f9930a8d793ee697574b45)), closes [#34387](https://github.com/bitnami/charts/issues/34387)
+
+## <small>2.1.4 (2025-06-06)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34224) ([93011ec](https://github.com/bitnami/charts/commit/93011ec3f0680aed3d8e25098813b4657d7ffa18)), closes [#34224](https://github.com/bitnami/charts/issues/34224)
+
+## <small>2.1.3 (2025-06-05)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34130) ([8892f2b](https://github.com/bitnami/charts/commit/8892f2b12a367fb0a2cefbc77c27cdeaa03e44f1)), closes [#34130](https://github.com/bitnami/charts/issues/34130)
 
 ## <small>2.1.2 (2025-05-31)</small>
 
