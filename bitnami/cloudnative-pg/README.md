@@ -366,25 +366,28 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### cloudnative-pg Operator Metrics Parameters
 
-| Name                                                | Description                                                                                            | Value   |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
-| `operator.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
-| `operator.metrics.service.ports.metrics`            | Meetrics service port                                                                                  | `80`    |
-| `operator.metrics.service.clusterIP`                | Static clusterIP or None for headless services                                                         | `""`    |
-| `operator.metrics.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                       | `None`  |
-| `operator.metrics.service.labels`                   | Labels for the metrics service                                                                         | `{}`    |
-| `operator.metrics.service.annotations`              | Annotations for the metrics service                                                                    | `{}`    |
-| `operator.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
-| `operator.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
-| `operator.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
-| `operator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
-| `operator.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
-| `operator.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false` |
-| `operator.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`    |
-| `operator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
-| `operator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |
-| `operator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`    |
-| `operator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`    |
+| Name                                                       | Description                                                                                            | Value   |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
+| `operator.metrics.enabled`                                 | Enable the export of Prometheus metrics                                                                | `false` |
+| `operator.metrics.monitoringQueries.useSecret`             | Use secret for the monitoring queries. Will use a ConfigMap if false                                   | `false` |
+| `operator.metrics.monitoringQueries.overrideConfiguration` | Override sections of the default monitoring queries configuration                                      | `{}`    |
+| `operator.metrics.monitoringQueries.existingQueries`       | Name of a ConfigMap or Secret with existing monitoring queries                                         | `""`    |
+| `operator.metrics.service.ports.metrics`                   | Meetrics service port                                                                                  | `80`    |
+| `operator.metrics.service.clusterIP`                       | Static clusterIP or None for headless services                                                         | `""`    |
+| `operator.metrics.service.sessionAffinity`                 | Control where client requests go, to the same pod or round-robin                                       | `None`  |
+| `operator.metrics.service.labels`                          | Labels for the metrics service                                                                         | `{}`    |
+| `operator.metrics.service.annotations`                     | Annotations for the metrics service                                                                    | `{}`    |
+| `operator.metrics.serviceMonitor.enabled`                  | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
+| `operator.metrics.serviceMonitor.namespace`                | Namespace in which Prometheus is running                                                               | `""`    |
+| `operator.metrics.serviceMonitor.annotations`              | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
+| `operator.metrics.serviceMonitor.labels`                   | Extra labels for the ServiceMonitor                                                                    | `{}`    |
+| `operator.metrics.serviceMonitor.jobLabel`                 | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
+| `operator.metrics.serviceMonitor.honorLabels`              | honorLabels chooses the metric's labels on collisions with target labels                               | `false` |
+| `operator.metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped.                                                           | `""`    |
+| `operator.metrics.serviceMonitor.scrapeTimeout`            | Timeout after which the scrape is ended                                                                | `""`    |
+| `operator.metrics.serviceMonitor.metricRelabelings`        | Specify additional relabeling of metrics                                                               | `[]`    |
+| `operator.metrics.serviceMonitor.relabelings`              | Specify general relabeling                                                                             | `[]`    |
+| `operator.metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                    | `{}`    |
 
 ### plugin-barman-cloud parameters
 
