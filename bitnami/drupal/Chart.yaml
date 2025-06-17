@@ -5,7 +5,7 @@ annotations:
   category: CMS
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r9
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r11
     - name: drupal
       image: docker.io/bitnami/drupal:11.1.8-debian-12-r0
     - name: os-shell
@@ -43,4 +43,4 @@ maintainers:
 name: drupal
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/drupal
-version: 21.2.10
+version: 21.2.12

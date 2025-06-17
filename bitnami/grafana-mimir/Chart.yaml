@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-mimir
-      image: docker.io/bitnami/grafana-mimir:2.16.0-debian-12-r10
+      image: docker.io/bitnami/grafana-mimir:2.16.0-debian-12-r11
     - name: memcached
       image: docker.io/bitnami/memcached:1.6.38-debian-12-r7
     - name: nginx
@@ -61,4 +61,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 3.0.3
+version: 3.0.4
