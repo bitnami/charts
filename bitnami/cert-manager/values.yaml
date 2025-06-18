@@ -86,7 +86,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.17.2-debian-12-r1
+    tag: 1.18.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -116,7 +116,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.17.2-debian-12-r1
+      tag: 1.18.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -497,7 +497,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.17.2-debian-12-r1
+    tag: 1.18.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -514,6 +514,11 @@ webhook:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+  ## @param webhook.timeoutSeconds [default: 30] How many seconds the webhook should wait for a response before timing out
+  ## ref: https://cert-manager.io/docs/troubleshooting/webhook/#error-context-deadline-exceeded
+  ## Default value is configured to 30 seconds (the maximum value allowed by Kubernetes)
+  ##
+  timeoutSeconds: 30
   ## Webhook containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param webhook.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
@@ -864,7 +869,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.17.2-debian-12-r2
+    tag: 1.18.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

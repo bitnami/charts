@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.3.9 (2025-05-13)
+## 4.3.10 (2025-06-12)
 
-* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#33658](https://github.com/bitnami/charts/pull/33658))
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#34368](https://github.com/bitnami/charts/pull/34368))
+
+## <small>4.3.9 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#33658) ([031cd9f](https://github.com/bitnami/charts/commit/031cd9fc28d16e5dea7f04899be77c7b1c95504f)), closes [#33658](https://github.com/bitnami/charts/issues/33658)
 
 ## <small>4.3.8 (2025-05-07)</small>
 

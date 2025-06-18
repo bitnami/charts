@@ -47,6 +47,9 @@ spec:
       {{- if .Values.controlPlane.hostNetwork }}
       hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
+      {{- if .Values.controlPlane.dnsPolicy }}
+      dnsPolicy: {{ .Values.controlPlane.dnsPolicy | quote }} 
+      {{- end }}   
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.controlPlane.automountServiceAccountToken }}
       {{- if .Values.controlPlane.hostAliases }}

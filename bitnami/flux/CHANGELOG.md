@@ -1,8 +1,57 @@
 # Changelog
 
-## 2.4.13 (2025-05-13)
+## 2.4.25 (2025-06-13)
 
-* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#33683](https://github.com/bitnami/charts/pull/33683))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34423](https://github.com/bitnami/charts/pull/34423))
+
+## <small>2.4.24 (2025-06-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34404) ([d672eb9](https://github.com/bitnami/charts/commit/d672eb9780bb67710e2fbf26b8f1291380c87b15)), closes [#34404](https://github.com/bitnami/charts/issues/34404)
+
+## <small>2.4.23 (2025-06-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34399) ([651a589](https://github.com/bitnami/charts/commit/651a589a1fcc28d4b1c01b093f6189b36c2c92c9)), closes [#34399](https://github.com/bitnami/charts/issues/34399)
+
+## <small>2.4.22 (2025-06-10)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34329) ([b8e4901](https://github.com/bitnami/charts/commit/b8e4901c8f81fb96c5118003dc9522339f9b7522)), closes [#34329](https://github.com/bitnami/charts/issues/34329)
+
+## <small>2.4.21 (2025-06-06)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34157) ([be07065](https://github.com/bitnami/charts/commit/be0706572bfde3ba0ddfa82c53463e9ce5415beb)), closes [#34157](https://github.com/bitnami/charts/issues/34157)
+
+## <small>2.4.20 (2025-06-05)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34154) ([30d17a9](https://github.com/bitnami/charts/commit/30d17a957717e16c0b5094c6c0755d5f605f3880)), closes [#34154](https://github.com/bitnami/charts/issues/34154)
+
+## <small>2.4.19 (2025-06-01)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34027) ([eb57020](https://github.com/bitnami/charts/commit/eb57020cda6719e2f8e6a29714e5fe7e34f5ad32)), closes [#34027](https://github.com/bitnami/charts/issues/34027)
+
+## <small>2.4.18 (2025-05-29)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33948) ([1d9e828](https://github.com/bitnami/charts/commit/1d9e828accbe0139f0862f8f526387e775f9a5f4)), closes [#33948](https://github.com/bitnami/charts/issues/33948)
+
+## <small>2.4.17 (2025-05-28)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33942) ([d09dfac](https://github.com/bitnami/charts/commit/d09dfac6fddf6c2b70b3977f673983f9a6489ad2)), closes [#33942](https://github.com/bitnami/charts/issues/33942)
+
+## <small>2.4.16 (2025-05-27)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33911) ([30d9d20](https://github.com/bitnami/charts/commit/30d9d201387be171336b825c524de987d95dab94)), closes [#33911](https://github.com/bitnami/charts/issues/33911)
+
+## <small>2.4.15 (2025-05-27)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33909) ([4de3432](https://github.com/bitnami/charts/commit/4de3432337ab872f171de85951b439a1ec854a59)), closes [#33909](https://github.com/bitnami/charts/issues/33909)
+
+## <small>2.4.14 (2025-05-27)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33908) ([44325de](https://github.com/bitnami/charts/commit/44325deb7580b6c44b97bb5fd3da4bc7daba7b23)), closes [#33908](https://github.com/bitnami/charts/issues/33908)
+
+## <small>2.4.13 (2025-05-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#33683) ([072b13e](https://github.com/bitnami/charts/commit/072b13efddd2a3f790a34dcf97ebedf776156045)), closes [#33683](https://github.com/bitnami/charts/issues/33683)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.4.12 (2025-05-07)</small>
 

@@ -4,10 +4,6 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
 
 {{/*
 Set the http prefix if the externalURl doesn't have it
@@ -16,15 +12,14 @@ Set the http prefix if the externalURl doesn't have it
 {{- $templatedExternalUrl := tpl .Values.externalURL . -}}
 {{- if hasPrefix "http" $templatedExternalUrl -}}
     {{- print $templatedExternalUrl -}}
-{{- else if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled -}}
-    {{- printf "https://%s" $templatedExternalUrl -}}
-{{- else if and (eq .Values.exposureType "ingress") .Values.ingress.core.tls -}}
-    {{- printf "https://%s" $templatedExternalUrl -}}
 {{- else -}}
-    {{- printf "http://%s" $templatedExternalUrl -}}
+    {{- printf "%s://%s" (ternary "https" "http" (or (and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled) (and (eq .Values.exposureType "ingress") .Values.ingress.core.tls))) $templatedExternalUrl -}}
 {{- end -}}
 {{- end -}}
 
+{{/*
+Return true if the NGINX TLS certs should be auto-generated
+*/}}
 {{- define "harbor.autoGenCertForNginx" -}}
 {{- if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled (not .Values.nginx.tls.existingSecret) -}}
     {{- true -}}
@@ -35,14 +30,6 @@ Set the http prefix if the externalURl doesn't have it
 - name: ca-bundle-certs
   secret:
     secretName: {{ .Values.internalTLS.caBundleSecret }}
-{{- end -}}
-
-{{- define "harbor.coreOverridesJsonSecret" -}}
-{{- if .Values.core.configOverwriteJsonSecret -}}
-{{- print .Values.core.configOverwriteJsonSecret }}
-{{- else }}
-{{- printf "%s-config-override" (include "harbor.core" .) -}}
-{{- end -}}
 {{- end -}}
 
 {{- define "harbor.caBundleVolumeMount" -}}
@@ -80,28 +67,59 @@ Set the http prefix if the externalURl doesn't have it
   {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.trivy" .) (ternary .Values.trivy.service.ports.https .Values.trivy.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
+{{/* Secret key that contains the Harbor admin password */}}
+{{- define "harbor.secret.adminPasswordKey" -}}
+{{- default "HARBOR_ADMIN_PASSWORD" .Values.existingSecretAdminPasswordKey -}}
+{{- end -}}
+
+{{/* Core secret name */}}
+{{- define "harbor.core.secretName" -}}
+{{- default (include "harbor.core" .) .Values.core.existingSecret -}}
+{{- end -}}
+
+{{/* Core token secret name */}}
+{{- define "harbor.core.token.secretName" -}}
+{{- default (include "harbor.core" .) .Values.core.secretName -}}
+{{- end -}}
+
+{{/* Core env. vars secret name */}}
+{{- define "harbor.core.envvars.secretName" -}}
+{{- default (printf "%s-envvars" (include "harbor.core" .)) .Values.core.existingEnvVarsSecret -}}
+{{- end -}}
+
+{{/* Core configuration overrides secret name */}}
+{{- define "harbor.core.overridesJsonSecret" -}}
+{{- default (printf "%s-config-override" (include "harbor.core" .)) .Values.core.configOverwriteJsonSecret -}}
+{{- end -}}
+
+{{/* Core TLS secret name */}}
 {{- define "harbor.core.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.core.tls.existingSecret (printf "%s-crt" (include "harbor.core" .))) -}}
+{{- default (printf "%s-crt" (include "harbor.core" .)) .Values.core.tls.existingSecret -}}
+{{- end -}}
+
+{{/* Jobservice secret name */}}
+{{- define "harbor.jobservice.secretName" -}}
+{{- default (include "harbor.jobservice" .) .Values.jobservice.existingSecret -}}
 {{- end -}}
 
 {{/* Jobservice TLS secret name */}}
 {{- define "harbor.jobservice.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.jobservice.tls.existingSecret (printf "%s-crt" (include "harbor.jobservice" .))) -}}
+{{- default (printf "%s-crt" (include "harbor.jobservice" .)) .Values.jobservice.tls.existingSecret -}}
 {{- end -}}
 
 {{/* Portal TLS secret name */}}
 {{- define "harbor.portal.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.portal.tls.existingSecret (printf "%s-crt" (include "harbor.portal" .))) -}}
+{{- default (printf "%s-crt" (include "harbor.portal" .)) .Values.portal.tls.existingSecret -}}
 {{- end -}}
 
 {{/* Registry TLS secret name */}}
 {{- define "harbor.registry.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.registry.tls.existingSecret (printf "%s-crt" (include "harbor.registry" .))) -}}
+{{- default (printf "%s-crt" (include "harbor.registry" .)) .Values.registry.tls.existingSecret -}}
 {{- end -}}
 
 {{/* Trivy TLS secret name */}}
 {{- define "harbor.trivy.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.trivy.tls.existingSecret (printf "%s-crt" (include "harbor.trivy" .))) -}}
+{{- default (printf "%s-crt" (include "harbor.trivy" .)) .Values.trivy.tls.existingSecret -}}
 {{- end -}}
 
 {{/*
@@ -113,10 +131,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.database.host" -}}
-{{- if eq .Values.postgresql.architecture "replication" }}
-    {{- ternary (printf "%s-primary" (include "harbor.postgresql.fullname" .)) .Values.externalDatabase.host .Values.postgresql.enabled -}}
-{{- else }}
-    {{- ternary (include "harbor.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- ternary (printf "%s-primary" (include "harbor.postgresql.fullname" .)) (include "harbor.postgresql.fullname" .) (eq .Values.postgresql.architecture "replication") -}}
+{{- else -}}
+    {{- tpl .Values.externalDatabase.host . -}}
 {{- end -}}
 {{- end -}}
 
@@ -129,20 +147,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "harbor.database.rawPassword" -}}
-{{- if .Values.postgresql.enabled }}
-  {{- if .Values.global.postgresql }}
-    {{- if .Values.global.postgresql.auth }}
-      {{- coalesce .Values.global.postgresql.auth.postgresPassword .Values.postgresql.auth.postgresPassword -}}
-    {{- else -}}
-      {{- .Values.postgresql.auth.postgresPassword -}}
-    {{- end -}}
-  {{- else -}}
-    {{- .Values.postgresql.auth.postgresPassword -}}
-  {{- end -}}
-{{- else -}}
-  {{- if not .Values.externalDatabase.existingSecret -}}
-    {{- .Values.externalDatabase.password -}}
-  {{- end -}}
+{{- if .Values.postgresql.enabled -}}
+  {{- coalesce (((.Values.global).postgresql).auth).postgresPassword .Values.postgresql.auth.postgresPassword -}}
+{{- else if not .Values.externalDatabase.existingSecret -}}
+  {{- .Values.externalDatabase.password -}}
 {{- end -}}
 {{- end -}}
 
@@ -224,13 +232,13 @@ true
     {{- $externalRedis.password -}}
   {{- else if and (not .context.Values.redis.enabled) $externalRedis.existingSecret -}}
     {{- $secret := tpl $externalRedis.existingSecret .context -}}
-    {{- include "common.secrets.get" (dict "secret" $secret "key" "redis-password" "context" .context) }}
+    {{- include "common.secrets.lookup" (dict "secret" $secret "key" "redis-password" "context" .context) }}
   {{- end -}}
   {{- if and .context.Values.redis.enabled .context.Values.redis.auth.enabled .context.Values.redis.auth.password -}}
     {{- .context.Values.redis.auth.password -}}
   {{- else if and .context.Values.redis.enabled .context.Values.redis.auth.enabled .context.Values.redis.auth.existingSecret -}}
     {{- $secret := tpl .context.Values.redis.auth.existingSecret .context -}}
-    {{- include "common.secrets.get" (dict "secret" $secret "key" "redis-password" "context" .context) }}
+    {{- include "common.secrets.lookup" (dict "secret" $secret "key" "redis-password" "context" .context) }}
   {{- end -}}
 {{- end -}}
 
@@ -560,7 +568,7 @@ harbor: Redis Mutual TLS
 
 {{/* Validate values of Harbor - externalRedis configuration */}}
 {{- define "harbor.validateValues.externalRedis" -}}
-{{- if and .Values.externalRedis.instancePerComponent ( or ( not .Values.externalRedis.core.host ) ( not .Values.externalRedis.jobservice.host ) ( not .Values.externalRedis.trivy.host ) ( not .Values.externalRedis.registry.host ) ) -}}
+{{- if and .Values.externalRedis.instancePerComponent ( or ( not .Values.externalRedis.core.host ) ( not .Values.externalRedis.jobservice.host ) ( and .Values.externalRedis.trivy.enabled ( not .Values.externalRedis.trivy.host ) ) ( not .Values.externalRedis.registry.host ) ) -}}
 harbor: External Redis instance per Harbor component
     Following values are mandatory when externalRedis.instancePerComponent is set:
       * externalRedis.core.host

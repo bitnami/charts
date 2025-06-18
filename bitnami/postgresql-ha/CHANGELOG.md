@@ -1,8 +1,36 @@
 # Changelog
 
-## 16.0.8 (2025-05-27)
+## 16.0.15 (2025-06-18)
 
 * [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password ([#32857](https://github.com/bitnami/charts/pull/32857))
+
+## <small>16.0.14 (2025-06-13)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34486](https://github.com/bitnami/charts/pull/34486))
+
+## <small>16.0.13 (2025-06-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34375) ([3ac12a1](https://github.com/bitnami/charts/commit/3ac12a10325eba47b2e31a3db3d008e3b421f867)), closes [#34375](https://github.com/bitnami/charts/issues/34375)
+
+## <small>16.0.12 (2025-06-11)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34354) ([0f9c1d4](https://github.com/bitnami/charts/commit/0f9c1d45293599d35386603884e545e9bfed631b)), closes [#34354](https://github.com/bitnami/charts/issues/34354)
+
+## <small>16.0.11 (2025-06-06)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34211) ([068660d](https://github.com/bitnami/charts/commit/068660d0ba097d0d6d005198099f7b696e07fe0a)), closes [#34211](https://github.com/bitnami/charts/issues/34211)
+
+## <small>16.0.10 (2025-06-03)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34072) ([ae2e653](https://github.com/bitnami/charts/commit/ae2e653858aceab76aa0e0fe06d1a5cde0f32f4d)), closes [#34072](https://github.com/bitnami/charts/issues/34072)
+
+## <small>16.0.9 (2025-05-30)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33983) ([2a92873](https://github.com/bitnami/charts/commit/2a9287306a40cad6a5147ff5e12546827037500e)), closes [#33983](https://github.com/bitnami/charts/issues/33983)
+
+## <small>16.0.8 (2025-05-27)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33915) ([adcb803](https://github.com/bitnami/charts/commit/adcb80334211c4a2fbb5aabd81ee0375bf470935)), closes [#33915](https://github.com/bitnami/charts/issues/33915)
 
 ## <small>16.0.7 (2025-05-26)</small>
 

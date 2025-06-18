@@ -1,8 +1,21 @@
 # Changelog
 
+## 13.0.2 (2025-06-09)
+
+* [bitnami/mastodon] Disable MinIO Console ([#34266](https://github.com/bitnami/charts/pull/34266))
+
+## <small>13.0.1 (2025-06-05)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34126) ([f5df349](https://github.com/bitnami/charts/commit/f5df349c81da25bad94adeba8561f1b96372ccd7)), closes [#34126](https://github.com/bitnami/charts/issues/34126)
+
+## 13.0.0 (2025-06-04)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mastodon] feat: major version due to Minio major bump (#34088) ([0ee5707](https://github.com/bitnami/charts/commit/0ee57073d3245196ded9b8225b932e91ba4338c1)), closes [#34088](https://github.com/bitnami/charts/issues/34088)
+
 ## 12.0.0 (2025-05-07)
 
-* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 ([#33505](https://github.com/bitnami/charts/pull/33505))
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33505) ([8501340](https://github.com/bitnami/charts/commit/8501340dac19dbffe07789f4faae139131a5a091)), closes [#33505](https://github.com/bitnami/charts/issues/33505)
 
 ## <small>11.0.2 (2025-05-06)</small>
 
