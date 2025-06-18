@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.5 (2025-06-17)
+## 3.0.5 (2025-06-18)
 
 * [bitnami/grafana-mimir] Typo in grafana-mimir's querier deployment ([#34531](https://github.com/bitnami/charts/pull/34531))
 
