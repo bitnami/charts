@@ -1,12 +1,12 @@
 # Changelog
 
-## 12.0.8 (2025-06-17)
+## 12.0.8 (2025-06-18)
 
 * [bitnami/grafana] Templated Rendering of Grafana Datasource SecretName ([#34530](https://github.com/bitnami/charts/pull/34530))
 
 ## <small>12.0.7 (2025-06-18)</small>
 
-* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#34535](https://github.com/bitnami/charts/pull/34535))
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#34535) ([303818e](https://github.com/bitnami/charts/commit/303818e6e5ccb33cbbb3bac0d882f3f809846732)), closes [#34535](https://github.com/bitnami/charts/issues/34535)
 
 ## <small>12.0.6 (2025-06-13)</small>
 
