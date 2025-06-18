@@ -1,6 +1,6 @@
 # Changelog
 
-## <small>12.0.8 (2025-06-18)</small>
+## 12.0.8 (2025-06-18)
 
 * [bitnami/grafana] Templated Rendering of Grafana Datasource SecretName ([#34530](https://github.com/bitnami/charts/pull/34530))
 
