@@ -367,7 +367,7 @@ spec:
         {{- if .Values.datasources.secretName }}
         - name: datasources
           secret:
-            secretName: {{ .Values.datasources.secretName }}
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.datasources.secretName "context" $) }} 
         {{- else if .Values.datasources.secretDefinition }}
         - name: datasources
           secret:
