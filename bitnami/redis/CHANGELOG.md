@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.4 (2025-06-16)
+## 21.2.5 (2025-06-18)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34463](https://github.com/bitnami/charts/pull/34463))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34547](https://github.com/bitnami/charts/pull/34547))
+
+## <small>21.2.4 (2025-06-16)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34463) ([edf1120](https://github.com/bitnami/charts/commit/edf1120dbe6f9039541ff5b10b4530d0d8c40e9b)), closes [#34463](https://github.com/bitnami/charts/issues/34463)
 
 ## <small>21.2.3 (2025-06-10)</small>
 
