@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.15 (2025-06-18)
+## 1.4.16 (2025-06-18)
 
-* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34552](https://github.com/bitnami/charts/pull/34552))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34553](https://github.com/bitnami/charts/pull/34553))
+
+## <small>1.4.15 (2025-06-18)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34552) ([3fbdf60](https://github.com/bitnami/charts/commit/3fbdf6024b26fdd33ccaea78ba0c6e705492e2da)), closes [#34552](https://github.com/bitnami/charts/issues/34552)
 
 ## <small>1.4.14 (2025-06-17)</small>
 
