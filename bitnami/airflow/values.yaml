@@ -2580,6 +2580,9 @@ setupDBJob:
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
 ## @param ldap.basedn Base of the search, eg. ou=example,o=org.
 ## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
+## @param ldap.firstnameField LDAP field that stores the user's first name.
+## @param ldap.lastnameField LDAP field that stores the user's last name.
+## @param ldap.emailField field that stores the user's email address, if null in LDAP, email is set to: "{username}@email.notfound"
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
 ## @param ldap.existingSecret Name of an existing secret containing the LDAP bind password
@@ -2593,6 +2596,9 @@ ldap:
   uri: "ldap://ldap_server:389"
   basedn: "dc=example,dc=org"
   searchAttribute: "cn"
+  firstnameField: "givenName"
+  lastnameField: "sn"
+  emailField: "mail"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
   existingSecret: ""

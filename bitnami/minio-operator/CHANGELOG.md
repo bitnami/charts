@@ -1,8 +1,29 @@
 # Changelog
 
-## 0.1.15 (2025-06-03)
+## 0.2.0 (2025-06-16)
 
-* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34071](https://github.com/bitnami/charts/pull/34071))
+* [bitnami/minio-operator] Deprecate KES ([#34513](https://github.com/bitnami/charts/pull/34513))
+
+## <small>0.1.19 (2025-06-16)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34500) ([de2b3eb](https://github.com/bitnami/charts/commit/de2b3eb69d4cf4919ac8e791bdb94e9880fa0fcb)), closes [#34500](https://github.com/bitnami/charts/issues/34500)
+
+## <small>0.1.18 (2025-06-13)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34479) ([3eb6ea2](https://github.com/bitnami/charts/commit/3eb6ea2106c1cfb26e52f303d68b4c545029f034)), closes [#34479](https://github.com/bitnami/charts/issues/34479)
+
+## <small>0.1.17 (2025-06-13)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34469) ([7a801ea](https://github.com/bitnami/charts/commit/7a801ea9986debabf127b80dca846021adff4e70)), closes [#34469](https://github.com/bitnami/charts/issues/34469)
+* [bitnami/minio-operator] Fix image descriptions (#34232) ([31bba81](https://github.com/bitnami/charts/commit/31bba81aaceb0b019f9c9535cea987739b8645cd)), closes [#34232](https://github.com/bitnami/charts/issues/34232)
+
+## <small>0.1.16 (2025-06-06)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34196) ([64d9cca](https://github.com/bitnami/charts/commit/64d9ccaa03520d70834e84327e418e8f1b5a0bdb)), closes [#34196](https://github.com/bitnami/charts/issues/34196)
+
+## <small>0.1.15 (2025-06-03)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34071) ([8ce50e6](https://github.com/bitnami/charts/commit/8ce50e652060317e963f629783489f5f73216bf5)), closes [#34071](https://github.com/bitnami/charts/issues/34071)
 
 ## <small>0.1.14 (2025-05-30)</small>
 

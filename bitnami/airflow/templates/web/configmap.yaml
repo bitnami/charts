@@ -26,12 +26,15 @@ data:
     import os
 
   {{- if .Values.ldap.enabled }}
-    from airflow.www.fab_security.manager import AUTH_LDAP
+    from flask_appbuilder.const import AUTH_LDAP
 
     AUTH_TYPE = AUTH_LDAP
     AUTH_LDAP_SERVER = {{ .Values.ldap.uri | squote }}
     AUTH_LDAP_SEARCH = {{ .Values.ldap.basedn | squote }}
     AUTH_LDAP_UID_FIELD = {{ .Values.ldap.searchAttribute | squote }}
+    AUTH_LDAP_FIRSTNAME_FIELD = {{ .Values.ldap.firstnameField | squote }}
+    AUTH_LDAP_LASTNAME_FIELD = {{ .Values.ldap.lastnameField | squote }}
+    AUTH_LDAP_EMAIL_FIELD = {{ .Values.ldap.emailField | squote }}
     AUTH_LDAP_BIND_USER = {{ .Values.ldap.binddn | squote }}
     AUTH_USER_REGISTRATION = {{ .Values.ldap.userRegistration | squote }}
     AUTH_USER_REGISTRATION_ROLE = {{ .Values.ldap.userRegistrationRole | squote }}
