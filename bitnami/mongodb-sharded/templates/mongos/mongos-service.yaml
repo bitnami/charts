@@ -44,8 +44,8 @@ spec:
     - name: metrics
       port: 9216
       targetPort: metrics
-      {{- if .Values.service.nodePorts.mongodb }}
-      nodePort: {{ add .Values.service.nodePorts.mongodb 1 }}
+      {{- if .Values.service.nodePorts.metrics }}
+      nodePort: {{ .Values.service.nodePorts.metrics }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
