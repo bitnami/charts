@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.4.10 (2025-06-10)
+## 15.4.12 (2025-06-18)
 
-* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34292](https://github.com/bitnami/charts/pull/34292))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34536](https://github.com/bitnami/charts/pull/34536))
+
+## <small>15.4.11 (2025-06-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34453) ([c545879](https://github.com/bitnami/charts/commit/c5458790c6d6a02d55a98c058083bc4e1b9b8ffb)), closes [#34453](https://github.com/bitnami/charts/issues/34453)
+
+## <small>15.4.10 (2025-06-10)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34292) ([41b99d9](https://github.com/bitnami/charts/commit/41b99d92775e380b1a61104158dd708ee386c17f)), closes [#34292](https://github.com/bitnami/charts/issues/34292)
 
 ## <small>15.4.9 (2025-06-06)</small>
 

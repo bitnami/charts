@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.0.7 (2025-06-06)
+## 4.0.10 (2025-06-18)
 
-* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#34169](https://github.com/bitnami/charts/pull/34169))
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#34542](https://github.com/bitnami/charts/pull/34542))
+
+## <small>4.0.9 (2025-06-13)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#34436) ([24a658d](https://github.com/bitnami/charts/commit/24a658d3ade082b2a6e7772e8823fb8aaa6303df)), closes [#34436](https://github.com/bitnami/charts/issues/34436)
+
+## <small>4.0.8 (2025-06-10)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#34308) ([ff62639](https://github.com/bitnami/charts/commit/ff626399162730aa80fbf3703f7a94eb0b16fdba)), closes [#34308](https://github.com/bitnami/charts/issues/34308)
+
+## <small>4.0.7 (2025-06-06)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#34169) ([d94aab6](https://github.com/bitnami/charts/commit/d94aab68213ce4276c7599c69807f2ddd40d86db)), closes [#34169](https://github.com/bitnami/charts/issues/34169)
 
 ## <small>4.0.6 (2025-05-13)</small>
 

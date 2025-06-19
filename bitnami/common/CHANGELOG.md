@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.31.2 (2025-05-19)
+## 2.31.3 (2025-06-12)
 
-* [bitnami/common] Prevent release name from breaking DNS naming specification ([#33773](https://github.com/bitnami/charts/pull/33773))
+* [bitnami/common] bugfix: common.capabilities.vpa.apiVersion context ([#34372](https://github.com/bitnami/charts/pull/34372))
+
+## <small>2.31.2 (2025-05-20)</small>
+
+* [bitnami/common] Prevent release name from breaking DNS naming specification (#33773) ([07f5233](https://github.com/bitnami/charts/commit/07f523329cad2dfe999b62dc45aa0072541f90be)), closes [#33773](https://github.com/bitnami/charts/issues/33773)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.31.1 (2025-05-07)</small>
 

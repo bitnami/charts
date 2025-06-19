@@ -1,8 +1,16 @@
 # Changelog
 
-## 17.0.3 (2025-06-06)
+## 17.0.5 (2025-06-16)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34195](https://github.com/bitnami/charts/pull/34195))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34339](https://github.com/bitnami/charts/pull/34339))
+
+## <small>17.0.4 (2025-06-11)</small>
+
+*  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is adde ([84b733b](https://github.com/bitnami/charts/commit/84b733b9426b91973701f95772e1f01c780d5f5e)), closes [#34311](https://github.com/bitnami/charts/issues/34311)
+
+## <small>17.0.3 (2025-06-06)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34195) ([303327d](https://github.com/bitnami/charts/commit/303327d49a16222d82bf2fca322794990fc469f9)), closes [#34195](https://github.com/bitnami/charts/issues/34195)
 
 ## <small>17.0.2 (2025-06-04)</small>
 

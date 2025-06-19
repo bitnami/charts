@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: cadvisor
-      image: docker.io/bitnami/cadvisor:0.53.0-debian-12-r1
+      image: docker.io/bitnami/cadvisor:0.53.0-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: cadvisor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cadvisor
-version: 0.1.6
+version: 0.1.8
