@@ -75,7 +75,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/grafana-k6-operator
-  tag: 0.0.21-debian-12-r2
+  tag: 0.0.21-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -111,7 +111,7 @@ starterImage:
 runnerImage:
   registry: docker.io
   repository: bitnami/grafana-k6
-  tag: 1.0.0-debian-12-r2
+  tag: 1.0.0-debian-12-r3
   digest: ""
 ## @param replicaCount Number of Grafana k6 Operator replicas to deploy
 ##
@@ -555,7 +555,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kube-rbac-proxy
-      tag: 0.19.1-debian-12-r3
+      tag: 0.19.1-debian-12-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

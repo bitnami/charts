@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.0.3 (2025-06-09)
+## 15.0.6 (2025-06-13)
 
-* [bitnami/milvus] Disable MinIO Console ([#34267](https://github.com/bitnami/charts/pull/34267))
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34468](https://github.com/bitnami/charts/pull/34468))
+
+## <small>15.0.5 (2025-06-13)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#34416) ([dab9868](https://github.com/bitnami/charts/commit/dab9868a93f1bcf36f80ee0b10bb629c5d780b88)), closes [#34416](https://github.com/bitnami/charts/issues/34416)
+
+## <small>15.0.4 (2025-06-11)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#34231) ([15bd4ec](https://github.com/bitnami/charts/commit/15bd4eca47e589eb651d0147e47281385b1cf7cc)), closes [#34231](https://github.com/bitnami/charts/issues/34231)
+
+## <small>15.0.3 (2025-06-09)</small>
+
+* [bitnami/milvus] Disable MinIO Console (#34267) ([8b41b99](https://github.com/bitnami/charts/commit/8b41b999bc18cd5f69425408df0be3363308b822)), closes [#34267](https://github.com/bitnami/charts/issues/34267)
 
 ## <small>15.0.2 (2025-06-06)</small>
 

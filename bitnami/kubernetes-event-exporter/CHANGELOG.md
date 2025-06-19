@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.5.4 (2025-06-06)
+## 3.5.6 (2025-06-16)
 
-* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references ([#34190](https://github.com/bitnami/charts/pull/34190))
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references ([#34460](https://github.com/bitnami/charts/pull/34460))
+
+## <small>3.5.5 (2025-06-11)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34319) ([8c09205](https://github.com/bitnami/charts/commit/8c09205649190ac73bbbf53c1fd1f0055b496a63)), closes [#34319](https://github.com/bitnami/charts/issues/34319)
+
+## <small>3.5.4 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34190) ([b9e4780](https://github.com/bitnami/charts/commit/b9e47805259f63cb54c96d1a24c8e79fe11c8bb2)), closes [#34190](https://github.com/bitnami/charts/issues/34190)
 
 ## <small>3.5.3 (2025-05-07)</small>
 

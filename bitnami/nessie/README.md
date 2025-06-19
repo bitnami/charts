@@ -90,7 +90,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 The chart supports setting Nessie [application properties](https://github.com/projectnessie/nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties) via two parameters:
 
 - `configOverrides`: Overrides non-sensitive application properties, such as `quarkus.micrometer.enabled`. Nested and plain YAML are supported.
-- `secretConfigOverrides`: Overrides sensitive application properties, such as `quarkus.datasource.postgresql.password`. Nested and plain YAML are supported.
+- `secretConfigOverrides`: Overrides sensitive application properties, such as `quarkus.datasource.password`. Nested and plain YAML are supported.
 
 In the following example, we use `configOverrides` to disable the HTTP access log and the HTTP decompression:
 

@@ -7,11 +7,11 @@ annotations:
     - name: clickhouse
       image: docker.io/bitnami/clickhouse:25.5.2-debian-12-r1
     - name: clickhouse-keeper
-      image: docker.io/bitnami/clickhouse-keeper:25.5.2-debian-12-r0
+      image: docker.io/bitnami/clickhouse-keeper:25.5.2-debian-12-r1
     - name: clickhouse-operator
-      image: docker.io/bitnami/clickhouse-operator:0.25.0-debian-12-r1
+      image: docker.io/bitnami/clickhouse-operator:0.25.0-debian-12-r2
     - name: clickhouse-operator-metrics-exporter
-      image: docker.io/bitnami/clickhouse-operator-metrics-exporter:0.25.0-debian-12-r1
+      image: docker.io/bitnami/clickhouse-operator-metrics-exporter:0.25.0-debian-12-r2
   licenses: Apache-2.0
 apiVersion: v2
 appVersion: 0.25.0
@@ -38,4 +38,4 @@ name: clickhouse-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/clickhouse-operator
 - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse-operator
-version: 0.2.13
+version: 0.2.14
