@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.7.12 (2025-06-16)
+## 16.7.13 (2025-06-18)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#34377](https://github.com/bitnami/charts/pull/34377))
+* [bitnami/postgresql] Fix invalid template reference in postgresql update-password job ([#34527](https://github.com/bitnami/charts/pull/34527))
+
+## <small>16.7.12 (2025-06-16)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34377) ([858195b](https://github.com/bitnami/charts/commit/858195b20aa25e8b985e5d1a8e85b8498870987a)), closes [#34377](https://github.com/bitnami/charts/issues/34377)
 
 ## <small>16.7.11 (2025-06-11)</small>
 
