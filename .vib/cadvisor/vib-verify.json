@@ -34,7 +34,7 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "S4"
+            "name": "M4"
           }
         }
       },
@@ -47,6 +47,9 @@
             },
             "tests_file": "cadvisor/goss/goss.yaml",
             "vars_file": "cadvisor/runtime-parameters.yaml",
+            "wait": {
+              "file": "cadvisor/goss/goss-wait.yaml"
+            },
             "remote": {
               "pod": {
                 "workload": "ds-cadvisor"
