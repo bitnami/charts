@@ -1,12 +1,8 @@
 # Changelog
 
-## 0.2.1 (2025-06-19)
+## 0.2.0 (2025-06-16)
 
-* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34557](https://github.com/bitnami/charts/pull/34557))
-
-## 0.2.0 (2025-06-18)
-
-* [bitnami/minio-operator] Deprecate KES (#34513) ([0eb49e9](https://github.com/bitnami/charts/commit/0eb49e99ee29b0c4e7e6527bbaaf70ff71c1bafb)), closes [#34513](https://github.com/bitnami/charts/issues/34513)
+* [bitnami/minio-operator] Deprecate KES ([#34513](https://github.com/bitnami/charts/pull/34513))
 
 ## <small>0.1.19 (2025-06-16)</small>
 

@@ -9,7 +9,7 @@ annotations:
     - name: minio-operator
       image: docker.io/bitnami/minio-operator:7.1.1-debian-12-r4
     - name: minio-operator-sidecar
-      image: docker.io/bitnami/minio-operator-sidecar:7.1.1-debian-12-r3
+      image: docker.io/bitnami/minio-operator-sidecar:7.1.1-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
