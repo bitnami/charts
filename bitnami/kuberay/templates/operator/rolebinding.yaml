@@ -25,7 +25,7 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "kuberay.operator.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
-{{- if not .Values.operator.watchAllNamespaces }}
+{{- if and (not .Values.operator.watchAllNamespaces) .Values.operator.crNamespacedRbacEnable }}
 {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.operator.watchNamespaces }}
 {{- range $namespace := $watchNamespaces }}
 ---
