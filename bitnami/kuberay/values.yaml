@@ -92,7 +92,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.47.0-debian-12-r0
+  tag: 2.47.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -213,6 +213,9 @@ operator:
   ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
   ##
   watchNamespaces: []
+  ## @param operator.crNamespacedRbacEnable Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`
+  ##
+  crNamespacedRbacEnable: true
   ## @param operator.enableBatchScheduler Enable batch scheduler component
   ##
   enableBatchScheduler: false
