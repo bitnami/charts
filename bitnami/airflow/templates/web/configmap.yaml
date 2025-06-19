@@ -63,7 +63,7 @@ data:
     {{- if (include "airflow.isImageMajorVersion3" .) }}
     # Ensure passwords are hashed using the PBKDF2 method
     # https://github.com/apache/airflow/issues/51833
-    FAB_PASSWORD_HASH_METHOD="pbkdf2:sha256"
+    FAB_PASSWORD_HASH_METHOD = "pbkdf2:sha256"
     {{- end }}
   {{- if .Values.web.extraConfiguration }}
     {{ include "common.tplvalues.render" (dict "value" .Values.web.extraConfiguration "context" .) | nindent 4 }}
