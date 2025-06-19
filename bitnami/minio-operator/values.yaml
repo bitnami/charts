@@ -115,7 +115,7 @@ sidecarImage:
 minioImage:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2025.5.24-debian-12-r6
+  tag: 2025.5.24-debian-12-r7
   digest: ""
 ## @param replicaCount Number of MinIO&reg; Operator replicas to deploy
 ##
