@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.17 (2025-06-19)
+## 1.4.18 (2025-06-20)
 
-* [bitnami/kuberay] Add feature toggle for Role/RoleBinding creation when operator.watchAllNamespaces is set to false ([#34333](https://github.com/bitnami/charts/pull/34333))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34574](https://github.com/bitnami/charts/pull/34574))
+
+## <small>1.4.17 (2025-06-19)</small>
+
+* [bitnami/kuberay] Add feature toggle for Role/RoleBinding creation when operator.watchAllNamespaces  ([09106c7](https://github.com/bitnami/charts/commit/09106c769a925778802d7d37cea35f7875765c74)), closes [#34333](https://github.com/bitnami/charts/issues/34333)
 
 ## <small>1.4.16 (2025-06-18)</small>
 
