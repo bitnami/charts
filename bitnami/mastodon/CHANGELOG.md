@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.0.3 (2025-06-20)
+## 13.0.3 (2025-06-21)
 
 * [bitnami/mastodon] fix broken PDB Label matching ([#34566](https://github.com/bitnami/charts/pull/34566))
 
