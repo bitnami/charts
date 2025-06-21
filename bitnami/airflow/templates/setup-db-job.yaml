@@ -63,6 +63,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareVenv" . | nindent 8 }}
         {{- if .Values.setupDBJob.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.initContainers "context" $) | trim | nindent 8 }}
         {{- end }}
@@ -163,6 +164,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
               subPath: app-conf-dir/airflow_local_settings.py
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv
+              subPath: venv-base-dir
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets

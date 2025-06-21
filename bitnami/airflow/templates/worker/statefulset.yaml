@@ -78,6 +78,7 @@ spec:
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
         {{- include "airflow.defaultInitContainers.prepareWebConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareVenv" . | nindent 8 }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
@@ -223,6 +224,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/webserver_config.py
               subPath: app-base-dir/webserver_config.py
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/venv
+              subPath: venv-base-dir
             {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/venv/tmp
