@@ -1,8 +1,17 @@
 # Changelog
 
-## 26.0.2 (2025-05-09)
+## 26.0.4 (2025-06-09)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#33592](https://github.com/bitnami/charts/pull/33592))
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#34273](https://github.com/bitnami/charts/pull/34273))
+
+## <small>26.0.3 (2025-06-05)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34136) ([987941b](https://github.com/bitnami/charts/commit/987941bc13a6d5d7ea95a811f210a2ae51868ac0)), closes [#34136](https://github.com/bitnami/charts/issues/34136)
+
+## <small>26.0.2 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#33592) ([07b03f6](https://github.com/bitnami/charts/commit/07b03f6ef68dd03e72c387127d7c9a8c43dad03c)), closes [#33592](https://github.com/bitnami/charts/issues/33592)
 
 ## <small>26.0.1 (2025-05-06)</small>
 

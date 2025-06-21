@@ -1,8 +1,30 @@
 # Changelog
 
-## 2.1.2 (2025-05-31)
+## 2.1.7 (2025-06-13)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34020](https://github.com/bitnami/charts/pull/34020))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#34495](https://github.com/bitnami/charts/pull/34495))
+
+## <small>2.1.6 (2025-06-13)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34489) ([6f037ee](https://github.com/bitnami/charts/commit/6f037ee360e32101925bc748665b6f3b73565a27)), closes [#34489](https://github.com/bitnami/charts/issues/34489)
+
+## <small>2.1.5 (2025-06-13)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34387) ([01ea69e](https://github.com/bitnami/charts/commit/01ea69e530d0b62882f9930a8d793ee697574b45)), closes [#34387](https://github.com/bitnami/charts/issues/34387)
+
+## <small>2.1.4 (2025-06-06)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34224) ([93011ec](https://github.com/bitnami/charts/commit/93011ec3f0680aed3d8e25098813b4657d7ffa18)), closes [#34224](https://github.com/bitnami/charts/issues/34224)
+
+## <small>2.1.3 (2025-06-05)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34130) ([8892f2b](https://github.com/bitnami/charts/commit/8892f2b12a367fb0a2cefbc77c27cdeaa03e44f1)), closes [#34130](https://github.com/bitnami/charts/issues/34130)
+
+## <small>2.1.2 (2025-05-31)</small>
+
+* [bitname/prometheus] add cluster port to networkpolicy (#33927) ([a4627ad](https://github.com/bitnami/charts/commit/a4627adf9d50c517c6131a4d3ee1a27c09ac5e46)), closes [#33927](https://github.com/bitnami/charts/issues/33927)
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#34020) ([0887dda](https://github.com/bitnami/charts/commit/0887dda9df2638e76af0689d13e728ffa9025d78)), closes [#34020](https://github.com/bitnami/charts/issues/34020)
+* [bitnami/prometheus] Allowing to disable the scraping of prometheus and alertmanager hosts with new  ([bae4289](https://github.com/bitnami/charts/commit/bae4289bdb77c4acf14224f8c2818648bc28c6f5)), closes [#33777](https://github.com/bitnami/charts/issues/33777)
 
 ## <small>2.0.8 (2025-05-19)</small>
 

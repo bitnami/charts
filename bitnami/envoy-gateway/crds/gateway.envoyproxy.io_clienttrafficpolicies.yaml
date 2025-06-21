@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_clienttrafficpolicies.yaml
-# Version: 1.4.0
+# Version: 1.4.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition

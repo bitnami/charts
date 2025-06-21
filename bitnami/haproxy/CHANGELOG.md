@@ -1,8 +1,25 @@
 # Changelog
 
-## 2.2.22 (2025-05-28)
+## 2.2.26 (2025-06-16)
 
-* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#33944](https://github.com/bitnami/charts/pull/33944))
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#34515](https://github.com/bitnami/charts/pull/34515))
+
+## <small>2.2.25 (2025-06-13)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34447) ([d372fad](https://github.com/bitnami/charts/commit/d372fadbc066f148f6f18392f8be9493e5d4f84e)), closes [#34447](https://github.com/bitnami/charts/issues/34447)
+
+## <small>2.2.24 (2025-06-11)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34351) ([e165f98](https://github.com/bitnami/charts/commit/e165f984502d21e10a05499d895f83b2b189d375)), closes [#34351](https://github.com/bitnami/charts/issues/34351)
+
+## <small>2.2.23 (2025-06-06)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34174) ([1dcb4e3](https://github.com/bitnami/charts/commit/1dcb4e31096045b3500351c6a72f64bb9041f25f)), closes [#34174](https://github.com/bitnami/charts/issues/34174)
+
+## <small>2.2.22 (2025-05-28)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#33944) ([9594f4d](https://github.com/bitnami/charts/commit/9594f4d2745c80e866512e4fd69c9da92ef797a0)), closes [#33944](https://github.com/bitnami/charts/issues/33944)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.2.21 (2025-05-07)</small>
 

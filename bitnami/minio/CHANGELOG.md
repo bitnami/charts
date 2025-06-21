@@ -1,8 +1,32 @@
 # Changelog
 
+## 17.0.6 (2025-06-19)
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34556](https://github.com/bitnami/charts/pull/34556))
+
+## <small>17.0.5 (2025-06-16)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34339) ([040a7bc](https://github.com/bitnami/charts/commit/040a7bcdbe9df037a3fab06b39095cf666d585d7)), closes [#34339](https://github.com/bitnami/charts/issues/34339)
+
+## <small>17.0.4 (2025-06-11)</small>
+
+*  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is adde ([84b733b](https://github.com/bitnami/charts/commit/84b733b9426b91973701f95772e1f01c780d5f5e)), closes [#34311](https://github.com/bitnami/charts/issues/34311)
+
+## <small>17.0.3 (2025-06-06)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34195) ([303327d](https://github.com/bitnami/charts/commit/303327d49a16222d82bf2fca322794990fc469f9)), closes [#34195](https://github.com/bitnami/charts/issues/34195)
+
+## <small>17.0.2 (2025-06-04)</small>
+
+* [bitnami/minio] bugfix: wrong svc port target on ingress (#34097) ([a4cefcd](https://github.com/bitnami/charts/commit/a4cefcd1e1bd46a5b18086facc3e559ad3f3ad78)), closes [#34097](https://github.com/bitnami/charts/issues/34097)
+
+## <small>17.0.1 (2025-06-03)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34070) ([383030c](https://github.com/bitnami/charts/commit/383030cf3e762b8e7988d7d4664d886b48bddac7)), closes [#34070](https://github.com/bitnami/charts/issues/34070)
+
 ## 17.0.0 (2025-06-03)
 
-* [bitnami/minio] feat: run Console UI as a separate component ([#34037](https://github.com/bitnami/charts/pull/34037))
+* [bitnami/minio] feat: run Console UI as a separate component (#34037) ([9d122cd](https://github.com/bitnami/charts/commit/9d122cdc904ad90305caa0223d208d783bcb470b)), closes [#34037](https://github.com/bitnami/charts/issues/34037)
 
 ## <small>16.0.11 (2025-06-02)</small>
 

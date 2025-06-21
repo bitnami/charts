@@ -1,8 +1,25 @@
 # Changelog
 
-## 24.2.7 (2025-05-29)
+## 24.2.11 (2025-06-20)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#33976](https://github.com/bitnami/charts/pull/33976))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#34565](https://github.com/bitnami/charts/pull/34565))
+
+## <small>24.2.10 (2025-06-13)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34393) ([4b609b0](https://github.com/bitnami/charts/commit/4b609b092ebe81d823403f65ac95da4cdf633d42)), closes [#34393](https://github.com/bitnami/charts/issues/34393)
+
+## <small>24.2.9 (2025-06-09)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34261) ([622b932](https://github.com/bitnami/charts/commit/622b93209405f54af257f3823217e6b914e2cb34)), closes [#34261](https://github.com/bitnami/charts/issues/34261)
+
+## <small>24.2.8 (2025-06-05)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34133) ([aeaa095](https://github.com/bitnami/charts/commit/aeaa09523131d1e8557faeb3d25f0c67ba469a98)), closes [#34133](https://github.com/bitnami/charts/issues/34133)
+
+## <small>24.2.7 (2025-05-29)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#33976) ([bdc91f6](https://github.com/bitnami/charts/commit/bdc91f6f7934e6d01c754a81c06abd0f8d82a05c)), closes [#33976](https://github.com/bitnami/charts/issues/33976)
 
 ## <small>24.2.6 (2025-05-08)</small>
 

@@ -1,8 +1,28 @@
 # Changelog
 
+## 3.0.5 (2025-06-18)
+
+* [bitnami/grafana-mimir] Typo in grafana-mimir's querier deployment ([#34531](https://github.com/bitnami/charts/pull/34531))
+
+## <small>3.0.4 (2025-06-13)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34443) ([005bea0](https://github.com/bitnami/charts/commit/005bea081d2ba1e85b614fd8781cc38df6b831b0)), closes [#34443](https://github.com/bitnami/charts/issues/34443)
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34313) ([ae17ab8](https://github.com/bitnami/charts/commit/ae17ab842eab4f77068336672021f2e59c551137)), closes [#34313](https://github.com/bitnami/charts/issues/34313)
+
+## <small>3.0.2 (2025-06-09)</small>
+
+* [bitnami/grafana-mimir] Disable MinIO Console (#34271) ([ed1abbb](https://github.com/bitnami/charts/commit/ed1abbbe1270c5a1a951659fa9926aafb2b98cf4)), closes [#34271](https://github.com/bitnami/charts/issues/34271)
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34163) ([9c81957](https://github.com/bitnami/charts/commit/9c819579e8288e9f1f2f16f1fae8acf19fda6a40)), closes [#34163](https://github.com/bitnami/charts/issues/34163)
+
 ## 3.0.0 (2025-06-04)
 
-* [bitnami/grafana-mimir] feat: major version due to Minio major bump ([#34087](https://github.com/bitnami/charts/pull/34087))
+* [bitnami/grafana-mimir] feat: major version due to Minio major bump (#34087) ([c5306dd](https://github.com/bitnami/charts/commit/c5306dd791e341c5a116d95fba3f166aeb8c1465)), closes [#34087](https://github.com/bitnami/charts/issues/34087)
 
 ## <small>2.0.7 (2025-05-30)</small>
 

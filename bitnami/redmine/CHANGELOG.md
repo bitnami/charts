@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.2.5 (2025-05-21)
+## 32.2.6 (2025-06-19)
 
-* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#33809](https://github.com/bitnami/charts/pull/33809))
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#34559](https://github.com/bitnami/charts/pull/34559))
+
+## <small>32.2.5 (2025-05-21)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#33809) ([a13bcca](https://github.com/bitnami/charts/commit/a13bcca6a5bcd85b3d82dd9db8635cb14e9bbd00)), closes [#33809](https://github.com/bitnami/charts/issues/33809)
 
 ## <small>32.2.4 (2025-05-06)</small>
 

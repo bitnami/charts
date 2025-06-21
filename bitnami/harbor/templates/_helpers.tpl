@@ -232,13 +232,13 @@ true
     {{- $externalRedis.password -}}
   {{- else if and (not .context.Values.redis.enabled) $externalRedis.existingSecret -}}
     {{- $secret := tpl $externalRedis.existingSecret .context -}}
-    {{- include "common.secrets.get" (dict "secret" $secret "key" "redis-password" "context" .context) }}
+    {{- include "common.secrets.lookup" (dict "secret" $secret "key" "redis-password" "context" .context) }}
   {{- end -}}
   {{- if and .context.Values.redis.enabled .context.Values.redis.auth.enabled .context.Values.redis.auth.password -}}
     {{- .context.Values.redis.auth.password -}}
   {{- else if and .context.Values.redis.enabled .context.Values.redis.auth.enabled .context.Values.redis.auth.existingSecret -}}
     {{- $secret := tpl .context.Values.redis.auth.existingSecret .context -}}
-    {{- include "common.secrets.get" (dict "secret" $secret "key" "redis-password" "context" .context) }}
+    {{- include "common.secrets.lookup" (dict "secret" $secret "key" "redis-password" "context" .context) }}
   {{- end -}}
 {{- end -}}
 

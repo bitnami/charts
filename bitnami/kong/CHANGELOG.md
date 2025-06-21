@@ -1,8 +1,32 @@
 # Changelog
 
-## 15.4.7 (2025-05-26)
+## 15.4.13 (2025-06-20)
 
-* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageUtilization" ([#33699](https://github.com/bitnami/charts/pull/33699))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34573](https://github.com/bitnami/charts/pull/34573))
+
+## <small>15.4.12 (2025-06-18)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34536) ([7c2d7fb](https://github.com/bitnami/charts/commit/7c2d7fbaa54ee16542edd52b4b5ab74a4bd2bbfd)), closes [#34536](https://github.com/bitnami/charts/issues/34536)
+
+## <small>15.4.11 (2025-06-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34453) ([c545879](https://github.com/bitnami/charts/commit/c5458790c6d6a02d55a98c058083bc4e1b9b8ffb)), closes [#34453](https://github.com/bitnami/charts/issues/34453)
+
+## <small>15.4.10 (2025-06-10)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34292) ([41b99d9](https://github.com/bitnami/charts/commit/41b99d92775e380b1a61104158dd708ee386c17f)), closes [#34292](https://github.com/bitnami/charts/issues/34292)
+
+## <small>15.4.9 (2025-06-06)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34236) ([8302fa7](https://github.com/bitnami/charts/commit/8302fa73984b0670f5d058f788a178b992ca9b83)), closes [#34236](https://github.com/bitnami/charts/issues/34236)
+
+## <small>15.4.8 (2025-06-06)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34180) ([f55ddee](https://github.com/bitnami/charts/commit/f55ddeef220d20df79a7cb289d449fca586440af)), closes [#34180](https://github.com/bitnami/charts/issues/34180)
+
+## <small>15.4.7 (2025-05-26)</small>
+
+* [bitnami/kong] :bug: (kong/autoscaling) fixed unknown field "spec.metrics[0].resource.targetAverageU ([35e0089](https://github.com/bitnami/charts/commit/35e0089d15d0818d9ff3216863e7ea54d5303e6b)), closes [#33699](https://github.com/bitnami/charts/issues/33699)
 
 ## <small>15.4.6 (2025-05-16)</small>
 

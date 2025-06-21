@@ -1,8 +1,36 @@
 # Changelog
 
-## 20.0.5 (2025-05-30)
+## 20.1.3 (2025-06-16)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34008](https://github.com/bitnami/charts/pull/34008))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34520](https://github.com/bitnami/charts/pull/34520))
+
+## <small>20.1.2 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34476) ([8a8748f](https://github.com/bitnami/charts/commit/8a8748f972eb24459a0a4cce7b1fefbe2b1585e7)), closes [#34476](https://github.com/bitnami/charts/issues/34476)
+
+## <small>20.1.1 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34435) ([6ec0d05](https://github.com/bitnami/charts/commit/6ec0d05f23a002fe7e47bb2c85053aa18c533985)), closes [#34435](https://github.com/bitnami/charts/issues/34435)
+
+## 20.1.0 (2025-06-10)
+
+* [bitnami/nginx] Service Monitor support tlsConfig (#34109) ([97011de](https://github.com/bitnami/charts/commit/97011dee108515c01d6850b2e3ba895352439e6e)), closes [#34109](https://github.com/bitnami/charts/issues/34109)
+
+## <small>20.0.8 (2025-06-09)</small>
+
+* [bitnami/nginx] Allow wildcards in ingress.hostname parameter (#34095) ([d4deec1](https://github.com/bitnami/charts/commit/d4deec169a66017c17e8f436cc0a992a500781d4)), closes [#34095](https://github.com/bitnami/charts/issues/34095)
+
+## <small>20.0.7 (2025-06-06)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34206) ([cbc61f9](https://github.com/bitnami/charts/commit/cbc61f961ab08156a64163ede0ccd1b8c902df8f)), closes [#34206](https://github.com/bitnami/charts/issues/34206)
+
+## <small>20.0.6 (2025-06-06)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34168) ([e8387d1](https://github.com/bitnami/charts/commit/e8387d1bd4a0f568865fee07e966689614a6e3ba)), closes [#34168](https://github.com/bitnami/charts/issues/34168)
+
+## <small>20.0.5 (2025-05-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34008) ([12b9b52](https://github.com/bitnami/charts/commit/12b9b529755b81f55643cab2af8cd88d033cf346)), closes [#34008](https://github.com/bitnami/charts/issues/34008)
 
 ## <small>20.0.4 (2025-05-29)</small>
 

@@ -1,8 +1,36 @@
 # Changelog
 
-## 26.6.1 (2025-05-30)
+## 26.7.6 (2025-06-16)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#33999](https://github.com/bitnami/charts/pull/33999))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34448](https://github.com/bitnami/charts/pull/34448))
+
+## <small>26.7.5 (2025-06-11)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34264) ([76c48d3](https://github.com/bitnami/charts/commit/76c48d399fcd4c5929c68a826fbbbc6d245319ad)), closes [#34264](https://github.com/bitnami/charts/issues/34264)
+
+## <small>26.7.4 (2025-06-09)</small>
+
+* [bitnami/harbor] bugfix: use proper helper name (#34259) ([f510161](https://github.com/bitnami/charts/commit/f5101619337fd6e371c4f9bbe267d61f9a3687bd)), closes [#34259](https://github.com/bitnami/charts/issues/34259)
+
+## <small>26.7.3 (2025-06-06)</small>
+
+* [bitnami/harbor] bugfix: amend ConfigMap & Secret references (#34227) ([1727128](https://github.com/bitnami/charts/commit/1727128e3ea49f113cb3c52ba424da911324ae1d)), closes [#34227](https://github.com/bitnami/charts/issues/34227)
+
+## <small>26.7.2 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34177) ([ad08bd5](https://github.com/bitnami/charts/commit/ad08bd5bdc86d99d7e467fb70674c09306faad94)), closes [#34177](https://github.com/bitnami/charts/issues/34177)
+
+## <small>26.7.1 (2025-06-06)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34175) ([8d335ad](https://github.com/bitnami/charts/commit/8d335adf2e80cc8526d6430a0eeca5e27e2a1458)), closes [#34175](https://github.com/bitnami/charts/issues/34175)
+
+## 26.7.0 (2025-06-05)
+
+* [bitnami/harbor] feat: add upstream features (#34111) ([6d7a296](https://github.com/bitnami/charts/commit/6d7a29633e378485f719214718af51a113e3e6b6)), closes [#34111](https://github.com/bitnami/charts/issues/34111)
+
+## <small>26.6.1 (2025-05-30)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#33999) ([3b24559](https://github.com/bitnami/charts/commit/3b245599ec312f2be028821bab86944016661fb5)), closes [#33999](https://github.com/bitnami/charts/issues/33999)
 
 ## 26.6.0 (2025-05-30)
 

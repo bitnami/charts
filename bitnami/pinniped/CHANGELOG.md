@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.4.17 (2025-05-19)
+## 2.4.19 (2025-06-13)
 
-* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#33781](https://github.com/bitnami/charts/pull/33781))
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#34482](https://github.com/bitnami/charts/pull/34482))
+
+## <small>2.4.18 (2025-06-06)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#34209) ([bf1e345](https://github.com/bitnami/charts/commit/bf1e345a910a59b4938a435de05f70fce3931997)), closes [#34209](https://github.com/bitnami/charts/issues/34209)
+
+## <small>2.4.17 (2025-05-19)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#33781) ([d951725](https://github.com/bitnami/charts/commit/d9517253c6f164ec6e572c9c6c1e96e9f1f14a2e)), closes [#33781](https://github.com/bitnami/charts/issues/33781)
 
 ## <small>2.4.16 (2025-05-07)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 5.1.19 (2025-06-03)
+## 5.1.22 (2025-06-13)
 
-* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#34062](https://github.com/bitnami/charts/pull/34062))
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#34450](https://github.com/bitnami/charts/pull/34450))
+
+## <small>5.1.21 (2025-06-10)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34326) ([8ef7658](https://github.com/bitnami/charts/commit/8ef765822341afb8ccb641c4e69b52e125d64e06)), closes [#34326](https://github.com/bitnami/charts/issues/34326)
+
+## <small>5.1.20 (2025-06-06)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34178) ([0db2b66](https://github.com/bitnami/charts/commit/0db2b662159038eae861bee8741bac014fdf8869)), closes [#34178](https://github.com/bitnami/charts/issues/34178)
+
+## <small>5.1.19 (2025-06-03)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34062) ([e0c4abc](https://github.com/bitnami/charts/commit/e0c4abc82edd265e9e4ac68b4873e06699dbff09)), closes [#34062](https://github.com/bitnami/charts/issues/34062)
 
 ## <small>5.1.18 (2025-05-13)</small>
 

@@ -89,7 +89,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.16.0-debian-12-r7
+    tag: 2.16.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4850,7 +4850,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r45
+    tag: 12-debian-12-r46
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -5043,6 +5043,10 @@ minio:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param minio.console.enabled Enable MinIO&reg; Console
+  ##
+  console:
+    enabled: false
 ## @section External Memcached (Chunks) Parameters
 ##
 externalMemcachedChunks:
@@ -5069,7 +5073,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r6
+    tag: 1.6.38-debian-12-r7
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -5125,7 +5129,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r6
+    tag: 1.6.38-debian-12-r7
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5181,7 +5185,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r6
+    tag: 1.6.38-debian-12-r7
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5237,7 +5241,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r6
+    tag: 1.6.38-debian-12-r7
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##
