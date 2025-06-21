@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.2 (2025-06-09)
+## 13.0.3 (2025-06-21)
 
-* [bitnami/mastodon] Disable MinIO Console ([#34266](https://github.com/bitnami/charts/pull/34266))
+* [bitnami/mastodon] fix broken PDB Label matching ([#34566](https://github.com/bitnami/charts/pull/34566))
+
+## <small>13.0.2 (2025-06-09)</small>
+
+* [bitnami/mastodon] Disable MinIO Console (#34266) ([e3949da](https://github.com/bitnami/charts/commit/e3949daf52445ad142cfa3ff80f218d470dd8539)), closes [#34266](https://github.com/bitnami/charts/issues/34266)
 
 ## <small>13.0.1 (2025-06-05)</small>
 
