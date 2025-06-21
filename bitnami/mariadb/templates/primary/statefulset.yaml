@@ -468,6 +468,16 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.primary.persistence.enabled (not .Values.primary.persistence.existingClaim) }}
+  {{- if .Values.primary.persistentVolumeClaimRetentionPolicy }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.primary.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.primary.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  {{- if .Values.secondary.persistentVolumeClaimRetentionPolicy }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
