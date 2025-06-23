@@ -6,7 +6,7 @@
 
 ## <small>18.1.12 (2025-06-19)</small>
 
-* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34558](https://github.com/bitnami/charts/pull/34558))
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references (#34558) ([23f28cf](https://github.com/bitnami/charts/commit/23f28cfe23f6feedee3bb7edb8dd5505b3b3bfe8)), closes [#34558](https://github.com/bitnami/charts/issues/34558)
 
 ## <small>18.1.11 (2025-06-13)</small>
 
