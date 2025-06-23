@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.6 (2025-06-19)
+## 17.0.7 (2025-06-23)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#34556](https://github.com/bitnami/charts/pull/34556))
+* [bitnami/minio] Adapt Console Deployment's PodSecurityContext for OpenShift ([#34580](https://github.com/bitnami/charts/pull/34580))
+
+## <small>17.0.6 (2025-06-19)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34556) ([1f0d9e8](https://github.com/bitnami/charts/commit/1f0d9e8d99735ea2479224b14cbf83a71be5e660)), closes [#34556](https://github.com/bitnami/charts/issues/34556)
 
 ## <small>17.0.5 (2025-06-16)</small>
 
