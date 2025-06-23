@@ -176,7 +176,7 @@ diagnosticMode:
   customStartupProbe: {}
   ## %%MAIN_CONTAINER_NAME%% resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param %%MAIN_OBJECT_BLOCK%%.resourcesPreset Set %%MAIN_CONTAINER_NAME%% container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if %%MAIN_OBJECT_BLOCK%%.resources is set (%%MAIN_OBJECT_BLOCK%%.resources is recommended for production).
+  ## @param %%MAIN_OBJECT_BLOCK%%.resourcesPreset Set %%MAIN_CONTAINER_NAME%% container resources according to one common preset (allowed values: nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if %%MAIN_OBJECT_BLOCK%%.resources is set (%%MAIN_OBJECT_BLOCK%%.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -779,7 +779,7 @@ defaultInitContainers:
         type: "RuntimeDefault"
     ## "volume-permissions" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set "volume-permissions" init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.volumePermissions.resources is set (defaultInitContainers.volumePermissions.resources is recommended for production).
+    ## @param defaultInitContainers.volumePermissions.resourcesPreset Set "volume-permissions" init container resources according to one common preset (allowed values: nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.volumePermissions.resources is set (defaultInitContainers.volumePermissions.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
