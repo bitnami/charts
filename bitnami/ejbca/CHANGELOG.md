@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.1.3 (2025-05-23)
+## 17.1.4 (2025-06-22)
 
-* [bitnami/ejbca] :zap: :arrow_up: Update dependency references ([#33853](https://github.com/bitnami/charts/pull/33853))
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references ([#34578](https://github.com/bitnami/charts/pull/34578))
+
+## <small>17.1.3 (2025-05-23)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#33853) ([9917e60](https://github.com/bitnami/charts/commit/9917e60fdf6e04b15a8a0b18093fa4778cc56d2c)), closes [#33853](https://github.com/bitnami/charts/issues/33853)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>17.1.2 (2025-05-07)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.1.2 (2025-06-13)
+## 20.1.3 (2025-06-16)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34476](https://github.com/bitnami/charts/pull/34476))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34520](https://github.com/bitnami/charts/pull/34520))
+
+## <small>20.1.2 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34476) ([8a8748f](https://github.com/bitnami/charts/commit/8a8748f972eb24459a0a4cce7b1fefbe2b1585e7)), closes [#34476](https://github.com/bitnami/charts/issues/34476)
 
 ## <small>20.1.1 (2025-06-13)</small>
 
