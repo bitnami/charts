@@ -485,23 +485,16 @@ Returns the value listener.security.protocol.map based on the values of 'listene
 {{- if .context.Values.listeners.securityProtocolMap -}}
   {{- print .context.Values.listeners.securityProtocolMap -}}
 {{- else -}}
-  {{- $listeners := list .context.Values.listeners.client .context.Values.listeners.interbroker -}}
-  {{- if .isController -}}
-    {{- if .context.Values.controller.controllerOnly -}}
-      {{- $listeners = list .context.Values.listeners.controller -}}
-    {{- else -}}
-      {{- $listeners = append $listeners .context.Values.listeners.controller -}}
-      {{- range $i := .context.Values.listeners.extraListeners -}}
-      {{- $listeners = append $listeners $i -}}
-      {{- end -}}
-    {{- end -}}
+  {{- $listeners := list .context.Values.listeners.controller .context.Values.listeners.client .context.Values.listeners.interbroker -}}
+  {{- if and .isController .context.Values.controller.controllerOnly -}}
+    {{- $listeners = list .context.Values.listeners.controller  -}}
   {{- else -}}
     {{- range $i := .context.Values.listeners.extraListeners -}}
     {{- $listeners = append $listeners $i -}}
     {{- end -}}
   {{- end -}}
-  {{- if and .context.Values.externalAccess.enabled -}}
-  {{- $listeners = append $listeners .context.Values.listeners.external -}}
+  {{- if .context.Values.externalAccess.enabled -}}
+    {{- $listeners = append $listeners .context.Values.listeners.external -}}
   {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
@@ -534,9 +527,16 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $port := int .Values.listeners.controller.containerPort }}
   {{- $bootstrapServers := list -}}
-  {{- range $i := until (int .Values.controller.replicaCount) -}}
-    {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-    {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+  {{- if and (.Values.controller.autoscaling) (.Values.controller.autoscaling.hpa) (.Values.controller.autoscaling.hpa.enabled) -}}
+    {{- range $i := until (int .Values.controller.autoscaling.hpa.maxReplicas) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+    {{- end -}}
+  {{- else -}}
+    {{- range $i := until (int .Values.controller.replicaCount) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+    {{- end -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
 {{- end -}}
@@ -546,7 +546,6 @@ Returns the controller quorum bootstrap servers based on the number of controlle
 Section of the server.properties shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-inter.broker.listener.name: {{ .Values.listeners.interbroker.name }}
 controller.listener.names: {{ .Values.listeners.controller.name }}
 controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" . }}
 {{- if include "kafka.sslEnabled" . }}

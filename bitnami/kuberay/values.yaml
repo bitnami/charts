@@ -92,7 +92,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.44.1-debian-12-r2
+  tag: 2.47.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -128,7 +128,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.3.2-debian-12-r4
+    tag: 1.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -213,6 +213,9 @@ operator:
   ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
   ##
   watchNamespaces: []
+  ## @param operator.crNamespacedRbacEnable Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`
+  ##
+  crNamespacedRbacEnable: true
   ## @param operator.enableBatchScheduler Enable batch scheduler component
   ##
   enableBatchScheduler: false
@@ -779,7 +782,7 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.3.2-debian-12-r4
+    tag: 1.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1432,7 +1435,7 @@ cluster:
     ## @param cluster.head.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "medium"
+    resourcesPreset: "large"
     ## @param cluster.head.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:

@@ -57,3 +57,6 @@ data:
       enabled: {{ .Values.metrics.enabled }}
       path: {{ .Values.metrics.path }}
       port: {{ .Values.jobservice.containerPorts.metrics }}
+    reaper:
+      max_update_hours: {{ .Values.jobservice.reaper.maxUpdateHours }}
+      max_dangling_hours: {{ .Values.jobservice.reaper.maxDanglingHours }}

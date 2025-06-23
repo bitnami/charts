@@ -1,8 +1,37 @@
 # Changelog
 
-## 2.3.12 (2025-05-13)
+## 2.3.19 (2025-06-16)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#33650](https://github.com/bitnami/charts/pull/33650))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34517](https://github.com/bitnami/charts/pull/34517))
+
+## <small>2.3.18 (2025-06-13)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34431) ([ceb1888](https://github.com/bitnami/charts/commit/ceb1888c277c9e3d22b9fb22499f3a9bf131fd17)), closes [#34431](https://github.com/bitnami/charts/issues/34431)
+
+## <small>2.3.17 (2025-06-10)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34287) ([09ad310](https://github.com/bitnami/charts/commit/09ad3102ea5cc02bad88261c158cd37d8f994bf7)), closes [#34287](https://github.com/bitnami/charts/issues/34287)
+
+## <small>2.3.16 (2025-06-06)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34160) ([8004bc7](https://github.com/bitnami/charts/commit/8004bc779d690bf68e0087acff9f39117497d4f7)), closes [#34160](https://github.com/bitnami/charts/issues/34160)
+
+## <small>2.3.15 (2025-06-03)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34048) ([3cf4ca0](https://github.com/bitnami/charts/commit/3cf4ca00fd8dd540bf114b6ec34137662128e531)), closes [#34048](https://github.com/bitnami/charts/issues/34048)
+
+## <small>2.3.14 (2025-05-23)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#33851) ([33bb0fb](https://github.com/bitnami/charts/commit/33bb0fbb4dd324dca5764308208d2a46a8af5e11)), closes [#33851](https://github.com/bitnami/charts/issues/33851)
+
+## <small>2.3.13 (2025-05-19)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#33785) ([f947d59](https://github.com/bitnami/charts/commit/f947d59c8e0743df6d9b97f8ca9a2f2d2b2bf30d)), closes [#33785](https://github.com/bitnami/charts/issues/33785)
+
+## <small>2.3.12 (2025-05-13)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#33650) ([dd28a06](https://github.com/bitnami/charts/commit/dd28a06a854175322b382ec5eb3ae030cf5ac46d)), closes [#33650](https://github.com/bitnami/charts/issues/33650)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.3.11 (2025-05-07)</small>
 

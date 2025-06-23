@@ -91,7 +91,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/envoy-gateway
-  tag: 1.3.3-debian-12-r0
+  tag: 1.4.1-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -116,7 +116,7 @@ image:
 ratelimitImage:
   registry: docker.io
   repository: bitnami/envoy-ratelimit
-  tag: 2025.4.9-debian-12-r2
+  tag: 2025.5.29-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -132,7 +132,7 @@ ratelimitImage:
 envoyImage:
   registry: docker.io
   repository: bitnami/envoy
-  tag: 1.34.1-debian-12-r0
+  tag: 1.34.1-debian-12-r2
   digest: ""
 ## @param replicaCount Number of Envoy Gateway replicas to deploy
 ##
@@ -483,6 +483,7 @@ service:
   ## @param service.nodePorts.wasm Node port for wasm
   ## @param service.nodePorts.metrics Node port for metrics
   ## @param service.nodePorts.admin Node port for admin
+  ## @param service.nodePorts.webhook Node port for webhook
   ## NOTE: choose port between <30000-32767>
   ##
   nodePorts:
@@ -491,6 +492,7 @@ service:
     wasm: ""
     metrics: ""
     admin: ""
+    webhook: ""
   ## @param service.clusterIP Envoy Gateway service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -909,6 +911,18 @@ certgen:
     ##
     extraEgress: []
 
+## @section Topology Injector configuration
+##
+topologyInjector:
+  ## @param topologyInjector.enabled Enables topologyInjector webhook
+  ##
+  enabled: true
+  ## @param topologyInjector.annotations [object] Annotations for topologyInjector object
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-1"
 ## @section Envoy Gateway Metrics Parameters
 ##
 

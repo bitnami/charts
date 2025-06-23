@@ -1,8 +1,25 @@
 # Changelog
 
-## 14.2.5 (2025-05-14)
+## 14.2.9 (2025-06-13)
 
-* [bitnami/mariadb-galera] Release 14.2.5 ([#33553](https://github.com/bitnami/charts/pull/33553))
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#34472](https://github.com/bitnami/charts/pull/34472))
+
+## <small>14.2.8 (2025-06-10)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34295) ([b27ec9e](https://github.com/bitnami/charts/commit/b27ec9e2f82057f4d7641f077b04350f133413a8)), closes [#34295](https://github.com/bitnami/charts/issues/34295)
+
+## <small>14.2.7 (2025-06-06)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34199) ([65afab0](https://github.com/bitnami/charts/commit/65afab04a7030adf35f3a723b9267c82e904d0dc)), closes [#34199](https://github.com/bitnami/charts/issues/34199)
+
+## <small>14.2.6 (2025-05-23)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#33855) ([076c26e](https://github.com/bitnami/charts/commit/076c26e9489bbb2460da1462fb12529f12f41d68)), closes [#33855](https://github.com/bitnami/charts/issues/33855)
+
+## <small>14.2.5 (2025-05-14)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mariadb-galera] Release 14.2.5 (#33553) ([5c50a37](https://github.com/bitnami/charts/commit/5c50a37a3cc3810cbdcd6aa989362c9b88ed6ac1)), closes [#33553](https://github.com/bitnami/charts/issues/33553)
 
 ## <small>14.2.4 (2025-05-06)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
+## 24.1.4 (2025-06-19)
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34306](https://github.com/bitnami/charts/pull/34306))
+
+## <small>24.1.3 (2025-06-16)</small>
+
+* [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBui ([047f06d](https://github.com/bitnami/charts/commit/047f06d129b6587a1d6e9615603bb7c8c2a78ff0)), closes [#34382](https://github.com/bitnami/charts/issues/34382)
+
+## <small>24.1.2 (2025-06-06)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34221) ([f42b7ae](https://github.com/bitnami/charts/commit/f42b7aefc905b479c54b142d7c0152fc9fa5c36d)), closes [#34221](https://github.com/bitnami/charts/issues/34221)
+
+## <small>24.1.1 (2025-05-26)</small>
+
+* [bitnami/airflow] update README to match deprecated values (#33602) ([8622ccf](https://github.com/bitnami/charts/commit/8622ccfcb0445d63b25b915c9d18edeb1f72061a)), closes [#33602](https://github.com/bitnami/charts/issues/33602)
+
 ## 24.1.0 (2025-05-14)
 
-* [bitnami/airflow] Validate executors and fix LocalExecutor ([#33696](https://github.com/bitnami/charts/pull/33696))
+* [bitnami/airflow] Validate executors and fix LocalExecutor (#33696) ([56e2e5f](https://github.com/bitnami/charts/commit/56e2e5f15cf318cf7d973da4c694623cbb142ed0)), closes [#33696](https://github.com/bitnami/charts/issues/33696)
 
 ## <small>24.0.3 (2025-05-13)</small>
 

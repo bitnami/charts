@@ -1,8 +1,56 @@
 # Changelog
 
-## 6.6.14 (2025-05-19)
+## 7.1.5 (2025-06-18)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#33771](https://github.com/bitnami/charts/pull/33771))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#34548](https://github.com/bitnami/charts/pull/34548))
+
+## <small>7.1.4 (2025-06-16)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#34457) ([cbb512c](https://github.com/bitnami/charts/commit/cbb512c861bb1edfe29ce6d9dc6bd5c34b2b4394)), closes [#34457](https://github.com/bitnami/charts/issues/34457)
+
+## <small>7.1.3 (2025-06-10)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#34318) ([eb96470](https://github.com/bitnami/charts/commit/eb96470710f912a3cd0477717de9fdc61a19019b)), closes [#34318](https://github.com/bitnami/charts/issues/34318)
+
+## <small>7.1.2 (2025-06-06)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#34184) ([9cfdcea](https://github.com/bitnami/charts/commit/9cfdcea7d5e25132c174c1ed359451725ee54e3c)), closes [#34184](https://github.com/bitnami/charts/issues/34184)
+
+## <small>7.1.1 (2025-05-28)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33950) ([a8b78ee](https://github.com/bitnami/charts/commit/a8b78ee892fa34004a5a707748a956df3874da8a)), closes [#33950](https://github.com/bitnami/charts/issues/33950)
+
+## 7.1.0 (2025-05-27)
+
+* [bitnami/influxdb] ci: enable S3 storage on VIB testing (#33900) ([e58cbd3](https://github.com/bitnami/charts/commit/e58cbd3e9b2891172701a3d1a0e9c22745f0e039)), closes [#33900](https://github.com/bitnami/charts/issues/33900)
+
+## <small>7.0.3 (2025-05-23)</small>
+
+* [bitnami/influxdb] bugfix: address limitations with read-only restrictive environments (#33852) ([ca6d3ba](https://github.com/bitnami/charts/commit/ca6d3ba87f395ca75c8ce09052d1f06f06787fe0)), closes [#33852](https://github.com/bitnami/charts/issues/33852)
+
+## <small>7.0.2 (2025-05-22)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33842) ([d06f954](https://github.com/bitnami/charts/commit/d06f95414a039530f74b16ddf7d140596e48e91d)), closes [#33842](https://github.com/bitnami/charts/issues/33842)
+
+## <small>7.0.1 (2025-05-22)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33830) ([26689cf](https://github.com/bitnami/charts/commit/26689cf48486b8969087f96457c05aa5dda5242d)), closes [#33830](https://github.com/bitnami/charts/issues/33830)
+
+## 7.0.0 (2025-05-22)
+
+* [bitnami/influxdb] feat: InfluxDB 3 major version (#33743) ([78a8a8d](https://github.com/bitnami/charts/commit/78a8a8da38974586285f81d2c66fd27dc4d0c62f)), closes [#33743](https://github.com/bitnami/charts/issues/33743)
+
+## <small>6.6.16 (2025-05-21)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33821) ([7d35e67](https://github.com/bitnami/charts/commit/7d35e670e5abfdb86f136ef4fd0882412b5e80e0)), closes [#33821](https://github.com/bitnami/charts/issues/33821)
+
+## <small>6.6.15 (2025-05-21)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33806) ([4a7dfd0](https://github.com/bitnami/charts/commit/4a7dfd0f7669ff4445772c6346c5e3b6bf0a92dc)), closes [#33806](https://github.com/bitnami/charts/issues/33806)
+
+## <small>6.6.14 (2025-05-19)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#33771) ([9b9aea7](https://github.com/bitnami/charts/commit/9b9aea70ab497f534a2395fcb409ef22233916f6)), closes [#33771](https://github.com/bitnami/charts/issues/33771)
 
 ## <small>6.6.13 (2025-05-15)</small>
 

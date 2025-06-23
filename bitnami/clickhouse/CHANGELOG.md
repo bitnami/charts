@@ -1,8 +1,51 @@
 # Changelog
 
-## 9.2.2 (2025-05-06)
+## 9.3.4 (2025-06-20)
 
-* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33345](https://github.com/bitnami/charts/pull/33345))
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34570](https://github.com/bitnami/charts/pull/34570))
+
+## <small>9.3.3 (2025-06-13)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34412) ([27dacea](https://github.com/bitnami/charts/commit/27dacea8b42af8b09fd372c17d6b7601a6dd2c6b)), closes [#34412](https://github.com/bitnami/charts/issues/34412)
+
+## <small>9.3.2 (2025-06-06)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34242) ([88c1463](https://github.com/bitnami/charts/commit/88c14631f9c84360b14f5782ff4b2edbb417247f)), closes [#34242](https://github.com/bitnami/charts/issues/34242)
+
+## <small>9.3.1 (2025-06-06)</small>
+
+* [bitnami/clickhouse] Add CHOWN capability to volume-permissions init container (#34225) ([eb89ebc](https://github.com/bitnami/charts/commit/eb89ebc57f39a36e01e71140a51c263c5b232bd0)), closes [#34225](https://github.com/bitnami/charts/issues/34225)
+
+## 9.3.0 (2025-06-04)
+
+* [bitnami/clickhouse] Add persistence.volumeName (#33991) ([cc78215](https://github.com/bitnami/charts/commit/cc78215c73cf597e3b928019204edb48d7537521)), closes [#33991](https://github.com/bitnami/charts/issues/33991)
+
+## <small>9.2.7 (2025-06-03)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34067) ([c77cc95](https://github.com/bitnami/charts/commit/c77cc95447711fb5af803c033cd67424fc23a5fc)), closes [#34067](https://github.com/bitnami/charts/issues/34067)
+
+## <small>9.2.6 (2025-05-30)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34001) ([83007bd](https://github.com/bitnami/charts/commit/83007bd27de053be5ed3e8fb99481ceb064cd27a)), closes [#34001](https://github.com/bitnami/charts/issues/34001)
+
+## <small>9.2.5 (2025-05-29)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#33966) ([f3e6b4c](https://github.com/bitnami/charts/commit/f3e6b4cc45edfe01fd7a1c5935e011117ee41529)), closes [#33966](https://github.com/bitnami/charts/issues/33966)
+
+## <small>9.2.4 (2025-05-22)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#33846) ([fa15d6e](https://github.com/bitnami/charts/commit/fa15d6e4bf757bb94859ad72672424da6bf0edd7)), closes [#33846](https://github.com/bitnami/charts/issues/33846)
+
+## <small>9.2.3 (2025-05-20)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#33601) ([788718d](https://github.com/bitnami/charts/commit/788718d0999fa2ebb8953eb604e3df5226f7c84c)), closes [#33601](https://github.com/bitnami/charts/issues/33601)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>9.2.2 (2025-05-07)</small>
+
+* [bitnami/clickhouse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([6924c7c](https://github.com/bitnami/charts/commit/6924c7cec199259b74f06c3d9eba4cba80cfbede)), closes [#33345](https://github.com/bitnami/charts/issues/33345)
 
 ## <small>9.2.1 (2025-05-05)</small>
 

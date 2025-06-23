@@ -70,6 +70,7 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           enableServiceLinks: {{ .Values.enableServiceLinks }}
+          serviceAccountName: {{ .Values.backup.cronjob.serviceAccount.name | quote }}
           {{- if .Values.tls.enabled }}
           initContainers:
             - name: generate-tls-certs
@@ -113,6 +114,9 @@ spec:
               resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
               {{- else if ne .Values.tls.resourcesPreset "none" }}
               resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 16 }}
+              {{- end }}
+              {{- if .Values.tls.securityContext }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tls.securityContext "context" $) | nindent 16 }}
               {{- end }}
           {{- end }}
           containers:

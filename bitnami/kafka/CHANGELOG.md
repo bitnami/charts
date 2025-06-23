@@ -1,8 +1,53 @@
 # Changelog
 
-## 32.2.6 (2025-05-16)
+## 32.2.17 (2025-06-18)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#33762](https://github.com/bitnami/charts/pull/33762))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34545](https://github.com/bitnami/charts/pull/34545))
+
+## <small>32.2.16 (2025-06-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34458) ([f9b84e1](https://github.com/bitnami/charts/commit/f9b84e164172062832510f7a5846a2e160a3eeb2)), closes [#34458](https://github.com/bitnami/charts/issues/34458)
+
+## <small>32.2.15 (2025-06-10)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34316) ([6145eac](https://github.com/bitnami/charts/commit/6145eac50971bbe0fe26a59f9aed7b466ba57c60)), closes [#34316](https://github.com/bitnami/charts/issues/34316)
+
+## <small>32.2.14 (2025-06-10)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34302) ([e3a75fe](https://github.com/bitnami/charts/commit/e3a75fe5f6d708f3aca03cce71e8c71487a75ec8)), closes [#34302](https://github.com/bitnami/charts/issues/34302)
+
+## <small>32.2.13 (2025-06-06)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34185) ([8828463](https://github.com/bitnami/charts/commit/88284636ab715e36ab82f1679c437336f3ebe7f5)), closes [#34185](https://github.com/bitnami/charts/issues/34185)
+
+## <small>32.2.12 (2025-06-03)</small>
+
+* [bitnami/kafka] Fix HPA controller logic to use maxReplicas to build controller.quorum.bootstrap.ser ([7cfb26d](https://github.com/bitnami/charts/commit/7cfb26d3c1663eead5eea81652b0f302954a4bbc)), closes [#33933](https://github.com/bitnami/charts/issues/33933)
+
+## <small>32.2.11 (2025-05-30)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34006) ([4287ec5](https://github.com/bitnami/charts/commit/4287ec583e7eda25eca91fbfec740983f6a9d736)), closes [#34006](https://github.com/bitnami/charts/issues/34006)
+
+## <small>32.2.10 (2025-05-29)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33967) ([d64b93d](https://github.com/bitnami/charts/commit/d64b93d0be6fdb2334bc1548856b9162d2c55b8e)), closes [#33967](https://github.com/bitnami/charts/issues/33967)
+
+## <small>32.2.9 (2025-05-28)</small>
+
+* bitnami/kafka Update the 32.0.0 release notes with more breaking changes (#33893) ([e4d5530](https://github.com/bitnami/charts/commit/e4d553012bbc076a27088176852695ade23920d5)), closes [#33893](https://github.com/bitnami/charts/issues/33893)
+
+## <small>32.2.8 (2025-05-20)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33789) ([d752de1](https://github.com/bitnami/charts/commit/d752de1c56cc496edbdfd9d4a2d4368d4e9527df)), closes [#33789](https://github.com/bitnami/charts/issues/33789)
+
+## <small>32.2.7 (2025-05-19)</small>
+
+* [bitnami/kafka][bitnami/charts/issues/32851] Update controller and broker configuration when enablin ([bfcd44f](https://github.com/bitnami/charts/commit/bfcd44f0c679cec8573fe5ff949cccf8a77de33b)), closes [#33740](https://github.com/bitnami/charts/issues/33740)
+
+## <small>32.2.6 (2025-05-17)</small>
+
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#33762) ([3053762](https://github.com/bitnami/charts/commit/30537620a0291f4875304761c5f43da61b9a4c5f)), closes [#33762](https://github.com/bitnami/charts/issues/33762)
 
 ## <small>32.2.5 (2025-05-15)</small>
 

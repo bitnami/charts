@@ -1,8 +1,21 @@
 # Changelog
 
-## 9.3.9 (2025-05-06)
+## 10.0.0 (2025-06-06)
 
-* [bitnami/spark] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33437](https://github.com/bitnami/charts/pull/33437))
+* [bitnami/spark] :zap: :arrow_up: Update dependency references ([#34235](https://github.com/bitnami/charts/pull/34235))
+
+## <small>9.4.1 (2025-05-29)</small>
+
+* [bitnami/spark] :zap: :arrow_up: Update dependency references (#33955) ([95cf312](https://github.com/bitnami/charts/commit/95cf3123a02ac891ceab57169c21d17e3e5c26b1)), closes [#33955](https://github.com/bitnami/charts/issues/33955)
+
+## 9.4.0 (2025-05-27)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/spark] Spark optional worker (#33834) ([0a81802](https://github.com/bitnami/charts/commit/0a8180230d6541074638a929b9a8d589bfc4e2ab)), closes [#33834](https://github.com/bitnami/charts/issues/33834)
+
+## <small>9.3.9 (2025-05-06)</small>
+
+* [bitnami/spark] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33437) ([75a7f53](https://github.com/bitnami/charts/commit/75a7f53e026a329b52df51ab952156e1c8641de2)), closes [#33437](https://github.com/bitnami/charts/issues/33437)
 
 ## <small>9.3.8 (2025-05-05)</small>
 

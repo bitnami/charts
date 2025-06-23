@@ -1,8 +1,17 @@
 # Changelog
 
-## 3.1.3 (2025-05-13)
+## 3.1.5 (2025-06-03)
 
-* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#33674](https://github.com/bitnami/charts/pull/33674))
+* [bitnami/fluent-bit] Fix HPA  target type ([#34052](https://github.com/bitnami/charts/pull/34052))
+
+## <small>3.1.4 (2025-05-30)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#34019) ([3c8dd6f](https://github.com/bitnami/charts/commit/3c8dd6ff2c92ee698869434becb5331dca4b8fa9)), closes [#34019](https://github.com/bitnami/charts/issues/34019)
+
+## <small>3.1.3 (2025-05-13)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#33674) ([7d4b3e4](https://github.com/bitnami/charts/commit/7d4b3e4c7bbacfc703daf2da91b8443702f1817e)), closes [#33674](https://github.com/bitnami/charts/issues/33674)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>3.1.2 (2025-05-06)</small>
 

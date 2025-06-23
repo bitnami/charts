@@ -1,8 +1,33 @@
 # Changelog
 
-## 5.1.31 (2025-05-16)
+## 5.1.37 (2025-06-13)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#33754](https://github.com/bitnami/charts/pull/33754))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#34425](https://github.com/bitnami/charts/pull/34425))
+
+## <small>5.1.36 (2025-06-11)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#34358) ([e17ed03](https://github.com/bitnami/charts/commit/e17ed03ce7e83d450aa25c9d0bd2909cbba615e9)), closes [#34358](https://github.com/bitnami/charts/issues/34358)
+
+## <small>5.1.35 (2025-06-11)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#34325) ([3c57bc6](https://github.com/bitnami/charts/commit/3c57bc663bfca7c88c09f0d76731575e8a38bb35)), closes [#34325](https://github.com/bitnami/charts/issues/34325)
+
+## <small>5.1.34 (2025-06-05)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#34145) ([ae49739](https://github.com/bitnami/charts/commit/ae4973970e1509c98983467f2729465df5dfb6ba)), closes [#34145](https://github.com/bitnami/charts/issues/34145)
+
+## <small>5.1.33 (2025-06-03)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#34073) ([ad7c9f9](https://github.com/bitnami/charts/commit/ad7c9f96248e5b7a9530b37bdc371c87b9c9d2b4)), closes [#34073](https://github.com/bitnami/charts/issues/34073)
+
+## <small>5.1.32 (2025-05-23)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#33868) ([3001192](https://github.com/bitnami/charts/commit/3001192942b19d81cf20dd051c8998e489ba2c59)), closes [#33868](https://github.com/bitnami/charts/issues/33868)
+
+## <small>5.1.31 (2025-05-16)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#33754) ([efe9468](https://github.com/bitnami/charts/commit/efe94689d045c518a84580da4653a2e7607b272d)), closes [#33754](https://github.com/bitnami/charts/issues/33754)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>5.1.30 (2025-05-08)</small>
 

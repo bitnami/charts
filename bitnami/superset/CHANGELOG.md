@@ -1,8 +1,21 @@
 # Changelog
 
-## 3.0.1 (2025-05-09)
+## 3.0.4 (2025-06-12)
 
-* [bitnami/superset] fix ingress with extraHosts failed to deploy ([#33052](https://github.com/bitnami/charts/pull/33052))
+* [bitnami/superset] Support `nameOverride` and `fullnameOverride` for internal Redis® ([#34364](https://github.com/bitnami/charts/pull/34364))
+
+## <small>3.0.3 (2025-06-09)</small>
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#34274) ([548bf19](https://github.com/bitnami/charts/commit/548bf19e2cb77c60610f83b2e213b1a156c16ae5)), closes [#34274](https://github.com/bitnami/charts/issues/34274)
+
+## <small>3.0.2 (2025-05-28)</small>
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#33934) ([b9d1588](https://github.com/bitnami/charts/commit/b9d15881884dbc3f39a9102f0c75a31fafe565de)), closes [#33934](https://github.com/bitnami/charts/issues/33934)
+
+## <small>3.0.1 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/superset] fix ingress with extraHosts failed to deploy (#33052) ([504fc3f](https://github.com/bitnami/charts/commit/504fc3fa4c12c5699e81db78db975a38a4ecbbe7)), closes [#33052](https://github.com/bitnami/charts/issues/33052)
 
 ## 3.0.0 (2025-05-07)
 

@@ -1,8 +1,37 @@
 # Changelog
 
-## 2.1.10 (2025-05-13)
+## 3.0.4 (2025-06-13)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#33655](https://github.com/bitnami/charts/pull/33655))
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#34449](https://github.com/bitnami/charts/pull/34449))
+
+## <small>3.0.3 (2025-06-13)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#34411) ([cf4ea1f](https://github.com/bitnami/charts/commit/cf4ea1f741c3ec7fbd6fb1be7bbe37781aa74ba1)), closes [#34411](https://github.com/bitnami/charts/issues/34411)
+
+## <small>3.0.2 (2025-06-06)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#34241) ([db84d80](https://github.com/bitnami/charts/commit/db84d8087850082a13f9605dcff7e86ba0c4547f)), closes [#34241](https://github.com/bitnami/charts/issues/34241)
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#34143) ([b8eb4ec](https://github.com/bitnami/charts/commit/b8eb4ec1d227541001ccfb0484f80d552003d1e8)), closes [#34143](https://github.com/bitnami/charts/issues/34143)
+
+## 3.0.0 (2025-05-27)
+
+* [bitnami/cilium] Update ETCD subchart (#33879) ([0814b9f](https://github.com/bitnami/charts/commit/0814b9f498a6dd00fbc575389060c390ad21cfdb)), closes [#33879](https://github.com/bitnami/charts/issues/33879)
+
+## <small>2.1.12 (2025-05-27)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33895) ([f11c343](https://github.com/bitnami/charts/commit/f11c3430724347a8ff177f6ed917d5d97815a685)), closes [#33895](https://github.com/bitnami/charts/issues/33895)
+
+## <small>2.1.11 (2025-05-19)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33719) ([b374c97](https://github.com/bitnami/charts/commit/b374c976d4243f56f1cae687df38bd9208904424)), closes [#33719](https://github.com/bitnami/charts/issues/33719)
+
+## <small>2.1.10 (2025-05-13)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#33655) ([bebf87b](https://github.com/bitnami/charts/commit/bebf87b2d4e0c6352807f70775ac0d919754b6ae)), closes [#33655](https://github.com/bitnami/charts/issues/33655)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.1.9 (2025-05-06)</small>
 

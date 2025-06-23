@@ -378,6 +378,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.nodePorts.wasm`                | Node port for wasm                                                                                 | `""`        |
 | `service.nodePorts.metrics`             | Node port for metrics                                                                              | `""`        |
 | `service.nodePorts.admin`               | Node port for admin                                                                                | `""`        |
+| `service.nodePorts.webhook`             | Node port for webhook                                                                              | `""`        |
 | `service.clusterIP`                     | Envoy Gateway service Cluster IP                                                                   | `""`        |
 | `service.loadBalancerIP`                | Envoy Gateway service Load Balancer IP                                                             | `""`        |
 | `service.loadBalancerSourceRanges`      | Envoy Gateway service Load Balancer sources                                                        | `[]`        |
@@ -481,6 +482,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `certgen.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                            | `true`           |
 | `certgen.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                               | `[]`             |
 | `certgen.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                                                                                                                                                         | `[]`             |
+
+### Topology Injector configuration
+
+| Name                           | Description                             | Value  |
+| ------------------------------ | --------------------------------------- | ------ |
+| `topologyInjector.enabled`     | Enables topologyInjector webhook        | `true` |
+| `topologyInjector.annotations` | Annotations for topologyInjector object | `{}`   |
 
 ### Envoy Gateway Metrics Parameters
 

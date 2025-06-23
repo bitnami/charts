@@ -1,8 +1,33 @@
 # Changelog
 
-## 0.1.5 (2025-05-13)
+## 1.0.5 (2025-06-19)
 
-* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#33600](https://github.com/bitnami/charts/pull/33600))
+* bitnami/envoy-gateway: fix template hpa ([#33621](https://github.com/bitnami/charts/pull/33621))
+
+## <small>1.0.4 (2025-06-13)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#34422) ([8f6de19](https://github.com/bitnami/charts/commit/8f6de19ad1e2c0d54a25eb35bcb2e3d86ae44592)), closes [#34422](https://github.com/bitnami/charts/issues/34422)
+
+## <small>1.0.3 (2025-06-05)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#34151) ([6d4be1c](https://github.com/bitnami/charts/commit/6d4be1cc84878ff60fe7127e52d5076ad137b1cb)), closes [#34151](https://github.com/bitnami/charts/issues/34151)
+
+## <small>1.0.2 (2025-06-04)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#34100) ([6d1fbd9](https://github.com/bitnami/charts/commit/6d1fbd994e5f241a502c5dec399e354648cb4938)), closes [#34100](https://github.com/bitnami/charts/issues/34100)
+
+## <small>1.0.1 (2025-05-29)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#33952) ([6f864f2](https://github.com/bitnami/charts/commit/6f864f284cafa51ef996b47a2be8a963cb23f30c)), closes [#33952](https://github.com/bitnami/charts/issues/33952)
+
+## 1.0.0 (2025-05-20)
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#33779) ([b6ce16e](https://github.com/bitnami/charts/commit/b6ce16ec73428c15857b1288ecfcfecde5046468)), closes [#33779](https://github.com/bitnami/charts/issues/33779)
+
+## <small>0.1.5 (2025-05-13)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#33600) ([a9c39b9](https://github.com/bitnami/charts/commit/a9c39b9c0bedec6648789b28e300954f9df50e8f)), closes [#33600](https://github.com/bitnami/charts/issues/33600)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>0.1.4 (2025-05-07)</small>
 
