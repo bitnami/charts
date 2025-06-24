@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.3.7 (2025-06-18)
+## 9.4.0 (2025-06-24)
 
 * [bitnami/mongodb-sharded] predictable port number for metrics ([#34439](https://github.com/bitnami/charts/pull/34439))
 
