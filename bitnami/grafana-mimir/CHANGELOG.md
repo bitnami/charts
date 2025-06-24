@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.5 (2025-06-18)
+## 3.0.6 (2025-06-24)
 
-* [bitnami/grafana-mimir] Typo in grafana-mimir's querier deployment ([#34531](https://github.com/bitnami/charts/pull/34531))
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34607](https://github.com/bitnami/charts/pull/34607))
+
+## <small>3.0.5 (2025-06-19)</small>
+
+* [bitnami/grafana-mimir] Typo in grafana-mimir's querier deployment (#34531) ([5c480e5](https://github.com/bitnami/charts/commit/5c480e5015e2c3d4d75d22bccf94ef59595d68f7)), closes [#34531](https://github.com/bitnami/charts/issues/34531)
 
 ## <small>3.0.4 (2025-06-13)</small>
 
