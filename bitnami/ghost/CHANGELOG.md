@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.17 (2025-06-23)
+## 23.0.18 (2025-06-24)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#34587](https://github.com/bitnami/charts/pull/34587))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#34601](https://github.com/bitnami/charts/pull/34601))
+
+## <small>23.0.17 (2025-06-23)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34587) ([daac25c](https://github.com/bitnami/charts/commit/daac25caf6d0e5096d7c8e1686ff8abfe0ed7be4)), closes [#34587](https://github.com/bitnami/charts/issues/34587)
 
 ## <small>23.0.16 (2025-06-20)</small>
 
