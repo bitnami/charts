@@ -296,8 +296,6 @@ Returns an init-container that prepares the venv directory
     - |
       . /opt/bitnami/scripts/libairflow.sh
 
-      mkdir -p /emptydir/venv-base-dir
-
       # Copy the configuration files to the writable directory
       cp -r --preserve=mode /opt/bitnami/airflow/venv /emptydir/venv-base-dir
 

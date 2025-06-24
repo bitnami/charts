@@ -213,11 +213,6 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/venv
               subPath: venv-base-dir
-            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
-            - name: empty-dir
-              mountPath: /opt/bitnami/airflow/venv/tmp
-              subPath: app-pyc-cache-dir
-            {{- end }}
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets
