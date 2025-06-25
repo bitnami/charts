@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.5 (2025-06-23)
+## 24.2.0 (2025-06-24)
 
-* [bitnami/airflow] Configure correct section for api/web secret_key ([#34581](https://github.com/bitnami/charts/pull/34581))
+* [bitnami/airflow] Move venv to emptydir volume ([#34560](https://github.com/bitnami/charts/pull/34560))
+
+## <small>24.1.5 (2025-06-23)</small>
+
+* [bitnami/airflow] Configure correct section for api/web secret_key (#34581) ([fe92d1b](https://github.com/bitnami/charts/commit/fe92d1b2ed3277e8c8549f5732544253ea1178ba)), closes [#34581](https://github.com/bitnami/charts/issues/34581)
 
 ## <small>24.1.4 (2025-06-19)</small>
 
