@@ -22,7 +22,7 @@ data:
     CURL_AUTH_FLAGS=""
 
     {{- if .Values.tls.enabled }}
-    CURL_TLS_FLAGS="-k"
+    CURL_TLS_FLAGS="--cacert /opt/bitnami/kibana/config/certs/server/ca.crt"
     {{- end }}
 
 
