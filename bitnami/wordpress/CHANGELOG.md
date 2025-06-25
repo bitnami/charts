@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.11 (2025-06-20)
+## 25.0.0 (2025-06-25)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#34565](https://github.com/bitnami/charts/pull/34565))
+* [bitnami/wordpress] Upgrade MariaDB 11.8 ([#34638](https://github.com/bitnami/charts/pull/34638))
+
+## <small>24.2.11 (2025-06-20)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34565) ([db248be](https://github.com/bitnami/charts/commit/db248be40efd6c70cbe9e754d2c362424960d5ff)), closes [#34565](https://github.com/bitnami/charts/issues/34565)
 
 ## <small>24.2.10 (2025-06-13)</small>
 
