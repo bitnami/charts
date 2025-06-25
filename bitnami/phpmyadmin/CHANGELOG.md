@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.13 (2025-06-23)
+## 19.0.0 (2025-06-25)
 
-* [bitnami/phpmyadmin] Add support for overriding service.targetPort in phpMyAdmin chart ([#34508](https://github.com/bitnami/charts/pull/34508))
+* [bitnami/phpmyadmin] Upgrade MariaDB 11.8 ([#34636](https://github.com/bitnami/charts/pull/34636))
+
+## <small>18.1.13 (2025-06-23)</small>
+
+* [bitnami/phpmyadmin] Add support for overriding service.targetPort in phpMyAdmin chart (#34508) ([a898cf9](https://github.com/bitnami/charts/commit/a898cf9611c621d58ae86964ab9b2c472dbbab75)), closes [#34508](https://github.com/bitnami/charts/issues/34508)
 
 ## <small>18.1.12 (2025-06-19)</small>
 
