@@ -32,7 +32,7 @@ data:
       KIBANA_PASSWORD=$(< "/opt/bitnami/kibana/secrets/kibana-password" tr -d '\n')
       CURL_AUTH_FLAGS="-u elastic:${KIBANA_PASSWORD}"
     else
-      echo "ERROR: elasticsearch-password file NOT found at $KIBANA_ELASTICSEARCH_PASSWORD_FILE"
+      echo "ERROR: kibana-password file NOT found at /opt/bitnami/kibana/secrets/"
     fi
     {{- else }}
     CURL_AUTH_FLAGS="-u elastic:${KIBANA_PASSWORD}"
