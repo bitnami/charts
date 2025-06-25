@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.1.3 (2025-06-19)
+## 12.1.4 (2025-06-25)
 
 * [bitnami/kibana] Support TLS and Authentication in Kibana dashboard import script ([#34562](https://github.com/bitnami/charts/pull/34562))
+
+## <small>12.1.3 (2025-06-24)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34604) ([ae475c8](https://github.com/bitnami/charts/commit/ae475c80a52127cbdab36276ed2d071c4495c785)), closes [#34604](https://github.com/bitnami/charts/issues/34604)
 
 ## <small>12.1.2 (2025-06-13)</small>
 
