@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.2 (2025-06-25)
+## 5.0.3 (2025-06-25)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34619](https://github.com/bitnami/charts/pull/34619))
+* [bitnami/mlflow] Create flask-server-secret-key when upgrading ([#34629](https://github.com/bitnami/charts/pull/34629))
+
+## <small>5.0.2 (2025-06-25)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34619) ([4003b7b](https://github.com/bitnami/charts/commit/4003b7b7f3780a03d0945b51dd91a1754c2096c0)), closes [#34619](https://github.com/bitnami/charts/issues/34619)
 
 ## <small>5.0.1 (2025-06-16)</small>
 
