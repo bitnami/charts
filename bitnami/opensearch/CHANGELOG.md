@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.4 (2025-06-19)
+## 2.0.5 (2025-06-25)
 
-* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#34561](https://github.com/bitnami/charts/pull/34561))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#34611](https://github.com/bitnami/charts/pull/34611))
+
+## <small>2.0.4 (2025-06-19)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#34561) ([d459f30](https://github.com/bitnami/charts/commit/d459f30d4f3c91dcde3c86ca90cbe889390c4fdf)), closes [#34561](https://github.com/bitnami/charts/issues/34561)
 
 ## <small>2.0.3 (2025-05-21)</small>
 
