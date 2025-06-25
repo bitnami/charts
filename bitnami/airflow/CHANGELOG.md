@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.1.4 (2025-06-19)
+## 24.1.5 (2025-06-23)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34306](https://github.com/bitnami/charts/pull/34306))
+* [bitnami/airflow] Configure correct section for api/web secret_key ([#34581](https://github.com/bitnami/charts/pull/34581))
+
+## <small>24.1.4 (2025-06-19)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34306) ([24c47d3](https://github.com/bitnami/charts/commit/24c47d393449d1e7d1a62f60ba2ef5db27068239)), closes [#34306](https://github.com/bitnami/charts/issues/34306)
 
 ## <small>24.1.3 (2025-06-16)</small>
 
