@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.1.4 (2025-06-25)
+## 20.1.4 (2025-06-26)
 
 * [bitnami/nginx] Changing auto generated tls.key and tls.crt to mount as tls.key and tls.crt instead of server.key and server.crt ([#34643](https://github.com/bitnami/charts/pull/34643))
 
