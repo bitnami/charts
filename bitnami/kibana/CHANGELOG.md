@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.1.2 (2025-06-13)
+## 12.1.3 (2025-06-24)
 
-* [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#34454](https://github.com/bitnami/charts/pull/34454))
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#34604](https://github.com/bitnami/charts/pull/34604))
+
+## <small>12.1.2 (2025-06-13)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34454) ([202ba80](https://github.com/bitnami/charts/commit/202ba803323dd898d998d5af3f1e19a7c69ecd14)), closes [#34454](https://github.com/bitnami/charts/issues/34454)
 
 ## <small>12.1.1 (2025-06-03)</small>
 

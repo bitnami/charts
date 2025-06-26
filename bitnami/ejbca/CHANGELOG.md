@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.1.4 (2025-06-22)
+## 18.0.0 (2025-06-25)
 
-* [bitnami/ejbca] :zap: :arrow_up: Update dependency references ([#34578](https://github.com/bitnami/charts/pull/34578))
+* [bitnami/ejbca] Upgrade MariaDB 11.8 ([#34635](https://github.com/bitnami/charts/pull/34635))
+
+## <small>17.1.4 (2025-06-22)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#34578) ([98f684b](https://github.com/bitnami/charts/commit/98f684bf402933a0040ef2b5c9ebb1d86441d02d)), closes [#34578](https://github.com/bitnami/charts/issues/34578)
 
 ## <small>17.1.3 (2025-05-23)</small>
 
