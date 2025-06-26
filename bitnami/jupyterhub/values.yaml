@@ -142,6 +142,9 @@ hub:
           {{- else }}
             admin_password: {{ randAlphaNum 32 | quote }}
           {{- end }}
+          Authenticator:
+            admin_users:
+              - {{ .Values.hub.adminUser }}
       cookieSecret:
       concurrentSpawnLimit: 64
       consecutiveFailureLimit: 5
