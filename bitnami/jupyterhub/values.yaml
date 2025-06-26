@@ -133,16 +133,15 @@ hub:
       config:
         JupyterHub:
           admin_access: true
-          authenticator_class: dummy
-          DummyAuthenticator:
-          {{- if .Values.hub.password }}
-            password: {{ .Values.hub.password | quote }}
-          {{- else }}
-            password: {{ randAlphaNum 10 | quote }}
-          {{- end }}
-          Authenticator:
+          authenticator_class: shared-password
+          SharedPasswordAuthenticator:
             admin_users:
               - {{ .Values.hub.adminUser }}
+          {{- if .Values.hub.password }}
+            admin_password: {{ .Values.hub.password | quote }}
+          {{- else }}
+            admin_password: {{ randAlphaNum 32 | quote }}
+          {{- end }}
       cookieSecret:
       concurrentSpawnLimit: 64
       consecutiveFailureLimit: 5

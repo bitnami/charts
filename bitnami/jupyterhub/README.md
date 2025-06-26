@@ -869,6 +869,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This major changes the default Authenticator from the deprecated DummyAuthenticator to [SharedPasswordAuthenticator](https://jupyterhub.readthedocs.io/en/latest/reference/api/auth.html#jupyterhub.authenticators.shared.SharedPasswordAuthenticator). This Authenticator forces passwords to have at least 32 characters. Once set a proper password, no major issues should be found during upgrades.
+
 ### To 9.0.0
 
 This major updates the JupyterHub and Jupyter Base Notebook images to 5.x versions.
