@@ -51,4 +51,4 @@ maintainers:
 name: mastodon
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
-version: 13.0.3
+version: 13.0.4

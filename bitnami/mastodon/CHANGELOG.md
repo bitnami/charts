@@ -1,8 +1,8 @@
 # Changelog
 
-## 13.0.3 (2025-06-15)
+## 13.0.3 (2025-06-21)
 
-* [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob definition ([#33981](https://github.com/bitnami/charts/pull/33981))
+* [bitnami/mastodon] fix broken PDB Label matching ([#34566](https://github.com/bitnami/charts/pull/34566))
 
 ## <small>13.0.2 (2025-06-09)</small>
 

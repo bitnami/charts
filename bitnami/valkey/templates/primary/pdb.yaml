@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $pdb := coalesce .Values.pdb .Values.primary.pdb }}
-{{- if and $pdb.create (gt (int64 .Values.primary.count) 0) (or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled)) }}
+{{- if and $pdb.create (gt (int64 .Values.primary.replicaCount) 0) (or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled)) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
