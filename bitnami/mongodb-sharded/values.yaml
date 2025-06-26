@@ -318,6 +318,9 @@ service:
   ##
   nodePorts:
     mongodb: ""
+    ## @param service.nodePorts.metrics Specify the metrics nodePort value for the LoadBalancer and NodePort service types.
+    ##
+    metrics: ""
   ## @param service.externalIPs External IP list to use with ClusterIP service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
