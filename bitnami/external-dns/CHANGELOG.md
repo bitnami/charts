@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.8.6 (2025-06-13)
+## 8.8.7 (2025-06-13)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34426](https://github.com/bitnami/charts/pull/34426))
+* [bitnami/external-dns] Fix bug with trailing comma in azure.json ([#33951](https://github.com/bitnami/charts/pull/33951))
+
+## <small>8.8.6 (2025-06-13)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#34426) ([c9e97df](https://github.com/bitnami/charts/commit/c9e97dfcff4967cffeb898b628e253d6429e1a7d)), closes [#34426](https://github.com/bitnami/charts/issues/34426)
 
 ## <small>8.8.5 (2025-06-13)</small>
 
