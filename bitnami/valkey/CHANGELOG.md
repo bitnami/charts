@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.16 (2025-06-25)
+## 3.0.16 (2025-06-26)
 
 * [bitnami/valkey] Fix key on condition to create PodDisruptionBudget ([#34641](https://github.com/bitnami/charts/pull/34641))
 
