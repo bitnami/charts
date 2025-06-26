@@ -2,7 +2,7 @@ module.exports = {
   defaultCommandTimeout: 30000,
   env: {
     username: 'test_user',
-    password: 'ComplicatedPassword123!4',
+    password: 'BitnamiComplicatedPassword123!45678',
   },
   e2e: {
     setupNodeEvents(on, config) {},

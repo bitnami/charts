@@ -64,7 +64,7 @@
             "app_protocol": "HTTP",
             "env": {
               "username": "test_user",
-              "password": "ComplicatedPassword123!4"
+              "password": "BitnamiComplicatedPassword123!45678"
             }
           }
         },
