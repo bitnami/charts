@@ -717,6 +717,7 @@ query:
   ## @param query.autoscaling.targetCPU Target CPU utilization percentage
   ## @param query.autoscaling.targetMemory Target Memory utilization percentage
   ## @param query.autoscaling.targetPodMetrics [array] List of custom pod metrics name and averageValue to evaluate for scaling
+  ## @param query.externalAutoscaler Specifies whether the Thanos Query deployment is scaled by an external autoscaler
   ## e.g.
   ## targetPodMetrics:
   ## - name: thanos_query_range_query_duration
@@ -731,6 +732,7 @@ query:
     targetCPU: ""
     targetMemory: ""
     targetPodMetrics: []
+  externalAutoscaler: false
   ## Thanos Query Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Query
@@ -1364,6 +1366,7 @@ queryFrontend:
   ## @param queryFrontend.autoscaling.maxReplicas Maximum number of Thanos Query Frontend replicas
   ## @param queryFrontend.autoscaling.targetCPU Target CPU utilization percentage
   ## @param queryFrontend.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param queryFrontend.externalAutoscaler Specifies whether the Thanos Query Frontend deployment is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -1371,6 +1374,7 @@ queryFrontend:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Query Frontend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryFrontend.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Query Frontend
@@ -1879,6 +1883,7 @@ bucketweb:
   ## @param bucketweb.autoscaling.maxReplicas Maximum number of Thanos Bucket Web replicas
   ## @param bucketweb.autoscaling.targetCPU Target CPU utilization percentage
   ## @param bucketweb.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param bucketweb.externalAutoscaler Specifies whether the Thanos Bucket Web deployment is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -1886,6 +1891,7 @@ bucketweb:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Bucket Web Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param bucketweb.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Bucket Web
@@ -3051,6 +3057,7 @@ storegateway:
   ## @param storegateway.autoscaling.maxReplicas Maximum number of Thanos Store Gateway replicas
   ## @param storegateway.autoscaling.targetCPU Target CPU utilization percentage
   ## @param storegateway.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param storegateway.externalAutoscaler Specifies whether the Thanos Store Gateway statefulset is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -3058,6 +3065,7 @@ storegateway:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Store Gateway Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param storegateway.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Store Gateway
@@ -3812,6 +3820,7 @@ ruler:
   ## @param ruler.autoscaling.maxReplicas Maximum number of Thanos Ruler replicas
   ## @param ruler.autoscaling.targetCPU Target CPU utilization percentage
   ## @param ruler.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param ruler.externalAutoscaler Specifies whether the Thanos Ruler statefulset is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -3819,6 +3828,7 @@ ruler:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Ruler Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ruler.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Ruler
@@ -4415,6 +4425,7 @@ receive:
   ## @param receive.autoscaling.maxReplicas Maximum number of Thanos Receive replicas
   ## @param receive.autoscaling.targetCPU Target CPU utilization percentage
   ## @param receive.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param receive.externalAutoscaler Specifies whether the Thanos Receive statefulset is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -4422,6 +4433,7 @@ receive:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Receive Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param receive.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Receive
@@ -4873,6 +4885,7 @@ receiveDistributor:
   ## @param receiveDistributor.autoscaling.maxReplicas Maximum number of Thanos Receive Distributor replicas
   ## @param receiveDistributor.autoscaling.targetCPU Target CPU utilization percentage
   ## @param receiveDistributor.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param receive.externalAutoscaler Specifies whether the Thanos Receive Distributor deployment is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
@@ -4880,6 +4893,7 @@ receiveDistributor:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
+  externalAutoscaler: false
   ## Thanos Receive Distributor Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param receiveDistributor.pdb.create Enable/disable a Pod Disruption Budget creation for Thanos Receive Distributor
