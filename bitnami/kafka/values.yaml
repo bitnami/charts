@@ -124,7 +124,7 @@ clusterId: ""
 ## @param existingKraftSecret Name of the secret containing the Kafka KRaft Cluster ID and one directory ID per controller replica
 ##
 existingKraftSecret: ""
-## @param kraftVersion Kraft version to be used. It determines whether static quorum or dynamic quorum will be used.
+## @param kraftVersion Kraft version to be used. It determines whether static quorum (kraftVersion=0) or dynamic quorum (kraftVersion=1) will be used.
 ## NOTE: Kafka 4.0 does not yet support switching kraft version. This setting was added for backward-compatibility with 3.x clusters.
 ## Ref: https://kafka.apache.org/documentation/#static_versus_dynamic_kraft_quorums
 ##
