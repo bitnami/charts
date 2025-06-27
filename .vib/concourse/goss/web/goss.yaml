@@ -6,7 +6,7 @@ command:
   {{- $pwd := (split ":" .Vars.secrets.localUsers)._1 }}
   {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
   {{- $pipeline := printf "pipe_%s" (randAlphaNum 5 | toLower) }}
-  {{- $example_pipeline := "ICBqb2JzOgogIC0gbmFtZTogam9iCiAgICBwdWJsaWM6IHRydWUKICAgIHBsYW46CiAgICAtIHRhc2s6IHNpbXBsZS10YXNrCiAgICAgIGNvbmZpZzoKICAgICAgICBwbGF0Zm9ybTogbGludXgKICAgICAgICBpbWFnZV9yZXNvdXJjZToKICAgICAgICAgIHR5cGU6IHJlZ2lzdHJ5LWltYWdlCiAgICAgICAgICBzb3VyY2U6IHsgcmVwb3NpdG9yeTogYml0bmFtaS9iaXRuYW1pLXNoZWxsIH0KICAgICAgICBydW46CiAgICAgICAgICBwYXRoOiBlY2hvCiAgICAgICAgICBhcmdzOiBbIkhlbGxvIHdvcmxkISJd" }}
+  {{- $example_pipeline := "ICBqb2JzOgogIC0gbmFtZTogam9iCiAgICBwdWJsaWM6IHRydWUKICAgIHBsYW46CiAgICAtIHRhc2s6IHNpbXBsZS10YXNrCiAgICAgIGNvbmZpZzoKICAgICAgICBwbGF0Zm9ybTogbGludXgKICAgICAgICBpbWFnZV9yZXNvdXJjZToKICAgICAgICAgIHR5cGU6IHJlZ2lzdHJ5LWltYWdlCiAgICAgICAgICBzb3VyY2U6IHsgcmVwb3NpdG9yeTogYml0bmFtaS9vcy1zaGVsbCB9CiAgICAgICAgcnVuOgogICAgICAgICAgcGF0aDogZWNobwogICAgICAgICAgYXJnczogWyJIZWxsbyB3b3JsZCEiXQ==" }}
   {{- $port := .Vars.service.web.ports.http }}
   {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
   create-pipeline-trigger-job:
