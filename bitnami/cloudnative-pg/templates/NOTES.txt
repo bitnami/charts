@@ -14,15 +14,15 @@ Check the cloudnative-pg documentation for instructions on how to deploy Cluster
 
 https://cloudnative-pg.io/docs/
 
-{{- if .Values.rbac.create }}
-{{- if .Values.watchAllNamespaces }}
+{{- if .Values.operator.rbac.create }}
+{{- if .Values.operator.watchAllNamespaces }}
 WARNING: CloudNative-PG can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
 
 You can limit allowed namespaces by setting watchAllNamespaces = false and configuring watchNamespaces
 {{- else }}
 
 CloudNative-PG can ONLY access resources in the following namespaces:
-{{ $namespaces := .Values.watchNamespaces | default (list (include "common.names.namespace" .)) }}
+{{ $namespaces := .Values.operator.watchNamespaces | default (list (include "common.names.namespace" .)) }}
 {{- range $namespace := $namespaces }}
   - {{ $namespace }}
 {{- end }}
@@ -32,9 +32,11 @@ CloudNative-PG won't be able to access resources in other namespaces. You can co
 {{- end }}
 {{- end }}
 
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "common.warnings.rollingTag" .Values.postgresqlImage }}
+{{- include "common.warnings.rollingTag" .Values.operator.image }}
+{{- include "common.warnings.rollingTag" .Values.operator.postgresqlImage }}
+{{- include "common.warnings.rollingTag" .Values.pluginBarmanCloud.image }}
+{{- include "common.warnings.rollingTag" .Values.pluginBarmanCloud.sidecarImage }}
 {{- include "cloudnative-pg.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.postgresqlImage .Values.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.postgresqlImage .Values.image) "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "operator" "pluginBarmanCloud") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.operator.postgresqlImage .Values.operator.image .Values.pluginBarmanCloud.image .Values.pluginBarmanCloud.sidecarImage) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.operator.postgresqlImage .Values.operator.image .Values.pluginBarmanCloud.image .Values.pluginBarmanCloud.sidecarImage) "context" $) }}

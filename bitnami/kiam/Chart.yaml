@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: kiam
-      image: docker.io/bitnami/kiam:4.2.0-debian-12-r65
+      image: docker.io/bitnami/kiam:4.2.0-debian-12-r66
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: kiam
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 2.3.12
+version: 2.3.13

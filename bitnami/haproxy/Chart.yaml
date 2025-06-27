@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: haproxy
-      image: docker.io/bitnami/haproxy:3.2.0-debian-12-r2
+      image: docker.io/bitnami/haproxy:3.2.1-debian-12-r2
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 3.2.0
+appVersion: 3.2.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -31,4 +31,4 @@ maintainers:
 name: haproxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/haproxy
-version: 2.2.23
+version: 2.2.26

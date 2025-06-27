@@ -43,6 +43,8 @@ cluster:
   worker:
     groupSpecs:
       - groupName: vib
+  head:
+    resourcesPreset: xlarge
 
 extraDeploy:
   # HACK: Kuberay does not allow setting a different service port from the container port, so we cannot set it at

@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.4.7 (2025-06-09)
+## 0.4.8 (2025-06-13)
 
-* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#34279](https://github.com/bitnami/charts/pull/34279))
+* bitnami/neo4j Fix neo4j persistent existing claim ([#34369](https://github.com/bitnami/charts/pull/34369))
+
+## <small>0.4.7 (2025-06-09)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#34279) ([7b134e1](https://github.com/bitnami/charts/commit/7b134e1683a08c557a1bb2c3c8d690f3b51a1269)), closes [#34279](https://github.com/bitnami/charts/issues/34279)
 
 ## <small>0.4.6 (2025-06-09)</small>
 

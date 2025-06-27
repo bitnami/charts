@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.7.3 (2025-05-28)
+## 24.7.4 (2025-06-11)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#33943](https://github.com/bitnami/charts/pull/33943))
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#34343](https://github.com/bitnami/charts/pull/34343))
+
+## <small>24.7.3 (2025-05-28)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33943) ([007a5df](https://github.com/bitnami/charts/commit/007a5df8e73f1e062940bedf3763d91abdc498e4)), closes [#33943](https://github.com/bitnami/charts/issues/33943)
 
 ## <small>24.7.2 (2025-05-28)</small>
 

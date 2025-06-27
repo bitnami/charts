@@ -275,6 +275,40 @@ create folders or volume names
 {{- end -}}
 
 {{/*
+Returns an init-container that prepares the venv directory
+*/}}
+{{- define "airflow.defaultInitContainers.prepareVenv" -}}
+- name: prepare-venv
+  image: {{ include "airflow.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- if .Values.defaultInitContainers.prepareVenv.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.prepareVenv.containerSecurityContext "context" .) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.prepareVenv.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.prepareVenv.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.prepareVenv.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.prepareVenv.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libairflow.sh
+
+      # Copy the configuration files to the writable directory
+      cp -r --preserve=mode /opt/bitnami/airflow/venv /emptydir/venv-base-dir
+
+      info "Copy operation completed"
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /emptydir
+{{- end -}}
+
+{{/*
 Returns shared structure between load-dags and load-plugins init containers
 */}}
 {{- define "airflow.defaultInitContainers.shared" -}}

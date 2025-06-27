@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: rabbitmq
-      image: docker.io/bitnami/rabbitmq:4.1.1-debian-12-r1
+      image: docker.io/bitnami/rabbitmq:4.1.1-debian-12-r2
     - name: rabbitmq-cluster-operator
-      image: docker.io/bitnami/rabbitmq-cluster-operator:2.14.0-debian-12-r2
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.14.0-debian-12-r3
     - name: rmq-default-credential-updater
-      image: docker.io/bitnami/rmq-default-credential-updater:1.0.6-debian-12-r2
+      image: docker.io/bitnami/rmq-default-credential-updater:1.0.6-debian-12-r3
     - name: rmq-messaging-topology-operator
-      image: docker.io/bitnami/rmq-messaging-topology-operator:1.17.1-debian-12-r2
+      image: docker.io/bitnami/rmq-messaging-topology-operator:1.17.1-debian-12-r3
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
@@ -39,4 +39,4 @@ maintainers:
 name: rabbitmq-cluster-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 4.4.21
+version: 4.4.22

@@ -299,6 +299,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
 | `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
+| `service.targetPorts.http`         | Service HTTP port                                                                                                                | `8080`                   |
+| `service.targetPorts.https`        | Service HTTPS port                                                                                                               | `8443`                   |
 | `service.nodePorts.http`           | Kubernetes http node port                                                                                                        | `""`                     |
 | `service.nodePorts.https`          | Kubernetes https node port                                                                                                       | `""`                     |
 | `service.clusterIP`                | PhpMyAdmin service clusterIP IP                                                                                                  | `""`                     |
@@ -421,6 +423,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpmy
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major release bumps the MariaDB version to 11.8. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-4-to-mariadb-11-8/) for upgrading from MariaDB 11.4 to 11.8. No major issues are expected during the upgrade.
 
 ### To 18.1.0
 

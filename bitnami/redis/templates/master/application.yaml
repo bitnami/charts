@@ -217,7 +217,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}
+                - "/health/ping_liveness_local.sh {{ .Values.master.livenessProbe.timeoutSeconds }}"
           {{- end }}
           {{- if .Values.master.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customReadinessProbe "context" $) | nindent 12 }}
@@ -232,7 +232,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}
+                - "/health/ping_readiness_local.sh {{ .Values.master.readinessProbe.timeoutSeconds }}"
           {{- end }}
           {{- end }}
           {{- if .Values.master.resources }}

@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: metrics-server
-      image: docker.io/bitnami/metrics-server:0.7.2-debian-12-r27
+      image: docker.io/bitnami/metrics-server:0.7.2-debian-12-r28
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -31,4 +31,4 @@ maintainers:
 name: metrics-server
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
-version: 7.4.6
+version: 7.4.7

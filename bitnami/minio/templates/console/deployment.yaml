@@ -69,7 +69,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.console.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.console.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.console.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.console.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.console.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.console.terminationGracePeriodSeconds }}

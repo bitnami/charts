@@ -111,11 +111,12 @@ data:
       {{- $replicaCount := int .Values.replicaCount }}
       {{- $portNumber := int .Values.service.ports.mongodb }}
       {{- $fullname := include "mongodb.fullname" . }}
+      {{- $serviceName := include "mongodb.service.nameOverride" . }}
       {{- $releaseNamespace := include "mongodb.namespace" . }}
       {{- $clusterDomain := .Values.clusterDomain }}
       {{- $mongoList := list }}
       {{- range $e, $i := until $replicaCount }}
-      {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
+      {{- $mongoList = append $mongoList (printf "%s-%d.%s.%s.svc.%s:%d" $fullname $i $serviceName $releaseNamespace $clusterDomain $portNumber) }}
       {{- end }}
 
       {{- if .Values.externalAccess.externalMaster.enabled }}

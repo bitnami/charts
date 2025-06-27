@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.8 (2025-06-02)
+## 8.1.9 (2025-06-10)
 
-* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references ([#34046](https://github.com/bitnami/charts/pull/34046))
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references ([#34304](https://github.com/bitnami/charts/pull/34304))
+
+## <small>8.1.8 (2025-06-02)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34046) ([c3ac537](https://github.com/bitnami/charts/commit/c3ac537c6187a8cc6850e7777dfd6f03bee4b1d8)), closes [#34046](https://github.com/bitnami/charts/issues/34046)
 
 ## <small>8.1.7 (2025-06-02)</small>
 

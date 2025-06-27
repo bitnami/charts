@@ -126,7 +126,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if and (eq .Values.versionStoreType "JDBC_POSTGRESQL") (not .Values.usePasswordFiles) }}
-            - name: QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD
+            - name: QUARKUS_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "nessie.database.secretName" . }}
@@ -235,7 +235,7 @@ spec:
             secretName: {{ include "nessie.database.secretName" . }}
             items:
               - key: {{ include "nessie.database.passwordKey" . }}
-                path: QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD
+                path: QUARKUS_DATASOURCE_PASSWORD
         {{- end }}
         {{- if (or .Values.secretConfigOverrides .Values.existingSecret) }}
         - name: secret-configuration

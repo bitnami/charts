@@ -5,7 +5,7 @@ annotations:
   category: DeveloperTools
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.3.0-debian-12-r2
+      image: docker.io/bitnami/jmx-exporter:1.3.0-debian-12-r3
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r46
     - name: sonarqube
@@ -40,4 +40,4 @@ maintainers:
 name: sonarqube
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 8.1.8
+version: 8.1.9

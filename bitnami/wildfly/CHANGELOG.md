@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.0.7 (2025-05-28)
+## 24.0.8 (2025-06-11)
 
-* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#33949](https://github.com/bitnami/charts/pull/33949))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#34345](https://github.com/bitnami/charts/pull/34345))
+
+## <small>24.0.7 (2025-05-28)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33949) ([8748d8f](https://github.com/bitnami/charts/commit/8748d8ff57c3688f55b3e7c48c3613ebb7ed5c89)), closes [#33949](https://github.com/bitnami/charts/issues/33949)
 
 ## <small>24.0.6 (2025-05-15)</small>
 

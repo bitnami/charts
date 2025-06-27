@@ -1,5 +1,6 @@
 extraDeploy:
 # Taken from https://cloudnative-pg.io/documentation/1.25/declarative_role_management/
+# 1) Deploy a PostgreSQL Cluster with the Barman Cloud Plugin enabled
 - apiVersion: v1
   kind: Secret
   metadata:
@@ -20,6 +21,11 @@ extraDeploy:
     instances: 3
     storage:
       size: 1Gi
+    plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: minio-store
     managed:
       roles:
         - name: vib_user
@@ -29,8 +35,206 @@ extraDeploy:
           superuser: true
           passwordSecret:
             name: vib-cluster-example-user
-# We cannot run goss tests in the actual instances because it's ReadOnlyRootFilesystem and it is not configurable
-# Instead we deploy a PostgreSQL client
+# 2) Deploy a MinIO(TM) instance to be used as ObjectStore for backups
+- |
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: minio
+    labels:
+      app.kubernetes.io/instance: minio
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/version: 2025.5.24
+      helm.sh/chart: minio-17.0.3
+      app.kubernetes.io/component: minio
+      app.kubernetes.io/part-of: minio
+  spec:
+    selector:
+      matchLabels:
+        app.kubernetes.io/instance: minio
+        app.kubernetes.io/name: minio
+        app.kubernetes.io/component: minio
+        app.kubernetes.io/part-of: minio
+    strategy:
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/instance: minio
+          app.kubernetes.io/managed-by: Helm
+          app.kubernetes.io/name: minio
+          app.kubernetes.io/version: 2025.5.24
+          helm.sh/chart: minio-17.0.3
+          app.kubernetes.io/component: minio
+          app.kubernetes.io/part-of: minio
+      spec:
+        securityContext:
+          fsGroupChangePolicy: OnRootMismatch
+          supplementalGroups: []
+          sysctls: []
+          {{- if not (include "common.compatibility.isOpenshift" .) }}
+          fsGroup: 1001
+          {{- end }}
+        initContainers:
+        containers:
+          - name: minio
+            image: docker.io/bitnami/minio:2025.5.24-debian-12-r5
+            imagePullPolicy: "IfNotPresent"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              privileged: false
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              seLinuxOptions: {}
+              seccompProfile:
+                type: RuntimeDefault
+              {{- if not (include "common.compatibility.isOpenshift" .) }}
+              runAsGroup: 1001
+              runAsUser: 1001
+              {{- end }}
+            env:
+              - name: BITNAMI_DEBUG
+                value: "false"
+              - name: MINIO_DISTRIBUTED_MODE_ENABLED
+                value: "no"
+              - name: MINIO_SCHEME
+                value: "http"
+              - name: MINIO_FORCE_NEW_KEYS
+                value: "no"
+              - name: MINIO_DEFAULT_BUCKETS
+                value: postgrestest
+              - name: MINIO_ROOT_USER_FILE
+                value: /opt/bitnami/minio/secrets/root-user
+              - name: MINIO_ROOT_PASSWORD_FILE
+                value: /opt/bitnami/minio/secrets/root-password
+              - name: MINIO_SKIP_CLIENT
+                value: "yes"
+              - name: MINIO_API_PORT_NUMBER
+                value: "9000"
+              - name: MINIO_BROWSER
+                value: "off"
+              - name: MINIO_PROMETHEUS_AUTH_TYPE
+                value: "public"
+              - name: MINIO_DATA_DIR
+                value: "/bitnami/minio/data"
+            ports:
+              - name: api
+                containerPort: 9000
+            livenessProbe:
+              httpGet:
+                path: /minio/health/live
+                port: api
+                scheme: "HTTP"
+              initialDelaySeconds: 5
+              periodSeconds: 5
+              timeoutSeconds: 5
+              successThreshold: 1
+              failureThreshold: 5
+            readinessProbe:
+              tcpSocket:
+                port: api
+              initialDelaySeconds: 5
+              periodSeconds: 5
+              timeoutSeconds: 1
+              successThreshold: 1
+              failureThreshold: 5
+            volumeMounts:
+              - name: empty-dir
+                mountPath: /tmp
+                subPath: tmp-dir
+              - name: empty-dir
+                mountPath: /opt/bitnami/minio/tmp
+                subPath: app-tmp-dir
+              - name: empty-dir
+                mountPath: /.mc
+                subPath: app-mc-dir
+              - name: minio-credentials
+                mountPath: /opt/bitnami/minio/secrets/
+              - name: data
+                mountPath: /bitnami/minio/data
+        volumes:
+          - name: empty-dir
+            emptyDir: {}
+          - name: minio-credentials
+            secret:
+              secretName: minio
+          - name: data
+            emptyDir: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: minio
+    labels:
+      app.kubernetes.io/instance: minio
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/version: 2025.5.24
+      helm.sh/chart: minio-17.0.3
+      app.kubernetes.io/component: minio
+      app.kubernetes.io/part-of: minio
+  spec:
+    type: ClusterIP
+    ports:
+      - name: tcp-api
+        port: 9000
+        targetPort: api
+        nodePort: null
+    selector:
+      app.kubernetes.io/instance: minio
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/component: minio
+      app.kubernetes.io/part-of: minio
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: minio
+    labels:
+      app.kubernetes.io/instance: minio
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: minio
+      app.kubernetes.io/version: 2025.5.24
+      helm.sh/chart: minio-17.0.3
+      app.kubernetes.io/component: minio
+      app.kubernetes.io/part-of: minio
+  type: Opaque
+  stringData:
+    root-user: "root"
+    root-password: "bitnami1234"
+- apiVersion: barmancloud.cnpg.io/v1
+  kind: ObjectStore
+  metadata:
+    name: minio-store
+  spec:
+    configuration:
+      destinationPath: s3://postgrestest/
+      endpointURL: http://minio:9000
+      s3Credentials:
+        accessKeyId:
+          name: minio
+          key: root-user
+        secretAccessKey:
+          name: minio
+          key: root-password
+      wal:
+        compression: gzip
+# 3) Deploy a Backup object to perform a backup of the PostgreSQL cluster deployed in step 1
+- apiVersion: postgresql.cnpg.io/v1
+  kind: Backup
+  metadata:
+    name: backup-example
+  spec:
+    cluster:
+      name: vib-cluster-example
+    method: plugin
+    pluginConfiguration:
+      name: barman-cloud.cloudnative-pg.io
+# 4) Create a Deployment for our goss tests. We cannot run goss in the operators because they are scratch. We cannot run the test in the Cluster instances because it's ReadOnlyRootFilesystem and it is not configurable. The testing deployment is comprised as follows:
+#    - First an init container with the PostgreSQL client checks that the cluster has been formed
+#    - Then a kubectl container will be used for running the goss tests. With it we can verify that the backup succeeded
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -47,7 +251,9 @@ extraDeploy:
         labels:
           app: postgresql
       spec:
-        containers:
+        serviceAccountName: '{{ template "cloudnative-pg.operator.serviceAccountName" . }}'
+        automountServiceAccountToken: true
+        initContainers:
         - image: docker.io/bitnami/postgresql:latest
           command:
             - /bin/bash
@@ -58,7 +264,6 @@ extraDeploy:
               # Wait until the cluster is formed
               while true; do
                   if PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -d postgres -h vib-cluster-example-rw -c "SELECT client_addr, state FROM pg_stat_replication;" | grep "2 rows"; then
-                      echo 1 > /tmp/ready
                       echo "Connected to PostgreSQL"
                       break
                   else
@@ -66,7 +271,7 @@ extraDeploy:
                       sleep 10
                   fi
               done
-              sleep infinity
+              exit 0
           name: postgresql
           env:
             - name: POSTGRES_PASSWORD
@@ -79,22 +284,6 @@ extraDeploy:
                 secretKeyRef:
                   name: vib-cluster-example-user
                   key: username
-          startupProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - |
-                  if [ $(cat /tmp/ready) = "1" ]; then
-                      exit 0
-                  else
-                      exit 1
-                  fi
-            initialDelaySeconds: 40
-            periodSeconds: 20
-            timeoutSeconds: 1
-            failureThreshold: 15
-            successThreshold: 1
           securityContext:
             runAsNonRoot: true
             privileged: false
@@ -106,15 +295,84 @@ extraDeploy:
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
+        - name: copy-kubectl
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              cp /opt/bitnami/kubectl/bin/kubectl /out/kubectl
+          image: bitnami/kubectl
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /out
+        containers:
+          - name: kubectl
+            command:
+              - sleep
+            args:
+              - infinity
+            readinessProbe:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - |
+                      exit 0
+              # Providing extra time for the test runs to finish
+              initialDelaySeconds: 120
+              periodSeconds: 20
+              timeoutSeconds: 1
+              failureThreshold: 15
+              successThreshold: 1
+            image: bitnami/os-shell:latest
+            securityContext:
+              runAsNonRoot: true
+              privileged: false
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+              seccompProfile:
+                type: "RuntimeDefault"
+            volumeMounts:
+              - name: empty-dir
+                mountPath: /tmp
+              - name: empty-dir
+                subPath: kubectl-bin
+                mountPath: /opt/bitnami/kubectl/bin
         volumes:
           - name: empty-dir
             emptyDir: {}
-service:
-  ports:
-    webhook: 443
-  type: LoadBalancer
-metrics:
+operator:
+  service:
+    ports:
+      webhook: 443
+    type: LoadBalancer
+  metrics:
+    enabled: true
+    service:
+      ports:
+        metrics: 2311
+pluginBarmanCloud:
   enabled: true
   service:
     ports:
-      metrics: 2311
+      grpc: 2218
+  metrics:
+    enabled: true
+    # Add the cloudnative-pg SA as allowed account because we need it for the goss tests
+    allowedServiceAccounts:
+      - name: '{{ include "cloudnative-pg.operator.serviceAccountName" $ }}'
+        namespace: '{{ include "common.names.namespace" $ }}'
+    service:
+      ports:
+        metrics: 8221

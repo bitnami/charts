@@ -1,8 +1,28 @@
 # Changelog
 
-## 3.0.11 (2025-06-08)
+## 3.0.16 (2025-06-26)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#34248](https://github.com/bitnami/charts/pull/34248))
+* [bitnami/valkey] Fix key on condition to create PodDisruptionBudget ([#34641](https://github.com/bitnami/charts/pull/34641))
+
+## <small>3.0.15 (2025-06-18)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34549) ([efaba92](https://github.com/bitnami/charts/commit/efaba9295865e5ee85201399acb23d6875b509a1)), closes [#34549](https://github.com/bitnami/charts/issues/34549)
+
+## <small>3.0.14 (2025-06-16)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34462) ([458f0ef](https://github.com/bitnami/charts/commit/458f0ef13a9b458d80d7ee5805dd931535c26f09)), closes [#34462](https://github.com/bitnami/charts/issues/34462)
+
+## <small>3.0.13 (2025-06-11)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34361) ([ab18df0](https://github.com/bitnami/charts/commit/ab18df0a21f34dd0bb41bc430c54dbadc52c5543)), closes [#34361](https://github.com/bitnami/charts/issues/34361)
+
+## <small>3.0.12 (2025-06-10)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34322) ([4ea6675](https://github.com/bitnami/charts/commit/4ea66757c88a14c81058ff34358b2daddb235449)), closes [#34322](https://github.com/bitnami/charts/issues/34322)
+
+## <small>3.0.11 (2025-06-08)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34248) ([e945325](https://github.com/bitnami/charts/commit/e9453256b0091b47900a79e7499aefd1d2b3fae7)), closes [#34248](https://github.com/bitnami/charts/issues/34248)
 
 ## <small>3.0.10 (2025-06-06)</small>
 

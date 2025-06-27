@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.8 (2025-05-15)
+## 7.1.9 (2025-06-14)
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#33717](https://github.com/bitnami/charts/pull/33717))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#34503](https://github.com/bitnami/charts/pull/34503))
+
+## <small>7.1.8 (2025-05-15)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33717) ([36f0609](https://github.com/bitnami/charts/commit/36f0609730409702cc1cdf65e64e216fc5e7c10d)), closes [#33717](https://github.com/bitnami/charts/issues/33717)
 
 ## <small>7.1.7 (2025-05-12)</small>
 

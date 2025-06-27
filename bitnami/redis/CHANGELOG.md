@@ -1,8 +1,28 @@
 # Changelog
 
-## 21.2.2 (2025-06-10)
+## 21.2.7 (2025-06-10)
 
 * [bitnami/redis] Fix external service annotations ignored #33270 ([#33776](https://github.com/bitnami/charts/pull/33776))
+
+## 21.2.6 (2025-06-26)
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34645](https://github.com/bitnami/charts/pull/34645))
+
+## <small>21.2.5 (2025-06-18)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34547) ([2ac72d1](https://github.com/bitnami/charts/commit/2ac72d167fb4094d66d3fedb49fd1cfe9fd5d07f)), closes [#34547](https://github.com/bitnami/charts/issues/34547)
+
+## <small>21.2.4 (2025-06-16)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34463) ([edf1120](https://github.com/bitnami/charts/commit/edf1120dbe6f9039541ff5b10b4530d0d8c40e9b)), closes [#34463](https://github.com/bitnami/charts/issues/34463)
+
+## <small>21.2.3 (2025-06-10)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34321) ([b3b5e16](https://github.com/bitnami/charts/commit/b3b5e16975817f3bf0431792bd1e336fdff342d1)), closes [#34321](https://github.com/bitnami/charts/issues/34321)
+
+## <small>21.2.2 (2025-06-10)</small>
+
+* [bitnami/redis] Redis Helm Chart probes are failing (#33957) ([e83394a](https://github.com/bitnami/charts/commit/e83394a295e751d574b7162c3dd07015c8cb3acb)), closes [#33957](https://github.com/bitnami/charts/issues/33957) [#29985](https://github.com/bitnami/charts/issues/29985) [#29097](https://github.com/bitnami/charts/issues/29097) [#28744](https://github.com/bitnami/charts/issues/28744) [#25217](https://github.com/bitnami/charts/issues/25217)
 
 ## <small>21.2.1 (2025-06-08)</small>
 
