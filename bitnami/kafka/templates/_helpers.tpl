@@ -535,7 +535,12 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- else -}}
     {{- range $i := until (int .Values.controller.replicaCount) -}}
       {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+      {{- if eq (int $.Values.kraftVersion) 0 }}
+        {{- $nodeId := add (int $i) (int $.Values.controller.minId) -}}
+        {{- $bootstrapServers = append $bootstrapServers (printf "%d@%s" $nodeId $nodeAddress ) -}}
+      {{- else }}
+        {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+      {{- end }}
     {{- end -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
