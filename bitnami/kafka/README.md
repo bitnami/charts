@@ -1064,7 +1064,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 32.2.0
+### To 32.3.0
 
 We have introduced the value `kraftVersion` to help control the change from static quorum to dynamic quorum.
 
