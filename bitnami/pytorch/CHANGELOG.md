@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.16 (2025-06-26)
+## 4.3.16 (2025-06-27)
 
 * [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#34679](https://github.com/bitnami/charts/pull/34679))
 
