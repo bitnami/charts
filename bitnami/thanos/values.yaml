@@ -4885,7 +4885,7 @@ receiveDistributor:
   ## @param receiveDistributor.autoscaling.maxReplicas Maximum number of Thanos Receive Distributor replicas
   ## @param receiveDistributor.autoscaling.targetCPU Target CPU utilization percentage
   ## @param receiveDistributor.autoscaling.targetMemory Target Memory utilization percentage
-  ## @param receive.externalAutoscaler Specifies whether the Thanos Receive Distributor deployment is scaled by an external autoscaler
+  ## @param receiveDistributor.externalAutoscaler Specifies whether the Thanos Receive Distributor deployment is scaled by an external autoscaler
   ##
   autoscaling:
     enabled: false
