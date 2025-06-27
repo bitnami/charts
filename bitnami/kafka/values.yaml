@@ -743,7 +743,7 @@ controller:
   ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
@@ -952,7 +952,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
-    type: OnDelete
+    type: RollingUpdate
   ## @param controller.extraVolumes Optionally specify extra list of additional volumes for the Kafka pod(s)
   ## e.g:
   ## extraVolumes:
