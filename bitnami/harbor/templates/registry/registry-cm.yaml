@@ -82,6 +82,12 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
         storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopychunksize }}
+        multipartcopychunksize: {{ .Values.persistence.imageChartStorage.s3.multipartcopychunksize }}
+        {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopymaxconcurrency }}
+        multipartcopymaxconcurrency: {{ .Values.persistence.imageChartStorage.s3.multipartcopymaxconcurrency }}
+        {{- end }}
         {{- if .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
         multipartcopythresholdsize: {{ .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
         {{- end }}
@@ -157,11 +163,11 @@ data:
         layerinfo: redis
       maintenance:
         uploadpurging:
-          {{- if .Values.persistence.imageChartStorage.uploadpurging.enabled }}
+          {{- if .Values.registry.uploadPurging.enabled }}
           enabled: true
-          age: {{ .Values.persistence.imageChartStorage.uploadpurging.age }}
-          interval: {{ .Values.persistence.imageChartStorage.uploadpurging.interval }}
-          dryrun: {{ .Values.persistence.imageChartStorage.uploadpurging.dryrun }}
+          age: {{ .Values.registry.uploadPurging.age }}
+          interval: {{ .Values.registry.uploadPurging.interval }}
+          dryrun: {{ .Values.registry.uploadPurging.dryrun }}
           {{- else }}
           enabled: false
           {{- end }}
@@ -170,11 +176,13 @@ data:
       redirect:
         disable: {{ .Values.persistence.imageChartStorage.disableredirect }}
     redis:
-      addr: "{{ template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}"
-      {{- if ne "" (include "harbor.redis.sentinel.masterSet" .) }}
-      sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" . }}"
+      addr: "{{ template "harbor.redis.host" ( dict "context" . "component" "registry" ) }}:{{ template "harbor.redis.port" ( dict "context" . "component" "registry" ) }}"
+      {{- if ne "" (include "harbor.redis.sentinel.masterSet" ( dict "context" . "component" "registry" ) ) }}
+      sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" ( dict "context" . "component" "registry" ) }}"
       {{- end }}
-      {{- if and (eq .Values.externalRedis.sentinel.enabled false) (eq .Values.redis.sentinel.enabled false) }}
+      {{- $externalRedis := ternary ( get .Values.externalRedis "registry" ) .Values.externalRedis .Values.externalRedis.instancePerComponent }}
+      enableTLS: {{ or .Values.redis.tls.enabled $externalRedis.tls.enabled }}
+      {{- if not (include "harbor.redis.sentinel.enabled" ( dict "context" . "component" "registry" )) }}
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
       {{- end }}
     http:
@@ -203,7 +211,9 @@ data:
         path: /etc/registry/passwd
     validation:
       disabled: true
-
+    compatibility:
+      schema1:
+        enabled: true
     {{- if .Values.registry.middleware.enabled }}
     {{- if eq .Values.registry.middleware.type "cloudFront" }}
     middleware:

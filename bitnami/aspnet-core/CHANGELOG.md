@@ -1,8 +1,33 @@
 # Changelog
 
-## 7.0.3 (2025-05-09)
+## 7.0.9 (2025-06-26)
 
-* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#33591](https://github.com/bitnami/charts/pull/33591))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#34677](https://github.com/bitnami/charts/pull/34677))
+
+## <small>7.0.8 (2025-06-16)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#34522) ([6b89e1e](https://github.com/bitnami/charts/commit/6b89e1e66fd4bc335de08e76e11b01e2f4323932)), closes [#34522](https://github.com/bitnami/charts/issues/34522)
+
+## <small>7.0.7 (2025-06-16)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#34430) ([815152a](https://github.com/bitnami/charts/commit/815152ab7acdcc436ee424785ffc34cc9bc1ea3c)), closes [#34430](https://github.com/bitnami/charts/issues/34430)
+
+## <small>7.0.6 (2025-06-11)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#34324) ([6042cb8](https://github.com/bitnami/charts/commit/6042cb85652b6614b46ea0edfa5e07bb175f6d02)), closes [#34324](https://github.com/bitnami/charts/issues/34324)
+
+## <small>7.0.5 (2025-06-06)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#34159) ([3d3a4a3](https://github.com/bitnami/charts/commit/3d3a4a3dabd0181f9fd71eb6e2266fb9ec634dc2)), closes [#34159](https://github.com/bitnami/charts/issues/34159)
+
+## <small>7.0.4 (2025-05-13)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#33682) ([16b2577](https://github.com/bitnami/charts/commit/16b25774b6cccbd92f7faafb249b3ab601628016)), closes [#33682](https://github.com/bitnami/charts/issues/33682)
+
+## <small>7.0.3 (2025-05-09)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#33591) ([28f779d](https://github.com/bitnami/charts/commit/28f779d47fd7d9c0eaabe1a38b45b163ef20f7a9)), closes [#33591](https://github.com/bitnami/charts/issues/33591)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>7.0.2 (2025-05-06)</small>
 

@@ -1,8 +1,21 @@
 # Changelog
 
-## 4.2.4 (2025-05-06)
+## 5.0.1 (2025-05-28)
 
-* [bitnami/apisix] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33335](https://github.com/bitnami/charts/pull/33335))
+* feat: [bitnami/apisix] Add dnsPolicy parameter support ([#33926](https://github.com/bitnami/charts/pull/33926))
+
+## 5.0.0 (2025-05-26)
+
+* [bitnami/apisix] Update ETCD subchart (#33878) ([8337a8c](https://github.com/bitnami/charts/commit/8337a8c86a942c0e88553964f7bce5edace0dbc2)), closes [#33878](https://github.com/bitnami/charts/issues/33878)
+
+## <small>4.2.5 (2025-05-13)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#33651) ([60b9da0](https://github.com/bitnami/charts/commit/60b9da0e0543cac807058ac69e398b41b78f84a9)), closes [#33651](https://github.com/bitnami/charts/issues/33651)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>4.2.4 (2025-05-06)</small>
+
+* [bitnami/apisix] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33335) ([21f0df7](https://github.com/bitnami/charts/commit/21f0df7910ce9f5849889a77e6c4923e165153ff)), closes [#33335](https://github.com/bitnami/charts/issues/33335)
 
 ## <small>4.2.3 (2025-05-01)</small>
 

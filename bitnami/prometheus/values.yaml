@@ -97,7 +97,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.28.1-debian-12-r6
+    tag: 0.28.1-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -681,7 +681,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 3.3.1-debian-12-r3
+    tag: 3.4.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -695,6 +695,12 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param server.scrapePrometheusHost Specifies whether to include prometheus host scraping job
+  ##
+  scrapePrometheusHost: true
+  ## @param server.scrapeAlertmanagerHost Specifies whether to include alertmanager host scraping job
+  ##
+  scrapeAlertmanagerHost: true
   ## @param server.configuration [string] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
   ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
@@ -718,9 +724,11 @@ server:
     remote_write: {{- include "common.tplvalues.render" (dict "value" .Values.server.remoteWrite "context" $) | nindent 4 }}
     {{- end }}
     scrape_configs:
+    {{- if .Values.server.scrapePrometheusHost }}
       - job_name: prometheus
       {{- include "prometheus.scrape_config" (dict "component" "server" "context" $) | nindent 4 }}
-    {{- if .Values.alertmanager.enabled }}
+    {{- end }}
+    {{- if and .Values.alertmanager.enabled .Values.server.scrapeAlertmanagerHost }}
       - job_name: alertmanager
         {{- include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
     {{- end }}
@@ -1074,7 +1082,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.38.0-debian-12-r3
+      tag: 0.39.0-debian-12-r0
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1647,6 +1655,10 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## @param server.rbac.includeDefaultRules Specifies whether to include default rules from official prometheus helm chart
+    ## ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/templates/clusterrole.yaml
+    ##
+    includeDefaultRules: true
     ## @param server.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
@@ -1681,7 +1693,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r47
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

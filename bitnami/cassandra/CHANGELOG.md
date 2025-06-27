@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.3.6 (2025-05-06)
+## 12.3.8 (2025-06-20)
 
-* [bitnami/cassandra] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33341](https://github.com/bitnami/charts/pull/33341))
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#34571](https://github.com/bitnami/charts/pull/34571))
+
+## <small>12.3.7 (2025-05-21)</small>
+
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#33808) ([2ac0f60](https://github.com/bitnami/charts/commit/2ac0f60d66406de4a1b5f487cb8b07066b41d23a)), closes [#33808](https://github.com/bitnami/charts/issues/33808)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>12.3.6 (2025-05-06)</small>
+
+* [bitnami/cassandra] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([6eae30e](https://github.com/bitnami/charts/commit/6eae30e058e2809b0011b3dce7e53d23b37a060c)), closes [#33341](https://github.com/bitnami/charts/issues/33341)
 
 ## <small>12.3.5 (2025-04-23)</small>
 

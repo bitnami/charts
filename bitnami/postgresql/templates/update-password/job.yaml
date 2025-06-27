@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ printf "%s-password-update" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-password-update" (include "postgresql.v1.chart.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: postgresql
@@ -206,26 +206,26 @@ spec:
         {{- if .Values.auth.usePasswordFiles }}
         - name: postgresql-previous-credentials
           secret:
-            secretName: {{ template "postgresql.update-job.previousSecretName" . }}
+            secretName: {{ template "postgresql.v1.update-job.previousSecretName" . }}
             items:
-              - key: postgresql-root-password
+              - key: {{ include "postgresql.v1.adminPasswordKey" . }}
                 path: POSTGRESQL_PREVIOUS_POSTGRES_PASSWORD
-              - key: postgresql-password
+              - key: {{ include "postgresql.v1.userPasswordKey" . }}
                 path: POSTGRESQL_PREVIOUS_PASSWORD
               {{- if eq .Values.architecture "replication" }}
-              - key: postgresql-replication-password
+              - key: {{ include "postgresql.v1.replicationPasswordKey" . }}
                 path: POSTGRESQL_PREVIOUS_REPLICATION_PASSWORD
               {{- end }}
         - name: postgresql-new-credentials
           secret:
-            secretName: {{ template "postgresql.update-job.newSecretName" . }}
+            secretName: {{ template "postgresql.v1.update-job.newSecretName" . }}
             items:
-              - key: postgresql-root-password
+              - key: {{ include "postgresql.v1.adminPasswordKey" . }}
                 path: POSTGRESQL_NEW_POSTGRES_PASSWORD
-              - key: postgresql-password
+              - key: {{ include "postgresql.v1.userPasswordKey" . }}
                 path: POSTGRESQL_NEW_PASSWORD
               {{- if eq .Values.architecture "replication" }}
-              - key: postgresql-replication-password
+              - key: {{ include "postgresql.v1.replicationPasswordKey" . }}
                 path: POSTGRESQL_NEW_REPLICATION_PASSWORD
               {{- end }}
         {{- end }}

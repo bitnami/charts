@@ -155,6 +155,8 @@ extraDeploy:
     name: test
   spec:
     defaults:
+      storageManagement:
+        provisioner: Operator
       templates:
         podTemplate: default-clickhouse
         dataVolumeClaimTemplate: default-volume-claim
@@ -200,6 +202,8 @@ extraDeploy:
     name: test
   spec:
     defaults:
+      storageManagement:
+        provisioner: Operator
       templates:
         podTemplate: default-keeper
         dataVolumeClaimTemplate: default-volume-claim
@@ -298,11 +302,11 @@ Check the [official quickstart guide](https://docs.altinity.com/altinitykubernet
 | `keeperImage.digest`                                | ClickHouse Keeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                   | `""`                                  |
 | `keeperImage.pullPolicy`                            | ClickHouse Keeper image pull policy                                                                                                                                                                                            | `IfNotPresent`                        |
 | `keeperImage.pullSecrets`                           | ClickHouse Keeper image pull secrets                                                                                                                                                                                           | `[]`                                  |
-| `auth.username`                                     | ClickHouse Admin username                                                                                                                                                                                                      | `clickhouse_operator`                 |
-| `auth.password`                                     | ClickHouse Admin password                                                                                                                                                                                                      | `""`                                  |
-| `auth.existingSecret`                               | Name of a secret containing the Admin credentials                                                                                                                                                                              | `""`                                  |
-| `auth.existingSecretUsernameKey`                    | Name of the key inside the existing secret containing the Admin username                                                                                                                                                       | `""`                                  |
-| `auth.existingSecretPasswordKey`                    | Name of the key inside the existing secret containing the Admin password                                                                                                                                                       | `""`                                  |
+| `auth.username`                                     | ClickHouse Operator username                                                                                                                                                                                                   | `clickhouse_operator`                 |
+| `auth.password`                                     | ClickHouse Operator password                                                                                                                                                                                                   | `""`                                  |
+| `auth.existingSecret`                               | Name of a secret containing the ClickHouse Operator credentials (expected keys: `username` and `password`)                                                                                                                     | `""`                                  |
+| `ipFamily.enableIpv4`                               | Enable IPv4 addresses                                                                                                                                                                                                          | `true`                                |
+| `ipFamily.enableIpv6`                               | Enable IPv6 listening                                                                                                                                                                                                          | `true`                                |
 | `replicaCount`                                      | Number of ClickHouse Operator replicas to deploy                                                                                                                                                                               | `1`                                   |
 | `containerPorts.metrics`                            | ClickHouse Operator Metrics container port                                                                                                                                                                                     | `9999`                                |
 | `extraContainerPorts`                               | Optionally specify extra list of additional ports for ClickHouse Operator containers                                                                                                                                           | `[]`                                  |

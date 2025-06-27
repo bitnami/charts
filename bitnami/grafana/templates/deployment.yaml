@@ -355,15 +355,19 @@ spec:
             name: {{ include "common.names.fullname" . }}-provider
             {{- end }}
         {{- end }}
-        {{- range .Values.dashboardsConfigMaps }}
-        - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
+{{- $dashboardConfigMapNames := list }}
+{{- range .Values.dashboardsConfigMaps }}
+  {{- $dashboardConfigMapNames = append $dashboardConfigMapNames .configMapName }}
+{{- end }}
+        {{- range $dashboardConfigMapNames | uniq }}
+        - name: {{ include "common.tplvalues.render" ( dict "value" . "context" $ ) }}
           configMap:
-            name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
+            name: {{ include "common.tplvalues.render" ( dict "value" . "context" $ ) }}
         {{- end }}
         {{- if .Values.datasources.secretName }}
         - name: datasources
           secret:
-            secretName: {{ .Values.datasources.secretName }}
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.datasources.secretName "context" $) }}
         {{- else if .Values.datasources.secretDefinition }}
         - name: datasources
           secret:

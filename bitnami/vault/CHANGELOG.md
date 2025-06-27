@@ -1,8 +1,37 @@
 # Changelog
 
-## 1.7.9 (2025-05-09)
+## 1.7.16 (2025-06-25)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#33594](https://github.com/bitnami/charts/pull/33594))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34610](https://github.com/bitnami/charts/pull/34610))
+
+## <small>1.7.15 (2025-06-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34497) ([9945dcc](https://github.com/bitnami/charts/commit/9945dcccf26e66be8b8fb31290ea2e0a23867b2e)), closes [#34497](https://github.com/bitnami/charts/issues/34497)
+
+## <small>1.7.14 (2025-06-11)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34341) ([879863e](https://github.com/bitnami/charts/commit/879863e5262a04e812cd0a6321e51e42774c7151)), closes [#34341](https://github.com/bitnami/charts/issues/34341)
+
+## <small>1.7.13 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34229) ([263a016](https://github.com/bitnami/charts/commit/263a0168d2c510bf13f7b9f6561c53cebdf892fb)), closes [#34229](https://github.com/bitnami/charts/issues/34229)
+
+## <small>1.7.12 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34223) ([3e2144e](https://github.com/bitnami/charts/commit/3e2144e4967bcbf3f1bcd71eb7e9c043dfd00ead)), closes [#34223](https://github.com/bitnami/charts/issues/34223)
+
+## <small>1.7.11 (2025-05-30)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33982) ([86eedf9](https://github.com/bitnami/charts/commit/86eedf97c52efcb887f188919f30c54c61fcb4a1)), closes [#33982](https://github.com/bitnami/charts/issues/33982)
+
+## <small>1.7.10 (2025-05-21)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33791) ([835677c](https://github.com/bitnami/charts/commit/835677cac979e646d0ce903bafedae9b5dc91d5f)), closes [#33791](https://github.com/bitnami/charts/issues/33791)
+
+## <small>1.7.9 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33594) ([7a93af2](https://github.com/bitnami/charts/commit/7a93af29d76c865a334893977f4de5bd5383f04f)), closes [#33594](https://github.com/bitnami/charts/issues/33594)
 
 ## <small>1.7.8 (2025-05-07)</small>
 

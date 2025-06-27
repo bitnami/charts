@@ -1,8 +1,25 @@
 # Changelog
 
-## 26.0.2 (2025-05-09)
+## 27.0.0 (2025-06-25)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#33592](https://github.com/bitnami/charts/pull/33592))
+* [bitnami/moodle] Upgrade MariaDB 11.8 ([#34631](https://github.com/bitnami/charts/pull/34631))
+
+## <small>26.0.5 (2025-06-13)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34394) ([53257c3](https://github.com/bitnami/charts/commit/53257c3bf4a5738616244dd6a2d20a4725e50255)), closes [#34394](https://github.com/bitnami/charts/issues/34394)
+
+## <small>26.0.4 (2025-06-09)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34273) ([34d587b](https://github.com/bitnami/charts/commit/34d587b70f86e3428fbb54e1fc07effff7c865c6)), closes [#34273](https://github.com/bitnami/charts/issues/34273)
+
+## <small>26.0.3 (2025-06-05)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34136) ([987941b](https://github.com/bitnami/charts/commit/987941bc13a6d5d7ea95a811f210a2ae51868ac0)), closes [#34136](https://github.com/bitnami/charts/issues/34136)
+
+## <small>26.0.2 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#33592) ([07b03f6](https://github.com/bitnami/charts/commit/07b03f6ef68dd03e72c387127d7c9a8c43dad03c)), closes [#33592](https://github.com/bitnami/charts/issues/33592)
 
 ## <small>26.0.1 (2025-05-06)</small>
 

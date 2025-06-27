@@ -1,8 +1,64 @@
 # Changelog
 
-## 16.7.1 (2025-05-08)
+## 16.7.14 (2025-06-26)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#33577](https://github.com/bitnami/charts/pull/33577))
+* [bitnami/postgresql] Update dependencies ([#34650](https://github.com/bitnami/charts/pull/34650))
+
+## <small>16.7.13 (2025-06-19)</small>
+
+* [bitnami/postgresql] Fix invalid template reference in postgresql update-password job (#34527) ([6ee27f5](https://github.com/bitnami/charts/commit/6ee27f537363be3f3e5279bfe726e6bae5c3cfb5)), closes [#34527](https://github.com/bitnami/charts/issues/34527)
+
+## <small>16.7.12 (2025-06-16)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34377) ([858195b](https://github.com/bitnami/charts/commit/858195b20aa25e8b985e5d1a8e85b8498870987a)), closes [#34377](https://github.com/bitnami/charts/issues/34377)
+
+## <small>16.7.11 (2025-06-11)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34353) ([ea1c058](https://github.com/bitnami/charts/commit/ea1c058afa569f454a2955380428a5276a89c885)), closes [#34353](https://github.com/bitnami/charts/issues/34353)
+* Fix incorrect value paths in password update job documentation (#34057) ([8e61c28](https://github.com/bitnami/charts/commit/8e61c28f6fabe634533eca525aa4ab35065f28b2)), closes [#34057](https://github.com/bitnami/charts/issues/34057)
+
+## <small>16.7.10 (2025-06-06)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34210) ([5880187](https://github.com/bitnami/charts/commit/5880187fcb235887cbe944dad6e38152471badb9)), closes [#34210](https://github.com/bitnami/charts/issues/34210)
+
+## <small>16.7.9 (2025-06-03)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34076) ([1063457](https://github.com/bitnami/charts/commit/10634578d525989118eba62cc72d2eb86b96029f)), closes [#34076](https://github.com/bitnami/charts/issues/34076)
+
+## <small>16.7.8 (2025-05-30)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#34009) ([41b1852](https://github.com/bitnami/charts/commit/41b1852d4b83df903fc4148e09a8406922a821d3)), closes [#34009](https://github.com/bitnami/charts/issues/34009)
+
+## <small>16.7.7 (2025-05-30)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33992) ([8d6133c](https://github.com/bitnami/charts/commit/8d6133cdb968ce73091026ec8b8031fd8cdd767e)), closes [#33992](https://github.com/bitnami/charts/issues/33992)
+
+## <small>16.7.6 (2025-05-30)</small>
+
+* [bitnami/postgresql] Update dependencies (#33986) ([400a5e5](https://github.com/bitnami/charts/commit/400a5e5dc0b0db3d222a588f49b6b8577da2dd75)), closes [#33986](https://github.com/bitnami/charts/issues/33986)
+
+## <small>16.7.5 (2025-05-27)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33916) ([96adefd](https://github.com/bitnami/charts/commit/96adefd64d7296b21fd2f491cc14bef9f9e31548)), closes [#33916](https://github.com/bitnami/charts/issues/33916)
+
+## <small>16.7.4 (2025-05-13)</small>
+
+* [bitnami/postgresql] Support for global postgresql fullnameOverride (#33616) ([7e006db](https://github.com/bitnami/charts/commit/7e006db0e1ed2d6dbc1bf1ffc3ebeac48726efa5)), closes [#33616](https://github.com/bitnami/charts/issues/33616)
+
+## <small>16.7.3 (2025-05-13)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33619) ([ab01617](https://github.com/bitnami/charts/commit/ab0161760fa3754e64945e5a94fd95866c8b929e)), closes [#33619](https://github.com/bitnami/charts/issues/33619)
+
+## <small>16.7.2 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33598) ([6fa611b](https://github.com/bitnami/charts/commit/6fa611bcc3611666ac322d421ed6c2a0eb10646c)), closes [#33598](https://github.com/bitnami/charts/issues/33598)
+
+## <small>16.7.1 (2025-05-08)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#33577) ([71ca86a](https://github.com/bitnami/charts/commit/71ca86a822cee8d5125cab0cc7b8adc43d3f115f)), closes [#33577](https://github.com/bitnami/charts/issues/33577)
 
 ## 16.7.0 (2025-05-08)
 

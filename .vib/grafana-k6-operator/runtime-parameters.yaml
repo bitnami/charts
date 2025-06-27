@@ -1,0 +1,226 @@
+extraDeploy:
+# BEGIN EXAMPLE
+# Example taken from https://github.com/grafana/k6-operator/blob/main/config/samples/k6_v1alpha1_configmap.yaml#L2
+- apiVersion: k6.io/v1alpha1
+  kind: TestRun
+  metadata:
+    name: testrun-sample
+  spec:
+    parallelism: 2
+    script:
+      configMap:
+        name: k6-test
+        file: test.js
+    # Set security restrictions to support all our testing platforms
+    # (note that this uses the CRD syntax, not the regular pod syntax)
+    initializer:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+    starter:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+    runner:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: k6-test
+  data:
+    test.js: |
+      import http from 'k6/http';
+      import { Rate } from 'k6/metrics';
+      import { check, sleep } from 'k6';
+
+      const failRate = new Rate('failed_requests');
+
+      export let options = {
+        stages: [
+          { target: 200, duration: '30s' },
+          { target: 0, duration: '30s' },
+        ],
+        thresholds: {
+          failed_requests: ['rate<=0'],
+          http_req_duration: ['p(95)<500'],
+        },
+      };
+
+      export default function () {
+        // Modified site to support airgapped
+        const result = http.get('http://nginx-vib-tests:8080');
+        check(result, {
+          'http response status code is 200': result.status === 200,
+        });
+        failRate.add(result.status !== 200);
+        sleep(1);
+      }
+# END EXAMPLE
+# EXTRAS
+# In order to support airgapped envs, we deploy a custom nginx instead of
+# the external site the original example did
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    namespace: '{{ include "common.names.namespace" . }}'
+    name: nginx-vib-tests
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: nginx
+    template:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: bitnami/nginx
+          ports:
+          - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: nginx-vib-tests
+    namespace: '{{ include "common.names.namespace" . }}'
+    labels:
+      app: nginx
+  spec:
+    selector:
+      app: nginx
+    ports:
+    - port: 8080
+      name: http
+      targetPort: 8080
+# As they are scratch containers, we need to deploy an extra container
+# for performing goss tests.
+# To do so, we deploy an os-shell container with extra kubectl binary
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    namespace: '{{ include "common.names.namespace" . }}'
+    name: vib-kubectl-test
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: kubectl
+    template:
+      metadata:
+        labels:
+          app: kubectl
+      spec:
+        serviceAccountName: '{{ include "grafana-k6-operator.serviceAccountName" . }}'
+        automountServiceAccountToken: true
+        initContainers:
+        - name: copy-kubectl
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              cp /opt/bitnami/kubectl/bin/kubectl /out/kubectl
+          image: bitnami/kubectl
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /out
+        containers:
+        - name: kubectl
+          command:
+            - sleep
+          args:
+            - infinity
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                    exit 0
+            # Providing extra time for the test runs to finish
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            timeoutSeconds: 1
+            failureThreshold: 15
+            successThreshold: 1
+          image: bitnami/os-shell:latest
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          volumeMounts:
+            - name: empty-dir
+              subpath: tmp-dir
+              mountPath: /tmp
+            - name: empty-dir
+              subPath: kubectl-bin
+              mountPath: /opt/bitnami/kubectl/bin
+        volumes:
+          - name: empty-dir
+            emptyDir: {}
+# We need to bind the metrics-reader clusterrole to the SA (this is intended to be done manually by operators)
+# so it is accepted by kube-rbac-proxy
+- kind: ClusterRoleBinding
+  apiVersion: '{{ include "common.capabilities.rbac.apiVersion" . }}'
+  metadata:
+    name: vib-metrics-reader
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: '{{ printf "%s-metrics-reader" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}'
+  subjects:
+    - kind: ServiceAccount
+      name: '{{ template "grafana-k6-operator.serviceAccountName" . }}'
+      namespace: '{{ include "common.names.namespace" . }}'
+# We can only verify the external endpoints, as the goss container will be the kubectl one, which is
+# external. Therefore we do not test SAs, containerSecurityContext and containerPorts
+metrics:
+  enabled: true
+  authProxy:
+    enabled: true
+  service:
+    ports:
+      metrics: 2311

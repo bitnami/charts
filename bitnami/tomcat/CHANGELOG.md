@@ -1,8 +1,41 @@
 # Changelog
 
-## 11.7.4 (2025-05-09)
+## 11.7.12 (2025-06-11)
 
-* [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#33586](https://github.com/bitnami/charts/pull/33586))
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#34342](https://github.com/bitnami/charts/pull/34342))
+
+## <small>11.7.11 (2025-06-10)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34301) ([8f194e2](https://github.com/bitnami/charts/commit/8f194e28dcf58d8f843ba9dc6b550b42eb29243c)), closes [#34301](https://github.com/bitnami/charts/issues/34301)
+
+## <small>11.7.10 (2025-06-10)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34286) ([8826462](https://github.com/bitnami/charts/commit/88264623f7417eee76706b35667d924c6823d9e7)), closes [#34286](https://github.com/bitnami/charts/issues/34286)
+
+## <small>11.7.9 (2025-05-28)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33939) ([bc54b6b](https://github.com/bitnami/charts/commit/bc54b6b6ff948bec3776f435e29a39830d5f7593)), closes [#33939](https://github.com/bitnami/charts/issues/33939)
+
+## <small>11.7.8 (2025-05-27)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33906) ([4912516](https://github.com/bitnami/charts/commit/4912516d9651b90db6bd1746e8123d7e18838e14)), closes [#33906](https://github.com/bitnami/charts/issues/33906)
+
+## <small>11.7.7 (2025-05-27)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33904) ([4d211ba](https://github.com/bitnami/charts/commit/4d211ba9148561476a93399585caa48653daf03f)), closes [#33904](https://github.com/bitnami/charts/issues/33904)
+
+## <small>11.7.6 (2025-05-16)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33763) ([6c7406e](https://github.com/bitnami/charts/commit/6c7406e7f1bf85b2bc077b1988d107d1d7b93af9)), closes [#33763](https://github.com/bitnami/charts/issues/33763)
+
+## <small>11.7.5 (2025-05-12)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33620) ([c7e2322](https://github.com/bitnami/charts/commit/c7e232230711b6bf29ee6c6b56adcb4239a1e31a)), closes [#33620](https://github.com/bitnami/charts/issues/33620)
+
+## <small>11.7.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33586) ([ddad138](https://github.com/bitnami/charts/commit/ddad1380b5f535847177d3c3807190fed6e3d6f4)), closes [#33586](https://github.com/bitnami/charts/issues/33586)
 
 ## <small>11.7.3 (2025-05-06)</small>
 

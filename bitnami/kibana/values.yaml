@@ -89,7 +89,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 9.0.1-debian-12-r0
+  tag: 9.0.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -162,6 +162,9 @@ savedObjects:
   ## @param savedObjects.configmap Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)
   ##
   configmap: ""
+  ## @param savedObjects.overwrite Overwrite saved objects
+  overwrite: false
+  ##
 ## @param extraConfiguration Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template
 ##
 extraConfiguration: {}
@@ -213,7 +216,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r47
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

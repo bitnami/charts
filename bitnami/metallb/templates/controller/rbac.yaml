@@ -180,6 +180,20 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - ipaddresspools
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - metallb.io
+    resources:
+      - ipaddresspools/status
+    verbs:
+      - update
 ---
 ## Role bindings
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}

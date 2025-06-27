@@ -1,8 +1,87 @@
 # Changelog
 
-## 16.5.6 (2025-05-06)
+## 16.5.25 (2025-06-26)
 
-* [bitnami/mongodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33405](https://github.com/bitnami/charts/pull/33405))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34661](https://github.com/bitnami/charts/pull/34661))
+
+## <small>16.5.24 (2025-06-24)</small>
+
+* [bitnami/mongodb] Fix Servicename in `setup.sh` Script (#34591) ([d8e919b](https://github.com/bitnami/charts/commit/d8e919ba54a81226ec69c40ea57df5527ca0745f)), closes [#34591](https://github.com/bitnami/charts/issues/34591)
+
+## <small>16.5.23 (2025-06-18)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34546) ([60bf8b7](https://github.com/bitnami/charts/commit/60bf8b7330064503836e443c82ccb1f5b034142a)), closes [#34546](https://github.com/bitnami/charts/issues/34546)
+
+## <small>16.5.22 (2025-06-16)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34461) ([9a2d122](https://github.com/bitnami/charts/commit/9a2d122284f5e167ec81bbbc927ebb514dc83a89)), closes [#34461](https://github.com/bitnami/charts/issues/34461)
+
+## <small>16.5.21 (2025-06-10)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34317) ([d0c306c](https://github.com/bitnami/charts/commit/d0c306cfb0319b45221911d2d8b505db1f5aee45)), closes [#34317](https://github.com/bitnami/charts/issues/34317)
+
+## <small>16.5.20 (2025-06-06)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34198) ([0083a4b](https://github.com/bitnami/charts/commit/0083a4b075591dd38b48467a1be763a19fa9de8c)), closes [#34198](https://github.com/bitnami/charts/issues/34198)
+
+## <small>16.5.19 (2025-06-06)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34188) ([4993293](https://github.com/bitnami/charts/commit/49932938bd96b524b88c97e7cbd38f38ffdcc486)), closes [#34188](https://github.com/bitnami/charts/issues/34188)
+
+## <small>16.5.18 (2025-06-05)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34116) ([4cbfab4](https://github.com/bitnami/charts/commit/4cbfab471489b66a2a4d41255af21a8576f66d16)), closes [#34116](https://github.com/bitnami/charts/issues/34116)
+
+## <small>16.5.17 (2025-06-05)</small>
+
+* [bitnami/mongodb] generate-tls-certs init container should respect tls securityContext (#33803) ([e6d06e9](https://github.com/bitnami/charts/commit/e6d06e9bddcbdcf71dc3d35de44abed2276250a1)), closes [#33803](https://github.com/bitnami/charts/issues/33803)
+
+## <small>16.5.16 (2025-06-03)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34085) ([f8d2e2e](https://github.com/bitnami/charts/commit/f8d2e2ea8ca1f5d7f88f6e23d424d9b6616268b3)), closes [#34085](https://github.com/bitnami/charts/issues/34085)
+
+## <small>16.5.15 (2025-06-03)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34056) ([d6c42b5](https://github.com/bitnami/charts/commit/d6c42b5083ff2b0605519fa9606d524047b84d53)), closes [#34056](https://github.com/bitnami/charts/issues/34056)
+
+## <small>16.5.14 (2025-06-02)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34034) ([eccb91f](https://github.com/bitnami/charts/commit/eccb91f359400d003dbbc6ac2dac7dfe6fae4196)), closes [#34034](https://github.com/bitnami/charts/issues/34034)
+
+## <small>16.5.13 (2025-05-30)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34007) ([61b2d82](https://github.com/bitnami/charts/commit/61b2d8292ed87dd51e51ac24bfd6c7ea97d353b6)), closes [#34007](https://github.com/bitnami/charts/issues/34007)
+
+## <small>16.5.12 (2025-05-29)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33969) ([7d6fc66](https://github.com/bitnami/charts/commit/7d6fc669cd8ff35876db19ba007cb82d40918f7d)), closes [#33969](https://github.com/bitnami/charts/issues/33969)
+
+## <small>16.5.11 (2025-05-21)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33819) ([64029c0](https://github.com/bitnami/charts/commit/64029c0851d0edc2e2672dd14faa33346ff6bfdc)), closes [#33819](https://github.com/bitnami/charts/issues/33819)
+
+## <small>16.5.10 (2025-05-21)</small>
+
+* [bitnami/mongodb] Add ability to configure SA for backup (#33112) ([8768d39](https://github.com/bitnami/charts/commit/8768d39c26a27c450d85989f8ee6c4c6b51b7626)), closes [#33112](https://github.com/bitnami/charts/issues/33112)
+
+## <small>16.5.9 (2025-05-20)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33788) ([4fdeeab](https://github.com/bitnami/charts/commit/4fdeeabffdc2d05a3a5343b88ba6ae078cb8b601)), closes [#33788](https://github.com/bitnami/charts/issues/33788)
+
+## <small>16.5.8 (2025-05-16)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33731) ([c2e3866](https://github.com/bitnami/charts/commit/c2e38660de6d95d6f752d0dda14ed17fde173448)), closes [#33731](https://github.com/bitnami/charts/issues/33731)
+
+## <small>16.5.7 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#33636) ([1bb5123](https://github.com/bitnami/charts/commit/1bb512381fad37e2b27f686f50bc5aa57243d38d)), closes [#33636](https://github.com/bitnami/charts/issues/33636)
+
+## <small>16.5.6 (2025-05-06)</small>
+
+* [bitnami/mongodb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33405 ([59d21e7](https://github.com/bitnami/charts/commit/59d21e7d2e6fe9785f6960ceb690c72c64e75190)), closes [#33405](https://github.com/bitnami/charts/issues/33405)
 
 ## <small>16.5.5 (2025-05-01)</small>
 

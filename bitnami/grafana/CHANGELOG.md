@@ -1,8 +1,45 @@
 # Changelog
 
-## 11.6.7 (2025-05-07)
+## 12.0.8 (2025-06-18)
 
-* [bitnami/grafana] Release 11.6.7 ([#33480](https://github.com/bitnami/charts/pull/33480))
+* [bitnami/grafana] Templated Rendering of Grafana Datasource SecretName ([#34541](https://github.com/bitnami/charts/pull/34541))
+
+## <small>12.0.7 (2025-06-18)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#34535) ([303818e](https://github.com/bitnami/charts/commit/303818e6e5ccb33cbbb3bac0d882f3f809846732)), closes [#34535](https://github.com/bitnami/charts/issues/34535)
+
+## <small>12.0.6 (2025-06-13)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#34446) ([48af2f0](https://github.com/bitnami/charts/commit/48af2f08caf164c3866bb95264c34925a8c0d70b)), closes [#34446](https://github.com/bitnami/charts/issues/34446)
+
+## <small>12.0.5 (2025-06-06)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#34173) ([e9e4184](https://github.com/bitnami/charts/commit/e9e418453ad6cc2e14b2a242da9e2d2a1267868b)), closes [#34173](https://github.com/bitnami/charts/issues/34173)
+
+## <small>12.0.4 (2025-05-22)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33848) ([8284435](https://github.com/bitnami/charts/commit/82844359f1211ba43c93bdcc2bae39125d8e169b)), closes [#33848](https://github.com/bitnami/charts/issues/33848)
+
+## <small>12.0.3 (2025-05-16)</small>
+
+* [bitnami/grafana] Deterministic admin password secret + saving password for future uses if .Values.a ([5a3fe1c](https://github.com/bitnami/charts/commit/5a3fe1c98a8991f78373b3884f9c205f1585122f)), closes [#33672](https://github.com/bitnami/charts/issues/33672)
+
+## <small>12.0.2 (2025-05-15)</small>
+
+* [bitnami/grafana] fix metrics namespace include (#33714) ([5a23570](https://github.com/bitnami/charts/commit/5a23570b164643efc1c55ae8aed6bc586a9738be)), closes [#33714](https://github.com/bitnami/charts/issues/33714)
+
+## <small>12.0.1 (2025-05-15)</small>
+
+* [bitnami/grafana] Grafana uniq dashboard volumes (#33689) ([e7e3012](https://github.com/bitnami/charts/commit/e7e3012f25807031502221ec6d83d00d1100d597)), closes [#33689](https://github.com/bitnami/charts/issues/33689)
+
+## 12.0.0 (2025-05-12)
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#33604) ([4229d77](https://github.com/bitnami/charts/commit/4229d7766abffbc8cf3f299016d1dc4d0be8796c)), closes [#33604](https://github.com/bitnami/charts/issues/33604)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.6.7 (2025-05-07)</small>
+
+* [bitnami/grafana] Release 11.6.7 (#33480) ([e6f2524](https://github.com/bitnami/charts/commit/e6f25246b6bc970e8b7496fd5f09739f15d18b3f)), closes [#33480](https://github.com/bitnami/charts/issues/33480)
 
 ## <small>11.6.6 (2025-05-06)</small>
 

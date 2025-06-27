@@ -1,8 +1,21 @@
 # Changelog
 
-## 7.1.6 (2025-05-06)
+## 7.1.9 (2025-06-14)
 
-* [bitnami/fluentd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33362](https://github.com/bitnami/charts/pull/33362))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#34503](https://github.com/bitnami/charts/pull/34503))
+
+## <small>7.1.8 (2025-05-15)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33717) ([36f0609](https://github.com/bitnami/charts/commit/36f0609730409702cc1cdf65e64e216fc5e7c10d)), closes [#33717](https://github.com/bitnami/charts/issues/33717)
+
+## <small>7.1.7 (2025-05-12)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33611) ([008f88d](https://github.com/bitnami/charts/commit/008f88dcdb1abc09ae64f9510ba46605d6a6cebf)), closes [#33611](https://github.com/bitnami/charts/issues/33611)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>7.1.6 (2025-05-07)</small>
+
+* [bitnami/fluentd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33362 ([1d61b4a](https://github.com/bitnami/charts/commit/1d61b4a8eddfaf58c6530b4a57f8505c245f6935)), closes [#33362](https://github.com/bitnami/charts/issues/33362)
 
 ## <small>7.1.5 (2025-04-12)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 22.0.3 (2025-05-07)
+## 22.0.9 (2025-06-24)
 
-* [bitnami/elasticsearch] Release 22.0.3 ([#33547](https://github.com/bitnami/charts/pull/33547))
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#34603](https://github.com/bitnami/charts/pull/34603))
+
+## <small>22.0.8 (2025-06-13)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#34421) ([bc71f57](https://github.com/bitnami/charts/commit/bc71f57ae7afe193a849082ddaa04ce430b9d96d)), closes [#34421](https://github.com/bitnami/charts/issues/34421)
+
+## <small>22.0.7 (2025-06-11)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#34340) ([e6e35bc](https://github.com/bitnami/charts/commit/e6e35bcb3a8c3a8ffcddb8d4cd082572f8307351)), closes [#34340](https://github.com/bitnami/charts/issues/34340)
+
+## <small>22.0.6 (2025-06-05)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#34150) ([0c52603](https://github.com/bitnami/charts/commit/0c52603016df402c866a245e7890c2a6f357a34b)), closes [#34150](https://github.com/bitnami/charts/issues/34150)
+
+## <small>22.0.5 (2025-06-03)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#34080) ([1438db8](https://github.com/bitnami/charts/commit/1438db8e11f6880e7bcea402c901d72a3841ce89)), closes [#34080](https://github.com/bitnami/charts/issues/34080)
+
+## <small>22.0.4 (2025-05-16)</small>
+
+* [bitnami/elasticsearch] add shareProcessNamespace support (#33232) ([023476f](https://github.com/bitnami/charts/commit/023476f5c0b12cb7527548e8a5a3b1ca985a55e4)), closes [#33232](https://github.com/bitnami/charts/issues/33232)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>22.0.3 (2025-05-07)</small>
+
+* [bitnami/elasticsearch] Release 22.0.3 (#33547) ([338e18a](https://github.com/bitnami/charts/commit/338e18a44389a547e16154e0c74abee522a68e77)), closes [#33547](https://github.com/bitnami/charts/issues/33547)
 
 ## <small>22.0.2 (2025-05-06)</small>
 

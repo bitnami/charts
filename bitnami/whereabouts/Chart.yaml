@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: whereabouts
-      image: docker.io/bitnami/whereabouts:0.9.0-debian-12-r6
+      image: docker.io/bitnami/whereabouts:0.9.0-debian-12-r10
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -31,4 +31,4 @@ maintainers:
 name: whereabouts
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 1.2.11
+version: 1.2.13

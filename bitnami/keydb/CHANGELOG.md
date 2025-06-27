@@ -1,8 +1,37 @@
 # Changelog
 
-## 0.5.6 (2025-05-06)
+## 0.5.13 (2025-06-13)
 
-* [bitnami/keydb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33381](https://github.com/bitnami/charts/pull/33381))
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#34485](https://github.com/bitnami/charts/pull/34485))
+
+## <small>0.5.12 (2025-06-08)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#34250) ([0c5977d](https://github.com/bitnami/charts/commit/0c5977d58de0c9f7d8ee83037aeb32c43271e03d)), closes [#34250](https://github.com/bitnami/charts/issues/34250)
+
+## <small>0.5.11 (2025-06-06)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#34213) ([bf69f89](https://github.com/bitnami/charts/commit/bf69f8926c844dbfdd377131e580c6d4910f8141)), closes [#34213](https://github.com/bitnami/charts/issues/34213)
+
+## <small>0.5.10 (2025-05-22)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33823) ([53b341e](https://github.com/bitnami/charts/commit/53b341e069b24a179b3b5146f4ab2f68d0c0d820)), closes [#33823](https://github.com/bitnami/charts/issues/33823)
+
+## <small>0.5.9 (2025-05-19)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33746) ([cbd1f29](https://github.com/bitnami/charts/commit/cbd1f2976e1869f1db3e7f4769a7bd6899bf4788)), closes [#33746](https://github.com/bitnami/charts/issues/33746)
+
+## <small>0.5.8 (2025-05-15)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33706) ([38c7ba6](https://github.com/bitnami/charts/commit/38c7ba65672f4e79c2f9d71a82df479f2d5c6e05)), closes [#33706](https://github.com/bitnami/charts/issues/33706)
+
+## <small>0.5.7 (2025-05-13)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#33634) ([826148b](https://github.com/bitnami/charts/commit/826148b6ef282ddf642e49ff880bc121a91b6c72)), closes [#33634](https://github.com/bitnami/charts/issues/33634)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>0.5.6 (2025-05-06)</small>
+
+* [bitnami/keydb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33381) ([9fce7db](https://github.com/bitnami/charts/commit/9fce7db045bb0eb41566f8b21176b0c9cebe9818)), closes [#33381](https://github.com/bitnami/charts/issues/33381)
 
 ## <small>0.5.5 (2025-04-20)</small>
 

@@ -1,8 +1,53 @@
 # Changelog
 
-## 3.0.7 (2025-05-08)
+## 5.0.4 (2025-06-26)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#33557](https://github.com/bitnami/charts/pull/33557))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34675](https://github.com/bitnami/charts/pull/34675))
+
+## <small>5.0.3 (2025-06-25)</small>
+
+* [bitnami/mlflow] Create flask-server-secret-key when upgrading (#34629) ([97dc66c](https://github.com/bitnami/charts/commit/97dc66c3236fce07dfa6476ed688438c49f4d26c)), closes [#34629](https://github.com/bitnami/charts/issues/34629)
+
+## <small>5.0.2 (2025-06-25)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34619) ([4003b7b](https://github.com/bitnami/charts/commit/4003b7b7f3780a03d0945b51dd91a1754c2096c0)), closes [#34619](https://github.com/bitnami/charts/issues/34619)
+
+## <small>5.0.1 (2025-06-16)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34518) ([380180e](https://github.com/bitnami/charts/commit/380180eea6c06e50022ff474a64cf100e1ce2618)), closes [#34518](https://github.com/bitnami/charts/issues/34518)
+
+## 5.0.0 (2025-06-16)
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34452) ([524fdd9](https://github.com/bitnami/charts/commit/524fdd9c6a3a9208d6d727bbb77cfc46084d96d0)), closes [#34452](https://github.com/bitnami/charts/issues/34452)
+
+## <small>4.0.5 (2025-06-13)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34434) ([791bb24](https://github.com/bitnami/charts/commit/791bb24ca9e59406a3f5b9046d23ecb20446f438)), closes [#34434](https://github.com/bitnami/charts/issues/34434)
+
+## <small>4.0.4 (2025-06-09)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34283) ([e6a33ef](https://github.com/bitnami/charts/commit/e6a33ef93fd3edac6b976b9815a3681adefba9f7)), closes [#34283](https://github.com/bitnami/charts/issues/34283)
+
+## <small>4.0.3 (2025-06-09)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34281) ([a0911b3](https://github.com/bitnami/charts/commit/a0911b33c408592838da992d5b4668fb81c8c1de)), closes [#34281](https://github.com/bitnami/charts/issues/34281)
+
+## <small>4.0.2 (2025-06-09)</small>
+
+* [bitnami/mlflow] Disable MinIO Console (#34268) ([0c2c1ad](https://github.com/bitnami/charts/commit/0c2c1ad68eda6214fe89b8975d6b8c7285fe7c83)), closes [#34268](https://github.com/bitnami/charts/issues/34268)
+
+## <small>4.0.1 (2025-06-06)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34161) ([6cf7e89](https://github.com/bitnami/charts/commit/6cf7e89b33452be31a7774dca9ceaaed238e92a7)), closes [#34161](https://github.com/bitnami/charts/issues/34161)
+
+## 4.0.0 (2025-06-04)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mlflow] feat: major version due to Minio major bump (#34090) ([095fda8](https://github.com/bitnami/charts/commit/095fda8c1d4adee4f6fdeccef26975dd6aefb332)), closes [#34090](https://github.com/bitnami/charts/issues/34090)
+
+## <small>3.0.7 (2025-05-08)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#33557) ([4811de9](https://github.com/bitnami/charts/commit/4811de95c73f55338b0211b7ba9707906ff5faca)), closes [#33557](https://github.com/bitnami/charts/issues/33557)
 
 ## <small>3.0.6 (2025-05-06)</small>
 

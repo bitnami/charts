@@ -1,8 +1,55 @@
 # Changelog
 
-## 16.0.10 (2025-05-07)
+## 17.0.9 (2025-06-25)
 
-* [bitnami/minio] Release 16.0.10 ([#33488](https://github.com/bitnami/charts/pull/33488))
+* [bitnami/minio] Adapt Console Deployment's PodSecurityContext for OpenShift ([#34580](https://github.com/bitnami/charts/pull/34580))
+
+## <small>17.0.8 (2025-06-24)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34595) ([5508ae1](https://github.com/bitnami/charts/commit/5508ae1c9e3f261e729f534325abe98d558eda79)), closes [#34595](https://github.com/bitnami/charts/issues/34595)
+
+## <small>17.0.7 (2025-06-24)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34594) ([0fb1e88](https://github.com/bitnami/charts/commit/0fb1e885345eb342ef385d4d332209f6b761fa05)), closes [#34594](https://github.com/bitnami/charts/issues/34594)
+
+## <small>17.0.6 (2025-06-19)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34556) ([1f0d9e8](https://github.com/bitnami/charts/commit/1f0d9e8d99735ea2479224b14cbf83a71be5e660)), closes [#34556](https://github.com/bitnami/charts/issues/34556)
+
+## <small>17.0.5 (2025-06-16)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34339) ([040a7bc](https://github.com/bitnami/charts/commit/040a7bcdbe9df037a3fab06b39095cf666d585d7)), closes [#34339](https://github.com/bitnami/charts/issues/34339)
+
+## <small>17.0.4 (2025-06-11)</small>
+
+*  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is adde ([84b733b](https://github.com/bitnami/charts/commit/84b733b9426b91973701f95772e1f01c780d5f5e)), closes [#34311](https://github.com/bitnami/charts/issues/34311)
+
+## <small>17.0.3 (2025-06-06)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34195) ([303327d](https://github.com/bitnami/charts/commit/303327d49a16222d82bf2fca322794990fc469f9)), closes [#34195](https://github.com/bitnami/charts/issues/34195)
+
+## <small>17.0.2 (2025-06-04)</small>
+
+* [bitnami/minio] bugfix: wrong svc port target on ingress (#34097) ([a4cefcd](https://github.com/bitnami/charts/commit/a4cefcd1e1bd46a5b18086facc3e559ad3f3ad78)), closes [#34097](https://github.com/bitnami/charts/issues/34097)
+
+## <small>17.0.1 (2025-06-03)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34070) ([383030c](https://github.com/bitnami/charts/commit/383030cf3e762b8e7988d7d4664d886b48bddac7)), closes [#34070](https://github.com/bitnami/charts/issues/34070)
+
+## 17.0.0 (2025-06-03)
+
+* [bitnami/minio] feat: run Console UI as a separate component (#34037) ([9d122cd](https://github.com/bitnami/charts/commit/9d122cdc904ad90305caa0223d208d783bcb470b)), closes [#34037](https://github.com/bitnami/charts/issues/34037)
+
+## <small>16.0.11 (2025-06-02)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/minio] Update dependencies (#34029) ([f70e5be](https://github.com/bitnami/charts/commit/f70e5be7d646d522d336f1c70ce07776934ed26f)), closes [#34029](https://github.com/bitnami/charts/issues/34029)
+
+## <small>16.0.10 (2025-05-07)</small>
+
+* [bitnami/minio] Release 16.0.10 (#33488) ([055477f](https://github.com/bitnami/charts/commit/055477f89bc7da14e5674c15f1f280f9ae0bdf0c)), closes [#33488](https://github.com/bitnami/charts/issues/33488)
 
 ## <small>16.0.9 (2025-05-07)</small>
 

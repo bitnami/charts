@@ -1,8 +1,37 @@
 # Changelog
 
-## 25.1.3 (2025-05-07)
+## 26.0.0 (2025-06-23)
 
-* [bitnami/schema-registry] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33431](https://github.com/bitnami/charts/pull/33431))
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#34586](https://github.com/bitnami/charts/pull/34586))
+
+## <small>25.1.9 (2025-06-18)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#34551) ([d9e9b0c](https://github.com/bitnami/charts/commit/d9e9b0c0152e2e09344e0502fda10f297500d332)), closes [#34551](https://github.com/bitnami/charts/issues/34551)
+
+## <small>25.1.8 (2025-06-11)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#34349) ([c4bfe6b](https://github.com/bitnami/charts/commit/c4bfe6b54218417b5a6694b05302ffade5120df1)), closes [#34349](https://github.com/bitnami/charts/issues/34349)
+
+## <small>25.1.7 (2025-06-07)</small>
+
+* [bitnami/schema-registry] Remove duplicate @param entries from chart (#34245) ([9e91a64](https://github.com/bitnami/charts/commit/9e91a64e7c710785319e3617ce76964bfce1ecd3)), closes [#34245](https://github.com/bitnami/charts/issues/34245)
+
+## <small>25.1.6 (2025-05-12)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#33615) ([67a2ddc](https://github.com/bitnami/charts/commit/67a2ddcc1b699ed3cbfb98122eec26655294c43a)), closes [#33615](https://github.com/bitnami/charts/issues/33615)
+
+## <small>25.1.5 (2025-05-12)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#33614) ([c02a6c2](https://github.com/bitnami/charts/commit/c02a6c2cfcb8d97599b985367386ef0cc75af794)), closes [#33614](https://github.com/bitnami/charts/issues/33614)
+
+## <small>25.1.4 (2025-05-12)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#33603) ([475edf8](https://github.com/bitnami/charts/commit/475edf87dcc2e0bdfb9e0c68984fe9c337e11513)), closes [#33603](https://github.com/bitnami/charts/issues/33603)
+
+## <small>25.1.3 (2025-05-07)</small>
+
+* [bitnami/schema-registry] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([4e7a54e](https://github.com/bitnami/charts/commit/4e7a54ee3bf4d18b6801193fc99869087a02fe63)), closes [#33431](https://github.com/bitnami/charts/issues/33431) [#33391](https://github.com/bitnami/charts/issues/33391) [#33397](https://github.com/bitnami/charts/issues/33397) [#33409](https://github.com/bitnami/charts/issues/33409) [#33406](https://github.com/bitnami/charts/issues/33406) [#33414](https://github.com/bitnami/charts/issues/33414) [#33430](https://github.com/bitnami/charts/issues/33430) [#33425](https://github.com/bitnami/charts/issues/33425) [#33450](https://github.com/bitnami/charts/issues/33450) [#33448](https://github.com/bitnami/charts/issues/33448) [#33384](https://github.com/bitnami/charts/issues/33384)
 
 ## <small>25.1.2 (2025-04-11)</small>
 

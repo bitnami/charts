@@ -1,8 +1,58 @@
 # Changelog
 
-## 0.1.10 (2025-05-07)
+## 0.2.2 (2025-06-24)
 
-* [bitnami/minio-operator] Release 0.1.10 ([#33535](https://github.com/bitnami/charts/pull/33535))
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34593](https://github.com/bitnami/charts/pull/34593))
+
+## <small>0.2.1 (2025-06-19)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34557) ([167aafa](https://github.com/bitnami/charts/commit/167aafaf0ecc822599cd24c45cfc1ffed7a4b739)), closes [#34557](https://github.com/bitnami/charts/issues/34557)
+
+## 0.2.0 (2025-06-18)
+
+* [bitnami/minio-operator] Deprecate KES (#34513) ([0eb49e9](https://github.com/bitnami/charts/commit/0eb49e99ee29b0c4e7e6527bbaaf70ff71c1bafb)), closes [#34513](https://github.com/bitnami/charts/issues/34513)
+
+## <small>0.1.19 (2025-06-16)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34500) ([de2b3eb](https://github.com/bitnami/charts/commit/de2b3eb69d4cf4919ac8e791bdb94e9880fa0fcb)), closes [#34500](https://github.com/bitnami/charts/issues/34500)
+
+## <small>0.1.18 (2025-06-13)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34479) ([3eb6ea2](https://github.com/bitnami/charts/commit/3eb6ea2106c1cfb26e52f303d68b4c545029f034)), closes [#34479](https://github.com/bitnami/charts/issues/34479)
+
+## <small>0.1.17 (2025-06-13)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34469) ([7a801ea](https://github.com/bitnami/charts/commit/7a801ea9986debabf127b80dca846021adff4e70)), closes [#34469](https://github.com/bitnami/charts/issues/34469)
+* [bitnami/minio-operator] Fix image descriptions (#34232) ([31bba81](https://github.com/bitnami/charts/commit/31bba81aaceb0b019f9c9535cea987739b8645cd)), closes [#34232](https://github.com/bitnami/charts/issues/34232)
+
+## <small>0.1.16 (2025-06-06)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34196) ([64d9cca](https://github.com/bitnami/charts/commit/64d9ccaa03520d70834e84327e418e8f1b5a0bdb)), closes [#34196](https://github.com/bitnami/charts/issues/34196)
+
+## <small>0.1.15 (2025-06-03)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34071) ([8ce50e6](https://github.com/bitnami/charts/commit/8ce50e652060317e963f629783489f5f73216bf5)), closes [#34071](https://github.com/bitnami/charts/issues/34071)
+
+## <small>0.1.14 (2025-05-30)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34012) ([947ebb4](https://github.com/bitnami/charts/commit/947ebb4525536a4deb85fad769fdb40e04798295)), closes [#34012](https://github.com/bitnami/charts/issues/34012)
+
+## <small>0.1.13 (2025-05-29)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#33971) ([7919b14](https://github.com/bitnami/charts/commit/7919b146276db8d2723a84f2cc466fedf2361631)), closes [#33971](https://github.com/bitnami/charts/issues/33971)
+
+## <small>0.1.12 (2025-05-24)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#33872) ([f8eebd6](https://github.com/bitnami/charts/commit/f8eebd63a77f5441fec32c981035b33f5e1068c5)), closes [#33872](https://github.com/bitnami/charts/issues/33872)
+
+## <small>0.1.11 (2025-05-24)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#33871) ([7d8f076](https://github.com/bitnami/charts/commit/7d8f076ce918ea800f9e6430aade1a804deb9c01)), closes [#33871](https://github.com/bitnami/charts/issues/33871)
+
+## <small>0.1.10 (2025-05-07)</small>
+
+* [bitnami/minio-operator] Release 0.1.10 (#33535) ([d8f1f93](https://github.com/bitnami/charts/commit/d8f1f93b9876c1537d2758c67121364f450dd2f7)), closes [#33535](https://github.com/bitnami/charts/issues/33535)
 
 ## <small>0.1.9 (2025-05-07)</small>
 

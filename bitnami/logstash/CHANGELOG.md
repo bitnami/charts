@@ -1,8 +1,21 @@
 # Changelog
 
-## 7.0.2 (2025-05-06)
+## 7.0.5 (2025-06-24)
 
-* [bitnami/logstash] Release 7.0.2 ([#33465](https://github.com/bitnami/charts/pull/33465))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#34602](https://github.com/bitnami/charts/pull/34602))
+
+## <small>7.0.4 (2025-06-13)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34465) ([02e7542](https://github.com/bitnami/charts/commit/02e7542c52fe66efffb5253ca6ad21b819c2e70e)), closes [#34465](https://github.com/bitnami/charts/issues/34465)
+
+## <small>7.0.3 (2025-06-03)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34081) ([164167b](https://github.com/bitnami/charts/commit/164167b0122f854bfad93167a771e8a3d3f2468b)), closes [#34081](https://github.com/bitnami/charts/issues/34081)
+
+## <small>7.0.2 (2025-05-06)</small>
+
+* [bitnami/logstash] Release 7.0.2 (#33465) ([dd6eb3c](https://github.com/bitnami/charts/commit/dd6eb3cb6d0381c03a9febfca500c905cd911f86)), closes [#33465](https://github.com/bitnami/charts/issues/33465)
 
 ## <small>7.0.1 (2025-05-06)</small>
 

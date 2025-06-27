@@ -1,8 +1,33 @@
 # Changelog
 
-## 24.6.6 (2025-05-08)
+## 24.7.4 (2025-06-11)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#33565](https://github.com/bitnami/charts/pull/33565))
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#34343](https://github.com/bitnami/charts/pull/34343))
+
+## <small>24.7.3 (2025-05-28)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33943) ([007a5df](https://github.com/bitnami/charts/commit/007a5df8e73f1e062940bedf3763d91abdc498e4)), closes [#33943](https://github.com/bitnami/charts/issues/33943)
+
+## <small>24.7.2 (2025-05-28)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33930) ([41ef43f](https://github.com/bitnami/charts/commit/41ef43f4ef7d091f75739eba41916b6e716e8e3f)), closes [#33930](https://github.com/bitnami/charts/issues/33930)
+
+## <small>24.7.1 (2025-05-22)</small>
+
+* [bitnami/keycloak] fix: preserve timestamps in init script (#33812) ([f3ec521](https://github.com/bitnami/charts/commit/f3ec521adf17b1e836760f963c99f8e129bbd276)), closes [#33812](https://github.com/bitnami/charts/issues/33812)
+
+## 24.7.0 (2025-05-19)
+
+* [bitnami/keycloak] Improvements to Keycloak cache handling (#32885) ([b2500eb](https://github.com/bitnami/charts/commit/b2500ebf9a4b983f8975d0d426a9c1473453fe1f)), closes [#32885](https://github.com/bitnami/charts/issues/32885)
+
+## <small>24.6.7 (2025-05-13)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33671) ([15a8f8a](https://github.com/bitnami/charts/commit/15a8f8a55a365316236d089a3f802f7364a4d060)), closes [#33671](https://github.com/bitnami/charts/issues/33671)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>24.6.6 (2025-05-08)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#33565) ([e750bc1](https://github.com/bitnami/charts/commit/e750bc1d7f2228c15181e003b6589eff8133d155)), closes [#33565](https://github.com/bitnami/charts/issues/33565)
 
 ## <small>24.6.5 (2025-05-06)</small>
 

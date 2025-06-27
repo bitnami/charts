@@ -1,8 +1,21 @@
 # Changelog
 
-## 13.6.6 (2025-05-06)
+## 13.6.9 (2025-06-25)
 
-* [bitnami/jenkins] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33377](https://github.com/bitnami/charts/pull/33377))
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#34642](https://github.com/bitnami/charts/pull/34642))
+
+## <small>13.6.8 (2025-05-28)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#33940) ([fe04530](https://github.com/bitnami/charts/commit/fe04530d9e69de6098971c96eb8105ab0a5181a9)), closes [#33940](https://github.com/bitnami/charts/issues/33940)
+
+## <small>13.6.7 (2025-05-13)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#33628) ([a4a6181](https://github.com/bitnami/charts/commit/a4a61813c3bbda80d3c469db5114b02695de23e6)), closes [#33628](https://github.com/bitnami/charts/issues/33628)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>13.6.6 (2025-05-06)</small>
+
+* [bitnami/jenkins] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33377 ([66a0b1d](https://github.com/bitnami/charts/commit/66a0b1d098d97725c81c175c9e340f94ca213b57)), closes [#33377](https://github.com/bitnami/charts/issues/33377)
 
 ## <small>13.6.5 (2025-04-30)</small>
 

@@ -1,8 +1,41 @@
 # Changelog
 
-## 1.0.2 (2025-05-06)
+## 3.0.4 (2025-06-13)
 
-* [bitnami/dremio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33353](https://github.com/bitnami/charts/pull/33353))
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34303) ([f5e9ccb](https://github.com/bitnami/charts/commit/f5e9ccb38d712460211fed98e05de6651c881904)), closes [#34303](https://github.com/bitnami/charts/issues/34303)
+
+## <small>3.0.2 (2025-06-09)</small>
+
+* [bitnami/dremio] Disable MinIO Console (#34265) ([7fecdb7](https://github.com/bitnami/charts/commit/7fecdb77d17db57ee0498ccb419639cb3a4e6f1f)), closes [#34265](https://github.com/bitnami/charts/issues/34265)
+
+## <small>3.0.1 (2025-06-06)</small>
+
+* [bitnami/dremio] Fix _init_containers.tpl incorrect variable (#33752) ([6a4cb8c](https://github.com/bitnami/charts/commit/6a4cb8cca4177c8da6a672e2dcc0a8c628c88843)), closes [#33752](https://github.com/bitnami/charts/issues/33752)
+
+## 3.0.0 (2025-06-04)
+
+* [bitnami/dremio] feat: major version due to Minio major bump (#34086) ([f510f04](https://github.com/bitnami/charts/commit/f510f043d07c11985c04e395e28686930646c32b)), closes [#34086](https://github.com/bitnami/charts/issues/34086)
+
+## <small>2.0.3 (2025-05-23)</small>
+
+* [bitnami/dremio] fix: ingress to wrong port (#33804) ([4f9da2d](https://github.com/bitnami/charts/commit/4f9da2d78c799c7759a85d6af61f62b820237b6e)), closes [#33804](https://github.com/bitnami/charts/issues/33804)
+
+## <small>2.0.1 (2025-05-16)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#33761) ([2a6b0ba](https://github.com/bitnami/charts/commit/2a6b0ba70ae3702d635ae8dae59914e432210c96)), closes [#33761](https://github.com/bitnami/charts/issues/33761)
+
+## 2.0.0 (2025-05-16)
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#33756) ([d210adf](https://github.com/bitnami/charts/commit/d210adf595a8b6deb798cfdb0d8b7934a59fe6c7)), closes [#33756](https://github.com/bitnami/charts/issues/33756)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>1.0.2 (2025-05-06)</small>
+
+* [bitnami/dremio] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33353) ([8512cf8](https://github.com/bitnami/charts/commit/8512cf815308c38e2cd98a6534569afa45edcb67)), closes [#33353](https://github.com/bitnami/charts/issues/33353)
 
 ## <small>1.0.1 (2025-04-25)</small>
 

@@ -1,8 +1,89 @@
 # Changelog
 
-## 22.2.16 (2025-05-06)
+## 23.0.19 (2025-06-25)
 
-* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33364](https://github.com/bitnami/charts/pull/33364))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#34627](https://github.com/bitnami/charts/pull/34627))
+
+## <small>23.0.18 (2025-06-24)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34601) ([ea48dcd](https://github.com/bitnami/charts/commit/ea48dcd1cce5780d243f59700952aa158bfc8aa2)), closes [#34601](https://github.com/bitnami/charts/issues/34601)
+
+## <small>23.0.17 (2025-06-23)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34587) ([daac25c](https://github.com/bitnami/charts/commit/daac25caf6d0e5096d7c8e1686ff8abfe0ed7be4)), closes [#34587](https://github.com/bitnami/charts/issues/34587)
+
+## <small>23.0.16 (2025-06-20)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34575) ([bb30d24](https://github.com/bitnami/charts/commit/bb30d24be0d15a6a23982df153e68a6f9b2a8178)), closes [#34575](https://github.com/bitnami/charts/issues/34575)
+
+## <small>23.0.15 (2025-06-18)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34550) ([9198a0d](https://github.com/bitnami/charts/commit/9198a0d76f0fb1c4a19403742ce3e063ecde167d)), closes [#34550](https://github.com/bitnami/charts/issues/34550)
+
+## <small>23.0.14 (2025-06-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34478) ([b9a8a28](https://github.com/bitnami/charts/commit/b9a8a288da0ce43a26c6892ae6f72b890648f7be)), closes [#34478](https://github.com/bitnami/charts/issues/34478)
+
+## <small>23.0.13 (2025-06-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34384) ([dce86c7](https://github.com/bitnami/charts/commit/dce86c7e51835348c8c58f10529e309b1cbb6c15)), closes [#34384](https://github.com/bitnami/charts/issues/34384)
+
+## <small>23.0.12 (2025-06-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34383) ([4b133e2](https://github.com/bitnami/charts/commit/4b133e2bda4c23e4af5291f03a0101a6429313d3)), closes [#34383](https://github.com/bitnami/charts/issues/34383)
+
+## <small>23.0.11 (2025-06-11)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34330) ([5201332](https://github.com/bitnami/charts/commit/5201332461736b851e0db4e66e4d53cd0254f040)), closes [#34330](https://github.com/bitnami/charts/issues/34330)
+
+## <small>23.0.10 (2025-05-30)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34018) ([2ddb985](https://github.com/bitnami/charts/commit/2ddb985e2aa1d90237dac75cf768ac3080855783)), closes [#34018](https://github.com/bitnami/charts/issues/34018)
+
+## <small>23.0.9 (2025-05-28)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33946) ([8b694fa](https://github.com/bitnami/charts/commit/8b694fad308bcde84d591c4682107a382afe9d88)), closes [#33946](https://github.com/bitnami/charts/issues/33946)
+
+## <small>23.0.8 (2025-05-27)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33907) ([12b06ee](https://github.com/bitnami/charts/commit/12b06ee0abcd0f42421b6d8d4f19e73ce14ccade)), closes [#33907](https://github.com/bitnami/charts/issues/33907)
+
+## <small>23.0.7 (2025-05-27)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33902) ([46be070](https://github.com/bitnami/charts/commit/46be070dd6e816f1e1e685ea2ddf2f811b4501e8)), closes [#33902](https://github.com/bitnami/charts/issues/33902)
+
+## <small>23.0.6 (2025-05-23)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33867) ([c0ae591](https://github.com/bitnami/charts/commit/c0ae5917a6dcfff78fc9d21c08b0f9c18f635e73)), closes [#33867](https://github.com/bitnami/charts/issues/33867)
+
+## <small>23.0.5 (2025-05-23)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33866) ([c6d4f5b](https://github.com/bitnami/charts/commit/c6d4f5be9057ad658cd5e106683b338ff0978865)), closes [#33866](https://github.com/bitnami/charts/issues/33866)
+
+## <small>23.0.4 (2025-05-22)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33837) ([f230bc9](https://github.com/bitnami/charts/commit/f230bc9c5ffc2cd34306484274b2900f8917ff83)), closes [#33837](https://github.com/bitnami/charts/issues/33837)
+
+## <small>23.0.3 (2025-05-16)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33755) ([d589f96](https://github.com/bitnami/charts/commit/d589f969093be69f83d61cd2f92ac4a4340aa66f)), closes [#33755](https://github.com/bitnami/charts/issues/33755)
+
+## <small>23.0.2 (2025-05-14)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33684) ([6eb9ac6](https://github.com/bitnami/charts/commit/6eb9ac6c58f1fdbfee96e8234f6130012630ed23)), closes [#33684](https://github.com/bitnami/charts/issues/33684)
+
+## <small>23.0.1 (2025-05-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#33670) ([12cb4c8](https://github.com/bitnami/charts/commit/12cb4c83b5c5fd9575700dc987e2862f9be070bc)), closes [#33670](https://github.com/bitnami/charts/issues/33670)
+
+## 23.0.0 (2025-05-12)
+
+* [bitnami/ghost] Update MySQL subchart (#33609) ([574a85b](https://github.com/bitnami/charts/commit/574a85bcddac878eb99dd7f4960be3480841a75d)), closes [#33609](https://github.com/bitnami/charts/issues/33609)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>22.2.16 (2025-05-06)</small>
+
+* [bitnami/ghost] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33364) ([609e1db](https://github.com/bitnami/charts/commit/609e1db564adb895c89b8d08abd01cbfd5bd68c3)), closes [#33364](https://github.com/bitnami/charts/issues/33364)
 
 ## <small>22.2.15 (2025-04-25)</small>
 

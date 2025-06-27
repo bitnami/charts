@@ -1,8 +1,33 @@
 # Changelog
 
-## 3.2.6 (2025-05-08)
+## 3.2.12 (2025-06-20)
 
-* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#33558](https://github.com/bitnami/charts/pull/33558))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#34576](https://github.com/bitnami/charts/pull/34576))
+
+## <small>3.2.11 (2025-06-20)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34568) ([1d1c24a](https://github.com/bitnami/charts/commit/1d1c24af817dafe81e8efd00adf76d03e83966e0)), closes [#34568](https://github.com/bitnami/charts/issues/34568)
+
+## <small>3.2.10 (2025-06-13)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34432) ([f104400](https://github.com/bitnami/charts/commit/f104400df985eccad8cccc535751b6b0952ca72a)), closes [#34432](https://github.com/bitnami/charts/issues/34432)
+
+## <small>3.2.9 (2025-06-10)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34288) ([b6c97f6](https://github.com/bitnami/charts/commit/b6c97f6716b8ee0223d32efee6e1fd72b8993151)), closes [#34288](https://github.com/bitnami/charts/issues/34288)
+
+## <small>3.2.8 (2025-06-06)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34162) ([674aa77](https://github.com/bitnami/charts/commit/674aa77b463b119e3049d98beae4889b410a5e4f)), closes [#34162](https://github.com/bitnami/charts/issues/34162)
+
+## <small>3.2.7 (2025-05-13)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33622) ([9b09ecd](https://github.com/bitnami/charts/commit/9b09ecd3fe077dfc550daceacc25101e3b1ea2b5)), closes [#33622](https://github.com/bitnami/charts/issues/33622)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>3.2.6 (2025-05-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33558) ([cf1e13b](https://github.com/bitnami/charts/commit/cf1e13bcd7c791faedb003185ab2c50c0f5dd487)), closes [#33558](https://github.com/bitnami/charts/issues/33558)
 
 ## <small>3.2.5 (2025-05-07)</small>
 

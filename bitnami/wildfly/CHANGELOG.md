@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.0.5 (2025-05-06)
+## 24.0.8 (2025-06-11)
 
-* [bitnami/wildfly] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([#33448](https://github.com/bitnami/charts/pull/33448))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#34345](https://github.com/bitnami/charts/pull/34345))
+
+## <small>24.0.7 (2025-05-28)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33949) ([8748d8f](https://github.com/bitnami/charts/commit/8748d8ff57c3688f55b3e7c48c3613ebb7ed5c89)), closes [#33949](https://github.com/bitnami/charts/issues/33949)
+
+## <small>24.0.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33724) ([addf9e6](https://github.com/bitnami/charts/commit/addf9e6f6515936d8ffb2b1f2fce7897aba39f70)), closes [#33724](https://github.com/bitnami/charts/issues/33724)
+
+## <small>24.0.5 (2025-05-06)</small>
+
+* [bitnami/wildfly] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33448 ([ec8802e](https://github.com/bitnami/charts/commit/ec8802e1a337503834208604cdb3f90914436f9b)), closes [#33448](https://github.com/bitnami/charts/issues/33448)
 
 ## <small>24.0.4 (2025-04-22)</small>
 

@@ -1,8 +1,45 @@
 # Changelog
 
-## 24.0.1 (2025-05-08)
+## 24.2.0 (2025-06-24)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#33572](https://github.com/bitnami/charts/pull/33572))
+* [bitnami/airflow] Move venv to emptydir volume ([#34560](https://github.com/bitnami/charts/pull/34560))
+
+## <small>24.1.5 (2025-06-23)</small>
+
+* [bitnami/airflow] Configure correct section for api/web secret_key (#34581) ([fe92d1b](https://github.com/bitnami/charts/commit/fe92d1b2ed3277e8c8549f5732544253ea1178ba)), closes [#34581](https://github.com/bitnami/charts/issues/34581)
+
+## <small>24.1.4 (2025-06-19)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34306) ([24c47d3](https://github.com/bitnami/charts/commit/24c47d393449d1e7d1a62f60ba2ef5db27068239)), closes [#34306](https://github.com/bitnami/charts/issues/34306)
+
+## <small>24.1.3 (2025-06-16)</small>
+
+* [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBui ([047f06d](https://github.com/bitnami/charts/commit/047f06d129b6587a1d6e9615603bb7c8c2a78ff0)), closes [#34382](https://github.com/bitnami/charts/issues/34382)
+
+## <small>24.1.2 (2025-06-06)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34221) ([f42b7ae](https://github.com/bitnami/charts/commit/f42b7aefc905b479c54b142d7c0152fc9fa5c36d)), closes [#34221](https://github.com/bitnami/charts/issues/34221)
+
+## <small>24.1.1 (2025-05-26)</small>
+
+* [bitnami/airflow] update README to match deprecated values (#33602) ([8622ccf](https://github.com/bitnami/charts/commit/8622ccfcb0445d63b25b915c9d18edeb1f72061a)), closes [#33602](https://github.com/bitnami/charts/issues/33602)
+
+## 24.1.0 (2025-05-14)
+
+* [bitnami/airflow] Validate executors and fix LocalExecutor (#33696) ([56e2e5f](https://github.com/bitnami/charts/commit/56e2e5f15cf318cf7d973da4c694623cbb142ed0)), closes [#33696](https://github.com/bitnami/charts/issues/33696)
+
+## <small>24.0.3 (2025-05-13)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33681) ([0486d35](https://github.com/bitnami/charts/commit/0486d357b19db6482cb423ad0dbcbe96b2ef74db)), closes [#33681](https://github.com/bitnami/charts/issues/33681)
+
+## <small>24.0.2 (2025-05-12)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33617) ([96d1206](https://github.com/bitnami/charts/commit/96d1206faf46aa9b9e45f82eb49bc468248bfa64)), closes [#33617](https://github.com/bitnami/charts/issues/33617)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>24.0.1 (2025-05-08)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33572) ([9daa628](https://github.com/bitnami/charts/commit/9daa628a3e71a75a154775e971952d27614b4122)), closes [#33572](https://github.com/bitnami/charts/issues/33572)
 
 ## 24.0.0 (2025-05-07)
 

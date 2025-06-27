@@ -48,6 +48,13 @@ Return the proper Airflow metrics fullname
 {{- end -}}
 
 {{/*
+Return the proper Airflow scheduler service name
+*/}}
+{{- define "airflow.scheduler.serviceName" -}}
+{{- printf "%s-hl" (include "airflow.scheduler.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Airflow image name
 */}}
 {{- define "airflow.image" -}}
@@ -350,8 +357,13 @@ Add environment variables to configure airflow common values
 {{- if .Values.usePasswordFiles }}
 - name: AIRFLOW__CORE__FERNET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-fernet-key"
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+- name: AIRFLOW__API__SECRET_KEY_CMD
+  value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- else }}
 - name: AIRFLOW__WEBSERVER__SECRET_KEY_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-secret-key"
+{{- end }}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
 - name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
   value: "cat /opt/bitnami/airflow/secrets/airflow-jwt-secret-key"
@@ -362,11 +374,19 @@ Add environment variables to configure airflow common values
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-fernet-key
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+- name: AIRFLOW__API__SECRET_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "airflow.secretName" . }}
+      key: airflow-secret-key
+{{- else }}
 - name: AIRFLOW__WEBSERVER__SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
       key: airflow-secret-key
+{{- end }}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
 - name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
   valueFrom:
@@ -421,6 +441,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "airflow.validateValues.plugins.repository_details" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.triggerer.replicaCount" .) -}}
 {{- $messages := append $messages (include "airflow.validateValues.metrics" . ) -}}
+{{- $messages := append $messages (include "airflow.validateValues.executors" . ) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -560,4 +581,51 @@ Validates the image tag version is equal or higher than 2.0.0
 */}}
 {{- define "airflow.isImageMajorVersion2" -}}
 {{- include "airflow.semverCondition" (dict "constraint" "^2" "imageVersion" .Values.image.tag "context" $) -}}
+{{- end -}}
+
+{{/*
+Checks whether the scheduler object has to be an statefulset or a deployment depending on the configured executors
+*/}}
+{{- define "airflow.scheduler.requiresStatefulset" -}}
+{{- $configuredExecutors := ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor) -}}
+{{- $statefulsetExecutors := list "SequentialExecutor" "LocalExecutor" "LocalCeleryExecutor" "LocalKubernetesExecutor" -}}
+{{- $statefulset := false -}}
+{{- range $executor := $configuredExecutors -}}
+    {{- if (has $executor $statefulsetExecutors) -}}
+        {{- $statefulset = true -}}
+    {{- end -}}
+{{- end -}}
+{{- if $statefulset -}}
+true
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validates deprecated executors on Airflow 3 are not used
+https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html#breaking-changes
+*/}}
+{{- define "airflow.validateValues.executors" -}}
+{{- $configuredExecutors := ternary (splitList "," .Values.executor) (list .Values.executor) (contains "," .Values.executor) -}}
+{{- $deprecatedExecutors := list "SequentialExecutor" "CeleryKubernetesExecutor" "LocalKubernetesExecutor" -}}
+{{- $executorsError := list -}}
+{{- if (include "airflow.isImageMajorVersion3" .) }}
+    {{- range $executor := $configuredExecutors -}}
+        {{- if (has $executor $deprecatedExecutors) -}}
+            {{- $executorsError = append $executorsError $executor -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{/* configuredExecutors can't be empty */}}
+{{- if (has "" $configuredExecutors) }}
+airflow: executors
+    You need to provide at least one value for the '.executor' parameter.
+{{- end -}}
+{{- if not (empty $executorsError) -}}
+airflow: executors
+    The next executors have been deprecated starting with Airflow 3.0.0 and can't be used:
+    {{- range $executorsError }}
+    - {{.}}
+    {{- end }}
+    See https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading_to_airflow3.html#breaking-changes for further details.
+{{- end -}}
 {{- end -}}

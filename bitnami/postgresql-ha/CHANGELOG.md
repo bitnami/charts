@@ -1,8 +1,62 @@
 # Changelog
 
-## 16.0.2 (2025-05-08)
+## 16.0.15 (2025-06-25)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#33576](https://github.com/bitnami/charts/pull/33576))
+* [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password ([#32857](https://github.com/bitnami/charts/pull/32857))
+
+## <small>16.0.14 (2025-06-13)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34486) ([61f65fb](https://github.com/bitnami/charts/commit/61f65fbbe03ea94d2dae41b9ef1c7279e9384a8b)), closes [#34486](https://github.com/bitnami/charts/issues/34486)
+
+## <small>16.0.13 (2025-06-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34375) ([3ac12a1](https://github.com/bitnami/charts/commit/3ac12a10325eba47b2e31a3db3d008e3b421f867)), closes [#34375](https://github.com/bitnami/charts/issues/34375)
+
+## <small>16.0.12 (2025-06-11)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34354) ([0f9c1d4](https://github.com/bitnami/charts/commit/0f9c1d45293599d35386603884e545e9bfed631b)), closes [#34354](https://github.com/bitnami/charts/issues/34354)
+
+## <small>16.0.11 (2025-06-06)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34211) ([068660d](https://github.com/bitnami/charts/commit/068660d0ba097d0d6d005198099f7b696e07fe0a)), closes [#34211](https://github.com/bitnami/charts/issues/34211)
+
+## <small>16.0.10 (2025-06-03)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34072) ([ae2e653](https://github.com/bitnami/charts/commit/ae2e653858aceab76aa0e0fe06d1a5cde0f32f4d)), closes [#34072](https://github.com/bitnami/charts/issues/34072)
+
+## <small>16.0.9 (2025-05-30)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33983) ([2a92873](https://github.com/bitnami/charts/commit/2a9287306a40cad6a5147ff5e12546827037500e)), closes [#33983](https://github.com/bitnami/charts/issues/33983)
+
+## <small>16.0.8 (2025-05-27)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33915) ([adcb803](https://github.com/bitnami/charts/commit/adcb80334211c4a2fbb5aabd81ee0375bf470935)), closes [#33915](https://github.com/bitnami/charts/issues/33915)
+
+## <small>16.0.7 (2025-05-26)</small>
+
+* [bitnami/postgresql-ha] Update domain name value for PGPOOL_BACKEND_NODES (#33607) ([286eab6](https://github.com/bitnami/charts/commit/286eab651e84221976a3a60645a3e61e639f1474)), closes [#33607](https://github.com/bitnami/charts/issues/33607)
+
+## <small>16.0.6 (2025-05-20)</small>
+
+* [bitnami/postgresql-ha] bugfix: missing password for 'postgres' user when using custom user/db (#337 ([3dfc34f](https://github.com/bitnami/charts/commit/3dfc34feaa7a4846e6b1a308221053f879627f2f)), closes [#33786](https://github.com/bitnami/charts/issues/33786)
+
+## <small>16.0.5 (2025-05-15)</small>
+
+* [bitnami-postgresql-ha] docs: document security fix on 16.0.0 (#33659) ([9d71b3a](https://github.com/bitnami/charts/commit/9d71b3ad0c5598932670d59c7d118d7a0c496d54)), closes [#33659](https://github.com/bitnami/charts/issues/33659)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33705) ([a2fac0d](https://github.com/bitnami/charts/commit/a2fac0de6560264e16c1632a4795a1b111630f0b)), closes [#33705](https://github.com/bitnami/charts/issues/33705)
+
+## <small>16.0.4 (2025-05-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33618) ([1eeb981](https://github.com/bitnami/charts/commit/1eeb9813ed3a5fd7791ace98ae352bcea57244e4)), closes [#33618](https://github.com/bitnami/charts/issues/33618)
+
+## <small>16.0.3 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33599) ([c995d17](https://github.com/bitnami/charts/commit/c995d17abcf310a3f843bf21ce9004598f6c8b8e)), closes [#33599](https://github.com/bitnami/charts/issues/33599)
+
+## <small>16.0.2 (2025-05-08)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#33576) ([42b31bd](https://github.com/bitnami/charts/commit/42b31bd7a265c41ade320b5a897348bdf7d44a0c)), closes [#33576](https://github.com/bitnami/charts/issues/33576)
 
 ## <small>16.0.1 (2025-05-08)</small>
 

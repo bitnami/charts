@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -95,7 +93,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.12.0-debian-12-r3
+  tag: 3.13.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -127,6 +125,12 @@ dataPlane:
   ## @param dataPlane.hostNetwork Use hostNetwork
   ##
   hostNetwork: false
+  ## @param dataPlane.dnsPolicy DNS policy for APISIX pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
+
   ## @param dataPlane.containerPorts.http APISIX HTTP container port
   ## @param dataPlane.containerPorts.https APISIX HTTPS container port
   ## @param dataPlane.containerPorts.control APISIX control container port
@@ -895,6 +899,11 @@ controlPlane:
   ## @param controlPlane.hostNetwork Use hostNetwork
   ##
   hostNetwork: false
+  ## @param controlPlane.dnsPolicy DNS policy for APISIX Admin pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
   ## @param controlPlane.useDaemonSet Deploy as DaemonSet
   ##
   useDaemonSet: false
@@ -1695,7 +1704,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r69
+    tag: 3.0.1-debian-12-r75
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2441,7 +2450,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.4-debian-12-r4
+    tag: 1.8.4-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3160,7 +3169,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r43
+    tag: 12-debian-12-r47
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
