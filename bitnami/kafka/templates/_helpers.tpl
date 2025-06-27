@@ -293,7 +293,7 @@ Return the Kafka controller-eligible secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka controller-eligible secret configuration values 
+Return the Kafka controller-eligible secret configuration values
 */}}
 {{- define "kafka.controller.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -357,7 +357,7 @@ Return the Kafka broker secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka broker secret configuration values 
+Return the Kafka broker secret configuration values
 */}}
 {{- define "kafka.broker.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -535,7 +535,12 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- else -}}
     {{- range $i := until (int .Values.controller.replicaCount) -}}
       {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+      {{- if eq (int $.Values.kraftVersion) 0 }}
+        {{- $nodeId := add (int $i) (int $.Values.controller.minId) -}}
+        {{- $bootstrapServers = append $bootstrapServers (printf "%d@%s" $nodeId $nodeAddress ) -}}
+      {{- else }}
+        {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+      {{- end }}
     {{- end -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
@@ -547,7 +552,11 @@ Section of the server.properties shared by both controller-eligible and broker n
 */}}
 {{- define "kafka.commonConfig" -}}
 controller.listener.names: {{ .Values.listeners.controller.name }}
+{{- if eq (int .Values.kraftVersion) 0 }}
+controller.quorum.voters: {{ include "kafka.controller.quorumBootstrapServers" . }}
+{{- else }}
 controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" . }}
+{{- end }}
 {{- if include "kafka.sslEnabled" . }}
 # TLS configuration
 ssl.keystore.type: JKS

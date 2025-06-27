@@ -124,6 +124,11 @@ clusterId: ""
 ## @param existingKraftSecret Name of the secret containing the Kafka KRaft Cluster ID and one directory ID per controller replica
 ##
 existingKraftSecret: ""
+## @param kraftVersion Kraft version to be used. It determines whether static quorum (kraftVersion=0) or dynamic quorum (kraftVersion=1) will be used.
+## NOTE: Kafka 4.0 does not yet support switching kraft version. This setting was added for backward-compatibility with 3.x clusters.
+## Ref: https://kafka.apache.org/documentation/#static_versus_dynamic_kraft_quorums
+##
+kraftVersion: 1
 ## @param config Specify content for Kafka configuration (auto-generated based on other parameters otherwise)
 ## NOTE: This will override the configuration based on values, please act carefully
 ## Use simple key-value YAML format, then it's transformed to properties format by the chart. e.g:
@@ -1678,7 +1683,7 @@ service:
       ##
       labels: {}
     ## @param service.headless.ipFamilies IP families for the headless service
-    ## 
+    ##
     ipFamilies: []
     ## @param service.headless.ipFamilyPolicy IP family policy for the headless service
     ##
@@ -2113,7 +2118,7 @@ metrics:
         prometheus.io/path: "/metrics"
       ## @param metrics.jmx.service.ipFamilies IP families for the jmx metrics service
       ##
-      ipFamilies: [] 
+      ipFamilies: []
       ## @param metrics.jmx.service.ipFamilyPolicy IP family policy for the jmx metrics service
       ##
       ipFamilyPolicy: ""
