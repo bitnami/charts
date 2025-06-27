@@ -1064,6 +1064,15 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 32.2.0
+
+We have introduced the value `kraftVersion` to help control the change from static quorum to dynamic quorum.
+
+By default, new clusters will be deployed with the new dynamic quorum (kraftVersion=1), but users upgrading from Kafka 3.x may need to modify the default values to continue using static quorum (kraftVersion=0).
+That is because Kafka 4.0 does not yet support switching from static quorum (controller.quorum.voters) to dynamic quorum (controller.quorum.bootstrap.servers), causing upgrades to fail (#34015).
+
+For more information please check [Kafka documentation](https://kafka.apache.org/documentation/#static_versus_dynamic_kraft_quorums).
+
 ### To 32.0.0
 
 This major release bumps Kafka major version to `4.y.z` series. This version implies a significant milestone given now Kafka operates operate entirely without Apache ZooKeeper, running in KRaft mode by default. As a consequence, **ZooKeeper is no longer a chart dependency and every related parameter has been removed.**. Upgrading from `31.y.z` chart version is not supported unless KRaft mode was already enabled.

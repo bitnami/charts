@@ -451,11 +451,11 @@ web:
   lifecycleHooks: {}
   ## @param web.extraEnvVars Array with extra environment variables to add to Mastodon web nodes
   ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
+  extraEnvVars:
+    - name: FOO
+      value: "bar"
   ##
-  extraEnvVars: []
+  ##extraEnvVars: []
   ## @param web.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Mastodon web nodes
   ##
   extraEnvVarsCM: ""
