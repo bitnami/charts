@@ -425,7 +425,7 @@ spec:
             driver: 'secrets-store.csi.k8s.io'
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}     
+              secretProviderClass: {{ include "mariadb.tde.secretProviderClassName" . }}
         {{- end }}
         - name: empty-dir
           emptyDir: {}
@@ -436,6 +436,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else }}
+  {{- if .Values.secondary.persistentVolumeClaimRetentionPolicy }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.secondary.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
