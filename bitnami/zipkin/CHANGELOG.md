@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.3.5 (2025-05-27)
+## 1.3.6 (2025-06-26)
 
-* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#33925](https://github.com/bitnami/charts/pull/33925))
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#34681](https://github.com/bitnami/charts/pull/34681))
+
+## <small>1.3.5 (2025-05-27)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#33925) ([bbbbaff](https://github.com/bitnami/charts/commit/bbbbaffe7096281c8d3e2a0280160d6ecb44fd05)), closes [#33925](https://github.com/bitnami/charts/issues/33925)
 
 ## <small>1.3.4 (2025-05-06)</small>
 
