@@ -824,6 +824,8 @@ Init container definition for waiting for the database to be ready
 
           if curl --max-time 5 "${s3_host}" $params_cert | grep "RequestId"; then
              return 0
+          elif curl --head --max-time 5 "${s3_host}" $params_cert | grep "x-guploader-uploadid"; then
+             return 0
           else
              return 1
           fi
