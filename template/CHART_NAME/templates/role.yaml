@@ -4,8 +4,8 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{ if .Values.rbac.create }}
-kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}

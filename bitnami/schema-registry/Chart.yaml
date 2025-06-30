@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: schema-registry
-      image: docker.io/bitnami/schema-registry:7.9.1-debian-12-r3
+      image: docker.io/bitnami/schema-registry:8.0.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 7.9.1
+appVersion: 8.0.0
 dependencies:
 - condition: kafka.enabled
   name: kafka
@@ -37,4 +37,4 @@ maintainers:
 name: schema-registry
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 25.1.8
+version: 26.0.0
