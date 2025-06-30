@@ -6,7 +6,7 @@
 
 ## 32.3.0 (2025-06-27)
 
-* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum ([#34689](https://github.com/bitnami/charts/pull/34689))
+* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum (#34689) ([559b34b](https://github.com/bitnami/charts/commit/559b34b2a16d14165cbcf16d7c0aec080002b1cc)), closes [#34689](https://github.com/bitnami/charts/issues/34689)
 
 ## <small>32.2.18 (2025-06-25)</small>
 
@@ -14,7 +14,7 @@
 
 ## <small>32.2.17 (2025-06-18)</small>
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34545) ([abde90b](https://github.com/bitnami/charts/commit/abde90b857ff403f1899bcb26c5e834c7788de0f)), closes [#34545](http
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34545) ([abde90b](https://github.com/bitnami/charts/commit/abde90b857ff403f1899bcb26c5e834c7788de0f)), closes [#34545](https://github.com/bitnami/charts/issues/34545)
 
 ## <small>32.2.16 (2025-06-16)</small>
 
