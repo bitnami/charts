@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.6 (2025-06-30)
+## 5.1.0 (2025-06-30)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34718](https://github.com/bitnami/charts/pull/34718))
+* [bitnami/mlflow] Adds resources to init containers ([#33910](https://github.com/bitnami/charts/pull/33910))
+
+## <small>5.0.6 (2025-06-30)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34718) ([9f0041b](https://github.com/bitnami/charts/commit/9f0041bad7245a4b6bd59923cf0fbaaf08cc8dc2)), closes [#34718](https://github.com/bitnami/charts/issues/34718)
 
 ## <small>5.0.5 (2025-06-30)</small>
 
