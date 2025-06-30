@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.1.37 (2025-06-13)
+## 5.1.39 (2025-06-27)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#34425](https://github.com/bitnami/charts/pull/34425))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#34644](https://github.com/bitnami/charts/pull/34644))
+
+## <small>5.1.38 (2025-06-27)</small>
+
+* [bitnami/concourse] Update deps and test (#34688) ([c4e66cd](https://github.com/bitnami/charts/commit/c4e66cdd2a3f75b76bb832593e2f2d8c5881a6e0)), closes [#34688](https://github.com/bitnami/charts/issues/34688)
+
+## <small>5.1.37 (2025-06-13)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#34425) ([47d3adc](https://github.com/bitnami/charts/commit/47d3adc0ac52ab5d0ae74f9603a70ebeb05f2459)), closes [#34425](https://github.com/bitnami/charts/issues/34425)
 
 ## <small>5.1.36 (2025-06-11)</small>
 

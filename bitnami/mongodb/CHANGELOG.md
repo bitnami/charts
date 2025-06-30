@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.5.23 (2025-06-18)
+## 16.5.26 (2025-06-27)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34546](https://github.com/bitnami/charts/pull/34546))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34697](https://github.com/bitnami/charts/pull/34697))
+
+## <small>16.5.25 (2025-06-26)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34661) ([4c67ae9](https://github.com/bitnami/charts/commit/4c67ae956cc4bad055007e3ee446c4e33a7e2e96)), closes [#34661](https://github.com/bitnami/charts/issues/34661)
+
+## <small>16.5.24 (2025-06-24)</small>
+
+* [bitnami/mongodb] Fix Servicename in `setup.sh` Script (#34591) ([d8e919b](https://github.com/bitnami/charts/commit/d8e919ba54a81226ec69c40ea57df5527ca0745f)), closes [#34591](https://github.com/bitnami/charts/issues/34591)
+
+## <small>16.5.23 (2025-06-18)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34546) ([60bf8b7](https://github.com/bitnami/charts/commit/60bf8b7330064503836e443c82ccb1f5b034142a)), closes [#34546](https://github.com/bitnami/charts/issues/34546)
 
 ## <small>16.5.22 (2025-06-16)</small>
 

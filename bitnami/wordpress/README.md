@@ -668,6 +668,10 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 25.0.0
+
+This major release bumps the MariaDB version to 11.8. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-4-to-mariadb-11-8/) for upgrading from MariaDB 11.4 to 11.8. No major issues are expected during the upgrade.
+
 ### To 24.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).

@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.receiveDistributor.autoscaling.enabled }}
+  {{- if not (or .Values.receiveDistributor.autoscaling.enabled .Values.receiveDistributor.externalAutoscaler) }}
   replicas: {{ .Values.receiveDistributor.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.receiveDistributor.revisionHistoryLimit }}
