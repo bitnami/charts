@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.0 (2025-06-28)
+## 15.1.0 (2025-06-30)
 
 * [bitnami/milvus] Add GCS support to _helpers.tpl ([#34701](https://github.com/bitnami/charts/pull/34701))
 
