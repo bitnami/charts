@@ -6,7 +6,7 @@
 
 ## <small>5.0.5 (2025-06-30)</small>
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34707](https://github.com/bitnami/charts/pull/34707))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34707) ([66759d6](https://github.com/bitnami/charts/commit/66759d6c4753908aa8824bfc7d333e3af24e1fb5)), closes [#34707](https://github.com/bitnami/charts/issues/34707)
 
 ## <small>5.0.4 (2025-06-26)</small>
 
