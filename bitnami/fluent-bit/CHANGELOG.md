@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.5 (2025-06-03)
+## 3.1.6 (2025-06-29)
 
-* [bitnami/fluent-bit] Fix HPA  target type ([#34052](https://github.com/bitnami/charts/pull/34052))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#34704](https://github.com/bitnami/charts/pull/34704))
+
+## <small>3.1.5 (2025-06-03)</small>
+
+* [bitnami/fluent-bit] Fix HPA  target type (#34052) ([b38ed91](https://github.com/bitnami/charts/commit/b38ed9161d728c576666940106b27a669abf3e7d)), closes [#34052](https://github.com/bitnami/charts/issues/34052)
 
 ## <small>3.1.4 (2025-05-30)</small>
 

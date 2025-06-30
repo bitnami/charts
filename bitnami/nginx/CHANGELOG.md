@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.2 (2025-06-28)
+## 21.0.3 (2025-06-30)
 
-* [bitnami/nginx] Changing auto generated tls.key and tls.crt to mount as tls.key and tls.crt instead of server.key and server.crt ([#34643](https://github.com/bitnami/charts/pull/34643))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34717](https://github.com/bitnami/charts/pull/34717))
+
+## <small>21.0.2 (2025-06-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34710) ([44266ca](https://github.com/bitnami/charts/commit/44266ca8f443622596057153e546317bbd59c445)), closes [#34710](https://github.com/bitnami/charts/issues/34710)
 
 ## <small>21.0.1 (2025-06-26)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
+## 32.3.1 (2025-06-30)
+
+* [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list ([#34359](https://github.com/bitnami/charts/pull/34359))
+
 ## 32.3.0 (2025-06-27)
 
-* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum ([#34689](https://github.com/bitnami/charts/pull/34689))
+* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum (#34689) ([559b34b](https://github.com/bitnami/charts/commit/559b34b2a16d14165cbcf16d7c0aec080002b1cc)), closes [#34689](https://github.com/bitnami/charts/issues/34689)
 
 ## <small>32.2.18 (2025-06-25)</small>
 
