@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.7.17 (2025-06-25)
+## 1.7.17 (2025-07-01)
 
 * [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34640](https://github.com/bitnami/charts/pull/34640))
 
