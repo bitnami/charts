@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.5 (2025-06-27)
+## 17.0.6 (2025-07-01)
 
-* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components ([#34256](https://github.com/bitnami/charts/pull/34256))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34747](https://github.com/bitnami/charts/pull/34747))
+
+## <small>17.0.5 (2025-06-27)</small>
+
+* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components (#3 ([879bca6](https://github.com/bitnami/charts/commit/879bca6783b372641facf6332eb179dd10569590)), closes [#34256](https://github.com/bitnami/charts/issues/34256)
 
 ## <small>17.0.4 (2025-06-25)</small>
 
