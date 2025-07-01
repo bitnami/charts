@@ -27,7 +27,7 @@ defaultBackend:
       return 404;
     }
 service:
-  ports: 
+  ports:
     http: 80
     https: 444
   type: LoadBalancer
@@ -54,7 +54,8 @@ extraDeploy:
           app: dokuwiki
       spec:
         containers:
-        - image: docker.io/bitnami/dokuwiki:latest
+        # Use the most recent Dokuwiki image available at https://hub.docker.com/r/bitnami/dokuwiki-archived/tags
+        - image: docker.io/bitnami/dokuwiki-archived@sha256:f7be2f151520663fcba4e431b7130f3a9594f08070b3f750526c93d9cd80a1c7
           name: dokuwiki
           securityContext:
             runAsNonRoot: true
