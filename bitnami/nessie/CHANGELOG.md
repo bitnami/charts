@@ -1,12 +1,8 @@
 # Changelog
 
-## 2.0.21 (2025-07-01)
+## 2.0.20 (2025-06-23)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#34742](https://github.com/bitnami/charts/pull/34742))
-
-## <small>2.0.20 (2025-06-23)</small>
-
-* [bitnami/nessie]fix(serviceMonitor): Amend selector (#34584) ([b664005](https://github.com/bitnami/charts/commit/b6640051f9a587405471afc16ac3fb0d48d1f317)), closes [#34584](https://github.com/bitnami/charts/issues/34584)
+* [bitnami/nessie]fix(serviceMonitor): Amend selector ([#34584](https://github.com/bitnami/charts/pull/34584))
 
 ## <small>2.0.19 (2025-06-18)</small>
 
