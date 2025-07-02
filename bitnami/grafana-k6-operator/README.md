@@ -366,6 +366,12 @@ helm install my-release -f values.yaml REGISTRY_NAME/REPOSITORY_NAME/grafana-k6-
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 1.0.0
+
+This major release introduces some breaking changes, including the removal of the `kube-rbac-proxy` image. Section `metrics.authProxy` has been removed accordingly. Find more details in the [release notes](https://github.com/grafana/k6-operator/releases/tag/v0.0.22).
+
 ## License
 
 Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.

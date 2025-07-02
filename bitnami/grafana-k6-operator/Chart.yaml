@@ -35,4 +35,4 @@ maintainers:
 name: grafana-k6-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-k6-operator
-version: 0.2.0
+version: 1.0.0
