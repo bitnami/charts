@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.4 (2025-06-13)
+## 3.0.5 (2025-07-02)
 
-* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
+* [bitnami/dremio] Engine overrides are clobbered by the last value ([#34725](https://github.com/bitnami/charts/pull/34725))
+
+## <small>3.0.4 (2025-06-13)</small>
+
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context (#34380) ([f2eeff4](https://github.com/bitnami/charts/commit/f2eeff497d27abdfa56952953a3d8069e84f247d)), closes [#34380](https://github.com/bitnami/charts/issues/34380)
 
 ## <small>3.0.3 (2025-06-10)</small>
 
