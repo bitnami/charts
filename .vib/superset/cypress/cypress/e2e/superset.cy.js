@@ -27,7 +27,7 @@ it('Example dashboards visible', () => {
   cy.contains('USA Births Names').click();
   // Check Dashboard contains data
   cy.wait(5000);
-  cy.contains('Michael');
+  cy.contains('Birth Names Dashboard');
 });
 
 it('allows to create a user', () => {

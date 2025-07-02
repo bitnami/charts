@@ -1,8 +1,8 @@
 # Changelog
 
-## 21.0.0 (2025-06-28)
+## 21.0.1 (2025-06-30)
 
-*  [bitnami/mariadb] Add support for persistentVolumeClaimRetentionPolicy in StatefulSet in MariaDB ([#34506](https://github.com/bitnami/charts/pull/34506))
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#34713](https://github.com/bitnami/charts/pull/34713))
 
 ## 21.0.0 (2025-06-25)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.13 (2025-06-13)
+## 0.5.14 (2025-06-30)
 
-* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#34485](https://github.com/bitnami/charts/pull/34485))
+*  [bitnami/keydb] Fix StatefulSet capitalization in replica HPA ([#34729](https://github.com/bitnami/charts/pull/34729))
+
+## <small>0.5.13 (2025-06-13)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#34485) ([6e0d14c](https://github.com/bitnami/charts/commit/6e0d14c221d3475dc491144f8394108b3b806bd0)), closes [#34485](https://github.com/bitnami/charts/issues/34485)
 
 ## <small>0.5.12 (2025-06-08)</small>
 

@@ -1575,7 +1575,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.29.0-debian-12-r0
+    tag: 1.29.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -5073,7 +5073,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r7
+    tag: 1.6.38-debian-12-r8
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -5129,7 +5129,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r7
+    tag: 1.6.38-debian-12-r8
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5185,7 +5185,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r7
+    tag: 1.6.38-debian-12-r8
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5241,7 +5241,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.38-debian-12-r7
+    tag: 1.6.38-debian-12-r8
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

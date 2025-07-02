@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.4 (2025-06-12)
+## 4.0.0 (2025-06-30)
 
-* [bitnami/superset] Support `nameOverride` and `fullnameOverride` for internal Redis® ([#34364](https://github.com/bitnami/charts/pull/34364))
+* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#34724](https://github.com/bitnami/charts/pull/34724))
+
+## <small>3.0.4 (2025-06-16)</small>
+
+* [bitnami/superset] Support `nameOverride` and `fullnameOverride` for internal Redis® (#34364) ([820cc91](https://github.com/bitnami/charts/commit/820cc91650c63d807a04b87a764093b26265b611)), closes [#34364](https://github.com/bitnami/charts/issues/34364)
 
 ## <small>3.0.3 (2025-06-09)</small>
 

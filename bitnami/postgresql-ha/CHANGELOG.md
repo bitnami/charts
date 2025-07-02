@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.15 (2025-06-25)
+## 16.0.16 (2025-07-01)
 
-* [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password ([#32857](https://github.com/bitnami/charts/pull/32857))
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34739](https://github.com/bitnami/charts/pull/34739))
+
+## <small>16.0.15 (2025-06-25)</small>
+
+* [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password (#32857) ([ac50a71](https://github.com/bitnami/charts/commit/ac50a71cbf6ca351e21367082205d7ac4f46d2aa)), closes [#32857](https://github.com/bitnami/charts/issues/32857)
 
 ## <small>16.0.14 (2025-06-13)</small>
 

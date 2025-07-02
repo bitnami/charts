@@ -21,9 +21,9 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/');
-    cy.get('select.select').select('userpass');
-    cy.get('#username').should('be.enabled').type(username);
-    cy.get('#password').should('be.enabled').type(password);
+    cy.get('select').select('userpass');
+    cy.get('input[name="username"]').should('be.enabled').type(username);
+    cy.get('input[name="password"]').should('be.enabled').type(password);
     cy.contains('button', 'Sign in').click();
     cy.contains('Secrets engines').should('be.visible');
   }
