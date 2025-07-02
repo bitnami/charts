@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.5 (2025-07-01)
+## 5.0.5 (2025-07-02)
 
 * [bitnami/apisix]: Correct values comments ([#34737](https://github.com/bitnami/charts/pull/34737))
 
