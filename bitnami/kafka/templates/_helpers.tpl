@@ -511,7 +511,7 @@ Returns the containerPorts for listeners.extraListeners
 {{- range $listener := .Values.listeners.extraListeners -}}
 - name: {{ lower $listener.name}}
   containerPort: {{ $listener.containerPort }}
-{{- end -}}
+{{ end }}
 {{- end -}}
 
 {{/*
