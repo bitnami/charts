@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.6 (2025-06-18)
+## 1.5.7 (2025-07-02)
 
-* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34540](https://github.com/bitnami/charts/pull/34540))
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34770](https://github.com/bitnami/charts/pull/34770))
+
+## <small>1.5.6 (2025-06-18)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34540) ([897192d](https://github.com/bitnami/charts/commit/897192d97cfa2637a31da13d1a65f4ff924a457d)), closes [#34540](https://github.com/bitnami/charts/issues/34540)
 
 ## <small>1.5.5 (2025-06-13)</small>
 
