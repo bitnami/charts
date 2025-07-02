@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/grafana/k6-operator/refs/tags/v{{version}}/config/crd/bases/k6.io_testruns.yaml
-# Version: 0.0.21
+# Version: 0.0.22
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -769,6 +769,8 @@ spec:
                         image:
                           type: string
                         name:
+                          type: string
+                        restartPolicy:
                           type: string
                         volumeMounts:
                           items:
@@ -2712,6 +2714,8 @@ spec:
                         image:
                           type: string
                         name:
+                          type: string
+                        restartPolicy:
                           type: string
                         volumeMounts:
                           items:
@@ -4678,6 +4682,8 @@ spec:
                         image:
                           type: string
                         name:
+                          type: string
+                        restartPolicy:
                           type: string
                         volumeMounts:
                           items:
