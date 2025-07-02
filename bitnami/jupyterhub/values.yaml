@@ -145,6 +145,7 @@ hub:
           Authenticator:
             admin_users:
               - {{ .Values.hub.adminUser }}
+            allow_all: true
       cookieSecret:
       concurrentSpawnLimit: 64
       consecutiveFailureLimit: 5
