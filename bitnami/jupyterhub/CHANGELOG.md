@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.0.0 (2025-06-26)
+## 10.0.0 (2025-07-02)
 
 * [bitnami/jupyterhub] feat!: :boom: :wrench: Update default Authenticator ([#34649](https://github.com/bitnami/charts/pull/34649))
 
