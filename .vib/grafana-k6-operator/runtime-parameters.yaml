@@ -219,8 +219,6 @@ extraDeploy:
 # external. Therefore we do not test SAs, containerSecurityContext and containerPorts
 metrics:
   enabled: true
-  authProxy:
-    enabled: true
   service:
     ports:
       metrics: 2311
