@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.21 (2025-06-30)
+## 2.3.22 (2025-07-03)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34708](https://github.com/bitnami/charts/pull/34708))
+* [bitnami/deepspeed] Wrong input expected by the helper function ([#34783](https://github.com/bitnami/charts/pull/34783))
+
+## <small>2.3.21 (2025-06-30)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34708) ([0879716](https://github.com/bitnami/charts/commit/0879716d3460207a05b73630465b0d0b80a257bb)), closes [#34708](https://github.com/bitnami/charts/issues/34708)
 
 ## <small>2.3.20 (2025-06-26)</small>
 
