@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.5 (2025-07-02)
+## 3.0.5 (2025-07-03)
 
 * [bitnami/dremio] Engine overrides are clobbered by the last value ([#34725](https://github.com/bitnami/charts/pull/34725))
 
