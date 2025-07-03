@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.7 (2025-06-13)
+## 7.4.8 (2025-07-03)
 
-* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34467](https://github.com/bitnami/charts/pull/34467))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34777](https://github.com/bitnami/charts/pull/34777))
+
+## <small>7.4.7 (2025-06-13)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34467) ([2fd5c55](https://github.com/bitnami/charts/commit/2fd5c555759bbd0d22750172eb33cfdb9b51c542)), closes [#34467](https://github.com/bitnami/charts/issues/34467)
 
 ## <small>7.4.6 (2025-06-06)</small>
 
