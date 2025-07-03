@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.3.1 (2025-06-30)
+## 32.3.2 (2025-07-02)
 
-* [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list ([#34359](https://github.com/bitnami/charts/pull/34359))
+* [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML ([#34772](https://github.com/bitnami/charts/pull/34772))
+
+## <small>32.3.1 (2025-06-30)</small>
+
+* [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list (#343 ([326a7cf](https://github.com/bitnami/charts/commit/326a7cf8d6584c37131ea645d3b9b577e8f5a627)), closes [#34359](https://github.com/bitnami/charts/issues/34359)
 
 ## 32.3.0 (2025-06-27)
 
