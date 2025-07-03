@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.8.6 (2025-06-13)
+## 7.9.0 (2025-07-03)
 
-* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#34464](https://github.com/bitnami/charts/pull/34464))
+* [bitnami/memcached] Allow trafficDistribution field to be specified ([#34773](https://github.com/bitnami/charts/pull/34773))
+
+## <small>7.8.6 (2025-06-13)</small>
+
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#34464) ([2cde47a](https://github.com/bitnami/charts/commit/2cde47a374bf489f218ec2f22ebfe3158ed96d4e)), closes [#34464](https://github.com/bitnami/charts/issues/34464)
 
 ## <small>7.8.5 (2025-06-06)</small>
 

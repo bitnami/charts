@@ -460,6 +460,10 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## @param service.trafficDistribution Traffic distribution preference
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: ""
   ## @param service.clusterIP Memcached service Cluster IP
   ## e.g.:
   ## clusterIP: None
