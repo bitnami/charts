@@ -1,6 +1,15 @@
 # Changelog
 
-## 4.4.21 (2025-06-09)
+
+## 4.4.24 (2025-07-04)
+
+* [bitnami/rabbitmq-cluster-operator] Fix outdated CRD ([#34786](https://github.com/bitnami/charts/pull/34786))
+
+## <small>4.4.23 (2025-06-27)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Update cluster-operator to v2.15.0 ([#34696](https://github.com/bitnami/charts/pull/34696))
+
+## <small>4.4.21 (2025-06-09)</small>
 
 * [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#34275](https://github.com/bitnami/charts/pull/34275))
 
