@@ -1,12 +1,12 @@
 # Changelog
 
-## <small>7.9.1 (2025-07-05)</small>
+## 7.9.1 (2025-07-04)
 
 * [bitnami/memcached] Allow hostNetwork field to be specified ([#34804](https://github.com/bitnami/charts/pull/34804))
 
 ## 7.9.0 (2025-07-03)
 
-* [bitnami/memcached] Allow trafficDistribution field to be specified ([#34773](https://github.com/bitnami/charts/pull/34773))
+* [bitnami/memcached] Allow trafficDistribution field to be specified (#34773) ([d664f99](https://github.com/bitnami/charts/commit/d664f996b6693002fec2f808f0fc163398f10fad)), closes [#34773](https://github.com/bitnami/charts/issues/34773)
 
 ## <small>7.8.6 (2025-06-13)</small>
 
