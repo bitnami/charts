@@ -2,7 +2,7 @@
 
 ## 22.0.0 (2025-07-04)
 
-* Ensure that Redis resources are less than 63 chars ([#34803](https://github.com/bitnami/charts/pull/34803))
+* [bitnami/redis] Ensure that Redis resources are less than 63 chars ([#34803](https://github.com/bitnami/charts/pull/34803))
 
 ## <small>21.2.6 (2025-06-26)</small>
 
