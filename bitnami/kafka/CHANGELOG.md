@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>32.3.3 (2025-07-04)</small>
+
+* [bitnami/kafka] Update default value of `controller.heapOpts` to fit default value of `Containers.kafka.Limits.memory` as well; [e908a9c](https://github.com/plblueraven/bitnami-charts/commit/e908a9cfa2d4dcfcb0f89663437a9b1e1e37d334) does it for `heapOpts`, also see ([#29670](https://github.com/bitnami/charts/issues/29670))
+
 ## 32.3.2 (2025-07-02)
 
 * [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML ([#34772](https://github.com/bitnami/charts/pull/34772))
