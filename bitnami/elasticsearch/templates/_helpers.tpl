@@ -41,13 +41,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper Copy TLS Certificates image name
-*/}}
-{{- define "elasticsearch.copyTlsCerts.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.copyTlsCerts.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Name for the Elasticsearch service
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 Required for the Kibana subchart to find Elasticsearch service.
