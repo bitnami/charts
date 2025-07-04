@@ -23,10 +23,10 @@ spec:
   clusterIP: {{ .Values.metrics.service.clusterIP }}
   {{- end }}
   ports:
-    - name: {{ ternary "https-metrics" "http-metrics" .Values.metrics.authProxy.enabled }}
+    - name: http-metrics
       port: {{ .Values.metrics.service.ports.metrics }}
       protocol: TCP
-      targetPort: {{ ternary "https" "http-metrics" .Values.metrics.authProxy.enabled }}
+      targetPort: http-metrics
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-k6-operator
     app.kubernetes.io/component: grafana-k6-operator

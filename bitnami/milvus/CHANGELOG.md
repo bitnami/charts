@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.0.7 (2025-06-25)
+## 15.0.9 (2025-07-01)
 
-* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#34639](https://github.com/bitnami/charts/pull/34639))
+* [bitnami/milvus] Add GCS support to _helpers.tpl ([#34701](https://github.com/bitnami/charts/pull/34701))
+
+## <small>15.0.8 (2025-06-27)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#34691) ([a2d40b9](https://github.com/bitnami/charts/commit/a2d40b9b39ec0839cfeef3231a6e1d6ab0efc8c0)), closes [#34691](https://github.com/bitnami/charts/issues/34691)
+
+## <small>15.0.7 (2025-06-25)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#34639) ([763ed53](https://github.com/bitnami/charts/commit/763ed53e749e6cf771e372bb169aa112b54c9486)), closes [#34639](https://github.com/bitnami/charts/issues/34639)
 
 ## <small>15.0.6 (2025-06-13)</small>
 

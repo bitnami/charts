@@ -1,8 +1,48 @@
 # Changelog
 
-## 4.0.23 (2025-06-23)
+## 4.0.33 (2025-07-03)
 
-* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#34582](https://github.com/bitnami/charts/pull/34582))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#34779](https://github.com/bitnami/charts/pull/34779))
+
+## <small>4.0.32 (2025-07-02)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34776) ([97f9010](https://github.com/bitnami/charts/commit/97f90107b08dc7f427b1da409bccd2226803d793)), closes [#34776](https://github.com/bitnami/charts/issues/34776)
+
+## <small>4.0.31 (2025-07-02)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34769) ([b90db85](https://github.com/bitnami/charts/commit/b90db85b02d6749a7074571eead0b35a2bbb5d72)), closes [#34769](https://github.com/bitnami/charts/issues/34769)
+
+## <small>4.0.30 (2025-07-01)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34761) ([303011d](https://github.com/bitnami/charts/commit/303011d1eeccff7732f8f7aa68f99ae3db616892)), closes [#34761](https://github.com/bitnami/charts/issues/34761)
+
+## <small>4.0.29 (2025-07-01)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34752) ([5e8bfba](https://github.com/bitnami/charts/commit/5e8bfbaf5f5674e80c5a562928347dc2cce3ae93)), closes [#34752](https://github.com/bitnami/charts/issues/34752)
+
+## <small>4.0.28 (2025-07-01)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34744) ([b783814](https://github.com/bitnami/charts/commit/b78381489f6a35a58b9379b9f4aee6bb1b1e3b64)), closes [#34744](https://github.com/bitnami/charts/issues/34744)
+
+## <small>4.0.27 (2025-07-01)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34732) ([cc1529a](https://github.com/bitnami/charts/commit/cc1529abd578de3010754fea72a86515c24fa246)), closes [#34732](https://github.com/bitnami/charts/issues/34732)
+
+## <small>4.0.26 (2025-06-30)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34728) ([a29d746](https://github.com/bitnami/charts/commit/a29d7466f5128d848f5d6c8b2c80e078b858f635)), closes [#34728](https://github.com/bitnami/charts/issues/34728)
+
+## <small>4.0.25 (2025-06-26)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34662) ([0277b32](https://github.com/bitnami/charts/commit/0277b32c53b3c64e18f2e455da43b687c0531f35)), closes [#34662](https://github.com/bitnami/charts/issues/34662)
+
+## <small>4.0.24 (2025-06-24)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34606) ([b20b2e2](https://github.com/bitnami/charts/commit/b20b2e24f95ebb43fc220b20e1542af3d3391a0b)), closes [#34606](https://github.com/bitnami/charts/issues/34606)
+
+## <small>4.0.23 (2025-06-23)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#34582) ([c1ec97e](https://github.com/bitnami/charts/commit/c1ec97e7c3d91543848486fb948e2d7bb9dc559c)), closes [#34582](https://github.com/bitnami/charts/issues/34582)
 
 ## <small>4.0.22 (2025-06-18)</small>
 
