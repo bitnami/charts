@@ -9,28 +9,28 @@ SPDX-License-Identifier: APACHE-2.0
 Return the proper Redis master fullname
 */}}
 {{- define "redis.master.fullname" -}}
-{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "master")) | trimSuffix "-") "master" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc ((sub 63 ("master" | len)) | int) | trimSuffix "-") "master" -}}
 {{- end -}}
 
 {{/*
 Return the proper Redis replicas fullname
 */}}
 {{- define "redis.replicas.fullname" -}}
-{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "replicas")) | trimSuffix "-") "replicas" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc ((sub 63 ("replicas" | len)) | int) | trimSuffix "-") "replicas" -}}
 {{- end -}}
 
 {{/*
 Return the proper Redis sentinel fullname
 */}}
 {{- define "redis.sentinel.fullname" -}}
-{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "node")) | trimSuffix "-") "node" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc ((sub 63 ("node" | len)) | int) | trimSuffix "-") "node" -}}
 {{- end -}}
 
 {{/*
 Return the proper Redis headless fullname
 */}}
 {{- define "redis.headless.fullname" -}}
-{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "headless")) | trimSuffix "-") "headless" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc ((sub 63 ("headless" | len)) | int) | trimSuffix "-") "headless" -}}
 {{- end -}}
 
 {{/*
