@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.9.0 (2025-07-03)
+## 8.9.1 (2025-07-04)
 
-* [bitnami/external-dns] Add Support for Cloudflare Regional Services Configuration ([#34782](https://github.com/bitnami/charts/pull/34782))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34653](https://github.com/bitnami/charts/pull/34653))
+
+## 8.9.0 (2025-07-04)
+
+* [bitnami/external-dns] Add Support for Cloudflare Regional Services Configuration (#34782) ([7bc8596](https://github.com/bitnami/charts/commit/7bc8596d62919e525934e5847e5106713543e155)), closes [#34782](https://github.com/bitnami/charts/issues/34782)
 
 ## <small>8.8.7 (2025-06-26)</small>
 
