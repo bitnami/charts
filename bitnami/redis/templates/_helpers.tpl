@@ -34,6 +34,13 @@ Return the proper Redis headless fullname
 {{- end -}}
 
 {{/*
+Return the proper Redis metrics fullname
+*/}}
+{{- define "redis.metrics.fullname" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc ((sub 63 ("-metrics" | len)) | int) | trimSuffix "-") "metrics" -}}
+{{- end -}}
+
+{{/*
 Return the proper Redis image name
 */}}
 {{- define "redis.image" -}}
