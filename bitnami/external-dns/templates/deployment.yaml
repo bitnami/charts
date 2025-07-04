@@ -248,6 +248,12 @@ spec:
               {{- if .Values.cloudflare.dnsRecordsPerPage }}
             - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
               {{- end }}
+              {{- if .Values.cloudflare.regionalServices }}
+            - --cloudflare-regional-services
+              {{- end }}
+              {{- if .Values.cloudflare.regionKey }}
+            - --cloudflare-region-key={{ .Values.cloudflare.regionKey }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
