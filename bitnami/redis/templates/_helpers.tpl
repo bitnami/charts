@@ -6,6 +6,34 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Return the proper Redis master fullname
+*/}}
+{{- define "redis.master.fullname" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "master")) | trimSuffix "-") "master" -}}
+{{- end -}}
+
+{{/*
+Return the proper Redis replicas fullname
+*/}}
+{{- define "redis.replicas.fullname" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "replicas")) | trimSuffix "-") "replicas" -}}
+{{- end -}}
+
+{{/*
+Return the proper Redis sentinel fullname
+*/}}
+{{- define "redis.sentinel.fullname" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "node")) | trimSuffix "-") "node" -}}
+{{- end -}}
+
+{{/*
+Return the proper Redis headless fullname
+*/}}
+{{- define "redis.headless.fullname" -}}
+{{- printf "%s-%s" ((include "common.names.fullname" .) | trunc (sub 63 (len "headless")) | trimSuffix "-") "headless" -}}
+{{- end -}}
+
+{{/*
 Return the proper Redis image name
 */}}
 {{- define "redis.image" -}}
