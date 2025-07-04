@@ -271,6 +271,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 | Name                                    | Description                                                                                                   | Value       |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------- |
+| `hostNetwork`                           | Use host's network namespace type                                                                                       | `false` |
 | `service.type`                          | Kubernetes Service type                                                                                       | `ClusterIP` |
 | `service.ports.memcached`               | Memcached service port                                                                                        | `11211`     |
 | `service.nodePorts.memcached`           | Node port for Memcached                                                                                       | `""`        |
