@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.0.4 (2025-07-04)
+## 21.0.4 (2025-07-05)
 
 * fix prometheusRules syntax ([#34801](https://github.com/bitnami/charts/pull/34801))
 
