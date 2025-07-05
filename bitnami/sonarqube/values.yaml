@@ -139,7 +139,7 @@ maxHeapSize: 2048m
 ## @param jvmOpts Values to add to SONARQUBE_WEB_JAVA_ADD_OPTS
 ##
 jvmOpts: ""
-## @param jvmCeOpts Values to add to SONAR_CE_JAVAADDITIONALOPTS
+## @param jvmCeOpts Values to add to SONARQUBE_CE_JAVA_ADD_OPTS
 ##
 jvmCeOpts: ""
 ## @param startTimeout Timeout for the application to start in seconds
@@ -707,7 +707,7 @@ ingress:
 ## @section SonarQube caCerts provisioning parameters
 ##
 ## Provide a secret containing one or more certificate files in the keys that will be added to cacerts
-## The cacerts file will be set via SONARQUBE_WEB_JAVA_ADD_OPTS and SONAR_CE_JAVAADDITIONALOPTS
+## The cacerts file will be set via SONARQUBE_WEB_JAVA_ADD_OPTS and SONARQUBE_CE_JAVA_ADD_OPTS
 caCerts:
   ## @param caCerts.enabled Enable the use of caCerts
   ##
