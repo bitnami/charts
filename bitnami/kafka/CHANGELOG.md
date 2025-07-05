@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.3.2 (2025-07-02)
+## 32.3.3 (2025-07-04)
 
-* [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML ([#34772](https://github.com/bitnami/charts/pull/34772))
+* [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit ([#34796](https://github.com/bitnami/charts/pull/34796))
+
+## <small>32.3.2 (2025-07-03)</small>
+
+* [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML (#34772) ([7843fef](https://github.com/bitnami/charts/commit/7843fefb90112624b4e8baea66bfcaf7ed97aa46)), closes [#34772](https://github.com/bitnami/charts/issues/34772)
 
 ## <small>32.3.1 (2025-06-30)</small>
 
