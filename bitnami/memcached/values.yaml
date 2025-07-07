@@ -279,6 +279,10 @@ automountServiceAccountToken: false
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param hostNetwork Use host's network namespace
+## https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#hosts-namespaces
+##
+hostNetwork: false
 ## @param podLabels Extra labels for Memcached pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
