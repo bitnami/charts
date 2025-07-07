@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.9 (2025-06-14)
+## 7.1.10 (2025-07-07)
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#34503](https://github.com/bitnami/charts/pull/34503))
+* [bitnami/fluentd] feat: Support for config dual-stack for services ([#34827](https://github.com/bitnami/charts/pull/34827))
+
+## <small>7.1.9 (2025-06-14)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#34503) ([e1a35fe](https://github.com/bitnami/charts/commit/e1a35fec9a34ab0542eb021f6038efdae00405f9)), closes [#34503](https://github.com/bitnami/charts/issues/34503)
 
 ## <small>7.1.8 (2025-05-15)</small>
 
