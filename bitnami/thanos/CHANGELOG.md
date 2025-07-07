@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.6 (2025-07-01)
+## 17.0.7 (2025-07-07)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34747](https://github.com/bitnami/charts/pull/34747))
+* [bitnami/thanos] feat: Added support for configuring dual-stack for services ([#34825](https://github.com/bitnami/charts/pull/34825))
+
+## <small>17.0.6 (2025-07-01)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34747) ([44e6ce5](https://github.com/bitnami/charts/commit/44e6ce5b0d24eb53252484ad6cf7efe4f24bab8c)), closes [#34747](https://github.com/bitnami/charts/issues/34747)
 
 ## <small>17.0.5 (2025-06-27)</small>
 
