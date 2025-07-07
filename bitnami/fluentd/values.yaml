@@ -382,6 +382,12 @@ forwarder:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param forwarder.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param forwarder.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -958,6 +964,12 @@ aggregator:
       ## @param aggregator.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param aggregator.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param aggregator.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
