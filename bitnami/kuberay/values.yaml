@@ -738,7 +738,7 @@ operator:
       jobLabel: ""
       ## @param operator.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
       ##
-      honorLabels: false
+      honorLabels: true
       ## @param operator.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ## e.g:
