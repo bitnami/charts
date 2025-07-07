@@ -12,6 +12,6 @@ it('can check metrics endpoint', () => {
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
-    expect(response.body).to.contain('external_dns_registry_a_records');
+    expect(response.body).to.contain('external_dns_registry_records');
   });
 });

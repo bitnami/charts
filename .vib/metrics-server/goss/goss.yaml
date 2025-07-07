@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
+  https://127.0.0.1:{{ .Vars.containerPorts.https }}/metrics:
+    status: 200
+    allow-insecure: true
+    body:
+    - metrics_server_storage_points
   https://metrics-server:{{ .Vars.service.ports.https }}/metrics:
     status: 200
     allow-insecure: true
