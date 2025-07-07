@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.8 (2025-06-18)
+## 12.0.9 (2025-07-07)
 
-* [bitnami/grafana] Templated Rendering of Grafana Datasource SecretName ([#34541](https://github.com/bitnami/charts/pull/34541))
+* [bitnami/grafana] Adding possibility to deploy as StatefulSet ([#34831](https://github.com/bitnami/charts/pull/34831))
+
+## <small>12.0.8 (2025-06-18)</small>
+
+* [bitnami/grafana] Templated Rendering of Grafana Datasource SecretName (#34541) ([e4c0e71](https://github.com/bitnami/charts/commit/e4c0e712a84116fa01cf14408dac47acce0d94ef)), closes [#34541](https://github.com/bitnami/charts/issues/34541)
 
 ## <small>12.0.7 (2025-06-18)</small>
 
