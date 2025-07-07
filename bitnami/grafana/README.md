@@ -24,15 +24,15 @@ This chart bootstraps a [grafana](https://github.com/bitnami/containers/tree/mai
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The *bitnami/grafana* chart deploys a single Grafana installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.) or a Kubernetes StatefulSet object (with headless service, volumeClaimTemplate and ConfigMaps). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
 ```text
                     +--------------+             +-----+
                     |              |             |     |
  Service & Ingress  |    Grafana   +<------------+ PVC |
 <-------------------+              |             |     |
-                    |  Deployment  |             +-----+
-                    |              |
+                    |  Deployment/ |             +-----+
+                    |  StatefulSet |
                     +-----------+--+
                                 ^                +------------+
                                 |                |            |
@@ -368,6 +368,8 @@ imageRenderer:
 To support HA Grafana just need an external database where store dashboards, users and other persistent data.
 To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/installation/configuration/#database)
 
+It's also recommended to use a `StatefulSet` kind instead of a `Deployment` kind to leverage the `volumeClaimTemplates`.
+
 More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
 
 ### Setting Pod's affinity
@@ -477,6 +479,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | Name                                                        | Description                                                                                                                                                                                                                       | Value            |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                                                                                                                                           | `1`              |
+| `grafana.kind`                                              | Use either StatefulSet or a Deployment                                                                                                                                                                                            | `Deployment`     |
 | `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                                                                                                                                                  | `RollingUpdate`  |
 | `grafana.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                | `false`          |
 | `grafana.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                       | `[]`             |
