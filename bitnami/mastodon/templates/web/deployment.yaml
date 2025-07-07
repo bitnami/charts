@@ -30,6 +30,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.web.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: mastodon
         app.kubernetes.io/component: web
     spec:
       serviceAccountName: {{ template "mastodon.serviceAccountName" . }}

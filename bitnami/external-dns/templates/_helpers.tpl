@@ -168,33 +168,35 @@ region = {{ .Values.aws.region }}
 {{- end -}}
 {{- end -}}
 
+
 {{- define "external-dns.azure-credentials" -}}
-{
-  {{- if .Values.azure.cloud }}
-  "cloud": "{{ .Values.azure.cloud }}",
-  {{- end }}
-  {{- if .Values.azure.tenantId }}
-  "tenantId": "{{ .Values.azure.tenantId }}",
-  {{- end }}
-  {{- if .Values.azure.subscriptionId }}
-  "subscriptionId": "{{ .Values.azure.subscriptionId }}",
-  {{- end }}
-  "resourceGroup": "{{ .Values.azure.resourceGroup }}",
-  {{- if not (or .Values.azure.useManagedIdentityExtension .Values.azure.useWorkloadIdentityExtension) }}
-  "aadClientId": "{{ .Values.azure.aadClientId }}",
-  "aadClientSecret": "{{ .Values.azure.aadClientSecret }}"
-  {{- end }}
-  {{- if .Values.azure.useWorkloadIdentityExtension }}
-  "useWorkloadIdentityExtension":  true,
-  {{- end }}
-  {{- if and .Values.azure.useManagedIdentityExtension .Values.azure.userAssignedIdentityID }}
-  "useManagedIdentityExtension": true,
-  "userAssignedIdentityID": "{{ .Values.azure.userAssignedIdentityID }}"
-  {{- else if and .Values.azure.useManagedIdentityExtension (not .Values.azure.userAssignedIdentityID) }}
-  "useManagedIdentityExtension": true
-  {{- end }}
-}
-{{ end }}
+{{- $credentials := dict -}}
+{{- if .Values.azure.cloud -}}
+{{- $_ := set $credentials "cloud" .Values.azure.cloud -}}
+{{- end -}}
+{{- if .Values.azure.tenantId -}}
+{{- $_ := set $credentials "tenantId" .Values.azure.tenantId -}}
+{{- end -}}
+{{- if .Values.azure.subscriptionId -}}
+{{- $_ := set $credentials "subscriptionId" .Values.azure.subscriptionId -}}
+{{- end -}}
+{{- $_ := set $credentials "resourceGroup" .Values.azure.resourceGroup -}}
+{{- if not (or .Values.azure.useManagedIdentityExtension .Values.azure.useWorkloadIdentityExtension) -}}
+{{- $_ := set $credentials "aadClientId" .Values.azure.aadClientId -}}
+{{- $_ := set $credentials "aadClientSecret" .Values.azure.aadClientSecret -}}
+{{- end -}}
+{{- if .Values.azure.useWorkloadIdentityExtension -}}
+{{- $_ := set $credentials "useWorkloadIdentityExtension" true -}}
+{{- end -}}
+{{- if and .Values.azure.useManagedIdentityExtension .Values.azure.userAssignedIdentityID -}}
+{{- $_ := set $credentials "useManagedIdentityExtension" true -}}
+{{- $_ := set $credentials "userAssignedIdentityID" .Values.azure.userAssignedIdentityID -}}
+{{- else if and .Values.azure.useManagedIdentityExtension (not .Values.azure.userAssignedIdentityID) -}}
+{{- $_ := set $credentials "useManagedIdentityExtension" true -}}
+{{- end -}}
+{{- $credentials | toJson -}}
+{{- end -}}
+
 {{- define "external-dns.oci-credentials" -}}
 {{- if .Values.oci.useWorkloadIdentity }}
 auth:

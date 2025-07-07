@@ -1,8 +1,24 @@
 # Changelog
 
-## 24.1.2 (2025-06-06)
+## 24.2.0 (2025-06-24)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34221](https://github.com/bitnami/charts/pull/34221))
+* [bitnami/airflow] Move venv to emptydir volume ([#34560](https://github.com/bitnami/charts/pull/34560))
+
+## <small>24.1.5 (2025-06-23)</small>
+
+* [bitnami/airflow] Configure correct section for api/web secret_key (#34581) ([fe92d1b](https://github.com/bitnami/charts/commit/fe92d1b2ed3277e8c8549f5732544253ea1178ba)), closes [#34581](https://github.com/bitnami/charts/issues/34581)
+
+## <small>24.1.4 (2025-06-19)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34306) ([24c47d3](https://github.com/bitnami/charts/commit/24c47d393449d1e7d1a62f60ba2ef5db27068239)), closes [#34306](https://github.com/bitnami/charts/issues/34306)
+
+## <small>24.1.3 (2025-06-16)</small>
+
+* [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBui ([047f06d](https://github.com/bitnami/charts/commit/047f06d129b6587a1d6e9615603bb7c8c2a78ff0)), closes [#34382](https://github.com/bitnami/charts/issues/34382)
+
+## <small>24.1.2 (2025-06-06)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34221) ([f42b7ae](https://github.com/bitnami/charts/commit/f42b7aefc905b479c54b142d7c0152fc9fa5c36d)), closes [#34221](https://github.com/bitnami/charts/issues/34221)
 
 ## <small>24.1.1 (2025-05-26)</small>
 

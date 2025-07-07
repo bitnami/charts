@@ -1,8 +1,28 @@
 # Changelog
 
-## 17.0.4 (2025-06-11)
+## 17.0.9 (2025-06-25)
 
-*  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is added ([#34311](https://github.com/bitnami/charts/pull/34311))
+* [bitnami/minio] Adapt Console Deployment's PodSecurityContext for OpenShift ([#34580](https://github.com/bitnami/charts/pull/34580))
+
+## <small>17.0.8 (2025-06-24)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34595) ([5508ae1](https://github.com/bitnami/charts/commit/5508ae1c9e3f261e729f534325abe98d558eda79)), closes [#34595](https://github.com/bitnami/charts/issues/34595)
+
+## <small>17.0.7 (2025-06-24)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34594) ([0fb1e88](https://github.com/bitnami/charts/commit/0fb1e885345eb342ef385d4d332209f6b761fa05)), closes [#34594](https://github.com/bitnami/charts/issues/34594)
+
+## <small>17.0.6 (2025-06-19)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34556) ([1f0d9e8](https://github.com/bitnami/charts/commit/1f0d9e8d99735ea2479224b14cbf83a71be5e660)), closes [#34556](https://github.com/bitnami/charts/issues/34556)
+
+## <small>17.0.5 (2025-06-16)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#34339) ([040a7bc](https://github.com/bitnami/charts/commit/040a7bcdbe9df037a3fab06b39095cf666d585d7)), closes [#34339](https://github.com/bitnami/charts/issues/34339)
+
+## <small>17.0.4 (2025-06-11)</small>
+
+*  [bitnami/minio] fix: chown in the volume-permissions will only work if the CHOWN capability is adde ([84b733b](https://github.com/bitnami/charts/commit/84b733b9426b91973701f95772e1f01c780d5f5e)), closes [#34311](https://github.com/bitnami/charts/issues/34311)
 
 ## <small>17.0.3 (2025-06-06)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.0.13 (2025-06-12)
+## 16.0.16 (2025-07-01)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34375](https://github.com/bitnami/charts/pull/34375))
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34739](https://github.com/bitnami/charts/pull/34739))
+
+## <small>16.0.15 (2025-06-25)</small>
+
+* [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password (#32857) ([ac50a71](https://github.com/bitnami/charts/commit/ac50a71cbf6ca351e21367082205d7ac4f46d2aa)), closes [#32857](https://github.com/bitnami/charts/issues/32857)
+
+## <small>16.0.14 (2025-06-13)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34486) ([61f65fb](https://github.com/bitnami/charts/commit/61f65fbbe03ea94d2dae41b9ef1c7279e9384a8b)), closes [#34486](https://github.com/bitnami/charts/issues/34486)
+
+## <small>16.0.13 (2025-06-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34375) ([3ac12a1](https://github.com/bitnami/charts/commit/3ac12a10325eba47b2e31a3db3d008e3b421f867)), closes [#34375](https://github.com/bitnami/charts/issues/34375)
 
 ## <small>16.0.12 (2025-06-11)</small>
 

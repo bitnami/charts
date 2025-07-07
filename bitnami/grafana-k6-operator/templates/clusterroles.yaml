@@ -150,7 +150,7 @@ rules:
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
-{{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
+{{- if .Values.metrics.enabled }}
 ---
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}

@@ -1,8 +1,13 @@
 # Changelog
 
-## 13.8.3 (2025-05-28)
+## 13.8.4 (2025-06-27)
 
-* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#33935](https://github.com/bitnami/charts/pull/33935))
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#34692](https://github.com/bitnami/charts/pull/34692))
+
+## <small>13.8.3 (2025-05-28)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references (#33935) ([eaf105d](https://github.com/bitnami/charts/commit/eaf105d596e48bf78bd4547e12be30aca7deb2e3)), closes [#33935](https://github.com/bitnami/charts/issues/33935)
 
 ## <small>13.8.2 (2025-05-06)</small>
 

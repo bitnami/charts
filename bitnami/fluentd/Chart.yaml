@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: fluentd
-      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r18
+      image: docker.io/bitnami/fluentd:1.18.0-debian-12-r21
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -32,4 +32,4 @@ maintainers:
 name: fluentd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluentd
-version: 7.1.8
+version: 7.1.9

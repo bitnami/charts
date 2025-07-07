@@ -1,8 +1,24 @@
 # Changelog
 
-## 17.0.2 (2025-06-09)
+## 17.0.6 (2025-07-01)
 
-* [bitnami/thanos] Disable MinIO Console ([#34269](https://github.com/bitnami/charts/pull/34269))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34747](https://github.com/bitnami/charts/pull/34747))
+
+## <small>17.0.5 (2025-06-27)</small>
+
+* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components (#3 ([879bca6](https://github.com/bitnami/charts/commit/879bca6783b372641facf6332eb179dd10569590)), closes [#34256](https://github.com/bitnami/charts/issues/34256)
+
+## <small>17.0.4 (2025-06-25)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34622) ([b98bf4b](https://github.com/bitnami/charts/commit/b98bf4b149114396ab00faf491efb38aff2b509d)), closes [#34622](https://github.com/bitnami/charts/issues/34622)
+
+## <small>17.0.3 (2025-06-13)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34496) ([fe5afc2](https://github.com/bitnami/charts/commit/fe5afc2d868484a9b20b210307131d881568dd70)), closes [#34496](https://github.com/bitnami/charts/issues/34496)
+
+## <small>17.0.2 (2025-06-09)</small>
+
+* [bitnami/thanos] Disable MinIO Console (#34269) ([a92a7fe](https://github.com/bitnami/charts/commit/a92a7fec980c003b23748a3a8db91c07450a44a0)), closes [#34269](https://github.com/bitnami/charts/issues/34269)
 
 ## <small>17.0.1 (2025-06-06)</small>
 

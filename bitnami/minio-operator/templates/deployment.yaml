@@ -106,8 +106,6 @@ spec:
           env:
             - name: OPERATOR_SIDECAR_IMAGE
               value: {{ include "minio-operator.sidecar.image" . | quote }}
-            - name: TENANT_KES_IMAGE
-              value: {{ include "minio-operator.kes.image" . }}
             - name: TENANT_MINIO_IMAGE
               value: {{ include "minio-operator.minio.image" . }}
             {{- if .Values.sts.enabled }}

@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.9.0-debian-12-r5
+      image: docker.io/bitnami/oauth2-proxy:7.9.0-debian-12-r6
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -38,4 +38,4 @@ maintainers:
 name: oauth2-proxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 7.0.2
+version: 7.0.3

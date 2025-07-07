@@ -460,6 +460,10 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## @param service.trafficDistribution Traffic distribution preference
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: ""
   ## @param service.clusterIP Memcached service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -682,7 +686,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.15.3-debian-12-r1
+    tag: 0.15.3-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

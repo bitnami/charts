@@ -1,8 +1,44 @@
 # Changelog
 
-## 4.0.4 (2025-06-09)
+## 5.1.0 (2025-06-30)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34283](https://github.com/bitnami/charts/pull/34283))
+* [bitnami/mlflow] Adds resources to init containers ([#33910](https://github.com/bitnami/charts/pull/33910))
+
+## <small>5.0.6 (2025-06-30)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34718) ([9f0041b](https://github.com/bitnami/charts/commit/9f0041bad7245a4b6bd59923cf0fbaaf08cc8dc2)), closes [#34718](https://github.com/bitnami/charts/issues/34718)
+
+## <small>5.0.5 (2025-06-30)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34707) ([66759d6](https://github.com/bitnami/charts/commit/66759d6c4753908aa8824bfc7d333e3af24e1fb5)), closes [#34707](https://github.com/bitnami/charts/issues/34707)
+
+## <small>5.0.4 (2025-06-26)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34675) ([35ee5a3](https://github.com/bitnami/charts/commit/35ee5a3568e2de13d3dc16aa191408624b3e12aa)), closes [#34675](https://github.com/bitnami/charts/issues/34675)
+
+## <small>5.0.3 (2025-06-25)</small>
+
+* [bitnami/mlflow] Create flask-server-secret-key when upgrading (#34629) ([97dc66c](https://github.com/bitnami/charts/commit/97dc66c3236fce07dfa6476ed688438c49f4d26c)), closes [#34629](https://github.com/bitnami/charts/issues/34629)
+
+## <small>5.0.2 (2025-06-25)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34619) ([4003b7b](https://github.com/bitnami/charts/commit/4003b7b7f3780a03d0945b51dd91a1754c2096c0)), closes [#34619](https://github.com/bitnami/charts/issues/34619)
+
+## <small>5.0.1 (2025-06-16)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34518) ([380180e](https://github.com/bitnami/charts/commit/380180eea6c06e50022ff474a64cf100e1ce2618)), closes [#34518](https://github.com/bitnami/charts/issues/34518)
+
+## 5.0.0 (2025-06-16)
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34452) ([524fdd9](https://github.com/bitnami/charts/commit/524fdd9c6a3a9208d6d727bbb77cfc46084d96d0)), closes [#34452](https://github.com/bitnami/charts/issues/34452)
+
+## <small>4.0.5 (2025-06-13)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34434) ([791bb24](https://github.com/bitnami/charts/commit/791bb24ca9e59406a3f5b9046d23ecb20446f438)), closes [#34434](https://github.com/bitnami/charts/issues/34434)
+
+## <small>4.0.4 (2025-06-09)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34283) ([e6a33ef](https://github.com/bitnami/charts/commit/e6a33ef93fd3edac6b976b9815a3681adefba9f7)), closes [#34283](https://github.com/bitnami/charts/issues/34283)
 
 ## <small>4.0.3 (2025-06-09)</small>
 

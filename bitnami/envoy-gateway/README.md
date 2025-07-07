@@ -381,6 +381,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.nodePorts.webhook`             | Node port for webhook                                                                              | `""`        |
 | `service.clusterIP`                     | Envoy Gateway service Cluster IP                                                                   | `""`        |
 | `service.loadBalancerIP`                | Envoy Gateway service Load Balancer IP                                                             | `""`        |
+| `service.loadBalancerClass`             | Envoy Gateway Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)     | `""`        |
 | `service.loadBalancerSourceRanges`      | Envoy Gateway service Load Balancer sources                                                        | `[]`        |
 | `service.externalTrafficPolicy`         | Envoy Gateway service external traffic policy                                                      | `Cluster`   |
 | `service.labels`                        | Labels for the service                                                                             | `{}`        |

@@ -227,7 +227,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  {{- if not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres") }} 
+                  key: postgres-password
+                  {{- else }}
                   key: password
+                  {{- end }}
             {{- end }}
             - name: PGPOOL_ADMIN_USERNAME
               value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}

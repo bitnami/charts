@@ -1,8 +1,32 @@
 # Changelog
 
-## 32.2.15 (2025-06-10)
+## 32.3.2 (2025-07-02)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34316](https://github.com/bitnami/charts/pull/34316))
+* [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML ([#34772](https://github.com/bitnami/charts/pull/34772))
+
+## <small>32.3.1 (2025-06-30)</small>
+
+* [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list (#343 ([326a7cf](https://github.com/bitnami/charts/commit/326a7cf8d6584c37131ea645d3b9b577e8f5a627)), closes [#34359](https://github.com/bitnami/charts/issues/34359)
+
+## 32.3.0 (2025-06-27)
+
+* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum (#34689) ([559b34b](https://github.com/bitnami/charts/commit/559b34b2a16d14165cbcf16d7c0aec080002b1cc)), closes [#34689](https://github.com/bitnami/charts/issues/34689)
+
+## <small>32.2.18 (2025-06-25)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34615) ([3e69eb6](https://github.com/bitnami/charts/commit/3e69eb6531e7b8eaca4275c43aec8e780c99ee45)), closes [#34615](https://github.com/bitnami/charts/issues/34615)
+
+## <small>32.2.17 (2025-06-18)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34545) ([abde90b](https://github.com/bitnami/charts/commit/abde90b857ff403f1899bcb26c5e834c7788de0f)), closes [#34545](https://github.com/bitnami/charts/issues/34545)
+
+## <small>32.2.16 (2025-06-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34458) ([f9b84e1](https://github.com/bitnami/charts/commit/f9b84e164172062832510f7a5846a2e160a3eeb2)), closes [#34458](https://github.com/bitnami/charts/issues/34458)
+
+## <small>32.2.15 (2025-06-10)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34316) ([6145eac](https://github.com/bitnami/charts/commit/6145eac50971bbe0fe26a59f9aed7b466ba57c60)), closes [#34316](https://github.com/bitnami/charts/issues/34316)
 
 ## <small>32.2.14 (2025-06-10)</small>
 

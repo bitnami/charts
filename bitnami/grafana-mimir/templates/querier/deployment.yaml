@@ -111,8 +111,8 @@ spec:
                   name: {{ include "grafana-mimir.minio.secretName" . }}
                   key: {{ include "grafana-mimir.minio.secretAccessKeyKey" . }}
             {{- end }}
-            {{- if .Values.compactor.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.querier.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             {{- if .Values.querier.extraEnvVarsCM }}

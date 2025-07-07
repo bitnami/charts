@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.7.12 (2025-06-11)
+## 11.7.14 (2025-07-04)
 
-* [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#34342](https://github.com/bitnami/charts/pull/34342))
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#34809](https://github.com/bitnami/charts/pull/34809))
+
+## <small>11.7.13 (2025-07-01)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34757) ([22bf2fb](https://github.com/bitnami/charts/commit/22bf2fb2a79a7a6a31ed6f434a8c6b19c7020230)), closes [#34757](https://github.com/bitnami/charts/issues/34757)
+
+## <small>11.7.12 (2025-06-11)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34342) ([70d9da9](https://github.com/bitnami/charts/commit/70d9da9b2644479c1ca4efc359a244de76730164)), closes [#34342](https://github.com/bitnami/charts/issues/34342)
 
 ## <small>11.7.11 (2025-06-10)</small>
 

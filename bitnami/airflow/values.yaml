@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 3.0.1-debian-12-r4
+  tag: 3.0.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -312,6 +312,52 @@ defaultInitContainers:
     ##
     resourcesPreset: "micro"
     ## @param defaultInitContainers.waitForDBMigrations.resources Set Airflow "wait-for-db-migrations" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## E.g:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  prepareVenv:
+    ## Configure "prepare-venv" init-container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.enabled Enabled "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "prepare-venv" init-containers
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.runAsUser Set runAsUser in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.runAsGroup Set runAsUser in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.privileged Set privileged in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "prepare-venv" init-containers' Security Context
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.capabilities.add List of capabilities to be added in "prepare-venv" init-containers
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "prepare-venv" init-containers
+    ## @param defaultInitContainers.prepareVenv.containerSecurityContext.seccompProfile.type Set seccomp profile in "prepare-venv" init-containers
+    ##
+    containerSecurityContext:
+      enabled: true
+      seLinuxOptions: {}
+      runAsUser: 1001
+      runAsGroup: 1001
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        add: []
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
+    ## Airflow "prepare-venv" init container resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param defaultInitContainers.prepareVenv.resourcesPreset Set Airflow "prepare-venv" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareVenv.resources is set (defaultInitContainers.prepareVenv.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param defaultInitContainers.prepareVenv.resources Set Airflow "prepare-venv" init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## E.g:
     ## resources:
     ##   requests:
@@ -2580,6 +2626,9 @@ setupDBJob:
 ## @param ldap.uri Server URI, eg. ldap://ldap_server:389
 ## @param ldap.basedn Base of the search, eg. ou=example,o=org.
 ## @param ldap.searchAttribute if doing an indirect bind to ldap, this is the field that matches the username when searching for the account to bind to
+## @param ldap.firstnameField LDAP field that stores the user's first name.
+## @param ldap.lastnameField LDAP field that stores the user's last name.
+## @param ldap.emailField field that stores the user's email address, if null in LDAP, email is set to: "{username}@email.notfound"
 ## @param ldap.binddn DN of the account used to search in the LDAP server.
 ## @param ldap.bindpw Bind Password
 ## @param ldap.existingSecret Name of an existing secret containing the LDAP bind password
@@ -2593,6 +2642,9 @@ ldap:
   uri: "ldap://ldap_server:389"
   basedn: "dc=example,dc=org"
   searchAttribute: "cn"
+  firstnameField: "givenName"
+  lastnameField: "sn"
+  emailField: "mail"
   binddn: "cn=admin,dc=example,dc=org"
   bindpw: ""
   existingSecret: ""
@@ -2830,7 +2882,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/statsd-exporter
-    tag: 0.28.0-debian-12-r19
+    tag: 0.28.0-debian-12-r20
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

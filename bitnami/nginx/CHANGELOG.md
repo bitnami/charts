@@ -1,8 +1,40 @@
 # Changelog
 
+## 21.0.3 (2025-06-30)
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34717](https://github.com/bitnami/charts/pull/34717))
+
+## <small>21.0.2 (2025-06-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34710) ([44266ca](https://github.com/bitnami/charts/commit/44266ca8f443622596057153e546317bbd59c445)), closes [#34710](https://github.com/bitnami/charts/issues/34710)
+
+## <small>21.0.1 (2025-06-26)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34678) ([96aa381](https://github.com/bitnami/charts/commit/96aa381320b94ff8663a2b4ccee0ffa4f3bf9932)), closes [#34678](https://github.com/bitnami/charts/issues/34678)
+
+## 21.0.0 (2025-06-26)
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34655) ([ada30f1](https://github.com/bitnami/charts/commit/ada30f145bce0b7d71f1147bc5ce8683163517c5)), closes [#34655](https://github.com/bitnami/charts/issues/34655)
+
+## <small>20.1.4 (2025-06-26)</small>
+
+* [bitnami/nginx] Update dependencies (#34651) ([2298065](https://github.com/bitnami/charts/commit/22980650f8d0c52a76f2d14d43c72dcecb5918aa)), closes [#34651](https://github.com/bitnami/charts/issues/34651)
+
+## <small>20.1.3 (2025-06-16)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34520) ([3e09df1](https://github.com/bitnami/charts/commit/3e09df1c46cb8ace38ddfee51d3666d3dafaa45e)), closes [#34520](https://github.com/bitnami/charts/issues/34520)
+
+## <small>20.1.2 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34476) ([8a8748f](https://github.com/bitnami/charts/commit/8a8748f972eb24459a0a4cce7b1fefbe2b1585e7)), closes [#34476](https://github.com/bitnami/charts/issues/34476)
+
+## <small>20.1.1 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34435) ([6ec0d05](https://github.com/bitnami/charts/commit/6ec0d05f23a002fe7e47bb2c85053aa18c533985)), closes [#34435](https://github.com/bitnami/charts/issues/34435)
+
 ## 20.1.0 (2025-06-10)
 
-* [bitnami/nginx] Service Monitor support tlsConfig ([#34109](https://github.com/bitnami/charts/pull/34109))
+* [bitnami/nginx] Service Monitor support tlsConfig (#34109) ([97011de](https://github.com/bitnami/charts/commit/97011dee108515c01d6850b2e3ba895352439e6e)), closes [#34109](https://github.com/bitnami/charts/issues/34109)
 
 ## <small>20.0.8 (2025-06-09)</small>
 

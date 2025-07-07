@@ -1,8 +1,32 @@
 # Changelog
 
-## 6.0.8 (2025-06-11)
+## 6.0.14 (2025-07-02)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#34348](https://github.com/bitnami/charts/pull/34348))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#34766](https://github.com/bitnami/charts/pull/34766))
+
+## <small>6.0.13 (2025-07-02)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34764) ([f095bcf](https://github.com/bitnami/charts/commit/f095bcf48b7fb4048a8db98d074ea9a608ef5dbe)), closes [#34764](https://github.com/bitnami/charts/issues/34764)
+
+## <small>6.0.12 (2025-06-25)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34613) ([e2d7724](https://github.com/bitnami/charts/commit/e2d772407d78bd8bcaa1bbc1a874d040dcca7596)), closes [#34613](https://github.com/bitnami/charts/issues/34613)
+
+## <small>6.0.11 (2025-06-18)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34533) ([c3fd2ea](https://github.com/bitnami/charts/commit/c3fd2eadad302c442546bbfe8847fb17a616d7d1)), closes [#34533](https://github.com/bitnami/charts/issues/34533)
+
+## <small>6.0.10 (2025-06-16)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34514) ([9a3cee5](https://github.com/bitnami/charts/commit/9a3cee528ddf9aa17402462bc824bf3002174c0f)), closes [#34514](https://github.com/bitnami/charts/issues/34514)
+
+## <small>6.0.9 (2025-06-13)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34445) ([13fdc03](https://github.com/bitnami/charts/commit/13fdc0300ff6963fd07b25f4feb15acf31998b02)), closes [#34445](https://github.com/bitnami/charts/issues/34445)
+
+## <small>6.0.8 (2025-06-11)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34348) ([05d3931](https://github.com/bitnami/charts/commit/05d393188f7f0159c631b4aba0833b6363e41356)), closes [#34348](https://github.com/bitnami/charts/issues/34348)
 
 ## <small>6.0.7 (2025-06-06)</small>
 

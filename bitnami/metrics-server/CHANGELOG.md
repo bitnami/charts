@@ -1,8 +1,17 @@
 # Changelog
 
-## 7.4.6 (2025-06-06)
+## 7.4.8 (2025-07-03)
 
-* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34193](https://github.com/bitnami/charts/pull/34193))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34777](https://github.com/bitnami/charts/pull/34777))
+
+## <small>7.4.7 (2025-06-13)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34467) ([2fd5c55](https://github.com/bitnami/charts/commit/2fd5c555759bbd0d22750172eb33cfdb9b51c542)), closes [#34467](https://github.com/bitnami/charts/issues/34467)
+
+## <small>7.4.6 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34193) ([70c9a27](https://github.com/bitnami/charts/commit/70c9a27c97d1a665484c5c8af16959a4809cd6f7)), closes [#34193](https://github.com/bitnami/charts/issues/34193)
 
 ## <small>7.4.5 (2025-05-07)</small>
 
