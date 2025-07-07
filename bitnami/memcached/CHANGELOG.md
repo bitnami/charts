@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.9.1 (2025-07-05)
+## 7.9.1 (2025-07-07)
 
 * [bitnami/memcached] Allow hostNetwork field to be specified ([#34804](https://github.com/bitnami/charts/pull/34804))
 
