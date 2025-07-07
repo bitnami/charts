@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.3.0 (2025-07-05)
+## 21.2.8 (2025-07-07)
 
 * [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
+
+## <small>21.2.7 (2025-07-06)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34816) ([1b0458e](https://github.com/bitnami/charts/commit/1b0458e88afb4d8486b4843bbba98a1512080626)), closes [#34816](https://github.com/bitnami/charts/issues/34816)
 
 ## <small>21.2.6 (2025-06-26)</small>
 
