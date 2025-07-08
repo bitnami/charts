@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.1 (2025-07-08)
+## 5.1.2 (2025-07-08)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34856](https://github.com/bitnami/charts/pull/34856))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#34891](https://github.com/bitnami/charts/pull/34891))
+
+## <small>5.1.1 (2025-07-08)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34856) ([100bf45](https://github.com/bitnami/charts/commit/100bf45756b4d13d0f8cfb35c59d67359f371899)), closes [#34856](https://github.com/bitnami/charts/issues/34856)
 
 ## 5.1.0 (2025-06-30)
 
