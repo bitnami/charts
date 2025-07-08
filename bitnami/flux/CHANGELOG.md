@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.29 (2025-07-08)
+## 2.4.30 (2025-07-08)
 
-* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34846](https://github.com/bitnami/charts/pull/34846))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34884](https://github.com/bitnami/charts/pull/34884))
+
+## <small>2.4.29 (2025-07-08)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34846) ([75e9998](https://github.com/bitnami/charts/commit/75e999858006e751c58253aeb026df3e8ff05090)), closes [#34846](https://github.com/bitnami/charts/issues/34846)
 
 ## <small>2.4.28 (2025-07-08)</small>
 
