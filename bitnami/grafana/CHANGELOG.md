@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.9 (2025-07-07)
+## 12.0.9 (2025-07-08)
 
 * [bitnami/grafana] Adding possibility to deploy as StatefulSet ([#34831](https://github.com/bitnami/charts/pull/34831))
 
