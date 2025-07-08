@@ -7,7 +7,7 @@ annotations:
     - name: acmesolver
       image: docker.io/bitnami/acmesolver:1.18.2-debian-12-r0
     - name: cainjector
-      image: docker.io/bitnami/cainjector:1.18.2-debian-12-r0
+      image: docker.io/bitnami/cainjector:1.18.2-debian-12-r1
     - name: cert-manager
       image: docker.io/bitnami/cert-manager:1.18.2-debian-12-r1
     - name: cert-manager-webhook
@@ -37,4 +37,4 @@ maintainers:
 name: cert-manager
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
-version: 1.5.7
+version: 1.5.8
