@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.16 (2025-06-26)
+## 3.0.17 (2025-07-07)
 
-* [bitnami/valkey] Fix key on condition to create PodDisruptionBudget ([#34641](https://github.com/bitnami/charts/pull/34641))
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#34833](https://github.com/bitnami/charts/pull/34833))
+
+## <small>3.0.16 (2025-06-26)</small>
+
+* [bitnami/valkey] Fix key on condition to create PodDisruptionBudget (#34641) ([be1c518](https://github.com/bitnami/charts/commit/be1c518fbde7a4bd1459d29155b3874180cbf405)), closes [#34641](https://github.com/bitnami/charts/issues/34641)
 
 ## <small>3.0.15 (2025-06-18)</small>
 
