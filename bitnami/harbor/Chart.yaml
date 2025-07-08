@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: harbor-adapter-trivy
-      image: docker.io/bitnami/harbor-adapter-trivy:2.13.1-debian-12-r3
+      image: docker.io/bitnami/harbor-adapter-trivy:2.13.1-debian-12-r4
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.13.1-debian-12-r8
+      image: docker.io/bitnami/harbor-core:2.13.1-debian-12-r9
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.13.1-debian-12-r6
+      image: docker.io/bitnami/harbor-exporter:2.13.1-debian-12-r7
     - name: harbor-jobservice
       image: docker.io/bitnami/harbor-jobservice:2.13.1-debian-12-r5
     - name: harbor-portal
@@ -56,4 +56,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 26.7.8
+version: 26.7.9
