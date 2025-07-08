@@ -327,7 +327,7 @@ spec:
               subPath: tmp-dir
             - name: ghost-data
               mountPath: /bitnami/ghost
-            {{- if .Values.persistence.subPath }}
+            {{- if (and (not .Values.usePasswordFiles) .Values.persistence.subPath) }}
               subPath: {{ .Values.persistence.subPath }}
             {{- end }}
             {{- if and .Values.usePasswordFiles }}
