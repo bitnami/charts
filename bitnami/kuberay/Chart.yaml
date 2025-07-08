@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: kuberay-apiserver
-      image: docker.io/bitnami/kuberay-apiserver:1.4.1-debian-12-r0
+      image: docker.io/bitnami/kuberay-apiserver:1.4.1-debian-12-r1
     - name: kuberay-operator
       image: docker.io/bitnami/kuberay-operator:1.4.1-debian-12-r1
     - name: ray
