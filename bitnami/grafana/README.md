@@ -479,7 +479,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | Name                                                        | Description                                                                                                                                                                                                                       | Value            |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                                                                                                                                           | `1`              |
-| `grafana.kind`                                              | Use either Deployment, StatefulSet (default) or DaemonSet                                                                                                                                                                         | `Deployment`     |
+| `grafana.kind`                                              | Use either Deployment or StatefulSet (default)                                                                                                                                                                                    | `Deployment`     |
 | `grafana.podManagementPolicy`                               | StatefulSet pod management policy                                                                                                                                                                                                 | `Parallel`       |
 | `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                                                                                                                                                  | `RollingUpdate`  |
 | `grafana.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                | `false`          |
@@ -562,15 +562,15 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Persistence parameters
 
-| Name                        | Description                                                                                               | Value           |
-| --------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`       | Enable persistence                                                                                        | `true`          |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                                       | `{}`            |
-| `persistence.accessMode`    | Persistent Volume Access Mode                                                                             | `ReadWriteOnce` |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                                                            | `[]`            |
-| `persistence.storageClass`  | Storage class to use with the PVC                                                                         | `""`            |
-| `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
-| `persistence.size`          | Size for the PV                                                                                           | `10Gi`          |
+| Name                        | Description                                                                                                                                                                                           | Value           |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`       | Enable persistence                                                                                                                                                                                    | `true`          |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                                                                                                                                                   | `{}`            |
+| `persistence.accessMode`    | Persistent Volume Access Mode                                                                                                                                                                         | `ReadWriteOnce` |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                                                        | `[]`            |
+| `persistence.storageClass`  | Storage class to use with the PVC                                                                                                                                                                     | `""`            |
+| `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable. Please note that this setting will be ignored when `grafana.kind` is set to `StatefulSet`. | `""`            |
+| `persistence.size`          | Size for the PV                                                                                                                                                                                       | `10Gi`          |
 
 ### RBAC parameters
 
