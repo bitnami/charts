@@ -16,7 +16,7 @@ metadata:
 spec:
   replicas: {{ .Values.grafana.replicaCount }}
   {{- if eq (lower .Values.grafana.kind) "statefulset" }}
-  serviceName: {{ include "common.names.fullname" . }}-headless
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.grafana.podManagementPolicy }}
   podManagementPolicy: {{ .Values.grafana.podManagementPolicy }}
   {{- end }}
