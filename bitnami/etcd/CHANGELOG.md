@@ -2,11 +2,11 @@
 
 ## 12.0.9 (2025-07-09)
 
-* [bitnami/etcd] Optional delay before starting the pre-upgrade hook ([#34973](https://github.com/bitnami/charts/pull/34973))
+* [bitnami/etcd] feat: introduce preUpgrade job delay ([#34973](https://github.com/bitnami/charts/pull/34973))
 
 ## <small>12.0.8 (2025-07-08)</small>
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34881](https://github.com/bitnami/charts/pull/34881))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34881) ([6d91652](https://github.com/bitnami/charts/commit/6d916522b51a18123e5c70705996d37549820bb0)), closes [#34881](https://github.com/bitnami/charts/issues/34881)
 
 ## <small>12.0.7 (2025-07-03)</small>
 
