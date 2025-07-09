@@ -3,12 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.grafana.kind "StatefulSet" }}
-apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
-{{- else }}
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-{{- end }}
-kind: {{ .Values.grafana.kind }}
+apiVersion: {{ ternary (include "common.capabilities.deployment.apiVersion" .) (include "common.capabilities.statefulset.apiVersion" .) (eq (lower .Values.grafana.kind) "deployment") }}
+kind: {{ ternary "Deployment" "StatefulSet" (eq (lower .Values.grafana.kind) "deployment") }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -19,7 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.grafana.replicaCount }}
-  {{- if eq .Values.grafana.kind "StatefulSet" }}
+  {{- if eq (lower .Values.grafana.kind) "statefulset" }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   {{- if .Values.grafana.podManagementPolicy }}
   podManagementPolicy: {{ .Values.grafana.podManagementPolicy }}
@@ -336,7 +332,7 @@ spec:
                   name:  {{ include "grafana.smtpSecretName" . }}
               {{- end }}
         {{- end }}
-        {{- if ne .Values.grafana.kind "StatefulSet" }}
+        {{- if eq (lower .Values.grafana.kind) "statefulset" }}
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
@@ -418,7 +414,7 @@ spec:
         {{- if .Values.grafana.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes  "context" $) | nindent 8 }}
         {{- end }}
-  {{- if and (eq .Values.grafana.kind "StatefulSet") .Values.persistence.enabled }}
+  {{- if and (eq (lower .Values.grafana.kind) "statefulset") .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data

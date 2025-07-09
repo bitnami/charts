@@ -2,7 +2,7 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
-{{- if eq .Values.grafana.kind "StatefulSet" }}
+{{- if eq (lower .Values.grafana.kind) "statefulset" }}
 apiVersion: v1
 kind: Service
 metadata:
