@@ -30,11 +30,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: grafana
   {{- if .Values.grafana.updateStrategy }}
-  {{- if eq .Values.grafana.kind "StatefulSet" }}
-  updateStrategy: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.updateStrategy "context" $) | nindent 4 }}
-  {{- else }}
-  strategy: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.updateStrategy "context" $) | nindent 4 }}
-  {{- end }}
+  {{ ternary "strategy" "updateStrategy" (eq (lower .Values.grafana.kind) "deployment") }}: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.updateStrategy "context" .) | nindent 4 }}
   {{- end }}
   template:
     metadata:
