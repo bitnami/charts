@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.0.9 (2025-07-08)
+## 12.0.9 (2025-07-09)
 
 * [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#34903](https://github.com/bitnami/charts/pull/34903))
 
