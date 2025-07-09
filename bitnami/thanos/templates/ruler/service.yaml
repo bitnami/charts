@@ -31,6 +31,12 @@ spec:
   {{- if and (eq .Values.ruler.service.type "LoadBalancer") .Values.ruler.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.ruler.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.ruler.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.ruler.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.ruler.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.ruler.service.ipFamilies | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.ruler.service.ports.http }}
       targetPort: http
