@@ -59,15 +59,11 @@ spec:
   {{- end }}
   ingress:
     - ports:
+        {{- if .Values.metrics.enabled }}
         - port: {{ .Values.containerPorts.metrics }}
+        {{- end }}
         {{- range .Values.extraContainerPorts }}
         - port: {{ . }}
-        {{- end }}
-        {{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
-        - port: {{ .Values.metrics.authProxy.containerPorts.https }}
-        {{- range .Values.metrics.authProxy.extraContainerPorts }}
-        - port: {{ . }}
-        {{- end }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
