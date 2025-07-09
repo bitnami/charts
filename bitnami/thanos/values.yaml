@@ -2872,6 +2872,14 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param storegateway.statefulsetLabels Thanos Store Gateway statefulset labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  statefulsetLabels: {}
+  ## @param storegateway.statefulsetAnnotations Thanos Store Gateway statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param storegateway.dnsConfig Deployment pod DNS config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
@@ -3644,6 +3652,14 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param ruler.statefulsetLabels Thanos Ruler statefulset labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  statefulsetLabels: {}
+  ## @param ruler.statefulsetAnnotations Thanos Ruler statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param ruler.dnsConfig Deployment pod DNS config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
@@ -4277,6 +4293,10 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   statefulsetLabels: {}
+  ## @param receive.statefulsetAnnotations Thanos Receive statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param receive.podLabels Thanos Receive pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
