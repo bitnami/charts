@@ -3308,6 +3308,10 @@ rbac:
   create: true
   pspEnabled: true
 
+## @param extraRbac Extra Rbac for the Prometheus clusterrole
+##
+extraRbac: []
+
 ## @section Thanos Ruler Parameters
 ##
 thanosRuler:

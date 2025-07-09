@@ -907,6 +907,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
 | `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
 | `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| `extraRbac`       | Extra Rbac for the Prometheus clusterrole                                                                                                                          | `[]`   |
 
 ### Thanos Ruler Parameters
 

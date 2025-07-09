@@ -46,4 +46,7 @@ rules:
       - "/metrics"
     verbs:
       - "get"
+  {{- if and .Values.extraRbac }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraRbac "context" $) | nindent 2 }}
+  {{- end }}
 {{- end }}
