@@ -304,7 +304,7 @@ grafana:
   ## @param grafana.replicaCount Number of Grafana nodes
   ##
   replicaCount: 1
-  ## @param grafana.kind Use either Deployment, StatefulSet (default) or DaemonSet
+  ## @param grafana.kind Use either Deployment or StatefulSet (default)
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
   ##
   kind: Deployment
