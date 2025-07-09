@@ -31,6 +31,12 @@ spec:
   {{- if and (eq .Values.bucketweb.service.type "LoadBalancer") .Values.bucketweb.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.bucketweb.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.bucketweb.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.bucketweb.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.bucketweb.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.bucketweb.service.ipFamilies | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.bucketweb.service.ports.http }}
       targetPort: http
