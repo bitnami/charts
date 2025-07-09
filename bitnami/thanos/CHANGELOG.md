@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.1.1 (2025-07-09)
+## 17.2.0 (2025-07-09)
 
 * [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
 
