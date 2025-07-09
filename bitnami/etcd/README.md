@@ -669,6 +669,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `preUpgradeJob.podSecurityContext.fsGroup`                        | Set fsGroup in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                       | `1001`           |
 | `preUpgradeJob.resourcesPreset`                                   | Set etcd "pre-upgrade" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if preUpgradeJob.resources is set (preUpgradeJob.resources is recommended for production). | `micro`          |
 | `preUpgradeJob.resources`                                         | Set etcd "pre-upgrade" job's container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
+| `preUpgradeJob.startDelay`                                        | Optional delay before starting the pre-upgrade hook (in seconds).                                                                                                                                                                                               | `""`             |
 
 ### Defragmentation parameters
 
