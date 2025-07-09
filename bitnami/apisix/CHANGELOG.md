@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.5 (2025-07-02)
+## 5.0.6 (2025-07-08)
 
-* [bitnami/apisix]: Correct values comments ([#34737](https://github.com/bitnami/charts/pull/34737))
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references ([#34865](https://github.com/bitnami/charts/pull/34865))
+
+## <small>5.0.5 (2025-07-07)</small>
+
+* [bitnami/apisix]: Correct values comments (#34737) ([e9bc018](https://github.com/bitnami/charts/commit/e9bc018e6802e0a2ea92e7a5a53a1e89f95b7ba6)), closes [#34737](https://github.com/bitnami/charts/issues/34737)
 
 ## <small>5.0.4 (2025-06-27)</small>
 

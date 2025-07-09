@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.0.1 (2025-07-08)
+
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34867](https://github.com/bitnami/charts/pull/34867))
+
 ## 19.0.0 (2025-06-25)
 
-* [bitnami/phpmyadmin] Upgrade MariaDB 11.8 ([#34636](https://github.com/bitnami/charts/pull/34636))
+* [bitnami/phpmyadmin] Upgrade MariaDB 11.8 (#34636) ([4222cde](https://github.com/bitnami/charts/commit/4222cdea8777f8596839f195a1a198177cfc6b60)), closes [#34636](https://github.com/bitnami/charts/issues/34636)
 
 ## <small>18.1.13 (2025-06-23)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.3 (2025-06-13)
+## 7.0.4 (2025-07-09)
 
-* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34480](https://github.com/bitnami/charts/pull/34480))
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34933](https://github.com/bitnami/charts/pull/34933))
+
+## <small>7.0.3 (2025-06-13)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34480) ([8b65b45](https://github.com/bitnami/charts/commit/8b65b453ddea50837f860d0b5d6eb9df78617ed1)), closes [#34480](https://github.com/bitnami/charts/issues/34480)
 
 ## <small>7.0.2 (2025-06-10)</small>
 
