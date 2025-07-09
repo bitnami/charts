@@ -1,8 +1,12 @@
 # Changelog
 
+## 10.0.1 (2025-07-08)
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#34863](https://github.com/bitnami/charts/pull/34863))
+
 ## 10.0.0 (2025-06-25)
 
-* [bitnami/matomo] Upgrade MariaDB 11.8 ([#34634](https://github.com/bitnami/charts/pull/34634))
+* [bitnami/matomo] Upgrade MariaDB 11.8 (#34634) ([754d473](https://github.com/bitnami/charts/commit/754d473aabe7ffd6b3f1f5e61257ef86be0812d6)), closes [#34634](https://github.com/bitnami/charts/issues/34634)
 
 ## <small>9.3.13 (2025-06-13)</small>
 
