@@ -1,8 +1,16 @@
 # Changelog
 
+## 9.4.2 (2025-07-09)
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34937](https://github.com/bitnami/charts/pull/34937))
+
+## <small>9.4.1 (2025-06-27)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34698) ([d5864a5](https://github.com/bitnami/charts/commit/d5864a5e45ef67acfc09fc4d94c1ef38838cd4f1)), closes [#34698](https://github.com/bitnami/charts/issues/34698)
+
 ## 9.4.0 (2025-06-24)
 
-* [bitnami/mongodb-sharded] predictable port number for metrics ([#34439](https://github.com/bitnami/charts/pull/34439))
+* [bitnami/mongodb-sharded] predictable port number for metrics (#34439) ([0ec66e0](https://github.com/bitnami/charts/commit/0ec66e0712cea64de3afbc6e433664a2d8e9672c)), closes [#34439](https://github.com/bitnami/charts/issues/34439)
 
 ## <small>9.3.6 (2025-06-16)</small>
 

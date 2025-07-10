@@ -1,8 +1,28 @@
 # Changelog
 
-## 17.0.4 (2025-06-25)
+## 17.2.0 (2025-07-09)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34622](https://github.com/bitnami/charts/pull/34622))
+* [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
+
+## 17.1.0 (2025-07-09)
+
+* [bitnami/thanos] feat: Added support for configuring dual-stack for services (#34825) ([ee5ebdd](https://github.com/bitnami/charts/commit/ee5ebddd317f9b1bb39f4b6c3da9297713b2b156)), closes [#34825](https://github.com/bitnami/charts/issues/34825)
+
+## <small>17.0.7 (2025-07-09)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34956) ([fdff255](https://github.com/bitnami/charts/commit/fdff2559fd6ffc710a8425f49b045477431b4ea4)), closes [#34956](https://github.com/bitnami/charts/issues/34956)
+
+## <small>17.0.6 (2025-07-01)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34747) ([44e6ce5](https://github.com/bitnami/charts/commit/44e6ce5b0d24eb53252484ad6cf7efe4f24bab8c)), closes [#34747](https://github.com/bitnami/charts/issues/34747)
+
+## <small>17.0.5 (2025-06-27)</small>
+
+* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components (#3 ([879bca6](https://github.com/bitnami/charts/commit/879bca6783b372641facf6332eb179dd10569590)), closes [#34256](https://github.com/bitnami/charts/issues/34256)
+
+## <small>17.0.4 (2025-06-25)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34622) ([b98bf4b](https://github.com/bitnami/charts/commit/b98bf4b149114396ab00faf491efb38aff2b509d)), closes [#34622](https://github.com/bitnami/charts/issues/34622)
 
 ## <small>17.0.3 (2025-06-13)</small>
 

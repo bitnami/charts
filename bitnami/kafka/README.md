@@ -432,6 +432,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `image.debug`                         | Specify if debug values should be set                                                                                                                                                                      | `false`                                               |
 | `clusterId`                           | Kafka Kraft cluster ID (ignored if existingKraftSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.                                                        | `""`                                                  |
 | `existingKraftSecret`                 | Name of the secret containing the Kafka KRaft Cluster ID and one directory ID per controller replica                                                                                                       | `""`                                                  |
+| `kraftVersion`                        | Kraft version to be used. It determines whether static quorum (kraftVersion=0) or dynamic quorum (kraftVersion=1) will be used.                                                                            | `1`                                                   |
 | `config`                              | Specify content for Kafka configuration (auto-generated based on other parameters otherwise)                                                                                                               | `{}`                                                  |
 | `overrideConfiguration`               | Kafka common configuration override. Values defined here takes precedence over the ones defined at `config`                                                                                                | `{}`                                                  |
 | `existingConfigmap`                   | Name of an existing ConfigMap with the Kafka configuration                                                                                                                                                 | `""`                                                  |
@@ -1063,6 +1064,15 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 32.3.0
+
+We have introduced the value `kraftVersion` to help control the change from static quorum to dynamic quorum.
+
+By default, new clusters will be deployed with the new dynamic quorum (kraftVersion=1), but users upgrading from Kafka 3.x may need to modify the default values to continue using static quorum (kraftVersion=0).
+That is because Kafka 4.0 does not yet support switching from static quorum (controller.quorum.voters) to dynamic quorum (controller.quorum.bootstrap.servers), causing upgrades to fail (#34015).
+
+For more information please check [Kafka documentation](https://kafka.apache.org/documentation/#static_versus_dynamic_kraft_quorums).
 
 ### To 32.0.0
 

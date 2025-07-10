@@ -1,8 +1,24 @@
 # Changelog
 
+## 5.0.4 (2025-07-09)
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#34957](https://github.com/bitnami/charts/pull/34957))
+
+## <small>5.0.3 (2025-07-07)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#34818) ([d05d817](https://github.com/bitnami/charts/commit/d05d8179a5fe436c49217a51f1a458ee4d09bcde)), closes [#34818](https://github.com/bitnami/charts/issues/34818)
+
+## <small>5.0.2 (2025-07-01)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#34743) ([03f99d1](https://github.com/bitnami/charts/commit/03f99d1e2097fd15a7833ba0e3ca5c1e629e3a23)), closes [#34743](https://github.com/bitnami/charts/issues/34743)
+
+## <small>5.0.1 (2025-06-30)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#34720) ([852f05d](https://github.com/bitnami/charts/commit/852f05d3940cbbd6aa007968a74536f2888f47f3)), closes [#34720](https://github.com/bitnami/charts/issues/34720)
+
 ## 5.0.0 (2025-06-25)
 
-* [bitnami/seaweedfs] Upgrade MariaDB 11.8 ([#34637](https://github.com/bitnami/charts/pull/34637))
+* [bitnami/seaweedfs] Upgrade MariaDB 11.8 (#34637) ([794aac8](https://github.com/bitnami/charts/commit/794aac83b56a912424db088a59249f6ae19f0fa8)), closes [#34637](https://github.com/bitnami/charts/issues/34637)
 
 ## <small>4.8.25 (2025-06-25)</small>
 

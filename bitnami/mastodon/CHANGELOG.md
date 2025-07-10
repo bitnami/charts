@@ -1,8 +1,20 @@
 # Changelog
 
-## 13.0.3 (2025-06-21)
+## 13.0.6 (2025-07-06)
 
-* [bitnami/mastodon] fix broken PDB Label matching ([#34566](https://github.com/bitnami/charts/pull/34566))
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#34812](https://github.com/bitnami/charts/pull/34812))
+
+## <small>13.0.5 (2025-07-02)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34771) ([6a2aa5d](https://github.com/bitnami/charts/commit/6a2aa5dfcdc7f7ec3de69863e716e17b8e8ba2e6)), closes [#34771](https://github.com/bitnami/charts/issues/34771)
+
+## <small>13.0.4 (2025-06-26)</small>
+
+* [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob defin ([b053acd](https://github.com/bitnami/charts/commit/b053acda4b4f84a8940a9f58973dc60f1850c517)), closes [#33981](https://github.com/bitnami/charts/issues/33981)
+
+## <small>13.0.3 (2025-06-23)</small>
+
+* [bitnami/mastodon] fix broken PDB Label matching (#34566) ([d8270d4](https://github.com/bitnami/charts/commit/d8270d4678b71c0081744873cb64def675bb8e62)), closes [#34566](https://github.com/bitnami/charts/issues/34566) [#34544](https://github.com/bitnami/charts/issues/34544)
 
 ## <small>13.0.2 (2025-06-09)</small>
 

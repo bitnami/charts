@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.0.4 (2025-06-20)
+## 1.0.7 (2025-07-08)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#34569](https://github.com/bitnami/charts/pull/34569))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#34895](https://github.com/bitnami/charts/pull/34895))
+
+## <small>1.0.6 (2025-07-03)</small>
+
+* [bitnami/gitlab-runner] Wrong input expected by the helper function (#34780) ([e3292f7](https://github.com/bitnami/charts/commit/e3292f7012ac086a8a3a66075e57b6bb5480ea96)), closes [#34780](https://github.com/bitnami/charts/issues/34780)
+
+## <small>1.0.5 (2025-06-26)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34668) ([2d86401](https://github.com/bitnami/charts/commit/2d8640184cfaf9e3d3ab34ef7230c1f2ad425d3b)), closes [#34668](https://github.com/bitnami/charts/issues/34668)
+
+## <small>1.0.4 (2025-06-20)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34569) ([663f05f](https://github.com/bitnami/charts/commit/663f05f4b508adda31123edf41dd734e41c889ba)), closes [#34569](https://github.com/bitnami/charts/issues/34569)
 
 ## <small>1.0.3 (2025-06-13)</small>
 

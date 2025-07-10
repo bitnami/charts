@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.4.25 (2025-06-13)
+## 2.4.31 (2025-07-08)
 
-* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34423](https://github.com/bitnami/charts/pull/34423))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34889](https://github.com/bitnami/charts/pull/34889))
+
+## <small>2.4.30 (2025-07-08)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34884) ([cf42d00](https://github.com/bitnami/charts/commit/cf42d0055bc5b779db6cbc8ffc0b590b4f2de95d)), closes [#34884](https://github.com/bitnami/charts/issues/34884)
+
+## <small>2.4.29 (2025-07-08)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34846) ([75e9998](https://github.com/bitnami/charts/commit/75e999858006e751c58253aeb026df3e8ff05090)), closes [#34846](https://github.com/bitnami/charts/issues/34846)
+
+## <small>2.4.28 (2025-07-08)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34841) ([226daba](https://github.com/bitnami/charts/commit/226dabaaa4376f42127485ca08e805cc2275d5fd)), closes [#34841](https://github.com/bitnami/charts/issues/34841)
+
+## <small>2.4.27 (2025-06-27)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34690) ([75abdc7](https://github.com/bitnami/charts/commit/75abdc7d7316c65fdadfa848ff8ab09c0d3612db)), closes [#34690](https://github.com/bitnami/charts/issues/34690)
+
+## <small>2.4.26 (2025-06-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34428) ([567a03f](https://github.com/bitnami/charts/commit/567a03feffb557f8a0268636bb37070e7cd630aa)), closes [#34428](https://github.com/bitnami/charts/issues/34428)
+
+## <small>2.4.25 (2025-06-13)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34423) ([e9619cb](https://github.com/bitnami/charts/commit/e9619cb90042a57c781bf20b8a25c9469f310486)), closes [#34423](https://github.com/bitnami/charts/issues/34423)
 
 ## <small>2.4.24 (2025-06-13)</small>
 
