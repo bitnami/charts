@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.2.10 (2025-07-09)
+## 21.2.10 (2025-07-10)
 
 * [bitnami/redis] Fix external service annotations ignored #33270 ([#33776](https://github.com/bitnami/charts/pull/33776))
 
