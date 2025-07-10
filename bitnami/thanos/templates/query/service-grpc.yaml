@@ -30,6 +30,12 @@ spec:
   {{- if and (eq .Values.query.serviceGrpc.type "LoadBalancer") .Values.query.serviceGrpc.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.query.serviceGrpc.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.query.serviceGrpc.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.query.serviceGrpc.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.query.serviceGrpc.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.query.serviceGrpc.ipFamilies | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.query.serviceGrpc.ports.grpc }}
       targetPort: grpc

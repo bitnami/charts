@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.9.1 (2025-07-07)
+## 7.9.2 (2025-07-09)
 
-* [bitnami/memcached] Allow hostNetwork field to be specified ([#34804](https://github.com/bitnami/charts/pull/34804))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#34919](https://github.com/bitnami/charts/pull/34919))
+
+## <small>7.9.1 (2025-07-07)</small>
+
+* [bitnami/memcached] Allow hostNetwork field to be specified (#34804) ([d144ac9](https://github.com/bitnami/charts/commit/d144ac9b0a0f916c667917a269819cace7b4c1ae)), closes [#34804](https://github.com/bitnami/charts/issues/34804)
 
 ## 7.9.0 (2025-07-03)
 

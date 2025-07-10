@@ -13,7 +13,7 @@ it('allows adding a project and a quality gate', () => {
   cy.get('body').then(($body) => {
     if ($body.find('img[src*=mode-tour]').is(':visible')) {
       cy.get('span').contains('Later').click({force: true});
-      cy.get('button[data-action=skip]').click({force: true});
+      cy.contains('Skip').click({force: true});
     }
   });
   cy.visit('/projects');
@@ -35,6 +35,7 @@ it('allows adding a project and a quality gate', () => {
     // Step 2: Create a Quality gate
     cy.visit('/quality_gates');
     cy.fixture('quality-gates').then((qualityGates) => {
+      cy.contains('Skip').click({force: true});
       cy.contains('Create').click();
       cy.get('#quality-gate-form-name').type(`${qualityGates.newQualityGate.name}${random}`);
       cy.get('[type="submit"]').contains('Create').click();
