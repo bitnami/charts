@@ -1,8 +1,20 @@
 # Changelog
 
-## 16.0.16 (2025-07-01)
+## 16.0.19 (2025-07-10)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34739](https://github.com/bitnami/charts/pull/34739))
+* [bitnami/postgresql-ha] bugfix: credentials from files on witness ([#34986](https://github.com/bitnami/charts/pull/34986))
+
+## <small>16.0.18 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34962) ([4841599](https://github.com/bitnami/charts/commit/48415997525a3b026d04823eef458537d1e5eef2)), closes [#34962](https://github.com/bitnami/charts/issues/34962)
+
+## <small>16.0.17 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34941) ([d6d6e95](https://github.com/bitnami/charts/commit/d6d6e9504968447e7cb4fabd7a210aaeb253d090)), closes [#34941](https://github.com/bitnami/charts/issues/34941)
+
+## <small>16.0.16 (2025-07-01)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34739) ([7f74a69](https://github.com/bitnami/charts/commit/7f74a69403211af80f018ec1fd800e430311aa7d)), closes [#34739](https://github.com/bitnami/charts/issues/34739)
 
 ## <small>16.0.15 (2025-06-25)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.9 (2025-07-07)
+## 7.4.10 (2025-07-09)
 
-* [bitnami/metrics-server] ci: VIB verify ([#34819](https://github.com/bitnami/charts/pull/34819))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34924](https://github.com/bitnami/charts/pull/34924))
+
+## <small>7.4.9 (2025-07-07)</small>
+
+* [bitnami/metrics-server] ci: VIB verify (#34819) ([396147d](https://github.com/bitnami/charts/commit/396147d60dd64dfa32512251b029a37fda5c1edb)), closes [#34819](https://github.com/bitnami/charts/issues/34819)
 
 ## <small>7.4.8 (2025-07-03)</small>
 
