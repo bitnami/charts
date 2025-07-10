@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.0.26 (2025-07-08)
+## 23.0.26 (2025-07-10)
 
 * [bitnami/ghost] subPath fix ([#34854](https://github.com/bitnami/charts/pull/34854))
 
