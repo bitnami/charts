@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.2.0 (2025-07-09)
+
+* [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
+
 ## 17.1.0 (2025-07-09)
 
-* [bitnami/thanos] feat: Added support for configuring dual-stack for services ([#34825](https://github.com/bitnami/charts/pull/34825))
+* [bitnami/thanos] feat: Added support for configuring dual-stack for services (#34825) ([ee5ebdd](https://github.com/bitnami/charts/commit/ee5ebddd317f9b1bb39f4b6c3da9297713b2b156)), closes [#34825](https://github.com/bitnami/charts/issues/34825)
 
 ## <small>17.0.7 (2025-07-09)</small>
 
