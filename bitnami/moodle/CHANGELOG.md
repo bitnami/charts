@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.0.1 (2025-07-08)
+## 27.0.2 (2025-07-10)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#34862](https://github.com/bitnami/charts/pull/34862))
+* [bitnami/moodle] Fix hostAliases Bug in Moodle deployment.yaml ([#34839](https://github.com/bitnami/charts/pull/34839))
+
+## <small>27.0.1 (2025-07-08)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34862) ([e299e92](https://github.com/bitnami/charts/commit/e299e92ff4be3ddb8baf0a01a4f767970a50d2d4)), closes [#34862](https://github.com/bitnami/charts/issues/34862)
 
 ## 27.0.0 (2025-06-25)
 
