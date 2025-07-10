@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.9 (2025-07-10)
+
+* [bitnami/influxdb] bugfix: fix typo in namespace inclusion (ingress-tls-secret)
+
 ## 7.1.8 (2025-07-09)
 
 * [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#34915](https://github.com/bitnami/charts/pull/34915))
