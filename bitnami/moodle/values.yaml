@@ -193,7 +193,10 @@ automountServiceAccountToken: false
 ## @param hostAliases Moodle&trade; pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-hostAliases: []
+hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
