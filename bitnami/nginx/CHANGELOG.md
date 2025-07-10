@@ -1,8 +1,20 @@
 # Changelog
 
-## 21.0.3 (2025-06-30)
+## 21.0.6 (2025-07-09)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34717](https://github.com/bitnami/charts/pull/34717))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34928](https://github.com/bitnami/charts/pull/34928))
+
+## <small>21.0.5 (2025-07-09)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34894) ([fd53b4c](https://github.com/bitnami/charts/commit/fd53b4c67867b3052d0705348a0f900428d0570e)), closes [#34894](https://github.com/bitnami/charts/issues/34894)
+
+## <small>21.0.4 (2025-07-07)</small>
+
+* fix prometheusRules syntax (#34801) ([95446ae](https://github.com/bitnami/charts/commit/95446ae3e94a183f151d27208f65eea7ed263c01)), closes [#34801](https://github.com/bitnami/charts/issues/34801)
+
+## <small>21.0.3 (2025-06-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34717) ([46e4710](https://github.com/bitnami/charts/commit/46e47104483cb8e3d774345ddb068f417d6cda8c)), closes [#34717](https://github.com/bitnami/charts/issues/34717)
 
 ## <small>21.0.2 (2025-06-30)</small>
 

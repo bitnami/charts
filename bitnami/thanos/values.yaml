@@ -69,7 +69,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.39.1-debian-12-r0
+  tag: 0.39.1-debian-12-r1
   digest: ""
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -615,6 +615,12 @@ query:
       ## @param query.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param query.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param query.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Service GRPC parameters
   ##
   serviceGrpc:
@@ -672,6 +678,12 @@ query:
       ## @param query.serviceGrpc.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param query.serviceGrpc.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param query.serviceGrpc.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Autoscaling parameters
   ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
@@ -1323,6 +1335,12 @@ queryFrontend:
     ## @param queryFrontend.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+    ## @param queryFrontend.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param queryFrontend.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## @param queryFrontend.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
   automountServiceAccountToken: true
@@ -1862,6 +1880,12 @@ bucketweb:
     ## @param bucketweb.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+    ## @param bucketweb.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param bucketweb.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## @param bucketweb.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
   automountServiceAccountToken: true
@@ -2412,6 +2436,12 @@ compactor:
     ## @param compactor.service.labelSelectorsOverride Selector for Thanos Query service
     ##
     labelSelectorsOverride: {}
+    ## @param compactor.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param compactor.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## @param compactor.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
   automountServiceAccountToken: true
@@ -2842,6 +2872,14 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param storegateway.statefulsetLabels Thanos Store Gateway statefulset labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  statefulsetLabels: {}
+  ## @param storegateway.statefulsetAnnotations Thanos Store Gateway statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param storegateway.dnsConfig Deployment pod DNS config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
@@ -2993,6 +3031,12 @@ storegateway:
       ## @param storegateway.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param storegateway.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param storegateway.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Persistence parameters
   ##
   persistence:
@@ -3608,6 +3652,14 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param ruler.statefulsetLabels Thanos Ruler statefulset labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  statefulsetLabels: {}
+  ## @param ruler.statefulsetAnnotations Thanos Ruler statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param ruler.dnsConfig Deployment pod DNS config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   ## E.g.
@@ -3759,6 +3811,12 @@ ruler:
       ## @param ruler.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param ruler.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param ruler.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Persistence parameters
   ##
   persistence:
@@ -4235,6 +4293,10 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   statefulsetLabels: {}
+  ## @param receive.statefulsetAnnotations Thanos Receive statefulset annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
   ## @param receive.podLabels Thanos Receive pod labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -4404,6 +4466,12 @@ receive:
       ## @param receive.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param receive.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param receive.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## @param receive.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
   ##
   automountServiceAccountToken: true

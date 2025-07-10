@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: cloudnative-pg
-      image: docker.io/bitnami/cloudnative-pg:1.26.0-debian-12-r4
+      image: docker.io/bitnami/cloudnative-pg:1.26.0-debian-12-r5
     - name: plugin-barman-cloud
-      image: docker.io/bitnami/plugin-barman-cloud:0.5.0-debian-12-r1
+      image: docker.io/bitnami/plugin-barman-cloud:0.5.0-debian-12-r2
     - name: plugin-barman-cloud-sidecar
       image: docker.io/bitnami/plugin-barman-cloud-sidecar:0.5.0-debian-12-r1
     - name: postgresql
@@ -36,4 +36,4 @@ maintainers:
 name: cloudnative-pg
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
-version: 1.0.2
+version: 1.0.4

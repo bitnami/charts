@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.11 (2025-07-02)
+## 22.0.12 (2025-07-02)
 
 * [bitnami/elasticsearch] remove copyTlsCerts init container ([#31960](https://github.com/bitnami/charts/pull/31960))
+
+## <small>22.0.11 (2025-07-08)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#34879](https://github.com/bitnami/charts/pull/34879))
 
 ## <small>22.0.10 (2025-06-30)</small>
 

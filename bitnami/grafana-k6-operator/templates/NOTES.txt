@@ -31,12 +31,7 @@ Grafana k6 Operator will ONLY access resources in the {{ include "common.names.n
 {{- include "common.warnings.rollingTag" .Values.starterImage }}
 {{- $checkImages := list .Values.runnerImage .Values.starterImage .Values.image }}
 {{- $resourcesSections := list "" }}
-{{- if and .Values.metrics.enabled .Values.metrics.authProxy.enabled }}
-  {{- include "common.warnings.rollingTag" .Values.metrics.authProxy.image }}
-  {{- $checkImages = append $checkImages .Values.metrics.authProxy.image }}
-  {{- $resourcesSections = append $resourcesSections "metrics.authProxy" }}
-{{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourcesSections "context" .) }}
 {{- include "grafana-k6-operator.validateValues" . }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.authProxy.image .Values.runnerImage .Values.starterImage) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.runnerImage .Values.starterImage) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" $checkImages "context" $) }}
