@@ -190,7 +190,7 @@ sidecars: []
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
-## @param hostAliases Moodle&trade; pods host aliases
+## @param hostAliases [array] Moodle&trade; pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases:
