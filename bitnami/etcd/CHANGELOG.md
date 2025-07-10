@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.0.7 (2025-07-02)
+## 12.0.9 (2025-07-10)
 
-* [bitnami/etcd] Fix protocol selection in defrag job ([#34767](https://github.com/bitnami/charts/pull/34767))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34997](https://github.com/bitnami/charts/pull/34997))
+
+## <small>12.0.8 (2025-07-08)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34881) ([6d91652](https://github.com/bitnami/charts/commit/6d916522b51a18123e5c70705996d37549820bb0)), closes [#34881](https://github.com/bitnami/charts/issues/34881)
+
+## <small>12.0.7 (2025-07-03)</small>
+
+* [bitnami/etcd] Fix protocol selection in defrag job (#34767) ([d6916ae](https://github.com/bitnami/charts/commit/d6916aef81a368351747137f8107fe6add7e3e93)), closes [#34767](https://github.com/bitnami/charts/issues/34767)
 
 ## <small>12.0.6 (2025-06-17)</small>
 
