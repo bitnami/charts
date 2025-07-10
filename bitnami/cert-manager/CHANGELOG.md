@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.5.10 (2025-07-10)
+## 1.5.11 (2025-07-10)
 
-* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34991](https://github.com/bitnami/charts/pull/34991))
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34996](https://github.com/bitnami/charts/pull/34996))
+
+## <small>1.5.10 (2025-07-10)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34991) ([bb6a7ba](https://github.com/bitnami/charts/commit/bb6a7bad6afeba9b3cdc26f2b4f4a638b426aa95)), closes [#34991](https://github.com/bitnami/charts/issues/34991)
 
 ## <small>1.5.9 (2025-07-08)</small>
 
