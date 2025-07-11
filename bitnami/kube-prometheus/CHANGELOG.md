@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.2.12 (2025-07-10)
+## 11.2.12 (2025-07-11)
 
-* [bitnami/kube-prometheus] add extraRbac ([#34968](https://github.com/bitnami/charts/pull/34968))
+* [bitnami/kube-prometheus] add rbac.rules ([#34968](https://github.com/bitnami/charts/pull/34968))
 
 ## <small>11.2.11 (2025-07-09)</small>
 
