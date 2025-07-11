@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.1.11 (2025-07-10)
+## 8.1.11 (2025-07-11)
 
 * [bitnami/sonarqube] Substitute SONAR_CE_JAVAADDITIONALOPTS by SONARQUBE_CE_JAVA_ADD_OPTS ([#34665](https://github.com/bitnami/charts/pull/34665))
 
