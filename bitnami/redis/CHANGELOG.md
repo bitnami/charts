@@ -2,7 +2,8 @@
 
 ## 21.2.10 (2025-07-11)
 
-* [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
+
+* [bitnami/redis] Fix external service annotations ignored #33270 ([#33776](https://github.com/bitnami/charts/pull/33776))
 
 ## <small>21.2.9 (2025-07-09)</small>
 
