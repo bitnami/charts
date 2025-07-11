@@ -1,8 +1,16 @@
 # Changelog
 
-## 8.1.9 (2025-06-10)
+## 8.1.11 (2025-07-11)
 
-* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references ([#34304](https://github.com/bitnami/charts/pull/34304))
+* [bitnami/sonarqube] Substitute SONAR_CE_JAVAADDITIONALOPTS by SONARQUBE_CE_JAVA_ADD_OPTS ([#34665](https://github.com/bitnami/charts/pull/34665))
+
+## <small>8.1.10 (2025-07-10)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34824) ([210c1ae](https://github.com/bitnami/charts/commit/210c1ae61078fcffa7762656c17a003b49208076)), closes [#34824](https://github.com/bitnami/charts/issues/34824)
+
+## <small>8.1.9 (2025-06-10)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34304) ([e290291](https://github.com/bitnami/charts/commit/e2902912033eac957096980c0e1b6ad8016590f3)), closes [#34304](https://github.com/bitnami/charts/issues/34304)
 
 ## <small>8.1.8 (2025-06-02)</small>
 
