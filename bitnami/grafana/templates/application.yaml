@@ -332,7 +332,7 @@ spec:
                   name:  {{ include "grafana.smtpSecretName" . }}
               {{- end }}
         {{- end }}
-        {{- if eq (lower .Values.grafana.kind) "statefulset" }}
+        {{- if eq (lower .Values.grafana.kind) "deployment" }}
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
