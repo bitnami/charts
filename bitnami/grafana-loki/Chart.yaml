@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-loki
-      image: docker.io/bitnami/grafana-loki:3.5.1-debian-12-r4
+      image: docker.io/bitnami/grafana-loki:3.5.2-debian-12-r0
     - name: nginx
       image: docker.io/bitnami/nginx:1.29.0-debian-12-r2
     - name: os-shell
@@ -13,7 +13,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 3.5.1
+appVersion: 3.5.2
 dependencies:
 - alias: grafanaalloy
   condition: grafanaalloy.enabled
@@ -61,4 +61,4 @@ maintainers:
 name: grafana-loki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
-version: 5.0.4
+version: 5.0.5

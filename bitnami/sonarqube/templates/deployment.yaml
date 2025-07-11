@@ -364,7 +364,7 @@ spec:
             {{- end }}
             - name: SONARQUBE_WEB_JAVA_ADD_OPTS
               value: {{ template "sonarqube.jvmOpts" . }}
-            - name: SONAR_CE_JAVAADDITIONALOPTS
+            - name: SONARQUBE_CE_JAVA_ADD_OPTS
               value: {{ template "sonarqube.jvmCEOpts" . }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
