@@ -1008,6 +1008,12 @@ preUpgradeJob:
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
+  ## @param preUpgradeJob.disableCommonPodLabels Avoid use of commonLabels with Pods of the etcd "pre-upgrade" Job
+  ## Etcd clusters which use a 'hard' podAntiAffinityPreset require an additional node to be able to schedule the
+  ## Job Pod. Removing the commonLabels lets the Job Pod work with etcd clusters using the default anti-affinity labels
+  ## with the 'hard' podAntiAffinityPreset.
+  ##
+  disableCommonPodLabels: false
   ## @param preUpgradeJob.podAnnotations Additional pod annotations for etcd "pre-upgrade" job
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
