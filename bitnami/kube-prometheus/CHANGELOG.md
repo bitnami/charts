@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.2.12 (2025-07-10)
+## 11.2.12 (2025-07-11)
 
 * [bitnami/kube-prometheus] add thanos sidecar service monitor ([#34969](https://github.com/bitnami/charts/pull/34969))
 
