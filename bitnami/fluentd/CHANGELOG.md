@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.10 (2025-07-10)
+## 7.1.10 (2025-07-11)
 
 * [bitnami/fluentd] feat: Support for config dual-stack for services ([#34827](https://github.com/bitnami/charts/pull/34827))
 
