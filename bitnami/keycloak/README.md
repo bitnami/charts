@@ -504,7 +504,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
 | `service.headless.extraPorts`           | Extra ports to expose on Keycloak headless service                                                                               | `[]`                     |
 | `ingress.enabled`                       | Enable ingress record generation for Keycloak                                                                                    | `false`                  |
-| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)                            | `""`                     |
 | `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.controller`                    | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
@@ -522,7 +522,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `adminIngress.enabled`                  | Enable admin ingress record generation for Keycloak                                                                              | `false`                  |
-| `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)                            | `""`                     |
 | `adminIngress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `adminIngress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `adminIngress.controller`               | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
