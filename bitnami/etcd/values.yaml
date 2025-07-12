@@ -1110,6 +1110,9 @@ preUpgradeJob:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## etcd "pre-upgrade" job's optional delay
+  ## @param preUpgradeJob.startDelay Optional delay before starting the pre-upgrade hook (in seconds).
+  startDelay: ""
 
 ## @section Defragmentation parameters
 ##
