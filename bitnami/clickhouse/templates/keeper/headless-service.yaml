@@ -1,0 +1,45 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.keeper.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "clickhouse.keeper.headlessServiceName" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: keeper
+    app.kubernetes.io/part-of: clickhouse
+  {{- if or .Values.keeper.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.service.headless.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp
+      port: {{ .Values.keeper.containerPorts.tcp }}
+      protocol: TCP
+      targetPort: tcp
+    {{- if .Values.tls.enabled }}
+    - name: tcp-secure
+      port: {{ .Values.keeper.containerPorts.tcpSecure }}
+      protocol: TCP
+      targetPort: tcp-secure
+    {{- end }}
+    - name: tcp-raft
+      port: {{ .Values.keeper.containerPorts.raft }}
+      protocol: TCP
+      targetPort: raft
+    {{- if .Values.keeper.service.headless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.keeper.service.headless.extraPorts "context" .) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.podLabels .Values.commonLabels) "context" .) }}
+  selector: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: keeper
+    app.kubernetes.io/part-of: clickhouse
+{{- end }}

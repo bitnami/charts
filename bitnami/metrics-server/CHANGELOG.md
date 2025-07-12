@@ -1,8 +1,46 @@
 # Changelog
 
-## 7.4.1 (2025-03-05)
+## 7.4.10 (2025-07-09)
 
-* [bitnami/metrics-server] Release 7.4.1 ([#32303](https://github.com/bitnami/charts/pull/32303))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34924](https://github.com/bitnami/charts/pull/34924))
+
+## <small>7.4.9 (2025-07-07)</small>
+
+* [bitnami/metrics-server] ci: VIB verify (#34819) ([396147d](https://github.com/bitnami/charts/commit/396147d60dd64dfa32512251b029a37fda5c1edb)), closes [#34819](https://github.com/bitnami/charts/issues/34819)
+
+## <small>7.4.8 (2025-07-03)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34777) ([ab8d476](https://github.com/bitnami/charts/commit/ab8d476c3dfbaaaa69153a91c895d11ad4a03edc)), closes [#34777](https://github.com/bitnami/charts/issues/34777)
+
+## <small>7.4.7 (2025-06-13)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34467) ([2fd5c55](https://github.com/bitnami/charts/commit/2fd5c555759bbd0d22750172eb33cfdb9b51c542)), closes [#34467](https://github.com/bitnami/charts/issues/34467)
+
+## <small>7.4.6 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34193) ([70c9a27](https://github.com/bitnami/charts/commit/70c9a27c97d1a665484c5c8af16959a4809cd6f7)), closes [#34193](https://github.com/bitnami/charts/issues/34193)
+
+## <small>7.4.5 (2025-05-07)</small>
+
+* [bitnami/metrics-server] Release 7.4.5 (#33482) ([07b73fa](https://github.com/bitnami/charts/commit/07b73fa0c06e60fc29f17123845c2cadd9044054)), closes [#33482](https://github.com/bitnami/charts/issues/33482)
+
+## <small>7.4.4 (2025-05-06)</small>
+
+* [bitnami/metrics-server] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([b36fa86](https://github.com/bitnami/charts/commit/b36fa8666c311b9e49bacf982a3844e98f7c60d7)), closes [#33400](https://github.com/bitnami/charts/issues/33400)
+
+## <small>7.4.3 (2025-05-02)</small>
+
+* [bitnami/metrics-server] Release 7.4.3 (#33296) ([32d8701](https://github.com/bitnami/charts/commit/32d8701105619dced44cb5a8cf981c7d8a91c98b)), closes [#33296](https://github.com/bitnami/charts/issues/33296)
+
+## <small>7.4.2 (2025-04-09)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metrics-server] Release 7.4.2 (#32746) ([3234328](https://github.com/bitnami/charts/commit/3234328aa4b5b1a18041c7dbf3364b91e8b40c74)), closes [#32746](https://github.com/bitnami/charts/issues/32746)
+
+## <small>7.4.1 (2025-03-05)</small>
+
+* [bitnami/metrics-server] Release 7.4.1 (#32303) ([d4ae291](https://github.com/bitnami/charts/commit/d4ae291eecd30ddba17b2be3901ab4c0376286ba)), closes [#32303](https://github.com/bitnami/charts/issues/32303)
 
 ## 7.4.0 (2025-02-20)
 

@@ -1,8 +1,90 @@
 # Changelog
 
-## 15.13.2 (2025-03-05)
+## 17.2.0 (2025-07-09)
 
-* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter ([#32201](https://github.com/bitnami/charts/pull/32201))
+* [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
+
+## 17.1.0 (2025-07-09)
+
+* [bitnami/thanos] feat: Added support for configuring dual-stack for services (#34825) ([ee5ebdd](https://github.com/bitnami/charts/commit/ee5ebddd317f9b1bb39f4b6c3da9297713b2b156)), closes [#34825](https://github.com/bitnami/charts/issues/34825)
+
+## <small>17.0.7 (2025-07-09)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34956) ([fdff255](https://github.com/bitnami/charts/commit/fdff2559fd6ffc710a8425f49b045477431b4ea4)), closes [#34956](https://github.com/bitnami/charts/issues/34956)
+
+## <small>17.0.6 (2025-07-01)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34747) ([44e6ce5](https://github.com/bitnami/charts/commit/44e6ce5b0d24eb53252484ad6cf7efe4f24bab8c)), closes [#34747](https://github.com/bitnami/charts/issues/34747)
+
+## <small>17.0.5 (2025-06-27)</small>
+
+* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components (#3 ([879bca6](https://github.com/bitnami/charts/commit/879bca6783b372641facf6332eb179dd10569590)), closes [#34256](https://github.com/bitnami/charts/issues/34256)
+
+## <small>17.0.4 (2025-06-25)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34622) ([b98bf4b](https://github.com/bitnami/charts/commit/b98bf4b149114396ab00faf491efb38aff2b509d)), closes [#34622](https://github.com/bitnami/charts/issues/34622)
+
+## <small>17.0.3 (2025-06-13)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34496) ([fe5afc2](https://github.com/bitnami/charts/commit/fe5afc2d868484a9b20b210307131d881568dd70)), closes [#34496](https://github.com/bitnami/charts/issues/34496)
+
+## <small>17.0.2 (2025-06-09)</small>
+
+* [bitnami/thanos] Disable MinIO Console (#34269) ([a92a7fe](https://github.com/bitnami/charts/commit/a92a7fec980c003b23748a3a8db91c07450a44a0)), closes [#34269](https://github.com/bitnami/charts/issues/34269)
+
+## <small>17.0.1 (2025-06-06)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34222) ([48654e6](https://github.com/bitnami/charts/commit/48654e6c16ca5e0f972cf94c1010fa94800a2f96)), closes [#34222](https://github.com/bitnami/charts/issues/34222)
+
+## 17.0.0 (2025-06-04)
+
+* [bitnami/thanos] feat: major version due to Minio major bump (#34091) ([f4be07e](https://github.com/bitnami/charts/commit/f4be07e37cdaac258143bf33ebac05ad31947c14)), closes [#34091](https://github.com/bitnami/charts/issues/34091)
+
+## <small>16.0.7 (2025-05-16)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/thanos] Allow custom objstore secret key in receive component (#33180) ([9a93d4f](https://github.com/bitnami/charts/commit/9a93d4ff1261a9a49cb94c69fd9597ba57668c58)), closes [#33180](https://github.com/bitnami/charts/issues/33180)
+
+## <small>16.0.6 (2025-05-07)</small>
+
+* [bitnami/thanos] Release 16.0.6 (#33544) ([c00f5d8](https://github.com/bitnami/charts/commit/c00f5d8074ad84eee1af26bdd73bce1f9aa1cad8)), closes [#33544](https://github.com/bitnami/charts/issues/33544)
+
+## <small>16.0.5 (2025-05-06)</small>
+
+* [bitnami/thanos] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33441) ([1f4814b](https://github.com/bitnami/charts/commit/1f4814b1ac7289d8635101aeb4a9a3edc5af1761)), closes [#33441](https://github.com/bitnami/charts/issues/33441)
+
+## <small>16.0.4 (2025-04-22)</small>
+
+* [bitnami/thanos] Release 16.0.4 (#33109) ([e88eeed](https://github.com/bitnami/charts/commit/e88eeed2db08e09cb06ba2cdbbaa5ab1a8d8f4fc)), closes [#33109](https://github.com/bitnami/charts/issues/33109)
+
+## <small>16.0.3 (2025-04-09)</small>
+
+* [bitnami/thanos] Release 16.0.3 (#32920) ([06b8213](https://github.com/bitnami/charts/commit/06b82139571baa2eb87e023f64a7942d618ada5f)), closes [#32920](https://github.com/bitnami/charts/issues/32920)
+
+## <small>16.0.2 (2025-04-08)</small>
+
+* [bitnami/thanos] Release 16.0.2 (#32875) ([d627749](https://github.com/bitnami/charts/commit/d627749913f9adb01494f022206a357aafee7524)), closes [#32875](https://github.com/bitnami/charts/issues/32875)
+
+## <small>16.0.1 (2025-04-07)</small>
+
+* [bitnami/thanos] Fix default value for ruler.alertmanagersconfig (#32812) ([2e66e3e](https://github.com/bitnami/charts/commit/2e66e3e37eca2c934b66d988a486f07530664c23)), closes [#32812](https://github.com/bitnami/charts/issues/32812)
+
+## 16.0.0 (2025-04-03)
+
+* [bitnami/thanos] Bump MinIO major version 16.x.x (#32703) ([ef3b5b1](https://github.com/bitnami/charts/commit/ef3b5b1e69200239d9efa4b31887baeb71bd6d17)), closes [#32703](https://github.com/bitnami/charts/issues/32703)
+
+## <small>15.14.1 (2025-04-02)</small>
+
+* [bitnami/thanos] Release 15.14.1 (#32764) ([41ff3b1](https://github.com/bitnami/charts/commit/41ff3b1ab077594728c97e522c21837c6fef1106)), closes [#32764](https://github.com/bitnami/charts/issues/32764)
+
+## 15.14.0 (2025-04-01)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/thanos] feature: allow configuring labels for all ingress (#32511) ([d65f94a](https://github.com/bitnami/charts/commit/d65f94a5bb8d2ba12d0c5ee59e2c4fee9b534578)), closes [#32511](https://github.com/bitnami/charts/issues/32511)
+
+## <small>15.13.2 (2025-03-06)</small>
+
+* [bitnami/thanos] fix: remove quotes from ruler.ruleFile parameter (#32201) ([1086c9b](https://github.com/bitnami/charts/commit/1086c9b831ade76d81749c91c4056531c050aba8)), closes [#32201](https://github.com/bitnami/charts/issues/32201)
 
 ## <small>15.13.1 (2025-03-05)</small>
 

@@ -26,24 +26,16 @@ spec:
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.receiveDistributor.autoscaling.targetMemory }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.receiveDistributor.autoscaling.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if .Values.receiveDistributor.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.receiveDistributor.autoscaling.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.receiveDistributor.autoscaling.targetCPU }}
-        {{- end }}
     {{- end }}
 {{- end }}

@@ -80,24 +80,35 @@ spec:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
-            - "/bin/bash"
-            - "-c"
-            - |-
-                /bin/bash
+            - /bin/bash
+            - -ec
+            - |
+                {{- if .Values.usePasswordFiles }}
+                export SOLR_ADMIN_PASSWORD="$(< $SOLR_ADMIN_PASSWORD_FILE)"
+                {{- end }}
                 printf '%s%s\n' 'httpBasicAuthUser=' $SOLR_ADMIN_USERNAME 'httpBasicAuthPassword=' $SOLR_ADMIN_PASSWORD > /basicauth-properties/basicauth.properties
           env:
             - name: SOLR_ADMIN_USERNAME
               value: {{ .Values.auth.adminUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SOLR_ADMIN_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/solr/secrets/pass/%s" (include "solr.secretPasswordKey" .) }}
+            {{- else }}
             - name: SOLR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "solr.secretName" . }}
                   key: {{ include "solr.secretPasswordKey" . }}
+            {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /basicauth-properties/
               subPath: app-basicauth-properties-dir
               readOnly: false
+            {{- if .Values.usePasswordFiles }}
+            - name: solr-pass-secret
+              mountPath: /opt/bitnami/solr/secrets/pass
+            {{- end }}
         {{- end }}
       containers:
         - name: solr-exporter
@@ -201,6 +212,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+        - name: solr-pass-secret
+          secret:
+            secretName: {{ include "solr.secretName" . }}
+        {{- end }}
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

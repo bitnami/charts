@@ -1,8 +1,50 @@
 # Changelog
 
-## 32.1.6 (2025-03-11)
+## 33.0.2 (2025-07-08)
 
-* [bitnami/redmine] Release 32.1.6 ([#32389](https://github.com/bitnami/charts/pull/32389))
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#34847](https://github.com/bitnami/charts/pull/34847))
+
+## <small>33.0.1 (2025-07-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34837) ([26290b7](https://github.com/bitnami/charts/commit/26290b7ac936fc95a3711efbbc790f1cb3c87581)), closes [#34837](https://github.com/bitnami/charts/issues/34837)
+
+## 33.0.0 (2025-06-25)
+
+* [bitnami/redmine] Upgrade MariaDB 11.8 (#34633) ([811e52e](https://github.com/bitnami/charts/commit/811e52eb9b2b2ea7e926b34993fe00a590761c15)), closes [#34633](https://github.com/bitnami/charts/issues/34633)
+
+## <small>32.2.6 (2025-06-19)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34559) ([8ee6624](https://github.com/bitnami/charts/commit/8ee66248b6a8b285c1e29c0d4a7e06dd393efdce)), closes [#34559](https://github.com/bitnami/charts/issues/34559)
+
+## <small>32.2.5 (2025-05-21)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#33809) ([a13bcca](https://github.com/bitnami/charts/commit/a13bcca6a5bcd85b3d82dd9db8635cb14e9bbd00)), closes [#33809](https://github.com/bitnami/charts/issues/33809)
+
+## <small>32.2.4 (2025-05-06)</small>
+
+* [bitnami/redmine] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33430 ([62bad3d](https://github.com/bitnami/charts/commit/62bad3d380fa3272eaf988d15b4f11062017531c)), closes [#33430](https://github.com/bitnami/charts/issues/33430)
+
+## <small>32.2.3 (2025-04-21)</small>
+
+* [bitnami/redmine] Release 32.2.3 (#33093) ([baa8b99](https://github.com/bitnami/charts/commit/baa8b99c67065cfb9647613242022b4ed0a47ecb)), closes [#33093](https://github.com/bitnami/charts/issues/33093)
+
+## <small>32.2.2 (2025-04-20)</small>
+
+* [bitnami/redmine] Release 32.2.2 (#33081) ([5449c12](https://github.com/bitnami/charts/commit/5449c12415df3b6cd8d69753b6ef5cc04d9fb813)), closes [#33081](https://github.com/bitnami/charts/issues/33081)
+
+## <small>32.2.1 (2025-04-15)</small>
+
+* [bitnami/redmine] Release 32.2.1 (#32947) ([774ba79](https://github.com/bitnami/charts/commit/774ba7969b41654f88748a1805f5d571cd4c875b)), closes [#32947](https://github.com/bitnami/charts/issues/32947)
+
+## 32.2.0 (2025-04-04)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redmine] Set `usePasswordFiles=true` by default (#32771) ([aa11aae](https://github.com/bitnami/charts/commit/aa11aaeecb5604baea8dea51be186195212cfb41)), closes [#32771](https://github.com/bitnami/charts/issues/32771)
+
+## <small>32.1.6 (2025-03-11)</small>
+
+* [bitnami/redmine] Release 32.1.6 (#32389) ([15830e2](https://github.com/bitnami/charts/commit/15830e283f3cdfe6000a1366b2b7e52a1e2a85ea)), closes [#32389](https://github.com/bitnami/charts/issues/32389)
 
 ## <small>32.1.5 (2025-02-28)</small>
 

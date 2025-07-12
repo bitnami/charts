@@ -1,8 +1,42 @@
 # Changelog
 
-## 2.4.12 (2025-03-19)
+## 2.4.20 (2025-07-09)
 
-* [bitnami/pinniped] Release 2.4.12 ([#32523](https://github.com/bitnami/charts/pull/32523))
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#34934](https://github.com/bitnami/charts/pull/34934))
+
+## <small>2.4.19 (2025-06-13)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#34482) ([1ea11c5](https://github.com/bitnami/charts/commit/1ea11c51be41808e893fbc251cb44e47909fede3)), closes [#34482](https://github.com/bitnami/charts/issues/34482)
+
+## <small>2.4.18 (2025-06-06)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#34209) ([bf1e345](https://github.com/bitnami/charts/commit/bf1e345a910a59b4938a435de05f70fce3931997)), closes [#34209](https://github.com/bitnami/charts/issues/34209)
+
+## <small>2.4.17 (2025-05-19)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#33781) ([d951725](https://github.com/bitnami/charts/commit/d9517253c6f164ec6e572c9c6c1e96e9f1f14a2e)), closes [#33781](https://github.com/bitnami/charts/issues/33781)
+
+## <small>2.4.16 (2025-05-07)</small>
+
+* [bitnami/pinniped] Release 2.4.16 (#33493) ([6265fac](https://github.com/bitnami/charts/commit/6265facd75dc9d81a05efec0d2d12200c5fd716c)), closes [#33493](https://github.com/bitnami/charts/issues/33493)
+
+## <small>2.4.15 (2025-05-06)</small>
+
+* [bitnami/pinniped] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3342 ([e13f1bc](https://github.com/bitnami/charts/commit/e13f1bc4ee09a47f5b3558dbfd81654b37ee41ec)), closes [#33421](https://github.com/bitnami/charts/issues/33421)
+
+## <small>2.4.14 (2025-04-22)</small>
+
+* [bitnami/pinniped] Release 2.4.14 (#33118) ([c5b0aa0](https://github.com/bitnami/charts/commit/c5b0aa03e762ba34ef1128066a2cd83ad179ae6e)), closes [#33118](https://github.com/bitnami/charts/issues/33118)
+
+## <small>2.4.13 (2025-04-02)</small>
+
+* [bitnami/pinniped] Release 2.4.13 (#32758) ([d9da8e8](https://github.com/bitnami/charts/commit/d9da8e850244ddc5e02e1c68f067e54f43705f3a)), closes [#32758](https://github.com/bitnami/charts/issues/32758)
+
+## <small>2.4.12 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/pinniped] Release 2.4.12 (#32523) ([de64aa3](https://github.com/bitnami/charts/commit/de64aa321ea9641e92728a305b5dcb0ceaa08d2d)), closes [#32523](https://github.com/bitnami/charts/issues/32523)
 
 ## <small>2.4.11 (2025-03-12)</small>
 

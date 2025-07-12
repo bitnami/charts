@@ -86,7 +86,11 @@ spec:
               value: /config/*
             {{- end }}
             - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
-              value: "true"
+              value: {{ .Values.keycloakConfigCli.availabilityCheck.enabled | quote }}
+            {{- if and .Values.keycloakConfigCli.availabilityCheck.enabled .Values.keycloakConfigCli.availabilityCheck.timeout }}
+            - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
+              value: {{ .Values.keycloakConfigCli.availabilityCheck.timeout }}
+            {{- end }}
             {{- if .Values.keycloakConfigCli.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

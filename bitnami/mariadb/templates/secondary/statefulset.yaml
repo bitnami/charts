@@ -83,6 +83,9 @@ spec:
       {{- if .Values.secondary.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.secondary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.secondary.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.secondary.terminationGracePeriodSeconds }}
+      {{- end }}
       initContainers:
         - name: preserve-logs-symlinks
           image: {{ include "mariadb.image" . }}

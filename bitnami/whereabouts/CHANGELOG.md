@@ -1,8 +1,42 @@
 # Changelog
 
-## 1.2.7 (2025-03-05)
+## 1.2.15 (2025-07-09)
 
-* [bitnami/whereabouts] Release 1.2.7 ([#32319](https://github.com/bitnami/charts/pull/32319))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34961](https://github.com/bitnami/charts/pull/34961))
+
+## <small>1.2.14 (2025-07-04)</small>
+
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#34723) ([99a2aea](https://github.com/bitnami/charts/commit/99a2aea456e3143a4b0dfc6a1f14f264471eb0ec)), closes [#34723](https://github.com/bitnami/charts/issues/34723)
+
+## <small>1.2.13 (2025-06-16)</small>
+
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#34499) ([1fda073](https://github.com/bitnami/charts/commit/1fda073790490ade719bfaa74227bb078f797def)), closes [#34499](https://github.com/bitnami/charts/issues/34499)
+
+## <small>1.2.12 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#34230) ([20cb7f2](https://github.com/bitnami/charts/commit/20cb7f2b686ae41b2b4ede879b3a5402e88743dc)), closes [#34230](https://github.com/bitnami/charts/issues/34230)
+
+## <small>1.2.11 (2025-05-07)</small>
+
+* [bitnami/whereabouts] Release 1.2.11 (#33522) ([9e8888b](https://github.com/bitnami/charts/commit/9e8888b5ef62e5e664b24fbf3abb73511adca1af)), closes [#33522](https://github.com/bitnami/charts/issues/33522)
+
+## <small>1.2.10 (2025-05-06)</small>
+
+* [bitnami/whereabouts] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3 ([74a51c1](https://github.com/bitnami/charts/commit/74a51c173ec5d8ffd02b300cd05658222d016cb2)), closes [#33447](https://github.com/bitnami/charts/issues/33447)
+
+## <small>1.2.9 (2025-04-09)</small>
+
+* [bitnami/whereabouts] Release 1.2.9 (#32923) ([b2da8b0](https://github.com/bitnami/charts/commit/b2da8b0769f2569f2d1afa16ea0d63c68ed98f08)), closes [#32923](https://github.com/bitnami/charts/issues/32923)
+
+## <small>1.2.8 (2025-04-03)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/whereabouts] Release 1.2.8 (#32798) ([69994d3](https://github.com/bitnami/charts/commit/69994d3efbda2763507e74c64a345bb315708886)), closes [#32798](https://github.com/bitnami/charts/issues/32798)
+
+## <small>1.2.7 (2025-03-05)</small>
+
+* [bitnami/whereabouts] Release 1.2.7 (#32319) ([500c06e](https://github.com/bitnami/charts/commit/500c06e104108c7aded29e0d5e2ac9d5f986ad6e)), closes [#32319](https://github.com/bitnami/charts/issues/32319)
 
 ## <small>1.2.6 (2025-02-20)</small>
 

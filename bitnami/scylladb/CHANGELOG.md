@@ -1,8 +1,38 @@
 # Changelog
 
-## 3.2.1 (2025-03-22)
+## 4.0.5 (2025-07-09)
 
-* [bitnami/scylladb] Release 3.2.1 ([#32562](https://github.com/bitnami/charts/pull/32562))
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#34978](https://github.com/bitnami/charts/pull/34978))
+
+## <small>4.0.4 (2025-06-13)</small>
+
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#34491) ([b36c8a2](https://github.com/bitnami/charts/commit/b36c8a20acfc4bc1f7bad7d5b435e14a4af7a649)), closes [#34491](https://github.com/bitnami/charts/issues/34491)
+
+## <small>4.0.3 (2025-06-05)</small>
+
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#34120) ([ff39819](https://github.com/bitnami/charts/commit/ff3981932b4ccb138c9bc208cd4d999d3e387a66)), closes [#34120](https://github.com/bitnami/charts/issues/34120)
+
+## <small>4.0.2 (2025-05-31)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#34023) ([76c10cf](https://github.com/bitnami/charts/commit/76c10cf217c5f37c4806bfc3b06683b849d8903f)), closes [#34023](https://github.com/bitnami/charts/issues/34023)
+
+## <small>4.0.1 (2025-05-01)</small>
+
+* [bitnami/scylladb] Release 4.0.1 (#33283) ([379064a](https://github.com/bitnami/charts/commit/379064a0cd45ee361b356b558e18e305f687e528)), closes [#33283](https://github.com/bitnami/charts/issues/33283)
+
+## 4.0.0 (2025-04-15)
+
+* [bitnami/scylladb] Release 4.0.0 (#33022) ([834b80a](https://github.com/bitnami/charts/commit/834b80a2e22e5d4545d6f91e9ab80a2cb59d197b)), closes [#33022](https://github.com/bitnami/charts/issues/33022)
+
+## 3.3.0 (2025-04-04)
+
+* [bitnami/scylladb] Set `usePasswordFiles=true` by default (#32710) ([5bdbf23](https://github.com/bitnami/charts/commit/5bdbf23b803e784ffafa47108f839a6d1a64ae0b)), closes [#32710](https://github.com/bitnami/charts/issues/32710)
+
+## <small>3.2.1 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/scylladb] Release 3.2.1 (#32562) ([5e073d5](https://github.com/bitnami/charts/commit/5e073d57d40783d8ac90e9a5861f3d10d0499750)), closes [#32562](https://github.com/bitnami/charts/issues/32562)
 
 ## 3.2.0 (2025-02-20)
 

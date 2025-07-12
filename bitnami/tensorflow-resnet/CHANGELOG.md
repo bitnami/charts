@@ -1,8 +1,30 @@
 # Changelog
 
-## 4.3.5 (2025-03-19)
+## 4.3.10 (2025-06-12)
 
-* [bitnami/tensorflow-resnet] Release 4.3.5 ([#32512](https://github.com/bitnami/charts/pull/32512))
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#34368](https://github.com/bitnami/charts/pull/34368))
+
+## <small>4.3.9 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#33658) ([031cd9f](https://github.com/bitnami/charts/commit/031cd9fc28d16e5dea7f04899be77c7b1c95504f)), closes [#33658](https://github.com/bitnami/charts/issues/33658)
+
+## <small>4.3.8 (2025-05-07)</small>
+
+* [bitnami/tensorflow-resnet] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 referenc ([814d0b1](https://github.com/bitnami/charts/commit/814d0b149a7a1f2c7203c746dff6705d5ee85c1e)), closes [#33440](https://github.com/bitnami/charts/issues/33440)
+
+## <small>4.3.7 (2025-05-06)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.7 (#33331) ([1209c0f](https://github.com/bitnami/charts/commit/1209c0f3ad121880ba407d5614a2135777b7dab6)), closes [#33331](https://github.com/bitnami/charts/issues/33331)
+
+## <small>4.3.6 (2025-04-18)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.6 (#33070) ([6e57de9](https://github.com/bitnami/charts/commit/6e57de9a9f02a50556ec2f94b4b60bbc5af5614b)), closes [#33070](https://github.com/bitnami/charts/issues/33070)
+
+## <small>4.3.5 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tensorflow-resnet] Release 4.3.5 (#32512) ([f394a4e](https://github.com/bitnami/charts/commit/f394a4e763960f5d853d45cb24cc6c632f0120d7)), closes [#32512](https://github.com/bitnami/charts/issues/32512)
 
 ## <small>4.3.4 (2025-02-20)</small>
 

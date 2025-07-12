@@ -20,7 +20,7 @@ it('allows creating a post with image', () => {
       .should('be.visible')
       .type(`${post.newPost.title} ${random}`);
   });
-  cy.get('[aria-label*="block inserter"]').click();
+  cy.get('button[aria-label="Block Inserter"]').click();
   cy.get('[class*="item-image"]').click();
   getIframeBody()
     .find('input[type="file"]')

@@ -1,8 +1,47 @@
 # Changelog
 
-## 9.5.5 (2025-03-12)
+## 9.6.6 (2025-07-08)
 
-* [bitnami/solr] Release 9.5.5 ([#32414](https://github.com/bitnami/charts/pull/32414))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#34843](https://github.com/bitnami/charts/pull/34843))
+
+## <small>9.6.5 (2025-06-08)</small>
+
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#34253) ([d1a06ef](https://github.com/bitnami/charts/commit/d1a06eff8e5fb1566ecc76f8520035de0fc74807)), closes [#34253](https://github.com/bitnami/charts/issues/34253)
+
+## <small>9.6.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#33583) ([91aceee](https://github.com/bitnami/charts/commit/91aceee9beb02e970c02f2b624756548e3af24ea)), closes [#33583](https://github.com/bitnami/charts/issues/33583)
+
+## <small>9.6.3 (2025-05-07)</small>
+
+* [bitnami/solr] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33435) ([537f842](https://github.com/bitnami/charts/commit/537f842cd75f07bab23b261697a89a47be5e65e7)), closes [#33435](https://github.com/bitnami/charts/issues/33435)
+
+## <small>9.6.2 (2025-05-07)</small>
+
+* [bitnami/solr] Add persistentvolumeclaim retention on solr statefulset (#33310) ([34ee22f](https://github.com/bitnami/charts/commit/34ee22fa3bc6d59cb3969a76d7655515e8969049)), closes [#33310](https://github.com/bitnami/charts/issues/33310)
+* Fix typo mentioning Geode in Solr and Zookeeper (#32987) ([9dd4289](https://github.com/bitnami/charts/commit/9dd42891c2c9f5ed339e5dbc1506a13f29e0d45c)), closes [#32987](https://github.com/bitnami/charts/issues/32987)
+
+## <small>9.6.1 (2025-04-09)</small>
+
+* [bitnami/solr] Release 9.6.1 (#32893) ([0326481](https://github.com/bitnami/charts/commit/0326481eb281ec144bc172c14ed160bdd6239a25)), closes [#32893](https://github.com/bitnami/charts/issues/32893)
+
+## 9.6.0 (2025-04-04)
+
+* [bitnami/solr] Set `usePasswordFiles=true` by default (#32782) ([84a3fb4](https://github.com/bitnami/charts/commit/84a3fb444e51f5c9cd0d417edc155390ee1b2ff0)), closes [#32782](https://github.com/bitnami/charts/issues/32782)
+
+## <small>9.5.7 (2025-04-02)</small>
+
+* [bitnami/solr] Release 9.5.7 (#32784) ([fd41f2d](https://github.com/bitnami/charts/commit/fd41f2d13d80e1dce5fee2703667d3a7d26ca103)), closes [#32784](https://github.com/bitnami/charts/issues/32784)
+
+## <small>9.5.6 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/solr] Release 9.5.6 (#32650) ([fc2728c](https://github.com/bitnami/charts/commit/fc2728cf08cbc7bb526b359e8188f3e9001f74f8)), closes [#32650](https://github.com/bitnami/charts/issues/32650)
+
+## <small>9.5.5 (2025-03-12)</small>
+
+* [bitnami/solr] Release 9.5.5 (#32414) ([2e718f5](https://github.com/bitnami/charts/commit/2e718f57ccae98f3116f89f6f11b31f0755b570b)), closes [#32414](https://github.com/bitnami/charts/issues/32414)
 
 ## <small>9.5.4 (2025-02-20)</small>
 

@@ -1,8 +1,39 @@
 # Changelog
 
-## 17.0.3 (2025-03-07)
+## 18.0.0 (2025-06-25)
 
-* [bitnami/ejbca] Release 17.0.3 ([#32370](https://github.com/bitnami/charts/pull/32370))
+* [bitnami/ejbca] Upgrade MariaDB 11.8 ([#34635](https://github.com/bitnami/charts/pull/34635))
+
+## <small>17.1.4 (2025-06-22)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#34578) ([98f684b](https://github.com/bitnami/charts/commit/98f684bf402933a0040ef2b5c9ebb1d86441d02d)), closes [#34578](https://github.com/bitnami/charts/issues/34578)
+
+## <small>17.1.3 (2025-05-23)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#33853) ([9917e60](https://github.com/bitnami/charts/commit/9917e60fdf6e04b15a8a0b18093fa4778cc56d2c)), closes [#33853](https://github.com/bitnami/charts/issues/33853)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>17.1.2 (2025-05-07)</small>
+
+* [bitnami/ejbca] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33355) ([db6d4c8](https://github.com/bitnami/charts/commit/db6d4c8aa79ff444a008dc2d390cc694bbe860cb)), closes [#33355](https://github.com/bitnami/charts/issues/33355)
+
+## <small>17.1.1 (2025-04-23)</small>
+
+* [bitnami/ejbca] Release 17.1.1 (#33136) ([30e4c1d](https://github.com/bitnami/charts/commit/30e4c1d01245b09dc537d1a3c54acbec6f15d8b3)), closes [#33136](https://github.com/bitnami/charts/issues/33136)
+
+## 17.1.0 (2025-04-04)
+
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default (#32343) ([cfa2cc8](https://github.com/bitnami/charts/commit/cfa2cc85a37e59b73aea8bad93948a843182df59)), closes [#32343](https://github.com/bitnami/charts/issues/32343)
+
+## <small>17.0.4 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/ejbca] Release 17.0.4 (#32674) ([7284153](https://github.com/bitnami/charts/commit/7284153ab6d0283ce1cdf1a2baa27e233ac0fe5d)), closes [#32674](https://github.com/bitnami/charts/issues/32674)
+
+## <small>17.0.3 (2025-03-08)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ejbca] Release 17.0.3 (#32370) ([f419d29](https://github.com/bitnami/charts/commit/f419d2908a049a6e9608bf2ea63939554baa14c2)), closes [#32370](https://github.com/bitnami/charts/issues/32370)
 
 ## <small>17.0.2 (2025-02-05)</small>
 

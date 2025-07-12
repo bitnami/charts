@@ -1,8 +1,37 @@
 # Changelog
 
-## 13.7.4 (2025-02-27)
+## 13.8.4 (2025-06-27)
 
-* [bitnami/zookeeper] Release 13.7.4 ([#32204](https://github.com/bitnami/charts/pull/32204))
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#34692](https://github.com/bitnami/charts/pull/34692))
+
+## <small>13.8.3 (2025-05-28)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references (#33935) ([eaf105d](https://github.com/bitnami/charts/commit/eaf105d596e48bf78bd4547e12be30aca7deb2e3)), closes [#33935](https://github.com/bitnami/charts/issues/33935)
+
+## <small>13.8.2 (2025-05-06)</small>
+
+* [bitnami/zookeeper] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([b1a5d07](https://github.com/bitnami/charts/commit/b1a5d07324528761af498d56da55ebaa2d20abcf)), closes [#33451](https://github.com/bitnami/charts/issues/33451)
+
+## <small>13.8.1 (2025-04-28)</small>
+
+* [bitnami/zookeeper] Release 13.8.1 (#33224) ([b0baf91](https://github.com/bitnami/charts/commit/b0baf91deede6a070a5305a80100d31ec3881f27)), closes [#33224](https://github.com/bitnami/charts/issues/33224)
+* Fix typo mentioning Geode in Solr and Zookeeper (#32987) ([9dd4289](https://github.com/bitnami/charts/commit/9dd42891c2c9f5ed339e5dbc1506a13f29e0d45c)), closes [#32987](https://github.com/bitnami/charts/issues/32987)
+
+## 13.8.0 (2025-04-07)
+
+* [bitnami/zookeeper] Set `usePasswordFiles=true` by default (#32780) ([f8d5d0c](https://github.com/bitnami/charts/commit/f8d5d0c2ff7b843f9364e0a956081fff2820fed1)), closes [#32780](https://github.com/bitnami/charts/issues/32780)
+
+## <small>13.7.5 (2025-03-29)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/zookeeper] Release 13.7.5 (#32680) ([9605372](https://github.com/bitnami/charts/commit/9605372e658eea7cadd026f16ae487571a1397e2)), closes [#32680](https://github.com/bitnami/charts/issues/32680)
+
+## <small>13.7.4 (2025-02-27)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/zookeeper] Release 13.7.4 (#32204) ([db53e62](https://github.com/bitnami/charts/commit/db53e622ecf1be5a78d1ce683cec8baa41110fa3)), closes [#32204](https://github.com/bitnami/charts/issues/32204)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
 
 ## <small>13.7.3 (2025-01-28)</small>
 

@@ -62,7 +62,7 @@ Create a default fully qualified redis name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "superset.redis.fullname" -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "redis-master" "chartValues" .Values.redis "context" $) -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "redis" "chartValues" .Values.redis "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -124,7 +124,11 @@ Get the configmap name
 Add environment variables to configure database values
 */}}
 {{- define "superset.database.host" -}}
-{{- ternary (include "superset.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- if eq .Values.postgresql.architecture "replication" }}
+    {{- printf "%s-primary" (ternary (include "superset.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled) -}}
+{{- else -}}
+    {{- ternary (include "superset.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -171,7 +175,11 @@ Add environment variables to configure database values
 Add environment variables to configure redis values
 */}}
 {{- define "superset.redis.host" -}}
-{{- ternary (include "superset.redis.fullname" .) .Values.externalRedis.host .Values.redis.enabled -}}
+{{- if .Values.redis.enabled -}}
+    {{- printf "%s-master" (include "superset.redis.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s" (tpl .Values.externalRedis.host $) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -201,11 +209,16 @@ Add environment variables to configure database values
 - name: SUPERSET_DATABASE_USER
   value: {{ include "superset.database.user" . | quote }}
 {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+{{- if .Values.usePasswordFiles }}
+- name: SUPERSET_DATABASE_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/superset/secrets/%s" (include "superset.database.secretKey" .) }}
+{{- else }}
 - name: SUPERSET_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.postgresql.secretName" . }}
       key: {{ include "superset.database.secretKey" . }}
+{{- end }}
 {{- else }}
 - name: ALLOW_EMPTY_PASSWORD
   value: "true"
@@ -222,22 +235,32 @@ Add environment variables to configure redis values
   value: {{ include "superset.redis.port" . | quote }}
 - name: REDIS_USER
   value: {{ ternary "default" .Values.externalRedis.username .Values.redis.enabled  | quote }}
+{{- if .Values.usePasswordFiles }}
+- name: REDIS_PASSWORD_FILE
+  value: {{ printf "/opt/bitnami/superset/secrets/%s" (include "superset.redis.secretKey" .) }}
+{{- else }}
 - name: REDIS_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.redis.secretName" . }}
       key: {{ include "superset.redis.secretKey" . }}
+{{- end }}
 {{- end -}}
 
 {{/*
 Add environment variables to configure superset common values
 */}}
 {{- define "superset.configure.common" -}}
+{{- if .Values.usePasswordFiles }}
+- name: SUPERSET_SECRET_KEY_FILE
+  value: "/opt/bitnami/superset/secrets/superset-secret-key"
+{{- else }}
 - name: SUPERSET_SECRET_KEY
   valueFrom:
     secretKeyRef:
       name: {{ include "superset.secretName" . }}
       key: superset-secret-key
+{{- end }}
 {{- if or .Values.existingConfigmap .Values.config }}
 - name: SUPERSET_CONF_FILE
   value: "/bitnami/superset/conf/superset_config.py"
@@ -276,6 +299,10 @@ Init container definition to wait for PostgreSQL
         . /opt/bitnami/scripts/liblog.sh
         . /opt/bitnami/scripts/libpostgresql.sh
 
+        {{- if .Values.usePasswordFiles }}
+        export SUPERSET_DATABASE_PASSWORD="$(< $SUPERSET_DATABASE_PASSWORD_FILE)"
+        {{- end }}
+
         check_postgresql_connection() {
             echo "SELECT 1" | postgresql_remote_execute "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD"
         }
@@ -289,6 +316,12 @@ Init container definition to wait for PostgreSQL
         fi
   env:
     {{- include "superset.configure.database" . | nindent 4 }}
+  {{- if .Values.usePasswordFiles }}
+  volumeMounts:
+    - name: superset-secrets
+      mountPath: /opt/bitnami/superset/secrets
+      readOnly: true
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -320,6 +353,10 @@ Init container definition to wait for Redis
         . /opt/bitnami/scripts/libos.sh
         . /opt/bitnami/scripts/liblog.sh
 
+        {{- if .Values.usePasswordFiles }}
+        export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+        {{- end }}
+
         check_redis_connection() {
             local result="$(redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT_NUMBER} -a ${REDIS_PASSWORD} --user ${REDIS_USER} PING)"
             if [[ "$result" != "PONG" ]]; then
@@ -336,6 +373,12 @@ Init container definition to wait for Redis
         fi
   env:
     {{- include "superset.configure.redis" . | nindent 4 }}
+  {{- if .Values.usePasswordFiles }}
+  volumeMounts:
+    - name: superset-secrets
+      mountPath: /opt/bitnami/superset/secrets
+      readOnly: true
+  {{- end }}
 {{- end }}
 
 {{- define "superset.initContainers.waitForExamples" -}}
@@ -365,12 +408,18 @@ Init container definition to wait for Redis
         . /opt/bitnami/scripts/liblog.sh
         . /opt/bitnami/scripts/libpostgresql.sh
 
+        {{- if .Values.usePasswordFiles }}
+        export SUPERSET_DATABASE_PASSWORD="$(< $SUPERSET_DATABASE_PASSWORD_FILE)"
+        {{- end }}
+
         check_examples_database() {
-            echo "SELECT dashboard_title FROM dashboards" | postgresql_remote_execute_print_output "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD" | grep "Dashboard"
+            # deck.gl Demo is one of the latest dashboards loaded.
+            echo "SELECT dashboard_title FROM dashboards" | postgresql_remote_execute_print_output "$SUPERSET_DATABASE_HOST" "$SUPERSET_DATABASE_PORT_NUMBER" "$SUPERSET_DATABASE_NAME" "$SUPERSET_DATABASE_USER" "$SUPERSET_DATABASE_PASSWORD" | grep "deck.gl Demo"
         }
 
         info "Checking if the 'examples' database exists at $SUPERSET_DATABASE_HOST:$SUPERSET_DATABASE_PORT_NUMBER"
-        if ! retry_while "check_examples_database"; then
+        # Retry 5 min
+        if ! retry_while "check_examples_database" 60; then
             error "Examples database not ready yet"
             exit 1
         else
@@ -378,6 +427,12 @@ Init container definition to wait for Redis
         fi
   env:
     {{- include "superset.configure.database" . | nindent 4 }}
+  {{- if .Values.usePasswordFiles }}
+  volumeMounts:
+    - name: superset-secrets
+      mountPath: /opt/bitnami/superset/secrets
+      readOnly: true
+  {{- end }}
 {{- end }}
 
 {{/*

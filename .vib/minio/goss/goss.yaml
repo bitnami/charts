@@ -2,20 +2,25 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://localhost:{{ .Vars.containerPorts.console }}:
+  http://localhost:{{ .Vars.containerPorts.api }}/minio/health/live:
+    status: 200
+  http://minio:{{ .Vars.service.ports.api }}/minio/health/live:
+    status: 200
+  http://minio-console:{{ .Vars.console.service.ports.http }}:
     status: 200
 command:
   {{- $auth := printf "'%s' '%s'" .Vars.auth.rootUser .Vars.auth.rootPassword }}
-  {{- $minio_cfg_name := printf "minio%s" (randAlpha 5) }}
+  {{- $minio_endpoint := printf "http://minio:%d" (int .Vars.service.ports.api) }}
+  {{- $minio_alias := printf "minio%s" (randAlpha 5) }}
+  # We cannot guarantee order execution, so we need to set the alias twice
   {{- $minio_bucket := printf "bucket%s" (randAlpha 5 | toLower) }}
-  {{- $minio_endpoint := printf "http://minio:%d" .Vars.service.ports.api }}
   mc-make-bucket:
-    exec: mc config host add {{ $minio_cfg_name }} {{ $minio_endpoint }} {{ $auth }} && mc mb {{ $minio_cfg_name }}/{{ $minio_bucket }} && mc ls {{ $minio_cfg_name }}
+    exec: mc alias set {{ $minio_alias }} {{ $minio_endpoint }} {{ $auth }} && mc mb {{ $minio_alias }}/{{ $minio_bucket }} && mc ls {{ $minio_alias }}
     exit-status: 0
     stdout:
       - "{{ $minio_bucket }}/"
-  mc-list-buckets:
-    exec: mc admin info local
+  mc-admin-info:
+    exec: mc alias set {{ $minio_alias }} {{ $minio_endpoint }} {{ $auth }} && mc admin info {{ $minio_alias }}
     exit-status: 0
     stdout:
       - /Network.*OK/

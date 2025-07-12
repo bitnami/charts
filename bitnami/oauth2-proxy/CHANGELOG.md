@@ -1,8 +1,46 @@
 # Changelog
 
-## 6.2.10 (2025-03-25)
+## 7.0.4 (2025-07-09)
 
-* [bitnami/oauth2-proxy] Release 6.2.10 ([#32609](https://github.com/bitnami/charts/pull/32609))
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34933](https://github.com/bitnami/charts/pull/34933))
+
+## <small>7.0.3 (2025-06-13)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34480) ([8b65b45](https://github.com/bitnami/charts/commit/8b65b453ddea50837f860d0b5d6eb9df78617ed1)), closes [#34480](https://github.com/bitnami/charts/issues/34480)
+
+## <small>7.0.2 (2025-06-10)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34327) ([0d0415b](https://github.com/bitnami/charts/commit/0d0415b7f5dbe5c1adde5ad2b01a431b349f3095)), closes [#34327](https://github.com/bitnami/charts/issues/34327)
+
+## <small>7.0.1 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34208) ([aa1accc](https://github.com/bitnami/charts/commit/aa1accc0d9d769e7954b1e076b8d55ddc3ee7c36)), closes [#34208](https://github.com/bitnami/charts/issues/34208)
+
+## 7.0.0 (2025-05-07)
+
+* [bitnami/oauth2-proxy] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33507) ([454dd1f](https://github.com/bitnami/charts/commit/454dd1fe99c2d120e780e92a25b1ea6c39e4b105)), closes [#33507](https://github.com/bitnami/charts/issues/33507)
+
+## <small>6.2.14 (2025-05-07)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.14 (#33487) ([a4f0f8d](https://github.com/bitnami/charts/commit/a4f0f8d94ef4b7efc07f32c6a83eb9b72904718c)), closes [#33487](https://github.com/bitnami/charts/issues/33487)
+
+## <small>6.2.13 (2025-05-06)</small>
+
+* [bitnami/oauth2-proxy] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([4d0bf5d](https://github.com/bitnami/charts/commit/4d0bf5daa6b9684f4493075626c13b74cc052cdc)), closes [#33416](https://github.com/bitnami/charts/issues/33416)
+
+## <small>6.2.12 (2025-04-28)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.12 (#33229) ([4cda3c6](https://github.com/bitnami/charts/commit/4cda3c63f74239944e3cd4f2ab20f43c2395125e)), closes [#33229](https://github.com/bitnami/charts/issues/33229)
+
+## <small>6.2.11 (2025-04-02)</small>
+
+* [bitnami/oauth2-proxy] Release 6.2.11 (#32757) ([ecbac45](https://github.com/bitnami/charts/commit/ecbac4538b79d8a8d52585116ccbeba86eb52490)), closes [#32757](https://github.com/bitnami/charts/issues/32757)
+
+## <small>6.2.10 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/oauth2-proxy] Release 6.2.10 (#32609) ([218d09f](https://github.com/bitnami/charts/commit/218d09fa753c6fd3a6e2d4405b460a1116ba3964)), closes [#32609](https://github.com/bitnami/charts/issues/32609)
 
 ## <small>6.2.9 (2025-03-05)</small>
 

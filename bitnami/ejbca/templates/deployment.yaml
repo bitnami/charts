@@ -110,6 +110,16 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: EJBCA_ADMIN_PASSWORD_FILE
+              value: "/opt/bitnami/ejbca/secrets/ejbca-admin-password"
+            - name: EJBCA_DATABASE_PASSWORD_FILE
+              value: "/opt/bitnami/ejbca/secrets/mariadb-password"
+            {{- if .Values.ejbcaKeystoreExistingSecret }}
+            - name: EJBCA_SERVER_CERT_PASSWORD_FILE
+              value: "/opt/bitnami/ejbca/secrets/keystore-password"
+            {{- end }}
+            {{- else }}
             - name: EJBCA_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -126,6 +136,7 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.ejbcaKeystoreExistingSecret }}
                   key: keystore-password
+            {{- end }}
             {{- end }}
             - name: EJBCA_ADMIN_USERNAME
               value: {{ .Values.ejbcaAdminUsername | quote }}
@@ -249,6 +260,10 @@ spec:
             - name: ejbca-data
               mountPath: /bitnami/wildfly
               subPath: wildfly
+            {{- if .Values.usePasswordFiles }}
+            - name: ejbca-secrets
+              mountPath: /opt/bitnami/ejbca/secrets
+            {{- end }}
             {{- if .Values.ejbcaKeystoreExistingSecret }}
             - name: ejbca-keystore
               mountPath: /opt/bitnami/ejbca/mounted-jks/keystore.jks
@@ -268,14 +283,27 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-          {{- if .Values.ejbcaKeystoreExistingSecret }}
+        {{- if .Values.ejbcaKeystoreExistingSecret }}
         - name: ejbca-keystore
           secret:
             secretName: {{ .Values.ejbcaKeystoreExistingSecret }}
             items:
             - key: "keystore.jks"
               path: "keystore.jks"
-          {{- end }}
+        {{- end }}
+        {{- if .Values.usePasswordFiles }}
+        - name: ejbca-secrets
+          projected:
+            sources:
+              - secret:
+                  name:  {{ include "ejbca.secretName" . }}
+              - secret:
+                  name:  {{ include "ejbca.databaseSecretName" . }}
+              {{- if .Values.ejbcaKeystoreExistingSecret }}
+              - secret:
+                  name: {{ .Values.ejbcaKeystoreExistingSecret }}
+              {{- end }}
+        {{- end }}
         - name: ejbca-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

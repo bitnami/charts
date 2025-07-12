@@ -652,17 +652,6 @@ Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.en
 {{- end -}}
 
 {{/*
-Return the appropriate apiGroup for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiGroup" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy" -}}
-{{- else -}}
-{{- print "extensions" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return true if a TLS secret object should be created
 */}}
 {{- define "mongodb.createTlsSecret" -}}

@@ -74,11 +74,16 @@ spec:
               value: {{ .Values.auth.username | quote }}
             - name: SUPERSET_EMAIL
               value: {{ .Values.auth.email | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: SUPERSET_PASSWORD_FILE
+              value: "/opt/bitnami/superset/secrets/superset-password"
+            {{- else }}
             - name: SUPERSET_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "superset.secretName" . }}
                   key: superset-password
+            {{- end }}
             - name: SUPERSET_LOAD_EXAMPLES
               value: {{ ternary "true" "false" .Values.loadExamples | quote }}
             {{- if .Values.init.extraEnvVars }}
@@ -105,6 +110,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if .Values.usePasswordFiles }}
+            - name: superset-secrets
+              mountPath: /opt/bitnami/superset/secrets
+              readOnly: true
+            {{- end }}
             {{- if or .Values.existingConfigmap .Values.config }}
             - name: superset-config
               mountPath: /bitnami/superset/conf
@@ -118,6 +128,24 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: superset-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "superset.secretName" . }}
+                  items:
+                    - key: superset-secret-key
+                      path: superset-secret-key
+                    - key: superset-password
+                      path: superset-password
+              - secret:
+                  name: {{ include "superset.redis.secretName" . }}
+              {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+              - secret:
+                  name: {{ include "superset.postgresql.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.existingConfigmap .Values.config }}
         - name: superset-config
           configMap:

@@ -20,8 +20,6 @@ Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https
 
 This chart bootstraps a [MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) replication cluster deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -402,6 +400,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `primary.service.clusterIP`                                 | MySQL Primary K8s service clusterIP IP                                                                                                                                                                                            | `""`                |
 | `primary.service.loadBalancerIP`                            | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                    | `""`                |
 | `primary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                              | `Cluster`           |
+| `primary.service.externalIPs`                               | MySQL Primary K8s service externalIPs                                                                                                                                                                                             | `[]`                |
 | `primary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when MySQL Primary service is LoadBalancer                                                                                                                                                             | `[]`                |
 | `primary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                    | `[]`                |
 | `primary.service.annotations`                               | Additional custom annotations for MySQL primary service                                                                                                                                                                           | `{}`                |
@@ -511,6 +510,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `secondary.service.clusterIP`                                 | MySQL secondary Kubernetes service clusterIP IP                                                                                                                                                                                       | `""`                |
 | `secondary.service.loadBalancerIP`                            | MySQL secondary loadBalancerIP if service type is `LoadBalancer`                                                                                                                                                                      | `""`                |
 | `secondary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                                                                                                                  | `Cluster`           |
+| `secondary.service.externalIPs`                               | MySQL Secondary K8s service externalIPs                                                                                                                                                                                               | `[]`                |
 | `secondary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when MySQL secondary service is LoadBalancer                                                                                                                                                               | `[]`                |
 | `secondary.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                        | `[]`                |
 | `secondary.service.annotations`                               | Additional custom annotations for MySQL secondary service                                                                                                                                                                             | `{}`                |
@@ -689,6 +689,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mysql
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 13.0.0
+
+This major bump uses mysql `9.3` image. Follow the [official instructions](https://dev.mysql.com/doc/refman/9.3/en/upgrading.html) to upgrade.
 
 ### To 12.2.0
 

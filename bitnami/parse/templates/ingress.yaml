@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingress.ingressClassName }}
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -28,9 +28,7 @@ spec:
           {{- toYaml .Values.ingress.dashboard.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingress.dashboard.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.dashboard.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.dashboard.extraHosts }}
@@ -38,9 +36,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "parse.dashboard.fullname" .) "servicePort" "http-dashboard" "context" $) | nindent 14 }}
     {{- end }}
   {{- end }}
@@ -52,9 +48,7 @@ spec:
           {{- toYaml .Values.ingress.server.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.ingress.server.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.server.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http-server" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.server.extraHosts }}
@@ -62,9 +56,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http-server" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.ingress.extraRules }}

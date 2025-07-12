@@ -390,7 +390,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
       value: {{ printf "%s-headless" (include "kafka.controller.fullname" .context) | trunc 63 | trimSuffix "-" }}
     - name: KAFKA_CONTROLLER_PORT
       value: {{ .context.Values.listeners.controller.containerPort | quote }}
-    {{- $kraftSecret := default (printf "%s-kraft" (include "common.names.fullname" .context)) .context.Values.existingKraftSecret }}
+    {{- $kraftSecret := include "kafka.kraftSecretName" .context }}
     {{- range $i := until (int .context.Values.controller.replicaCount) }}
     - name: KAFKA_CONTROLLER_{{ $i }}_DIR_ID
       valueFrom:
@@ -402,7 +402,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
     - name: EXTERNAL_ACCESS_LISTENER_NAME
       value: {{ upper .context.Values.listeners.external.name | quote }}
     {{- $externalAccess := index .context.Values.externalAccess .role }}
-    {{- if eq $externalAccess.service.type "LoadBalancer" }}
+    {{- if or (eq $externalAccess.service.type "LoadBalancer") (and $externalAccess.service.loadBalancerNames (eq $externalAccess.service.type "ClusterIP")) }}
     {{- if not .context.Values.defaultInitContainers.autoDiscovery.enabled }}
     - name: EXTERNAL_ACCESS_HOSTS_LIST
       value: {{ join "," (default $externalAccess.service.loadBalancerIPs $externalAccess.service.loadBalancerNames) | quote }}

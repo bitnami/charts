@@ -1,8 +1,47 @@
 # Changelog
 
-## 2.5.7 (2025-03-05)
+## 2.5.16 (2025-07-09)
 
-* [bitnami/sealed-secrets] Release 2.5.7 ([#32316](https://github.com/bitnami/charts/pull/32316))
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34950](https://github.com/bitnami/charts/pull/34950))
+
+## <small>2.5.15 (2025-06-16)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34492) ([1f70b72](https://github.com/bitnami/charts/commit/1f70b72a29dd8def0175b89a61e00dc14057ddc3)), closes [#34492](https://github.com/bitnami/charts/issues/34492)
+
+## <small>2.5.14 (2025-06-12)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34371) ([7d0511c](https://github.com/bitnami/charts/commit/7d0511c51b70560ad670e0db56b636c406c2a052)), closes [#34371](https://github.com/bitnami/charts/issues/34371)
+
+## <small>2.5.13 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34219) ([22645d3](https://github.com/bitnami/charts/commit/22645d3c72b846fc78e75e3376157f3a25e40abd)), closes [#34219](https://github.com/bitnami/charts/issues/34219)
+
+## <small>2.5.12 (2025-05-07)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.12 (#33521) ([0680ad7](https://github.com/bitnami/charts/commit/0680ad793c30949a2547c504cc14f73fcf860a02)), closes [#33521](https://github.com/bitnami/charts/issues/33521)
+
+## <small>2.5.11 (2025-05-06)</small>
+
+* [bitnami/sealed-secrets] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([b55c926](https://github.com/bitnami/charts/commit/b55c926b75b6c0347a9e29713c7c685a4f81de98)), closes [#33433](https://github.com/bitnami/charts/issues/33433)
+
+## <small>2.5.10 (2025-04-24)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.10 (#33153) ([51fc030](https://github.com/bitnami/charts/commit/51fc030d329581bcf37b9069d3488800d5becb29)), closes [#33153](https://github.com/bitnami/charts/issues/33153)
+
+## <small>2.5.9 (2025-04-02)</small>
+
+* [bitnami/sealed-secrets] Release 2.5.9 (#32762) ([a1015e1](https://github.com/bitnami/charts/commit/a1015e1df9ad4314ef46e2d493881b848e499836)), closes [#32762](https://github.com/bitnami/charts/issues/32762)
+
+## <small>2.5.8 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/sealed-secrets] Release 2.5.8 (#32641) ([08742e3](https://github.com/bitnami/charts/commit/08742e3f0a3aa6134b4f9a6971fa4721e7c30cfc)), closes [#32641](https://github.com/bitnami/charts/issues/32641)
+
+## <small>2.5.7 (2025-03-05)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/sealed-secrets] Release 2.5.7 (#32316) ([25a175f](https://github.com/bitnami/charts/commit/25a175f490351b3fdfe1acbfab678bbb26576ea0)), closes [#32316](https://github.com/bitnami/charts/issues/32316)
 
 ## <small>2.5.6 (2025-02-07)</small>
 

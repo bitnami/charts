@@ -1,0 +1,30 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "kube-prometheus.thanosRuler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.thanosRuler.pdb.minAvailable }}
+  minAvailable: {{ .Values.thanosRuler.pdb.minAvailable }}
+  {{- end }}
+  {{- if or .Values.thanosRuler.pdb.maxUnavailable ( not .Values.thanosRuler.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.thanosRuler.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{ include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: thanos-ruler
+{{- end }}

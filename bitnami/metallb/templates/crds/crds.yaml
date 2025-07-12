@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/metallb/metallb/v{version}/charts/metallb/charts/crds/templates/crds.yaml
-# Version: 0.14.9
+# Version: 0.15.2
 # Conditional: .Values.installCRDs
 {{- if .Values.installCRDs }}
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: bfdprofiles.metallb.io
 spec:
   group: metallb.io
@@ -127,7 +127,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: bgpadvertisements.metallb.io
 spec:
   group: metallb.io
@@ -333,14 +333,13 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: bgppeers.metallb.io
 spec:
   conversion:
     strategy: Webhook
     webhook:
       clientConfig:
-        caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlGWlRDQ0EwMmdBd0lCQWdJVU5GRW1XcTM3MVpKdGkrMmlSQzk1WmpBV1MxZ3dEUVlKS29aSWh2Y05BUUVMDQpCUUF3UWpFTE1Ba0dBMVVFQmhNQ1dGZ3hGVEFUQmdOVkJBY01ERVJsWm1GMWJIUWdRMmwwZVRFY01Cb0dBMVVFDQpDZ3dUUkdWbVlYVnNkQ0JEYjIxd1lXNTVJRXgwWkRBZUZ3MHlNakEzTVRrd09UTXlNek5hRncweU1qQTRNVGd3DQpPVE15TXpOYU1FSXhDekFKQmdOVkJBWVRBbGhZTVJVd0V3WURWUVFIREF4RVpXWmhkV3gwSUVOcGRIa3hIREFhDQpCZ05WQkFvTUUwUmxabUYxYkhRZ1EyOXRjR0Z1ZVNCTWRHUXdnZ0lpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElDDQpEd0F3Z2dJS0FvSUNBUUNxVFpxMWZRcC9vYkdlenhES0o3OVB3Ny94azJwellualNzMlkzb1ZYSm5sRmM4YjVlDQpma2ZZQnY2bndscW1keW5PL2phWFBaQmRQSS82aFdOUDBkdVhadEtWU0NCUUpyZzEyOGNXb3F0MGNTN3pLb1VpDQpvcU1tQ0QvRXVBeFFNZjhRZDF2c1gvVllkZ0poVTZBRXJLZEpIaXpFOUJtUkNkTDBGMW1OVW55Rk82UnRtWFZUDQpidkxsTDVYeTc2R0FaQVBLOFB4aVlDa0NtbDdxN0VnTWNiOXlLWldCYmlxQ3VkTXE5TGJLNmdKNzF6YkZnSXV4DQo1L1pXK2JraTB2RlplWk9ZODUxb1psckFUNzJvMDI4NHNTWW9uN0pHZVZkY3NoUnh5R1VpSFpSTzdkaXZVTDVTDQpmM2JmSDFYbWY1ZDQzT0NWTWRuUUV2NWVaOG8zeWVLa3ZrbkZQUGVJMU9BbjdGbDlFRVNNR2dhOGFaSG1URSttDQpsLzlMSmdDYjBnQmtPT0M0WnV4bWh2aERKV1EzWnJCS3pMQlNUZXN0NWlLNVlwcXRWVVk2THRyRW9FelVTK1lsDQpwWndXY2VQWHlHeHM5ZURsR3lNVmQraW15Y3NTU1UvVno2Mmx6MnZCS21NTXBkYldDQWhud0RsRTVqU2dyMjRRDQp0eGNXLys2N3d5KzhuQlI3UXdqVTFITndVRjBzeERWdEwrZ1NHVERnSEVZSlhZelYvT05zMy94TkpoVFNPSkxNDQpoeXNVdyttaGdackdhbUdXcHVIVU1DUitvTWJzMTc1UkcrQjJnUFFHVytPTjJnUTRyOXN2b0ZBNHBBQm8xd1dLDQpRYjRhY3pmeVVscElBOVFoSmFsZEY3S3dPSHVlV3gwRUNrNXg0T2tvVDBvWVp0dzFiR0JjRGtaSmF3SURBUUFCDQpvMU13VVRBZEJnTlZIUTRFRmdRVW90UlNIUm9IWTEyRFZ4R0NCdEhpb1g2ZmVFQXdId1lEVlIwakJCZ3dGb0FVDQpvdFJTSFJvSFkxMkRWeEdDQnRIaW9YNmZlRUF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCDQpBUXNGQUFPQ0FnRUFSbkpsWWRjMTFHd0VxWnh6RDF2R3BDR2pDN2VWTlQ3aVY1d3IybXlybHdPYi9aUWFEa0xYDQpvVStaOVVXT1VlSXJTdzUydDdmQUpvVVAwSm5iYkMveVIrU1lqUGhvUXNiVHduOTc2ZldBWTduM3FMOXhCd1Y0DQphek41OXNjeUp0dlhMeUtOL2N5ak1ReDRLajBIMFg0bWJ6bzVZNUtzWWtYVU0vOEFPdWZMcEd0S1NGVGgrSEFDDQpab1Q5YnZHS25adnNHd0tYZFF0Wnh0akhaUjVqK3U3ZGtQOTJBT051RFNabS8rWVV4b2tBK09JbzdSR3BwSHNXDQo1ZTdNY0FTVXRtb1FORXd6dVFoVkJaRWQ1OGtKYjUrV0VWbGNzanlXNnRTbzErZ25tTWNqR1BsMWgxR2hVbjV4DQpFY0lWRnBIWXM5YWo1NmpBSjk1MVQvZjhMaWxmTlVnanBLQ0c1bnl0SUt3emxhOHNtdGlPdm1UNEpYbXBwSkI2DQo4bmdHRVluVjUrUTYwWFJ2OEhSSGp1VG9CRHVhaERrVDA2R1JGODU1d09FR2V4bkZpMXZYWUxLVllWb1V2MXRKDQo4dVdUR1pwNllDSVJldlBqbzg5ZytWTlJSaVFYUThJd0dybXE5c0RoVTlqTjA0SjdVL1RvRDFpNHE3VnlsRUc5DQorV1VGNkNLaEdBeTJIaEhwVncyTGFoOS9lUzdZMUZ1YURrWmhPZG1laG1BOCtqdHNZamJadnR5Mm1SWlF0UUZzDQpUU1VUUjREbUR2bVVPRVRmeStpRHdzK2RkWXVNTnJGeVVYV2dkMnpBQU4ydVl1UHFGY2pRcFNPODFzVTJTU3R3DQoxVzAyeUtYOGJEYmZFdjBzbUh3UzliQnFlSGo5NEM1Mjg0YXpsdTBmaUdpTm1OUEM4ckJLRmhBPQ0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
         service:
           name: metallb-webhook-service
           namespace: {{ .Release.Namespace }}
@@ -530,7 +529,15 @@ spec:
                       rule: duration(self).getMilliseconds() % 1000 == 0
                 disableMP:
                   default: false
-                  description: To set if we want to disable MP BGP that will separate IPv4 and IPv6 route exchanges into distinct BGP sessions.
+                  description: |-
+                    To set if we want to disable MP BGP that will separate IPv4 and IPv6 route exchanges into distinct BGP sessions.
+                    Deprecated: DisableMP is deprecated in favor of dualStackAddressFamily.
+                  type: boolean
+                dualStackAddressFamily:
+                  default: false
+                  description: |-
+                    To set if we want to enable the neighbor not only for the ipfamily related to its session,
+                    but also the other one. This allows to advertise/receive IPv4 prefixes over IPv6 sessions and vice versa.
                   type: boolean
                 dynamicASN:
                   description: |-
@@ -558,6 +565,14 @@ spec:
                       rule: self == oldSelf
                 holdTime:
                   description: Requested BGP hold time, per RFC4271.
+                  type: string
+                interface:
+                  description: |-
+                    Interface is the node interface over which the unnumbered BGP peering will
+                    be established. No API validation takes place as that string value
+                    represents an interface name on the host and if user provides an invalid
+                    value, only the actual BGP session will not be established.
+                    Address and Interface are mutually exclusive and one of them must be specified.
                   type: string
                 keepaliveTime:
                   description: Requested BGP keepalive time, per RFC4271.
@@ -653,7 +668,7 @@ spec:
                   default: 179
                   description: Port to dial when establishing the session.
                   maximum: 16384
-                  minimum: 0
+                  minimum: 1
                   type: integer
                 routerID:
                   description: BGP router ID to advertise to the peer
@@ -668,7 +683,6 @@ spec:
                   type: string
               required:
                 - myASN
-                - peerAddress
               type: object
             status:
               description: BGPPeerStatus defines the observed state of Peer.
@@ -683,7 +697,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: communities.metallb.io
 spec:
   group: metallb.io
@@ -748,7 +762,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: ipaddresspools.metallb.io
 spec:
   group: metallb.io
@@ -945,6 +959,28 @@ spec:
               type: object
             status:
               description: IPAddressPoolStatus defines the observed state of IPAddressPool.
+              properties:
+                assignedIPv4:
+                  description: AssignedIPv4 is the number of assigned IPv4 addresses.
+                  format: int64
+                  type: integer
+                assignedIPv6:
+                  description: AssignedIPv6 is the number of assigned IPv6 addresses.
+                  format: int64
+                  type: integer
+                availableIPv4:
+                  description: AvailableIPv4 is the number of available IPv4 addresses.
+                  format: int64
+                  type: integer
+                availableIPv6:
+                  description: AvailableIPv6 is the number of available IPv6 addresses.
+                  format: int64
+                  type: integer
+              required:
+                - assignedIPv4
+                - assignedIPv6
+                - availableIPv4
+                - availableIPv6
               type: object
           required:
             - spec
@@ -958,7 +994,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: l2advertisements.metallb.io
 spec:
   group: metallb.io
@@ -1138,7 +1174,92 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.2
+  name: servicebgpstatuses.metallb.io
+spec:
+  group: metallb.io
+  names:
+    kind: ServiceBGPStatus
+    listKind: ServiceBGPStatusList
+    plural: servicebgpstatuses
+    singular: servicebgpstatus
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .status.node
+          name: Node
+          type: string
+        - jsonPath: .status.serviceName
+          name: Service Name
+          type: string
+        - jsonPath: .status.serviceNamespace
+          name: Service Namespace
+          type: string
+      name: v1beta1
+      schema:
+        openAPIV3Schema:
+          description: ServiceBGPStatus exposes the BGP peers a service is configured to be advertised to, per relevant node.
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ServiceBGPStatusSpec defines the desired state of ServiceBGPStatus.
+              type: object
+            status:
+              description: MetalLBServiceBGPStatus defines the observed state of ServiceBGPStatus.
+              properties:
+                node:
+                  description: Node indicates the node announcing the service.
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                peers:
+                  description: |-
+                    Peers indicate the BGP peers for which the service is configured to be advertised to.
+                    The service being actually advertised to a given peer depends on the session state and is not indicated here.
+                  items:
+                    type: string
+                  type: array
+                serviceName:
+                  description: ServiceName indicates the service this status represents.
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+                serviceNamespace:
+                  description: ServiceNamespace indicates the namespace of the service.
+                  type: string
+                  x-kubernetes-validations:
+                    - message: Value is immutable
+                      rule: self == oldSelf
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: servicel2statuses.metallb.io
 spec:
   group: metallb.io

@@ -1,8 +1,74 @@
 # Changelog
 
-## 9.2.1 (2025-03-21)
+## 9.4.2 (2025-07-09)
 
-* [bitnami/mongodb-sharded] Release 9.2.1 ([#32550](https://github.com/bitnami/charts/pull/32550))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34937](https://github.com/bitnami/charts/pull/34937))
+
+## <small>9.4.1 (2025-06-27)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34698) ([d5864a5](https://github.com/bitnami/charts/commit/d5864a5e45ef67acfc09fc4d94c1ef38838cd4f1)), closes [#34698](https://github.com/bitnami/charts/issues/34698)
+
+## 9.4.0 (2025-06-24)
+
+* [bitnami/mongodb-sharded] predictable port number for metrics (#34439) ([0ec66e0](https://github.com/bitnami/charts/commit/0ec66e0712cea64de3afbc6e433664a2d8e9672c)), closes [#34439](https://github.com/bitnami/charts/issues/34439)
+
+## <small>9.3.6 (2025-06-16)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34470) ([48aee76](https://github.com/bitnami/charts/commit/48aee76d89b5bbaebcc6d4a9d585b3599e0892ed)), closes [#34470](https://github.com/bitnami/charts/issues/34470)
+
+## <small>9.3.5 (2025-06-06)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34197) ([4eb7b44](https://github.com/bitnami/charts/commit/4eb7b44a3f4ca9ac2c35a0897db2c8641b28f214)), closes [#34197](https://github.com/bitnami/charts/issues/34197)
+
+## <small>9.3.4 (2025-06-05)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34115) ([bf8cd69](https://github.com/bitnami/charts/commit/bf8cd69e4e9fabee42eabdad3d0f4d50e9c2ad5e)), closes [#34115](https://github.com/bitnami/charts/issues/34115)
+
+## <small>9.3.3 (2025-06-04)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34084) ([c24f869](https://github.com/bitnami/charts/commit/c24f869dc90c0ba2030304aa06b60b5c4f1244c6)), closes [#34084](https://github.com/bitnami/charts/issues/34084)
+
+## <small>9.3.2 (2025-06-03)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34055) ([c1d1d77](https://github.com/bitnami/charts/commit/c1d1d77cb2671c03736fc534bac36b4889038bac)), closes [#34055](https://github.com/bitnami/charts/issues/34055)
+
+## <small>9.3.1 (2025-06-02)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34033) ([d4f0675](https://github.com/bitnami/charts/commit/d4f067510c7eab577a1f02f4158603c90770f767)), closes [#34033](https://github.com/bitnami/charts/issues/34033)
+
+## 9.3.0 (2025-05-23)
+
+* [bitnami/mongodb-sharded] allow selector definitions for volumeClaimTemplates (#33574) ([8250811](https://github.com/bitnami/charts/commit/82508118e303da80196874242fb82d2ca32c1add)), closes [#33574](https://github.com/bitnami/charts/issues/33574)
+
+## <small>9.2.7 (2025-05-22)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#33820) ([933035b](https://github.com/bitnami/charts/commit/933035b248eec8383069a4601616545c24066ed6)), closes [#33820](https://github.com/bitnami/charts/issues/33820)
+
+## <small>9.2.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#33638) ([3e654df](https://github.com/bitnami/charts/commit/3e654dfd3e3d86723b6f56ae14418b0dbd649559)), closes [#33638](https://github.com/bitnami/charts/issues/33638)
+
+## <small>9.2.5 (2025-05-06)</small>
+
+* [bitnami/mongodb-sharded] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ([07e1ed1](https://github.com/bitnami/charts/commit/07e1ed1be815ad1edd28babc745ef230ece66c31)), closes [#33406](https://github.com/bitnami/charts/issues/33406)
+
+## <small>9.2.4 (2025-05-01)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.4 (#33285) ([7f09123](https://github.com/bitnami/charts/commit/7f0912397bd85bef38951545f9fefd1b15a815a0)), closes [#33285](https://github.com/bitnami/charts/issues/33285)
+
+## <small>9.2.3 (2025-04-14)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.3 (#32994) ([0217276](https://github.com/bitnami/charts/commit/0217276dd5d063a65c8b327c3641cdcc44e185eb)), closes [#32994](https://github.com/bitnami/charts/issues/32994)
+
+## <small>9.2.2 (2025-04-02)</small>
+
+* [bitnami/mongodb-sharded] Release 9.2.2 (#32751) ([828a6e1](https://github.com/bitnami/charts/commit/828a6e12d079ff09cc34f1ec26f4c2a929f04e7c)), closes [#32751](https://github.com/bitnami/charts/issues/32751)
+
+## <small>9.2.1 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mongodb-sharded] Release 9.2.1 (#32550) ([73a090e](https://github.com/bitnami/charts/commit/73a090eab45cd85a0623bb50906b3ae4d1d3c366)), closes [#32550](https://github.com/bitnami/charts/issues/32550)
 
 ## 9.2.0 (2025-02-27)
 

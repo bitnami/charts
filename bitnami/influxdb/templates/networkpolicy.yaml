@@ -10,13 +10,16 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: influxdb
+    app.kubernetes.io/component: influxdb
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.influxdb.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: influxdb
       app.kubernetes.io/component: influxdb
   policyTypes:
     - Ingress
@@ -32,20 +35,14 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to other agent pods
+    # Allow internal communications between nodes
     - ports:
-        - port: {{ .Values.influxdb.containerPorts.http }}
+        - port: {{ .Values.containerPorts.http }}
           protocol: TCP
-        - port: {{ .Values.influxdb.containerPorts.rpc }}
-          protocol: TCP
-        {{- if .Values.collectd.enabled }}
-        - port: {{ .Values.collectd.service.port }}
-          protocol: UDP
-        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: influxdb
+              app.kubernetes.io/part-of: influxdb
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
@@ -53,13 +50,10 @@ spec:
   ingress:
     # Allow inbound connections
     - ports:
-        - port: {{ .Values.influxdb.containerPorts.http }}
+        - port: {{ .Values.containerPorts.http }}
           protocol: TCP
-        - port: {{ .Values.influxdb.containerPorts.rpc }}
-          protocol: TCP
-        {{- if .Values.collectd.enabled }}
-        - port: {{ .Values.collectd.service.port }}
-          protocol: UDP
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ .containerPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
@@ -83,4 +77,7 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 {{- end }}

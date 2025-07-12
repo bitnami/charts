@@ -37,6 +37,9 @@ spec:
     # Allow connection to other aggregator pods
     - ports:
         - port: {{ .Values.containerPorts.http }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -47,6 +50,9 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.http }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

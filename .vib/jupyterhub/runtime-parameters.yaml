@@ -1,7 +1,7 @@
 hub:
   baseUrl: /
   adminUser: test_user
-  password: ComplicatedPassword123!4
+  password: BitnamiComplicatedPassword123!45678
   containerPorts:
     http: 8082
   containerSecurityContext:

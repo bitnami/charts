@@ -42,4 +42,4 @@ spec:
   namespaceSelector:
     matchNames:
     - {{ include "common.names.namespace" . }}
-{{- end -}}
+{{- end }}

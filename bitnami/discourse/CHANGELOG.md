@@ -1,8 +1,59 @@
 # Changelog
 
-## 15.1.6 (2025-02-26)
+## 16.0.3 (2025-06-25)
 
-* [bitnami/discourse] Release 15.1.6 ([#32182](https://github.com/bitnami/charts/pull/32182))
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#34612](https://github.com/bitnami/charts/pull/34612))
+
+## <small>16.0.2 (2025-06-12)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#34370) ([6256282](https://github.com/bitnami/charts/commit/6256282f900492040896ead699de754073b088e5)), closes [#34370](https://github.com/bitnami/charts/issues/34370)
+
+## <small>16.0.1 (2025-05-28)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#33931) ([cad860e](https://github.com/bitnami/charts/commit/cad860e7e6b5d826fd15c1204b03eec39737e038)), closes [#33931](https://github.com/bitnami/charts/issues/33931)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## 16.0.0 (2025-05-07)
+
+* [bitnami/discourse] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33501) ([de6e982](https://github.com/bitnami/charts/commit/de6e982e0bebc1bcd8226cc98a76a43ab706983e)), closes [#33501](https://github.com/bitnami/charts/issues/33501)
+
+## <small>15.1.15 (2025-05-06)</small>
+
+* [bitnami/discourse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([7947c69](https://github.com/bitnami/charts/commit/7947c69dd2d9a0a262e430cbb48683d8ee95ef45)), closes [#33352](https://github.com/bitnami/charts/issues/33352)
+* [bitnami/discourse] Release 15.1.14 (#33241) ([bceff0f](https://github.com/bitnami/charts/commit/bceff0fcc3f5c0091ba103662bc540cf6ccdd3a4)), closes [#33241](https://github.com/bitnami/charts/issues/33241)
+
+## <small>15.1.13 (2025-04-09)</small>
+
+* [bitnami/discourse] Release 15.1.13 (#32897) ([9a6f2f1](https://github.com/bitnami/charts/commit/9a6f2f1eb301dbda584ee4098fe5e3dd8d1064a2)), closes [#32897](https://github.com/bitnami/charts/issues/32897)
+
+## <small>15.1.12 (2025-04-09)</small>
+
+* [bitnami/discourse] Release 15.1.12 (#32879) ([a9cb381](https://github.com/bitnami/charts/commit/a9cb381c3e824b15789e8b57bb609bfe793f2ede)), closes [#32879](https://github.com/bitnami/charts/issues/32879)
+
+## <small>15.1.11 (2025-04-08)</small>
+
+* [bitnami/discourse] Release 15.1.11 (#32876) ([707afb7](https://github.com/bitnami/charts/commit/707afb70e81836b102ec50ff89f58cad97a74306)), closes [#32876](https://github.com/bitnami/charts/issues/32876)
+
+## <small>15.1.10 (2025-04-07)</small>
+
+* [bitnami/discourse] Release 15.1.10 (#32847) ([ea7f23c](https://github.com/bitnami/charts/commit/ea7f23c95a98a6804e337ed7e4dff9bd6d9d5f2a)), closes [#32847](https://github.com/bitnami/charts/issues/32847)
+
+## <small>15.1.9 (2025-04-07)</small>
+
+* [bitnami/discourse] Release 15.1.9 (#32844) ([602149a](https://github.com/bitnami/charts/commit/602149a7195940d078e560ce95224d5def8d2c2a)), closes [#32844](https://github.com/bitnami/charts/issues/32844)
+
+## <small>15.1.8 (2025-04-07)</small>
+
+* [bitnami/discourse] Support envFrom in `install-plugins` (#32790) ([7345c0b](https://github.com/bitnami/charts/commit/7345c0bb2842b73f299aacd2af37147bd7b714cd)), closes [#32790](https://github.com/bitnami/charts/issues/32790)
+
+## <small>15.1.7 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/discourse] Release 15.1.7 (#32672) ([57d6e90](https://github.com/bitnami/charts/commit/57d6e9026b8539d3c993fee402acd47234c4e182)), closes [#32672](https://github.com/bitnami/charts/issues/32672)
+
+## <small>15.1.6 (2025-02-26)</small>
+
+* [bitnami/discourse] Release 15.1.6 (#32182) ([6e9ab1b](https://github.com/bitnami/charts/commit/6e9ab1b61b2d6c799fa82f540df063e863e16118)), closes [#32182](https://github.com/bitnami/charts/issues/32182)
 
 ## <small>15.1.5 (2025-02-24)</small>
 

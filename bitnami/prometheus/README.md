@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Prometheus](https://prometheus.io) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -476,6 +474,8 @@ server:
 | `server.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                                         | `""`                         |
 | `server.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                                                                  | `IfNotPresent`               |
 | `server.image.pullSecrets`                                        | Prometheus image pull secrets                                                                                                                                                                                                                 | `[]`                         |
+| `server.scrapePrometheusHost`                                     | Specifies whether to include prometheus host scraping job                                                                                                                                                                                     | `true`                       |
+| `server.scrapeAlertmanagerHost`                                   | Specifies whether to include alertmanager host scraping job                                                                                                                                                                                   | `true`                       |
 | `server.configuration`                                            | Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.                                                                                                                       | `""`                         |
 | `server.alertingRules`                                            | Prometheus alerting rules. This content will be stored in the the rules.yaml file and the content can be a template.                                                                                                                          | `{}`                         |
 | `server.extraScrapeConfigs`                                       | Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.                                                                  | `[]`                         |
@@ -677,6 +677,7 @@ server:
 | `server.persistence.selector`                                     | Selector to match an existing Persistent Volume for Prometheus data PVC                                                                                                                                                                       | `{}`                         |
 | `server.persistence.dataSource`                                   | Custom PVC data source                                                                                                                                                                                                                        | `{}`                         |
 | `server.rbac.create`                                              | Specifies whether RBAC resources should be created                                                                                                                                                                                            | `true`                       |
+| `server.rbac.includeDefaultRules`                                 | Specifies whether to include default rules from official prometheus helm chart                                                                                                                                                                | `true`                       |
 | `server.rbac.rules`                                               | Custom RBAC rules to set                                                                                                                                                                                                                      | `[]`                         |
 
 ### Init Container Parameters

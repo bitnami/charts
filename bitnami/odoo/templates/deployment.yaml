@@ -88,8 +88,8 @@ spec:
           volumeMounts:
             - name: odoo-data
               mountPath: /bitnami/odoo
-              {{- if .Values.persistence.subPath }} 
-              subPath: {{ .Values.persistence.subPath }} 
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
               {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
@@ -131,11 +131,16 @@ spec:
               value: {{ .Values.odooDatabaseFilter | quote }}
             - name: ODOO_DATABASE_USER
               value: {{ template "odoo.databaseUser" . }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ODOO_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/odoo/secrets/%s" (include "odoo.databaseSecretPasswordKey" .) }}
+            {{- else }}
             - name: ODOO_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
                   key: {{ include "odoo.databaseSecretPasswordKey" . }}
+            {{- end }}
             {{- if and (not .Values.postgresql.enabled) .Values.externalDatabase.create }}
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ template "odoo.databaseHost" . }}
@@ -143,28 +148,43 @@ spec:
               value: {{ template "odoo.databasePort" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
               value: {{ .Values.externalDatabase.postgresqlPostgresUser }}
+            {{- if .Values.usePasswordFiles }}
+            - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/odoo/secrets/%s" (include "odoo.databaseSecretPostgresPasswordKey" .) }}
+            {{- else }}
             - name: POSTGRESQL_CLIENT_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
                   key: {{ include "odoo.databaseSecretPostgresPasswordKey" . }}
+            {{- end }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_NAME
               value: {{ template "odoo.databaseName" . }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME
               value: {{ template "odoo.databaseUser" . }}
+            {{- if .Values.usePasswordFiles }}
+            - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/odoo/secrets/%s" (include "odoo.databaseSecretPasswordKey" .) }}
+            {{- else }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "odoo.databaseSecretName" . }}
                   key: {{ include "odoo.databaseSecretPasswordKey" . }}
             {{- end }}
+            {{- end }}
             - name: ODOO_EMAIL
               value: {{ .Values.odooEmail | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ODOO_PASSWORD_FILE
+              value: "/opt/bitnami/odoo/secrets/odoo-password"
+            {{- else }}
             - name: ODOO_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "odoo.secretName" . }}
                   key: odoo-password
+            {{- end }}
             - name: ODOO_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.odooSkipInstall | quote }}
             - name: ODOO_LOAD_DEMO_DATA
@@ -186,11 +206,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+            {{- if .Values.usePasswordFiles }}
+            - name: ODOO_SMTP_PASSWORD_FILE
+              value: "/opt/bitnami/odoo/secrets/smtp-password"
+            {{- else }}
             - name: ODOO_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "odoo.smtpSecretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpProtocol }}
             - name: ODOO_SMTP_PROTOCOL
@@ -247,9 +272,13 @@ spec:
           volumeMounts:
             - name: odoo-data
               mountPath: /bitnami/odoo
-              {{- if .Values.persistence.subPath }} 
-              subPath: {{ .Values.persistence.subPath }} 
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
               {{- end }}
+            {{- if .Values.usePasswordFiles }}
+            - name: odoo-secrets
+              mountPath: /opt/bitnami/odoo/secrets
+            {{- end }}
             {{- if .Values.customPostInitScripts }}
             - mountPath: /docker-entrypoint-init.d
               name: custom-postinit
@@ -268,6 +297,19 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        {{- if .Values.usePasswordFiles }}
+        - name: odoo-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "odoo.secretName" . }}
+              - secret:
+                  name: {{ include "odoo.databaseSecretName" . }}
+              {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
+              - secret:
+                  name: {{ template "odoo.smtpSecretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if .Values.customPostInitScripts }}
         - name: custom-postinit
           configMap:

@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Architecture
 
 The JupyterHub chart deploys three basic elements:
@@ -870,6 +868,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jupyt
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major changes the default Authenticator from the deprecated DummyAuthenticator to [SharedPasswordAuthenticator](https://jupyterhub.readthedocs.io/en/latest/reference/api/auth.html#jupyterhub.authenticators.shared.SharedPasswordAuthenticator). This Authenticator forces passwords to have at least 32 characters. Once set a proper password, no major issues should be found during upgrades.
+
+### To 9.0.0
+
+This major updates the JupyterHub and Jupyter Base Notebook images to 5.x versions.
 
 ### To 8.1.0
 

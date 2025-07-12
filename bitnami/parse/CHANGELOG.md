@@ -1,8 +1,58 @@
 # Changelog
 
-## 25.0.1 (2025-03-10)
+## 25.1.9 (2025-07-10)
 
-* [bitnami/parse] Release 25.0.1 ([#32377](https://github.com/bitnami/charts/pull/32377))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#34981](https://github.com/bitnami/charts/pull/34981))
+
+## <small>25.1.8 (2025-07-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#34754) ([ceb7060](https://github.com/bitnami/charts/commit/ceb70607a9ff435a95b0cad07ac1531780671b20)), closes [#34754](https://github.com/bitnami/charts/issues/34754)
+
+## <small>25.1.7 (2025-07-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#34751) ([4f95657](https://github.com/bitnami/charts/commit/4f956576bcd4918fccfbe9ce838db32c82bae9e9)), closes [#34751](https://github.com/bitnami/charts/issues/34751)
+
+## <small>25.1.6 (2025-06-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#34026) ([1e61d23](https://github.com/bitnami/charts/commit/1e61d234564b264c4a21eaf439f76deaaecc01da)), closes [#34026](https://github.com/bitnami/charts/issues/34026)
+
+## <small>25.1.5 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#33568) ([ed82cb6](https://github.com/bitnami/charts/commit/ed82cb692a590396ca28eaf235141196e6ccd08f)), closes [#33568](https://github.com/bitnami/charts/issues/33568)
+
+## <small>25.1.4 (2025-05-06)</small>
+
+* [bitnami/parse] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33419) ([188a39d](https://github.com/bitnami/charts/commit/188a39d8630bf05e17d4d7ad24aa347680090f4b)), closes [#33419](https://github.com/bitnami/charts/issues/33419)
+
+## <small>25.1.3 (2025-05-01)</small>
+
+* [bitnami/parse] Release 25.1.3 (#33280) ([23c378a](https://github.com/bitnami/charts/commit/23c378a148067ae0f4bbe5a519966d78ef26d425)), closes [#33280](https://github.com/bitnami/charts/issues/33280)
+
+## <small>25.1.2 (2025-04-28)</small>
+
+* [bitnami/parse] Release 25.1.2 (#33213) ([c1f51d6](https://github.com/bitnami/charts/commit/c1f51d65c87430b62caab99531e8c0928bcc2634)), closes [#33213](https://github.com/bitnami/charts/issues/33213)
+
+## <small>25.1.1 (2025-04-09)</small>
+
+* [bitnami/parse] Release 25.1.1 (#32912) ([8c64016](https://github.com/bitnami/charts/commit/8c64016ca68781796e8996aa90d0b987e8c3d6ec)), closes [#32912](https://github.com/bitnami/charts/issues/32912)
+
+## 25.1.0 (2025-04-04)
+
+* [bitnami/parse] Set `usePasswordFiles=true` by default (#32709) ([5166f77](https://github.com/bitnami/charts/commit/5166f773fda498d5fc6ba9dbfa2adab226386824)), closes [#32709](https://github.com/bitnami/charts/issues/32709)
+
+## <small>25.0.3 (2025-04-04)</small>
+
+* [bitnami/parse] Release 25.0.3 (#32810) ([920a2d6](https://github.com/bitnami/charts/commit/920a2d667af0321b87ead6f38726c4fcb1742c60)), closes [#32810](https://github.com/bitnami/charts/issues/32810)
+
+## <small>25.0.2 (2025-03-31)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/parse] Release 25.0.2 (#32687) ([e95d3a8](https://github.com/bitnami/charts/commit/e95d3a8ee8c5087cc103997e3da4cdac938d6017)), closes [#32687](https://github.com/bitnami/charts/issues/32687)
+
+## <small>25.0.1 (2025-03-10)</small>
+
+* [bitnami/parse] Release 25.0.1 (#32377) ([8bd7796](https://github.com/bitnami/charts/commit/8bd7796d56dd6886ba7031e5e6d6e97bc0093a5a)), closes [#32377](https://github.com/bitnami/charts/issues/32377)
 
 ## 25.0.0 (2025-03-10)
 

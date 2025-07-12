@@ -1,8 +1,34 @@
 # Changelog
 
-## 1.4.5 (2025-03-21)
+## 2.0.5 (2025-07-07)
 
-* [bitnami/flink] Release 1.4.5 ([#32547](https://github.com/bitnami/charts/pull/32547))
+* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#34830](https://github.com/bitnami/charts/pull/34830))
+
+## <small>2.0.4 (2025-06-07)</small>
+
+* [bitnami/flink] :zap: :arrow_up: Update dependency references (#34246) ([8cfde38](https://github.com/bitnami/charts/commit/8cfde3859edbd220bc30ec07168b344ca210057b)), closes [#34246](https://github.com/bitnami/charts/issues/34246)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>2.0.3 (2025-05-08)</small>
+
+* [bitnami/flink] :zap: :arrow_up: Update dependency references (#33562) ([06629ce](https://github.com/bitnami/charts/commit/06629ced21f3fdd860a8a2bb48823027925d5f19)), closes [#33562](https://github.com/bitnami/charts/issues/33562)
+
+## <small>2.0.2 (2025-05-06)</small>
+
+* [bitnami/flink] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33360) ([3522956](https://github.com/bitnami/charts/commit/3522956e60ae89f100e093f8fbe22e81503cf3df)), closes [#33360](https://github.com/bitnami/charts/issues/33360)
+
+## <small>2.0.1 (2025-04-24)</small>
+
+* [bitnami/flink] Release 2.0.1 (#33172) ([8e878d7](https://github.com/bitnami/charts/commit/8e878d711fe5a2b616a2e7cc7cfdf86e3ee0e04b)), closes [#33172](https://github.com/bitnami/charts/issues/33172)
+
+## 2.0.0 (2025-03-28)
+
+* [bitnami/flink] Release 2.0.0 (#32603) ([086de00](https://github.com/bitnami/charts/commit/086de005636344e119bd3ad636dc12f2333f38ef)), closes [#32603](https://github.com/bitnami/charts/issues/32603)
+
+## <small>1.4.5 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/flink] Release 1.4.5 (#32547) ([ff4abfc](https://github.com/bitnami/charts/commit/ff4abfc3109f98fe88a26b2e451a7e8dd087a4cc)), closes [#32547](https://github.com/bitnami/charts/issues/32547)
 
 ## <small>1.4.4 (2025-02-21)</small>
 

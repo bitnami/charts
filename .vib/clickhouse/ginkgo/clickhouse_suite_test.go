@@ -3,6 +3,7 @@ package clickhouse_test
 import (
 	"context"
 	"flag"
+	"fmt"
 	"testing"
 	"time"
 
@@ -66,12 +67,50 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 					RestartPolicy: "Never",
 					Containers: []v1.Container{
 						{
-							Name:            "clickhouse",
-							Image:           image,
-							Command:         []string{"clickhouse-client", "--user", username, "--password", password, "--multiquery", "--host", releaseName, "--port", port, "--query", stmt},
+							Name:  "clickhouse",
+							Image: image,
+							Command: []string{
+								"clickhouse-client",
+								"--host", releaseName, "--port", port,
+								"--config", "/opt/bitnami/clickhouse/etc/config.d/06-tls.xml", "--secure",
+								"--user", username, "--password", password, "--multiquery",
+								"--query", stmt,
+							},
 							SecurityContext: securityContext,
+							Env: []v1.EnvVar{{
+								Name:  "CLICKHOUSE_TCP_SECURE_PORT",
+								Value: port,
+							}, {
+								Name: "CLICKHOUSE_HTTPS_PORT",
+								// We can set any number here, it's not used
+								Value: "1234",
+							}},
+							VolumeMounts: []v1.VolumeMount{{
+								Name:      "ca-cert",
+								MountPath: "/opt/bitnami/clickhouse/certs/ca",
+							}, {
+								Name:      "configd-configuration",
+								MountPath: "/opt/bitnami/clickhouse/etc/config.d",
+							}},
 						},
 					},
+					Volumes: []v1.Volume{{
+						Name: "ca-cert",
+						VolumeSource: v1.VolumeSource{
+							Secret: &v1.SecretVolumeSource{
+								SecretName: fmt.Sprintf("%s-ca-crt", releaseName),
+							},
+						},
+					}, {
+						Name: "configd-configuration",
+						VolumeSource: v1.VolumeSource{
+							ConfigMap: &v1.ConfigMapVolumeSource{
+								LocalObjectReference: v1.LocalObjectReference{
+									Name: fmt.Sprintf("%s-configd", releaseName),
+								},
+							},
+						},
+					}},
 				},
 			},
 		},

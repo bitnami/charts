@@ -14,11 +14,17 @@ metadata:
     {{- if .Values.receive.statefulsetLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.receive.statefulsetLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.receive.statefulsetAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.receive.statefulsetAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.receive.statefulsetAnnotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  {{- if not .Values.receive.autoscaling.enabled }}
+  {{- if not (or .Values.receive.autoscaling.enabled .Values.receive.externalAutoscaler) }}
   replicas: {{ .Values.receive.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.receive.revisionHistoryLimit }}
@@ -187,7 +193,7 @@ spec:
             - name: OBJSTORE_CONFIG
               valueFrom:
                 secretKeyRef:
-                  key: objstore.yml
+                  key: {{ include "thanos.objstoreSecretKey" . }}
                   name: {{ include "thanos.objstoreSecretName" . }}
             {{- end }}
             {{- if .Values.receive.extraEnvVars }}
@@ -317,12 +323,10 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.receive.persistence.enabled (not .Values.receive.persistence.existingClaim) }}
-  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
   {{- if .Values.receive.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenDeleted }}
     whenScaled: {{ .Values.receive.persistentVolumeClaimRetentionPolicy.whenScaled }}
-  {{- end }}
   {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1

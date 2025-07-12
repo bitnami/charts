@@ -1,8 +1,62 @@
 # Changelog
 
-## 0.3.3 (2025-03-11)
+## 0.4.10 (2025-07-10)
 
-* [bitnami/neo4j] Release 0.3.3 ([#32407](https://github.com/bitnami/charts/pull/32407))
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#34998](https://github.com/bitnami/charts/pull/34998))
+
+## <small>0.4.9 (2025-07-09)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#34972) ([4654fc4](https://github.com/bitnami/charts/commit/4654fc45c972c76316adc591432f684b478c36b6)), closes [#34972](https://github.com/bitnami/charts/issues/34972)
+
+## <small>0.4.8 (2025-06-13)</small>
+
+* bitnami/neo4j Fix neo4j persistent existing claim (#34369) ([3bcbf62](https://github.com/bitnami/charts/commit/3bcbf62b3e6d2bdeefcbf1fb7f8d1cb5a3d59581)), closes [#34369](https://github.com/bitnami/charts/issues/34369)
+
+## <small>0.4.7 (2025-06-09)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#34279) ([7b134e1](https://github.com/bitnami/charts/commit/7b134e1683a08c557a1bb2c3c8d690f3b51a1269)), closes [#34279](https://github.com/bitnami/charts/issues/34279)
+
+## <small>0.4.6 (2025-06-09)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#34272) ([e902f2e](https://github.com/bitnami/charts/commit/e902f2e525a90308559729b9e673ff98eb0274f4)), closes [#34272](https://github.com/bitnami/charts/issues/34272)
+
+## <small>0.4.5 (2025-05-30)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#33924) ([2af8c35](https://github.com/bitnami/charts/commit/2af8c35af465aa273626cb0fb0a1e2f3ee65b617)), closes [#33924](https://github.com/bitnami/charts/issues/33924)
+
+## <small>0.4.4 (2025-05-27)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#33922) ([b741265](https://github.com/bitnami/charts/commit/b741265a44b0901a830038e145937f1814110076)), closes [#33922](https://github.com/bitnami/charts/issues/33922)
+
+## <small>0.4.3 (2025-05-06)</small>
+
+* [bitnami/neo4j] Release 0.4.3 (#33466) ([f62b9ca](https://github.com/bitnami/charts/commit/f62b9ca46c6fc47922474520d95e74673e088aeb)), closes [#33466](https://github.com/bitnami/charts/issues/33466)
+
+## <small>0.4.2 (2025-05-06)</small>
+
+* [bitnami/neo4j] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33411) ([f20b267](https://github.com/bitnami/charts/commit/f20b26755c4baf3014bf9ff4054e9c00ee20b467)), closes [#33411](https://github.com/bitnami/charts/issues/33411)
+
+## <small>0.4.1 (2025-05-02)</small>
+
+* [bitnami/neo4j] Release 0.4.1 (#33307) ([e1f95c2](https://github.com/bitnami/charts/commit/e1f95c2e61edb3ab20146965a5c579f1d56a10eb)), closes [#33307](https://github.com/bitnami/charts/issues/33307)
+
+## 0.4.0 (2025-04-04)
+
+* [bitnami/neo4j] Set `usePasswordFiles=true` by default (#32706) ([5366ece](https://github.com/bitnami/charts/commit/5366ece669637c9d9dc1835e9f5eeae94af3d66a)), closes [#32706](https://github.com/bitnami/charts/issues/32706)
+
+## <small>0.3.5 (2025-04-02)</small>
+
+* [bitnami/neo4j] Release 0.3.5 (#32775) ([d3164a4](https://github.com/bitnami/charts/commit/d3164a467066be2db9c8925e64fc1b1d2c9bc839)), closes [#32775](https://github.com/bitnami/charts/issues/32775)
+
+## <small>0.3.4 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/neo4j] Release 0.3.4 (#32772) ([e5d11c6](https://github.com/bitnami/charts/commit/e5d11c6699449494b5c892c1234f69075952b64f)), closes [#32772](https://github.com/bitnami/charts/issues/32772)
+
+## <small>0.3.3 (2025-03-11)</small>
+
+* [bitnami/neo4j] Release 0.3.3 (#32407) ([c144fd2](https://github.com/bitnami/charts/commit/c144fd2bfeca9387f5b3f76bbd0c9d32400b1909)), closes [#32407](https://github.com/bitnami/charts/issues/32407)
 
 ## <small>0.3.2 (2025-02-24)</small>
 

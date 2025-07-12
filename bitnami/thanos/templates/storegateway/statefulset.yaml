@@ -11,11 +11,20 @@ metadata:
   namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if .Values.storegateway.statefulsetLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.statefulsetLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.storegateway.statefulsetAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.storegateway.statefulsetAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.statefulsetAnnotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  {{- if not .Values.storegateway.autoscaling.enabled }}
+  {{- if not (or .Values.storegateway.autoscaling.enabled .Values.storegateway.externalAutoscaler) }}
   replicas: {{ .Values.storegateway.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.storegateway.revisionHistoryLimit }}
@@ -288,12 +297,10 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.storegateway.persistence.enabled (not .Values.storegateway.persistence.existingClaim) }}
-  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
   {{- if .Values.storegateway.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.storegateway.persistentVolumeClaimRetentionPolicy.whenDeleted }}
     whenScaled: {{ .Values.storegateway.persistentVolumeClaimRetentionPolicy.whenScaled }}
-  {{- end }}
   {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1

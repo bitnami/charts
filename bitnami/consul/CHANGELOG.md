@@ -1,8 +1,66 @@
 # Changelog
 
-## 11.4.10 (2025-03-12)
+## 11.4.24 (2025-07-08)
 
-* [bitnami/consul] Release 11.4.10 ([#32423](https://github.com/bitnami/charts/pull/32423))
+* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#34877](https://github.com/bitnami/charts/pull/34877))
+
+## <small>11.4.23 (2025-06-24)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34596) ([f23c1ca](https://github.com/bitnami/charts/commit/f23c1ca3604e9b5f2e6766208ddd13522cfeb73d)), closes [#34596](https://github.com/bitnami/charts/issues/34596)
+
+## <small>11.4.22 (2025-06-13)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34417) ([fd38cc2](https://github.com/bitnami/charts/commit/fd38cc28dd432d7b5fcdb1482b165c9fafa2aa34)), closes [#34417](https://github.com/bitnami/charts/issues/34417)
+
+## <small>11.4.21 (2025-06-11)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34334) ([08ce40f](https://github.com/bitnami/charts/commit/08ce40f3cac176133d23880f1b8f1f998e263877)), closes [#34334](https://github.com/bitnami/charts/issues/34334)
+
+## <small>11.4.20 (2025-06-10)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34310) ([d0f490f](https://github.com/bitnami/charts/commit/d0f490f10822ea3cd3c4aa9fad434cffac723355)), closes [#34310](https://github.com/bitnami/charts/issues/34310)
+
+## <small>11.4.19 (2025-06-05)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34146) ([3973893](https://github.com/bitnami/charts/commit/397389371bd0fea42d5c28f69fa7385b2f2fc980)), closes [#34146](https://github.com/bitnami/charts/issues/34146)
+
+## <small>11.4.18 (2025-05-23)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#33864) ([c34a324](https://github.com/bitnami/charts/commit/c34a324c5da676ff7861f49b18c8527fdbcebdf3)), closes [#33864](https://github.com/bitnami/charts/issues/33864)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.4.17 (2025-05-07)</small>
+
+* [bitnami/consul] Release 11.4.17 (#33474) ([ce201e1](https://github.com/bitnami/charts/commit/ce201e13a95acf1b214be8a93144ceb61d16764d)), closes [#33474](https://github.com/bitnami/charts/issues/33474)
+
+## <small>11.4.16 (2025-05-06)</small>
+
+* [bitnami/consul] Release 11.4.16 (#33462) ([d27763a](https://github.com/bitnami/charts/commit/d27763a49e4f586aae2f81c7e44784b5a1f03e50)), closes [#33462](https://github.com/bitnami/charts/issues/33462)
+
+## <small>11.4.15 (2025-05-06)</small>
+
+* [bitnami/consul] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33349) ([059f766](https://github.com/bitnami/charts/commit/059f76645d06e7d7af07fb2d7fe7fabfc5b35ec2)), closes [#33349](https://github.com/bitnami/charts/issues/33349)
+
+## <small>11.4.14 (2025-04-30)</small>
+
+* [bitnami/consul] Fix mismatched serfLAN and serfWAN ports in consul-headless-service (#33114) ([9447571](https://github.com/bitnami/charts/commit/944757190dadada96f0eb7c86f745d6df7283ea0)), closes [#33114](https://github.com/bitnami/charts/issues/33114)
+
+## <small>11.4.13 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.13 (#33201) ([d1dbafc](https://github.com/bitnami/charts/commit/d1dbafc7ad5581e5d9f2b6a4387980272f996115)), closes [#33201](https://github.com/bitnami/charts/issues/33201)
+
+## <small>11.4.12 (2025-04-28)</small>
+
+* [bitnami/consul] Release 11.4.12 (#33200) ([0507ec6](https://github.com/bitnami/charts/commit/0507ec6480cbc335c2576f86f1478f871d5b571a)), closes [#33200](https://github.com/bitnami/charts/issues/33200)
+
+## <small>11.4.11 (2025-04-01)</small>
+
+* [bitnami/consul] Release 11.4.11 (#32726) ([754755d](https://github.com/bitnami/charts/commit/754755d846dc4e1d00f848a0f6db4fe7852781d3)), closes [#32726](https://github.com/bitnami/charts/issues/32726)
+
+## <small>11.4.10 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/consul] Release 11.4.10 (#32423) ([774ed2e](https://github.com/bitnami/charts/commit/774ed2e5b0d61eb21a1aa2102c6904947b5d96d3)), closes [#32423](https://github.com/bitnami/charts/issues/32423)
 
 ## <small>11.4.9 (2025-03-04)</small>
 

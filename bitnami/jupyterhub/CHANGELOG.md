@@ -1,8 +1,82 @@
 # Changelog
 
-## 8.1.5 (2025-03-21)
+## 10.0.0 (2025-07-02)
 
-* [bitnami/jupyterhub] Release 8.1.5 ([#32553](https://github.com/bitnami/charts/pull/32553))
+* [bitnami/jupyterhub] feat!: :boom: :wrench: Update default Authenticator ([#34649](https://github.com/bitnami/charts/pull/34649))
+
+## <small>9.0.16 (2025-06-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34400) ([fffcf82](https://github.com/bitnami/charts/commit/fffcf82e09e1cf91d0bdd0ec77b2aaf16034b495)), closes [#34400](https://github.com/bitnami/charts/issues/34400)
+
+## <small>9.0.15 (2025-06-10)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34314) ([6f0f3de](https://github.com/bitnami/charts/commit/6f0f3def9a47d24848334e02ed3f5ba3d78b3ffd)), closes [#34314](https://github.com/bitnami/charts/issues/34314)
+
+## <small>9.0.14 (2025-06-05)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34124) ([46fb106](https://github.com/bitnami/charts/commit/46fb10648030ed1f7e6f0bf29cc6274ad90dbced)), closes [#34124](https://github.com/bitnami/charts/issues/34124)
+
+## <small>9.0.13 (2025-06-05)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34123) ([92f6e0b](https://github.com/bitnami/charts/commit/92f6e0b5896eea27fb35c587337aa7d83bc31be2)), closes [#34123](https://github.com/bitnami/charts/issues/34123)
+
+## <small>9.0.12 (2025-06-04)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34053) ([5f2dcf7](https://github.com/bitnami/charts/commit/5f2dcf76a16b68ee44f71482a3bceb1132ac7a1c)), closes [#34053](https://github.com/bitnami/charts/issues/34053)
+
+## <small>9.0.11 (2025-05-21)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33815) ([51f8096](https://github.com/bitnami/charts/commit/51f80964a134560b54ccbad8d99611dfb64d7cd8)), closes [#33815](https://github.com/bitnami/charts/issues/33815)
+
+## <small>9.0.10 (2025-05-21)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33814) ([d42683e](https://github.com/bitnami/charts/commit/d42683e754eefe34172058de6e35930166dc01ce)), closes [#33814](https://github.com/bitnami/charts/issues/33814)
+
+## <small>9.0.9 (2025-05-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#33656) ([89a0ed7](https://github.com/bitnami/charts/commit/89a0ed76c66020d0ab006db4b9dd1d6d6a27531b)), closes [#33656](https://github.com/bitnami/charts/issues/33656)
+
+## <small>9.0.8 (2025-05-12)</small>
+
+* [bitnami/jupyterhub] Init containers can be used with external PostgreSQL (#33582) ([58e80d9](https://github.com/bitnami/charts/commit/58e80d9805f0f6d7f5da29adf35efead9f7b28d9)), closes [#33582](https://github.com/bitnami/charts/issues/33582)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>9.0.7 (2025-05-07)</small>
+
+* [jupyterhub] Fix singleuser image pull secrets (#33176) ([95a3490](https://github.com/bitnami/charts/commit/95a34900e72996e02e0ba14bea719a6f7747e2c2)), closes [#33176](https://github.com/bitnami/charts/issues/33176)
+
+## <small>9.0.6 (2025-05-06)</small>
+
+* [bitnami/jupyterhub] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([4f25ca4](https://github.com/bitnami/charts/commit/4f25ca45071de7b489e3b7dc14d994c64777a069)), closes [#33378](https://github.com/bitnami/charts/issues/33378)
+
+## <small>9.0.5 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.5 (#33304) ([18bc5da](https://github.com/bitnami/charts/commit/18bc5da4bfc5c0b02874b4c13b4f226a00759608)), closes [#33304](https://github.com/bitnami/charts/issues/33304)
+
+## <small>9.0.4 (2025-05-02)</small>
+
+* [bitnami/jupyterhub] Release 9.0.4 (#33303) ([5972ed9](https://github.com/bitnami/charts/commit/5972ed96a412ee74df71bc10c7418276744ef6cd)), closes [#33303](https://github.com/bitnami/charts/issues/33303)
+
+## <small>9.0.3 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.3 (#33046) ([4d95659](https://github.com/bitnami/charts/commit/4d95659a2b163f32ff6623f1c4b70a9df4cd8142)), closes [#33046](https://github.com/bitnami/charts/issues/33046)
+
+## <small>9.0.2 (2025-04-16)</small>
+
+* [bitnami/jupyterhub] Release 9.0.2 (#33044) ([2a6ce7c](https://github.com/bitnami/charts/commit/2a6ce7cf906959f8aeb49cc00172a58961deb8a3)), closes [#33044](https://github.com/bitnami/charts/issues/33044)
+
+## <small>9.0.1 (2025-04-14)</small>
+
+* [bitnami/jupyterhub] Update jupyterhub_config.py and z2hj.py (#32991) ([ff09959](https://github.com/bitnami/charts/commit/ff09959c13f5dcebbc17faf2a496ada9b9f0c1b6)), closes [#32991](https://github.com/bitnami/charts/issues/32991)
+
+## 9.0.0 (2025-04-14)
+
+* [bitnami/jupyterhub] Release 9.0.0 (#32989) ([c9f5654](https://github.com/bitnami/charts/commit/c9f5654d04847f65d61db4cd07266d831df7f127)), closes [#32989](https://github.com/bitnami/charts/issues/32989)
+
+## <small>8.1.5 (2025-03-21)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jupyterhub] Release 8.1.5 (#32553) ([997d302](https://github.com/bitnami/charts/commit/997d302643d3c2f5aee2f3dceb9bcf989efe80ec)), closes [#32553](https://github.com/bitnami/charts/issues/32553)
 
 ## <small>8.1.4 (2025-02-19)</small>
 

@@ -92,11 +92,16 @@ spec:
                   value: {{ template "redmine.database.name" . }}
                 - name: REDMINE_MAIL_RECEIVER_DB_USERNAME
                   value: {{ template "redmine.database.username" . }}
+                {{- if .Values.usePasswordFiles }}
+                - name: REDMINE_MAIL_RECEIVER_DB_PASSWORD_FILE
+                  value: {{ printf "/opt/bitnami/redmine/secrets/%s" (include "redmine.database.secretKey" .) }}
+                {{- else }}
                 - name: REDMINE_MAIL_RECEIVER_DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ include "redmine.database.secretName" . }}
                       key: {{ include "redmine.database.secretKey" . }}
+                {{- end }}
                 - name: REDMINE_MAIL_RECEIVER_DB_PORT
                   value: {{ include "redmine.database.port" . | quote }}
                 - name: REDMINE_MAIL_RECEIVER_HOST
@@ -105,11 +110,16 @@ spec:
                   value: {{ .Values.mailReceiver.port | quote }}
                 - name: REDMINE_MAIL_RECEIVER_USERNAME
                   value: {{ .Values.mailReceiver.username | quote }}
+                {{- if .Values.usePasswordFiles }}
+                - name: REDMINE_MAIL_RECEIVER_PASSWORD_FILE
+                  value: "/opt/bitnami/redmine/secrets/mail-receiver-password"
+                {{- else }}
                 - name: REDMINE_MAIL_RECEIVER_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ template "redmine.secretName" . }}
                       key: mail-receiver-password
+                {{- end }}
                 - name: REDMINE_MAIL_RECEIVER_USE_SSL
                   value: {{ .Values.mailReceiver.ssl | quote }}
                 - name: REDMINE_MAIL_RECEIVER_STARTTLS
@@ -168,6 +178,10 @@ spec:
               volumeMounts:
                 - name: mail-receiver
                   mountPath: /cj
+                {{- if  .Values.usePasswordFiles }}
+                - name: redmine-secrets
+                  mountPath: /opt/bitnami/redmine/secrets
+                {{- end }}
                 {{- if .Values.mailReceiver.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
@@ -179,6 +193,15 @@ spec:
               configMap:
                 name: {{ include "common.names.fullname" . }}
                 defaultMode: 0744
+            {{- if .Values.usePasswordFiles }}
+            - name: redmine-secrets
+              projected:
+                sources:
+                  - secret:
+                      name: {{ include "redmine.secretName" . }}
+                  - secret:
+                      name: {{ include "redmine.database.secretName" . }}
+            {{- end }}
             {{- if .Values.mailReceiver.extraVolumes }}
             {{- include "common.tplvalues.render" (dict "value" .Values.mailReceiver.extraVolumes "context" $) | nindent 12 }}
             {{- end }}

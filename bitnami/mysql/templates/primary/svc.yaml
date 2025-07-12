@@ -35,6 +35,9 @@ spec:
   {{- if and (eq .Values.primary.service.type "LoadBalancer") (not (empty .Values.primary.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.primary.service.loadBalancerIP }}
   {{- end }}
+  {{- if .Values.primary.service.externalIPs }}
+  externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.externalIPs "context" $) | nindent 4 }}
+  {{- end }}  
   ports:
     - name: mysql
       port: {{ .Values.primary.service.ports.mysql }}

@@ -7,5 +7,5 @@
 
 it('checks if the amount of workers is correct', () => {
   cy.visit('/');
-  cy.contains(`Alive Workers: ${Cypress.env('expectedWorkers')}`);
+  cy.contains(`Workers: ${Cypress.env('expectedWorkers')} Alive`);
 });

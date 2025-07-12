@@ -84,7 +84,7 @@ spec:
           {{- else if .Values.command }}
             {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
-            - /nats-server
+            - nats-server
           {{- end }}
           args:
           {{- if .Values.diagnosticMode.enabled }}

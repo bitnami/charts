@@ -92,6 +92,9 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+          {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

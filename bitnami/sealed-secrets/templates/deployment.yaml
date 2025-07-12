@@ -83,7 +83,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /controller
+            - controller
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
@@ -123,7 +123,7 @@ spec:
             {{- end }}
             - "--privatekey-annotations"
             - {{ trimSuffix "," $privatekeyAnnotations | quote }}
-            {{- end }}            
+            {{- end }}
             {{- if .Values.privateKeyLabels }}
             {{- $privateKeyLabels := ""}}
             {{- range $k, $v := .Values.privateKeyLabels }}
@@ -162,7 +162,7 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
           {{- if .Values.metrics.enabled }}
-            - name: metrics 
+            - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
           {{- end }}

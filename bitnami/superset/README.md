@@ -22,8 +22,6 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Superset](https://superset.apache.org/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -172,6 +170,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using an environment variable                     | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the chart release                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the chart release                                    | `["infinity"]`  |
@@ -516,7 +515,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `flower.auth.enabled`                                                   | Enables Apache Celery flower HTTP basic authentication                                                                                                                                                                                          | `true`                     |
 | `flower.auth.username`                                                  | Apache Celery flower username                                                                                                                                                                                                                   | `user`                     |
 | `flower.auth.password`                                                  | Apache Celery flower password                                                                                                                                                                                                                   | `""`                       |
-| `flower.auth.usePasswordFiles`                                          | Mount credentials as files instead of using an environment variable                                                                                                                                                                             | `true`                     |
 | `flower.auth.existingSecret`                                            | Name of existing secret to use for Superset Celery flower                                                                                                                                                                                       | `""`                       |
 | `flower.livenessProbe.enabled`                                          | Enable livenessProbe on Superset celery flower containers                                                                                                                                                                                       | `true`                     |
 | `flower.livenessProbe.initialDelaySeconds`                              | Initial delay seconds for livenessProbe                                                                                                                                                                                                         | `30`                       |
@@ -739,6 +737,16 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/super
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 3.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 2.0.0
+
+This version replaces the value `flower.auth.usePasswordFiles` with the new value `usePasswordFiles`. When using `usePasswordFiles=true`, , all credentials will be mounted as files instead of using an environment variable.
 
 ## License
 

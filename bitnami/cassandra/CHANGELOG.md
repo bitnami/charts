@@ -1,8 +1,50 @@
 # Changelog
 
-## 12.2.2 (2025-03-12)
+## 12.3.8 (2025-06-20)
 
-* [bitnami/cassandra] bugfix #32369 ([#32415](https://github.com/bitnami/charts/pull/32415))
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#34571](https://github.com/bitnami/charts/pull/34571))
+
+## <small>12.3.7 (2025-05-21)</small>
+
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#33808) ([2ac0f60](https://github.com/bitnami/charts/commit/2ac0f60d66406de4a1b5f487cb8b07066b41d23a)), closes [#33808](https://github.com/bitnami/charts/issues/33808)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>12.3.6 (2025-05-06)</small>
+
+* [bitnami/cassandra] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([6eae30e](https://github.com/bitnami/charts/commit/6eae30e058e2809b0011b3dce7e53d23b37a060c)), closes [#33341](https://github.com/bitnami/charts/issues/33341)
+
+## <small>12.3.5 (2025-04-23)</small>
+
+* [bitnami/cassandra]fix(readinessProbe): Remove path for metrics readinessProbe (#33121) ([7753e55](https://github.com/bitnami/charts/commit/7753e550cc1fc8941e5ec4bb3d3b4082aa8463f8)), closes [#33121](https://github.com/bitnami/charts/issues/33121)
+
+## <small>12.3.4 (2025-04-22)</small>
+
+* [bitnami/cassandra] Store cassandra-exporter configuration in Secret (#33069) ([597d759](https://github.com/bitnami/charts/commit/597d7598bf4a6968ed7ec67a840c97677f23fe6d)), closes [#33069](https://github.com/bitnami/charts/issues/33069)
+
+## <small>12.3.3 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.3 (#33094) ([9d364ee](https://github.com/bitnami/charts/commit/9d364ee60ba1b4beac37efb5b28f80adf3ac9329)), closes [#33094](https://github.com/bitnami/charts/issues/33094)
+
+## <small>12.3.2 (2025-04-21)</small>
+
+* [bitnami/cassandra] Release 12.3.2 (#32966) ([4f6012d](https://github.com/bitnami/charts/commit/4f6012d7dad6a03aebce1af424863d39eaec8e4a)), closes [#32966](https://github.com/bitnami/charts/issues/32966)
+
+## <small>12.3.1 (2025-04-09)</small>
+
+* [bitnami/cassandra] Release 12.3.1 (#32901) ([8295c9d](https://github.com/bitnami/charts/commit/8295c9d7e5f5e4cfeb76c0840c048fa167413c07)), closes [#32901](https://github.com/bitnami/charts/issues/32901)
+
+## 12.3.0 (2025-04-08)
+
+* [bitnami/cassandra] Cassandra dynamic seed discovery (#32464) ([7e84568](https://github.com/bitnami/charts/commit/7e845681d98407d9d57105aa231a90c91c93f207)), closes [#32464](https://github.com/bitnami/charts/issues/32464)
+
+## <small>12.2.3 (2025-04-04)</small>
+
+* [bitnami/cassandra] Release 12.2.3 (#32813) ([450a2ae](https://github.com/bitnami/charts/commit/450a2ae38a9b69b2f2ce9e99d8f071060b77130c)), closes [#32813](https://github.com/bitnami/charts/issues/32813)
+
+## <small>12.2.2 (2025-03-20)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cassandra] bugfix #32369 (#32415) ([74346fb](https://github.com/bitnami/charts/commit/74346fb2715f349727c5e0468b4066d55ddd2a02)), closes [#32369](https://github.com/bitnami/charts/issues/32369) [#32415](https://github.com/bitnami/charts/issues/32415) [#32369](https://github.com/bitnami/charts/issues/32369)
 
 ## <small>12.2.1 (2025-03-05)</small>
 

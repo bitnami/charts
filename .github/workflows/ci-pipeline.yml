@@ -600,7 +600,7 @@ jobs:
         env:
           CSP_API_URL: https://console.tanzu.broadcom.com
           CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
-          VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
+          VIB_PUBLIC_URL: ${{ vars.VIB_PUBLIC_URL }}
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
           # Alternative Target-Platform to be used in case of incompatibilities
@@ -657,7 +657,7 @@ jobs:
       # If the CI did not succeed ('VIB Verify' failed or skipped),
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
-        if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
+        if: ${{ always() && github.run_attempt >= vars.MAX_RUNS_ATTEMPTS && needs.vib-verify.result != 'skipped' && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
         env:
           BODY: |

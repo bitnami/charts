@@ -19,8 +19,15 @@ rules:
       - services
       - pods
       - nodes
-      - endpoints
       - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: 
+      - "discovery.k8s.io"
+    resources: 
+      - endpointslices
     verbs:
       - get
       - list
@@ -111,6 +118,7 @@ rules:
       - cis.f5.com
     resources:
       - virtualservers
+      - transportservers
     verbs:
       - get
       - watch

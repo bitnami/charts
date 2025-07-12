@@ -1,0 +1,80 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingChiTemplatesConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-chi-templates" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse-operator
+    app.kubernetes.io/component: operator
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  default-template.yaml: |
+  {{- if .Values.chiTemplate }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.chiTemplate "context" .) | nindent 4 }}
+  {{- else }}
+    apiVersion: clickhouse.altinity.com/v1
+    kind: ClickHouseInstallationTemplate
+    metadata:
+      name: default-chi-template
+      namespace: {{ include "common.names.namespace" . | quote }}
+    spec:
+      templates:
+        podTemplates:
+          - name: clickhouse
+            distribution: Unspecified
+            metadata:
+              labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 16 }}
+                app.kubernetes.io/part-of: clickhouse-operator
+                app.kubernetes.io/component: clickhouse
+            spec:
+              containers:
+                - name: clickhouse
+                  image: {{ template "clickhouse-operator.clickhouse.image" . }}
+                  imagePullPolicy: {{ .Values.clickHouseImage.pullPolicy | quote }}
+                  env:
+                    - name: CLICKHOUSE_HTTP_PORT
+                      value: "8124"
+                    - name: CLICKHOUSE_TCP_PORT
+                      value: "9001"
+                    - name: CLICKHOUSE_INTERSERVER_HTTP_PORT
+                      value: "9010"
+                  ports:
+                    - name: http
+                      containerPort: 8124
+                    - name: tcp
+                      containerPort: 9001
+                    - name: interserver
+                      containerPort: 9010
+                  volumeMounts:
+                    - name: clickhouse-data
+                      mountPath: /bitnami/clickhouse
+                    - name: empty-dir
+                      mountPath: /opt/bitnami/clickhouse/logs
+                      subPath: app-logs-dir
+                    - name: empty-dir
+                      mountPath: /opt/bitnami/clickhouse/tmp
+                      subPath: app-tmp-dir
+                    - name: empty-dir
+                      mountPath: /tmp
+                      subPath: tmp-dir
+              volumes:
+                - name: empty-dir
+                  emptyDir: {}
+        volumeClaimTemplates:
+          - name: clickhouse-data
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+    {{- end }}
+{{- end }}

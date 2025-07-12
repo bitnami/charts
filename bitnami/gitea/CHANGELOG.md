@@ -1,8 +1,69 @@
 # Changelog
 
+## 3.2.15 (2025-07-11)
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35014](https://github.com/bitnami/charts/pull/35014))
+
+## <small>3.2.14 (2025-07-11)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35006) ([9f0bc3d](https://github.com/bitnami/charts/commit/9f0bc3d82b790f5bb4dd337b226314aa0cfb9041)), closes [#35006](https://github.com/bitnami/charts/issues/35006)
+
+## <small>3.2.13 (2025-07-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34890) ([acc77e5](https://github.com/bitnami/charts/commit/acc77e5b63e3e593f01f2c266ae0b38ec016c9b4)), closes [#34890](https://github.com/bitnami/charts/issues/34890)
+
+## <small>3.2.12 (2025-06-20)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34576) ([c6775b5](https://github.com/bitnami/charts/commit/c6775b5d9f599e09b708c53e5466cd76e83be16a)), closes [#34576](https://github.com/bitnami/charts/issues/34576)
+
+## <small>3.2.11 (2025-06-20)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34568) ([1d1c24a](https://github.com/bitnami/charts/commit/1d1c24af817dafe81e8efd00adf76d03e83966e0)), closes [#34568](https://github.com/bitnami/charts/issues/34568)
+
+## <small>3.2.10 (2025-06-13)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34432) ([f104400](https://github.com/bitnami/charts/commit/f104400df985eccad8cccc535751b6b0952ca72a)), closes [#34432](https://github.com/bitnami/charts/issues/34432)
+
+## <small>3.2.9 (2025-06-10)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34288) ([b6c97f6](https://github.com/bitnami/charts/commit/b6c97f6716b8ee0223d32efee6e1fd72b8993151)), closes [#34288](https://github.com/bitnami/charts/issues/34288)
+
+## <small>3.2.8 (2025-06-06)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#34162) ([674aa77](https://github.com/bitnami/charts/commit/674aa77b463b119e3049d98beae4889b410a5e4f)), closes [#34162](https://github.com/bitnami/charts/issues/34162)
+
+## <small>3.2.7 (2025-05-13)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33622) ([9b09ecd](https://github.com/bitnami/charts/commit/9b09ecd3fe077dfc550daceacc25101e3b1ea2b5)), closes [#33622](https://github.com/bitnami/charts/issues/33622)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>3.2.6 (2025-05-08)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#33558) ([cf1e13b](https://github.com/bitnami/charts/commit/cf1e13bcd7c791faedb003185ab2c50c0f5dd487)), closes [#33558](https://github.com/bitnami/charts/issues/33558)
+
+## <small>3.2.5 (2025-05-07)</small>
+
+* [bitnami/gitea] Release 3.2.5 (#33479) ([a1595ee](https://github.com/bitnami/charts/commit/a1595eee53e221b0b22cbdef0db922dc72ef825d)), closes [#33479](https://github.com/bitnami/charts/issues/33479)
+
+## <small>3.2.4 (2025-05-06)</small>
+
+* [bitnami/gitea] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33365) ([6850abe](https://github.com/bitnami/charts/commit/6850abe386dcae0781ee5b1f4e61b548784a292b)), closes [#33365](https://github.com/bitnami/charts/issues/33365)
+
+## <small>3.2.3 (2025-04-09)</small>
+
+* [bitnami/gitea] Release 3.2.3 (#32905) ([cf465ce](https://github.com/bitnami/charts/commit/cf465ce64050d29fdd2ead91540bfa185b836bb3)), closes [#32905](https://github.com/bitnami/charts/issues/32905)
+
+## <small>3.2.2 (2025-04-08)</small>
+
+* [bitnami/gitea] Release 3.2.2 (#32856) ([8a6e278](https://github.com/bitnami/charts/commit/8a6e2781db8ba84cfc81a654daac1fcee3de9eda)), closes [#32856](https://github.com/bitnami/charts/issues/32856)
+
+## <small>3.2.1 (2025-04-01)</small>
+
+* [bitnami/gitea] Release 3.2.1 (#32730) ([bad3639](https://github.com/bitnami/charts/commit/bad3639d7d8dc68ecc2ff9ae0fad8f189f1cfa21)), closes [#32730](https://github.com/bitnami/charts/issues/32730)
+
 ## 3.2.0 (2025-03-27)
 
-* [bitnami/gitea] Set `usePasswordFiles=true` by default ([#32347](https://github.com/bitnami/charts/pull/32347))
+* [bitnami/gitea] Set `usePasswordFiles=true` by default (#32347) ([f82ce08](https://github.com/bitnami/charts/commit/f82ce081fed5aaddc123caae618776df141bf691)), closes [#32347](https://github.com/bitnami/charts/issues/32347)
 
 ## <small>3.1.14 (2025-03-24)</small>
 

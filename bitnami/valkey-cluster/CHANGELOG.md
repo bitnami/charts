@@ -1,8 +1,86 @@
 # Changelog
 
-## 2.2.0 (2025-02-21)
+## 3.0.17 (2025-07-09)
 
-* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default ([#32122](https://github.com/bitnami/charts/pull/32122))
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#34951](https://github.com/bitnami/charts/pull/34951))
+
+## <small>3.0.16 (2025-07-08)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34848) ([db08207](https://github.com/bitnami/charts/commit/db08207a95e1670f3b0de576ec3a256e56083cd1)), closes [#34848](https://github.com/bitnami/charts/issues/34848)
+
+## <small>3.0.15 (2025-07-07)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34832) ([c68166d](https://github.com/bitnami/charts/commit/c68166d44581e57f1407ac7e507471f11bbd5781)), closes [#34832](https://github.com/bitnami/charts/issues/34832)
+
+## <small>3.0.14 (2025-06-13)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34488) ([9a78845](https://github.com/bitnami/charts/commit/9a78845214c304deff27f07f487d47ca74937245)), closes [#34488](https://github.com/bitnami/charts/issues/34488)
+
+## <small>3.0.13 (2025-06-11)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34362) ([df7362e](https://github.com/bitnami/charts/commit/df7362ef25b67f3705690b532d7c9cd4046f6a83)), closes [#34362](https://github.com/bitnami/charts/issues/34362)
+
+## <small>3.0.12 (2025-06-08)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34252) ([6592a44](https://github.com/bitnami/charts/commit/6592a4411503f98468add9c4760197d094c8ba68)), closes [#34252](https://github.com/bitnami/charts/issues/34252)
+
+## <small>3.0.11 (2025-06-06)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#34216) ([c4d9bfb](https://github.com/bitnami/charts/commit/c4d9bfb0df2690b31c2461f7f7e5f1ea3971b58e)), closes [#34216](https://github.com/bitnami/charts/issues/34216)
+
+## <small>3.0.10 (2025-05-22)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33826) ([a248d00](https://github.com/bitnami/charts/commit/a248d00d8a4dc7ba4fb53f6259f7d01a93c8c6a1)), closes [#33826](https://github.com/bitnami/charts/issues/33826)
+
+## <small>3.0.9 (2025-05-18)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33768) ([e0389ac](https://github.com/bitnami/charts/commit/e0389acd8d7a2fe8b1822c2a19cdd2cdfad7eeea)), closes [#33768](https://github.com/bitnami/charts/issues/33768)
+
+## <small>3.0.8 (2025-05-16)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33748) ([4a2d739](https://github.com/bitnami/charts/commit/4a2d739e2ace2c50ffb8961ce02b77549c34dd28)), closes [#33748](https://github.com/bitnami/charts/issues/33748)
+
+## <small>3.0.7 (2025-05-15)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33712) ([97270b5](https://github.com/bitnami/charts/commit/97270b5e120cff1148bc48056e2e2fed42a89edb)), closes [#33712](https://github.com/bitnami/charts/issues/33712)
+
+## <small>3.0.6 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#33648) ([0b5a55e](https://github.com/bitnami/charts/commit/0b5a55e4c0d1c5ab60d246be1d70c2a087b71a30)), closes [#33648](https://github.com/bitnami/charts/issues/33648)
+
+## <small>3.0.5 (2025-05-07)</small>
+
+* [bitnami/valkey-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([1e19c13](https://github.com/bitnami/charts/commit/1e19c1350f7663fec99ba6d6aa899442272f577d)), closes [#33444](https://github.com/bitnami/charts/issues/33444)
+
+## <small>3.0.4 (2025-05-05)</small>
+
+* [bitnami/valkey-cluster] only use password files if auth is enabled (#33239) ([ce60ab6](https://github.com/bitnami/charts/commit/ce60ab65a82c5429d488eaf9fdb805915fd4af0a)), closes [#33239](https://github.com/bitnami/charts/issues/33239)
+
+## <small>3.0.3 (2025-04-23)</small>
+
+* [bitnami/valkey-cluster] Release 3.0.3 (#33149) ([20426a5](https://github.com/bitnami/charts/commit/20426a51276475f4e7c6844ccb86044e35cbcf61)), closes [#33149](https://github.com/bitnami/charts/issues/33149)
+
+## <small>3.0.2 (2025-04-09)</small>
+
+* [bitnami/valkey-cluster] Release 3.0.2 (#32937) ([04a7a8d](https://github.com/bitnami/charts/commit/04a7a8d9014726e23b189bdd8bbc8a52b696920f)), closes [#32937](https://github.com/bitnami/charts/issues/32937)
+
+## <small>3.0.1 (2025-04-09)</small>
+
+* [bitnami/valkey-cluster] Release 3.0.1 (#32935) ([eae8e95](https://github.com/bitnami/charts/commit/eae8e95db651adfe54d3ec3929387bc1a9167f82)), closes [#32935](https://github.com/bitnami/charts/issues/32935)
+
+## 3.0.0 (2025-04-09)
+
+* [bitnami/valkey-cluster] Release 3.0.0 (#32934) ([7b1a034](https://github.com/bitnami/charts/commit/7b1a03414cce9425fb364332f5f669dc0bda348d)), closes [#32934](https://github.com/bitnami/charts/issues/32934)
+
+## <small>2.2.1 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/valkey-cluster] Release 2.2.1 (#32564) ([1c23328](https://github.com/bitnami/charts/commit/1c23328f1e9cb6d076adb8e7b548a40b341f3c0c)), closes [#32564](https://github.com/bitnami/charts/issues/32564)
+
+## 2.2.0 (2025-02-24)
+
+* [bitnami/valkey-cluster] Set `usePasswordFiles=true` by default (#32122) ([c46b8f0](https://github.com/bitnami/charts/commit/c46b8f0029226245c04a3fed93225e82a9ab3e57)), closes [#32122](https://github.com/bitnami/charts/issues/32122)
 
 ## <small>2.1.3 (2025-02-20)</small>
 

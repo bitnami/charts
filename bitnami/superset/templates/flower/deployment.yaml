@@ -175,8 +175,8 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
-            {{- if and .Values.flower.auth.enabled .Values.flower.auth.usePasswordFiles }}
-            - name: flower-basic-auth
+            {{- if .Values.usePasswordFiles }}
+            - name: superset-secrets
               mountPath: /opt/bitnami/superset/secrets
               readOnly: true
             {{- end }}
@@ -193,13 +193,25 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.flower.auth.enabled .Values.flower.auth.usePasswordFiles }}
-        - name: flower-basic-auth
-          secret:
-            secretName: {{ template "superset.flower.secretName" . }}
-            items:
-              - key: flower-basic-auth
-                path: flower-basic-auth
+        {{- if .Values.usePasswordFiles }}
+        - name: superset-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "superset.secretName" . }}
+                  items:
+                    - key: superset-secret-key
+                      path: superset-secret-key
+              - secret:
+                  name: {{ include "superset.redis.secretName" . }}
+              {{- if .Values.flower.auth.enabled }}
+              - secret:
+                  name: {{ include "superset.flower.secretName" . }}
+              {{- end }}
+              {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+              - secret:
+                  name: {{ include "superset.postgresql.secretName" . }}
+              {{- end }}
         {{- end }}
         {{- if or .Values.existingConfigmap .Values.config }}
         - name: superset-config

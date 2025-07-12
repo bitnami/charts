@@ -1,8 +1,74 @@
 # Changelog
 
-## 9.0.7 (2025-03-19)
+## 9.0.23 (2025-07-09)
 
-* [bitnami/nats] Release 9.0.7 ([#32517](https://github.com/bitnami/charts/pull/32517))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#34940](https://github.com/bitnami/charts/pull/34940))
+
+## <small>9.0.22 (2025-07-01)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34750) ([97834e3](https://github.com/bitnami/charts/commit/97834e3ba1e5b23238fe4b6cd6f93512d528a83e)), closes [#34750](https://github.com/bitnami/charts/issues/34750)
+
+## <small>9.0.21 (2025-06-26)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34673) ([12a5a04](https://github.com/bitnami/charts/commit/12a5a042a865fc1eaa13c42aa7613def756753bc)), closes [#34673](https://github.com/bitnami/charts/issues/34673)
+
+## <small>9.0.20 (2025-06-13)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34475) ([bdc3695](https://github.com/bitnami/charts/commit/bdc36953addec8a05afc48ebe0bee8e8c4fcc21f)), closes [#34475](https://github.com/bitnami/charts/issues/34475)
+
+## <small>9.0.19 (2025-06-06)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34202) ([2082fad](https://github.com/bitnami/charts/commit/2082fad3449f295796c5e61896684b2c5567f86a)), closes [#34202](https://github.com/bitnami/charts/issues/34202)
+
+## <small>9.0.18 (2025-05-23)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#33839) ([5630c2e](https://github.com/bitnami/charts/commit/5630c2e5c662a613828e6c2f2f6bd11be1d1505c)), closes [#33839](https://github.com/bitnami/charts/issues/33839)
+
+## <small>9.0.17 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#33640) ([2b5f801](https://github.com/bitnami/charts/commit/2b5f801f622b3503fb532fe41401896974e05c97)), closes [#33640](https://github.com/bitnami/charts/issues/33640)
+
+## <small>9.0.16 (2025-05-07)</small>
+
+* [bitnami/nats] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33410) ([f2667b0](https://github.com/bitnami/charts/commit/f2667b0d8fa6772d6690abcf1f095edec02c07ec)), closes [#33410](https://github.com/bitnami/charts/issues/33410)
+
+## <small>9.0.15 (2025-05-07)</small>
+
+* [bitnami/nats] Release 9.0.15 (#33485) ([62269c2](https://github.com/bitnami/charts/commit/62269c278eabaa535ef27c41598576cbe1e9fd8b)), closes [#33485](https://github.com/bitnami/charts/issues/33485)
+
+## <small>9.0.14 (2025-05-01)</small>
+
+* [bitnami/nats] Release 9.0.14 (#33278) ([47d5c34](https://github.com/bitnami/charts/commit/47d5c34a24bf12e2e8428cbeec0295757181576c)), closes [#33278](https://github.com/bitnami/charts/issues/33278)
+
+## <small>9.0.13 (2025-04-25)</small>
+
+* [bitnami/nats] Release 9.0.13 (#33175) ([19560d6](https://github.com/bitnami/charts/commit/19560d62362d9efb134001006f022808aabe69b5)), closes [#33175](https://github.com/bitnami/charts/issues/33175)
+
+## <small>9.0.12 (2025-04-24)</small>
+
+* [bitnami/nats] Release 9.0.12 (#33152) ([3cff316](https://github.com/bitnami/charts/commit/3cff316522df5c41d7fb97894d9510e0c3e16091)), closes [#33152](https://github.com/bitnami/charts/issues/33152)
+
+## <small>9.0.11 (2025-04-09)</small>
+
+* [bitnami/nats] Release 9.0.11 (#32929) ([eb05c75](https://github.com/bitnami/charts/commit/eb05c754751470332875f53af5c5aa4d5d17914e)), closes [#32929](https://github.com/bitnami/charts/issues/32929)
+
+## <small>9.0.10 (2025-04-09)</small>
+
+* [bitnami/nats] Release 9.0.10 (#32907) ([85f9f14](https://github.com/bitnami/charts/commit/85f9f14119a4f8693116c4b1f346fdff3bcd03eb)), closes [#32907](https://github.com/bitnami/charts/issues/32907)
+
+## <small>9.0.9 (2025-04-08)</small>
+
+* [bitnami/nats] Release 9.0.9 (#32873) ([138f5a9](https://github.com/bitnami/charts/commit/138f5a9dcd179ce78354423b43b037ce13bdcc73)), closes [#32873](https://github.com/bitnami/charts/issues/32873)
+
+## <small>9.0.8 (2025-04-02)</small>
+
+* [bitnami/nats] Release 9.0.8 (#32754) ([fbba74c](https://github.com/bitnami/charts/commit/fbba74c68011f672055966d535858be10a8dd74e)), closes [#32754](https://github.com/bitnami/charts/issues/32754)
+
+## <small>9.0.7 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nats] Release 9.0.7 (#32517) ([a902ef8](https://github.com/bitnami/charts/commit/a902ef8c45ad542e44e8e89171ad03ba47ea31fc)), closes [#32517](https://github.com/bitnami/charts/issues/32517)
 
 ## <small>9.0.6 (2025-03-11)</small>
 

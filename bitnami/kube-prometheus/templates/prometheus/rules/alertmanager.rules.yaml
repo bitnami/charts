@@ -50,9 +50,9 @@ spec:
             summary: An Alertmanager instance failed to send notifications.
           expr: |-
             (
-              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default"}[5m])
+              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default"}[15m])
             /
-              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default"}[5m])
+              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default"}[15m])
             )
             > 0.01
           for: 5m
@@ -65,9 +65,9 @@ spec:
             summary: All Alertmanager instances in a cluster failed to send notifications to a critical integration.
           expr: |-
             min by (namespace,service, integration) (
-              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default", integration=~`.*`}[5m])
+              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default", integration=~`.*`}[15m])
             /
-              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default", integration=~`.*`}[5m])
+              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default", integration=~`.*`}[15m])
             )
             > 0.01
           for: 5m
@@ -80,9 +80,9 @@ spec:
             summary: All Alertmanager instances in a cluster failed to send notifications to a non-critical integration.
           expr: |-
             min by (namespace,service, integration) (
-              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default", integration!~`.*`}[5m])
+              rate(alertmanager_notifications_failed_total{job="foo-alertmanager",namespace="default", integration!~`.*`}[15m])
             /
-              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default", integration!~`.*`}[5m])
+              ignoring (reason) group_left rate(alertmanager_notifications_total{job="foo-alertmanager",namespace="default", integration!~`.*`}[15m])
             )
             > 0.01
           for: 5m

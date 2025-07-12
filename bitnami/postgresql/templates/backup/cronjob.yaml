@@ -60,7 +60,7 @@ spec:
                 value: {{ $customUser | quote }}
               {{- end }}
               {{- if .Values.auth.usePasswordFiles }}
-              - name:  PGPASSFILE
+              - name:  PGPASSWORD_FILE
                 value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.adminPasswordKey" .) }}
               {{- else }}
               - name: PGPASSWORD
@@ -97,6 +97,10 @@ spec:
               - name: empty-dir
                 mountPath: /tmp
                 subPath: tmp-dir
+              {{- if .Values.auth.usePasswordFiles }}
+              - name: postgresql-password
+                mountPath: /opt/bitnami/postgresql/secrets/
+              {{- end }}
               {{- if .Values.backup.cronjob.extraVolumeMounts }}
               {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumeMounts "context" $) | nindent 14 }}
               {{- end }}
@@ -132,6 +136,11 @@ spec:
             {{- end }}
             - name: empty-dir
               emptyDir: {}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: postgresql-password
+              secret:
+                secretName: {{ include "postgresql.v1.secretName" . }}
+            {{- end }}
             {{- if .Values.backup.cronjob.extraVolumes }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.extraVolumes "context" $ ) | nindent 12 }}
             {{- end }}

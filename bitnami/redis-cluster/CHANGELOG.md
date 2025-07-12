@@ -1,8 +1,81 @@
 # Changelog
 
-## 11.4.6 (2025-03-22)
+## 12.0.12 (2025-07-09)
 
-* [bitnami/redis-cluster] Release 11.4.6 ([#32560](https://github.com/bitnami/charts/pull/32560))
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#34948](https://github.com/bitnami/charts/pull/34948))
+
+## <small>12.0.11 (2025-07-06)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#34815) ([3b1e9b1](https://github.com/bitnami/charts/commit/3b1e9b1b3ec2a48e581dd44df454d163f80528cc)), closes [#34815](https://github.com/bitnami/charts/issues/34815)
+
+## <small>12.0.10 (2025-06-13)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#34487) ([3860720](https://github.com/bitnami/charts/commit/3860720b370fcf295d9ce82356d04f2c30f28c33)), closes [#34487](https://github.com/bitnami/charts/issues/34487)
+
+## <small>12.0.9 (2025-06-08)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#34251) ([09782cf](https://github.com/bitnami/charts/commit/09782cf7dba3273c187fdd27b8b5227463312e93)), closes [#34251](https://github.com/bitnami/charts/issues/34251)
+
+## <small>12.0.8 (2025-06-06)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#34215) ([54b2264](https://github.com/bitnami/charts/commit/54b22645bbea3530c0729e93d6c8d41a4b5b35cd)), closes [#34215](https://github.com/bitnami/charts/issues/34215)
+
+## <small>12.0.7 (2025-05-27)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33912) ([616d697](https://github.com/bitnami/charts/commit/616d697d3900a0fef7c4d13c29d3b878c8b950cb)), closes [#33912](https://github.com/bitnami/charts/issues/33912)
+
+## <small>12.0.6 (2025-05-22)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33824) ([99dc338](https://github.com/bitnami/charts/commit/99dc338605e0328a3741af35a2dfe1a99a3d4e50)), closes [#33824](https://github.com/bitnami/charts/issues/33824)
+
+## <small>12.0.5 (2025-05-19)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33747) ([850cd8f](https://github.com/bitnami/charts/commit/850cd8f2971737ed44ff3ae8f6b6a12357ca7a3f)), closes [#33747](https://github.com/bitnami/charts/issues/33747)
+
+## <small>12.0.4 (2025-05-15)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33711) ([3e3c7be](https://github.com/bitnami/charts/commit/3e3c7be8f4412c762f3e9fcca875848b8a8bf9da)), closes [#33711](https://github.com/bitnami/charts/issues/33711)
+
+## <small>12.0.3 (2025-05-13)</small>
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33667) ([09eb1d6](https://github.com/bitnami/charts/commit/09eb1d6ecdfa0408636e6246add1b5485db9a404)), closes [#33667](https://github.com/bitnami/charts/issues/33667)
+
+## <small>12.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#33649) ([d75776d](https://github.com/bitnami/charts/commit/d75776d265c727d7819af8d79d8ab408d4524d9e)), closes [#33649](https://github.com/bitnami/charts/issues/33649)
+
+## <small>12.0.1 (2025-05-07)</small>
+
+* [bitnami/redis-cluster] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references ( ([cdadc03](https://github.com/bitnami/charts/commit/cdadc03d3d4c232253c2a9ae0d5148a3d1c4a64e)), closes [#33429](https://github.com/bitnami/charts/issues/33429)
+
+## 12.0.0 (2025-05-06)
+
+* [bitnami/redis-cluster] Release 12.0.0 (#33456) ([583c0b6](https://github.com/bitnami/charts/commit/583c0b6e1a1377f8ea387597c623ac490a329822)), closes [#33456](https://github.com/bitnami/charts/issues/33456)
+
+## <small>11.5.4 (2025-04-30)</small>
+
+* [bitnami/redis-cluster] Switch shell from /bin/sh to /bin/bash to improve process handling (#33250) ([69aea26](https://github.com/bitnami/charts/commit/69aea26249970f032782d60e19446e7209b32bce)), closes [#33250](https://github.com/bitnami/charts/issues/33250)
+
+## <small>11.5.3 (2025-04-24)</small>
+
+* [bitnami/redis-cluster] Release 11.5.3 (#33156) ([44c8d3c](https://github.com/bitnami/charts/commit/44c8d3c58a252e4a292fbf5f22febe1f8897c648)), closes [#33156](https://github.com/bitnami/charts/issues/33156)
+
+## <small>11.5.2 (2025-04-21)</small>
+
+* [bitnami/redis-cluster] Release 11.5.2 (#33088) ([b00414f](https://github.com/bitnami/charts/commit/b00414fb0fc5398962714d59688409aa147d078f)), closes [#33088](https://github.com/bitnami/charts/issues/33088)
+
+## <small>11.5.1 (2025-04-14)</small>
+
+*  [bitnami/redis-cluster] fix: Do not generate secret checksum when is not existing (#32967) ([9982c19](https://github.com/bitnami/charts/commit/9982c197fc3b4837b20382972eade19af6f6f66b)), closes [#32967](https://github.com/bitnami/charts/issues/32967)
+
+## 11.5.0 (2025-04-07)
+
+* [bitnami/redis-cluster] Set `usePasswordFiles=true` by default (#32118) ([2e2ac61](https://github.com/bitnami/charts/commit/2e2ac61c4cb2945873e61bd21cf6ecac15c3f08b)), closes [#32118](https://github.com/bitnami/charts/issues/32118)
+
+## <small>11.4.6 (2025-03-22)</small>
+
+* [bitnami/redis-cluster] Release 11.4.6 (#32560) ([e433131](https://github.com/bitnami/charts/commit/e43313143d767e4cd8fa744a5b868ff3341ead47)), closes [#32560](https://github.com/bitnami/charts/issues/32560)
 
 ## <small>11.4.5 (2025-03-13)</small>
 

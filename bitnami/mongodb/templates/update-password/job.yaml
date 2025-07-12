@@ -129,7 +129,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
-            {{- if not .Values.auth.usePasswordFiles }}
+            {{- if not .Values.usePasswordFiles }}
             - name: MONGODB_PREVIOUS_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -146,7 +146,7 @@ spec:
               value: {{ $customUsers | quote }}
             - name: MONGODB_EXTRA_DATABASES
               value: {{ $customDatabases | quote }}
-            {{- if not .Values.auth.usePasswordFiles }}
+            {{- if not .Values.usePasswordFiles }}
             - name: MONGODB_NEW_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
@@ -157,7 +157,7 @@ spec:
             {{- if .Values.metrics.username }}
             - name: MONGODB_METRICS_USER
               value: {{ .Values.metrics.username | quote }}
-            {{- if not .Values.auth.usePasswordFiles }}
+            {{- if not .Values.usePasswordFiles }}
             - name: MONGODB_PREVIOUS_METRICS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -217,7 +217,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if and .Values.auth.usePasswordFiles }}
+        {{- if and .Values.usePasswordFiles }}
         - name: mongodb-previous-credentials
           secret:
             secretName: {{ template "mongodb.update-job.previousSecretName" . }}

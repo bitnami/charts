@@ -124,20 +124,30 @@ spec:
               value: {{ include "redmine.database.name" . }}
             - name: REDMINE_DATABASE_USER
               value: {{ include "redmine.database.username" . }}
+            {{- if .Values.usePasswordFiles }}
+            - name: REDMINE_DATABASE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/redmine/secrets/%s" (include "redmine.database.secretKey" .) }}
+            {{- else }}
             - name: REDMINE_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "redmine.database.secretName" . }}
                   key: {{ include "redmine.database.secretKey" . }}
+            {{- end }}
             - name: REDMINE_DATABASE_PORT_NUMBER
               value: {{ include "redmine.database.port" . | quote }}
             - name: REDMINE_USERNAME
               value: {{ default "" .Values.redmineUsername | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: REDMINE_PASSWORD_FILE
+              value: "/opt/bitnami/redmine/secrets/redmine-password"
+            {{- else }}
             - name: REDMINE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "redmine.secretName" . }}
                   key: redmine-password
+            {{- end }}
             - name: REDMINE_EMAIL
               value: {{ .Values.redmineEmail | quote }}
             - name: REDMINE_LANG
@@ -155,11 +165,16 @@ spec:
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
             {{- if .Values.smtpPassword }}
+            {{- if .Values.usePasswordFiles }}
+            - name: REDMINE_SMTP_PASSWORD_FILE
+              value: "/opt/bitnami/redmine/secrets/smtp-password"
+            {{- else }}
             - name: REDMINE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "redmine.secretName" . }}
                   key: smtp-password
+            {{- end }}
             {{- end }}
             {{- if .Values.smtpTls }}
             - name: REDMINE_SMTP_PROTOCOL
@@ -218,9 +233,13 @@ spec:
           {{- end }}
           volumeMounts:
             {{- include "certificates.volumeMount" . | indent 12 }}
+            {{- if  .Values.usePasswordFiles }}
+            - name: redmine-secrets
+              mountPath: /opt/bitnami/redmine/secrets
+            {{- end }}
             {{- if .Values.customPostInitScripts }}
-            - mountPath: /docker-entrypoint-init.d
-              name: custom-postinit
+            - name: custom-postinit
+              mountPath: /docker-entrypoint-init.d
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -232,6 +251,15 @@ spec:
         {{- end }}
       volumes:
         {{- include "certificates.volumes" . | indent 8 }}
+        {{- if .Values.usePasswordFiles }}
+        - name: redmine-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "redmine.secretName" . }}
+              - secret:
+                  name: {{ include "redmine.database.secretName" . }}
+        {{- end }}
         - name: redmine-data
           {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

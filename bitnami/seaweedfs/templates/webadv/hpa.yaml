@@ -26,24 +26,16 @@ spec:
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.webdav.autoscaling.targetMemory  }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.webdav.autoscaling.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if .Values.webdav.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.webdav.autoscaling.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.webdav.autoscaling.targetCPU }}
-        {{- end }}
     {{- end }}
 {{- end }}

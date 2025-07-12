@@ -158,6 +158,11 @@
                     "description": "Use hostNetwork",
                     "default": false
                 },
+                "dnsPolicy": {
+                    "type": "string",
+                    "description": "DNS policy for dataPlane pods",
+                    "default": "ClusterFirstWithHostNet"
+                },
                 "containerPorts": {
                     "type": "object",
                     "properties": {
@@ -1029,6 +1034,11 @@
                     "type": "boolean",
                     "description": "Use hostNetwork",
                     "default": false
+                },
+                "dnsPolicy": {
+                    "type": "string",
+                    "description": "DNS policy for controlPlane pods",
+                    "default": "ClusterFirst"
                 },
                 "useDaemonSet": {
                     "type": "boolean",

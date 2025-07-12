@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v{version}/config/crd/bases/postgresql.cnpg.io_databases.yaml
-# Version: 1.25.1
+# Version: 1.26.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.2
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: databases.postgresql.cnpg.io
 spec:
   group: postgresql.cnpg.io
@@ -126,6 +126,43 @@ spec:
                 - present
                 - absent
                 type: string
+              extensions:
+                description: The list of extensions to be managed in the database
+                items:
+                  description: ExtensionSpec configures an extension in a database
+                  properties:
+                    ensure:
+                      default: present
+                      description: |-
+                        Specifies whether an extension/schema should be present or absent in
+                        the database. If set to `present`, the extension/schema will be
+                        created if it does not exist. If set to `absent`, the
+                        extension/schema will be removed if it exists.
+                      enum:
+                      - present
+                      - absent
+                      type: string
+                    name:
+                      description: Name of the extension/schema
+                      type: string
+                    schema:
+                      description: |-
+                        The name of the schema in which to install the extension's objects,
+                        in case the extension allows its contents to be relocated. If not
+                        specified (default), and the extension's control file does not
+                        specify a schema either, the current default object creation schema
+                        is used.
+                      type: string
+                    version:
+                      description: |-
+                        The version of the extension to install. If empty, the operator will
+                        install the default version (whatever is specified in the
+                        extension's control file)
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               icuLocale:
                 description: |-
                   Maps to the `ICU_LOCALE` parameter of `CREATE DATABASE`. This
@@ -205,6 +242,35 @@ spec:
                   Maps to the `OWNER TO` command of `ALTER DATABASE`.
                   The role name of the user who owns the database inside PostgreSQL.
                 type: string
+              schemas:
+                description: The list of schemas to be managed in the database
+                items:
+                  description: SchemaSpec configures a schema in a database
+                  properties:
+                    ensure:
+                      default: present
+                      description: |-
+                        Specifies whether an extension/schema should be present or absent in
+                        the database. If set to `present`, the extension/schema will be
+                        created if it does not exist. If set to `absent`, the
+                        extension/schema will be removed if it exists.
+                      enum:
+                      - present
+                      - absent
+                      type: string
+                    name:
+                      description: Name of the extension/schema
+                      type: string
+                    owner:
+                      description: |-
+                        The role name of the user who owns the schema inside PostgreSQL.
+                        It maps to the `AUTHORIZATION` parameter of `CREATE SCHEMA` and the
+                        `OWNER TO` command of `ALTER SCHEMA`.
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               tablespace:
                 description: |-
                   Maps to the `TABLESPACE` parameter of `CREATE DATABASE`.
@@ -244,6 +310,28 @@ spec:
               applied:
                 description: Applied is true if the database was reconciled correctly
                 type: boolean
+              extensions:
+                description: Extensions is the status of the managed extensions
+                items:
+                  description: DatabaseObjectStatus is the status of the managed database
+                    objects
+                  properties:
+                    applied:
+                      description: |-
+                        True of the object has been installed successfully in
+                        the database
+                      type: boolean
+                    message:
+                      description: Message is the object reconciliation message
+                      type: string
+                    name:
+                      description: The name of the object
+                      type: string
+                  required:
+                  - applied
+                  - name
+                  type: object
+                type: array
               message:
                 description: Message is the reconciliation output message
                 type: string
@@ -253,6 +341,28 @@ spec:
                   desired state that was synchronized
                 format: int64
                 type: integer
+              schemas:
+                description: Schemas is the status of the managed schemas
+                items:
+                  description: DatabaseObjectStatus is the status of the managed database
+                    objects
+                  properties:
+                    applied:
+                      description: |-
+                        True of the object has been installed successfully in
+                        the database
+                      type: boolean
+                    message:
+                      description: Message is the object reconciliation message
+                      type: string
+                    name:
+                      description: The name of the object
+                      type: string
+                  required:
+                  - applied
+                  - name
+                  type: object
+                type: array
             type: object
         required:
         - metadata

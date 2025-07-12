@@ -1,8 +1,93 @@
 # Changelog
 
-## 11.2.0 (2025-03-24)
+## 12.0.9 (2025-07-10)
 
-* [bitnami/etcd] Set `usePasswordFiles=true` by default ([#32345](https://github.com/bitnami/charts/pull/32345))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34997](https://github.com/bitnami/charts/pull/34997))
+
+## <small>12.0.8 (2025-07-08)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34881) ([6d91652](https://github.com/bitnami/charts/commit/6d916522b51a18123e5c70705996d37549820bb0)), closes [#34881](https://github.com/bitnami/charts/issues/34881)
+
+## <small>12.0.7 (2025-07-03)</small>
+
+* [bitnami/etcd] Fix protocol selection in defrag job (#34767) ([d6916ae](https://github.com/bitnami/charts/commit/d6916aef81a368351747137f8107fe6add7e3e93)), closes [#34767](https://github.com/bitnami/charts/issues/34767)
+
+## <small>12.0.6 (2025-06-17)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34427) ([9cf5b43](https://github.com/bitnami/charts/commit/9cf5b43efaf70d8e0490b3e0af08a11276cc528b)), closes [#34427](https://github.com/bitnami/charts/issues/34427)
+
+## <small>12.0.5 (2025-06-16)</small>
+
+* [bitnami/etcd] Add values for etcd preUpgradeJob scheduling parameters (#34367) ([a68568b](https://github.com/bitnami/charts/commit/a68568bf913f20198f62f1c7435ebc2bf4f47670)), closes [#34367](https://github.com/bitnami/charts/issues/34367)
+
+## <small>12.0.4 (2025-06-11)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34350) ([fd5b5f5](https://github.com/bitnami/charts/commit/fd5b5f563fb0baeab3b69bd23cbac99040831d2d)), closes [#34350](https://github.com/bitnami/charts/issues/34350)
+
+## <small>12.0.3 (2025-06-06)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34244) ([3359be4](https://github.com/bitnami/charts/commit/3359be42c419564ea972adf895828ce3da92052f)), closes [#34244](https://github.com/bitnami/charts/issues/34244)
+
+## <small>12.0.2 (2025-06-05)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34152) ([321b964](https://github.com/bitnami/charts/commit/321b96464c71b78121e60b99c08d69eadfad9024)), closes [#34152](https://github.com/bitnami/charts/issues/34152)
+
+## <small>12.0.1 (2025-06-03)</small>
+
+* [etcd] add priorityClass to preupgrade-hook-job. (#34035) ([320d606](https://github.com/bitnami/charts/commit/320d6068c96f78f18e99446f3214afec6cffc3c6)), closes [#34035](https://github.com/bitnami/charts/issues/34035)
+
+## 12.0.0 (2025-05-23)
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#33840) ([f1bf7cb](https://github.com/bitnami/charts/commit/f1bf7cb2bbc239632a46fb04db7b6e3c5ccf6efc)), closes [#33840](https://github.com/bitnami/charts/issues/33840)
+
+## <small>11.3.6 (2025-05-19)</small>
+
+* [bitnami/etcd] Allow release namespace to be overridden (#33550) ([b14c079](https://github.com/bitnami/charts/commit/b14c0794110027fb4198f9529c1b43ae34213d9c)), closes [#33550](https://github.com/bitnami/charts/issues/33550)
+
+## <small>11.3.5 (2025-05-16)</small>
+
+* [bitnami/etcd] fix type of GOMAXPROCS in envs (#33477) ([0a6e907](https://github.com/bitnami/charts/commit/0a6e907ab91b4ed81541b6243d981289deee636d)), closes [#33477](https://github.com/bitnami/charts/issues/33477)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.3.4 (2025-05-08)</small>
+
+* [bitnami/etcd]fix(cronjob-defrag):Remove JWT restrictions (#33321) ([02d7b94](https://github.com/bitnami/charts/commit/02d7b94f68d17fc6ebdc9f7431510b6d6d12f444)), closes [#33321](https://github.com/bitnami/charts/issues/33321)
+
+## <small>11.3.3 (2025-05-07)</small>
+
+* [bitnami/etcd] Release 11.3.3 (#33511) ([92517f3](https://github.com/bitnami/charts/commit/92517f3d191313e140bbee83b5fd5eb22af786a9)), closes [#33511](https://github.com/bitnami/charts/issues/33511)
+
+## <small>11.3.2 (2025-05-07)</small>
+
+* [bitnami/etcd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33358) ([c7f00d1](https://github.com/bitnami/charts/commit/c7f00d1ce5daeb4a2152139724308da61fc47bb8)), closes [#33358](https://github.com/bitnami/charts/issues/33358)
+
+## <small>11.3.1 (2025-05-01)</small>
+
+* [bitnami/etcd] Release 11.3.1 (#33289) ([831c6a5](https://github.com/bitnami/charts/commit/831c6a597f8d157f8e7e25e3d52872860fc49691)), closes [#33289](https://github.com/bitnami/charts/issues/33289)
+
+## 11.3.0 (2025-04-23)
+
+* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob (#32953) ([9df94d0](https://github.com/bitnami/charts/commit/9df94d083dbc03eb22202dbbc691fd687827ac66)), closes [#32953](https://github.com/bitnami/charts/issues/32953)
+
+## <small>11.2.4 (2025-04-11)</small>
+
+* [bitnami/etcd] Simplify condition (#32814) ([4b9196b](https://github.com/bitnami/charts/commit/4b9196b591ac921706c23dc47512f54d2f374beb)), closes [#32814](https://github.com/bitnami/charts/issues/32814)
+
+## <small>11.2.3 (2025-04-09)</small>
+
+* [bitnami/etcd] fix livenessprobe when metrics.useSeparateEndpoint is set (#32870) ([0f3c1cc](https://github.com/bitnami/charts/commit/0f3c1ccdeefe6e244c9ff9577e06b6c7e9b4bb15)), closes [#32870](https://github.com/bitnami/charts/issues/32870)
+
+## <small>11.2.2 (2025-04-01)</small>
+
+* [bitnami/etcd] Release 11.2.2 (#32727) ([b34eff7](https://github.com/bitnami/charts/commit/b34eff75291633a39b02ed46c27c60250a07d3f9)), closes [#32727](https://github.com/bitnami/charts/issues/32727)
+
+## <small>11.2.1 (2025-03-28)</small>
+
+* [bitnami/etcd] Release 11.2.1 (#32654) ([5822809](https://github.com/bitnami/charts/commit/5822809df8949d943bcde1d8f6521a2484a8b5cc)), closes [#32654](https://github.com/bitnami/charts/issues/32654)
+
+## 11.2.0 (2025-03-27)
+
+* [bitnami/etcd] Set `usePasswordFiles=true` by default (#32345) ([c46b195](https://github.com/bitnami/charts/commit/c46b195f624cdcc487dc503fed040bf80278b615)), closes [#32345](https://github.com/bitnami/charts/issues/32345)
 
 ## <small>11.1.6 (2025-03-21)</small>
 

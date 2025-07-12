@@ -78,7 +78,7 @@ spec:
         {{- if .Values.defaultInitContainers.waitForRedis.enabled }}
         {{- include "superset.initContainers.waitForRedis" . | nindent 8 }}
         {{- end }}
-        {{- if and .Values.web.waitForExamples.enabled .Values.loadExamples }}
+        {{- if and .Values.init.enabled .Values.web.waitForExamples.enabled .Values.loadExamples }}
         {{- include "superset.initContainers.waitForExamples" . | nindent 8 }}
         {{- end }}
         {{- if .Values.web.initContainers }}
@@ -167,6 +167,11 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/superset/superset_home
               subPath: superset-home
+            {{- if .Values.usePasswordFiles }}
+            - name: superset-secrets
+              mountPath: /opt/bitnami/superset/secrets
+              readOnly: true
+            {{- end }}
             {{- if or .Values.existingConfigmap .Values.config }}
             - name: superset-config
               mountPath: /bitnami/superset/conf
@@ -180,6 +185,22 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.usePasswordFiles }}
+        - name: superset-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "superset.secretName" . }}
+                  items:
+                    - key: superset-secret-key
+                      path: superset-secret-key
+              - secret:
+                  name: {{ include "superset.redis.secretName" . }}
+              {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
+              - secret:
+                  name: {{ include "superset.postgresql.secretName" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.existingConfigmap .Values.config }}
         - name: superset-config
           configMap:

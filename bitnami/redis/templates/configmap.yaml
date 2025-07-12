@@ -56,8 +56,15 @@ data:
     user default on {{ if $password}}#{{ sha256sum $password}}{{ else }}nopass{{ end }} ~* &* +@all
     {{- if .Values.auth.acl.users -}}
     {{- /* custom users */ -}}
+    {{- $userSecret := .Values.auth.acl.userSecret -}}
     {{- range .Values.auth.acl.users }}
-    user {{ .username }} {{ default "on" .enabled}} {{ if .password}}#{{ sha256sum .password}}{{ else }}nopass{{ end }} {{ default "~*" .keys}} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- $userPassword := .password | default "" }}
+    {{- if $userSecret }}
+    {{- $secretPassword := include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $) }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $secretPassword }}#{{ sha256sum $secretPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- else }}
+    user {{ .username }} {{ default "on" .enabled }} {{ if $userPassword }}#{{ sha256sum $userPassword }}{{ else }}nopass{{ end }} {{ default "~*" .keys }} {{ default "&*" .channels }} {{ default "+@all" .commands }}
+    {{- end }}
     {{- end }}
     {{- end }}
     {{- end }}
@@ -80,12 +87,15 @@ data:
       sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
     {{- end }}
     {{- if .Values.auth.acl.sentinel }}
-    {{- range .Values.auth.acl.users }}
     # Sentinel ACL configuration, only for users with password
-    {{ if .password }}
-    user {{ .username }} {{ default "on" .enabled }} {{ if .password }}#{{ sha256sum .password }}{{ else }}nopass{{ end }} ~* &* +@all
+    {{- $userSecret := .Values.auth.acl.userSecret }}
+    {{- range .Values.auth.acl.users }}
+    {{- $userPassword := .password | default "" }}
+    {{- $secretPassword := ternary "" (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $)) (empty $userSecret) }}
+    {{- if or $userPassword $secretPassword }}
+    user {{ .username }} {{ default "on" .enabled }} #{{ coalesce $secretPassword $userPassword | sha256sum }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
-    sentinel sentinel-pass {{ .password }} 
+    sentinel sentinel-pass {{ coalesce $secretPassword $userPassword }}
     {{- end }}
     {{- end }}
     {{- end }}

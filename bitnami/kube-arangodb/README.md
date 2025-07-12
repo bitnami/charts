@@ -20,8 +20,6 @@ Looking to use ArangoDB Kubernetes Operator in production? Try [VMware Tanzu App
 
 This chart bootstraps a [ArangoDB Kubernetes Operator](https://github.com/bitnami/containers/tree/main/bitnami/kube-arangodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -255,7 +253,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                  | `{}`                            |
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                    | `{}`                            |
 | `scope`                                             | Define namespace scope: Allowed values: legacy, namespaced                                                                                                                                                            | `legacy`                        |
-| `allowChaos`                                        | Allow chaows in deployments                                                                                                                                                                                           | `false`                         |
+| `allowChaos`                                        | Allow chaos in deployments                                                                                                                                                                                            | `false`                         |
 | `enableAPI`                                         | Enable operator API endpoints                                                                                                                                                                                         | `true`                          |
 | `enableCRDManagement`                               | Enable CRD Management by the operator                                                                                                                                                                                 | `true`                          |
 | `extraArgs`                                         | Add extra arguments to the default command                                                                                                                                                                            | `[]`                            |

@@ -20,8 +20,6 @@ Looking to use Multus CNI in production? Try [VMware Tanzu Application Catalog](
 
 This chart bootstraps a [Multus CNI](https://github.com/bitnami/containers/tree/main/bitnami/multus-cni) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+

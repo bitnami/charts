@@ -22,8 +22,6 @@ This chart bootstraps a [Odoo](https://github.com/bitnami/containers/tree/main/b
 
 Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get a full-featured Open Source ERP when you install several Apps.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -145,6 +143,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`                   |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                                    | `cluster.local`        |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`                   |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                    | `true`                 |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`                |
 | `diagnosticMode.command` | Command to override all containers in the the statefulset                                            | `["sleep"]`            |
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`         |

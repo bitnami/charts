@@ -1,8 +1,58 @@
 # Changelog
 
-## 25.1.5 (2025-03-17)
+## 27.0.2 (2025-07-10)
 
-* [bitnami/moodle] Release 25.1.5 ([#32473](https://github.com/bitnami/charts/pull/32473))
+* [bitnami/moodle] Fix hostAliases Bug in Moodle deployment.yaml ([#34839](https://github.com/bitnami/charts/pull/34839))
+
+## <small>27.0.1 (2025-07-08)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34862) ([e299e92](https://github.com/bitnami/charts/commit/e299e92ff4be3ddb8baf0a01a4f767970a50d2d4)), closes [#34862](https://github.com/bitnami/charts/issues/34862)
+
+## 27.0.0 (2025-06-25)
+
+* [bitnami/moodle] Upgrade MariaDB 11.8 (#34631) ([7fb4217](https://github.com/bitnami/charts/commit/7fb42171b0bb270ba790fb2a78ee49b6107b6e62)), closes [#34631](https://github.com/bitnami/charts/issues/34631)
+
+## <small>26.0.5 (2025-06-13)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34394) ([53257c3](https://github.com/bitnami/charts/commit/53257c3bf4a5738616244dd6a2d20a4725e50255)), closes [#34394](https://github.com/bitnami/charts/issues/34394)
+
+## <small>26.0.4 (2025-06-09)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34273) ([34d587b](https://github.com/bitnami/charts/commit/34d587b70f86e3428fbb54e1fc07effff7c865c6)), closes [#34273](https://github.com/bitnami/charts/issues/34273)
+
+## <small>26.0.3 (2025-06-05)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34136) ([987941b](https://github.com/bitnami/charts/commit/987941bc13a6d5d7ea95a811f210a2ae51868ac0)), closes [#34136](https://github.com/bitnami/charts/issues/34136)
+
+## <small>26.0.2 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#33592) ([07b03f6](https://github.com/bitnami/charts/commit/07b03f6ef68dd03e72c387127d7c9a8c43dad03c)), closes [#33592](https://github.com/bitnami/charts/issues/33592)
+
+## <small>26.0.1 (2025-05-06)</small>
+
+* [bitnami/moodle] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33407) ([502482e](https://github.com/bitnami/charts/commit/502482e304fc70f6286939b5eb050ff92fc37ec6)), closes [#33407](https://github.com/bitnami/charts/issues/33407)
+
+## 26.0.0 (2025-04-30)
+
+* [bitnami/moodle] Release 26.0.0 (#33267) ([e83e3be](https://github.com/bitnami/charts/commit/e83e3be7a4c094947e7b1012d828e157c92c6bc5)), closes [#33267](https://github.com/bitnami/charts/issues/33267)
+
+## <small>25.2.2 (2025-04-16)</small>
+
+* [bitnami/moodle] Release 25.2.2 (#33042) ([c59ae4e](https://github.com/bitnami/charts/commit/c59ae4e423d0179cd00bb5cf8872fcf09698dd9c)), closes [#33042](https://github.com/bitnami/charts/issues/33042)
+
+## <small>25.2.1 (2025-04-16)</small>
+
+* [bitnami/moodle] Release 25.2.1 (#33030) ([00d63ef](https://github.com/bitnami/charts/commit/00d63efcda779c41bff2429fab8f8703abe9b8dc)), closes [#33030](https://github.com/bitnami/charts/issues/33030)
+
+## 25.2.0 (2025-04-04)
+
+* [bitnami/moodle] Set `usePasswordFiles=true` by default (#32705) ([1414fd1](https://github.com/bitnami/charts/commit/1414fd1b628b67034905dd591ef58cdc8009115f)), closes [#32705](https://github.com/bitnami/charts/issues/32705)
+
+## <small>25.1.5 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/moodle] Release 25.1.5 (#32473) ([313c5b6](https://github.com/bitnami/charts/commit/313c5b61f8981333edbe04e7b66d37594f04dc1a)), closes [#32473](https://github.com/bitnami/charts/issues/32473)
 
 ## <small>25.1.4 (2025-02-21)</small>
 

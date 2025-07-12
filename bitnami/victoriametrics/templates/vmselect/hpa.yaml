@@ -32,24 +32,16 @@ spec:
     - type: Resource
       resource:
         name: memory
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetMemory  }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetMemory }}
-        {{- end }}
     {{- end }}
     {{- if .Values.vmselect.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetCPU }}
-        {{- else }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.vmselect.autoscaling.hpa.targetCPU }}
-        {{- end }}
     {{- end }}
 {{- end }}

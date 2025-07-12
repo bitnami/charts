@@ -1,8 +1,39 @@
 # Changelog
 
-## 12.3.2 (2025-03-22)
+## 13.0.3 (2025-07-09)
 
-* [bitnami/mysql] Release 12.3.2 ([#32558](https://github.com/bitnami/charts/pull/32558))
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#34931](https://github.com/bitnami/charts/pull/34931))
+
+## <small>13.0.2 (2025-06-13)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34474) ([d72e326](https://github.com/bitnami/charts/commit/d72e326edaf5815cb306abf3cad2382716576228)), closes [#34474](https://github.com/bitnami/charts/issues/34474)
+
+## <small>13.0.1 (2025-06-06)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34203) ([dd724f1](https://github.com/bitnami/charts/commit/dd724f14108510987ecc8ca81277c2ac5f0d85ad)), closes [#34203](https://github.com/bitnami/charts/issues/34203)
+* [bitnami/mysql] Update MySQL docs (#33613) ([b0ca2e2](https://github.com/bitnami/charts/commit/b0ca2e239a09b9e9eca7fe2f67b0f85b3f5d696c)), closes [#33613](https://github.com/bitnami/charts/issues/33613)
+
+## 13.0.0 (2025-05-12)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#33608) ([98a47b5](https://github.com/bitnami/charts/commit/98a47b5384cc63899673169e0768dd7bf0997271)), closes [#33608](https://github.com/bitnami/charts/issues/33608)
+
+## <small>12.3.5 (2025-05-06)</small>
+
+* [bitnami/mysql] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33409) ([aeeb08b](https://github.com/bitnami/charts/commit/aeeb08b9b6e4ebddd8ff9da3ef58073c504b7c96)), closes [#33409](https://github.com/bitnami/charts/issues/33409)
+
+## <small>12.3.4 (2025-04-15)</small>
+
+* [bitnami/mysql] Release 12.3.4 (#33017) ([86aa183](https://github.com/bitnami/charts/commit/86aa183ab6017410cdf02ade4ac9449791e5fb1b)), closes [#33017](https://github.com/bitnami/charts/issues/33017)
+
+## <small>12.3.3 (2025-04-09)</small>
+
+* [bitnami/mysql]  Allow setting externalIPs for services (#32858) ([a9077e0](https://github.com/bitnami/charts/commit/a9077e0501cbc9f4460b91866ced3bd4d789ecff)), closes [#32858](https://github.com/bitnami/charts/issues/32858)
+
+## <small>12.3.2 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mysql] Release 12.3.2 (#32558) ([6070eb2](https://github.com/bitnami/charts/commit/6070eb2d51c4200b3ecdf5e8f30c2742501fde6f)), closes [#32558](https://github.com/bitnami/charts/issues/32558)
 
 ## <small>12.3.1 (2025-03-06)</small>
 

@@ -50,7 +50,7 @@ spec:
   {{- if eq .Values.ingress.core.controller "ncp" }}
   backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.portal" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 4 }}
   {{- end }}
-  {{- if and .Values.ingress.core.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  {{- if .Values.ingress.core.ingressClassName }}
   ingressClassName: {{ .Values.ingress.core.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -62,34 +62,22 @@ spec:
           {{- toYaml .Values.ingress.core.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .api_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
           - path: {{ .service_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
           - path: {{ .v2_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
           - path: {{ .chartrepo_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
           - path: {{ .controller_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
           - path: {{ .portal_path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.core.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.portal" .) "servicePort" (ternary "https" "http" .Values.internalTLS.enabled) "context" $) | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.core.extraHosts }}
@@ -97,9 +85,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "harbor.core" $) "servicePort" (ternary "https" "http" $.Values.internalTLS.enabled) "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.ingress.core.extraRules }}

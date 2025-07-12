@@ -44,21 +44,20 @@ queryScheduler:
   service:
     ports:
       http: 3100
-promtail:
+grafanaalloy:
   enabled: true
-  containerPorts:
-    http: 8081
   podSecurityContext:
     enabled: true
     fsGroup: 0
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 0
-  logLevel: debug
+  alloy:
+    containerPorts:
+      http: 8081
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1002
   service:
-    type: ClusterIP
     ports:
-      http: 3101
+      http: 8081
   rbac:
     create: true
   serviceAccount:
@@ -78,4 +77,4 @@ memcachedindexqueries:
   enabled: true
   service:
     ports:
-      memcached: 11212 
+      memcached: 11212

@@ -20,8 +20,6 @@ Looking to use Kibana in production? Try [VMware Tanzu Application Catalog](http
 
 This chart bootstraps a [Kibana](https://github.com/bitnami/containers/tree/main/bitnami/kibana) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -283,6 +281,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
 | `extraDeploy`            | A list of extra kubernetes resources to be deployed                                                       | `[]`            |
 | `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                   | `["infinity"]`  |
@@ -308,6 +307,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `plugins`                                           | Array containing the Kibana plugins to be installed in deployment                                                                                                                                                                                     | `[]`                       |
 | `savedObjects.urls`                                 | Array containing links to NDJSON files to be imported during Kibana initialization                                                                                                                                                                    | `[]`                       |
 | `savedObjects.configmap`                            | Configmap containing NDJSON files to be imported during Kibana initialization (evaluated as a template)                                                                                                                                               | `""`                       |
+| `savedObjects.overwrite`                            | Overwrite saved objects                                                                                                                                                                                                                               | `false`                    |
 | `extraConfiguration`                                | Extra settings to be added to the default kibana.yml configmap that the chart creates (unless replaced using `configurationCM`). Evaluated as a template                                                                                              | `{}`                       |
 | `configurationCM`                                   | ConfigMap containing a kibana.yml file that will replace the default one specified in configuration.yaml                                                                                                                                              | `""`                       |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                                  | `[]`                       |

@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.prometheus.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.prometheus.thanos.ingress.ingressClassName }}
   ingressClassName: {{ .Values.prometheus.thanos.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -28,9 +28,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.thanos.ingress.extraPaths "context" $) | nindent 10 }}
           {{- end }}
           - path: {{ .Values.prometheus.thanos.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.prometheus.thanos.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
     {{- range .Values.prometheus.thanos.ingress.extraHosts }}
@@ -38,9 +36,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanos.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.prometheus.thanos.ingress.extraRules }}

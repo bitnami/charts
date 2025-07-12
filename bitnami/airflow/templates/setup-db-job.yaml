@@ -10,6 +10,7 @@ metadata:
   name: {{ printf "%s-setup-db" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: setup-db
   {{- $defaultAnnotations := dict "helm.sh/hook" "post-install,post-upgrade" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.setupDBJob.annotations .Values.commonAnnotations $defaultAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
@@ -19,6 +20,7 @@ spec:
     metadata:
       {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.setupDBJob.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: setup-db
       {{- if .Values.setupDBJob.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -32,6 +34,32 @@ spec:
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.setupDBJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.setupDBJob.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.setupDBJob.podAffinityPreset "component" "setup-db" "customLabels" $podLabels "topologyKey" .Values.setupDBJob.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.setupDBJob.podAntiAffinityPreset "component" "setup-db" "customLabels" $podLabels "topologyKey" .Values.setupDBJob.topologyKey "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.setupDBJob.nodeAffinityPreset.type "key" .Values.setupDBJob.nodeAffinityPreset.key "values" .Values.setupDBJob.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.setupDBJob.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.setupDBJob.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.setupDBJob.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.setupDBJob.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.setupDBJob.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.setupDBJob.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.setupDBJob.priorityClassName }}
+      priorityClassName: {{ .Values.setupDBJob.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.setupDBJob.schedulerName }}
+      schedulerName: {{ .Values.setupDBJob.schedulerName }}
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
@@ -70,12 +98,23 @@ spec:
 
               if ! airflow_execute db check-migrations; then
                   info "Populating database"
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db init
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
 
                   airflow_create_admin_user
+                  info "Synchronizing internal metadata"
+                  airflow_execute sync-perm --include-dags
+                  true
               else
                   info "Upgrading database schema"
+                  {{- if (include "airflow.isImageMajorVersion2" .) }}
                   airflow_execute db upgrade
+                  {{- else }}
+                  airflow_execute db migrate
+                  {{- end }}
                   true
               fi
           {{- end }}

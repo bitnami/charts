@@ -1,8 +1,112 @@
 # Changelog
 
-## 19.0.3 (2025-03-21)
+## 21.0.6 (2025-07-09)
 
-* [bitnami/nginx] Add resources to git-clone-repository initcontainer ([#32530](https://github.com/bitnami/charts/pull/32530))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#34928](https://github.com/bitnami/charts/pull/34928))
+
+## <small>21.0.5 (2025-07-09)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34894) ([fd53b4c](https://github.com/bitnami/charts/commit/fd53b4c67867b3052d0705348a0f900428d0570e)), closes [#34894](https://github.com/bitnami/charts/issues/34894)
+
+## <small>21.0.4 (2025-07-07)</small>
+
+* fix prometheusRules syntax (#34801) ([95446ae](https://github.com/bitnami/charts/commit/95446ae3e94a183f151d27208f65eea7ed263c01)), closes [#34801](https://github.com/bitnami/charts/issues/34801)
+
+## <small>21.0.3 (2025-06-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34717) ([46e4710](https://github.com/bitnami/charts/commit/46e47104483cb8e3d774345ddb068f417d6cda8c)), closes [#34717](https://github.com/bitnami/charts/issues/34717)
+
+## <small>21.0.2 (2025-06-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34710) ([44266ca](https://github.com/bitnami/charts/commit/44266ca8f443622596057153e546317bbd59c445)), closes [#34710](https://github.com/bitnami/charts/issues/34710)
+
+## <small>21.0.1 (2025-06-26)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34678) ([96aa381](https://github.com/bitnami/charts/commit/96aa381320b94ff8663a2b4ccee0ffa4f3bf9932)), closes [#34678](https://github.com/bitnami/charts/issues/34678)
+
+## 21.0.0 (2025-06-26)
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34655) ([ada30f1](https://github.com/bitnami/charts/commit/ada30f145bce0b7d71f1147bc5ce8683163517c5)), closes [#34655](https://github.com/bitnami/charts/issues/34655)
+
+## <small>20.1.4 (2025-06-26)</small>
+
+* [bitnami/nginx] Update dependencies (#34651) ([2298065](https://github.com/bitnami/charts/commit/22980650f8d0c52a76f2d14d43c72dcecb5918aa)), closes [#34651](https://github.com/bitnami/charts/issues/34651)
+
+## <small>20.1.3 (2025-06-16)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34520) ([3e09df1](https://github.com/bitnami/charts/commit/3e09df1c46cb8ace38ddfee51d3666d3dafaa45e)), closes [#34520](https://github.com/bitnami/charts/issues/34520)
+
+## <small>20.1.2 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34476) ([8a8748f](https://github.com/bitnami/charts/commit/8a8748f972eb24459a0a4cce7b1fefbe2b1585e7)), closes [#34476](https://github.com/bitnami/charts/issues/34476)
+
+## <small>20.1.1 (2025-06-13)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34435) ([6ec0d05](https://github.com/bitnami/charts/commit/6ec0d05f23a002fe7e47bb2c85053aa18c533985)), closes [#34435](https://github.com/bitnami/charts/issues/34435)
+
+## 20.1.0 (2025-06-10)
+
+* [bitnami/nginx] Service Monitor support tlsConfig (#34109) ([97011de](https://github.com/bitnami/charts/commit/97011dee108515c01d6850b2e3ba895352439e6e)), closes [#34109](https://github.com/bitnami/charts/issues/34109)
+
+## <small>20.0.8 (2025-06-09)</small>
+
+* [bitnami/nginx] Allow wildcards in ingress.hostname parameter (#34095) ([d4deec1](https://github.com/bitnami/charts/commit/d4deec169a66017c17e8f436cc0a992a500781d4)), closes [#34095](https://github.com/bitnami/charts/issues/34095)
+
+## <small>20.0.7 (2025-06-06)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34206) ([cbc61f9](https://github.com/bitnami/charts/commit/cbc61f961ab08156a64163ede0ccd1b8c902df8f)), closes [#34206](https://github.com/bitnami/charts/issues/34206)
+
+## <small>20.0.6 (2025-06-06)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34168) ([e8387d1](https://github.com/bitnami/charts/commit/e8387d1bd4a0f568865fee07e966689614a6e3ba)), closes [#34168](https://github.com/bitnami/charts/issues/34168)
+
+## <small>20.0.5 (2025-05-30)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#34008) ([12b9b52](https://github.com/bitnami/charts/commit/12b9b529755b81f55643cab2af8cd88d033cf346)), closes [#34008](https://github.com/bitnami/charts/issues/34008)
+
+## <small>20.0.4 (2025-05-29)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#33975) ([bfd2a83](https://github.com/bitnami/charts/commit/bfd2a83eddbb63c72acf7616b122bab3446df4e4)), closes [#33975](https://github.com/bitnami/charts/issues/33975)
+
+## <small>20.0.3 (2025-05-21)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/nginx] Global Cluster Domain Support for AutoGenerated SSL Certificate (#33769) ([13787be](https://github.com/bitnami/charts/commit/13787be69280f20686e9174a7d7bae1625b1fc87)), closes [#33769](https://github.com/bitnami/charts/issues/33769)
+
+## <small>20.0.2 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#33641) ([7328b50](https://github.com/bitnami/charts/commit/7328b50368ed9001a1235a5929721500d46989d0)), closes [#33641](https://github.com/bitnami/charts/issues/33641)
+
+## <small>20.0.1 (2025-05-06)</small>
+
+* [bitnami/nginx] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33413) ([b946af2](https://github.com/bitnami/charts/commit/b946af26c1d520d34d8282d150ba32437b254efa)), closes [#33413](https://github.com/bitnami/charts/issues/33413)
+
+## 20.0.0 (2025-04-24)
+
+* [bitnami/nginx] Release 20.0.0 (#33169) ([c935715](https://github.com/bitnami/charts/commit/c9357150af548e9982f711e7b68b82dc77487031)), closes [#33169](https://github.com/bitnami/charts/issues/33169)
+
+## <small>19.1.1 (2025-04-16)</small>
+
+* [bitnami/nginx] Release 19.1.1 (#33047) ([9664b32](https://github.com/bitnami/charts/commit/9664b32f2d374565e8eb7c95b3ea9218242e8631)), closes [#33047](https://github.com/bitnami/charts/issues/33047)
+
+## 19.1.0 (2025-04-11)
+
+* [bitnami/nginx] feat(nginx-optional-initcontainers): Enable optional initcontainers (#32577) ([f0805ab](https://github.com/bitnami/charts/commit/f0805ab27224a65adc902729d7d334a14f00833a)), closes [#32577](https://github.com/bitnami/charts/issues/32577)
+
+## <small>19.0.5 (2025-04-11)</small>
+
+* [bitnami/nginx] Release 19.0.5 (#32964) ([d38c92a](https://github.com/bitnami/charts/commit/d38c92a6037deda6ff3807e7b26c02fdf9183fbc)), closes [#32964](https://github.com/bitnami/charts/issues/32964)
+
+## <small>19.0.4 (2025-04-02)</small>
+
+* [bitnami/nginx] Ingress hostname dynamic tpl function (#32421) ([4e232c3](https://github.com/bitnami/charts/commit/4e232c32dcced4935ccc378597a0bfb9e1432f63)), closes [#32421](https://github.com/bitnami/charts/issues/32421)
+
+## <small>19.0.3 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/nginx] Add resources to git-clone-repository initcontainer (#32530) ([4c795a8](https://github.com/bitnami/charts/commit/4c795a8f58e03c85e1ca6ae278a2c0214d6f7b92)), closes [#32530](https://github.com/bitnami/charts/issues/32530)
 
 ## <small>19.0.2 (2025-03-12)</small>
 

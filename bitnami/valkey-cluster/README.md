@@ -20,8 +20,6 @@ Looking to use Valkey Cluster in production? Try [VMware Tanzu Application Catal
 
 This chart bootstraps a [Valkey](https://github.com/bitnami/containers/tree/main/bitnami/valkey) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ### Choose between Valkey Helm Chart and Valkey Cluster Helm Chart
 
 You can choose any of the two Valkey Helm charts for deploying a Valkey cluster.

@@ -20,8 +20,6 @@ Looking to use Fluent Bit in production? Try [VMware Tanzu Application Catalog](
 
 This chart bootstraps a [fluent-bit](https://github.com/bitnami/containers/tree/main/bitnami/fluent-bit) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -74,6 +72,25 @@ Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/char
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Configure extraPorts
+
+- Based on your fluent-bit configuration, edit the `extraContainerPorts` and `service.extraPorts` parameters. In the `extraContainerPorts` parameter, set the extra ports that the fluent-bit configuration uses, and in the `service.extraPorts` parameter, set the extra ports to be externally exposed.
+
+  Example:
+
+  ```yaml
+  service:
+    extraPorts:
+      - name: forward
+        port: 24224 # We use port 24224 for receiving logs over TCP
+        protocol: TCP
+        targetPort: forward
+
+  extraContainerPorts:
+    - name: forward
+      containerPort: 24224
+  ```
 
 ### Backup and restore
 
@@ -220,6 +237,7 @@ The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                         |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for fluent-bit container                                                                                                                                 | `[]`                         |
 | `containerPorts.http`                               | Port for HTTP port                                                                                                                                                                                                | `2020`                       |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for fluent-bit containers                                                                                                                                       | `[]`                         |
 | `service.type`                                      | Fluent Bit service type                                                                                                                                                                                           | `ClusterIP`                  |
 | `service.ports.http`                                | Port for HTTP port                                                                                                                                                                                                | `2020`                       |
 | `service.nodePorts.http`                            | Node port for HTTP port                                                                                                                                                                                           | `""`                         |

@@ -1,0 +1,26 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rbac.create -}}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: {{ ternary "ClusterRole" "Role" .Values.rbac.clusterWideAccess }}
+metadata:
+  name: {{ template "common.names.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: gitlab-runner
+    app.kubernetes.io/component: gitlab-runner
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  {{- /* Mimicking the logic from the upstream chart. When rbac.rules is not set, add all objects from the core API Group */}}
+  {{- if not .Values.rbac.rules }}
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["*"]
+  {{- else }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end -}}

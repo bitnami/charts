@@ -34,7 +34,7 @@ it('import and check user information', () => {
     });
     cy.get('#partial-import-file-filename').selectFile(importFile, { action: 'drag-drop' });
     cy.get('[data-testid="users-checkbox"]').click();
-    cy.get('[data-testid="import-button"]').click();
+    cy.get('[data-testid="confirm"]').click();
     cy.contains('record added');
     cy.get('[data-testid="close-button"]').click();
     cy.get('[href*="/users"]').click();

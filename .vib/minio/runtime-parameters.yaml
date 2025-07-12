@@ -4,7 +4,6 @@ auth:
   rootPassword: ComplicatedPassword123!4
 containerPorts:
   api: 9000
-  console: 9003
 podSecurityContext:
   enabled: true
   fsGroup: 1002
@@ -12,10 +11,13 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1002
 service:
-  type: LoadBalancer
   ports:
-    api: 9002
-    console: 80
+    api: 9000
+console:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
 persistence:
   enabled: true
   mountPath: /bitnami/minio/data

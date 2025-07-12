@@ -11,11 +11,20 @@ metadata:
   namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ruler
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if .Values.ruler.statefulsetLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.statefulsetLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.ruler.statefulsetAnnotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.ruler.statefulsetAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.statefulsetAnnotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
-  {{- if not .Values.ruler.autoscaling.enabled }}
+  {{- if not (or .Values.ruler.autoscaling.enabled .Values.ruler.externalAutoscaler) }}
   replicas: {{ .Values.ruler.replicaCount }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.ruler.revisionHistoryLimit }}
@@ -295,12 +304,10 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.ruler.persistence.enabled (not .Values.ruler.persistence.existingClaim) }}
-  {{- if semverCompare ">=1.23-0" (include "common.capabilities.kubeVersion" .) -}}
   {{- if .Values.ruler.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenDeleted }}
     whenScaled: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenScaled }}
-  {{- end }}
   {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1

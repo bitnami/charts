@@ -1,8 +1,93 @@
 # Changelog
 
-## 2.0.2 (2025-03-21)
+## 2.0.23 (2025-07-11)
 
-* [bitnami/nessie] Release 2.0.2 ([#32552](https://github.com/bitnami/charts/pull/32552))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#35021](https://github.com/bitnami/charts/pull/35021))
+
+## <small>2.0.22 (2025-07-11)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35009) ([2147691](https://github.com/bitnami/charts/commit/2147691cc49104ed2a45c1c81377da4637695d94)), closes [#35009](https://github.com/bitnami/charts/issues/35009)
+
+## <small>2.0.21 (2025-07-01)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34742) ([eb9fc5f](https://github.com/bitnami/charts/commit/eb9fc5ff7df04d2b17a10804a924b451f54e949b)), closes [#34742](https://github.com/bitnami/charts/issues/34742)
+
+## <small>2.0.20 (2025-06-23)</small>
+
+* [bitnami/nessie]fix(serviceMonitor): Amend selector (#34584) ([b664005](https://github.com/bitnami/charts/commit/b6640051f9a587405471afc16ac3fb0d48d1f317)), closes [#34584](https://github.com/bitnami/charts/issues/34584)
+
+## <small>2.0.19 (2025-06-18)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34376) ([cd35dd0](https://github.com/bitnami/charts/commit/cd35dd0a560e9e6b20ac40ac1a17cf964cb48515)), closes [#34376](https://github.com/bitnami/charts/issues/34376)
+
+## <small>2.0.18 (2025-06-11)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34356) ([f083cb0](https://github.com/bitnami/charts/commit/f083cb0126461fd6d54571712c989252ed9ae1c8)), closes [#34356](https://github.com/bitnami/charts/issues/34356)
+
+## <small>2.0.17 (2025-06-03)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34082) ([b8618ea](https://github.com/bitnami/charts/commit/b8618eaa19c98df0de955f48b6014216e77b4680)), closes [#34082](https://github.com/bitnami/charts/issues/34082)
+
+## <small>2.0.16 (2025-06-03)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34075) ([a0ae218](https://github.com/bitnami/charts/commit/a0ae21822a4102880be8a6779e37fb73f2596457)), closes [#34075](https://github.com/bitnami/charts/issues/34075)
+
+## <small>2.0.15 (2025-05-30)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34005) ([8c84a1c](https://github.com/bitnami/charts/commit/8c84a1cdd73dd14f095c5e4a2e411737c8218103)), closes [#34005](https://github.com/bitnami/charts/issues/34005)
+
+## <small>2.0.14 (2025-05-30)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33994) ([64d5255](https://github.com/bitnami/charts/commit/64d5255e3e549e29121c4a2f4709deef1b15de5a)), closes [#33994](https://github.com/bitnami/charts/issues/33994)
+
+## <small>2.0.13 (2025-05-27)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33923) ([96474ff](https://github.com/bitnami/charts/commit/96474ff13d799d95981269fce834c8adac41b6b4)), closes [#33923](https://github.com/bitnami/charts/issues/33923)
+
+## <small>2.0.12 (2025-05-27)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33919) ([65d0ba9](https://github.com/bitnami/charts/commit/65d0ba980a0d588b500d978ad305c52b6aa1bfa1)), closes [#33919](https://github.com/bitnami/charts/issues/33919)
+
+## <small>2.0.11 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#33642) ([739257b](https://github.com/bitnami/charts/commit/739257b97477968deb9a19ab0ff32b7f6a973dab)), closes [#33642](https://github.com/bitnami/charts/issues/33642)
+
+## <small>2.0.10 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.10 (#33549) ([b29bdd1](https://github.com/bitnami/charts/commit/b29bdd190c56330769e17f1c23d3ce471f322926)), closes [#33549](https://github.com/bitnami/charts/issues/33549)
+
+## <small>2.0.9 (2025-05-07)</small>
+
+* [bitnami/nessie] Release 2.0.9 (#33536) ([b3fdd10](https://github.com/bitnami/charts/commit/b3fdd10c0105f2ee69620dcd887731985df76289)), closes [#33536](https://github.com/bitnami/charts/issues/33536)
+
+## <small>2.0.8 (2025-05-06)</small>
+
+* [bitnami/nessie] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33412) ([9f42a65](https://github.com/bitnami/charts/commit/9f42a65f1d468cd16c4892f095b6fad804c71cdc)), closes [#33412](https://github.com/bitnami/charts/issues/33412)
+
+## <small>2.0.7 (2025-05-01)</small>
+
+* [bitnami/nessie] Release 2.0.7 (#33279) ([5299ff5](https://github.com/bitnami/charts/commit/5299ff516e7766cc97eb1a45d9df40dc414185ba)), closes [#33279](https://github.com/bitnami/charts/issues/33279)
+
+## <small>2.0.6 (2025-04-26)</small>
+
+* [bitnami/nessie] Release 2.0.6 (#33191) ([be2cd4b](https://github.com/bitnami/charts/commit/be2cd4bf4e81b4db3698b8c38521cef2b6858855)), closes [#33191](https://github.com/bitnami/charts/issues/33191)
+
+## <small>2.0.5 (2025-04-24)</small>
+
+* [bitnami/nessie] Release 2.0.5 (#33171) ([199b095](https://github.com/bitnami/charts/commit/199b095d8455710813cdaf811060865d412f3809)), closes [#33171](https://github.com/bitnami/charts/issues/33171)
+
+## <small>2.0.4 (2025-04-09)</small>
+
+* [bitnami/nessie] Release 2.0.4 (#32913) ([df901a7](https://github.com/bitnami/charts/commit/df901a7694a3f3159eff40c4e976b5dd9c540ea9)), closes [#32913](https://github.com/bitnami/charts/issues/32913)
+
+## <small>2.0.3 (2025-04-08)</small>
+
+* [bitnami/nessie] Release 2.0.3 (#32872) ([d8de398](https://github.com/bitnami/charts/commit/d8de39855a8f2cbd3bd106eaebe62f212d5f762e)), closes [#32872](https://github.com/bitnami/charts/issues/32872)
+
+## <small>2.0.2 (2025-03-21)</small>
+
+* [bitnami/nessie] Release 2.0.2 (#32552) ([15c0d4f](https://github.com/bitnami/charts/commit/15c0d4fd69a7022e2549f25752a10f40b99cbc14)), closes [#32552](https://github.com/bitnami/charts/issues/32552)
 
 ## <small>2.0.1 (2025-03-18)</small>
 

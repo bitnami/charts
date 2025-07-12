@@ -19,7 +19,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.healthIngress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.healthIngress.ingressClassName }}
   ingressClassName: {{ .Values.healthIngress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -31,9 +31,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraPaths  "context" $) | nindent 10 }}
           {{- end }}
           - path: {{ .Values.healthIngress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.healthIngress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.healthIngress.extraHosts }}
@@ -44,9 +42,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.extraPaths  "context" $) | nindent 10 }}
           {{- end }}
           - path: {{ .Values.healthIngress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ .Values.healthIngress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- if .Values.healthIngress.extraRules }}

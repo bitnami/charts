@@ -1,8 +1,77 @@
 # Changelog
 
-## 21.2.0 (2025-03-24)
+## 22.0.2 (2025-07-08)
 
-* [bitnami/drupal] Set `usePasswordFiles=true` by default ([#32342](https://github.com/bitnami/charts/pull/32342))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34864](https://github.com/bitnami/charts/pull/34864))
+
+## <small>22.0.1 (2025-06-26)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34666) ([fa45675](https://github.com/bitnami/charts/commit/fa456755fd35d29276970537041e4bf4adbab0fb)), closes [#34666](https://github.com/bitnami/charts/issues/34666)
+
+## 22.0.0 (2025-06-25)
+
+* [bitnami/drupal] Upgrade MariaDB 11.8 (#34632) ([8ca32ad](https://github.com/bitnami/charts/commit/8ca32ad85ae459efe290028053aaafc1879184a7)), closes [#34632](https://github.com/bitnami/charts/issues/34632)
+
+## <small>21.2.14 (2025-06-25)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34626) ([8eaed7e](https://github.com/bitnami/charts/commit/8eaed7e5d5048b2715cc31367431b25a58625929)), closes [#34626](https://github.com/bitnami/charts/issues/34626)
+
+## <small>21.2.13 (2025-06-19)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34555) ([dbcee8a](https://github.com/bitnami/charts/commit/dbcee8a0b5e14163163aecc2935b908943ec5bdb)), closes [#34555](https://github.com/bitnami/charts/issues/34555)
+
+## <small>21.2.12 (2025-06-13)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34407) ([f9517dd](https://github.com/bitnami/charts/commit/f9517dd38688c89b006a54b34008d937b9c1c063)), closes [#34407](https://github.com/bitnami/charts/issues/34407)
+
+## <small>21.2.11 (2025-06-13)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34389) ([acfe313](https://github.com/bitnami/charts/commit/acfe3134567afe66099a29d30457680bd1b1905f)), closes [#34389](https://github.com/bitnami/charts/issues/34389)
+
+## <small>21.2.10 (2025-06-06)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34176) ([c60236f](https://github.com/bitnami/charts/commit/c60236fee7ecc81f71c8df5044a55a9b0121a7b9)), closes [#34176](https://github.com/bitnami/charts/issues/34176)
+
+## <small>21.2.9 (2025-06-05)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34134) ([cad0bf7](https://github.com/bitnami/charts/commit/cad0bf7670597148be076a4a5a403cfd0091fffb)), closes [#34134](https://github.com/bitnami/charts/issues/34134)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>21.2.8 (2025-05-08)</small>
+
+* [bitnami/drupal] Release 21.2.8 (#33551) ([29bfd06](https://github.com/bitnami/charts/commit/29bfd06799a4a11c5b0b65614400042a9cf35f34)), closes [#33551](https://github.com/bitnami/charts/issues/33551)
+
+## <small>21.2.7 (2025-05-06)</small>
+
+* [bitnami/drupal] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33354) ([06648bb](https://github.com/bitnami/charts/commit/06648bb460b7b064848f4abc3e131d145bb0960c)), closes [#33354](https://github.com/bitnami/charts/issues/33354)
+
+## <small>21.2.6 (2025-04-25)</small>
+
+* [bitnami/drupal] Release 21.2.6 (#33182) ([19023d0](https://github.com/bitnami/charts/commit/19023d0eb33370ea6d231728991cc0444b7fa0b7)), closes [#33182](https://github.com/bitnami/charts/issues/33182)
+
+## <small>21.2.5 (2025-04-22)</small>
+
+* [bitnami/drupal] Release 21.2.5 (#33120) ([34244ba](https://github.com/bitnami/charts/commit/34244ba99597d32a1922f45e439fcc1f5475af8d)), closes [#33120](https://github.com/bitnami/charts/issues/33120)
+
+## <small>21.2.4 (2025-04-09)</small>
+
+* [bitnami/drupal] Release 21.2.4 (#32891) ([6cae25e](https://github.com/bitnami/charts/commit/6cae25e950e2d4b3403c9942df798895426359b9)), closes [#32891](https://github.com/bitnami/charts/issues/32891)
+
+## <small>21.2.3 (2025-04-04)</small>
+
+* [bitnami/drupal] Release 21.2.3 (#32820) ([741b7a6](https://github.com/bitnami/charts/commit/741b7a6399d8856e265de178ab46fc839ece7c95)), closes [#32820](https://github.com/bitnami/charts/issues/32820)
+
+## <small>21.2.2 (2025-04-04)</small>
+
+* [bitnami/drupal] Release 21.2.2 (#32811) ([21e3062](https://github.com/bitnami/charts/commit/21e3062d1521a344fb59aa4d09a9a8e4409153f2)), closes [#32811](https://github.com/bitnami/charts/issues/32811)
+
+## <small>21.2.1 (2025-04-03)</small>
+
+* [bitnami/drupal] Release 21.2.1 (#32788) ([a63e76d](https://github.com/bitnami/charts/commit/a63e76de8aaed9e7fad4da91244c4fd58b684ced)), closes [#32788](https://github.com/bitnami/charts/issues/32788)
+
+## 21.2.0 (2025-03-27)
+
+* [bitnami/drupal] Set `usePasswordFiles=true` by default (#32342) ([ee46d82](https://github.com/bitnami/charts/commit/ee46d82b4b0cfc4b5a8ba878d1594dc35be53143)), closes [#32342](https://github.com/bitnami/charts/issues/32342)
 
 ## <small>21.1.7 (2025-03-19)</small>
 

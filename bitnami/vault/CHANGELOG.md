@@ -1,8 +1,82 @@
 # Changelog
 
+## 1.7.18 (2025-07-09)
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34959](https://github.com/bitnami/charts/pull/34959))
+
+## <small>1.7.17 (2025-07-01)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34640) ([71a3831](https://github.com/bitnami/charts/commit/71a38311640b33d4959c6d58b6566abc15a47ebe)), closes [#34640](https://github.com/bitnami/charts/issues/34640)
+
+## <small>1.7.16 (2025-06-25)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34610) ([31ad11f](https://github.com/bitnami/charts/commit/31ad11f3ac737896ec72ae5be15da214965d4f1a)), closes [#34610](https://github.com/bitnami/charts/issues/34610)
+
+## <small>1.7.15 (2025-06-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34497) ([9945dcc](https://github.com/bitnami/charts/commit/9945dcccf26e66be8b8fb31290ea2e0a23867b2e)), closes [#34497](https://github.com/bitnami/charts/issues/34497)
+
+## <small>1.7.14 (2025-06-11)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34341) ([879863e](https://github.com/bitnami/charts/commit/879863e5262a04e812cd0a6321e51e42774c7151)), closes [#34341](https://github.com/bitnami/charts/issues/34341)
+
+## <small>1.7.13 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34229) ([263a016](https://github.com/bitnami/charts/commit/263a0168d2c510bf13f7b9f6561c53cebdf892fb)), closes [#34229](https://github.com/bitnami/charts/issues/34229)
+
+## <small>1.7.12 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34223) ([3e2144e](https://github.com/bitnami/charts/commit/3e2144e4967bcbf3f1bcd71eb7e9c043dfd00ead)), closes [#34223](https://github.com/bitnami/charts/issues/34223)
+
+## <small>1.7.11 (2025-05-30)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33982) ([86eedf9](https://github.com/bitnami/charts/commit/86eedf97c52efcb887f188919f30c54c61fcb4a1)), closes [#33982](https://github.com/bitnami/charts/issues/33982)
+
+## <small>1.7.10 (2025-05-21)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33791) ([835677c](https://github.com/bitnami/charts/commit/835677cac979e646d0ce903bafedae9b5dc91d5f)), closes [#33791](https://github.com/bitnami/charts/issues/33791)
+
+## <small>1.7.9 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33594) ([7a93af2](https://github.com/bitnami/charts/commit/7a93af29d76c865a334893977f4de5bd5383f04f)), closes [#33594](https://github.com/bitnami/charts/issues/33594)
+
+## <small>1.7.8 (2025-05-07)</small>
+
+* [bitnami/vault] Release 1.7.8 (#33516) ([524f254](https://github.com/bitnami/charts/commit/524f2543ec651adbb58cfe757119f9d1207fd503)), closes [#33516](https://github.com/bitnami/charts/issues/33516)
+
+## <small>1.7.7 (2025-05-07)</small>
+
+* [bitnami/vault] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33445) ([3a89290](https://github.com/bitnami/charts/commit/3a89290df070eb355495262d431f4e1624b31df1)), closes [#33445](https://github.com/bitnami/charts/issues/33445)
+
+## <small>1.7.6 (2025-04-30)</small>
+
+* [bitnami/vault] Release 1.7.6 (#33273) ([3dfb09f](https://github.com/bitnami/charts/commit/3dfb09f99574b2225d693e2803689186817afb35)), closes [#33273](https://github.com/bitnami/charts/issues/33273)
+
+## <small>1.7.5 (2025-04-18)</small>
+
+* [bitnami/vault] Release 1.7.5 (#33075) ([9dfede7](https://github.com/bitnami/charts/commit/9dfede72bb0df747cf0bb2e3c3db210e4447fe80)), closes [#33075](https://github.com/bitnami/charts/issues/33075)
+
+## <small>1.7.4 (2025-04-14)</small>
+
+* [bitnami/vault] bugfix: enable back server.replicaCount parameter (#32992) ([6f734f4](https://github.com/bitnami/charts/commit/6f734f419d4809e7b80be9f2c412e2f8c1c99421)), closes [#32992](https://github.com/bitnami/charts/issues/32992)
+
+## <small>1.7.3 (2025-04-09)</small>
+
+* [bitnami/vault] Release 1.7.3 (#32919) ([32020c1](https://github.com/bitnami/charts/commit/32020c1a7047c5717374c972e6ca755545477650)), closes [#32919](https://github.com/bitnami/charts/issues/32919)
+
+## <small>1.7.2 (2025-04-04)</small>
+
+* [bitnami/vault] Release 1.7.2 (#32819) ([79a15c6](https://github.com/bitnami/charts/commit/79a15c68659a535de55bdcaffb37824fd844af6e)), closes [#32819](https://github.com/bitnami/charts/issues/32819)
+
+## <small>1.7.1 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/vault] Release 1.7.1 (#32765) ([af1ea05](https://github.com/bitnami/charts/commit/af1ea053672509dbaef2b96426d9bf63a166eaa1)), closes [#32765](https://github.com/bitnami/charts/issues/32765)
+
 ## 1.7.0 (2025-03-11)
 
-* [bitnami/vault] Remove server.replicaCount parameter ([#32384](https://github.com/bitnami/charts/pull/32384))
+* [bitnami/vault] Remove server.replicaCount parameter (#32384) ([3dcf30f](https://github.com/bitnami/charts/commit/3dcf30f59eb2febfd69f48ad06f31b51e7bb69b4)), closes [#32384](https://github.com/bitnami/charts/issues/32384)
 
 ## <small>1.6.10 (2025-03-05)</small>
 

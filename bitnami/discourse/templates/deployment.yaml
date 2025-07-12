@@ -118,6 +118,17 @@ spec:
           {{- if .Values.discourse.extraEnvVars }}
           env:
             {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraEnvVars "context" $) | nindent 12 }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}
+            {{- if .Values.discourse.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.discourse.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.discourse.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.discourse.extraEnvVarsSecret }}
+            {{- end }}
           {{- end }}
           {{- if .Values.discourse.resources }}
           resources: {{- toYaml .Values.discourse.resources | nindent 12 }}

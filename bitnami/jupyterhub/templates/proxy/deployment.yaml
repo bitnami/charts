@@ -94,7 +94,6 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - configurable-http-proxy
             - "--ip=::"
             - "--api-ip=::"
             - --api-port={{ .Values.proxy.containerPort.api }}

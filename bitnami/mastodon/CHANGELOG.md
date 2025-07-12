@@ -1,8 +1,78 @@
 # Changelog
 
-## 9.2.7 (2025-03-13)
+## 13.0.6 (2025-07-06)
 
-* [bitnami/mastodon] Release 9.2.7 ([#32447](https://github.com/bitnami/charts/pull/32447))
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#34812](https://github.com/bitnami/charts/pull/34812))
+
+## <small>13.0.5 (2025-07-02)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34771) ([6a2aa5d](https://github.com/bitnami/charts/commit/6a2aa5dfcdc7f7ec3de69863e716e17b8e8ba2e6)), closes [#34771](https://github.com/bitnami/charts/issues/34771)
+
+## <small>13.0.4 (2025-06-26)</small>
+
+* [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob defin ([b053acd](https://github.com/bitnami/charts/commit/b053acda4b4f84a8940a9f58973dc60f1850c517)), closes [#33981](https://github.com/bitnami/charts/issues/33981)
+
+## <small>13.0.3 (2025-06-23)</small>
+
+* [bitnami/mastodon] fix broken PDB Label matching (#34566) ([d8270d4](https://github.com/bitnami/charts/commit/d8270d4678b71c0081744873cb64def675bb8e62)), closes [#34566](https://github.com/bitnami/charts/issues/34566) [#34544](https://github.com/bitnami/charts/issues/34544)
+
+## <small>13.0.2 (2025-06-09)</small>
+
+* [bitnami/mastodon] Disable MinIO Console (#34266) ([e3949da](https://github.com/bitnami/charts/commit/e3949daf52445ad142cfa3ff80f218d470dd8539)), closes [#34266](https://github.com/bitnami/charts/issues/34266)
+
+## <small>13.0.1 (2025-06-05)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34126) ([f5df349](https://github.com/bitnami/charts/commit/f5df349c81da25bad94adeba8561f1b96372ccd7)), closes [#34126](https://github.com/bitnami/charts/issues/34126)
+
+## 13.0.0 (2025-06-04)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mastodon] feat: major version due to Minio major bump (#34088) ([0ee5707](https://github.com/bitnami/charts/commit/0ee57073d3245196ded9b8225b932e91ba4338c1)), closes [#34088](https://github.com/bitnami/charts/issues/34088)
+
+## 12.0.0 (2025-05-07)
+
+* [bitnami/mastodon] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33505) ([8501340](https://github.com/bitnami/charts/commit/8501340dac19dbffe07789f4faae139131a5a091)), closes [#33505](https://github.com/bitnami/charts/issues/33505)
+
+## <small>11.0.2 (2025-05-06)</small>
+
+* [bitnami/mastodon] Release 11.0.2 (#33463) ([336ac7a](https://github.com/bitnami/charts/commit/336ac7a11f3751e2c1570b084530007e68cc708c)), closes [#33463](https://github.com/bitnami/charts/issues/33463)
+
+## <small>11.0.1 (2025-05-06)</small>
+
+* [bitnami/mastodon] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3339 ([94c9020](https://github.com/bitnami/charts/commit/94c902008f4dda66063d6820e443afadf72fce95)), closes [#33395](https://github.com/bitnami/charts/issues/33395)
+
+## 11.0.0 (2025-04-30)
+
+* [bitnami/mastodon] major: Upgrade elasticsearch subchart to 22.x.x (ES 9.x) (#33264) ([ffb165a](https://github.com/bitnami/charts/commit/ffb165a2535d93a78333d01aaea1a37bb7141490)), closes [#33264](https://github.com/bitnami/charts/issues/33264)
+
+## <small>10.1.1 (2025-04-09)</small>
+
+* [bitnami/mastodon] Release 10.1.1 (#32909) ([42032e2](https://github.com/bitnami/charts/commit/42032e24c96811e5809ba6991bd1b59d43c075fb)), closes [#32909](https://github.com/bitnami/charts/issues/32909)
+
+## 10.1.0 (2025-04-04)
+
+* [bitnami/mastodon] Set `usePasswordFiles=true` by default (#32367) ([410b9a2](https://github.com/bitnami/charts/commit/410b9a27153710a4fae9a1eeb1ca182c63e76118)), closes [#32367](https://github.com/bitnami/charts/issues/32367)
+
+## <small>10.0.1 (2025-04-03)</small>
+
+* [bitnami/mastodon] Release 10.0.1 (#32803) ([41f62c8](https://github.com/bitnami/charts/commit/41f62c8333b88d11169ca08f7f1c8ce9b3a1ed73)), closes [#32803](https://github.com/bitnami/charts/issues/32803)
+
+## 10.0.0 (2025-04-03)
+
+* [bitnami/mastodon] Bump MinIO major version 16.x.x (#32700) ([dfd61a0](https://github.com/bitnami/charts/commit/dfd61a00e9e7ac67251f68b3a273e7b6368e84ff)), closes [#32700](https://github.com/bitnami/charts/issues/32700)
+
+## <small>9.2.9 (2025-04-02)</small>
+
+* [bitnami/mastodon] Release 9.2.9 (#32785) ([14e9623](https://github.com/bitnami/charts/commit/14e96230f82d5a26ae12bd381a43819fd1ec2847)), closes [#32785](https://github.com/bitnami/charts/issues/32785)
+
+## <small>9.2.8 (2025-04-01)</small>
+
+* [bitnami/mastodon] Release 9.2.8 (#32711) ([256efe8](https://github.com/bitnami/charts/commit/256efe8969ab8f46739d15b8d25ccf42988521c2)), closes [#32711](https://github.com/bitnami/charts/issues/32711)
+
+## <small>9.2.7 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mastodon] Release 9.2.7 (#32447) ([9e82185](https://github.com/bitnami/charts/commit/9e8218519bb1197509174b5c88f1dff86e8daea4)), closes [#32447](https://github.com/bitnami/charts/issues/32447)
 
 ## <small>9.2.6 (2025-03-10)</small>
 

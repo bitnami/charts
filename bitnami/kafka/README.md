@@ -14,13 +14,13 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
+> Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.kafka-cnab) to see the listing on Azure Marketplace.
+
 Looking to use Apache Kafka in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
 ## Introduction
 
 This chart bootstraps a [Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -138,9 +138,11 @@ externalAccess.enabled=true
 externalAccess.broker.service.type=LoadBalancer
 externalAccess.controller.service.type=LoadBalancer
 externalAccess.broker.service.ports.external=9094
-externalAccess.controller.service.containerPorts.external=9094
+externalAccess.controller.service.ports.external=9094
 defaultInitContainers.autoDiscovery.enabled=true
 serviceAccount.create=true
+broker.automountServiceAccountToken=true
+controller.automountServiceAccountToken=true
 rbac.create=true
 ```
 
@@ -339,7 +341,7 @@ extraDeploy:
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
-        bootstrap.servers = {{ include "common.names.fullname" . }}-0.{{ include "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+        bootstrap.servers = {{ include "common.names.fullname" . }}-controller-0.{{ include "common.names.fullname" . }}-controller-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.client }}
         ...
       mongodb.properties: |-
         connection.uri=mongodb://root:password@mongodb-hostname:27017
@@ -368,7 +370,7 @@ FROM bitnami/kafka:latest
 RUN mkdir -p /opt/bitnami/kafka/plugins && \
     cd /opt/bitnami/kafka/plugins && \
     curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar
-CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
+CMD /opt/bitnami/kafka/bin/connect-standalone.sh /bitnami/kafka/config/connect-standalone.properties /bitnami/kafka/config/mongo.properties
 ```
 
 ### Persistence
@@ -430,6 +432,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `image.debug`                         | Specify if debug values should be set                                                                                                                                                                      | `false`                                               |
 | `clusterId`                           | Kafka Kraft cluster ID (ignored if existingKraftSecret is set). A random cluster ID will be generated the 1st time Kraft is initialized if not set.                                                        | `""`                                                  |
 | `existingKraftSecret`                 | Name of the secret containing the Kafka KRaft Cluster ID and one directory ID per controller replica                                                                                                       | `""`                                                  |
+| `kraftVersion`                        | Kraft version to be used. It determines whether static quorum (kraftVersion=0) or dynamic quorum (kraftVersion=1) will be used.                                                                            | `1`                                                   |
 | `config`                              | Specify content for Kafka configuration (auto-generated based on other parameters otherwise)                                                                                                               | `{}`                                                  |
 | `overrideConfiguration`               | Kafka common configuration override. Values defined here takes precedence over the ones defined at `config`                                                                                                | `{}`                                                  |
 | `existingConfigmap`                   | Name of an existing ConfigMap with the Kafka configuration                                                                                                                                                 | `""`                                                  |
@@ -638,6 +641,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `controller.hostIPC`                                           | Specify if host IPC should be enabled for Kafka pods                                                                                                                                                                                    | `false`               |
 | `controller.podLabels`                                         | Extra labels for Kafka pods                                                                                                                                                                                                             | `{}`                  |
 | `controller.podAnnotations`                                    | Extra annotations for Kafka pods                                                                                                                                                                                                        | `{}`                  |
+| `controller.topologyKey`                                       | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                                                                                                                                                   | `""`                  |
 | `controller.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                     | `""`                  |
 | `controller.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                | `soft`                |
 | `controller.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                               | `""`                  |
@@ -762,6 +766,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `broker.hostIPC`                                           | Specify if host IPC should be enabled for Kafka pods                                                                                                                                                                            | `false`               |
 | `broker.podLabels`                                         | Extra labels for Kafka pods                                                                                                                                                                                                     | `{}`                  |
 | `broker.podAnnotations`                                    | Extra annotations for Kafka pods                                                                                                                                                                                                | `{}`                  |
+| `broker.topologyKey`                                       | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                                                                                                                                           | `""`                  |
 | `broker.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                             | `""`                  |
 | `broker.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                        | `soft`                |
 | `broker.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                       | `""`                  |
@@ -986,8 +991,8 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `provisioning.tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                                              | `[]`                  |
 | `provisioning.extraProvisioningCommands`                         | Extra commands to run to provision cluster resources                                                                                                                                                                                        | `[]`                  |
 | `provisioning.parallel`                                          | Number of provisioning commands to run at the same time                                                                                                                                                                                     | `1`                   |
-| `provisioning.preScript`                                         | Extra bash script to run before topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations                                                                                                                 | `""`                  |
-| `provisioning.postScript`                                        | Extra bash script to run after topic provisioning. $CLIENT_CONF is path to properties file with most needed configurations                                                                                                                  | `""`                  |
+| `provisioning.preScript`                                         | Extra bash script to run before topic provisioning. /shared/client.properties is path to properties file with most needed configurations                                                                                                    | `""`                  |
+| `provisioning.postScript`                                        | Extra bash script to run after topic provisioning. /shared/client.properties is path to properties file with most needed configurations                                                                                                     | `""`                  |
 | `provisioning.auth.tls.type`                                     | Format to use for TLS certificates. Allowed types: `JKS` and `PEM`.                                                                                                                                                                         | `jks`                 |
 | `provisioning.auth.tls.certificatesSecret`                       | Existing secret containing the TLS certificates for the Kafka provisioning Job.                                                                                                                                                             | `""`                  |
 | `provisioning.auth.tls.cert`                                     | The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)                                                                                                                                               | `tls.crt`             |
@@ -1060,6 +1065,15 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 32.3.0
+
+We have introduced the value `kraftVersion` to help control the change from static quorum to dynamic quorum.
+
+By default, new clusters will be deployed with the new dynamic quorum (kraftVersion=1), but users upgrading from Kafka 3.x may need to modify the default values to continue using static quorum (kraftVersion=0).
+That is because Kafka 4.0 does not yet support switching from static quorum (controller.quorum.voters) to dynamic quorum (controller.quorum.bootstrap.servers), causing upgrades to fail (#34015).
+
+For more information please check [Kafka documentation](https://kafka.apache.org/documentation/#static_versus_dynamic_kraft_quorums).
+
 ### To 32.0.0
 
 This major release bumps Kafka major version to `4.y.z` series. This version implies a significant milestone given now Kafka operates operate entirely without Apache ZooKeeper, running in KRaft mode by default. As a consequence, **ZooKeeper is no longer a chart dependency and every related parameter has been removed.**. Upgrading from `31.y.z` chart version is not supported unless KRaft mode was already enabled.
@@ -1080,6 +1094,9 @@ Other notable changes:
 - `externalAccess.autoDiscovery` parameters have been moved under `defaultInitContainers` parameter.
 - `controller.initContainerResources` and `broker.initContainerResources` have been removed. Use `defaultInitContainers.prepareConfig.resources` instead.
 - `extraInit` has been renamed to `defaultInitContainers.prepareConfig.extraInit`.
+- `extraConfig` has been replaced with `overrideConfiguration`.
+- provisioning variable `$CLIENT_CONF` has been removed use `/shared/client.properties`.
+- If using your own SSL certs you will need to disable `tls.autoGenerated.enabled`
 
 ### To 31.1.0
 

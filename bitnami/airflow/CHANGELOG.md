@@ -1,8 +1,89 @@
 # Changelog
 
-## 22.7.2 (2025-03-25)
+## 24.2.1 (2025-07-09)
 
-* bitnami/airflow  Fix indentation error when providing setupDBJob.resources in values ([#32599](https://github.com/bitnami/charts/pull/32599))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34953](https://github.com/bitnami/charts/pull/34953))
+
+## 24.2.0 (2025-06-25)
+
+* [bitnami/airflow] Move venv to emptydir volume (#34560) ([d2e3dc5](https://github.com/bitnami/charts/commit/d2e3dc579cc0e96c8b09fb6083c504b85a3d5c08)), closes [#34560](https://github.com/bitnami/charts/issues/34560)
+
+## <small>24.1.5 (2025-06-23)</small>
+
+* [bitnami/airflow] Configure correct section for api/web secret_key (#34581) ([fe92d1b](https://github.com/bitnami/charts/commit/fe92d1b2ed3277e8c8549f5732544253ea1178ba)), closes [#34581](https://github.com/bitnami/charts/issues/34581)
+
+## <small>24.1.4 (2025-06-19)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34306) ([24c47d3](https://github.com/bitnami/charts/commit/24c47d393449d1e7d1a62f60ba2ef5db27068239)), closes [#34306](https://github.com/bitnami/charts/issues/34306)
+
+## <small>24.1.3 (2025-06-16)</small>
+
+* [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBui ([047f06d](https://github.com/bitnami/charts/commit/047f06d129b6587a1d6e9615603bb7c8c2a78ff0)), closes [#34382](https://github.com/bitnami/charts/issues/34382)
+
+## <small>24.1.2 (2025-06-06)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34221) ([f42b7ae](https://github.com/bitnami/charts/commit/f42b7aefc905b479c54b142d7c0152fc9fa5c36d)), closes [#34221](https://github.com/bitnami/charts/issues/34221)
+
+## <small>24.1.1 (2025-05-26)</small>
+
+* [bitnami/airflow] update README to match deprecated values (#33602) ([8622ccf](https://github.com/bitnami/charts/commit/8622ccfcb0445d63b25b915c9d18edeb1f72061a)), closes [#33602](https://github.com/bitnami/charts/issues/33602)
+
+## 24.1.0 (2025-05-14)
+
+* [bitnami/airflow] Validate executors and fix LocalExecutor (#33696) ([56e2e5f](https://github.com/bitnami/charts/commit/56e2e5f15cf318cf7d973da4c694623cbb142ed0)), closes [#33696](https://github.com/bitnami/charts/issues/33696)
+
+## <small>24.0.3 (2025-05-13)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33681) ([0486d35](https://github.com/bitnami/charts/commit/0486d357b19db6482cb423ad0dbcbe96b2ef74db)), closes [#33681](https://github.com/bitnami/charts/issues/33681)
+
+## <small>24.0.2 (2025-05-12)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33617) ([96d1206](https://github.com/bitnami/charts/commit/96d1206faf46aa9b9e45f82eb49bc468248bfa64)), closes [#33617](https://github.com/bitnami/charts/issues/33617)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>24.0.1 (2025-05-08)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#33572) ([9daa628](https://github.com/bitnami/charts/commit/9daa628a3e71a75a154775e971952d27614b4122)), closes [#33572](https://github.com/bitnami/charts/issues/33572)
+
+## 24.0.0 (2025-05-07)
+
+* [bitnami/airflow] feat!: :arrow_up: :boom: Bump Redis(R) to 8.0 (#33518) ([fb8524a](https://github.com/bitnami/charts/commit/fb8524ac91a57c98a817a73ba7cf518064801df8)), closes [#33518](https://github.com/bitnami/charts/issues/33518)
+
+## <small>23.1.1 (2025-05-07)</small>
+
+* [bitnami/airflow] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33333 ([c74d5b3](https://github.com/bitnami/charts/commit/c74d5b3ea31edbde920c94b16648b88b6ee15dd7)), closes [#33333](https://github.com/bitnami/charts/issues/33333)
+
+## 23.1.0 (2025-05-06)
+
+* [bitnami/airflow] Expose topologyKey for all objects (#33461) ([b320070](https://github.com/bitnami/charts/commit/b320070f3688a4ef2ffbb623b181ebbc72bf9bf8)), closes [#33461](https://github.com/bitnami/charts/issues/33461)
+
+## <small>23.0.4 (2025-05-06)</small>
+
+* [bitnami/airflow] Fix baseUrl generation with ingress enabled (#33399) ([461bc9f](https://github.com/bitnami/charts/commit/461bc9face35a3b6339f012c60cf4622c3d18ac6)), closes [#33399](https://github.com/bitnami/charts/issues/33399)
+
+## <small>23.0.3 (2025-05-05)</small>
+
+* [bitnami/airflow] Fix svc name for Ingress backend (#33316) ([d814a50](https://github.com/bitnami/charts/commit/d814a50bfb2756a817cbd4f66abbba71d1b74b63)), closes [#33316](https://github.com/bitnami/charts/issues/33316)
+
+## <small>23.0.2 (2025-05-01)</small>
+
+* [bitnami/airflow] Minor performance improvements (#33276) ([be6729e](https://github.com/bitnami/charts/commit/be6729e5675d0bd77ab21211dad18b6ab6b7efea)), closes [#33276](https://github.com/bitnami/charts/issues/33276)
+
+## <small>23.0.1 (2025-04-29)</small>
+
+* [bitnami/airflow] Release 23.0.1 (#33254) ([704baf2](https://github.com/bitnami/charts/commit/704baf2653410238a5a1365afc39aa374b375ad1)), closes [#33254](https://github.com/bitnami/charts/issues/33254)
+
+## 23.0.0 (2025-04-29)
+
+* [bitnami/airflow] Release 23.0.0 (#33141) ([2932247](https://github.com/bitnami/charts/commit/29322473955e7aba4b46118390e8e50db219e95e)), closes [#33141](https://github.com/bitnami/charts/issues/33141)
+
+## <small>22.7.3 (2025-04-21)</small>
+
+* [bitnami/airflow] Release 22.7.3 (#33087) ([c62ad9b](https://github.com/bitnami/charts/commit/c62ad9b97dad33d09d2888d21066d9d25cafeed5)), closes [#33087](https://github.com/bitnami/charts/issues/33087)
+
+## <small>22.7.2 (2025-03-25)</small>
+
+* bitnami/airflow  Fix indentation error when providing setupDBJob.resources in values (#32599) ([96b7651](https://github.com/bitnami/charts/commit/96b76511ff0c016e787ec1dae21494591254c367)), closes [#32599](https://github.com/bitnami/charts/issues/32599)
 
 ## <small>22.7.1 (2025-03-22)</small>
 

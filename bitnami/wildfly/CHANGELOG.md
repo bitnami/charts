@@ -1,8 +1,53 @@
 # Changelog
 
-## 23.0.6 (2025-03-27)
+## 24.0.9 (2025-07-01)
 
-* [bitnami/wildfly] Release 23.0.6 ([#32630](https://github.com/bitnami/charts/pull/32630))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#34758](https://github.com/bitnami/charts/pull/34758))
+
+## <small>24.0.8 (2025-06-11)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#34345) ([aeeefaa](https://github.com/bitnami/charts/commit/aeeefaa6257dc3810b54479595ae8902a1c4d87e)), closes [#34345](https://github.com/bitnami/charts/issues/34345)
+
+## <small>24.0.7 (2025-05-28)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33949) ([8748d8f](https://github.com/bitnami/charts/commit/8748d8ff57c3688f55b3e7c48c3613ebb7ed5c89)), closes [#33949](https://github.com/bitnami/charts/issues/33949)
+
+## <small>24.0.6 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#33724) ([addf9e6](https://github.com/bitnami/charts/commit/addf9e6f6515936d8ffb2b1f2fce7897aba39f70)), closes [#33724](https://github.com/bitnami/charts/issues/33724)
+
+## <small>24.0.5 (2025-05-06)</small>
+
+* [bitnami/wildfly] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33448 ([ec8802e](https://github.com/bitnami/charts/commit/ec8802e1a337503834208604cdb3f90914436f9b)), closes [#33448](https://github.com/bitnami/charts/issues/33448)
+
+## <small>24.0.4 (2025-04-22)</small>
+
+* [bitnami/wildfly] Release 24.0.4 (#33127) ([4a570aa](https://github.com/bitnami/charts/commit/4a570aa6df4b595c59fcc5e7bb58cc447c640359)), closes [#33127](https://github.com/bitnami/charts/issues/33127)
+
+## <small>24.0.3 (2025-04-22)</small>
+
+* [bitnami/wildfly] Release 24.0.3 (#33123) ([238f70d](https://github.com/bitnami/charts/commit/238f70d96013729cbe5d6c37dcb135d0b3d3de60)), closes [#33123](https://github.com/bitnami/charts/issues/33123)
+
+## <small>24.0.2 (2025-04-21)</small>
+
+* [bitnami/wildfly] Release 24.0.2 (#33095) ([0150f2a](https://github.com/bitnami/charts/commit/0150f2a6f6d7d38de995785fa4fee75f4f8f1756)), closes [#33095](https://github.com/bitnami/charts/issues/33095)
+
+## <small>24.0.1 (2025-04-15)</small>
+
+* [bitnami/wildfly] Release 24.0.1 (#33019) ([ab8e7f5](https://github.com/bitnami/charts/commit/ab8e7f596ddaa48ac6a91d7a16a59a46629e196a)), closes [#33019](https://github.com/bitnami/charts/issues/33019)
+
+## 24.0.0 (2025-04-11)
+
+* [bitnami/wildfly] Release 24.0.0 (#32971) ([410f444](https://github.com/bitnami/charts/commit/410f4447e395b717bbd86fb7fa7db024d3ca50fb)), closes [#32971](https://github.com/bitnami/charts/issues/32971)
+
+## 23.1.0 (2025-04-04)
+
+* [bitnami/wildfly] Set `usePasswordFiles=true` by default (#32704) ([5793762](https://github.com/bitnami/charts/commit/579376244d9acd91eaae547fbf9011a3e8e022aa)), closes [#32704](https://github.com/bitnami/charts/issues/32704)
+
+## <small>23.0.6 (2025-03-27)</small>
+
+* [bitnami/wildfly] Release 23.0.6 (#32630) ([a28ac2f](https://github.com/bitnami/charts/commit/a28ac2f0c9ed06113d9c4a03db96e15d540422db)), closes [#32630](https://github.com/bitnami/charts/issues/32630)
 
 ## <small>23.0.5 (2025-03-13)</small>
 

@@ -1,0 +1,64 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.thanosRuler.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kube-prometheus.thanosRuler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" (include "common.images.version" (dict "imageRoot" .Values.thanosRuler.image "chart" .Chart)) }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.thanosRuler.service.labels .Values.commonLabels $versionLabel) "context" .) }}
+  labels: {{ include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+  {{- if or .Values.thanosRuler.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{ include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.thanosRuler.service.type }}
+  {{- if and .Values.thanosRuler.service.clusterIP (eq .Values.thanosRuler.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.thanosRuler.service.clusterIP }}
+  {{- end }}
+  {{- if ne .Values.thanosRuler.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.thanosRuler.service.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and .Values.thanosRuler.service.loadBalancerIP (eq .Values.thanosRuler.service.type "LoadBalancer") }}
+  loadBalancerIP: {{ .Values.thanosRuler.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.thanosRuler.service.type "LoadBalancer") .Values.thanosRuler.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ toYaml .Values.thanosRuler.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.thanosRuler.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if and (or (eq .Values.thanosRuler.service.type "NodePort") (eq .Values.thanosRuler.service.type "LoadBalancer")) .Values.thanosRuler.service.nodePorts.http }}
+      nodePort: {{ .Values.thanosRuler.service.nodePorts.http }}
+      {{- else if eq .Values.thanosRuler.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - port: {{ .Values.thanosRuler.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if and (or (eq .Values.thanosRuler.service.type "NodePort") (eq .Values.thanosRuler.service.type "LoadBalancer")) .Values.thanosRuler.service.nodePorts.grpc }}
+      nodePort: {{ .Values.thanosRuler.service.nodePorts.grpc }}
+      {{- else if eq .Values.thanosRuler.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.thanosRuler.service.extraPorts }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if .Values.thanosRuler.service.labelSelectorsOverride }}
+    {{ include "common.tplvalues.render" (dict "value" .Values.thanosRuler.service.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.thanosRuler.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: thanos-ruler
+    {{- end }}
+{{- end }}

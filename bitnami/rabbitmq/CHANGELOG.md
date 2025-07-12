@@ -1,8 +1,77 @@
 # Changelog
 
-## 15.4.0 (2025-03-17)
+## 16.0.10 (2025-07-03)
 
-* [bitnami/rabbitmq] allow to configure trafficDistribution ([#32443](https://github.com/bitnami/charts/pull/32443))
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#34789](https://github.com/bitnami/charts/pull/34789))
+
+## <small>16.0.9 (2025-06-25)</small>
+
+* [bitnami/rabbitmq] Update dependencies (#34616) ([31f65af](https://github.com/bitnami/charts/commit/31f65af3c533a97ee52328f1a055f03e7f6d7efb)), closes [#34616](https://github.com/bitnami/charts/issues/34616)
+
+## <small>16.0.8 (2025-06-13)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34484) ([a7379b4](https://github.com/bitnami/charts/commit/a7379b406abad89931455da3354fc85eed4df300)), closes [#34484](https://github.com/bitnami/charts/issues/34484)
+
+## <small>16.0.7 (2025-06-09)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34276) ([8e7d44a](https://github.com/bitnami/charts/commit/8e7d44a8fd17b6ab8c32c904fcc34c4aa5b23375)), closes [#34276](https://github.com/bitnami/charts/issues/34276)
+
+## <small>16.0.6 (2025-06-05)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34122) ([073e68a](https://github.com/bitnami/charts/commit/073e68ae186cf2844d608663f413b37c6732d830)), closes [#34122](https://github.com/bitnami/charts/issues/34122)
+
+## <small>16.0.5 (2025-06-02)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34031) ([8e3fe0b](https://github.com/bitnami/charts/commit/8e3fe0b70144eb8c11df19e525c53d1b63c0c52c)), closes [#34031](https://github.com/bitnami/charts/issues/34031)
+
+## <small>16.0.4 (2025-05-30)</small>
+
+* [bitnami/rabbitmq] Update dependencies (#33985) ([f882b31](https://github.com/bitnami/charts/commit/f882b31ca02acff4767a3ee142edce535057d90c)), closes [#33985](https://github.com/bitnami/charts/issues/33985)
+
+## <small>16.0.3 (2025-05-23)</small>
+
+* [bitnami/*] Add CNAB link for charts on Azure MP (#33695) ([6312371](https://github.com/bitnami/charts/commit/63123718de94dbedd798d380807b57031e98ed4f)), closes [#33695](https://github.com/bitnami/charts/issues/33695)
+* [bitnami/*] Update CNAB tip (#33741) ([2bc74f3](https://github.com/bitnami/charts/commit/2bc74f3f539481ceaa12833c114047583912b748)), closes [#33741](https://github.com/bitnami/charts/issues/33741)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#33860) ([fd7de7d](https://github.com/bitnami/charts/commit/fd7de7d00b67501ed1a50d8abf1b725c234cbd59)), closes [#33860](https://github.com/bitnami/charts/issues/33860)
+
+## <small>16.0.2 (2025-05-06)</small>
+
+* [bitnami/rabbitmq] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#3342 ([9ca5aa5](https://github.com/bitnami/charts/commit/9ca5aa5e3312617ce24d85efe33cc1d696495a25)), closes [#33426](https://github.com/bitnami/charts/issues/33426)
+* [bitnami/rabbitmq] fixed validation for memoryHighWatermark using resourcesPreset (#33186) ([c864596](https://github.com/bitnami/charts/commit/c86459615a6a5bf186b08e5c70cf7d9b74dbfbea)), closes [#33186](https://github.com/bitnami/charts/issues/33186)
+
+## 16.0.0 (2025-04-23)
+
+* [bitnami/rabbitmq] Release 16.0.0 (#33138) ([7ba0ac5](https://github.com/bitnami/charts/commit/7ba0ac515175806c1617f5509d18e395cc4ddb6b)), closes [#33138](https://github.com/bitnami/charts/issues/33138)
+
+## <small>15.5.3 (2025-04-14)</small>
+
+* [bitnami/rabbitmq] Release 15.5.3 (#32997) ([d3ea559](https://github.com/bitnami/charts/commit/d3ea559a3f698dd1aee57d179598cd59d31ea260)), closes [#32997](https://github.com/bitnami/charts/issues/32997)
+
+## <small>15.5.2 (2025-04-14)</small>
+
+* [bitnami/rabbitmq] Release 15.5.2 (#32995) ([b9930e0](https://github.com/bitnami/charts/commit/b9930e0f17873bea04e5bceae164ac954bf00004)), closes [#32995](https://github.com/bitnami/charts/issues/32995)
+
+## <small>15.5.1 (2025-04-09)</small>
+
+* [bitnami/rabbitmq] Release 15.5.1 (#32894) ([ab383a2](https://github.com/bitnami/charts/commit/ab383a2f6ec2e7c14a1b57e73860fbe086b982bb)), closes [#32894](https://github.com/bitnami/charts/issues/32894)
+
+## 15.5.0 (2025-04-04)
+
+* [bitnami/rabbitmq] Set `usePasswordFiles=true` by default (#32768) ([4a88674](https://github.com/bitnami/charts/commit/4a886740c6abb96f510eb6736de03737e60e8835)), closes [#32768](https://github.com/bitnami/charts/issues/32768)
+
+## <small>15.4.2 (2025-04-03)</small>
+
+* [bitnami/rabbitmq] Release 15.4.2 (#32793) ([b6e252b](https://github.com/bitnami/charts/commit/b6e252bd85d43b7686ff0c9b525b91563e557af8)), closes [#32793](https://github.com/bitnami/charts/issues/32793)
+
+## <small>15.4.1 (2025-03-28)</small>
+
+* [bitnami/rabbitmq] Release 15.4.1 (#32679) ([b941af0](https://github.com/bitnami/charts/commit/b941af0e5e720e5bbd7c34cf16f3c65ca5e6be50)), closes [#32679](https://github.com/bitnami/charts/issues/32679)
+
+## 15.4.0 (2025-03-19)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/rabbitmq] allow to configure trafficDistribution (#32443) ([49e8182](https://github.com/bitnami/charts/commit/49e81822b9ebe29f544f6276d367489cdb0c121d)), closes [#32443](https://github.com/bitnami/charts/issues/32443)
 
 ## <small>15.3.3 (2025-02-26)</small>
 

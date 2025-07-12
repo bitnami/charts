@@ -1,8 +1,58 @@
 # Changelog
 
-## 5.1.12 (2025-03-08)
+## 5.1.24 (2025-07-09)
 
-* [bitnami/jaeger] Release 5.1.12 ([#32372](https://github.com/bitnami/charts/pull/32372))
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#34908](https://github.com/bitnami/charts/pull/34908))
+
+## <small>5.1.23 (2025-07-05)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34810) ([47a3e3b](https://github.com/bitnami/charts/commit/47a3e3bf734817bd046dbcaa3b2029e1efdcf7b7)), closes [#34810](https://github.com/bitnami/charts/issues/34810)
+
+## <small>5.1.22 (2025-06-13)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34450) ([2067b37](https://github.com/bitnami/charts/commit/2067b37a0b959b5e99efc3c8e0ac76f2d88e7f20)), closes [#34450](https://github.com/bitnami/charts/issues/34450)
+
+## <small>5.1.21 (2025-06-10)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34326) ([8ef7658](https://github.com/bitnami/charts/commit/8ef765822341afb8ccb641c4e69b52e125d64e06)), closes [#34326](https://github.com/bitnami/charts/issues/34326)
+
+## <small>5.1.20 (2025-06-06)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34178) ([0db2b66](https://github.com/bitnami/charts/commit/0db2b662159038eae861bee8741bac014fdf8869)), closes [#34178](https://github.com/bitnami/charts/issues/34178)
+
+## <small>5.1.19 (2025-06-03)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34062) ([e0c4abc](https://github.com/bitnami/charts/commit/e0c4abc82edd265e9e4ac68b4873e06699dbff09)), closes [#34062](https://github.com/bitnami/charts/issues/34062)
+
+## <small>5.1.18 (2025-05-13)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#33626) ([f3ce821](https://github.com/bitnami/charts/commit/f3ce821b21ef692dcea4c908d98abd0d83d43f0e)), closes [#33626](https://github.com/bitnami/charts/issues/33626)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>5.1.17 (2025-05-08)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#33563) ([b8d13a9](https://github.com/bitnami/charts/commit/b8d13a9b6ad550197fa318ec12e3d812e71c3e72)), closes [#33563](https://github.com/bitnami/charts/issues/33563)
+
+## <small>5.1.16 (2025-05-07)</small>
+
+* [bitnami/jaeger] Release 5.1.16 (#33498) ([6958ffa](https://github.com/bitnami/charts/commit/6958ffa03c00d311c0b6131858903c8016277461)), closes [#33498](https://github.com/bitnami/charts/issues/33498)
+
+## <small>5.1.15 (2025-05-07)</small>
+
+* [bitnami/jaeger] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33375) ([aa10601](https://github.com/bitnami/charts/commit/aa1060191c244c76b538a46e41c9a276c984298b)), closes [#33375](https://github.com/bitnami/charts/issues/33375)
+
+## <small>5.1.14 (2025-04-15)</small>
+
+* [bitnami/jaeger] Release 5.1.14 (#33010) ([c200116](https://github.com/bitnami/charts/commit/c200116294bcb06831957c334a07580ecba1fc4a)), closes [#33010](https://github.com/bitnami/charts/issues/33010)
+
+## <small>5.1.13 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/jaeger] Release 5.1.13 (#32741) ([2466579](https://github.com/bitnami/charts/commit/24665791672ee53d82a226d7a3c7fa150795eaf4)), closes [#32741](https://github.com/bitnami/charts/issues/32741)
+
+## <small>5.1.12 (2025-03-08)</small>
+
+* [bitnami/jaeger] Release 5.1.12 (#32372) ([0c4e213](https://github.com/bitnami/charts/commit/0c4e213f95debcad6d09674ba05e0e87ac5da530)), closes [#32372](https://github.com/bitnami/charts/issues/32372)
 
 ## <small>5.1.11 (2025-03-05)</small>
 

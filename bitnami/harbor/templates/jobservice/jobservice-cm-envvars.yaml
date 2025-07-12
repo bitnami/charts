@@ -21,6 +21,8 @@ data:
   REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
   REGISTRY_CONTROLLER_URL: {{ include "harbor.registryCtl.url" . | quote }}
   REGISTRY_CREDENTIAL_USERNAME: {{ .Values.registry.credentials.username | quote }}
+  JOBSERVICE_WEBHOOK_JOB_MAX_RETRY: {{ .Values.jobservice.notification.webhookJobMaxRetry | quote }}
+  JOBSERVICE_WEBHOOK_JOB_HTTP_CLIENT_TIMEOUT: {{ .Values.jobservice.notification.webhookJobHttpClientTimeout | quote }}
   {{- if has "jobservice" .Values.proxy.components }}
   HTTP_PROXY: {{ .Values.proxy.httpProxy | quote }}
   HTTPS_PROXY: {{ .Values.proxy.httpsProxy | quote }}
@@ -34,4 +36,8 @@ data:
   {{- if .Values.tracing.enabled }}
   TRACE_SERVICE_NAME: "harbor-jobservice"
   {{- include "harbor.tracing.envvars" . | nindent 2}}
+  {{- end }}
+  {{- if .Values.cache.enabled }}
+  CACHE_ENABLED: "true"
+  CACHE_EXPIRE_HOURS: {{ .Values.cache.expireHours | quote }}
   {{- end }}

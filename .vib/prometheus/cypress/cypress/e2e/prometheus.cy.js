@@ -12,9 +12,9 @@ it('allows executing a query and displaying response data for each deployment', 
   cy.visit(`/graph`);
   Object.keys(deployments).forEach((podName, i) => {
     const query = Object.values(deployments)[i].query;
-    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`,{delay: 100});
-    cy.contains('Execute').click();
-    cy.contains('.data-table', `container="${podName}"`)
+    cy.get('[role="textbox"]');
+    cy.visit(`/graph?g0.expr=${query}`);
+    cy.contains('span', `"${podName}"`)
   })
 });
 
@@ -24,6 +24,6 @@ it('checks targets status', () => {
   Object.keys(targets).forEach((podName, i) => {
     const podData = Object.values(targets)[i];
     cy.visit(`/targets?search=${podName}`);
-    cy.contains(`${podData.replicaCount}/${podData.replicaCount} up`);
+    cy.get('a[href$=metrics]').should('have.length', `${podData.replicaCount}`);
   })
 });

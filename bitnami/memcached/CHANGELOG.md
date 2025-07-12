@@ -1,8 +1,50 @@
 # Changelog
 
-## 7.7.1 (2025-03-19)
+## 7.9.2 (2025-07-09)
 
-* [bitnami/memcached] Release 7.7.1 ([#32526](https://github.com/bitnami/charts/pull/32526))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#34919](https://github.com/bitnami/charts/pull/34919))
+
+## <small>7.9.1 (2025-07-07)</small>
+
+* [bitnami/memcached] Allow hostNetwork field to be specified (#34804) ([d144ac9](https://github.com/bitnami/charts/commit/d144ac9b0a0f916c667917a269819cace7b4c1ae)), closes [#34804](https://github.com/bitnami/charts/issues/34804)
+
+## 7.9.0 (2025-07-03)
+
+* [bitnami/memcached] Allow trafficDistribution field to be specified (#34773) ([d664f99](https://github.com/bitnami/charts/commit/d664f996b6693002fec2f808f0fc163398f10fad)), closes [#34773](https://github.com/bitnami/charts/issues/34773)
+
+## <small>7.8.6 (2025-06-13)</small>
+
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#34464) ([2cde47a](https://github.com/bitnami/charts/commit/2cde47a374bf489f218ec2f22ebfe3158ed96d4e)), closes [#34464](https://github.com/bitnami/charts/issues/34464)
+
+## <small>7.8.5 (2025-06-06)</small>
+
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#34191) ([cd6e3fc](https://github.com/bitnami/charts/commit/cd6e3fc3ca9808092acb9a7a458f3fd2dac082a6)), closes [#34191](https://github.com/bitnami/charts/issues/34191)
+
+## <small>7.8.4 (2025-05-28)</small>
+
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#33947) ([ce6c523](https://github.com/bitnami/charts/commit/ce6c523c75d55bb53af8655bbb53396d5ff7bbb3)), closes [#33947](https://github.com/bitnami/charts/issues/33947)
+
+## <small>7.8.3 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#33635) ([a4d8554](https://github.com/bitnami/charts/commit/a4d855426d3a7bd89dc1b3d3a6e24b82e1d96b7d)), closes [#33635](https://github.com/bitnami/charts/issues/33635)
+
+## <small>7.8.2 (2025-05-06)</small>
+
+* [bitnami/memcached] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#333 ([3fa01d8](https://github.com/bitnami/charts/commit/3fa01d8c491ceac5fad378ec61dabc9327c0b566)), closes [#33397](https://github.com/bitnami/charts/issues/33397)
+
+## <small>7.8.1 (2025-04-18)</small>
+
+* [bitnami/memcached] Release 7.8.1 (#33078) ([658218b](https://github.com/bitnami/charts/commit/658218b21d9c670c31a1002a729755515067de5c)), closes [#33078](https://github.com/bitnami/charts/issues/33078)
+
+## 7.8.0 (2025-03-31)
+
+* [bitnami/memcached] Set `usePasswordFiles=true` by default (#32362) ([1e9a38b](https://github.com/bitnami/charts/commit/1e9a38b0e51a48f37b1768dcecbad9d4c11f1dae)), closes [#32362](https://github.com/bitnami/charts/issues/32362)
+
+## <small>7.7.1 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/memcached] Release 7.7.1 (#32526) ([8d5d1bf](https://github.com/bitnami/charts/commit/8d5d1bfdb67a25630b430d06dc0e1caca6f9f043)), closes [#32526](https://github.com/bitnami/charts/issues/32526)
 
 ## 7.7.0 (2025-03-12)
 

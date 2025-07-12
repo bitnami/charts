@@ -1,8 +1,55 @@
 # Changelog
 
-## 4.3.6 (2025-03-11)
+## 4.3.18 (2025-07-08)
 
-* [bitnami/pytorch] Update Chart.yaml ([#32411](https://github.com/bitnami/charts/pull/32411))
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#34892](https://github.com/bitnami/charts/pull/34892))
+
+## <small>4.3.17 (2025-06-30)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34706) ([70eb85c](https://github.com/bitnami/charts/commit/70eb85ca3ac963fa79faf00047897e9751dc177d)), closes [#34706](https://github.com/bitnami/charts/issues/34706)
+
+## <small>4.3.16 (2025-06-27)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34679) ([37c264f](https://github.com/bitnami/charts/commit/37c264f939af84313592a81a7e04990c3c36ea3b)), closes [#34679](https://github.com/bitnami/charts/issues/34679)
+
+## <small>4.3.15 (2025-06-16)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34519) ([187be7a](https://github.com/bitnami/charts/commit/187be7a6503f0b08b92d0aa197abcf215320b7bc)), closes [#34519](https://github.com/bitnami/charts/issues/34519)
+
+## <small>4.3.14 (2025-06-16)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34493) ([c5fbe11](https://github.com/bitnami/charts/commit/c5fbe11630023526d0e0dcfd388cdda19cd82186)), closes [#34493](https://github.com/bitnami/charts/issues/34493)
+
+## <small>4.3.13 (2025-06-13)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34437) ([6f34c31](https://github.com/bitnami/charts/commit/6f34c313aae777ddb9429d57e612548ffd2ecd88)), closes [#34437](https://github.com/bitnami/charts/issues/34437)
+
+## <small>4.3.12 (2025-06-06)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34125) ([04ff6a0](https://github.com/bitnami/charts/commit/04ff6a06b12947d97c3b86c38f80d434bbf99b50)), closes [#34125](https://github.com/bitnami/charts/issues/34125)
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#34164) ([cbe57bc](https://github.com/bitnami/charts/commit/cbe57bc0c1aa57410f08bed387efe1637fd910ac)), closes [#34164](https://github.com/bitnami/charts/issues/34164)
+
+## <small>4.3.10 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#33657) ([12626f2](https://github.com/bitnami/charts/commit/12626f2a27b2c863fa9abc6b74b72b0b021e2b7e)), closes [#33657](https://github.com/bitnami/charts/issues/33657)
+
+## <small>4.3.9 (2025-05-06)</small>
+
+* [bitnami/pytorch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33425 ([e20b5e3](https://github.com/bitnami/charts/commit/e20b5e3ee4d4eb6f4fae1db2f518432927283687)), closes [#33425](https://github.com/bitnami/charts/issues/33425)
+
+## <small>4.3.8 (2025-04-23)</small>
+
+* [bitnami/pytorch] Release 4.3.8 (#33148) ([52441d4](https://github.com/bitnami/charts/commit/52441d4d4b73f537cd73bf8a6d3a58eaa6778b59)), closes [#33148](https://github.com/bitnami/charts/issues/33148)
+
+## <small>4.3.7 (2025-03-30)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/pytorch] Release 4.3.7 (#32683) ([2a1b864](https://github.com/bitnami/charts/commit/2a1b8643c7c0e0db962efd7a0eaefb0d00228d0e)), closes [#32683](https://github.com/bitnami/charts/issues/32683)
+
+## <small>4.3.6 (2025-03-11)</small>
+
+* [bitnami/pytorch] Update Chart.yaml (#32411) ([0a8723b](https://github.com/bitnami/charts/commit/0a8723b979c6d111fafdbea07409f642c653721c)), closes [#32411](https://github.com/bitnami/charts/issues/32411)
 
 ## <small>4.3.5 (2025-03-11)</small>
 

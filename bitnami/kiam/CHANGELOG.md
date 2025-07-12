@@ -1,8 +1,35 @@
 # Changelog
 
-## 2.3.7 (2025-03-05)
+## 2.3.14 (2025-07-09)
 
-* [bitnami/kiam] Release 2.3.7 ([#32296](https://github.com/bitnami/charts/pull/32296))
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#34910](https://github.com/bitnami/charts/pull/34910))
+
+## <small>2.3.13 (2025-06-13)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34451) ([444f093](https://github.com/bitnami/charts/commit/444f0931004b312f5e0e4b3eeada7be03eda031a)), closes [#34451](https://github.com/bitnami/charts/issues/34451)
+
+## <small>2.3.12 (2025-06-06)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34179) ([96db50e](https://github.com/bitnami/charts/commit/96db50e83c23dba0d59aed8ddde69aee9c67d8ee)), closes [#34179](https://github.com/bitnami/charts/issues/34179)
+* [bitnami/kiam] Release 2.3.11 (#33531) ([49f873c](https://github.com/bitnami/charts/commit/49f873c114b8ba69df3bff7a10324b9fd74d3034)), closes [#33531](https://github.com/bitnami/charts/issues/33531)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>2.3.10 (2025-05-06)</small>
+
+* [bitnami/kiam] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33382) ([8324840](https://github.com/bitnami/charts/commit/8324840d752836cf61399b327951699fb0b82d3a)), closes [#33382](https://github.com/bitnami/charts/issues/33382)
+
+## <small>2.3.9 (2025-05-01)</small>
+
+* [bitnami/kiam] Release 2.3.9 (#33294) ([dbf3c59](https://github.com/bitnami/charts/commit/dbf3c5933390bf9e46eb21810b193ad60f1dda36)), closes [#33294](https://github.com/bitnami/charts/issues/33294)
+
+## <small>2.3.8 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kiam] Release 2.3.8 (#32744) ([e2ffb1f](https://github.com/bitnami/charts/commit/e2ffb1f3034dec24b40b563300a41b8c441c56e9)), closes [#32744](https://github.com/bitnami/charts/issues/32744)
+
+## <small>2.3.7 (2025-03-05)</small>
+
+* [bitnami/kiam] Release 2.3.7 (#32296) ([01fafc1](https://github.com/bitnami/charts/commit/01fafc1e5f5f857e211caf922ee680f63d10ebba)), closes [#32296](https://github.com/bitnami/charts/issues/32296)
 
 ## <small>2.3.6 (2025-02-19)</small>
 

@@ -33,7 +33,7 @@ command:
     {{- $vhost := printf "vhost_%s" (randAlpha 5) }}
     exec: rabbitmqctl add_vhost {{ $vhost }} && sleep 2 {{ range $e, $i := until $nodes }} && rabbitmqctl --node rabbit@rabbitmq-{{ $i }} list_vhosts | grep -q {{ $vhost }} {{ end }}
     exit-status: 0
-    timeout: 30000
+    timeout: 60000
   rabbitmq-plugins-enabled:
     exec: rabbitmq-plugins list --enabled
     exit-status: 0

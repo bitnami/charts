@@ -159,6 +159,9 @@ spec:
             {{- if .Values.txtSuffix }}
             - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
+            {{- if .Values.txtNewFormatOnly }}
+            - --txt-new-format-only
+            {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
             - --annotation-filter={{ .Values.annotationFilter }}
@@ -244,6 +247,12 @@ spec:
               {{- end }}
               {{- if .Values.cloudflare.dnsRecordsPerPage }}
             - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
+              {{- end }}
+              {{- if .Values.cloudflare.regionalServices }}
+            - --cloudflare-regional-services
+              {{- end }}
+              {{- if .Values.cloudflare.regionKey }}
+            - --cloudflare-region-key={{ .Values.cloudflare.regionKey }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
@@ -635,6 +644,7 @@ spec:
                   key: infoblox_wapi_password
             {{- end }}
             {{- end }}
+            {{- if eq .Values.provider "rfc2136" }}
             {{- if .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
             {{- if .Values.rfc2136.rfc3645Enabled }}
@@ -654,6 +664,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: rfc2136_tsig_secret
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}

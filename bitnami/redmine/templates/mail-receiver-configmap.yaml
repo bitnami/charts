@@ -18,6 +18,11 @@ data:
   receive.sh: |
     #!/usr/bin/env bash
 
+    {{- if .Values.usePasswordFiles }}
+    export REDMINE_MAIL_RECEIVER_DB_PASSWORD="$(< $REDMINE_MAIL_RECEIVER_DB_PASSWORD_FILE)"
+    export REDMINE_MAIL_RECEIVER_PASSWORD="$(< $REDMINE_MAIL_RECEIVER_PASSWORD_FILE)"
+    {{- end }}
+
     if [ $REDMINE_MAIL_RECEIVER_DEBUG ]; then
         set -x
     fi

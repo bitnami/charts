@@ -10,7 +10,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -20,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   defaultStorageClass: ""
-  storageClass: ""
   ## Security parameters
   ##
   security:
@@ -95,7 +93,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.11.0-debian-12-r10
+  tag: 3.13.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -115,31 +113,37 @@ image:
 ## @section APISIX Data Plane parameters
 ##
 dataPlane:
-  ## @param dataPlane.enabled Enable APISIX
+  ## @param dataPlane.enabled Enable APISIX Data Plane
   ##
   enabled: true
-  ## @param dataPlane.useDaemonSet Deploy as DaemonSet
+  ## @param dataPlane.useDaemonSet Deploy Data Plane as DaemonSet
   ##
   useDaemonSet: false
-  ## @param dataPlane.replicaCount Number of APISIX replicas to deploy
+  ## @param dataPlane.replicaCount Number of APISIX Data Plane replicas to deploy
   ##
   replicaCount: 1
-  ## @param dataPlane.hostNetwork Use hostNetwork
+  ## @param dataPlane.hostNetwork Use hostNetwork in APISIX Data Plane
   ##
   hostNetwork: false
-  ## @param dataPlane.containerPorts.http APISIX HTTP container port
-  ## @param dataPlane.containerPorts.https APISIX HTTPS container port
-  ## @param dataPlane.containerPorts.control APISIX control container port
-  ## @param dataPlane.containerPorts.metrics APISIX metrics container port
+  ## @param dataPlane.dnsPolicy DNS policy for APISIX Data Plane pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
+
+  ## @param dataPlane.containerPorts.http APISIX Data Plane HTTP container port
+  ## @param dataPlane.containerPorts.https APISIX Data Plane HTTPS container port
+  ## @param dataPlane.containerPorts.control APISIX Data Plane control container port
+  ## @param dataPlane.containerPorts.metrics APISIX Data Plane metrics container port
   ##
   containerPorts:
     http: 9080
     https: 9443
     control: 9090
     metrics: 9099
-  ## Configure extra options for APISIX containers' liveness and readiness probes
+  ## Configure extra options for APISIX Data Plane containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param dataPlane.livenessProbe.enabled Enable livenessProbe on APISIX containers
+  ## @param dataPlane.livenessProbe.enabled Enable livenessProbe on APISIX Data Plane containers
   ## @param dataPlane.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param dataPlane.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param dataPlane.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -153,7 +157,7 @@ dataPlane:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dataPlane.readinessProbe.enabled Enable readinessProbe on APISIX containers
+  ## @param dataPlane.readinessProbe.enabled Enable readinessProbe on APISIX Data Plane containers
   ## @param dataPlane.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param dataPlane.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param dataPlane.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -167,7 +171,7 @@ dataPlane:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dataPlane.startupProbe.enabled Enable startupProbe on APISIX containers
+  ## @param dataPlane.startupProbe.enabled Enable startupProbe on APISIX Data Plane containers
   ## @param dataPlane.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param dataPlane.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param dataPlane.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -190,7 +194,7 @@ dataPlane:
   ## @param dataPlane.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## APISIX resource requests and limits
+  ## APISIX Data Plane resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataPlane.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataPlane.resources is set (dataPlane.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -209,11 +213,11 @@ dataPlane:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dataPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param dataPlane.podSecurityContext.enabled Enabled APISIX Data Plane pods' Security Context
   ## @param dataPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param dataPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param dataPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param dataPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
+  ## @param dataPlane.podSecurityContext.fsGroup Set APISIX Data Plane pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -223,16 +227,16 @@ dataPlane:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX Data Plane containers' Security Context
   ## @param dataPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
-  ## @param dataPlane.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
-  ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
-  ## @param dataPlane.containerSecurityContext.privileged Set APISIX containers' Security Context privileged
-  ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
-  ## @param dataPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-  ## @param dataPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
-  ## @param dataPlane.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
+  ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX Data Plane containers' Security Context runAsUser
+  ## @param dataPlane.containerSecurityContext.runAsGroup Set APISIX Data Plane containers' Security Context runAsGroup
+  ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX Data Plane containers' Security Context runAsNonRoot
+  ## @param dataPlane.containerSecurityContext.privileged Set APISIX Data Plane containers' Security Context privileged
+  ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX Data Plane containers' Security Context runAsNonRoot
+  ## @param dataPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX Data Plane container's privilege escalation
+  ## @param dataPlane.containerSecurityContext.capabilities.drop Set APISIX Data Plane container's Security Context runAsNonRoot
+  ## @param dataPlane.containerSecurityContext.seccompProfile.type Set APISIX Data Plane container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -256,11 +260,11 @@ dataPlane:
   ## @param dataPlane.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
-  ## @param dataPlane.hostAliases APISIX pods host aliases
+  ## @param dataPlane.hostAliases APISIX Data Plane pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param dataPlane.defaultConfig [string] Apisix apisix configuration (evaluated as a template)
+  ## @param dataPlane.defaultConfig [string] APISIX Data Plane configuration (evaluated as a template)
   ##
   defaultConfig: |
     {{- if .Values.dataPlane.metrics.enabled }}
@@ -355,17 +359,17 @@ dataPlane:
           token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
 
         default_weight: 50 # weight assigned to each discovered endpoint. default 50, minimum 0
-  ## @param dataPlane.extraConfig [object] extra configuration parameters to add to the config.yaml file in APISIX Data plane
+  ## @param dataPlane.extraConfig [object] extra configuration parameters to add to the config.yaml file in APISIX Data Plane
   ##
   extraConfig: {}
-  ## @param dataPlane.existingConfigMap name of a ConfigMap with existing configuration for the apisix
+  ## @param dataPlane.existingConfigMap name of a ConfigMap with existing configuration for APISIX Data Plane
   ##
   existingConfigMap: ""
-  ## @param dataPlane.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the data plane
+  ## @param dataPlane.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for APISIX Data Plane
   ##
   extraConfigExistingConfigMap: ""
   tls:
-    ## @param dataPlane.tls.enabled Enable TLS transport in Data Plane
+    ## @param dataPlane.tls.enabled Enable TLS transport in APISIX Data Plane
     ##
     enabled: true
     ## @param dataPlane.tls.autoGenerated Auto-generate self-signed certificates
@@ -392,11 +396,11 @@ dataPlane:
     ## @param dataPlane.tls.ca Content of the certificate CA to be added to the secret
     ##
     ca: ""
-  ## @param dataPlane.podLabels Extra labels for APISIX pods
+  ## @param dataPlane.podLabels Extra labels for APISIX Data Plane pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param dataPlane.podAnnotations Annotations for APISIX pods
+  ## @param dataPlane.podAnnotations Annotations for APISIX Data Plane pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -435,20 +439,20 @@ dataPlane:
     ##   - e2e-az2
     ##
     values: []
-  ## @param dataPlane.affinity Affinity for APISIX pods assignment
+  ## @param dataPlane.affinity Affinity for APISIX Data Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `apisix.podAffinityPreset`, `apisix.podAntiAffinityPreset`, and `apisix.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param dataPlane.nodeSelector Node labels for APISIX pods assignment
+  ## @param dataPlane.nodeSelector Node labels for APISIX Data Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param dataPlane.tolerations Tolerations for APISIX pods assignment
+  ## @param dataPlane.tolerations Tolerations for APISIX Data Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param dataPlane.updateStrategy.type APISIX statefulset strategy type
+  ## @param dataPlane.updateStrategy.type APISIX Data Plane statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -456,14 +460,14 @@ dataPlane:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param dataPlane.priorityClassName APISIX pods' priorityClassName
+  ## @param dataPlane.priorityClassName APISIX Data Plane pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param dataPlane.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param dataPlane.schedulerName Name of the k8s scheduler (other than default) for APISIX pods
+  ## @param dataPlane.schedulerName Name of the k8s scheduler (other than default) for APISIX Data Plane pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
@@ -471,29 +475,29 @@ dataPlane:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param dataPlane.lifecycleHooks for the APISIX container(s) to automate configuration before or after startup
+  ## @param dataPlane.lifecycleHooks for the APISIX Data Plane container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param dataPlane.extraEnvVars Array with extra environment variables to add to APISIX nodes
+  ## @param dataPlane.extraEnvVars Array with extra environment variables to add to APISIX Data Plane nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param dataPlane.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for APISIX nodes
+  ## @param dataPlane.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for APISIX Data Plane nodes
   ##
   extraEnvVarsCM: ""
-  ## @param dataPlane.extraEnvVarsSecret Name of existing Secret containing extra env vars for APISIX nodes
+  ## @param dataPlane.extraEnvVarsSecret Name of existing Secret containing extra env vars for APISIX Data Plane nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param dataPlane.extraVolumes Optionally specify extra list of additional volumes for the APISIX pod(s)
+  ## @param dataPlane.extraVolumes Optionally specify extra list of additional volumes for the APISIX Data Plane pod(s)
   ##
   extraVolumes: []
-  ## @param dataPlane.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the APISIX container(s)
+  ## @param dataPlane.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the APISIX Data Plane container(s)
   ##
   extraVolumeMounts: []
-  ## @param dataPlane.sidecars Add additional sidecar containers to the APISIX pod(s)
+  ## @param dataPlane.sidecars Add additional sidecar containers to the APISIX Data Plane pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -504,7 +508,7 @@ dataPlane:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param dataPlane.initContainers Add additional init containers to the APISIX pod(s)
+  ## @param dataPlane.initContainers Add additional init containers to the APISIX Data Plane pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -517,12 +521,12 @@ dataPlane:
   ## @section APISIX Data Plane Traffic Exposure Parameters
   ##
   service:
-    ## @param dataPlane.service.type APISIX service type
+    ## @param dataPlane.service.type APISIX Data Plane service type
     ##
     type: LoadBalancer
-    ## @param dataPlane.service.ports.http APISIX service HTTP port
-    ## @param dataPlane.service.ports.https APISIX service HTTPS port
-    ## @param dataPlane.service.ports.metrics APISIX service HTTPS port
+    ## @param dataPlane.service.ports.http APISIX Data Plane service HTTP port
+    ## @param dataPlane.service.ports.https APISIX Data Plane service HTTPS port
+    ## @param dataPlane.service.ports.metrics APISIX Data Plane service HTTPS port
     ##
     ports:
       http: 80
@@ -538,23 +542,23 @@ dataPlane:
       http: ""
       https: ""
       metrics: ""
-    ## @param dataPlane.service.clusterIP APISIX service Cluster IP
+    ## @param dataPlane.service.clusterIP APISIX Data Plane service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param dataPlane.service.loadBalancerIP APISIX service Load Balancer IP
+    ## @param dataPlane.service.loadBalancerIP APISIX Data Plane service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param dataPlane.service.loadBalancerSourceRanges APISIX service Load Balancer sources
+    ## @param dataPlane.service.loadBalancerSourceRanges APISIX Data Plane service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param dataPlane.service.externalIPs APISIX service External IPs
+    ## @param dataPlane.service.externalIPs APISIX Data Plane service External IPs
     ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ## e.g.
     ## externalIPs:
@@ -562,14 +566,14 @@ dataPlane:
     ##   - 201.22.30.1
     ##
     externalIPs: []
-    ## @param dataPlane.service.externalTrafficPolicy APISIX service external traffic policy
+    ## @param dataPlane.service.externalTrafficPolicy APISIX Data Plane service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param dataPlane.service.annotations Additional custom annotations for APISIX service
+    ## @param dataPlane.service.annotations Additional custom annotations for APISIX Data Plane service
     ##
     annotations: {}
-    ## @param dataPlane.service.extraPorts Extra ports to expose in APISIX service (normally used with the `sidecars` value)
+    ## @param dataPlane.service.extraPorts Extra ports to expose in APISIX Data Plane service (normally used with the `sidecars` value)
     ##
     extraPorts: []
     ## @param dataPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
@@ -644,7 +648,7 @@ dataPlane:
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
-    ## @param dataPlane.ingress.enabled Enable ingress record generation for Apisix
+    ## @param dataPlane.ingress.enabled Enable ingress record generation for APISIX Data Plane
     ##
     enabled: false
     ## @param dataPlane.ingress.pathType Ingress path type
@@ -821,7 +825,7 @@ dataPlane:
     ## @param dataPlane.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
-    ## @param dataPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
+    ## @param dataPlane.serviceAccount.automountServiceAccountToken Automount service account token for the APISIX Data Plane service account
     ##
     automountServiceAccountToken: false
   ## @section APISIX Data Plane Metrics Parameters
@@ -833,7 +837,7 @@ dataPlane:
     ## @param dataPlane.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
-    ## @param dataPlane.metrics.annotations [object] Annotations for the apisix service in order to scrape metrics
+    ## @param dataPlane.metrics.annotations [object] Annotations for the APISIX Data Plane service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.dataPlane.service.ports.metrics }}"
@@ -886,31 +890,36 @@ dataPlane:
 ## @section APISIX Control Plane Parameters
 ##
 controlPlane:
-  ## @param controlPlane.enabled Enable APISIX
+  ## @param controlPlane.enabled Enable APISIX Control Plane 
   ##
   enabled: true
-  ## @param controlPlane.replicaCount Number of APISIX replicas to deploy
+  ## @param controlPlane.replicaCount Number of APISIX Control Plane replicas to deploy
   ##
   replicaCount: 1
   ## @param controlPlane.hostNetwork Use hostNetwork
   ##
   hostNetwork: false
+  ## @param controlPlane.dnsPolicy DNS policy for APISIX Control Plane pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-policies
+  ## NOTE: If you set hostNetwork=true, you must set dnsPolicy=ClusterFirstWithHostNet
+  ##
+  dnsPolicy: ClusterFirst
   ## @param controlPlane.useDaemonSet Deploy as DaemonSet
   ##
   useDaemonSet: false
-  ## @param controlPlane.containerPorts.adminAPI APISIX Admin API port
-  ## @param controlPlane.containerPorts.configServer APISIX config port
-  ## @param controlPlane.containerPorts.control APISIX control port
-  ## @param controlPlane.containerPorts.metrics APISIX metrics port
+  ## @param controlPlane.containerPorts.adminAPI APISIX Control Plane Admin API port
+  ## @param controlPlane.containerPorts.configServer APISIX Control Plane config port
+  ## @param controlPlane.containerPorts.control APISIX Control Plane control port
+  ## @param controlPlane.containerPorts.metrics APISIX Control Plane metrics port
   ##
   containerPorts:
     adminAPI: 9180
     configServer: 9280
     control: 9090
     metrics: 9099
-  ## Configure extra options for APISIX containers' liveness and readiness probes
+  ## Configure extra options for APISIX Control Plane containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param controlPlane.livenessProbe.enabled Enable livenessProbe on APISIX containers
+  ## @param controlPlane.livenessProbe.enabled Enable livenessProbe on APISIX Control Plane containers
   ## @param controlPlane.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param controlPlane.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param controlPlane.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -924,7 +933,7 @@ controlPlane:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param controlPlane.readinessProbe.enabled Enable readinessProbe on APISIX containers
+  ## @param controlPlane.readinessProbe.enabled Enable readinessProbe on APISIX Control Plane containers
   ## @param controlPlane.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param controlPlane.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param controlPlane.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -938,7 +947,7 @@ controlPlane:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param controlPlane.startupProbe.enabled Enable startupProbe on APISIX containers
+  ## @param controlPlane.startupProbe.enabled Enable startupProbe on APISIX Control Plane containers
   ## @param controlPlane.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param controlPlane.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param controlPlane.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -961,7 +970,7 @@ controlPlane:
   ## @param controlPlane.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## APISIX resource requests and limits
+  ## APISIX Control Plane resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controlPlane.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controlPlane.resources is set (controlPlane.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -980,11 +989,11 @@ controlPlane:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param controlPlane.podSecurityContext.enabled Enabled APISIX pods' Security Context
+  ## @param controlPlane.podSecurityContext.enabled Enabled APISIX Control Plane pods' Security Context
   ## @param controlPlane.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param controlPlane.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param controlPlane.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param controlPlane.podSecurityContext.fsGroup Set APISIX pod's Security Context fsGroup
+  ## @param controlPlane.podSecurityContext.fsGroup Set APISIX Control Plane pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -994,16 +1003,16 @@ controlPlane:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX Control Plane containers' Security Context
   ## @param controlPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
-  ## @param controlPlane.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
-  ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
-  ## @param controlPlane.containerSecurityContext.privileged Set APISIX containers' Security Context privileged
-  ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
-  ## @param controlPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-  ## @param controlPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
-  ## @param controlPlane.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
+  ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX Control Plane containers' Security Context runAsUser
+  ## @param controlPlane.containerSecurityContext.runAsGroup Set APISIX Control Plane containers' Security Context runAsGroup
+  ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX Control Plane containers' Security Context runAsNonRoot
+  ## @param controlPlane.containerSecurityContext.privileged Set APISIX Control Plane containers' Security Context privileged
+  ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX Control Plane containers' Security Context runAsNonRoot
+  ## @param controlPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX Control Plane container's privilege escalation
+  ## @param controlPlane.containerSecurityContext.capabilities.drop Set APISIX Control Plane container's Security Context runAsNonRoot
+  ## @param controlPlane.containerSecurityContext.seccompProfile.type Set APISIX Control Plane container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -1027,26 +1036,26 @@ controlPlane:
   ## @param controlPlane.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
-  ## @param controlPlane.hostAliases APISIX pods host aliases
+  ## @param controlPlane.hostAliases APISIX Control Plane pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param controlPlane.apiTokenAdmin Admin API Token for APISIX control plane
+  ## @param controlPlane.apiTokenAdmin Admin API Token for APISIX Control Plane
   ##
   apiTokenAdmin: ""
-  ## @param controlPlane.apiTokenViewer Viewer API Token for APISIX control plane
+  ## @param controlPlane.apiTokenViewer Viewer API Token for APISIX Control Plane
   ##
   apiTokenViewer: ""
-  ## @param controlPlane.existingSecret Name of a secret containing API Tokens for APISIX control plane
+  ## @param controlPlane.existingSecret Name of a secret containing API Tokens for APISIX Control Plane
   ##
   existingSecret: ""
-  ## @param controlPlane.existingSecretAdminTokenKey Key inside the secret containing the Admin API Tokens for APISIX control plane
+  ## @param controlPlane.existingSecretAdminTokenKey Key inside the secret containing the Admin API Tokens for APISIX Control Plane
   ##
   existingSecretAdminTokenKey: ""
-  ## @param controlPlane.existingSecretViewerTokenKey Key inside the secret containing the Viewer API Tokens for APISIX control plane
+  ## @param controlPlane.existingSecretViewerTokenKey Key inside the secret containing the Viewer API Tokens for APISIX Control Plane
   ##
   existingSecretViewerTokenKey: ""
-  ## @param controlPlane.defaultConfig [string] Apisix apisix configuration (evaluated as a template)
+  ## @param controlPlane.defaultConfig [string] APISIX Control Plane configuration (evaluated as a template)
   ##
   defaultConfig: |
     {{- if .Values.controlPlane.metrics.enabled }}
@@ -1148,14 +1157,14 @@ controlPlane:
   ## @param controlPlane.extraConfig [object] extra configuration parameters to add to the config.yaml file in APISIX Control plane
   ##
   extraConfig: {}
-  ## @param controlPlane.existingConfigMap name of a ConfigMap with existing configuration for the apisix
+  ## @param controlPlane.existingConfigMap name of a ConfigMap with existing configuration for APISIX Control Plane
   ##
   existingConfigMap: ""
-  ## @param controlPlane.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the conrol plane
+  ## @param controlPlane.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for APISIX Control Plane
   ##
   extraConfigExistingConfigMap: ""
   tls:
-    ## @param controlPlane.tls.enabled Enable TLS transport in Control Plane
+    ## @param controlPlane.tls.enabled Enable TLS transport in APISIX Control Plane
     ##
     enabled: true
     ## @param controlPlane.tls.autoGenerated Auto-generate self-signed certificates
@@ -1182,11 +1191,11 @@ controlPlane:
     ## @param controlPlane.tls.ca Content of the certificate CA to be added to the secret
     ##
     ca: ""
-  ## @param controlPlane.podLabels Extra labels for APISIX pods
+  ## @param controlPlane.podLabels Extra labels for APISIX Control Plane pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param controlPlane.podAnnotations Annotations for APISIX pods
+  ## @param controlPlane.podAnnotations Annotations for APISIX Control Plane pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -1225,20 +1234,20 @@ controlPlane:
     ##   - e2e-az2
     ##
     values: []
-  ## @param controlPlane.affinity Affinity for APISIX pods assignment
+  ## @param controlPlane.affinity Affinity for APISIX Control Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `apisix.podAffinityPreset`, `apisix.podAntiAffinityPreset`, and `apisix.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param controlPlane.nodeSelector Node labels for APISIX pods assignment
+  ## @param controlPlane.nodeSelector Node labels for APISIX Control Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param controlPlane.tolerations Tolerations for APISIX pods assignment
+  ## @param controlPlane.tolerations Tolerations for APISIX Control Plane pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param controlPlane.updateStrategy.type APISIX statefulset strategy type
+  ## @param controlPlane.updateStrategy.type APISIX Control Plane statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1246,14 +1255,14 @@ controlPlane:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-  ## @param controlPlane.priorityClassName APISIX pods' priorityClassName
+  ## @param controlPlane.priorityClassName APISIX Control Plane pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param controlPlane.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param controlPlane.schedulerName Name of the k8s scheduler (other than default) for APISIX pods
+  ## @param controlPlane.schedulerName Name of the k8s scheduler (other than default) for APISIX Control Plane pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
@@ -1261,29 +1270,29 @@ controlPlane:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
-  ## @param controlPlane.lifecycleHooks for the APISIX container(s) to automate configuration before or after startup
+  ## @param controlPlane.lifecycleHooks for the APISIX Control Plane container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param controlPlane.extraEnvVars Array with extra environment variables to add to APISIX nodes
+  ## @param controlPlane.extraEnvVars Array with extra environment variables to add to APISIX Control Plane nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param controlPlane.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for APISIX nodes
+  ## @param controlPlane.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for APISIX Control Plane nodes
   ##
   extraEnvVarsCM: ""
-  ## @param controlPlane.extraEnvVarsSecret Name of existing Secret containing extra env vars for APISIX nodes
+  ## @param controlPlane.extraEnvVarsSecret Name of existing Secret containing extra env vars for APISIX Control Plane nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param controlPlane.extraVolumes Optionally specify extra list of additional volumes for the APISIX pod(s)
+  ## @param controlPlane.extraVolumes Optionally specify extra list of additional volumes for the APISIX Control Plane pod(s)
   ##
   extraVolumes: []
-  ## @param controlPlane.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the APISIX container(s)
+  ## @param controlPlane.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the APISIX Control Plane container(s)
   ##
   extraVolumeMounts: []
-  ## @param controlPlane.sidecars Add additional sidecar containers to the APISIX pod(s)
+  ## @param controlPlane.sidecars Add additional sidecar containers to the APISIX Control Plane pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -1294,7 +1303,7 @@ controlPlane:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param controlPlane.initContainers Add additional init containers to the APISIX pod(s)
+  ## @param controlPlane.initContainers Add additional init containers to the APISIX Control Plane pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1307,12 +1316,12 @@ controlPlane:
   ## @section APISIX Control Plane Traffic Exposure Parameters
   ##
   service:
-    ## @param controlPlane.service.type APISIX service type
+    ## @param controlPlane.service.type APISIX Control Plane service type
     ##
     type: ClusterIP
-    ## @param controlPlane.service.ports.adminAPI APISIX service Admin API port
-    ## @param controlPlane.service.ports.configServer APISIX service Config Server port
-    ## @param controlPlane.service.ports.metrics APISIX service metrics port
+    ## @param controlPlane.service.ports.adminAPI APISIX Control Plane service Admin API port
+    ## @param controlPlane.service.ports.configServer APISIX Control Plane service Config Server port
+    ## @param controlPlane.service.ports.metrics APISIX Control Plane service metrics port
     ##
     ports:
       adminAPI: 9180
@@ -1328,23 +1337,23 @@ controlPlane:
       adminAPI: ""
       configServer: ""
       metrics: ""
-    ## @param controlPlane.service.clusterIP APISIX service Cluster IP
+    ## @param controlPlane.service.clusterIP APISIX Control Plane service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param controlPlane.service.loadBalancerIP APISIX service Load Balancer IP
+    ## @param controlPlane.service.loadBalancerIP APISIX Control Plane service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param controlPlane.service.loadBalancerSourceRanges APISIX service Load Balancer sources
+    ## @param controlPlane.service.loadBalancerSourceRanges APISIX Control Plane service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param controlPlane.service.externalIPs APISIX service External IPs
+    ## @param controlPlane.service.externalIPs APISIX Control Plane service External IPs
     ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
     ## e.g.
     ## externalIPs:
@@ -1352,14 +1361,14 @@ controlPlane:
     ##   - 201.22.30.1
     ##
     externalIPs: []
-    ## @param controlPlane.service.externalTrafficPolicy APISIX service external traffic policy
+    ## @param controlPlane.service.externalTrafficPolicy APISIX Control Plane service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param controlPlane.service.annotations Additional custom annotations for APISIX service
+    ## @param controlPlane.service.annotations Additional custom annotations for APISIX Control Plane service
     ##
     annotations: {}
-    ## @param controlPlane.service.extraPorts Extra ports to expose in APISIX service (normally used with the `sidecars` value)
+    ## @param controlPlane.service.extraPorts Extra ports to expose in APISIX Control Plane service (normally used with the `sidecars` value)
     ##
     extraPorts: []
     ## @param controlPlane.service.sessionAffinity Control where web requests go, to the same pod or round-robin
@@ -1434,7 +1443,7 @@ controlPlane:
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
-    ## @param controlPlane.ingress.enabled Enable ingress record generation for Apisix
+    ## @param controlPlane.ingress.enabled Enable ingress record generation for APISIX Control Plane
     ##
     enabled: false
     ## @param controlPlane.ingress.pathType Ingress path type
@@ -1562,13 +1571,13 @@ controlPlane:
         ##
         updateMode: Auto
     hpa:
-      ## @param controlPlane.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ## @param controlPlane.autoscaling.hpa.enabled Enable HPA for APISIX Control Plane 
       ##
       enabled: false
-      ## @param controlPlane.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ## @param controlPlane.autoscaling.hpa.minReplicas Minimum number of APISIX Control Plane replicas
       ##
       minReplicas: ""
-      ## @param controlPlane.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ## @param controlPlane.autoscaling.hpa.maxReplicas Maximum number of APISIX Control Plane replicas
       ##
       maxReplicas: ""
       ## @param controlPlane.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -1611,7 +1620,7 @@ controlPlane:
     ## @param controlPlane.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
     ##
     annotations: {}
-    ## @param controlPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
+    ## @param controlPlane.serviceAccount.automountServiceAccountToken Automount service account token for the APISIX Control Plane service account
     ##
     automountServiceAccountToken: false
   ## @section APISIX Control Plane Metrics Parameters
@@ -1623,7 +1632,7 @@ controlPlane:
     ## @param controlPlane.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
-    ## @param controlPlane.metrics.annotations [object] Annotations for the apisix service in order to scrape metrics
+    ## @param controlPlane.metrics.annotations [object] Annotations for the APISIX Control Plane service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.controlPlane.service.ports.metrics }}"
@@ -1695,7 +1704,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r64
+    tag: 3.0.1-debian-12-r76
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1852,14 +1861,14 @@ dashboard:
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
   extraConfig: {}
-  ## @param dashboard.existingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param dashboard.existingConfigMap name of a ConfigMap with existing configuration for APISIX Dashboard
   ##
   existingConfigMap: ""
-  ## @param dashboard.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param dashboard.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for APISIX Dashboard
   ##
   extraConfigExistingConfigMap: ""
   tls:
-    ## @param dashboard.tls.enabled Enable TLS transport in Dashboard
+    ## @param dashboard.tls.enabled Enable TLS transport in APISIX Dashboard
     ##
     enabled: true
     ## @param dashboard.tls.autoGenerated Auto-generate self-signed certificates
@@ -2010,15 +2019,15 @@ dashboard:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-  ## @param dashboard.containerPorts.http Dashboard http container port
-  ## @param dashboard.containerPorts.https Dashboard https container port
+  ## @param dashboard.containerPorts.http APISIX Dashboard http container port
+  ## @param dashboard.containerPorts.https APISIX Dashboard https container port
   ##
   containerPorts:
     http: 8080
     https: 8443
-  ## Configure extra options for Dashboard container' liveness and readiness probes
+  ## Configure extra options for APISIX Dashboard containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param dashboard.livenessProbe.enabled Enable livenessProbe on Dashboard container
+  ## @param dashboard.livenessProbe.enabled Enable livenessProbe on APISIX Dashboard container
   ## @param dashboard.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param dashboard.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param dashboard.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -2032,7 +2041,7 @@ dashboard:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dashboard.readinessProbe.enabled Enable readinessProbe on Dashboard container
+  ## @param dashboard.readinessProbe.enabled Enable readinessProbe on APISIX Dashboard container
   ## @param dashboard.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param dashboard.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param dashboard.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -2046,7 +2055,7 @@ dashboard:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dashboard.startupProbe.enabled Enable startupProbe on Dashboard container
+  ## @param dashboard.startupProbe.enabled Enable startupProbe on APISIX Dashboard container
   ## @param dashboard.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param dashboard.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param dashboard.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -2088,16 +2097,16 @@ dashboard:
   resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
+  ## @param dashboard.containerSecurityContext.enabled Enabled APISIX Dashboard containers' Security Context
   ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
-  ## @param dashboard.containerSecurityContext.runAsGroup Set Dashboard container' Security Context runAsGroup
-  ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
-  ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
-  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Dashboard container' Security Context runAsNonRoot
-  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set Dashboard container's privilege escalation
-  ## @param dashboard.containerSecurityContext.capabilities.drop Set Dashboard container's Security Context runAsNonRoot
-  ## @param dashboard.containerSecurityContext.seccompProfile.type Set Dashboard container's Security Context seccomp profile
+  ## @param dashboard.containerSecurityContext.runAsUser Set APISIX Dashboard containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsGroup Set APISIX Dashboard containers' Security Context runAsGroup
+  ## @param dashboard.containerSecurityContext.runAsNonRoot Set APISIX Dashboard containers' Security Context runAsNonRoot
+  ## @param dashboard.containerSecurityContext.privileged Set APISIX Dashboard containers' Security Context privileged
+  ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set APISIX Dashboard containers' Security Context readOnlyRootFilesystem
+  ## @param dashboard.containerSecurityContext.allowPrivilegeEscalation Set APISIX Dashboard containers' privilege escalation
+  ## @param dashboard.containerSecurityContext.capabilities.drop Set APISIX Dashboard containers' Security Context capabilities drop
+  ## @param dashboard.containerSecurityContext.seccompProfile.type Set APISIX Dashboard containers' Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -2118,20 +2127,20 @@ dashboard:
   ## @param dashboard.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param dashboard.lifecycleHooks for the Dashboard container(s) to automate configuration before or after startup
+  ## @param dashboard.lifecycleHooks for the APISIX Dashboard container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param dashboard.extraEnvVars Array with extra environment variables to add to Dashboard nodes
+  ## @param dashboard.extraEnvVars Array with extra environment variables to add to APISIX Dashboard nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param dashboard.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Dashboard nodes
+  ## @param dashboard.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for APISIX Dashboard nodes
   ##
   extraEnvVarsCM: ""
-  ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for Dashboard nodes
+  ## @param dashboard.extraEnvVarsSecret Name of existing Secret containing extra env vars for APISIX Dashboard nodes
   ##
   extraEnvVarsSecret: ""
   ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the APISIX Dashboard container
@@ -2260,7 +2269,7 @@ dashboard:
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
-    ## @param dashboard.ingress.enabled Enable ingress record generation for Apisix
+    ## @param dashboard.ingress.enabled Enable ingress record generation for APISIX Dashboard
     ##
     enabled: false
     ## @param dashboard.ingress.pathType Ingress path type
@@ -2441,7 +2450,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.4-debian-12-r0
+    tag: 1.8.4-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2713,14 +2722,14 @@ ingressController:
   ##
   initContainers: []
   ## @param ingressController.ingressClass.create Specifies whether a IngressClass should be created
-  ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress
-  ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX IngressClass
+  ## @param ingressController.ingressClass.name IngressClass that will be be used to implement the APISIX Ingress Controller Ingress
+  ## @param ingressController.ingressClass.annotations Additional annotations for the APISIX Ingress Controller IngressClass
   ##
   ingressClass:
     create: true
     name: "apisix"
     annotations: {}
-  ## @param ingressController.defaultConfig [string] APISIX Dashboard configuration (evaluated as a template)
+  ## @param ingressController.defaultConfig [string] APISIX Ingress Controller configuration (evaluated as a template)
   ##
   defaultConfig: |
     # log options
@@ -2754,14 +2763,14 @@ ingressController:
   ## @param ingressController.extraConfig Extra configuration parameters for APISIX Ingress Controller
   ##
   extraConfig: {}
-  ## @param ingressController.existingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param ingressController.existingConfigMap name of a ConfigMap with existing configuration for the APISIX Ingress Controller
   ##
   existingConfigMap: ""
-  ## @param ingressController.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param ingressController.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the APISIX Ingress Controller
   ##
   extraConfigExistingConfigMap: ""
   tls:
-    ## @param ingressController.tls.enabled Enable TLS transport in Ingress Controller
+    ## @param ingressController.tls.enabled Enable TLS transport in APISIX Ingress Controller
     ##
     enabled: true
     ## @param ingressController.tls.autoGenerated Auto-generate self-signed certificates
@@ -2914,7 +2923,7 @@ ingressController:
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
-    ## @param ingressController.ingress.enabled Enable ingress record generation for Apisix
+    ## @param ingressController.ingress.enabled Enable ingress record generation for APISIX Ingress Controller
     ##
     enabled: false
     ## @param ingressController.ingress.pathType Ingress path type
@@ -3100,7 +3109,7 @@ ingressController:
     ## @param ingressController.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
-    ## @param ingressController.metrics.annotations [object] Annotations for the apisix service in order to scrape metrics
+    ## @param ingressController.metrics.annotations [object] Annotations for the APISIX Ingress Controller service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.ingressController.service.ports.http }}"
@@ -3160,7 +3169,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r40
+    tag: 12-debian-12-r47
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -3176,16 +3185,16 @@ waitContainer:
     pullSecrets: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
+  ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
   ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
-  ## @param waitContainer.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
-  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-  ## @param waitContainer.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
-  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
+  ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsGroup Set APISIX Ingress Controller containers' Security Context runAsGroup
+  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
+  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX Ingress Controller containers' Security Context readOnlyRootFilesystem
+  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set APISIX Ingress Controller containers' Security Context allowPrivilegeEscalation
+  ## @param waitContainer.containerSecurityContext.capabilities.drop Set APISIX Ingress Controller containers' Security Context capabilities.drop
+  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set APISIX Ingress Controller containers' Security Context seccompProfile.type
   ##
   containerSecurityContext:
     enabled: true

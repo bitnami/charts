@@ -165,6 +165,17 @@ org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
 {{- end -}}
 
 {{/*
+Return the Kafka Kraft secret
+*/}}
+{{- define "kafka.kraftSecretName" -}}
+{{- if .Values.existingKraftSecret -}}
+    {{- print (tpl .Values.existingKraftSecret .) -}}
+{{- else -}}
+    {{- printf "%s-kraft" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka SASL credentials secret
 */}}
 {{- define "kafka.saslSecretName" -}}
@@ -282,7 +293,7 @@ Return the Kafka controller-eligible secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka controller-eligible secret configuration values 
+Return the Kafka controller-eligible secret configuration values
 */}}
 {{- define "kafka.controller.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -346,7 +357,7 @@ Return the Kafka broker secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka broker secret configuration values 
+Return the Kafka broker secret configuration values
 */}}
 {{- define "kafka.broker.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -474,23 +485,16 @@ Returns the value listener.security.protocol.map based on the values of 'listene
 {{- if .context.Values.listeners.securityProtocolMap -}}
   {{- print .context.Values.listeners.securityProtocolMap -}}
 {{- else -}}
-  {{- $listeners := list .context.Values.listeners.client .context.Values.listeners.interbroker -}}
-  {{- if .isController -}}
-    {{- if .context.Values.controller.controllerOnly -}}
-      {{- $listeners = list .context.Values.listeners.controller -}}
-    {{- else -}}
-      {{- $listeners = append $listeners .context.Values.listeners.controller -}}
-      {{- range $i := .context.Values.listeners.extraListeners -}}
-      {{- $listeners = append $listeners $i -}}
-      {{- end -}}
-    {{- end -}}
+  {{- $listeners := list .context.Values.listeners.controller .context.Values.listeners.client .context.Values.listeners.interbroker -}}
+  {{- if and .isController .context.Values.controller.controllerOnly -}}
+    {{- $listeners = list .context.Values.listeners.controller  -}}
   {{- else -}}
     {{- range $i := .context.Values.listeners.extraListeners -}}
     {{- $listeners = append $listeners $i -}}
     {{- end -}}
   {{- end -}}
-  {{- if and .context.Values.externalAccess.enabled -}}
-  {{- $listeners = append $listeners .context.Values.listeners.external -}}
+  {{- if .context.Values.externalAccess.enabled -}}
+    {{- $listeners = append $listeners .context.Values.listeners.external -}}
   {{- end -}}
   {{- $res := list -}}
   {{- range $listener := $listeners -}}
@@ -507,7 +511,7 @@ Returns the containerPorts for listeners.extraListeners
 {{- range $listener := .Values.listeners.extraListeners -}}
 - name: {{ lower $listener.name}}
   containerPort: {{ $listener.containerPort }}
-{{- end -}}
+{{ end }}
 {{- end -}}
 
 {{/*
@@ -523,9 +527,21 @@ Returns the controller quorum bootstrap servers based on the number of controlle
   {{- $clusterDomain := .Values.clusterDomain }}
   {{- $port := int .Values.listeners.controller.containerPort }}
   {{- $bootstrapServers := list -}}
-  {{- range $i := until (int .Values.controller.replicaCount) -}}
-    {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
-    {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+  {{- if and (.Values.controller.autoscaling) (.Values.controller.autoscaling.hpa) (.Values.controller.autoscaling.hpa.enabled) -}}
+    {{- range $i := until (int .Values.controller.autoscaling.hpa.maxReplicas) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+    {{- end -}}
+  {{- else -}}
+    {{- range $i := until (int .Values.controller.replicaCount) -}}
+      {{- $nodeAddress := printf "%s-%d.%s.%s.svc.%s:%d" $fullname (int $i) $serviceName $releaseNamespace $clusterDomain $port -}}
+      {{- if eq (int $.Values.kraftVersion) 0 }}
+        {{- $nodeId := add (int $i) (int $.Values.controller.minId) -}}
+        {{- $bootstrapServers = append $bootstrapServers (printf "%d@%s" $nodeId $nodeAddress ) -}}
+      {{- else }}
+        {{- $bootstrapServers = append $bootstrapServers $nodeAddress -}}
+      {{- end }}
+    {{- end -}}
   {{- end -}}
   {{- join "," $bootstrapServers -}}
 {{- end -}}
@@ -535,9 +551,12 @@ Returns the controller quorum bootstrap servers based on the number of controlle
 Section of the server.properties shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-inter.broker.listener.name: {{ .Values.listeners.interbroker.name }}
 controller.listener.names: {{ .Values.listeners.controller.name }}
+{{- if eq (int .Values.kraftVersion) 0 }}
+controller.quorum.voters: {{ include "kafka.controller.quorumBootstrapServers" . }}
+{{- else }}
 controller.quorum.bootstrap.servers: {{ include "kafka.controller.quorumBootstrapServers" . }}
+{{- end }}
 {{- if include "kafka.sslEnabled" . }}
 # TLS configuration
 ssl.keystore.type: JKS
@@ -706,7 +725,7 @@ Environment variables shared by both controller-eligible and broker nodes
 - name: KAFKA_KRAFT_CLUSTER_ID
   valueFrom:
     secretKeyRef:
-      name: {{ default (printf "%s-kraft" (include "common.names.fullname" .)) .Values.existingKraftSecret }}
+      name: {{ template "kafka.kraftSecretName" . }}
       key: cluster-id
 {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
 - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS

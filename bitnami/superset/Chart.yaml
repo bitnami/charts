@@ -2,19 +2,19 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: application
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: superset
-      image: docker.io/bitnami/superset:4.1.2-debian-12-r0
+      image: docker.io/bitnami/superset:5.0.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: application
 apiVersion: v2
-appVersion: 4.1.2
+appVersion: 5.0.0
 dependencies:
 - condition: redis.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.x.x
+  version: 21.x.x
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -38,4 +38,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/superset
 - https://github.com/bitnami/containers/tree/main/bitnami/superset
 - https://github.com/apache/superset
-version: 1.1.2
+version: 4.0.0

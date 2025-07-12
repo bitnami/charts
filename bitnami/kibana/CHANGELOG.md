@@ -1,8 +1,46 @@
 # Changelog
 
-## 11.5.3 (2025-03-25)
+## 12.1.4 (2025-06-26)
 
-* [bitnami/kibana] Release 11.5.3 ([#32604](https://github.com/bitnami/charts/pull/32604))
+* [bitnami/kibana] Support TLS and Authentication in Kibana dashboard import script ([#34562](https://github.com/bitnami/charts/pull/34562))
+
+## <small>12.1.3 (2025-06-24)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34604) ([ae475c8](https://github.com/bitnami/charts/commit/ae475c80a52127cbdab36276ed2d071c4495c785)), closes [#34604](https://github.com/bitnami/charts/issues/34604)
+
+## <small>12.1.2 (2025-06-13)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34454) ([202ba80](https://github.com/bitnami/charts/commit/202ba803323dd898d998d5af3f1e19a7c69ecd14)), closes [#34454](https://github.com/bitnami/charts/issues/34454)
+
+## <small>12.1.1 (2025-06-03)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#34083) ([ef295dc](https://github.com/bitnami/charts/commit/ef295dcd770e2206e04b3145065bbe9ae82af67b)), closes [#34083](https://github.com/bitnami/charts/issues/34083)
+
+## 12.1.0 (2025-05-14)
+
+* [bitnami/kibana] Add overwrite parameter to import saved objects managing (#33282) ([c8e3e76](https://github.com/bitnami/charts/commit/c8e3e76d9d2da66286eb512390ed7ce49199676b)), closes [#33282](https://github.com/bitnami/charts/issues/33282)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>12.0.2 (2025-05-07)</small>
+
+* [bitnami/kibana] Release 12.0.2 (#33499) ([c461c0a](https://github.com/bitnami/charts/commit/c461c0a50b8519e07f7e975d9ea66dd1061159f5)), closes [#33499](https://github.com/bitnami/charts/issues/33499)
+
+## <small>12.0.1 (2025-05-06)</small>
+
+* [bitnami/kibana] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33383) ([a05c481](https://github.com/bitnami/charts/commit/a05c481865114bfc6083c7d22ba4153228bde48b)), closes [#33383](https://github.com/bitnami/charts/issues/33383)
+
+## 12.0.0 (2025-04-29)
+
+* [bitnami/kibana] Release 12.0.0 (#33244) ([389d46f](https://github.com/bitnami/charts/commit/389d46f68a2a84b0239e93d5c361e548c6d0f7c9)), closes [#33244](https://github.com/bitnami/charts/issues/33244)
+
+## 11.6.0 (2025-04-04)
+
+* [bitnami/kibana] Set `usePasswordFiles=true` by default (#32636) ([5ee2a7e](https://github.com/bitnami/charts/commit/5ee2a7edaf8731c0590c65b47b9bd5d9201386fa)), closes [#32636](https://github.com/bitnami/charts/issues/32636)
+
+## <small>11.5.3 (2025-03-25)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kibana] Release 11.5.3 (#32604) ([2bc41c9](https://github.com/bitnami/charts/commit/2bc41c9aa9ff2014a0c89cd626e0039a0108b29d)), closes [#32604](https://github.com/bitnami/charts/issues/32604)
 
 ## <small>11.5.2 (2025-03-04)</small>
 

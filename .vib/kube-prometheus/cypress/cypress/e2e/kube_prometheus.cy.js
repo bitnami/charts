@@ -12,9 +12,8 @@ it('allows executing a query and displaying response data for each deployment', 
   Object.keys(deployments).forEach((podName, i) => {
     const query = Object.values(deployments)[i].query;
 
-    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`);
-    cy.contains('Execute').click();
-    cy.contains('.data-table', `container="${podName}"`)
+    cy.visit(`/graph?g0.expr=${query}`);
+    cy.contains('span', `container="${podName}"`)
   })
 });
 
@@ -25,9 +24,8 @@ it('allows executing a query and displaying response data for each service monit
   Object.keys(monitors).forEach((jobName, i) => {
     const query = Object.values(monitors)[i].query;
 
-    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`);
-    cy.contains('Execute').click();
-    cy.contains('.data-table', `job="${jobName}"`)
+    cy.visit(`/graph?g0.expr=${query}`);
+    cy.contains('span', `job="${jobName}"`)
   })
 });
 
@@ -38,6 +36,6 @@ it('checks targets status', () => {
     const podData = Object.values(targets)[i];
 
     cy.visit(`/targets?search=${podName}`);
-    cy.contains(`${podData.replicaCount}/${podData.replicaCount} up`);
+    cy.get('a[href$=metrics]').should('have.length', `${podData.replicaCount}`);
   })
 });

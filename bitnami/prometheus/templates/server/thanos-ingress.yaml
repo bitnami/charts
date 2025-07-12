@@ -18,21 +18,19 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.server.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.server.thanos.ingress.ingressClassName }}
   ingressClassName: {{ .Values.server.thanos.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
     {{- if .Values.server.thanos.ingress.hostname }}
-    - host: {{ .Values.server.thanos.ingress.hostname }}
+    - host: {{ tpl .Values.server.thanos.ingress.hostname . | quote }}
       http:
         paths:
           {{- if .Values.server.thanos.ingress.extraPaths }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.ingress.extraPaths "context" $) | nindent 10 }}
           {{- end }}
           - path: {{ .Values.server.thanos.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.thanos.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.thanos-sidecar.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
     {{- range .Values.server.thanos.ingress.extraHosts }}
@@ -40,9 +38,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "prometheus.thanos-sidecar.fullname" $) "servicePort" "grpc" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.server.thanos.ingress.extraRules }}

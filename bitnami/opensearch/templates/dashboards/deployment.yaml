@@ -69,7 +69,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.dashboards.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }} 
+        {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }}
         {{- if .Values.dashboards.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -94,11 +94,16 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.dashboards.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.security.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: OPENSEARCH_DASHBOARDS_PASSWORD_FILE
+              value: "/opt/bitnami/opensearch-dashboards/secrets/opensearch-dashboards-password"
+            {{- else }}
             - name: OPENSEARCH_DASHBOARDS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "opensearch.secretName" . }}
                   key: opensearch-dashboards-password
+            {{- end }}
             {{- end }}
             {{- if .Values.dashboards.tls.enabled }}
             - name: OPENSEARCH_DASHBOARDS_SERVER_ENABLE_TLS
@@ -174,6 +179,10 @@ spec:
               subPath: app-plugins-dir
             - name: dashboards-data
               mountPath: /bitnami/opensearch-dashboards
+            {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+            - name: opensearch-dashboards-secrets
+              mountPath: /opt/bitnami/opensearch-dashboards/secrets
+            {{- end }}
             {{- if .Values.security.enabled }}
             - name: opensearch-certificates
               mountPath: /opt/bitnami/opensearch-dashboards/config/certs/opensearch
@@ -193,6 +202,14 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+        - name: opensearch-dashboards-secrets
+          secret:
+            secretName: {{ include "opensearch.secretName" . }}
+            items:
+              - key: opensearch-dashboards-password
+                path: opensearch-dashboards-password
+        {{- end }}
         - name: dashboards-data
         {{- if .Values.dashboards.persistence.enabled }}
           persistentVolumeClaim:

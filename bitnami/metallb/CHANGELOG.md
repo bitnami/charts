@@ -1,8 +1,54 @@
 # Changelog
 
-## 6.4.8 (2025-03-05)
+## 6.4.19 (2025-07-09)
 
-* [bitnami/metallb] Release 6.4.8 ([#32302](https://github.com/bitnami/charts/pull/32302))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34923](https://github.com/bitnami/charts/pull/34923))
+
+## <small>6.4.18 (2025-06-16)</small>
+
+* [bitnami/metallb] Add RBAC permissions for new IPAddressPool and ServiceBGP resources (#34233) ([31f6fbd](https://github.com/bitnami/charts/commit/31f6fbd549d1b7b8952ce868e4eb0232a8bb3199)), closes [#34233](https://github.com/bitnami/charts/issues/34233)
+
+## <small>6.4.17 (2025-06-13)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34466) ([66e8dcf](https://github.com/bitnami/charts/commit/66e8dcfd86830855f47419a48b0bf09454759fab)), closes [#34466](https://github.com/bitnami/charts/issues/34466)
+
+## <small>6.4.16 (2025-06-06)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34192) ([7d31656](https://github.com/bitnami/charts/commit/7d3165658a617d4bcbf3e8f0c2e8a4688b210715)), closes [#34192](https://github.com/bitnami/charts/issues/34192)
+
+## <small>6.4.15 (2025-06-04)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34101) ([16be32c](https://github.com/bitnami/charts/commit/16be32c30bbb19ccd338208b68786408d831662e)), closes [#34101](https://github.com/bitnami/charts/issues/34101)
+
+## <small>6.4.14 (2025-06-03)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34069) ([e16e576](https://github.com/bitnami/charts/commit/e16e576607fb024e627e8e40a47925264e8cfbc6)), closes [#34069](https://github.com/bitnami/charts/issues/34069)
+
+## <small>6.4.13 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#33707) ([4407ba6](https://github.com/bitnami/charts/commit/4407ba65aae5e2473bbc88c2d2e9f54b70d03db5)), closes [#33707](https://github.com/bitnami/charts/issues/33707)
+
+## <small>6.4.12 (2025-05-07)</small>
+
+* [bitnami/metallb] Release 6.4.12 (#33534) ([e1fe319](https://github.com/bitnami/charts/commit/e1fe319645d8288b2a3aafa0bac41433639a8d1d)), closes [#33534](https://github.com/bitnami/charts/issues/33534)
+
+## <small>6.4.11 (2025-05-06)</small>
+
+* [bitnami/metallb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33398 ([f55bc85](https://github.com/bitnami/charts/commit/f55bc851530f9caf66252ded8d27c35eae87b8d5)), closes [#33398](https://github.com/bitnami/charts/issues/33398)
+
+## <small>6.4.10 (2025-05-02)</small>
+
+* [bitnami/metallb] Release 6.4.10 (#33297) ([c6b47ee](https://github.com/bitnami/charts/commit/c6b47ee4d2a3e0b0a56109ff2414114a506f233f)), closes [#33297](https://github.com/bitnami/charts/issues/33297)
+
+## <small>6.4.9 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metallb] Release 6.4.9 (#32750) ([2d75cde](https://github.com/bitnami/charts/commit/2d75cde070fb339d4635c2c77e0a63fdf6c76c86)), closes [#32750](https://github.com/bitnami/charts/issues/32750)
+
+## <small>6.4.8 (2025-03-05)</small>
+
+* [bitnami/metallb] Release 6.4.8 (#32302) ([63855c7](https://github.com/bitnami/charts/commit/63855c7c58f8f3a49c3064d8e38ff09152cb3772)), closes [#32302](https://github.com/bitnami/charts/issues/32302)
 
 ## <small>6.4.7 (2025-02-19)</small>
 

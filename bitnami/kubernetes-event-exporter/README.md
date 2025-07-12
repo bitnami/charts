@@ -20,8 +20,6 @@ Looking to use Kubernetes Event Exporter in production? Try [VMware Tanzu Applic
 
 This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -130,6 +128,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                       | `[]`                                        |
 | `config.logLevel`                                   | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                                                                                                                      | `debug`                                     |
 | `config.logFormat`                                  | How the logs are formatted. Allowed values: `pretty` or `json`                                                                                                                                                    | `pretty`                                    |
+| `config.clusterName`                                | The name of the kubernetes cluster that the events are originating from                                                                                                                                           | `""`                                        |
 | `config.receivers`                                  | Array containing event receivers                                                                                                                                                                                  | `[]`                                        |
 | `config.route.routes`                               | Array containing event route configuration                                                                                                                                                                        | `[]`                                        |
 | `rbac.create`                                       | Create the RBAC roles for API accessibility                                                                                                                                                                       | `true`                                      |

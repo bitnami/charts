@@ -1,0 +1,89 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.keeper.enabled .Values.keeper.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "clickhouse.keeper.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/part-of: clickhouse
+    app.kubernetes.io/component: keeper
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keeper.podLabels .Values.commonLabels) "context" .) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 6 }}
+      app.kubernetes.io/part-of: clickhouse
+      app.kubernetes.io/component: keeper
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.keeper.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.keeper.containerPorts.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.keeper.containerPorts.tcpSecure }}
+        {{- end }}
+        - port: {{ .Values.keeper.containerPorts.raft }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 14 }}
+              app.kubernetes.io/part-of: clickhouse
+              app.kubernetes.io/component: keeper
+    {{- if .Values.keeper.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.keeper.networkPolicy.extraEgress "context" .) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.keeper.containerPorts.tcp }}
+        {{- if .Values.tls.enabled }}
+        - port: {{ .Values.keeper.containerPorts.tcpSecure }}
+        {{- end }}
+        - port: {{ .Values.keeper.containerPorts.raft }}
+      {{- if not .Values.keeper.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" .Values.commonLabels "context" .) | nindent 14 }}
+              app.kubernetes.io/part-of: clickhouse
+        {{- if .Values.keeper.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels:
+              {{ include "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.keeper.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.keeper.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.keeper.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.keeper.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.keeper.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.keeper.networkPolicy.extraIngress "context" .) | nindent 4 }}
+    {{- end }}
+{{- end }}

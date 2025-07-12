@@ -1,8 +1,74 @@
 # Changelog
 
-## 1.4.12 (2025-03-04)
+## 1.5.11 (2025-07-10)
 
-* [bitnami/cert-manager] Release 1.4.12 ([#32278](https://github.com/bitnami/charts/pull/32278))
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34996](https://github.com/bitnami/charts/pull/34996))
+
+## <small>1.5.10 (2025-07-10)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34991) ([bb6a7ba](https://github.com/bitnami/charts/commit/bb6a7bad6afeba9b3cdc26f2b4f4a638b426aa95)), closes [#34991](https://github.com/bitnami/charts/issues/34991)
+
+## <small>1.5.9 (2025-07-08)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34871) ([c91b32d](https://github.com/bitnami/charts/commit/c91b32da251fe12b6789baef22ab287ad4f95c5c)), closes [#34871](https://github.com/bitnami/charts/issues/34871)
+
+## <small>1.5.8 (2025-07-08)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34859) ([88f4965](https://github.com/bitnami/charts/commit/88f4965e80762e2066013ee99fde9f904c81384b)), closes [#34859](https://github.com/bitnami/charts/issues/34859)
+
+## <small>1.5.7 (2025-07-02)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34770) ([911707a](https://github.com/bitnami/charts/commit/911707a7ca3e4503e14463bed55da3a038e4272a)), closes [#34770](https://github.com/bitnami/charts/issues/34770)
+
+## <small>1.5.6 (2025-06-18)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34540) ([897192d](https://github.com/bitnami/charts/commit/897192d97cfa2637a31da13d1a65f4ff924a457d)), closes [#34540](https://github.com/bitnami/charts/issues/34540)
+
+## <small>1.5.5 (2025-06-13)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34409) ([416a937](https://github.com/bitnami/charts/commit/416a937e6b2148cf365d074ac99b0f485eba54b2)), closes [#34409](https://github.com/bitnami/charts/issues/34409)
+
+## <small>1.5.4 (2025-06-13)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34401) ([bc411cb](https://github.com/bitnami/charts/commit/bc411cb236c976722cb9df310bbe5b5a4262392c)), closes [#34401](https://github.com/bitnami/charts/issues/34401)
+
+## <small>1.5.3 (2025-06-10)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34298) ([7e16380](https://github.com/bitnami/charts/commit/7e163808e27c3ea66ebc56139a9a6836308e163f)), closes [#34298](https://github.com/bitnami/charts/issues/34298)
+
+## <small>1.5.2 (2025-06-05)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34141) ([c24c500](https://github.com/bitnami/charts/commit/c24c500dbbb415a1d477eb15cb4864fe7252fa9c)), closes [#34141](https://github.com/bitnami/charts/issues/34141)
+
+## <small>1.5.1 (2025-06-05)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34128) ([ac8db5a](https://github.com/bitnami/charts/commit/ac8db5a63830f5ba3a70f5ac5c02cafec0d202de)), closes [#34128](https://github.com/bitnami/charts/issues/34128)
+
+## 1.5.0 (2025-05-29)
+
+* [bitnami/cert-manager] added webhook.timeoutSeconds (#33890) ([3e2b76e](https://github.com/bitnami/charts/commit/3e2b76e83e5227c47342e44a4180ea7a3e7ef182)), closes [#33890](https://github.com/bitnami/charts/issues/33890)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>1.4.16 (2025-05-07)</small>
+
+* [bitnami/cert-manager] Release 1.4.16 (#33523) ([03e13bf](https://github.com/bitnami/charts/commit/03e13bf81d3c73fbd944e7e8dfce20ecc5076287)), closes [#33523](https://github.com/bitnami/charts/issues/33523)
+
+## <small>1.4.15 (2025-05-06)</small>
+
+* [bitnami/cert-manager] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (# ([241352d](https://github.com/bitnami/charts/commit/241352decddbbab70a72d3f683c24c46502516c8)), closes [#33342](https://github.com/bitnami/charts/issues/33342)
+
+## <small>1.4.14 (2025-04-24)</small>
+
+* [bitnami/cert-manager] Release 1.4.14 (#33162) ([d36389f](https://github.com/bitnami/charts/commit/d36389f096574523cacb5c98a5acccf03b23ccc4)), closes [#33162](https://github.com/bitnami/charts/issues/33162)
+
+## <small>1.4.13 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/cert-manager] Release 1.4.13 (#32719) ([0da4f79](https://github.com/bitnami/charts/commit/0da4f799bcf09d19130d28d1924222e98668fcda)), closes [#32719](https://github.com/bitnami/charts/issues/32719)
+
+## <small>1.4.12 (2025-03-04)</small>
+
+* [bitnami/cert-manager] Release 1.4.12 (#32278) ([ee732be](https://github.com/bitnami/charts/commit/ee732bee6aba0b701c5ec8749dc8df6e42d0c664)), closes [#32278](https://github.com/bitnami/charts/issues/32278)
 
 ## <small>1.4.11 (2025-02-19)</small>
 

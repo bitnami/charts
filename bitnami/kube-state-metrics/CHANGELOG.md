@@ -1,8 +1,42 @@
 # Changelog
 
-## 5.0.4 (2025-03-05)
+## 5.0.12 (2025-07-09)
 
-* [bitnami/kube-state-metrics] Release 5.0.4 ([#32297](https://github.com/bitnami/charts/pull/32297))
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#34914](https://github.com/bitnami/charts/pull/34914))
+
+## <small>5.0.11 (2025-06-25)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34628) ([64929a5](https://github.com/bitnami/charts/commit/64929a5757f4c7a55ac792b2edd94e6735158757)), closes [#34628](https://github.com/bitnami/charts/issues/34628)
+
+## <small>5.0.10 (2025-06-13)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34456) ([279aed1](https://github.com/bitnami/charts/commit/279aed1243da476dac60740fef48bcebab1cc1e1)), closes [#34456](https://github.com/bitnami/charts/issues/34456)
+
+## <small>5.0.9 (2025-06-06)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34182) ([3ad7b94](https://github.com/bitnami/charts/commit/3ad7b9420066eb156d354d363a06383ecb893b5c)), closes [#34182](https://github.com/bitnami/charts/issues/34182)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>5.0.8 (2025-05-07)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.8 (#33532) ([f1de57e](https://github.com/bitnami/charts/commit/f1de57ebb454042196f7bd581dd793e454838f20)), closes [#33532](https://github.com/bitnami/charts/issues/33532)
+
+## <small>5.0.7 (2025-05-06)</small>
+
+* [bitnami/kube-state-metrics] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 referen ([7c5ec69](https://github.com/bitnami/charts/commit/7c5ec69cea44d08859d87ac51eeedd23b6ccf2e8)), closes [#33388](https://github.com/bitnami/charts/issues/33388)
+
+## <small>5.0.6 (2025-05-02)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.6 (#33295) ([f90ae20](https://github.com/bitnami/charts/commit/f90ae20419304eda7ade6fefff0745675dfe8bc0)), closes [#33295](https://github.com/bitnami/charts/issues/33295)
+
+## <small>5.0.5 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kube-state-metrics] Release 5.0.5 (#32745) ([923099a](https://github.com/bitnami/charts/commit/923099aaf08be9df766b3399efa49b16a6b20f73)), closes [#32745](https://github.com/bitnami/charts/issues/32745)
+
+## <small>5.0.4 (2025-03-05)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.4 (#32297) ([b141399](https://github.com/bitnami/charts/commit/b14139969db1e24805425b679c490a7bdc268212)), closes [#32297](https://github.com/bitnami/charts/issues/32297)
 
 ## <small>5.0.3 (2025-02-19)</small>
 

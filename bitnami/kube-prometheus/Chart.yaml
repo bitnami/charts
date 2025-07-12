@@ -2,22 +2,22 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  tanzuCategory: clusterUtility
   category: Analytics
-  licenses: Apache-2.0
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r0
+      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r12
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r1
+      image: docker.io/bitnami/blackbox-exporter:0.27.0-debian-12-r1
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.55.1-debian-12-r14
+      image: docker.io/bitnami/prometheus:3.4.2-debian-12-r1
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.81.0-debian-12-r0
+      image: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r5
     - name: thanos
-      image: docker.io/bitnami/thanos:0.37.2-debian-12-r8
+      image: docker.io/bitnami/thanos:0.39.1-debian-12-r1
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.81.0
+appVersion: 0.83.0
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
@@ -35,7 +35,8 @@ dependencies:
 - name: kube-prometheus-crds
   repository: file://./charts/kube-prometheus-crds
   version: 0.x.x
-description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
+description: Prometheus Operator provides easy monitoring definitions for Kubernetes
+  services and deployment and management of Prometheus instances.
 home: https://bitnami.com
 icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 keywords:
@@ -50,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.1.3
+version: 11.2.11

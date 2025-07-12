@@ -35,13 +35,13 @@ http:
   {{- if .Vars.metrics.enabled }}
   http://127.0.0.1:{{ .Vars.metrics.containerPorts.metrics }}/metrics:
     status: 200
-    timeout: 30000
+    timeout: 120000
     body:
       - /metrics_dremio/
   {{- /* Not testing the body output because it is causing a CancelTimeoutError from time to time (probably because of the resource preset we are using) */}}
   http://dremio-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
     status: 200
-    timeout: 30000
+    timeout: 120000
   {{- end }}
 addr:
   tcp://dremio-master-coordinator-0.dremio-headless:{{ .Vars.dremio.containerPorts.liveness }}:

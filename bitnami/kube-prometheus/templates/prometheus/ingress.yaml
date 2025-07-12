@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.prometheus.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.prometheus.ingress.ingressClassName }}
   ingressClassName: {{ .Values.prometheus.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -26,9 +26,7 @@ spec:
           {{- toYaml .Values.prometheus.ingress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ .Values.prometheus.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.prometheus.ingress.pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
       {{- if ne .Values.prometheus.ingress.hostname "*" }}
       host: {{ .Values.prometheus.ingress.hostname }}
@@ -39,9 +37,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.prometheus.ingress.extraRules }}

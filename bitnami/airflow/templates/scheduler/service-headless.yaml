@@ -3,11 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "LocalKubernetesExecutor") (eq .Values.executor "SequentialExecutor")) }}
+{{- if (include "airflow.scheduler.requiresStatefulset" .) -}}
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ printf "%s-hl" (include "airflow.scheduler.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ include "airflow.scheduler.serviceName" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler

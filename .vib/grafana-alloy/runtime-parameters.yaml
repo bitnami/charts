@@ -1,0 +1,26 @@
+resourceType: deployment
+replicaCount: 2
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+alloy:
+  clustering:
+    enabled: true
+  mounts:
+    varlog: true
+    dockercontainers: true
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  containerPorts:
+    http: 8081
+configReloader:
+  containerPorts:
+    http: 9999
+service:
+  ports:
+    http: 8081
+  type: LoadBalancer
+serviceAccount:
+  create: true
+automountServiceAccountToken: true

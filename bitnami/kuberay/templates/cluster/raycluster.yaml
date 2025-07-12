@@ -171,7 +171,7 @@ spec:
             {{- $podAntiAffinityPreset := coalesce .podAntiAffinityPreset $.Values.cluster.worker.common.podAntiAffinityPreset }}
             podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $podAntiAffinityPreset "component" (printf "cluster-worker-%s" .groupName) "customLabels" $podLabels "context" $) | nindent 14 }}
             {{- $nodeAffinityPreset := coalesce .nodeAffinityPreset $.Values.cluster.worker.common.nodeAffinityPreset }}
-            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $nodeAffinityPreset.type "key" $nodeAffinityPreset.key "values" $nodeAffinityPreset.values) | nindent 12 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $nodeAffinityPreset.type "key" $nodeAffinityPreset.key "values" $nodeAffinityPreset.values) | nindent 14 }}
           {{- end }}
           {{- $nodeSelector := coalesce .nodeSelector $.Values.cluster.worker.common.nodeSelector }}
           {{- if $nodeSelector }}

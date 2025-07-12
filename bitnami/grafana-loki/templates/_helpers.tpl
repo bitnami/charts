@@ -87,17 +87,10 @@ Return the proper Grafana Loki gossip-ring fullname
 {{- end -}}
 
 {{/*
-Return the proper Grafana Loki promtail fullname
+Return the proper Grafana Loki alloy fullname
 */}}
-{{- define "grafana-loki.promtail.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "promtail" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Return the proper Grafana Loki image name
-*/}}
-{{- define "grafana-loki.promtail.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.promtail.image "global" .Values.global) }}
+{{- define "grafana-loki.grafana-alloy.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "grafanaalloy" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -118,7 +111,7 @@ Return the proper Grafana Loki image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-loki.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.promtail.image .Values.volumePermissions.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.loki.image .Values.gateway.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -144,35 +137,13 @@ Get the Loki configuration configmap.
 {{- end -}}
 
 {{/*
-Get the promtail configuration configmap.
-*/}}
-{{- define "grafana-loki.promtail.secretName" -}}
-{{- if .Values.promtail.existingSecret -}}
-    {{- .Values.promtail.existingSecret -}}
-{{- else }}
-    {{- include "grafana-loki.promtail.fullname" .  -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the promtail configuration configmap.
+Get the gateway configuration secret.
 */}}
 {{- define "grafana-loki.gateway.secretName" -}}
 {{- if .Values.gateway.auth.existingSecret -}}
     {{- .Values.gateway.auth.existingSecret -}}
 {{- else }}
     {{- include "grafana-loki.gateway.fullname" .  -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "grafana-loki.promtail.serviceAccountName" -}}
-{{- if .Values.promtail.serviceAccount.create -}}
-    {{ default (printf "%s" (include "grafana-loki.promtail.fullname" .)) .Values.promtail.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.promtail.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -285,7 +256,6 @@ Check if there are rolling tags in the images
 */}}
 {{- define "grafana-loki.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.loki.image }}
-{{- include "common.warnings.rollingTag" .Values.promtail.image }}
 {{- include "common.warnings.rollingTag" .Values.gateway.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

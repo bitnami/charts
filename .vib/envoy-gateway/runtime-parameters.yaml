@@ -1,0 +1,159 @@
+# Taken from https://gateway.envoyproxy.io/latest/tasks/quickstart/
+extraDeploy:
+  # Begin example
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: GatewayClass
+    metadata:
+      name: eg
+    spec:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  - |
+    apiVersion: gateway.envoyproxy.io/v1alpha1
+    kind: EnvoyProxy
+    metadata:
+      name: config
+    spec:
+      provider:
+        type: Kubernetes
+        kubernetes:
+          envoyDeployment:
+            pod:
+              {{- include "envoy-gateway.imagePullSecrets" . | nindent 10 }}
+  - |
+    apiVersion: gateway.networking.k8s.io/v1
+    kind: Gateway
+    metadata:
+      name: eg
+    spec:
+      gatewayClassName: eg
+      infrastructure:
+        parametersRef:
+          group: gateway.envoyproxy.io
+          kind: EnvoyProxy
+          name: config
+      listeners:
+        - name: http
+          protocol: HTTP
+          port: 80
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: backend
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: backend
+      labels:
+        app: backend
+        service: backend
+    spec:
+      ports:
+        - name: http
+          port: 80
+          targetPort: 8080
+      selector:
+        app: backend
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: backend
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: backend
+          version: v1
+      template:
+        metadata:
+          labels:
+            app: backend
+            version: v1
+        spec:
+          serviceAccountName: backend
+          containers:
+            - image: bitnami/nginx
+              imagePullPolicy: Always
+              name: backend
+              ports:
+                - containerPort: 8080
+              volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/nginx/conf
+                  subPath: app-conf-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/nginx/logs
+                  subPath: app-logs-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/nginx/tmp
+                  subPath: app-tmp-dir
+              securityContext:
+                runAsNonRoot: true
+                privileged: false
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+                seccompProfile:
+                  type: "RuntimeDefault"
+          volumes:
+            - name: empty-dir
+              emptyDir: {}
+  - apiVersion: gateway.networking.k8s.io/v1
+    kind: HTTPRoute
+    metadata:
+      name: backend
+    spec:
+      parentRefs:
+        - name: eg
+      hostnames:
+        - "bitnami-envoy.my"
+      rules:
+        - backendRefs:
+            - group: ""
+              kind: Service
+              name: backend
+              port: 80
+              weight: 1
+          matches:
+            - path:
+                type: PathPrefix
+                value: /
+  # End of the example
+  # HACK: As the created envoy service has a random-generated name, we
+  # create one with a fixed name using the expected selectors
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: vib-envoy-gateway
+    spec:
+      ports:
+        - name: http
+          port: 80
+          targetPort: 10080
+      selector:
+        gateway.envoyproxy.io/owning-gateway-name: eg
+exposeAdmin: true
+overrideConfiguration:
+  admin:
+    enableDumpConfig: true
+containerPorts:
+  admin: 9881
+service:
+  ports:
+    admin: 80
+    metrics: 8081
+  type: LoadBalancer
+metrics:
+  enabled: true
+extraVolumes:
+  - name: empty-dir
+    emptyDir: {}
+extraVolumeMounts:
+  - name: empty-dir
+    mountPath: /tmp
+# Adding an extra initial delay to avoid race conditions with the
+# deployment and goss stages
+readinessProbe:
+  initialDelaySeconds: 60

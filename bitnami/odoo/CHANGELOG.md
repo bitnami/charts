@@ -1,8 +1,46 @@
 # Changelog
 
-## 28.1.4 (2025-03-05)
+## 28.2.7 (2025-07-05)
 
-* [bitnami/odoo] Release 28.1.4 ([#32324](https://github.com/bitnami/charts/pull/32324))
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#34811](https://github.com/bitnami/charts/pull/34811))
+
+## <small>28.2.6 (2025-06-10)</small>
+
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#34293) ([157643b](https://github.com/bitnami/charts/commit/157643b64f3ba12f9877c3d2807999043d7a07d6)), closes [#34293](https://github.com/bitnami/charts/issues/34293)
+
+## <small>28.2.5 (2025-06-08)</small>
+
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#34254) ([8aa2c60](https://github.com/bitnami/charts/commit/8aa2c60571a39b7a96e48dfc74510972f35505b3)), closes [#34254](https://github.com/bitnami/charts/issues/34254)
+
+## <small>28.2.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#33584) ([30eb91a](https://github.com/bitnami/charts/commit/30eb91ab3f92114c6381db532a6bbf9925f533ed)), closes [#33584](https://github.com/bitnami/charts/issues/33584)
+
+## <small>28.2.3 (2025-05-06)</small>
+
+* [bitnami/odoo] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33417) ([4a0c8c6](https://github.com/bitnami/charts/commit/4a0c8c63b7a5a55d105f66d634aefb773fc351e7)), closes [#33417](https://github.com/bitnami/charts/issues/33417)
+
+## <small>28.2.2 (2025-04-09)</small>
+
+* [bitnami/odoo] Release 28.2.2 (#32911) ([499fc05](https://github.com/bitnami/charts/commit/499fc05089cc581d8e3b42e5df53fc4786e9e7f7)), closes [#32911](https://github.com/bitnami/charts/issues/32911)
+
+## <small>28.2.1 (2025-04-05)</small>
+
+* [bitnami/odoo] Release 28.2.1 (#32825) ([753dfab](https://github.com/bitnami/charts/commit/753dfab586cf77099baaef7fa7bb671276a6cae0)), closes [#32825](https://github.com/bitnami/charts/issues/32825)
+
+## 28.2.0 (2025-04-04)
+
+* [bitnami/odoo] Set `usePasswordFiles=true` by default (#32708) ([bd67257](https://github.com/bitnami/charts/commit/bd67257b171efc29461033046b19d6287fa98af9)), closes [#32708](https://github.com/bitnami/charts/issues/32708)
+
+## <small>28.1.5 (2025-04-04)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/odoo] Release 28.1.5 (#32815) ([f69b715](https://github.com/bitnami/charts/commit/f69b715c6851244fb92e1120962bbfb6ce28cab3)), closes [#32815](https://github.com/bitnami/charts/issues/32815)
+
+## <small>28.1.4 (2025-03-05)</small>
+
+* [bitnami/odoo] Release 28.1.4 (#32324) ([4ffe055](https://github.com/bitnami/charts/commit/4ffe05501fe37fd073a04942182edce479a4d77c)), closes [#32324](https://github.com/bitnami/charts/issues/32324)
 
 ## <small>28.1.3 (2025-02-12)</small>
 

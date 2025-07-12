@@ -1,8 +1,46 @@
 # Changelog
 
-## 2.2.9 (2025-03-24)
+## 2.2.18 (2025-07-09)
 
-* [bitnami/multus-cni] Release 2.2.9 ([#32584](https://github.com/bitnami/charts/pull/32584))
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references ([#34939](https://github.com/bitnami/charts/pull/34939))
+
+## <small>2.2.17 (2025-06-13)</small>
+
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34471) ([a95efb5](https://github.com/bitnami/charts/commit/a95efb5e02fa7ef3d28c3ae3ebaa65e6be616b0e)), closes [#34471](https://github.com/bitnami/charts/issues/34471)
+
+## <small>2.2.16 (2025-06-10)</small>
+
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34328) ([70b7968](https://github.com/bitnami/charts/commit/70b7968af286f9ed47dda50073ba022a5610c4e0)), closes [#34328](https://github.com/bitnami/charts/issues/34328)
+
+## <small>2.2.15 (2025-06-06)</small>
+
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34200) ([2376c60](https://github.com/bitnami/charts/commit/2376c609d5d269b1734a119381d421145e368e88)), closes [#34200](https://github.com/bitnami/charts/issues/34200)
+
+## <small>2.2.14 (2025-06-05)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/multus-cni] :zap: :arrow_up: Update dependency references (#34117) ([9f992ee](https://github.com/bitnami/charts/commit/9f992ee1c41c4a1ba2f7a1c8ecce37b461e0dfa0)), closes [#34117](https://github.com/bitnami/charts/issues/34117)
+
+## <small>2.2.13 (2025-05-07)</small>
+
+* [bitnami/multus-cni] Release 2.2.13 (#33483) ([573a103](https://github.com/bitnami/charts/commit/573a1030c5b1b31c9226c5f66822805a309294d9)), closes [#33483](https://github.com/bitnami/charts/issues/33483)
+
+## <small>2.2.12 (2025-05-06)</small>
+
+* [bitnami/multus-cni] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([be1b80d](https://github.com/bitnami/charts/commit/be1b80da79f61f5e625575fd8b9bf3c70e73adbf)), closes [#33408](https://github.com/bitnami/charts/issues/33408)
+
+## <small>2.2.11 (2025-05-02)</small>
+
+* [bitnami/multus-cni] Release 2.2.11 (#33298) ([d858725](https://github.com/bitnami/charts/commit/d85872573d1ebdcbecdce6a63b7e72eb6dc0ce3f)), closes [#33298](https://github.com/bitnami/charts/issues/33298)
+
+## <small>2.2.10 (2025-04-02)</small>
+
+* [bitnami/multus-cni] Release 2.2.10 (#32753) ([6e39c72](https://github.com/bitnami/charts/commit/6e39c72f1d2aecabd873cafe040c2a93ea9275a1)), closes [#32753](https://github.com/bitnami/charts/issues/32753)
+
+## <small>2.2.9 (2025-03-24)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/multus-cni] Release 2.2.9 (#32584) ([52607fa](https://github.com/bitnami/charts/commit/52607faf0d32ed0c7741b0fc224863596fcdc271)), closes [#32584](https://github.com/bitnami/charts/issues/32584)
 
 ## <small>2.2.8 (2025-03-05)</small>
 

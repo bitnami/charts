@@ -1,8 +1,85 @@
 # Changelog
 
-## 1.4.3 (2025-03-18)
+## 1.4.22 (2025-07-09)
 
-* [bitnami/kuberay] Release 1.4.3 ([#32495](https://github.com/bitnami/charts/pull/32495))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34917](https://github.com/bitnami/charts/pull/34917))
+
+## <small>1.4.21 (2025-07-08)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34845) ([29cd8f8](https://github.com/bitnami/charts/commit/29cd8f8a93ba7c7151a8881a7ecbc328e0c57707)), closes [#34845](https://github.com/bitnami/charts/issues/34845)
+
+## <small>1.4.20 (2025-07-07)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34836) ([f4fc6dd](https://github.com/bitnami/charts/commit/f4fc6dd20bd8ef2f2450922a861a6054f4d941dc)), closes [#34836](https://github.com/bitnami/charts/issues/34836)
+
+## <small>1.4.19 (2025-07-07)</small>
+
+* [bitnami/kuberay]  Update `operator.metrics.serviceMonitor.honorLabels` to keep in sync with upstrea ([3be20eb](https://github.com/bitnami/charts/commit/3be20eb970e579f347c25aadce0ef592fee92e46)), closes [#34793](https://github.com/bitnami/charts/issues/34793)
+
+## <small>1.4.18 (2025-06-20)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34574) ([ef4c802](https://github.com/bitnami/charts/commit/ef4c80257e9fb6563e0550ef6700dafd0f6918cd)), closes [#34574](https://github.com/bitnami/charts/issues/34574)
+
+## <small>1.4.17 (2025-06-19)</small>
+
+* [bitnami/kuberay] Add feature toggle for Role/RoleBinding creation when operator.watchAllNamespaces  ([09106c7](https://github.com/bitnami/charts/commit/09106c769a925778802d7d37cea35f7875765c74)), closes [#34333](https://github.com/bitnami/charts/issues/34333)
+
+## <small>1.4.16 (2025-06-18)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34553) ([6dab9b2](https://github.com/bitnami/charts/commit/6dab9b2653e47160b076656aee7ae6035e5b6d46)), closes [#34553](https://github.com/bitnami/charts/issues/34553)
+
+## <small>1.4.15 (2025-06-18)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34552) ([3fbdf60](https://github.com/bitnami/charts/commit/3fbdf6024b26fdd33ccaea78ba0c6e705492e2da)), closes [#34552](https://github.com/bitnami/charts/issues/34552)
+
+## <small>1.4.14 (2025-06-17)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34360) ([5ec9e65](https://github.com/bitnami/charts/commit/5ec9e65098aff06dca9338054d3af064cf177fb1)), closes [#34360](https://github.com/bitnami/charts/issues/34360)
+
+## <small>1.4.13 (2025-06-06)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34186) ([de8a30f](https://github.com/bitnami/charts/commit/de8a30febd24f767ec8bbfa82b9e99e42caef4a4)), closes [#34186](https://github.com/bitnami/charts/issues/34186)
+
+## <small>1.4.12 (2025-05-29)</small>
+
+* fix(kuberay): wrong indentation in nodeAffinity element (#33929) ([cc6d0e2](https://github.com/bitnami/charts/commit/cc6d0e29bf6319f6c39dbca7812fe0acc75ba8d4)), closes [#33929](https://github.com/bitnami/charts/issues/33929) [bitnami#33887](https://github.com/bitnami/issues/33887)
+
+## <small>1.4.11 (2025-05-26)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/kuberay] Release 1.4.11 (#33481) ([5b3a24b](https://github.com/bitnami/charts/commit/5b3a24bb0bb33c11f7839bb793bf8ea82129bc75)), closes [#33481](https://github.com/bitnami/charts/issues/33481)
+
+## <small>1.4.10 (2025-05-06)</small>
+
+* [bitnami/kuberay] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33390 ([bcdcba5](https://github.com/bitnami/charts/commit/bcdcba5f33b36b87b7e4640c13d1c7540e01e697)), closes [#33390](https://github.com/bitnami/charts/issues/33390)
+
+## <small>1.4.9 (2025-04-14)</small>
+
+* [bitnami/kuberay] match upstream clusterrole (#32829) ([2e22964](https://github.com/bitnami/charts/commit/2e22964831c0891af097e780ff19b41a6883a10a)), closes [#32829](https://github.com/bitnami/charts/issues/32829)
+
+## <small>1.4.8 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.8 (#32932) ([2824293](https://github.com/bitnami/charts/commit/28242930c9814f6c46f0a0268d4a036324f5ba33)), closes [#32932](https://github.com/bitnami/charts/issues/32932)
+
+## <small>1.4.7 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.7 (#32928) ([54e904c](https://github.com/bitnami/charts/commit/54e904c954a3fc599f97efe62d12874d676ad5a6)), closes [#32928](https://github.com/bitnami/charts/issues/32928)
+
+## <small>1.4.6 (2025-04-09)</small>
+
+* [bitnami/kuberay] Release 1.4.6 (#32902) ([22bb26e](https://github.com/bitnami/charts/commit/22bb26ee4c4ab1c7052a4ac5e1a2918c198edb8d)), closes [#32902](https://github.com/bitnami/charts/issues/32902)
+
+## <small>1.4.5 (2025-04-03)</small>
+
+* [bitnami/kuberay] Release 1.4.5 (#32789) ([0b3b4e0](https://github.com/bitnami/charts/commit/0b3b4e0cb956609edc8d17557f4cba8e5f7a8a27)), closes [#32789](https://github.com/bitnami/charts/issues/32789)
+
+## <small>1.4.4 (2025-04-02)</small>
+
+* [bitnami/kuberay] Release 1.4.4 (#32743) ([2f6fb6e](https://github.com/bitnami/charts/commit/2f6fb6e3a68d97be7924ea84af67a25e47313168)), closes [#32743](https://github.com/bitnami/charts/issues/32743)
+
+## <small>1.4.3 (2025-03-18)</small>
+
+* [bitnami/kuberay] Release 1.4.3 (#32495) ([e5716fd](https://github.com/bitnami/charts/commit/e5716fd11e0d994973d026685004123b1d1a1451)), closes [#32495](https://github.com/bitnami/charts/issues/32495)
 
 ## <small>1.4.2 (2025-03-15)</small>
 

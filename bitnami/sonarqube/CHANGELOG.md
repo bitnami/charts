@@ -1,8 +1,62 @@
 # Changelog
 
-## 8.0.6 (2025-03-04)
+## 8.1.11 (2025-07-11)
 
-* [bitnami/sonarqube] Release 8.0.6 ([#32275](https://github.com/bitnami/charts/pull/32275))
+* [bitnami/sonarqube] Substitute SONAR_CE_JAVAADDITIONALOPTS by SONARQUBE_CE_JAVA_ADD_OPTS ([#34665](https://github.com/bitnami/charts/pull/34665))
+
+## <small>8.1.10 (2025-07-10)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34824) ([210c1ae](https://github.com/bitnami/charts/commit/210c1ae61078fcffa7762656c17a003b49208076)), closes [#34824](https://github.com/bitnami/charts/issues/34824)
+
+## <small>8.1.9 (2025-06-10)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34304) ([e290291](https://github.com/bitnami/charts/commit/e2902912033eac957096980c0e1b6ad8016590f3)), closes [#34304](https://github.com/bitnami/charts/issues/34304)
+
+## <small>8.1.8 (2025-06-02)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34046) ([c3ac537](https://github.com/bitnami/charts/commit/c3ac537c6187a8cc6850e7777dfd6f03bee4b1d8)), closes [#34046](https://github.com/bitnami/charts/issues/34046)
+
+## <small>8.1.7 (2025-06-02)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#34042) ([924b25c](https://github.com/bitnami/charts/commit/924b25c03967bb8ef91a920c0cfd06eea37481d0)), closes [#34042](https://github.com/bitnami/charts/issues/34042)
+
+## <small>8.1.6 (2025-05-16)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#33760) ([9ae1373](https://github.com/bitnami/charts/commit/9ae1373ea1fd926d2794b2b9f53c3d6b9a5bc9e2)), closes [#33760](https://github.com/bitnami/charts/issues/33760)
+
+## <small>8.1.5 (2025-05-07)</small>
+
+* [bitnami/sonarqube] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([f444011](https://github.com/bitnami/charts/commit/f4440116d494c23f922edd23626741156c0334f3)), closes [#33436](https://github.com/bitnami/charts/issues/33436)
+
+## <small>8.1.4 (2025-05-06)</small>
+
+* [bitnami/sonarqube] Release 8.1.4 (#33457) ([f671a51](https://github.com/bitnami/charts/commit/f671a51039dc71dda8b8486a89e4ec292dfefd6b)), closes [#33457](https://github.com/bitnami/charts/issues/33457)
+
+## <small>8.1.3 (2025-04-30)</small>
+
+* [bitnami/sonarqube] Increase password length to minimum 12 characters (#33160) ([c1acb5e](https://github.com/bitnami/charts/commit/c1acb5ea46e87991d8847ee178e45cb954c62db4)), closes [#33160](https://github.com/bitnami/charts/issues/33160)
+
+## <small>8.1.2 (2025-04-09)</small>
+
+* [bitnami/sonarqube] Release 8.1.2 (#32917) ([ba491e0](https://github.com/bitnami/charts/commit/ba491e00c8907b6d7949e0f94e8e52a49e4825f9)), closes [#32917](https://github.com/bitnami/charts/issues/32917)
+
+## <small>8.1.1 (2025-04-07)</small>
+
+* [bitnami/sonarqube] Release 8.1.1 (#32853) ([c552c7c](https://github.com/bitnami/charts/commit/c552c7c822cf409c42a47930355ee973d1c6ffd9)), closes [#32853](https://github.com/bitnami/charts/issues/32853)
+
+## 8.1.0 (2025-04-04)
+
+* [bitnami/sonarqube] Set `usePasswordFiles=true` by default (#32769) ([c62075b](https://github.com/bitnami/charts/commit/c62075b5cbd53b80bda25ad7fa0959c79f482513)), closes [#32769](https://github.com/bitnami/charts/issues/32769)
+
+## <small>8.0.7 (2025-04-03)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/sonarqube] Release 8.0.7 (#32805) ([70b4f28](https://github.com/bitnami/charts/commit/70b4f2859fc026cab0b083749f00c704d63534a2)), closes [#32805](https://github.com/bitnami/charts/issues/32805)
+
+## <small>8.0.6 (2025-03-04)</small>
+
+* [bitnami/sonarqube] Release 8.0.6 (#32275) ([02898e2](https://github.com/bitnami/charts/commit/02898e2451f52577262d28b652497ce3b0fa8f3a)), closes [#32275](https://github.com/bitnami/charts/issues/32275)
 
 ## <small>8.0.5 (2025-02-27)</small>
 

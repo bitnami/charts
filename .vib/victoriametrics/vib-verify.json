@@ -32,7 +32,7 @@
           "path": "/bitnami/victoriametrics"
         },
         "target_platform": {
-          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
             "name": "M4"
           }

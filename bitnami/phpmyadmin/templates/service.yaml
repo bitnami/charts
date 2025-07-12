@@ -37,7 +37,7 @@ spec:
     - name: http
       port: {{ coalesce .Values.service.ports.http .Values.service.port }}
       protocol: TCP
-      targetPort: http
+      targetPort: {{ .Values.service.targetPorts.http | default "http" }}
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}
@@ -46,7 +46,7 @@ spec:
     - name: https
       port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
       protocol: TCP
-      targetPort: https
+      targetPort: {{ .Values.service.targetPorts.https | default "https" }}
       {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https))) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- else if eq .Values.service.type "ClusterIP" }}

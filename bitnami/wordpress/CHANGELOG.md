@@ -1,8 +1,66 @@
 # Changelog
 
-## 24.1.18 (2025-03-06)
+## 25.0.1 (2025-07-08)
 
-* [bitnami/wordpress] fix network policy when metrics enabled ([#32338](https://github.com/bitnami/charts/pull/32338))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#34866](https://github.com/bitnami/charts/pull/34866))
+
+## 25.0.0 (2025-06-25)
+
+* [bitnami/wordpress] Upgrade MariaDB 11.8 (#34638) ([d78e9fc](https://github.com/bitnami/charts/commit/d78e9fc583b87d250645b6061fa8610c8720baa9)), closes [#34638](https://github.com/bitnami/charts/issues/34638)
+
+## <small>24.2.11 (2025-06-20)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34565) ([db248be](https://github.com/bitnami/charts/commit/db248be40efd6c70cbe9e754d2c362424960d5ff)), closes [#34565](https://github.com/bitnami/charts/issues/34565)
+
+## <small>24.2.10 (2025-06-13)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34393) ([4b609b0](https://github.com/bitnami/charts/commit/4b609b092ebe81d823403f65ac95da4cdf633d42)), closes [#34393](https://github.com/bitnami/charts/issues/34393)
+
+## <small>24.2.9 (2025-06-09)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34261) ([622b932](https://github.com/bitnami/charts/commit/622b93209405f54af257f3823217e6b914e2cb34)), closes [#34261](https://github.com/bitnami/charts/issues/34261)
+
+## <small>24.2.8 (2025-06-05)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#34133) ([aeaa095](https://github.com/bitnami/charts/commit/aeaa09523131d1e8557faeb3d25f0c67ba469a98)), closes [#34133](https://github.com/bitnami/charts/issues/34133)
+
+## <small>24.2.7 (2025-05-29)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#33976) ([bdc91f6](https://github.com/bitnami/charts/commit/bdc91f6f7934e6d01c754a81c06abd0f8d82a05c)), closes [#33976](https://github.com/bitnami/charts/issues/33976)
+
+## <small>24.2.6 (2025-05-08)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#33556) ([69c79f3](https://github.com/bitnami/charts/commit/69c79f39b0852eb690a91cf960eaaaef8dfffa29)), closes [#33556](https://github.com/bitnami/charts/issues/33556)
+
+## <small>24.2.5 (2025-05-06)</small>
+
+* [bitnami/wordpress] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#334 ([2c523ed](https://github.com/bitnami/charts/commit/2c523ed14d02778383a5727c557cfda22e670808)), closes [#33449](https://github.com/bitnami/charts/issues/33449)
+
+## <small>24.2.4 (2025-04-30)</small>
+
+* [bitnami/wordpress] Release 24.2.4 (#33275) ([91e8cda](https://github.com/bitnami/charts/commit/91e8cda781e3c04f9692cb0e76e2dc76c28e352c)), closes [#33275](https://github.com/bitnami/charts/issues/33275)
+
+## <small>24.2.3 (2025-04-23)</small>
+
+* [bitnami/wordpress] Release 24.2.3 (#33041) ([c0c23ae](https://github.com/bitnami/charts/commit/c0c23ae555f97fc416e7563c85aa76cae5a328f9)), closes [#33041](https://github.com/bitnami/charts/issues/33041)
+
+## <small>24.2.2 (2025-04-09)</small>
+
+* [bitnami/wordpress] Release 24.2.2 (#32921) ([fd3b5b0](https://github.com/bitnami/charts/commit/fd3b5b045fd0a9fd3c4fbbb012d9f460a011ac6b)), closes [#32921](https://github.com/bitnami/charts/issues/32921)
+
+## <small>24.2.1 (2025-04-05)</small>
+
+* [bitnami/wordpress] Release 24.2.1 (#32824) ([1f14bb1](https://github.com/bitnami/charts/commit/1f14bb10870b4cd30fe1d6d2e7d9e8c32eaf9a8f)), closes [#32824](https://github.com/bitnami/charts/issues/32824)
+
+## 24.2.0 (2025-04-04)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/wordpress] Set `usePasswordFiles=true` by default (#32770) ([d31ec15](https://github.com/bitnami/charts/commit/d31ec15591a7ed93fdb9087a87a87ec436084ac4)), closes [#32770](https://github.com/bitnami/charts/issues/32770)
+
+## <small>24.1.18 (2025-03-07)</small>
+
+* [bitnami/wordpress] fix network policy when metrics enabled (#32338) ([ddcee74](https://github.com/bitnami/charts/commit/ddcee74411ab886e7ff1831e248392cf6dfed668)), closes [#32338](https://github.com/bitnami/charts/issues/32338)
 
 ## <small>24.1.17 (2025-03-06)</small>
 
