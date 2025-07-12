@@ -36,6 +36,12 @@ spec:
   {{- if .Values.aggregator.service.sessionAffinityConfig }}
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.aggregator.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.aggregator.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.aggregator.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.aggregator.service.ipFamilies | nindent 4 }}
+  {{- end }}
   ports:
   {{- range $key, $value := .Values.aggregator.service.ports }}
     - name: {{ $key }}
