@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.10 (2025-07-11)
+## 22.0.0 (2025-07-14)
 
-* [bitnami/redis] Fix external service annotations ignored #33270 ([#33776](https://github.com/bitnami/charts/pull/33776))
+* [bitnami/redis] Ensure that Redis resources are less than 63 chars ([#34803](https://github.com/bitnami/charts/pull/34803))
+
+## <small>21.2.10 (2025-07-11)</small>
+
+* [bitnami/redis] Fix external service annotations ignored #33270 (#33776) ([cd64f12](https://github.com/bitnami/charts/commit/cd64f12492a47b8e68154737dc75460de67c5bd1)), closes [#33270](https://github.com/bitnami/charts/issues/33270) [#33776](https://github.com/bitnami/charts/issues/33776) [#33270](https://github.com/bitnami/charts/issues/33270)
 
 ## <small>21.2.9 (2025-07-09)</small>
 
