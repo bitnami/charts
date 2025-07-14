@@ -24,6 +24,13 @@ Return the proper gitlab-runner image name
 {{- end -}}
 
 {{/*
+Return the proper gitlab-runner-helper image name
+*/}}
+{{- define "gitlab-runner.helper.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.helperImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper gitlab-runner image name
 */}}
 {{- define "gitlab-runner.session-server.fullname" -}}
@@ -34,7 +41,7 @@ Return the proper gitlab-runner image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "gitlab-runner.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image ) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.helperImage) "context" .) -}}
 {{- end -}}
 
 {{/*
