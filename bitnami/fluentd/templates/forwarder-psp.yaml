@@ -23,7 +23,7 @@ spec:
     - pathPrefix: '/var/lib/docker/containers'
       readOnly: true
     - pathPrefix: '/var/log'
-      readOnly: {{ .Values.varlog.readonly | quote }}
+      readOnly: {{ .Values.varlog.readonly }}
   volumes:
     - 'configMap'
     - 'emptyDir'
