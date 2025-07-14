@@ -40,7 +40,7 @@ spec:
       app.kubernetes.io/part-of: dremio
       app.kubernetes.io/component: executor
       engine: {{ $engine.name }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" $) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ template "dremio.headlessServiceName" $ }}
   {{- if $executorValues.updateStrategy }}
   updateStrategy: {{- toYaml $executorValues.updateStrategy | nindent 4 }}
   {{- end }}
