@@ -285,7 +285,11 @@ spec:
         - name: metrics
           image: {{ template "apache.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:8080/server-status/?auto']
+          {{- if .Values.metrics.scrapeUri }}
+          command: ['/bin/apache_exporter', '--scrape_uri', '{{ .Values.metrics.scrapeUri }}']
+          {{- else }}
+          command: ['/bin/apache_exporter', '--scrape_uri', 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto']
+          {{- end }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.metrics.image.debug | quote }}
