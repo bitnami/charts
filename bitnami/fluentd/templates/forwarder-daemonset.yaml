@@ -281,7 +281,7 @@ spec:
             {{- end }}
             - name: varlog
               mountPath: /var/log
-              readOnly: true
+              readOnly: {{ .Values.varlog.readonly | quote }}
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
