@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.8.7 (2025-07-11)
+## 24.8.0 (2025-07-14)
 
 * feat(keycloak/ingress): support template value for ingress and admin … ([#35025](https://github.com/bitnami/charts/pull/35025))
 
