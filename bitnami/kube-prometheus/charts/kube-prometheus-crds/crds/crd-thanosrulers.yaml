@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
-# Version: 0.83.0
+# Version: 0.84.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.18.0
-    operator.prometheus.io/version: 0.83.0
+    operator.prometheus.io/version: 0.84.0
   name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -4444,7 +4444,7 @@ spec:
                       Annotations is an unstructured key value map stored with a resource that may be
                       set by external tools to store and retrieve arbitrary metadata. They are not
                       queryable and should be preserved when modifying objects.
-                      More info: http://kubernetes.io/docs/user-guide/annotations
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
                     type: object
                   labels:
                     additionalProperties:
@@ -4453,7 +4453,7 @@ spec:
                       Map of string keys and values that can be used to organize and categorize
                       (scope and select) objects. May match selectors of replication controllers
                       and services.
-                      More info: http://kubernetes.io/docs/user-guide/labels
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
                     type: object
                   name:
                     description: |-
@@ -4462,7 +4462,7 @@ spec:
                       automatically. Name is primarily intended for creation idempotence and configuration
                       definition.
                       Cannot be updated.
-                      More info: http://kubernetes.io/docs/user-guide/identifiers#names
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
                     type: string
                 type: object
               portName:
@@ -5718,6 +5718,13 @@ spec:
                 description: The route prefix ThanosRuler registers HTTP handlers
                   for. This allows thanos UI to be served on a sub-path.
                 type: string
+              ruleConcurrentEval:
+                description: |-
+                  How many rules can be evaluated concurrently.
+                  It requires Thanos >= v0.37.0.
+                format: int32
+                minimum: 1
+                type: integer
               ruleNamespaceSelector:
                 description: |-
                   Namespaces to be selected for Rules discovery. If unspecified, only
@@ -5766,6 +5773,18 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
+              ruleOutageTolerance:
+                description: |-
+                  Max time to tolerate prometheus outage for restoring "for" state of alert.
+                  It requires Thanos >= v0.30.0.
+                pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                type: string
+              ruleQueryOffset:
+                description: |-
+                  The default rule group's query offset duration to use.
+                  It requires Thanos >= v0.38.0.
+                pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                type: string
               ruleSelector:
                 description: |-
                   PrometheusRule objects to be selected for rule evaluation. An empty
@@ -6376,7 +6395,7 @@ spec:
                               Annotations is an unstructured key value map stored with a resource that may be
                               set by external tools to store and retrieve arbitrary metadata. They are not
                               queryable and should be preserved when modifying objects.
-                              More info: http://kubernetes.io/docs/user-guide/annotations
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
                             type: object
                           labels:
                             additionalProperties:
@@ -6385,7 +6404,7 @@ spec:
                               Map of string keys and values that can be used to organize and categorize
                               (scope and select) objects. May match selectors of replication controllers
                               and services.
-                              More info: http://kubernetes.io/docs/user-guide/labels
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
                             type: object
                           name:
                             description: |-
@@ -6394,7 +6413,7 @@ spec:
                               automatically. Name is primarily intended for creation idempotence and configuration
                               definition.
                               Cannot be updated.
-                              More info: http://kubernetes.io/docs/user-guide/identifiers#names
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
                             type: string
                         type: object
                       spec:
