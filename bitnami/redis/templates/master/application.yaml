@@ -8,7 +8,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: {{ .Values.master.kind }}
 metadata:
-  name: {{ printf "%s-master" (include "common.names.fullname" .) }}
+  name: {{ include "redis.master.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
@@ -26,7 +26,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: master
   {{- if (eq .Values.master.kind "StatefulSet") }}
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  serviceName: {{ include "redis.headless.fullname" . }}
   {{- end }}
   {{- if .Values.master.updateStrategy }}
   {{- if (eq .Values.master.kind "Deployment") }}

@@ -78,7 +78,7 @@ data:
     sentinel monitor {{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     {{- end }}
     {{- else }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ include "redis.sentinel.fullname" . }}-0.{{ include "redis.headless.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     {{- end }}
     sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
