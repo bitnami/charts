@@ -601,6 +601,7 @@ runners:
         namespace = "{{ include "common.names.namespace" . }}"
         image = "{{ include "gitlab-runner.image" . }}"
         helper_image = "{{ include "gitlab-runner.helper.image" . }}"
+        image_pull_secrets = [{{ include "gitlab-runner.imagePullSecretsRaw" . }}]
 
   ## @param runners.configPath Absolute path for an existing runner configuration file (to be used with volumes/extraVolumes)
   ##
