@@ -29,6 +29,9 @@ useHelmHooks: false
 createAdminTokenJob:
   enabled: true
   cleanup: false
+  waitForS3:
+    retryAttempts: 30
+    retryInterval: 5
 extraDeploy:
 - apiVersion: v1
   kind: Secret
