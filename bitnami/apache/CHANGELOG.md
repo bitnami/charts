@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.22 (2025-07-10)
+## 11.3.23 (2025-07-15)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#34992](https://github.com/bitnami/charts/pull/34992))
+* [bitnami/apache] Support custom scrape_uri in apache exporter ([#35050](https://github.com/bitnami/charts/pull/35050))
+
+## <small>11.3.22 (2025-07-10)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34992) ([2a2be25](https://github.com/bitnami/charts/commit/2a2be25c074bedc94656f17095c2a2cbe4368f19)), closes [#34992](https://github.com/bitnami/charts/issues/34992)
 
 ## <small>11.3.21 (2025-07-08)</small>
 
