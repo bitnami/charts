@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.2.11 (2025-07-11)
+## 21.2.11 (2025-07-15)
 
 * [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
 
