@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.13 (2025-07-15)
+## 5.0.14 (2025-07-15)
 
-* [bitnami/kube-state-metrics] ci: VIB verify ([#35059](https://github.com/bitnami/charts/pull/35059))
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#35064](https://github.com/bitnami/charts/pull/35064))
+
+## <small>5.0.13 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] ci: VIB verify (#35059) ([510c479](https://github.com/bitnami/charts/commit/510c4795f26cd2c7e6f19691fc1d1edb28df22da)), closes [#35059](https://github.com/bitnami/charts/issues/35059)
 
 ## <small>5.0.12 (2025-07-09)</small>
 
