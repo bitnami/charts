@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.6 (2025-07-10)
+## 3.0.7 (2025-07-14)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#34988](https://github.com/bitnami/charts/pull/34988))
+* [bitnami/dremio] chore: create helper for headless svc name ([#35039](https://github.com/bitnami/charts/pull/35039))
+
+## <small>3.0.6 (2025-07-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34988) ([a502aba](https://github.com/bitnami/charts/commit/a502aba30df023e5eb4c1b4bdea7ca908a36e570)), closes [#34988](https://github.com/bitnami/charts/issues/34988)
 
 ## <small>3.0.5 (2025-07-03)</small>
 

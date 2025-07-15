@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.18.0-debian-12-r21
+  tag: 1.18.0-debian-12-r22
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -100,6 +100,13 @@ image:
   ## Enable debug mode
   ##
   debug: false
+
+## /var/log readonly
+## @param varlog.readonly Set /var/log volume mount readOnly
+##
+varlog:
+  readonly: true
+
 ## Forwarder parameters
 ##
 forwarder:

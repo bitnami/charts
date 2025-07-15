@@ -102,6 +102,6 @@ Session Server:
 {{- include "gitlab-runner.checkRollingTags" . }}
 
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}
-{{- include "common.errors.insecureImages" (dict "images" (list .Values.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.helperImage) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.helperImage) "context" $) }}
 {{- end }}
