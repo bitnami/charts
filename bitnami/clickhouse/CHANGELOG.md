@@ -1,12 +1,8 @@
 # Changelog
 
-## 9.3.10 (2025-07-15)
+## 9.3.9 (2025-07-10)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#35073](https://github.com/bitnami/charts/pull/35073))
-
-## <small>9.3.9 (2025-07-10)</small>
-
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34995) ([d440e80](https://github.com/bitnami/charts/commit/d440e80abce56277bacd6489306507d62ba08fc6)), closes [#34995](https://github.com/bitnami/charts/issues/34995)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34995](https://github.com/bitnami/charts/pull/34995))
 
 ## <small>9.3.8 (2025-06-27)</small>
 
