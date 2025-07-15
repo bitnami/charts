@@ -1,0 +1,28 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-delete" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
+    helm.sh/hook: pre-delete
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ template "cdioperator.serviceAccountName" . }}
+      restartPolicy: Never
+      containers:
+        - name: cleanup
+          image: {{ .Values.job.image }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              kubectl delete cdi {{ template "common.names.fullname" . }} -n {{ include "common.names.namespace" . | quote }}

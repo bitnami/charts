@@ -1,0 +1,31 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 1.62.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: The Containerized Data Importer (CDI) project provides facilities for
+  enabling Persistent Volume Claims (PVCs) to be used as disks for KubeVirt VMs by
+  way of DataVolumes.
+home: https://bitnami.com
+icon: https://github.com/kubevirt/community/blob/77864f3ab046cb62b8df2f9a7f59ba3e19aaa948/logo/KubeVirt_icon.png
+keywords:
+- kubevirt
+- kubernetes
+- infrastructure
+- virtualization
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: cdi-operator
+sources:
+- https://kubevirt.io/user-guide/storage/containerized_data_importer/
+version: 1.62.0
