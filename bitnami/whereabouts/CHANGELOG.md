@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.15 (2025-07-09)
+## 1.2.16 (2025-07-15)
 
-* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#34961](https://github.com/bitnami/charts/pull/34961))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#35063](https://github.com/bitnami/charts/pull/35063))
+
+## <small>1.2.15 (2025-07-09)</small>
+
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#34961) ([62e1487](https://github.com/bitnami/charts/commit/62e14874823373d52fec3ca310168144ede253e6)), closes [#34961](https://github.com/bitnami/charts/issues/34961)
 
 ## <small>1.2.14 (2025-07-04)</small>
 
