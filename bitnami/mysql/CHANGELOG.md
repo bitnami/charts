@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.3 (2025-07-09)
+## 13.0.4 (2025-07-15)
 
-* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#34931](https://github.com/bitnami/charts/pull/34931))
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#35107](https://github.com/bitnami/charts/pull/35107))
+
+## <small>13.0.3 (2025-07-09)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34931) ([78fdcbd](https://github.com/bitnami/charts/commit/78fdcbdc1d6ce5282b70db59e9ff3248269370a3)), closes [#34931](https://github.com/bitnami/charts/issues/34931)
 
 ## <small>13.0.2 (2025-06-13)</small>
 
