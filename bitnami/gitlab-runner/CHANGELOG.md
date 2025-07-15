@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.1.1 (2025-07-14)
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35044](https://github.com/bitnami/charts/pull/35044))
+
 ## 1.1.0 (2025-07-14)
 
-* [bitnami/gitlab-runner] feat: add paramters to customize Gitlab Runner Helper image ([#35042](https://github.com/bitnami/charts/pull/35042))
+* [bitnami/gitlab-runner] feat: add paramters to customize Gitlab Runner Helper image (#35042) ([ae24482](https://github.com/bitnami/charts/commit/ae244829471a787b754f6ab75f2d3355d7288c88)), closes [#35042](https://github.com/bitnami/charts/issues/35042)
 
 ## <small>1.0.7 (2025-07-08)</small>
 
