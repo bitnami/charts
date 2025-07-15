@@ -12,6 +12,8 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
+containerPorts:
+  http: 8080
 service:
   type: LoadBalancer
   ports:
