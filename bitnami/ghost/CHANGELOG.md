@@ -1,12 +1,8 @@
 # Changelog
 
-## 23.0.27 (2025-07-15)
+## 23.0.26 (2025-07-11)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35140](https://github.com/bitnami/charts/pull/35140))
-
-## <small>23.0.26 (2025-07-11)</small>
-
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35024) ([5c4b174](https://github.com/bitnami/charts/commit/5c4b174c9891e7d3480f0d9f4d085a786f4fa9f5)), closes [#35024](https://github.com/bitnami/charts/issues/35024)
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35024](https://github.com/bitnami/charts/pull/35024))
 
 ## <small>23.0.25 (2025-07-04)</small>
 
