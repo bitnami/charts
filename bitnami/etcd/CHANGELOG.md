@@ -1,6 +1,10 @@
 # Changelog
 
-## 12.0.12 (2025-07-22)
+## 12.0.13 (2025-07-24)
+
+* [bitnami/etcd] Optional delay before starting the pre-upgrade hook ([#34973](https://github.com/bitnami/charts/pull/34973))
+
+## <small>12.0.12 (2025-07-22)</small>
 
 * [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35249](https://github.com/bitnami/charts/pull/35249))
 
