@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.25 (2025-07-15)
+## 2.0.26 (2025-07-16)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#35102](https://github.com/bitnami/charts/pull/35102))
+* [bitnami/nessie] Recover quarkus specific environment variables ([#35158](https://github.com/bitnami/charts/pull/35158))
+
+## <small>2.0.25 (2025-07-15)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35102) ([fa6b4d5](https://github.com/bitnami/charts/commit/fa6b4d5f346c00fbf97acbcf4c3e2a9a41431482)), closes [#35102](https://github.com/bitnami/charts/issues/35102)
 
 ## <small>2.0.24 (2025-07-12)</small>
 
