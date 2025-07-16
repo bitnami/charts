@@ -6,7 +6,7 @@
 
 ## <small>11.2.13 (2025-07-14)</small>
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35048](https://github.com/bitnami/charts/pull/35048))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35048) ([1f6a266](https://github.com/bitnami/charts/commit/1f6a2662914664ea18df3ca84521735a0bfbad3e)), closes [#35048](https://github.com/bitnami/charts/issues/35048)
 
 ## <small>11.2.12 (2025-07-14)</small>
 
