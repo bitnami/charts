@@ -2,11 +2,11 @@
 
 ## 12.0.12 (2025-07-16)
 
-* [bitnami/etcd] Optional delay before starting the pre-upgrade hook ([#34973](https://github.com/bitnami/charts/pull/34973))
+* [bitnami/etcd] feat: introduce preUpgrade job delay ([#34973](https://github.com/bitnami/charts/pull/34973))
 
-## 12.0.11 (2025-07-16)
+## <small>12.0.11 (2025-07-16)</small>
 
-* [bitnami/etcd] Always use initial cluster token ([#35160](https://github.com/bitnami/charts/pull/35160))
+* [bitnami/etcd] Always use initial cluster token (#35160) ([3d49e70](https://github.com/bitnami/charts/commit/3d49e70015e2dd434b4e77643b1dc530803a6ef9)), closes [#35160](https://github.com/bitnami/charts/issues/35160)
 
 ## <small>12.0.10 (2025-07-15)</small>
 
