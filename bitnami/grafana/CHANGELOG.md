@@ -1,8 +1,12 @@
 # Changelog
 
+## 12.1.1 (2025-07-15)
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#35092](https://github.com/bitnami/charts/pull/35092))
+
 ## 12.1.0 (2025-07-11)
 
-* [bitnami/grafana] Adding possibility to deploy as StatefulSet ([#34831](https://github.com/bitnami/charts/pull/34831))
+* [bitnami/grafana] Adding possibility to deploy as StatefulSet (#34831) ([1e846bd](https://github.com/bitnami/charts/commit/1e846bd4b4665926a04c39a15eb8c9fe9e71e476)), closes [#34831](https://github.com/bitnami/charts/issues/34831)
 
 ## <small>12.0.9 (2025-07-09)</small>
 
