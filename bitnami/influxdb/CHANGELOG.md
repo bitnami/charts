@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.9 (2025-07-15)
+## 7.1.9 (2025-07-16)
 
 * [bitnami/influxdb] feat: improve tests stability ([#35071](https://github.com/bitnami/charts/pull/35071))
 
