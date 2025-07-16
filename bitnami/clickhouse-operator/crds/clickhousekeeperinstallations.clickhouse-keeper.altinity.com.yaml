@@ -1,15 +1,15 @@
 # Source: https://raw.githubusercontent.com/Altinity/clickhouse-operator/refs/heads/{version}/deploy/helm/clickhouse-operator/crds/CustomResourceDefinition-clickhousekeeperinstallations.clickhouse-keeper.altinity.com.yaml
-# Version: 0.25.1
+# Version: 0.25.2
 # Template Parameters:
 #
-# OPERATOR_VERSION=0.25.1
+# OPERATOR_VERSION=0.25.2
 #
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: clickhousekeeperinstallations.clickhouse-keeper.altinity.com
   labels:
-    clickhouse-keeper.altinity.com/chop: 0.25.1
+    clickhouse-keeper.altinity.com/chop: 0.25.2
 spec:
   group: clickhouse-keeper.altinity.com
   scope: Namespaced

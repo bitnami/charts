@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.2.1 (2025-07-15)
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35131](https://github.com/bitnami/charts/pull/35131))
+
 ## 17.2.0 (2025-07-09)
 
-* [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
+* [bitnami/thanos] addition of parameter to configure statefulset annotations (#33988) ([4232306](https://github.com/bitnami/charts/commit/42323062d64cb6f071615e93c0bc8e0542425c20)), closes [#33988](https://github.com/bitnami/charts/issues/33988) [#34825](https://github.com/bitnami/charts/issues/34825)
 
 ## 17.1.0 (2025-07-09)
 
