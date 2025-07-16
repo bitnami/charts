@@ -45,6 +45,33 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the proper Docker Image Registry Secret Names as a raw comma-separated string
+*/}}
+{{- define "gitlab-runner.imagePullSecretsRaw" -}}
+{{- $context := . }}
+{{- $pullSecrets := list }}
+{{- range ((.Values.global).imagePullSecrets) -}}
+  {{- if kindIs "map" . -}}
+    {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context) | quote) -}}
+  {{- else -}}
+    {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context) | quote) -}}
+  {{- end -}}
+{{- end -}}
+{{- range (list .Values.image .Values.helperImage) -}}
+  {{- range .pullSecrets -}}
+    {{- if kindIs "map" . -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context) | quote) -}}
+    {{- else -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context) | quote) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if (not (empty $pullSecrets)) -}}
+  {{- $pullSecrets | join ", " -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Name of the Runner Secret
 */}}
 {{- define "gitlab-runner.secretName" -}}

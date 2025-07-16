@@ -1,5 +1,5 @@
 backend:
-  adminPassword: bitnami!1234
+  adminPassword: bitnami!1234567
   adminEmail: vibuser@example.com
   service:
     ports:
