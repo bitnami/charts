@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.0.1 (2025-07-15)
+
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#35128](https://github.com/bitnami/charts/pull/35128))
+
 ## 5.0.0 (2025-07-14)
 
-* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#35045](https://github.com/bitnami/charts/pull/35045))
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#35045) ([8623aff](https://github.com/bitnami/charts/commit/8623affe43b7da1e04804954a69561281d13a094)), closes [#35045](https://github.com/bitnami/charts/issues/35045)
 
 ## <small>4.0.5 (2025-07-09)</small>
 

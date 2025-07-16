@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.5 (2025-06-24)
+## 7.0.6 (2025-07-15)
 
-* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#34602](https://github.com/bitnami/charts/pull/34602))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35096](https://github.com/bitnami/charts/pull/35096))
+
+## <small>7.0.5 (2025-06-24)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34602) ([42959c0](https://github.com/bitnami/charts/commit/42959c00a308b3b1f155591076b5b6bee9322572)), closes [#34602](https://github.com/bitnami/charts/issues/34602)
 
 ## <small>7.0.4 (2025-06-13)</small>
 
