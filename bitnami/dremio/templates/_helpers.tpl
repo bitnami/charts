@@ -46,6 +46,13 @@ Return the proper Dremio Executor fullname
 {{- end -}}
 
 {{/*
+Return the Dremio headless service name
+*/}}
+{{- define "dremio.headlessServiceName" -}}
+{{- printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "dremio.imagePullSecrets" -}}

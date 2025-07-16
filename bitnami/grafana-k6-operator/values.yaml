@@ -99,7 +99,7 @@ image:
 starterImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r47
+  tag: 12-debian-12-r48
   digest: ""
 ## Bitnami Grafana k6 image version
 ## ref: https://hub.docker.com/r/bitnami/grafana-k6/tags/
