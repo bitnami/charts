@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.3.23 (2025-07-16)
+## 11.4.0 (2025-07-16)
 
 * [bitnami/apache] Support custom scrape_uri in apache exporter ([#35050](https://github.com/bitnami/charts/pull/35050))
 
