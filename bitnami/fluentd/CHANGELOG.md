@@ -6,9 +6,9 @@
 
 ## <small>7.2.1 (2025-07-14)</small>
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#35043](https://github.com/bitnami/charts/pull/35043))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35043) ([2c3e789](https://github.com/bitnami/charts/commit/2c3e78954e46c399441d68b582a8b0dba40e2ec9)), closes [#35043](https://github.com/bitnami/charts/issues/35043)
 
-## <small>7.2.0 (2025-07-14)</small>
+## 7.2.0 (2025-07-14)
 
 * [bitnami/fluentd] Make  volume mount read-only (#35038) ([f7961f2](https://github.com/bitnami/charts/commit/f7961f2fc3ee9de839a58ffb83d17d4b9b8b8199)), closes [#35038](https://github.com/bitnami/charts/issues/35038)
 
