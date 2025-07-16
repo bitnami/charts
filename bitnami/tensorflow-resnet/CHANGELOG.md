@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.10 (2025-06-12)
+## 4.3.11 (2025-07-12)
 
-* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#34368](https://github.com/bitnami/charts/pull/34368))
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#35028](https://github.com/bitnami/charts/pull/35028))
+
+## <small>4.3.10 (2025-06-12)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#34368) ([c7e6d1b](https://github.com/bitnami/charts/commit/c7e6d1bc3584f1f409de2dc598a34f230f84dfb4)), closes [#34368](https://github.com/bitnami/charts/issues/34368)
 
 ## <small>4.3.9 (2025-05-13)</small>
 
