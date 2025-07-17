@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.2.11 (2025-07-09)
+## 11.2.14 (2025-07-16)
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#34954](https://github.com/bitnami/charts/pull/34954))
+* [bitnami/kube-prometheus] fix(thanosRuler) service port ([#35017](https://github.com/bitnami/charts/pull/35017))
+
+## <small>11.2.13 (2025-07-14)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35048) ([1f6a266](https://github.com/bitnami/charts/commit/1f6a2662914664ea18df3ca84521735a0bfbad3e)), closes [#35048](https://github.com/bitnami/charts/issues/35048)
+
+## <small>11.2.12 (2025-07-14)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35041) ([a1bab28](https://github.com/bitnami/charts/commit/a1bab28c494050153d2d794a0f017a312b0dbce7)), closes [#35041](https://github.com/bitnami/charts/issues/35041)
+
+## <small>11.2.11 (2025-07-09)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#34954) ([406304f](https://github.com/bitnami/charts/commit/406304f26e9d22085621a5b475bd21810f817c76)), closes [#34954](https://github.com/bitnami/charts/issues/34954)
 
 ## <small>11.2.10 (2025-07-09)</small>
 

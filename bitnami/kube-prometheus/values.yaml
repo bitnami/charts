@@ -78,7 +78,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.83.0-debian-12-r5
+    tag: 0.84.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -638,7 +638,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 3.4.2-debian-12-r1
+    tag: 3.5.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3381,7 +3381,7 @@ thanosRuler:
     ## @param thanosRuler.service.ports.grpc Thanos Ruler service GRPC port
     ##
     ports:
-      http: 9090
+      http: 10902
       grpc: 10901
     ## @param thanosRuler.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
     ## @param thanosRuler.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
@@ -3857,7 +3857,7 @@ thanosRuler:
   priorityClassName: ""
   ## @param thanosRuler.portName Port name used for the pods and governing service
   ##
-  portName: web
+  portName: http
   ## @param thanosRuler.web Defines the configuration of the ThanosRuler web server
   ##
   web: {}
