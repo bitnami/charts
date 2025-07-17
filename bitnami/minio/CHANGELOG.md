@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.12 (2025-07-14)
+## 17.0.13 (2025-07-15)
 
-* [bitnami/minio] bugfix: reference to non-existing parameter ([#35036](https://github.com/bitnami/charts/pull/35036))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35109](https://github.com/bitnami/charts/pull/35109))
+
+## <small>17.0.12 (2025-07-14)</small>
+
+* [bitnami/minio] bugfix: reference to non-existing parameter (#35036) ([bb67a61](https://github.com/bitnami/charts/commit/bb67a61959568f980f7953f8706787e30425f380)), closes [#35036](https://github.com/bitnami/charts/issues/35036)
 
 ## <small>17.0.11 (2025-07-09)</small>
 

@@ -946,6 +946,12 @@ createAdminTokenJob:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param createAdminTokenJob.waitForS3.retryAttempts Number of attempts to retry waiting for S3 backend to be ready
+  ## @param createAdminTokenJob.waitForS3.retryInterval Seconds to wait between attempts to retry waiting for S3 backend to be ready
+  ##
+  waitForS3:
+    retryAttempts: 12
+    retryInterval: 5
   ## @param createAdminTokenJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10
