@@ -4,9 +4,9 @@
 
 * [bitnami/influxdb] fix typo in namespace inclusion (ingress-tls-secret) ([#34984](https://github.com/bitnami/charts/pull/34984))
 
-## 7.1.9 (2025-07-16)
+## <small>7.1.9 (2025-07-16)</small>
 
-* [bitnami/influxdb] feat: improve tests stability ([#35071](https://github.com/bitnami/charts/pull/35071))
+* [bitnami/influxdb] feat: improve tests stability (#35071) ([efb2eb0](https://github.com/bitnami/charts/commit/efb2eb0140c3668c4411675a3ce9efc808032cf5)), closes [#35071](https://github.com/bitnami/charts/issues/35071)
 
 ## <small>7.1.8 (2025-07-09)</small>
 
