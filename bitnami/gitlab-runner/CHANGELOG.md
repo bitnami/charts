@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.2 (2025-07-15)
+## 1.1.3 (2025-07-17)
 
-* [bitnami/gitlab-runner] feat: add support for custom image_pull_secrets ([#35057](https://github.com/bitnami/charts/pull/35057))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35188](https://github.com/bitnami/charts/pull/35188))
+
+## <small>1.1.2 (2025-07-15)</small>
+
+* [bitnami/gitlab-runner] feat: add support for custom image_pull_secrets (#35057) ([9bd3b6d](https://github.com/bitnami/charts/commit/9bd3b6dd43f4592803bb09521311cef324e8d230)), closes [#35057](https://github.com/bitnami/charts/issues/35057)
 
 ## <small>1.1.1 (2025-07-14)</small>
 
