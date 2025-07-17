@@ -142,7 +142,6 @@ config:
         ##   component: "{{ .Source.Component }}"
         ##   host: "{{ .Source.Host }}"
         ##
-        layout: {}
   route:
     routes:
       - match:
