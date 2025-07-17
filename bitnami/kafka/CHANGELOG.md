@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.3.6 (2025-07-16)
+## 32.3.6 (2025-07-17)
 
 * add ca-cert validity days in tls-secret ([#35165](https://github.com/bitnami/charts/pull/35165))
 
