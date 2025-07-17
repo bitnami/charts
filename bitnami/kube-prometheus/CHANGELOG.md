@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.14 (2025-07-16)
+## 11.2.15 (2025-07-17)
 
 * [bitnami/kube-prometheus] add thanos sidecar service monitor ([#34969](https://github.com/bitnami/charts/pull/34969))
+
+## <small>11.2.14 (2025-07-16)</small>
+
+* [bitnami/kube-prometheus] fix(thanosRuler) service port ([#35017](https://github.com/bitnami/charts/pull/35017))
 
 ## <small>11.2.13 (2025-07-14)</small>
 

@@ -939,7 +939,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `thanosRuler.listenLocal`                                 | Makes Thanos Ruler listen on loopback, so that it does not bind against the Pod IP                                                 | `false`                  |
 | `thanosRuler.externalPrefix`                              | The external URL the Thanos Ruler instances will be available under. Maps to  --web.external-prefix on Thanos Ruler                | `""`                     |
 | `thanosRuler.service.type`                                | Kubernetes service type                                                                                                            | `ClusterIP`              |
-| `thanosRuler.service.ports.http`                          | Thanos Ruler service HTTP port                                                                                                     | `9090`                   |
+| `thanosRuler.service.ports.http`                          | Thanos Ruler service HTTP port                                                                                                     | `10902`                  |
 | `thanosRuler.service.ports.grpc`                          | Thanos Ruler service GRPC port                                                                                                     | `10901`                  |
 | `thanosRuler.service.nodePorts.http`                      | Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
 | `thanosRuler.service.nodePorts.grpc`                      | Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
@@ -1031,7 +1031,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `thanosRuler.containers`                                  | Containers allows injecting additional containers or modifying operator generated containers                                       | `[]`                     |
 | `thanosRuler.initContainers`                              | InitContainers allows adding initContainers to the pod definition                                                                  | `[]`                     |
 | `thanosRuler.priorityClassName`                           | Priority class assigned to the Pods                                                                                                | `""`                     |
-| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `web`                    |
+| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `http`                   |
 | `thanosRuler.web`                                         | Defines the configuration of the ThanosRuler web server                                                                            | `{}`                     |
 | `thanosRuler.remoteWrite`                                 | Defines the list of remote write configurations                                                                                    | `{}`                     |
 

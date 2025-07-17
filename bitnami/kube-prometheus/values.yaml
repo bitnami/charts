@@ -3410,7 +3410,7 @@ thanosRuler:
     ## @param thanosRuler.service.ports.grpc Thanos Ruler service GRPC port
     ##
     ports:
-      http: 9090
+      http: 10902
       grpc: 10901
     ## @param thanosRuler.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
     ## @param thanosRuler.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
@@ -3886,7 +3886,7 @@ thanosRuler:
   priorityClassName: ""
   ## @param thanosRuler.portName Port name used for the pods and governing service
   ##
-  portName: web
+  portName: http
   ## @param thanosRuler.web Defines the configuration of the ThanosRuler web server
   ##
   web: {}
