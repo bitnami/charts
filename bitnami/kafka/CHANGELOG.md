@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.3.5 (2025-07-16)
+## 32.3.6 (2025-07-17)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#35150](https://github.com/bitnami/charts/pull/35150))
+* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling ([#35190](https://github.com/bitnami/charts/pull/35190))
+
+## <small>32.3.5 (2025-07-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35150) ([6202afd](https://github.com/bitnami/charts/commit/6202afd718713f3ca6db813c06fe88587854a90f)), closes [#35150](https://github.com/bitnami/charts/issues/35150)
 
 ## <small>32.3.4 (2025-07-15)</small>
 
