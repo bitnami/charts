@@ -90,6 +90,44 @@ You can use the following arguments:
 --set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
 
+### Webhook Providers
+
+Webhook providers allow integrating ExternalDNS with DNS providers through an HTTP interface. This approach decouples ExternalDNS and the Providers code which can be running in separate processes.
+
+With the Bitnami ExternalDNS chart, you can deploy Webhook Providers and configure ExternalDNS easely using `sidecars` and `extraArgs` values:
+
+```yaml
+provider: webhook
+
+extraArgs:
+  webhook-provider-url: http://localhost:8080
+  txt-prefix: reg-
+
+sidecars:
+  - name: my-webhook
+    image: <external-dns-webhook-image>
+    ports:
+      - containerPort: 8080
+        name: http
+    livenessProbe:
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      tcpSocket:
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    env:
+      - name: <WEBHOOK-CONFIG-ENV-VAR>
+        value: TEST
+      ...
+```
+
+More information about these new providers can be found in the [ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns/tree/master#new-providers)
+
 ## Tutorials
 
 Find information about the requirements for each DNS provider on the link below:
