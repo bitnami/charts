@@ -490,6 +490,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.0.0
+
+Unsupported in-tree providers has been removed: OpenStack Designate, Hetzner, Infoblox, VinylDNS
+
 ### To 8.7.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
