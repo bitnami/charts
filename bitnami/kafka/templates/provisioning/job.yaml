@@ -191,6 +191,13 @@ spec:
           volumeMounts:
             - name: shared
               mountPath: /shared
+            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
+            {{- if not (empty .Values.provisioning.auth.tls.certificatesSecret) }}
+            - name: kafka-client-certs
+              mountPath: /certs
+              readOnly: true
+            {{- end }}
+            {{- end }}
         {{- end }}
         {{- if .Values.provisioning.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.initContainers "context" $ ) | nindent 8 }}
