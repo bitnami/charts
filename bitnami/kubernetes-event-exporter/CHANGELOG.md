@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.6.1 (2025-07-17)
+
+* [bitnami/kubernetes-event-exporter] fix: kubernetes-event-exporter default config layout shows empty logs ([#35193](https://github.com/bitnami/charts/pull/35193))
+
 ## 3.6.0 (2025-07-10)
 
-* [bitnami/kubernetes-event-exporter] Add tpl ability to .Values.Config ([#34855](https://github.com/bitnami/charts/pull/34855))
+* [bitnami/kubernetes-event-exporter] Add tpl ability to .Values.Config (#34855) ([3f448fb](https://github.com/bitnami/charts/commit/3f448fb644c10f553471e8e8aade678efb18f0ea)), closes [#34855](https://github.com/bitnami/charts/issues/34855)
 
 ## <small>3.5.7 (2025-07-09)</small>
 
