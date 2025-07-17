@@ -458,7 +458,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 9.0.0
 
-Unsupported in-tree providers has been removed: OpenStack Designate, Hetzner, Infoblox, VinylDNS
+Unsupported in-tree providers have been removed: OpenStack Designate, Hetzner, Infoblox, VinylDNS
 
 ### To 8.7.0
 
