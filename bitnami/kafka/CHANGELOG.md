@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.3.6 (2025-07-17)
+## 32.3.6 (2025-07-18)
 
 * [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling ([#35190](https://github.com/bitnami/charts/pull/35190))
 
