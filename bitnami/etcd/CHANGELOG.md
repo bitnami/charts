@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.0.9 (2025-07-10)
+## 12.0.11 (2025-07-16)
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#34997](https://github.com/bitnami/charts/pull/34997))
+* [bitnami/etcd] Always use initial cluster token ([#35160](https://github.com/bitnami/charts/pull/35160))
+
+## <small>12.0.10 (2025-07-15)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35084) ([6e98277](https://github.com/bitnami/charts/commit/6e982774426942dd86fc4375f3968b7a37e68fee)), closes [#35084](https://github.com/bitnami/charts/issues/35084)
+
+## <small>12.0.9 (2025-07-10)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34997) ([45ad7d6](https://github.com/bitnami/charts/commit/45ad7d61d7261a51f433d6420549ea982b9d8c9f)), closes [#34997](https://github.com/bitnami/charts/issues/34997)
 
 ## <small>12.0.8 (2025-07-08)</small>
 

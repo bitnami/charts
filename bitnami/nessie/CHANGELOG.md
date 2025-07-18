@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.0.20 (2025-06-23)
+## 2.0.26 (2025-07-16)
 
-* [bitnami/nessie]fix(serviceMonitor): Amend selector ([#34584](https://github.com/bitnami/charts/pull/34584))
+* [bitnami/nessie] Recover quarkus specific environment variables ([#35158](https://github.com/bitnami/charts/pull/35158))
+
+## <small>2.0.25 (2025-07-15)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35102) ([fa6b4d5](https://github.com/bitnami/charts/commit/fa6b4d5f346c00fbf97acbcf4c3e2a9a41431482)), closes [#35102](https://github.com/bitnami/charts/issues/35102)
+
+## <small>2.0.24 (2025-07-12)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35030) ([5ec487b](https://github.com/bitnami/charts/commit/5ec487b3a172fadaa61beaa51f16c1567b1c46c3)), closes [#35030](https://github.com/bitnami/charts/issues/35030)
+
+## <small>2.0.23 (2025-07-11)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35021) ([d1904f0](https://github.com/bitnami/charts/commit/d1904f0525552aa06d3a58363bc7fe83a41f3cb0)), closes [#35021](https://github.com/bitnami/charts/issues/35021)
+
+## <small>2.0.22 (2025-07-11)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35009) ([2147691](https://github.com/bitnami/charts/commit/2147691cc49104ed2a45c1c81377da4637695d94)), closes [#35009](https://github.com/bitnami/charts/issues/35009)
+
+## <small>2.0.21 (2025-07-01)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#34742) ([eb9fc5f](https://github.com/bitnami/charts/commit/eb9fc5ff7df04d2b17a10804a924b451f54e949b)), closes [#34742](https://github.com/bitnami/charts/issues/34742)
+
+## <small>2.0.20 (2025-06-23)</small>
+
+* [bitnami/nessie]fix(serviceMonitor): Amend selector (#34584) ([b664005](https://github.com/bitnami/charts/commit/b6640051f9a587405471afc16ac3fb0d48d1f317)), closes [#34584](https://github.com/bitnami/charts/issues/34584)
 
 ## <small>2.0.19 (2025-06-18)</small>
 

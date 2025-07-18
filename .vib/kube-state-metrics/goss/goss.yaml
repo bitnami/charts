@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
+  http://127.0.0.1:{{ .Vars.containerPorts.http }}/metrics:
+    status: 200
+    body:
+    - /kube_deployment_status_replicas_ready.*kube-state-metrics.*{{ .Vars.replicaCount }}/
+    - "!kube_secret_"
   http://kube-state-metrics:{{ .Vars.service.ports.http }}/metrics:
     status: 200
     body:

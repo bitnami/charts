@@ -273,7 +273,7 @@ Return the proper Mastodon sidekiq fullname
 Return true if the init job should be created
 */}}
 {{- define "mastodon.createInitJob" -}}
-{{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin .Values.initJob.precompileAssets .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch -}}
+{{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin .Values.initJob.precompileAssets.enabled .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
