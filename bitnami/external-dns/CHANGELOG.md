@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.9.2 (2025-07-08)
+## 9.0.0 (2025-07-17)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#34882](https://github.com/bitnami/charts/pull/34882))
+* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers ([#35175](https://github.com/bitnami/charts/pull/35175))
+
+## <small>8.9.2 (2025-07-08)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#34882) ([84a7516](https://github.com/bitnami/charts/commit/84a7516ae6891bbeb2134ba939408867b46a5ba0)), closes [#34882](https://github.com/bitnami/charts/issues/34882)
 
 ## <small>8.9.1 (2025-07-04)</small>
 

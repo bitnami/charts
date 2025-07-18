@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.6 (2025-07-08)
+## 1.0.0 (2025-07-17)
 
-* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#34896](https://github.com/bitnami/charts/pull/34896))
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#35172](https://github.com/bitnami/charts/pull/35172))
+
+## <small>0.2.6 (2025-07-08)</small>
+
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references (#34896) ([651b306](https://github.com/bitnami/charts/commit/651b3061d44ef1dfe310ec0c423315a439fba0d4)), closes [#34896](https://github.com/bitnami/charts/issues/34896)
 
 ## <small>0.2.5 (2025-07-08)</small>
 

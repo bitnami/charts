@@ -1,8 +1,14 @@
 # Changelog
 
+
 ## 32.3.6 (2025-07-17)
 
 * add ca-cert validity days in tls-secret ([#35165](https://github.com/bitnami/charts/pull/35165))
+
+## 32.3.6 (2025-07-18)
+
+* [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit ([#34796](https://github.com/bitnami/charts/pull/34796))
+
 
 ## <small>32.3.5 (2025-07-16)</small>
 
