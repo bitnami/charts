@@ -707,9 +707,9 @@ controller:
   ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
-  ## @param controller.heapOpts Kafka Java Heap size for controller-eligible nodes
+  ## @param controller.heapOpts Kafka Java Heap configuration for controller-eligible nodes
   ##
-  heapOpts: -Xmx1024m -Xms1024m
+  heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
   ## @param controller.command Override Kafka container command
   ##
   command: []
@@ -1168,9 +1168,9 @@ broker:
   ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
-  ## @param broker.heapOpts Kafka Java Heap size for broker-only nodes
+  ## @param broker.heapOpts Kafka Java Heap configuration for broker-only nodes
   ##
-  heapOpts: -Xmx1024m -Xms1024m
+  heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
   ## @param broker.command Override Kafka container command
   ##
   command: []
