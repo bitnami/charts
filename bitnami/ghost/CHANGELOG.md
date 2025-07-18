@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.0.27 (2025-07-15)
+## 23.0.28 (2025-07-18)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35140](https://github.com/bitnami/charts/pull/35140))
+* [bitnami/ghost] subPath fix ([#34854](https://github.com/bitnami/charts/pull/34854))
+
+## <small>23.0.27 (2025-07-15)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35140) ([240df57](https://github.com/bitnami/charts/commit/240df5755136f74c22f50c0794f929486fc63417)), closes [#35140](https://github.com/bitnami/charts/issues/35140)
 
 ## <small>23.0.26 (2025-07-11)</small>
 
