@@ -1,5 +1,9 @@
 # Changelog
 
+## 32.3.7 (2025-07-18)
+
+* [bitnami/kafka] fix: NetworkPolicy controller podSelector does not match StatefulSet controller pod label ([#33068](https://github.com/bitnami/charts/issues/33068))
+
 ## 32.3.6 (2025-07-18)
 
 * [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit ([#34796](https://github.com/bitnami/charts/pull/34796))
