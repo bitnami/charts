@@ -1,8 +1,16 @@
 # Changelog
 
-## 22.0.1 (2025-06-26)
+## 22.0.3 (2025-07-15)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34666](https://github.com/bitnami/charts/pull/34666))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35076](https://github.com/bitnami/charts/pull/35076))
+
+## <small>22.0.2 (2025-07-08)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34864) ([2a1712d](https://github.com/bitnami/charts/commit/2a1712de992cd5c0e711c3bec5d29560ac46ea70)), closes [#34864](https://github.com/bitnami/charts/issues/34864)
+
+## <small>22.0.1 (2025-06-26)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34666) ([fa45675](https://github.com/bitnami/charts/commit/fa456755fd35d29276970537041e4bf4adbab0fb)), closes [#34666](https://github.com/bitnami/charts/issues/34666)
 
 ## 22.0.0 (2025-06-25)
 

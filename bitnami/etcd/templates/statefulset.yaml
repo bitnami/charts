@@ -206,7 +206,6 @@ spec:
             - name: GOMAXPROCS
               value: {{ .Values.maxProcs | quote }}
             {{- end }}
-            {{- if gt $replicaCount 1 }}
             - name: ETCD_INITIAL_CLUSTER_TOKEN
               value: {{ .Values.initialClusterToken | quote }}
             {{- $initialCluster := list }}
@@ -215,7 +214,6 @@ spec:
             {{- end }}
             - name: ETCD_INITIAL_CLUSTER
               value: {{ join "," $initialCluster | quote }}
-            {{- end }}
             - name: ETCD_CLUSTER_DOMAIN
               value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
             {{- if and .Values.auth.client.secureTransport .Values.auth.client.useAutoTLS }}

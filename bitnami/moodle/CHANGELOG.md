@@ -1,8 +1,20 @@
 # Changelog
 
+## 27.0.3 (2025-07-15)
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35115](https://github.com/bitnami/charts/pull/35115))
+
+## <small>27.0.2 (2025-07-10)</small>
+
+* [bitnami/moodle] Fix hostAliases Bug in Moodle deployment.yaml (#34839) ([26d0084](https://github.com/bitnami/charts/commit/26d00844ebd6006d819e2a708489dca05b3a4d0e)), closes [#34839](https://github.com/bitnami/charts/issues/34839)
+
+## <small>27.0.1 (2025-07-08)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#34862) ([e299e92](https://github.com/bitnami/charts/commit/e299e92ff4be3ddb8baf0a01a4f767970a50d2d4)), closes [#34862](https://github.com/bitnami/charts/issues/34862)
+
 ## 27.0.0 (2025-06-25)
 
-* [bitnami/moodle] Upgrade MariaDB 11.8 ([#34631](https://github.com/bitnami/charts/pull/34631))
+* [bitnami/moodle] Upgrade MariaDB 11.8 (#34631) ([7fb4217](https://github.com/bitnami/charts/commit/7fb42171b0bb270ba790fb2a78ee49b6107b6e62)), closes [#34631](https://github.com/bitnami/charts/issues/34631)
 
 ## <small>26.0.5 (2025-06-13)</small>
 

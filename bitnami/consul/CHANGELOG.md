@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.4.23 (2025-06-24)
+## 11.4.25 (2025-07-15)
 
-* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#34596](https://github.com/bitnami/charts/pull/34596))
+* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#35080](https://github.com/bitnami/charts/pull/35080))
+
+## <small>11.4.24 (2025-07-08)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34877) ([263c284](https://github.com/bitnami/charts/commit/263c284597c80892a7f5b752174561f9a1bf8c0b)), closes [#34877](https://github.com/bitnami/charts/issues/34877)
+
+## <small>11.4.23 (2025-06-24)</small>
+
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#34596) ([f23c1ca](https://github.com/bitnami/charts/commit/f23c1ca3604e9b5f2e6766208ddd13522cfeb73d)), closes [#34596](https://github.com/bitnami/charts/issues/34596)
 
 ## <small>11.4.22 (2025-06-13)</small>
 

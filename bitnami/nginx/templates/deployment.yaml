@@ -398,9 +398,9 @@ spec:
             secretName: {{ printf "%s-tls" (include "common.names.fullname" .) }}
             items:
               - key: tls.crt
-                path: server.crt
+                path: tls.crt
               - key: tls.key
-                path: server.key
+                path: tls.key
             {{- end }}
         {{- end }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}

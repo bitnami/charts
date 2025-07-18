@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.1.6 (2025-06-29)
+## 3.1.8 (2025-07-09)
 
-* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#34704](https://github.com/bitnami/charts/pull/34704))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#34976](https://github.com/bitnami/charts/pull/34976))
+
+## <small>3.1.7 (2025-07-07)</small>
+
+* [bitnami/fluent-bit] Remove healthcheck VIB test (#34829) ([86395d4](https://github.com/bitnami/charts/commit/86395d4011a3b031f5f37f867b0a4ccba3d676e1)), closes [#34829](https://github.com/bitnami/charts/issues/34829)
+
+## <small>3.1.6 (2025-06-29)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#34704) ([4a29a32](https://github.com/bitnami/charts/commit/4a29a322d558718ff9e3a582e38faef1c5c49026)), closes [#34704](https://github.com/bitnami/charts/issues/34704)
 
 ## <small>3.1.5 (2025-06-03)</small>
 

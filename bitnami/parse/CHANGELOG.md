@@ -1,8 +1,16 @@
 # Changelog
 
-## 25.1.8 (2025-07-01)
+## 25.1.10 (2025-07-15)
 
-* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#34754](https://github.com/bitnami/charts/pull/34754))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#35120](https://github.com/bitnami/charts/pull/35120))
+
+## <small>25.1.9 (2025-07-10)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#34981) ([a01d383](https://github.com/bitnami/charts/commit/a01d383165fcb84d9d8b131c1fa03a3570668985)), closes [#34981](https://github.com/bitnami/charts/issues/34981)
+
+## <small>25.1.8 (2025-07-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#34754) ([ceb7060](https://github.com/bitnami/charts/commit/ceb70607a9ff435a95b0cad07ac1531780671b20)), closes [#34754](https://github.com/bitnami/charts/issues/34754)
 
 ## <small>25.1.7 (2025-07-01)</small>
 

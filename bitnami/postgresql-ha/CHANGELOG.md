@@ -1,8 +1,32 @@
 # Changelog
 
-## 16.0.16 (2025-07-01)
+## 16.0.22 (2025-07-15)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34739](https://github.com/bitnami/charts/pull/34739))
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#35117](https://github.com/bitnami/charts/pull/35117))
+
+## <small>16.0.21 (2025-07-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35032) ([f9a9627](https://github.com/bitnami/charts/commit/f9a9627b7ac1d944db23f827eabb249077eb665e)), closes [#35032](https://github.com/bitnami/charts/issues/35032)
+
+## <small>16.0.20 (2025-07-11)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35008) ([28d6eb1](https://github.com/bitnami/charts/commit/28d6eb147362b6a8e60bf97fb9d12dd5c49c44db)), closes [#35008](https://github.com/bitnami/charts/issues/35008)
+
+## <small>16.0.19 (2025-07-10)</small>
+
+* [bitnami/postgresql-ha] bugfix: credentials from files on witness (#34986) ([361cf78](https://github.com/bitnami/charts/commit/361cf78943a1f6a1c5dcc654fe6d29b05090dbb3)), closes [#34986](https://github.com/bitnami/charts/issues/34986)
+
+## <small>16.0.18 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34962) ([4841599](https://github.com/bitnami/charts/commit/48415997525a3b026d04823eef458537d1e5eef2)), closes [#34962](https://github.com/bitnami/charts/issues/34962)
+
+## <small>16.0.17 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34941) ([d6d6e95](https://github.com/bitnami/charts/commit/d6d6e9504968447e7cb4fabd7a210aaeb253d090)), closes [#34941](https://github.com/bitnami/charts/issues/34941)
+
+## <small>16.0.16 (2025-07-01)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34739) ([7f74a69](https://github.com/bitnami/charts/commit/7f74a69403211af80f018ec1fd800e430311aa7d)), closes [#34739](https://github.com/bitnami/charts/issues/34739)
 
 ## <small>16.0.15 (2025-06-25)</small>
 

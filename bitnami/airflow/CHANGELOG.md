@@ -1,8 +1,16 @@
 # Changelog
 
-## 24.2.0 (2025-06-24)
+## 24.2.2 (2025-07-15)
 
-* [bitnami/airflow] Move venv to emptydir volume ([#34560](https://github.com/bitnami/charts/pull/34560))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#35068](https://github.com/bitnami/charts/pull/35068))
+
+## <small>24.2.1 (2025-07-09)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34953) ([4ebb820](https://github.com/bitnami/charts/commit/4ebb82056d1b836ce081bee4e4142757e840951b)), closes [#34953](https://github.com/bitnami/charts/issues/34953)
+
+## 24.2.0 (2025-06-25)
+
+* [bitnami/airflow] Move venv to emptydir volume (#34560) ([d2e3dc5](https://github.com/bitnami/charts/commit/d2e3dc579cc0e96c8b09fb6083c504b85a3d5c08)), closes [#34560](https://github.com/bitnami/charts/issues/34560)
 
 ## <small>24.1.5 (2025-06-23)</small>
 

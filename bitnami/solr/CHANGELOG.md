@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.6.5 (2025-06-08)
+## 9.6.7 (2025-07-15)
 
-* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#34253](https://github.com/bitnami/charts/pull/34253))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#35125](https://github.com/bitnami/charts/pull/35125))
+
+## <small>9.6.6 (2025-07-08)</small>
+
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#34843) ([c69d5bc](https://github.com/bitnami/charts/commit/c69d5bcf19dce8dbebea97c2198babb46c1d9671)), closes [#34843](https://github.com/bitnami/charts/issues/34843)
+
+## <small>9.6.5 (2025-06-08)</small>
+
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#34253) ([d1a06ef](https://github.com/bitnami/charts/commit/d1a06eff8e5fb1566ecc76f8520035de0fc74807)), closes [#34253](https://github.com/bitnami/charts/issues/34253)
 
 ## <small>9.6.4 (2025-05-09)</small>
 

@@ -1,8 +1,28 @@
 # Changelog
 
+## 1.1.5 (2025-07-17)
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35189](https://github.com/bitnami/charts/pull/35189))
+
+## <small>1.1.4 (2025-07-15)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35147) ([15b1b5f](https://github.com/bitnami/charts/commit/15b1b5f3dc9520fe914cc0e0a74563ca6abf0c51)), closes [#35147](https://github.com/bitnami/charts/issues/35147)
+
+## <small>1.1.3 (2025-07-10)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35001) ([ba254ab](https://github.com/bitnami/charts/commit/ba254abfa1377b093b2014bb3cc93e5af312c339)), closes [#35001](https://github.com/bitnami/charts/issues/35001)
+
+## <small>1.1.2 (2025-07-08)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#34883) ([b6c7d5b](https://github.com/bitnami/charts/commit/b6c7d5b881ddb943694177de17f24fcde4c3c667)), closes [#34883](https://github.com/bitnami/charts/issues/34883)
+
+## <small>1.1.1 (2025-07-04)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#34798) ([f638233](https://github.com/bitnami/charts/commit/f638233febeb4aa7760e7ab5b7ea907e05e3b3fa)), closes [#34798](https://github.com/bitnami/charts/issues/34798)
+
 ## 1.1.0 (2025-06-25)
 
-* [bitnami/envoy-gateway]: Add support for customizing loadBalancerClass ([#34618](https://github.com/bitnami/charts/pull/34618))
+* [bitnami/envoy-gateway]: Add support for customizing loadBalancerClass (#34618) ([9769190](https://github.com/bitnami/charts/commit/9769190aa7f7c3244a458f0abb89a68d899ea450)), closes [#34618](https://github.com/bitnami/charts/issues/34618)
 
 ## <small>1.0.5 (2025-06-19)</small>
 

@@ -1,8 +1,20 @@
 # Changelog
 
+## 33.0.3 (2025-07-15)
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#35127](https://github.com/bitnami/charts/pull/35127))
+
+## <small>33.0.2 (2025-07-08)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34847) ([301a39d](https://github.com/bitnami/charts/commit/301a39dbbf0c772f04e7f3e305ee3e5029baafd3)), closes [#34847](https://github.com/bitnami/charts/issues/34847)
+
+## <small>33.0.1 (2025-07-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34837) ([26290b7](https://github.com/bitnami/charts/commit/26290b7ac936fc95a3711efbbc790f1cb3c87581)), closes [#34837](https://github.com/bitnami/charts/issues/34837)
+
 ## 33.0.0 (2025-06-25)
 
-* [bitnami/redmine] Upgrade MariaDB 11.8 ([#34633](https://github.com/bitnami/charts/pull/34633))
+* [bitnami/redmine] Upgrade MariaDB 11.8 (#34633) ([811e52e](https://github.com/bitnami/charts/commit/811e52eb9b2b2ea7e926b34993fe00a590761c15)), closes [#34633](https://github.com/bitnami/charts/issues/34633)
 
 ## <small>32.2.6 (2025-06-19)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
+## 5.1.4 (2025-07-16)
+
+* [bitnami/charts/issues/35055] Increase lenght of auto-generated password for MLFlow ([#35156](https://github.com/bitnami/charts/pull/35156))
+
+## <small>5.1.3 (2025-07-15)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#35114) ([c800f4a](https://github.com/bitnami/charts/commit/c800f4ac124887a5921ca6012113fe6482a2b2ac)), closes [#35114](https://github.com/bitnami/charts/issues/35114)
+
+## <small>5.1.2 (2025-07-08)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34891) ([4c67c19](https://github.com/bitnami/charts/commit/4c67c19267461e24301e1b8d069d98f1a536f9df)), closes [#34891](https://github.com/bitnami/charts/issues/34891)
+
+## <small>5.1.1 (2025-07-08)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#34856) ([100bf45](https://github.com/bitnami/charts/commit/100bf45756b4d13d0f8cfb35c59d67359f371899)), closes [#34856](https://github.com/bitnami/charts/issues/34856)
+
 ## 5.1.0 (2025-06-30)
 
-* [bitnami/mlflow] Adds resources to init containers ([#33910](https://github.com/bitnami/charts/pull/33910))
+* [bitnami/mlflow] Adds resources to init containers (#33910) ([c5eb698](https://github.com/bitnami/charts/commit/c5eb6988a947776a8596e7bae172bdc0a0494c27)), closes [#33910](https://github.com/bitnami/charts/issues/33910)
 
 ## <small>5.0.6 (2025-06-30)</small>
 

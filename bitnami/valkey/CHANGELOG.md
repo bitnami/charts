@@ -1,8 +1,32 @@
 # Changelog
 
-## 3.0.16 (2025-06-26)
+## 3.0.22 (2025-07-16)
 
-* [bitnami/valkey] Fix key on condition to create PodDisruptionBudget ([#34641](https://github.com/bitnami/charts/pull/34641))
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#35151](https://github.com/bitnami/charts/pull/35151))
+
+## <small>3.0.21 (2025-07-15)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#35135) ([4a16d74](https://github.com/bitnami/charts/commit/4a16d74eebb0f13d8423403bb4390c3cac30bd4a)), closes [#35135](https://github.com/bitnami/charts/issues/35135)
+
+## <small>3.0.20 (2025-07-09)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34952) ([39c73b3](https://github.com/bitnami/charts/commit/39c73b37c8afd5414d7bdb2311ef6e5fff59c71d)), closes [#34952](https://github.com/bitnami/charts/issues/34952)
+
+## <small>3.0.19 (2025-07-09)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34922) ([4a25dbc](https://github.com/bitnami/charts/commit/4a25dbc8e5a453d19fa8648af179398b9bed0353)), closes [#34922](https://github.com/bitnami/charts/issues/34922)
+
+## <small>3.0.18 (2025-07-08)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34849) ([9a2b90b](https://github.com/bitnami/charts/commit/9a2b90b7d7f8e9ee0b164738e7dae4f5c4d54693)), closes [#34849](https://github.com/bitnami/charts/issues/34849)
+
+## <small>3.0.17 (2025-07-07)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#34833) ([e824d09](https://github.com/bitnami/charts/commit/e824d0901f695edbd5aba67419b1b73dd2a8ca38)), closes [#34833](https://github.com/bitnami/charts/issues/34833)
+
+## <small>3.0.16 (2025-06-26)</small>
+
+* [bitnami/valkey] Fix key on condition to create PodDisruptionBudget (#34641) ([be1c518](https://github.com/bitnami/charts/commit/be1c518fbde7a4bd1459d29155b3874180cbf405)), closes [#34641](https://github.com/bitnami/charts/issues/34641)
 
 ## <small>3.0.15 (2025-06-18)</small>
 
