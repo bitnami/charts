@@ -1,6 +1,6 @@
 # Changelog
 
-## 26.8.0 (2025-07-17)
+## 26.8.0 (2025-07-18)
 
 * [bitnami/harbor] feat: allow to disable ingress ([#35194](https://github.com/bitnami/charts/pull/35194))
 
