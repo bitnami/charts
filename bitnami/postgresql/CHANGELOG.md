@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.7.19 (2025-07-15)
+## 16.7.20 (2025-07-18)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35116](https://github.com/bitnami/charts/pull/35116))
+* [bitnami/postgresql] Rename backup.cronjob.timeZone to backup.cronjob.timezone ([#35153](https://github.com/bitnami/charts/pull/35153))
+
+## <small>16.7.19 (2025-07-15)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#35116) ([15c6eee](https://github.com/bitnami/charts/commit/15c6eeeee5d8454b93eeada473a80a0230d6d3ae)), closes [#35116](https://github.com/bitnami/charts/issues/35116)
 
 ## <small>16.7.18 (2025-07-12)</small>
 
