@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.7.20 (2025-07-17)
+## 16.7.20 (2025-07-18)
 
 * [bitnami/postgresql] Rename backup.cronjob.timeZone to backup.cronjob.timezone ([#35153](https://github.com/bitnami/charts/pull/35153))
 
