@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.13 (2025-07-15)
+## 17.0.14 (2025-07-18)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35109](https://github.com/bitnami/charts/pull/35109))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35209](https://github.com/bitnami/charts/pull/35209))
+
+## <small>17.0.13 (2025-07-15)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#35109) ([70e8f83](https://github.com/bitnami/charts/commit/70e8f83e2d7512a18c57a448eff6305271685f7e)), closes [#35109](https://github.com/bitnami/charts/issues/35109)
 
 ## <small>17.0.12 (2025-07-14)</small>
 
