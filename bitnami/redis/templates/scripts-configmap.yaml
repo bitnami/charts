@@ -534,9 +534,9 @@ data:
 
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
+            redis-cli -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
         else
-            redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" sentinel "$@"
+            redis-cli -p "$REDIS_SENTINEL_PORT" sentinel "$@"
         fi
     }
     sentinel_failover_finished() {
@@ -544,8 +544,6 @@ data:
       REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
       [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
     }
-
-    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     {{ if .Values.auth.sentinel -}}
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
@@ -583,10 +581,45 @@ data:
     }
     is_master() {
         REDIS_ROLE=$(run_redis_command role | head -1)
+        echo "REDIS_ROLE: $REDIS_ROLE"
         [[ "$REDIS_ROLE" == "master" ]]
     }
 
+    {{- if .Values.sentinel.externalAccess.enabled }}
+    {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
+
+    SERVICE_NAMES="{{
+    $fullname := include "common.names.fullname" . -}}
+    {{- range $i, $e := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+        {{- if $i }} {{ end }}{{ printf "%s-svc-%d" $fullname $i }}
+    {{- end }}"
+    SERVICE_IPS="{{- range $i, $ip := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+    {{- if $i }} {{ end }}{{ $ip }}
+    {{- end }}"
+
+
+    # Helper function to get IP by service name
+    get_service_ip() {
+    search_name="$1"
+    set -- $SERVICE_NAMES
+    for i in $(seq 1 $#); do
+        eval name=\${$i}
+        if [ "$name" = "$search_name" ]; then
+        set -- $SERVICE_IPS
+        eval echo \${$i}
+        return 0
+        fi
+    done
+    return 1
+    }
+    
+    SVC_NAME=$(hostname | sed 's/node/svc/g')
+    EXTERNAL_SERVICE="$SVC_NAME.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    {{- else }}
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    {{- end }}
+    {{- end }}
+
 
     get_full_hostname() {
         hostname="$1"
@@ -617,18 +650,29 @@ data:
 
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
         else
-            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" sentinel "$@"
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -p "$REDIS_SENTINEL_PORT" sentinel "$@"
         fi
     }
+
     sentinel_failover_finished() {
         REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        echo "REDIS_SENTINEL_INFO: $REDIS_SENTINEL_INFO"
         REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+        echo "REDIS_MASTER_HOST: $REDIS_MASTER_HOST"
+        {{- if .Values.sentinel.externalAccess.enabled }}
+        # Get the current service name and its IP
+        CURRENT_SERVICE_NAME="$SVC_NAME"
+        echo "CURRENT_SERVICE_NAME: $CURRENT_SERVICE_NAME"
+        CURRENT_SERVICE_IP=$(get_service_ip "$CURRENT_SERVICE_NAME")
+        echo "CURRENT_SERVICE_IP: $CURRENT_SERVICE_IP"
+        [[ "$REDIS_MASTER_HOST" != "$CURRENT_SERVICE_IP" ]]
+        {{- else }}
+        echo "REDIS_MASTER_HOST: $(get_full_hostname $HOSTNAME)"
         [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+        {{- end }}
     }
-
-    REDIS_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
