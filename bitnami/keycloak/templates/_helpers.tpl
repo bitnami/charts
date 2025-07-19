@@ -131,6 +131,13 @@ Return the Database database name
 {{- end -}}
 
 {{/*
+Return the Database port
+*/}}
+{{- define "keycloak.databaseSchema" -}}
+{{- ternary "public" (tpl (.Values.externalDatabase.schema | toString) $) .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
+{{/*
 Return the Database user
 */}}
 {{- define "keycloak.databaseUser" -}}
