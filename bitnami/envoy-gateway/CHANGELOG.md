@@ -1,8 +1,15 @@
 # Changelog
 
-## 1.1.5 (2025-07-17)
+## 1.1.6 (2025-07-19)
 
-* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35189](https://github.com/bitnami/charts/pull/35189))
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35213](https://github.com/bitnami/charts/pull/35213))
+
+## <small>1.1.5 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35189) ([eca7375](https://github.com/bitnami/charts/commit/eca73755cdd1d01c32460c9f43c2ff4ca4da0c24)), closes [#35189](https://github.com/bitnami/charts/issues/35189)
 
 ## <small>1.1.4 (2025-07-15)</small>
 
