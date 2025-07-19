@@ -1,0 +1,210 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: operator
+    kubevirt.io: virt-operator
+  {{- if or .Values.operator.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.operator.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.operator.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.operator.replicaCount }}
+  {{- end }}
+  {{- if .Values.operator.updateStrategy }}
+  strategy: {{- toYaml .Values.operator.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.operator.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: operator
+      kubevirt.io: virt-operator
+  template:
+    metadata:
+      name: {{ template "common.names.fullname" . }}
+      {{- if .Values.operator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: operator
+        kubevirt.io: virt-operator
+        name: virt-operator
+        prometheus.kubevirt.io: "true"
+    spec:
+      {{- include "operator.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "operator.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
+      {{- if .Values.operator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.operator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.operator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.operator.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAffinityPreset "component" "operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.operator.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.operator.podAntiAffinityPreset "component" "operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.operator.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.operator.nodeAffinityPreset.type "key" .Values.operator.nodeAffinityPreset.key "values" .Values.operator.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.operator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.operator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.operator.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.priorityClassName }}
+      priorityClassName: {{ .Values.operator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.operator.schedulerName }}
+      schedulerName: {{ .Values.operator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.operator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.operator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "operator.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+          {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
+        {{- end }}
+        {{- if .Values.operator.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.operator.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: virt-operator
+          image: {{ template "operator.image" . }}
+          imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          {{- if .Values.operator.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.operator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.operator.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.operator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.operator.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: VIRT_OPERATOR_IMAGE
+              value: quay.io/kubevirt/virt-operator:{{ .Values.operator.image.tag }}
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['olm.targetNamespaces']
+            - name: KUBEVIRT_VERSION
+              value: {{ .Values.operator.image.tag }}
+            {{- if .Values.operator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.operator.extraEnvVarsCM .Values.operator.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.operator.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.operator.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.operator.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.operator.resources }}
+          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- else if ne .Values.operator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.operator.containerPorts.metrics }}
+              protocol: TCP
+            - name: webhooks
+              containerPort: {{ .Values.operator.containerPorts.webhooks }}
+              protocol: TCP
+            {{- if .Values.operator.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.operator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.operator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: 8443
+              scheme: HTTPS
+          {{- end }}
+          {{- if .Values.operator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.operator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.operator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.operator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: kubevirt-operator-certs
+              readOnly: true
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
+            - name: profile-data
+              mountPath: /profile-data
+          {{- if .Values.operator.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.operator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.operator.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: profile-data
+          emptyDir: {}
+        - name: kubevirt-operator-certs
+          secret:
+            optional: true
+            secretName: kubevirt-operator-certs
+        {{- if .Values.operator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
