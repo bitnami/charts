@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   {{- if .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  ingressClassName: {{ include "common.tplvalues.render" ( dict "value" .Values.ingress.ingressClassName "context" $ ) | quote }}
   {{- end }}
   rules:
     {{- if .Values.ingress.hostname }}
