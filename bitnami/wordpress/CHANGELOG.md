@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.3 (2025-07-15)
+## 25.0.4 (2025-07-21)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35143](https://github.com/bitnami/charts/pull/35143))
+* [bitnami/wordpress] Update passwordFile secret mountPath ([#35222](https://github.com/bitnami/charts/pull/35222))
+
+## <small>25.0.3 (2025-07-15)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35143) ([348bee6](https://github.com/bitnami/charts/commit/348bee6aaffd3e15e5a2e3eb519152f76d0d1958)), closes [#35143](https://github.com/bitnami/charts/issues/35143)
 
 ## <small>25.0.2 (2025-07-15)</small>
 
