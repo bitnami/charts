@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.2 (2025-07-15)
+## 24.2.3 (2025-07-18)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#35068](https://github.com/bitnami/charts/pull/35068))
+* [bitnami/airflow] add events to rbac role ([#35201](https://github.com/bitnami/charts/pull/35201))
+
+## <small>24.2.2 (2025-07-15)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35068) ([7a30b32](https://github.com/bitnami/charts/commit/7a30b329dcd9ee666d0ea4f1c87080d67094aede)), closes [#35068](https://github.com/bitnami/charts/issues/35068)
 
 ## <small>24.2.1 (2025-07-09)</small>
 
