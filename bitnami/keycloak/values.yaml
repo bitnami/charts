@@ -1353,6 +1353,7 @@ postgresql:
 ## @param externalDatabase.user Non-root username for Keycloak
 ## @param externalDatabase.password Password for the non-root username for Keycloak
 ## @param externalDatabase.database Keycloak database name
+## @param externalDatabase.schema Keycloak database schema
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
 ## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name
 ## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port
@@ -1366,6 +1367,7 @@ externalDatabase:
   port: 5432
   user: bn_keycloak
   database: bitnami_keycloak
+  schema: public
   password: ""
   existingSecret: ""
   existingSecretHostKey: ""

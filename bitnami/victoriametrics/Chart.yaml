@@ -5,22 +5,22 @@ annotations:
   category: Infrastructure
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r48
+      image: docker.io/bitnami/os-shell:12-debian-12-r49
     - name: victoriametrics-vmagent
-      image: docker.io/bitnami/victoriametrics-vmagent:1.121.0-debian-12-r3
+      image: docker.io/bitnami/victoriametrics-vmagent:1.122.0-debian-12-r0
     - name: victoriametrics-vmalert
-      image: docker.io/bitnami/victoriametrics-vmalert:1.121.0-debian-12-r2
+      image: docker.io/bitnami/victoriametrics-vmalert:1.122.0-debian-12-r0
     - name: victoriametrics-vmauth
-      image: docker.io/bitnami/victoriametrics-vmauth:1.121.0-debian-12-r2
+      image: docker.io/bitnami/victoriametrics-vmauth:1.122.0-debian-12-r0
     - name: victoriametrics-vminsert
-      image: docker.io/bitnami/victoriametrics-vminsert:1.121.0-debian-12-r2
+      image: docker.io/bitnami/victoriametrics-vminsert:1.122.0-debian-12-r0
     - name: victoriametrics-vmselect
-      image: docker.io/bitnami/victoriametrics-vmselect:1.121.0-debian-12-r2
+      image: docker.io/bitnami/victoriametrics-vmselect:1.122.0-debian-12-r0
     - name: victoriametrics-vmstorage
-      image: docker.io/bitnami/victoriametrics-vmstorage:1.121.0-debian-12-r2
+      image: docker.io/bitnami/victoriametrics-vmstorage:1.122.0-debian-12-r0
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.121.0
+appVersion: 1.122.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -40,4 +40,4 @@ maintainers:
 name: victoriametrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/victoriametrics
-version: 0.1.24
+version: 0.1.25

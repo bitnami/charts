@@ -158,9 +158,10 @@ database:
 
 ## @section Traffic Exposure Parameters
 
-## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy ]
+## @param exposureType The way to expose Harbor. Allowed values are [ ingress \| proxy \| none ]
 ## Use "proxy" to deploy NGINX proxy in front of Harbor services
 ## Use "ingress" to use an Ingress Controller as proxy
+## Use "none" to bring your own ingress
 ##
 exposureType: proxy
 ## Service parameters

@@ -104,6 +104,17 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
+### Load custom modules in Redis&reg;
+
+You can use the `commonConfiguration` parameter to specify the modules to load. For example, to load the RediSearch, RedisBloom, RedisJSON and RedisTimeSeries modules supported from Redis&reg; 8+, you can set the following:
+
+```yaml
+commonConfiguration: |
+  loadmodule /opt/bitnami/redis/lib/redis/modules/redisbloom.so
+  loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
+  loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
+  loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
+
 ### Bootstrapping with an External Cluster
 
 This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:

@@ -705,6 +705,9 @@ metrics:
     ## Enable debug mode
     ##
     debug: false
+  ## @param metrics.scrapeUri Apache Prometheus Exporter scrape_uri
+  ## Default scrape_uri is 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' if this variable is empty.
+  scrapeUri: ""
   ## @param metrics.podAnnotations [object] Additional custom annotations for Apache exporter service
   ##
   podAnnotations:
