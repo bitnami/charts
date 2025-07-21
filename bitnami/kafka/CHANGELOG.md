@@ -1,8 +1,15 @@
 # Changelog
 
-## 32.3.6 (2025-07-18)
+## 32.3.7 (2025-07-21)
 
 * [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling ([#35190](https://github.com/bitnami/charts/pull/35190))
+
+## <small>32.3.6 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit (#34796) ([eb6830e](https://github.com/bitnami/charts/commit/eb6830efb87aa905ff874ba93e75b82f5303a6fb)), closes [#34796](https://github.com/bitnami/charts/issues/34796)
 
 ## <small>32.3.5 (2025-07-16)</small>
 
