@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.18 (2025-07-16)
+## 6.0.19 (2025-07-21)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35159](https://github.com/bitnami/charts/pull/35159))
+* [bitnami/appsmith] Update passwordFile secret mountPath ([#35223](https://github.com/bitnami/charts/pull/35223))
+
+## <small>6.0.18 (2025-07-16)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35159) ([f884c35](https://github.com/bitnami/charts/commit/f884c3567b15dbb25668f6accd77d4b601518d96)), closes [#35159](https://github.com/bitnami/charts/issues/35159)
 
 ## <small>6.0.17 (2025-07-15)</small>
 
