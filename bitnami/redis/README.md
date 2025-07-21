@@ -103,6 +103,7 @@ commonConfiguration: |
   loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
+
 ### Bootstrapping with an External Cluster
 
 This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:
