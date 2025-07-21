@@ -1,6 +1,6 @@
 # Changelog
 
-## 32.4.0 (2025-07-18)
+## 32.4.0 (2025-07-21)
 
 * Change ca-root certificate validity days as a variable ([#35196](https://github.com/bitnami/charts/pull/35196))
 
