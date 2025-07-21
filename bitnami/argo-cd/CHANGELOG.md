@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.0.31 (2025-07-20)
+## 9.0.31 (2025-07-21)
 
 * [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` ([#35221](https://github.com/bitnami/charts/pull/35221))
 
