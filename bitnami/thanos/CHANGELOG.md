@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.2.1 (2025-07-15)
+## 17.2.2 (2025-07-21)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35131](https://github.com/bitnami/charts/pull/35131))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35226](https://github.com/bitnami/charts/pull/35226))
+
+## <small>17.2.1 (2025-07-15)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35131) ([b84a27d](https://github.com/bitnami/charts/commit/b84a27db4a60d92308cf7d61122f6cebeeff75ab)), closes [#35131](https://github.com/bitnami/charts/issues/35131)
 
 ## 17.2.0 (2025-07-09)
 
