@@ -60,6 +60,7 @@ data:
   {{- if not .Values.externalDatabase.existingSecretDatabaseKey }}
   KEYCLOAK_DATABASE_NAME: {{ include "keycloak.databaseName" . | quote }}
   {{- end }}
+  KEYCLOAK_DATABASE_SCHEMA: {{ include "keycloak.databaseSchema" . }}
   {{- if not .Values.externalDatabase.existingSecretUserKey }}
   KEYCLOAK_DATABASE_USER: {{ include "keycloak.databaseUser" . | quote }}
   {{- end }}

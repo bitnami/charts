@@ -106,6 +106,7 @@ externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
 externalDatabase.port=5432
+externalDatabase.schema=public
 ```
 
 > NOTE: Only PostgreSQL database server is supported as external database
@@ -687,6 +688,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
 | `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
 | `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
+| `externalDatabase.schema`                    | Keycloak database schema                                                                                          | `public`           |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
 | `externalDatabase.existingSecretHostKey`     | Name of an existing secret key containing the database host name                                                  | `""`               |
 | `externalDatabase.existingSecretPortKey`     | Name of an existing secret key containing the database port                                                       | `""`               |

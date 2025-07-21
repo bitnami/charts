@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.7.7 (2025-07-11)
+## 24.8.0 (2025-07-19)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35004](https://github.com/bitnami/charts/pull/35004))
+* [bitnami/keycloak] Add support for customization of the Keycloak database schema ([#35211](https://github.com/bitnami/charts/pull/35211))
+
+## <small>24.7.7 (2025-07-11)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#35004) ([827692c](https://github.com/bitnami/charts/commit/827692c4bf27135087b0287ff595440a59dfac85)), closes [#35004](https://github.com/bitnami/charts/issues/35004)
 
 ## <small>24.7.6 (2025-07-09)</small>
 
