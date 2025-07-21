@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.3 (2025-07-15)
+## 22.0.4 (2025-07-21)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35076](https://github.com/bitnami/charts/pull/35076))
+* [bitnami/drupal] Update passwordFile secret mountPath ([#35224](https://github.com/bitnami/charts/pull/35224))
+
+## <small>22.0.3 (2025-07-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35076) ([d7f12ab](https://github.com/bitnami/charts/commit/d7f12ab976196f777375247662b49c4982b8dabe)), closes [#35076](https://github.com/bitnami/charts/issues/35076)
 
 ## <small>22.0.2 (2025-07-08)</small>
 
