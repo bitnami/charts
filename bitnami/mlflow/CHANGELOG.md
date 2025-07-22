@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.4 (2025-07-16)
+## 5.1.5 (2025-07-22)
 
-* [bitnami/charts/issues/35055] Increase lenght of auto-generated password for MLFlow ([#35156](https://github.com/bitnami/charts/pull/35156))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#35242](https://github.com/bitnami/charts/pull/35242))
+
+## <small>5.1.4 (2025-07-16)</small>
+
+* [bitnami/charts/issues/35055] Increase lenght of auto-generated password for MLFlow (#35156) ([ec1ff13](https://github.com/bitnami/charts/commit/ec1ff13546682a6b479e9d8de6bbf3dc28a65c6d)), closes [#35156](https://github.com/bitnami/charts/issues/35156)
 
 ## <small>5.1.3 (2025-07-15)</small>
 
