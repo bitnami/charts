@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.30 (2025-07-15)
+## 9.0.31 (2025-07-21)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35083](https://github.com/bitnami/charts/pull/35083))
+* [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` ([#35221](https://github.com/bitnami/charts/pull/35221))
+
+## <small>9.0.30 (2025-07-15)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35083) ([c0e11e9](https://github.com/bitnami/charts/commit/c0e11e996e67659b2bb335a051fd8c525cbcbf01)), closes [#35083](https://github.com/bitnami/charts/issues/35083)
 
 ## <small>9.0.29 (2025-07-10)</small>
 
