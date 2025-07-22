@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.11 (2025-07-16)
+## 12.0.12 (2025-07-22)
 
-* [bitnami/etcd] Always use initial cluster token ([#35160](https://github.com/bitnami/charts/pull/35160))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35249](https://github.com/bitnami/charts/pull/35249))
+
+## <small>12.0.11 (2025-07-16)</small>
+
+* [bitnami/etcd] Always use initial cluster token (#35160) ([3d49e70](https://github.com/bitnami/charts/commit/3d49e70015e2dd434b4e77643b1dc530803a6ef9)), closes [#35160](https://github.com/bitnami/charts/issues/35160)
 
 ## <small>12.0.10 (2025-07-15)</small>
 
