@@ -1,8 +1,15 @@
 # Changelog
 
-## 6.0.19 (2025-07-21)
+## 6.0.20 (2025-07-22)
 
-* [bitnami/appsmith] Update passwordFile secret mountPath ([#35223](https://github.com/bitnami/charts/pull/35223))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35245](https://github.com/bitnami/charts/pull/35245))
+
+## <small>6.0.19 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/appsmith] Update passwordFile secret mountPath (#35223) ([b2dec04](https://github.com/bitnami/charts/commit/b2dec047e4a16c716d5f1b936503d5aa9f20f4fd)), closes [#35223](https://github.com/bitnami/charts/issues/35223)
 
 ## <small>6.0.18 (2025-07-16)</small>
 
