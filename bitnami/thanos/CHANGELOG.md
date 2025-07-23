@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.2.3 (2025-07-22)
+## 17.2.3 (2025-07-23)
 
 * [bitnami/thanos] Fix commonLabels on sharded storegateway ([#35238](https://github.com/bitnami/charts/pull/35238))
 
