@@ -1,8 +1,15 @@
 # Changelog
 
-## 11.4.0 (2025-07-16)
+## 11.4.1 (2025-07-23)
 
-* [bitnami/apache] Support custom scrape_uri in apache exporter ([#35050](https://github.com/bitnami/charts/pull/35050))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#35259](https://github.com/bitnami/charts/pull/35259))
+
+## 11.4.0 (2025-07-18)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/apache] Support custom scrape_uri in apache exporter (#35050) ([6c008fc](https://github.com/bitnami/charts/commit/6c008fcf2fd8943b243860164f17cd53485f6119)), closes [#35050](https://github.com/bitnami/charts/issues/35050)
 
 ## <small>11.3.22 (2025-07-10)</small>
 
