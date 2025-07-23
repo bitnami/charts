@@ -614,6 +614,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 13.0.0
+
+This major updates the MySQL subchart to its newest major, 14.0.0. For more information on this subchart's major, please refer to [MySQL upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1400).
+
 ### To 12.0.0
 
 This major updates the MySQL subchart to its newest major, 13.0.0. For more information on this subchart's major, please refer to [MySQL upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1300).
