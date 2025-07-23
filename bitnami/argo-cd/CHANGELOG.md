@@ -1,8 +1,15 @@
 # Changelog
 
-## 9.0.31 (2025-07-21)
+## 9.0.32 (2025-07-23)
 
-* [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` ([#35221](https://github.com/bitnami/charts/pull/35221))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35264](https://github.com/bitnami/charts/pull/35264))
+
+## <small>9.0.31 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` (#35221) ([8a5b631](https://github.com/bitnami/charts/commit/8a5b631db38db4c9b9fd411c205746549759491e)), closes [#35221](https://github.com/bitnami/charts/issues/35221)
 
 ## <small>9.0.30 (2025-07-15)</small>
 
