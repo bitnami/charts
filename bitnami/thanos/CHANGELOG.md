@@ -1,8 +1,15 @@
 # Changelog
 
-## 17.2.2 (2025-07-21)
+## 17.2.3 (2025-07-23)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35226](https://github.com/bitnami/charts/pull/35226))
+* [bitnami/thanos] Fix commonLabels on sharded storegateway ([#35238](https://github.com/bitnami/charts/pull/35238))
+
+## <small>17.2.2 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35226) ([efbbe03](https://github.com/bitnami/charts/commit/efbbe03289f99a78de4ac4c8eeb66d64d4b79bcd)), closes [#35226](https://github.com/bitnami/charts/issues/35226)
 
 ## <small>17.2.1 (2025-07-15)</small>
 
