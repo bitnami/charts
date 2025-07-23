@@ -1,8 +1,16 @@
 # Changelog
 
-## 23.0.29 (2025-07-18)
+## 24.0.0 (2025-07-23)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35208](https://github.com/bitnami/charts/pull/35208))
+* [bitnami/ghost] Upgrade Ghost subchart to 14 ([#35252](https://github.com/bitnami/charts/pull/35252))
+
+## <small>23.0.30 (2025-07-21)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35230) ([b89fa2a](https://github.com/bitnami/charts/commit/b89fa2a3a9359a511db4d6b092ca348d38a0eee3)), closes [#35230](https://github.com/bitnami/charts/issues/35230)
+
+## <small>23.0.29 (2025-07-18)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35208) ([623d487](https://github.com/bitnami/charts/commit/623d4871a55de9191a93d00069a09b0ac4e556b6)), closes [#35208](https://github.com/bitnami/charts/issues/35208)
 
 ## <small>23.0.28 (2025-07-18)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.3.7 (2025-07-21)
+
+## 32.3.8 (2025-07-23)
 
 * [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling ([#35190](https://github.com/bitnami/charts/pull/35190))
+
+## <small>32.3.7 (2025-07-23)</small>
+
+* [bitnami/kafka]fix(provisioning): Fix typo in initContainers ([#35255](https://github.com/bitnami/charts/pull/35255))
 
 ## <small>32.3.6 (2025-07-18)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
+## 6.0.1 (2025-07-23)
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#35258](https://github.com/bitnami/charts/pull/35258))
+
 ## 6.0.0 (2025-07-18)
 
-* [bitnami/grafana-loki] Upgrade Alloy chart ([#35197](https://github.com/bitnami/charts/pull/35197))
+* [bitnami/grafana-loki] Upgrade Alloy chart (#35197) ([4b503a5](https://github.com/bitnami/charts/commit/4b503a5d6e6e855ce5786ec9ddf52d7c4dfc2701)), closes [#35197](https://github.com/bitnami/charts/issues/35197)
 
 ## <small>5.0.7 (2025-07-17)</small>
 

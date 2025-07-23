@@ -170,9 +170,6 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
-        {{- if .Values.provisioning.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.initContainers "context" $ ) | nindent 8 }}
-        {{- end }}
         {{- if .Values.provisioning.waitForKafka }}
         - name: wait-for-available-kafka
           image: {{ include "kafka.image" . }}
@@ -217,6 +214,9 @@ spec:
         {{- end }}
         {{- if .Values.provisioning.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.initContainers "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
       containers:
         - name: kafka-provisioning
