@@ -21,8 +21,8 @@ metadata:
     ingress.kubernetes.io/protocol: https # Traefik
     nginx.ingress.kubernetes.io/backend-protocol: https # Nginx
     {{- end }}
-    {{- if or .Values.controller.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
