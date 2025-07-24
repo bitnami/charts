@@ -2,11 +2,14 @@
 
 ## 12.0.13 (2025-07-24)
 
-* [bitnami/etcd] Optional delay before starting the pre-upgrade hook ([#34973](https://github.com/bitnami/charts/pull/34973))
+* [bitnami/etcd] feat: introduce preUpgrade job delay ([#34973](https://github.com/bitnami/charts/pull/34973))
 
 ## <small>12.0.12 (2025-07-22)</small>
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35249](https://github.com/bitnami/charts/pull/35249))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35249) ([f4dda1b](https://github.com/bitnami/charts/commit/f4dda1bab2cf8636652c68d4b9441c91c40c5c26)), closes [#35249](https://github.com/bitnami/charts/issues/35249)
 
 ## <small>12.0.11 (2025-07-16)</small>
 
