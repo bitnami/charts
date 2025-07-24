@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>13.0.1 (2025-07-24)</small>
+
+* Fix ingress annotations retrieval ([#35273](https://github.com/bitnami/charts/issues/35273))
+
 ## 13.0.0 (2025-07-23)
 
 * [bitnami/argo-workflows] Upgrade MySQL subchart to 14 ([#35254](https://github.com/bitnami/charts/pull/35254))
