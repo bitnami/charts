@@ -1,12 +1,15 @@
 # Changelog
 
-## <small>13.0.1 (2025-07-24)</small>
+## 13.0.1 (2025-07-24)
 
-* Fix ingress annotations retrieval ([#35273](https://github.com/bitnami/charts/issues/35273))
+* Fix ingress annotations in argo-workflows ([#35275](https://github.com/bitnami/charts/pull/35275))
 
 ## 13.0.0 (2025-07-23)
 
-* [bitnami/argo-workflows] Upgrade MySQL subchart to 14 ([#35254](https://github.com/bitnami/charts/pull/35254))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/argo-workflows] Upgrade MySQL subchart to 14 (#35254) ([06cb090](https://github.com/bitnami/charts/commit/06cb0900f83b402447250875b832ce05b1dc73fd)), closes [#35254](https://github.com/bitnami/charts/issues/35254)
 
 ## <small>12.0.7 (2025-07-08)</small>
 
