@@ -1,5 +1,9 @@
 # Changelog
 
+## 12.1.7 (2025-07-25)
+
+* [bitnami/kibana] Add `revisionHistoryLimit` for deployments
+
 ## 12.1.6 (2025-07-22)
 
 * [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#35246](https://github.com/bitnami/charts/pull/35246))
