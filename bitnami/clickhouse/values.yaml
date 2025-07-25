@@ -302,6 +302,11 @@ replicaCount: 3
 ## @param distributeReplicasByZone Schedules replicas of the same shard to different availability zones
 ##
 distributeReplicasByZone: false
+## @param exposeMysql Expose MySQL port container port
+## @param exposePostgresql Expose PostgreSQL port container port
+##
+exposeMysql: true
+exposePostgresql: true
 ## @param containerPorts.http ClickHouse HTTP container port
 ## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port
