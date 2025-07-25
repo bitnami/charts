@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 (2025-07-24)
+## 1.0.1 (2025-07-25)
 
 * [bitnami/grafana-alloy] fix quote prometheus.io/port annotation to avoid decoding error ([#35289](https://github.com/bitnami/charts/pull/35289))
 
