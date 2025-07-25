@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.13 (2025-07-24)
+## 12.0.14 (2025-07-25)
 
-* [bitnami/etcd] feat: introduce preUpgrade job delay ([#34973](https://github.com/bitnami/charts/pull/34973))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35303](https://github.com/bitnami/charts/pull/35303))
+
+## <small>12.0.13 (2025-07-24)</small>
+
+* [bitnami/etcd] feat: introduce preUpgrade job delay (#34973) ([36b2825](https://github.com/bitnami/charts/commit/36b2825bb4f8cc66c70b656dac06859651c79c83)), closes [#34973](https://github.com/bitnami/charts/issues/34973)
 
 ## <small>12.0.12 (2025-07-22)</small>
 
