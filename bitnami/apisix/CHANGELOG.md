@@ -4,6 +4,15 @@
 
 * [bitnami/apisix] fix: Apisix clean uds ([#34987](https://github.com/bitnami/charts/pull/34987))
 
+## 5.0.8 (2025-07-23)
+
+* [bitnami/charts/issues/35218] Share context with apisix.etcd.authEnabled function ([#35257](https://github.com/bitnami/charts/pull/35257))
+
+## <small>5.0.7 (2025-07-15)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35079) ([03f66b2](https://github.com/bitnami/charts/commit/03f66b2c6caaaf14477cb720e8dff0c43407f686)), closes [#35079](https://github.com/bitnami/charts/issues/35079)
+
+
 ## <small>5.0.6 (2025-07-08)</small>
 
 * [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34865) ([5c9287c](https://github.com/bitnami/charts/commit/5c9287c28a82889e83ab6390d5327fa53a9a0a9a)), closes [#34865](https://github.com/bitnami/charts/issues/34865)

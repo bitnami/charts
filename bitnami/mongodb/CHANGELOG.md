@@ -1,8 +1,27 @@
 # Changelog
 
-## 16.5.29 (2025-07-09)
+## 16.5.33 (2025-07-23)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#34938](https://github.com/bitnami/charts/pull/34938))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#35266](https://github.com/bitnami/charts/pull/35266))
+
+## <small>16.5.32 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35181) ([03110ea](https://github.com/bitnami/charts/commit/03110ea447acf58cde84f5f26137731a8ae2f632)), closes [#35181](https://github.com/bitnami/charts/issues/35181)
+
+## <small>16.5.31 (2025-07-16)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35148) ([58713bf](https://github.com/bitnami/charts/commit/58713bf96368115a5fb6854f61805fba64055a03)), closes [#35148](https://github.com/bitnami/charts/issues/35148)
+
+## <small>16.5.30 (2025-07-15)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35113) ([e099bec](https://github.com/bitnami/charts/commit/e099bec036e7d1095ec1a30f21d5c004ca474a40)), closes [#35113](https://github.com/bitnami/charts/issues/35113)
+
+## <small>16.5.29 (2025-07-09)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#34938) ([39efb70](https://github.com/bitnami/charts/commit/39efb70e19e09bb7cc8fd82a46f2a1b80e170d2f)), closes [#34938](https://github.com/bitnami/charts/issues/34938)
 
 ## <small>16.5.28 (2025-07-09)</small>
 

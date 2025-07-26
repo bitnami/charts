@@ -17,6 +17,7 @@ it('allows to publish a tweet with an image', () => {
       force: true,
     });
     cy.get('[type="submit"]').should('be.enabled').click();
+    cy.get('button[class="link-button"]').contains('Post anyway').click();
     cy.get('.item-list').contains(`${tweet.text} ${random}`);
     // The image will get renamed so we can only check if the new post contains an image
     cy.contains('.status-public', `${tweet.text} ${random}`).within(() => {

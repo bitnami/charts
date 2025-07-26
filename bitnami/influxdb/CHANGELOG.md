@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.1.8 (2025-07-09)
+## 7.1.10 (2025-07-17)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#34915](https://github.com/bitnami/charts/pull/34915))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#35090](https://github.com/bitnami/charts/pull/35090))
+
+## <small>7.1.9 (2025-07-16)</small>
+
+* [bitnami/influxdb] feat: improve tests stability (#35071) ([efb2eb0](https://github.com/bitnami/charts/commit/efb2eb0140c3668c4411675a3ce9efc808032cf5)), closes [#35071](https://github.com/bitnami/charts/issues/35071)
+
+## <small>7.1.8 (2025-07-09)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#34915) ([7af0b6c](https://github.com/bitnami/charts/commit/7af0b6c665c12f4fce3b5e0e1b20800bd67fdb32)), closes [#34915](https://github.com/bitnami/charts/issues/34915)
 
 ## <small>7.1.7 (2025-07-03)</small>
 
