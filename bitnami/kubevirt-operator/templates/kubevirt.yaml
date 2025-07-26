@@ -1,0 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+spec:
+  certificateRotateStrategy: {{ include "common.tplvalues.render" (dict "value" .Values.kubevirt.certificateRotateStrategy "context" $) }}
+  configuration:
+    developerConfiguration:
+      featureGates:
+      {{- range $key, $enabled := .Values.kubevirt.featureGates }}
+      {{- if $enabled }}
+      - {{ $key }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.kubevirt.extraFeatureGates }}
+      {{- range . }}
+      - {{ . }}
+      {{- end }}
+      {{- end }}
+  customizeComponents: {{ include "common.tplvalues.render" (dict "value" .Values.kubevirt.customizeComponents "context" $) }}
+  imagePullPolicy: {{ .Values.kubevirt.imagePullPolicy }}
+  workloadUpdateStrategy: {{ include "common.tplvalues.render" (dict "value" .Values.kubevirt.workloadUpdateStrategy "context" $) }}
