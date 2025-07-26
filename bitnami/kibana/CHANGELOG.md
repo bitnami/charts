@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.1.7 (2025-07-25)
+## 12.1.7 (2025-07-26)
 
 * [bitnami/kibana] add revisionHistoryLimit for deployments ([#35298](https://github.com/bitnami/charts/pull/35298))
 
