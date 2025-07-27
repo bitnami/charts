@@ -61,28 +61,15 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        - name: install-multus-binary
-          image: {{ template "multus-cni.image" . }}
-          command:
-            - cp 
-            - -r
-            # Using /usr/src to allow compatibility with upstream multus container
-            - "/usr/src/multus-cni/bin/multus"
-            - "{{ .Values.CNIMountPath }}/opt/cni/bin/"
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: cni-bin-dir
-              mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
-              mountPropagation: Bidirectional
-        - name: generate-kubeconfig
+        - name: install-multus
           image: {{ template "multus-cni.image" . }}
           command:
             - install_multus
           args:
             - "--type"
             - "thin"
+            - "--dest-dir"
+            - "{{ .Values.CNIMountPath }}/opt/cni/bin"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
