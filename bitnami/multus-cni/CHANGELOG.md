@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.20 (2025-07-27)
+## 2.2.20 (2025-07-28)
 
 * [bitnami/multus-cni] Fix "Text file busy" after node reboot ([#35307](https://github.com/bitnami/charts/pull/35307))
 
