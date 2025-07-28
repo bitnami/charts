@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: jenkins
-      image: docker.io/bitnami/jenkins:2.516.1-debian-12-r0
+      image: docker.io/bitnami/jenkins:2.516.1-debian-12-r1
     - name: jenkins-agent
       image: docker.io/bitnami/jenkins-agent:0.3327.0-debian-12-r0
     - name: os-shell
@@ -38,4 +38,4 @@ maintainers:
 name: jenkins
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 13.6.13
+version: 13.6.14
