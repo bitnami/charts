@@ -274,7 +274,7 @@ spec:
                   wait
               done
 
-              {{- if .Values.provisioning.preScript }}
+              {{- if .Values.provisioning.postScript }}
               echo "Running post-provisioning script"
               {{ .Values.provisioning.postScript | nindent 14 }}
               {{- end }}
