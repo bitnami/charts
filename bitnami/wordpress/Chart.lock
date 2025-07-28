@@ -1,12 +1,12 @@
 dependencies:
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.8.6
 - name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 21.0.0
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 2.31.3
 digest: sha256:1a2f0ded9b8b7836abf7c4d12be15e329752627c5778a05abb9463cb9a1950dd
 generated: "2025-06-25T17:18:01.978621+02:00"

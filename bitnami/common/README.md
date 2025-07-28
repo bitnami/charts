@@ -8,7 +8,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 dependencies:
   - name: common
     version: 2.x.x
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: oci://ghcr.io/cloudcops
 ```
 
 ```console

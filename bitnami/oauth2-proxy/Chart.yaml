@@ -13,10 +13,10 @@ appVersion: 7.10.0
 dependencies:
 - condition: redis.enabled
   name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 21.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   tags:
   - bitnami-common
   version: 2.x.x

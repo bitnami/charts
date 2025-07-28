@@ -1,21 +1,21 @@
 dependencies:
 - name: grafana-alloy
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 1.0.0
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.9.3
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.9.3
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.9.3
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.9.3
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 2.31.3
 digest: sha256:0c0d8ba130ced7123bcb9c7ef19addec77ac39f1be75d3fdf4388ec0bda24546
 generated: "2025-07-18T13:17:06.513141+02:00"

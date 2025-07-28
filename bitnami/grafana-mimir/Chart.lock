@@ -1,21 +1,21 @@
 dependencies:
 - name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 17.0.1
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.8.4
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.8.4
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.8.4
 - name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.8.4
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 2.31.1
 digest: sha256:f830ce8e613fc8e6ffd24bf3485604e61f3ccc9e1420ac7ae57956e80f51c32d
 generated: "2025-06-04T08:48:12.184468+02:00"

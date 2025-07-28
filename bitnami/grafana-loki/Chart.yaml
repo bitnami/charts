@@ -18,30 +18,30 @@ dependencies:
 - alias: grafanaalloy
   condition: grafanaalloy.enabled
   name: grafana-alloy
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 1.x.x
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.x.x
 - alias: memcachedfrontend
   condition: memcachedfrontend.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.x.x
 - alias: memcachedindexqueries
   condition: memcachedindexqueries.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.x.x
 - alias: memcachedindexwrites
   condition: memcachedindexwrites.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   version: 7.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  repository: oci://ghcr.io/cloudcops
   tags:
   - bitnami-common
   version: 2.x.x
