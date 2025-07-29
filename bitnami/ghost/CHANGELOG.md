@@ -1,8 +1,23 @@
 # Changelog
 
-## 23.0.28 (2025-07-18)
+## 24.0.0 (2025-07-23)
 
-* [bitnami/ghost] subPath fix ([#34854](https://github.com/bitnami/charts/pull/34854))
+* [bitnami/ghost] Upgrade Ghost subchart to 14 ([#35252](https://github.com/bitnami/charts/pull/35252))
+
+## <small>23.0.30 (2025-07-21)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35230) ([b89fa2a](https://github.com/bitnami/charts/commit/b89fa2a3a9359a511db4d6b092ca348d38a0eee3)), closes [#35230](https://github.com/bitnami/charts/issues/35230)
+
+## <small>23.0.29 (2025-07-18)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35208) ([623d487](https://github.com/bitnami/charts/commit/623d4871a55de9191a93d00069a09b0ac4e556b6)), closes [#35208](https://github.com/bitnami/charts/issues/35208)
+
+## <small>23.0.28 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/ghost] subPath fix (#34854) ([2aae25a](https://github.com/bitnami/charts/commit/2aae25a2302bd5e49cf10e8db9bc452f7e8dfb8a)), closes [#34854](https://github.com/bitnami/charts/issues/34854)
 
 ## <small>23.0.27 (2025-07-15)</small>
 

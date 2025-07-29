@@ -1,8 +1,15 @@
 # Changelog
 
-## 26.7.12 (2025-07-17)
+## 26.8.0 (2025-07-18)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35182](https://github.com/bitnami/charts/pull/35182))
+* [bitnami/harbor] feat: allow to disable ingress ([#35194](https://github.com/bitnami/charts/pull/35194))
+
+## <small>26.7.12 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35182) ([57f9b65](https://github.com/bitnami/charts/commit/57f9b65441824aa1e4d5ed3ff0db6c0310a87556)), closes [#35182](https://github.com/bitnami/charts/issues/35182)
 
 ## <small>26.7.11 (2025-07-15)</small>
 

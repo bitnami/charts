@@ -263,7 +263,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress \| proxy ]                                                                | `proxy`                  |
+| `exposureType`                     | The way to expose Harbor. Allowed values are [ ingress \| proxy \| none ]                                                        | `proxy`                  |
 | `service.type`                     | NGINX proxy service type                                                                                                         | `LoadBalancer`           |
 | `service.ports.http`               | NGINX proxy service HTTP port                                                                                                    | `80`                     |
 | `service.ports.https`              | NGINX proxy service HTTPS port                                                                                                   | `443`                    |

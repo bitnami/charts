@@ -5,15 +5,15 @@ annotations:
   category: Analytics
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r12
+      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r13
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.27.0-debian-12-r1
+      image: docker.io/bitnami/blackbox-exporter:0.27.0-debian-12-r2
     - name: prometheus
-      image: docker.io/bitnami/prometheus:3.5.0-debian-12-r0
+      image: docker.io/bitnami/prometheus:3.5.0-debian-12-r1
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.84.0-debian-12-r0
+      image: docker.io/bitnami/prometheus-operator:0.84.0-debian-12-r1
     - name: thanos
-      image: docker.io/bitnami/thanos:0.39.1-debian-12-r1
+      image: docker.io/bitnami/thanos:0.39.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -51,4 +51,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.2.15
+version: 11.2.16
