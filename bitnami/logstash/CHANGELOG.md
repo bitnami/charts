@@ -1,8 +1,15 @@
 # Changelog
 
-## 7.0.7 (2025-07-22)
+## 7.0.8 (2025-07-29)
 
-* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35243](https://github.com/bitnami/charts/pull/35243))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35332](https://github.com/bitnami/charts/pull/35332))
+
+## <small>7.0.7 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35243) ([46ec76d](https://github.com/bitnami/charts/commit/46ec76d40a0a82d5931d870e7a0b22c8b35835ad)), closes [#35243](https://github.com/bitnami/charts/issues/35243)
 
 ## <small>7.0.6 (2025-07-15)</small>
 
