@@ -1,7 +1,7 @@
 dependencies:
 - name: common
   repository: oci://ghcr.io/cloudcops
-  version: 2.31.0
+  version: 2.31.3
 - name: cassandra
   repository: oci://ghcr.io/cloudcops
   version: 12.3.5

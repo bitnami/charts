@@ -4,6 +4,6 @@ dependencies:
   version: 13.8.1
 - name: common
   repository: oci://ghcr.io/cloudcops
-  version: 2.31.0
+  version: 2.31.3
 digest: sha256:f624298818dc1dbc4fac2b047b5b7d81591426a03d6a8bb9cea9e8eafec43862
 generated: "2025-05-06T11:04:49.53069139+02:00"

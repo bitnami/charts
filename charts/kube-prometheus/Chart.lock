@@ -7,7 +7,7 @@ dependencies:
   version: 5.0.6
 - name: common
   repository: oci://ghcr.io/cloudcops
-  version: 2.31.0
+  version: 2.31.3
 - name: kube-prometheus-crds
   repository: file://./charts/kube-prometheus-crds
   version: 0.1.0
