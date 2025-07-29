@@ -4,9 +4,9 @@
 
 * [bitnami/kafka] Fix component labels of controller to 'controller-eligible' ([#35200](https://github.com/bitnami/charts/pull/35200))
 
-## 32.3.8 (2025-07-23)
+## <small>32.3.8 (2025-07-25)</small>
 
-* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling ([#35190](https://github.com/bitnami/charts/pull/35190))
+* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling (#35190) ([47af963](https://github.com/bitnami/charts/commit/47af96309b90d5259c2c09b073bbac1a18480db5)), closes [#35190](https://github.com/bitnami/charts/issues/35190) [PKCS#8](https://github.com/PKCS/issues/8)
 
 ## <small>32.3.7 (2025-07-23)</small>
 
