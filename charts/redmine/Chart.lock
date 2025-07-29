@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql
+  repository: oci://ghcr.io/cloudcops
+  version: 16.7.13
+- name: mariadb
+  repository: oci://ghcr.io/cloudcops
+  version: 21.0.0
+- name: common
+  repository: oci://ghcr.io/cloudcops
+  version: 2.31.3
+digest: sha256:620e9c96f7857927db2f5c7dba409cb04046cb5c5de77803ff6d2173b074f36d
+generated: "2025-06-25T17:24:50.344786+02:00"

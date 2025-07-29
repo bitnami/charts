@@ -16,11 +16,11 @@ header:
         */}}
 
     paths:
-      - "bitnami/**/templates/**/*.yml"
-      - "bitnami/**/templates/**/*.yaml"
+      - "charts/**/templates/**/*.yml"
+      - "charts/**/templates/**/*.yaml"
     paths-ignore:
-      - "bitnami/**/templates/crds/**/*.yml"
-      - "bitnami/**/templates/crds/**/*.yaml"
+      - "charts/**/templates/crds/**/*.yml"
+      - "charts/**/templates/crds/**/*.yaml"
 
   # License format for all other YAML files
   - comment: on-failure
@@ -33,8 +33,8 @@ header:
         # SPDX-License-Identifier: APACHE-2.0
 
     paths:
-      - "bitnami/**/*.yml"
-      - "bitnami/**/*.yaml"
+      - "charts/**/*.yml"
+      - "charts/**/*.yaml"
     paths-ignore:
-      - "bitnami/**/templates/**/*.yml"
-      - "bitnami/**/templates/**/*.yaml"
+      - "charts/**/templates/**/*.yml"
+      - "charts/**/templates/**/*.yaml"

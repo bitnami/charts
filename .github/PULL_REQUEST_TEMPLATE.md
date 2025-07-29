@@ -7,7 +7,7 @@
 
  Thank you for contributing! We will try to test and integrate the change as soon as we can, but be aware we have many GitHub repositories to manage and can't immediately respond to every request. There is no need to bump or check in on a pull request (it will clutter the discussion of the request).
 
- Also don't be worried if the request is closed or not integrated sometimes the priorities of Bitnami might not match the priorities of the pull request. Don't fret, the open source community thrives on forks and GitHub makes it easy to keep your changes in a forked repo.
+ Also don't be worried if the request is closed or not integrated sometimes the priorities of CloudCops might not match the priorities of the pull request. Don't fret, the open source community thrives on forks and GitHub makes it easy to keep your changes in a forked repo.
  -->
 
 ### Description of the change
@@ -37,5 +37,5 @@
 
 - [ ] Chart version bumped in `Chart.yaml` according to [semver](http://semver.org/). This is *not necessary* when the changes only affect README.md files.
 - [ ] Variables are documented in the values.yaml and added to the `README.md` using [readme-generator-for-helm](https://github.com/bitnami/readme-generator-for-helm)
-- [ ] Title of the pull request follows this pattern [bitnami/<name_of_the_chart>] Descriptive title
-- [ ] All commits signed off and in agreement of [Developer Certificate of Origin (DCO)](https://github.com/bitnami/charts/blob/main/CONTRIBUTING.md#sign-your-work)
+- [ ] Title of the pull request follows this pattern [charts/<name_of_the_chart>] Descriptive title
+- [ ] All commits signed off and in agreement of [Developer Certificate of Origin (DCO)](https://github.com/cloudcops/charts/blob/main/CONTRIBUTING.md#sign-your-work)

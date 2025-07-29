@@ -1,0 +1,12 @@
+dependencies:
+- name: redis
+  repository: oci://ghcr.io/cloudcops
+  version: 21.2.6
+- name: postgresql
+  repository: oci://ghcr.io/cloudcops
+  version: 16.7.14
+- name: common
+  repository: oci://ghcr.io/cloudcops
+  version: 2.31.3
+digest: sha256:2280cfea587f87947744865bb29ecee00b28c481af5273cf58609620e82e16ec
+generated: "2025-06-30T16:06:02.38618+02:00"

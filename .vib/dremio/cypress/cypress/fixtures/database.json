@@ -1,6 +1,0 @@
-{
-  "database": {
-    "name": "vib_psql",
-    "expectedRes": "cars"
-  }
-}

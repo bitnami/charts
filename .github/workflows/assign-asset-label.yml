@@ -25,7 +25,7 @@ jobs:
           curl -Lkso $TEMP_FILE $DIFF_URL
           files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
           # Adding || true to avoid "Process exited with code 1" errors
-          assets=($(echo "$files_changed" | xargs dirname | sed -nr "s|bitnami/([^/]*).*|\1|p" | sort | uniq || true))
+          assets=($(echo "$files_changed" | xargs dirname | sed -nr "s|charts/([^/]*).*|\1|p" | sort | uniq || true))
 
           if [[ "${#assets[@]}" -ne "1" ]]; then
             echo "result=skip" >> $GITHUB_OUTPUT

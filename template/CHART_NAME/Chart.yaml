@@ -9,10 +9,10 @@ appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
   - condition: SUBCHART_NAME.enabled
     name: SUBCHART_NAME
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: oci://ghcr.io/cloudcops
     version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
   - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: oci://ghcr.io/cloudcops
     tags:
       - bitnami-common
     version: 2.x.x
