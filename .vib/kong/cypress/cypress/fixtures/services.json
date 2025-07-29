@@ -1,6 +1,0 @@
-{
-  "newService": {
-    "name": "cypress-service",
-    "upstreamURL": "https://google.com"
-  }
-}

@@ -1,7 +1,0 @@
-# Copyright Broadcom, Inc. All Rights Reserved.
-# SPDX-License-Identifier: APACHE-2.0
-
-addr:
-  tcp://wordpress-mariadb:3306:
-    reachable: true
-    timeout: 2000

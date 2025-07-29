@@ -1,8 +1,0 @@
-containerPorts:
-  http: 8500
-service:
-  ports:
-    http: 80
-  type: LoadBalancer
-datacenterName: datacenter1
-replicaCount: 3

@@ -1,7 +1,0 @@
-{
-  "newRegistry": {
-    "provider": "harbor",
-    "name": "harbor",
-    "url": "http://harbor-registry:5000"
-  }
-}
