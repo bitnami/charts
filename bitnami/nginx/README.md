@@ -137,6 +137,80 @@ serverBlock: |-
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
 
+### Adding custom configuration by context
+
+The NGINX chart supports context-based configuration includes, allowing you to add custom directives to specific NGINX contexts. You can provide configuration for three contexts:
+
+- **Main context**: For global directives like module loading and worker processes
+- **Events context**: For event-related directives
+- **HTTP context**: For HTTP-related directives
+
+#### Inline Context Configuration
+
+You can provide inline configuration using the `contextIncludes` values:
+
+```yaml
+contextIncludes:
+  main: |
+    # Load additional modules
+    load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+
+    # Set worker processes
+    worker_processes auto;
+
+  events: |
+    # Increase worker connections
+    worker_connections 2048;
+
+    # Use epoll for better performance
+    use epoll;
+
+  http: |
+    # Enable gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_types text/plain application/json text/css;
+
+    # Security headers
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+```
+
+#### External ConfigMaps for Context Configuration
+
+You can also reference external ConfigMaps for each context using lists:
+
+```yaml
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+  - "nginx-main-directives"
+
+existingContextEventsConfigmaps:
+  - "nginx-events-tuning"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-headers"
+  - "nginx-compression-config"
+```
+
+#### Mixed Configuration
+
+You can combine inline configuration with external ConfigMaps:
+
+```yaml
+contextIncludes:
+  main: |
+    worker_processes auto;
+
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-config"
+```
+
+All configuration files are mounted to the appropriate directories (`/opt/bitnami/nginx/conf/context.d/{main,events,http}/`) and included using wildcards in the nginx.conf.
+
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -341,6 +415,12 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `streamServerBlock`                              | Custom stream server block to be added to NGINX configuration                                                                                                                                                                                                                   | `""`                  |
 | `existingServerBlockConfigmap`                   | ConfigMap with custom server block to be added to NGINX configuration                                                                                                                                                                                                           | `""`                  |
 | `existingStreamServerBlockConfigmap`             | ConfigMap with custom stream server block to be added to NGINX configuration                                                                                                                                                                                                    | `""`                  |
+| `contextIncludes.main`                           | Custom configuration for the main context                                                                                                                                                                                                                                       | `""`                  |
+| `contextIncludes.events`                         | Custom configuration for the events context                                                                                                                                                                                                                                     | `""`                  |
+| `contextIncludes.http`                           | Custom configuration for the http context                                                                                                                                                                                                                                       | `""`                  |
+| `existingContextMainConfigmaps`                  | List of existing ConfigMaps with custom main context configuration                                                                                                                                                                                                              | `[]`                  |
+| `existingContextEventsConfigmaps`                | List of existing ConfigMaps with custom events context configuration                                                                                                                                                                                                            | `[]`                  |
+| `existingContextHttpConfigmaps`                  | List of existing ConfigMaps with custom http context configuration                                                                                                                                                                                                              | `[]`                  |
 | `staticSiteConfigmap`                            | Name of existing ConfigMap with the server static site content                                                                                                                                                                                                                  | `""`                  |
 | `staticSitePVC`                                  | Name of existing PVC with the server static site content                                                                                                                                                                                                                        | `""`                  |
 
