@@ -10,7 +10,9 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- $postgresqlCredentials := printf "-U %s%s" $postgresqlUsername (ternary "" (printf " -d %s" $postgresqlDatabase) (empty $postgresqlDatabase)) }}
 {{- $pgpoolSvcName := include "postgresql-ha.pgpool" . }}
 
-NOTICE: Starting August 28th, 2025, only a limited subset of images/charts will remain available for free. Backup will be available for some time at the 'Bitnami Legacy' repository. More info at https://github.com/bitnami/containers/issues/83267
+⚠ WARNING: Since August 28th, 2025, only a limited subset of images/charts are available for free.
+    Subscribe to Bitnami Secure Images to receive continued support and security updates.
+    More info at https://bitnami.com and https://github.com/bitnami/containers/issues/83267
 
 ** Please be patient while the chart is being deployed **
 
