@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.0.1 (2025-07-30)
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#35345](https://github.com/bitnami/charts/pull/35345))
+
 ## 4.0.0 (2025-06-30)
 
-* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#34724](https://github.com/bitnami/charts/pull/34724))
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#34724) ([027289f](https://github.com/bitnami/charts/commit/027289ff18e3e39e302dac191f196b1ba481b077)), closes [#34724](https://github.com/bitnami/charts/issues/34724)
 
 ## <small>3.0.4 (2025-06-16)</small>
 
