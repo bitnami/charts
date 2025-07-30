@@ -766,7 +766,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 6.0.19
 
-This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
 
 ### To 6.0.0
 
