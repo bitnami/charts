@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.5.34 (2025-07-31)
+## 16.5.35 (2025-07-31)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#35363](https://github.com/bitnami/charts/pull/35363))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#35366](https://github.com/bitnami/charts/pull/35366))
+
+## <small>16.5.34 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35363) ([a1afc6a](https://github.com/bitnami/charts/commit/a1afc6a960233a7136c2f744ff1ecd8696578cc9)), closes [#35363](https://github.com/bitnami/charts/issues/35363)
 
 ## <small>16.5.33 (2025-07-23)</small>
 
