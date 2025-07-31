@@ -520,7 +520,7 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         with:
-          image: bitnami/kubescape:3.0.3
+          image: bitnami/kubescape:3.0.37
           options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
           run: |
             if [ -d "/charts/bitnami/${CHART}" ]; then
