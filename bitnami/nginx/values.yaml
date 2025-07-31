@@ -625,7 +625,7 @@ existingServerBlockConfigmap: ""
 ## NOTE: This will override streamServerBlock
 ##
 existingStreamServerBlockConfigmap: ""
-## @param contextIncludes Collection of NGINX context based includes
+## Collection of NGINX context based includes
 ## e.g:
 ## contextIncludes:
 ##   main: |
