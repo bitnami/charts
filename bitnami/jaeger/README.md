@@ -486,6 +486,18 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 6.0.0
+
+This major release updates Jaeger to its new major Jaeger v2. Previous releases of the chart (5.x.x) have been tagged as Jaeger v2, but due to an issue the chart continued using the Jaeger v1 binaries.
+
+Starting from this version, the chart will use the Jaeger v2 binary and the container will no longer include Jaeger v1 binaries in the v2 images.
+
+Additionally, this major release introduces the following changes:
+- Removes the cassandra-schema init job, as Jaeger v2 is capable of initializing the schema.
+- Removed the `admin`, `binary` and `grpc` collector port values. Added jaeger legacy ports `jaeger.grpc` (previously `grpc`) and `jaeger.thrift_http` (previously `binary`).
+- Jaeger v2 no longer supports the `admin` port. Prometheus metrics and healthcheck capabilities have been moved into the new ports `metrics` and `healthcheck` for both collector and query nodes.
+- Introduced the jaeger-query and jaeger-collector configmaps, as Jaeger v2 no longer supports configuration via environment variables. Added values `collector.configuration`/`query.configuration` and `collector.existingConfigmap`/`query.existingConfigmap` to customize configuration.
+
 ### To 5.1.0
 
 This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).

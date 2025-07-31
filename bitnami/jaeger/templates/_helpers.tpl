@@ -102,6 +102,28 @@ Create a container for checking cassandra availability
 {{- end -}}
 
 {{/*
+Get the jaeger collector configmap name
+*/}}
+{{- define "jaeger.collector.configMapName" -}}
+{{- if .Values.collector.existingConfigmap -}}
+    {{- print (tpl .Values.collector.existingConfigmap .) -}}
+{{- else -}}
+    {{- print (include "jaeger.collector.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the jaeger query configmap name
+*/}}
+{{- define "jaeger.query.configMapName" -}}
+{{- if .Values.query.existingConfigmap -}}
+    {{- print (tpl .Values.query.existingConfigmap .) -}}
+{{- else -}}
+    {{- print (include "jaeger.query.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use for the collector
 */}}
 {{- define "jaeger.collector.serviceAccountName" -}}
@@ -198,14 +220,17 @@ Create the cassandra datacenter
 {{- end -}}
 
 {{/*
-Create the cassandra keyspace
+Return the cassandra keyspace
 */}}
 {{- define "jaeger.cassandra.keyspace" -}}
-    {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.keyspace | quote -}}
-    {{- else }}
-        {{- .Values.cassandra.keyspace | quote -}}
-    {{- end -}}
+{{- if .Values.keyspace }}
+    {{- /* Inside cassandra subchart */ -}}
+    {{- print .Values.keyspace -}}
+{{- else if .Values.cassandra.enabled }}
+    {{- print .Values.cassandra.keyspace -}}
+{{- else -}}
+    {{- print .Values.externalDatabase.keyspace -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
