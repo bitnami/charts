@@ -213,10 +213,10 @@ query:
   ## @param query.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
-  ## @param configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
+  ## @param query.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
   ##
   configuration: {}
-  ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
+  ## @param query.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
   ##
   existingConfigmap: ""
   ## Container ports to expose
@@ -231,7 +231,7 @@ query:
     ## @param query.containerPorts.metrics Jaeger query prometheus metrics port
     ##
     metrics: 8888
-    ## @param query.containerPorts.metrics Jaeger query healthcheck port
+    ## @param query.containerPorts.healthcheck Jaeger query healthcheck port
     ##
     healthcheck: 13133
   ## Jaeger query.service parameters
@@ -249,7 +249,7 @@ query:
       ## @param query.service.ports.http Port for API
       ##
       http: 16686
-      ## @param query.service.metrics Jaeger query prometheus metrics port
+      ## @param query.service.ports.metrics Jaeger query prometheus metrics port
       ##
       metrics: 8888
     ## Node ports to expose
@@ -619,10 +619,10 @@ collector:
   ## @param collector.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
-  ## @param configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
+  ## @param collector.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
   ##
   configuration: {}
-  ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
+  ## @param collector.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
   ##
   existingConfigmap: ""
   ## @param collector.receivers Sets the jaeger collector receivers that will be enabled
@@ -658,7 +658,7 @@ collector:
     ## @param collector.containerPorts.metrics Jaeger collector prometheus metrics port
     ##
     metrics: 8888
-    ## @param collector.containerPorts.metrics Jaeger collector healthcheck port
+    ## @param collector.containerPorts.healthcheck Jaeger collector healthcheck port
     ##
     healthcheck: 13133
   ## Jaeger collector.service parameters
@@ -682,16 +682,16 @@ collector:
       ## Legacy Jaeger Write API. Maintained for backward-compatibility
       ##
       jaeger:
-        ## @param collector.service.jaeger.grpc Legacy Jaeger protobuf via gRPC API port
+        ## @param collector.service.ports.jaeger.grpc Legacy Jaeger protobuf via gRPC API port
         ##
         grpc: 14250
-        ## @param collector.service.jaeger.thrift_http Legacy Jaeger Thrift over HTTP API port
+        ## @param collector.service.ports.jaeger.thrift_http Legacy Jaeger Thrift over HTTP API port
         ##
         thrift_http: 14268
       ## @param collector.service.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
       ##
       zipkin: 9411
-      ## @param collector.service.metrics Jaeger collector prometheus metrics port
+      ## @param collector.service.ports.metrics Jaeger collector prometheus metrics port
       ##
       metrics: 8888
     ## Node ports to expose
