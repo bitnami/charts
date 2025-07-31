@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.24 (2025-07-09)
+## 6.0.0 (2025-07-31)
 
-* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#34908](https://github.com/bitnami/charts/pull/34908))
+* [bitnami/jaeger] Major release: Jaeger v2  ([#35352](https://github.com/bitnami/charts/pull/35352))
+
+## <small>5.1.24 (2025-07-09)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34908) ([d016eb3](https://github.com/bitnami/charts/commit/d016eb3d2d5f905a778ed57e4557569abc649e2f)), closes [#34908](https://github.com/bitnami/charts/issues/34908)
 
 ## <small>5.1.23 (2025-07-05)</small>
 
