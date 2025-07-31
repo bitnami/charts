@@ -1,8 +1,12 @@
 # Changelog
 
+## 24.0.1 (2025-07-31)
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35369](https://github.com/bitnami/charts/pull/35369))
+
 ## 24.0.0 (2025-07-23)
 
-* [bitnami/ghost] Upgrade Ghost subchart to 14 ([#35252](https://github.com/bitnami/charts/pull/35252))
+* [bitnami/ghost] Upgrade MySQL subchart to 14 (#35252) ([e6418de](https://github.com/bitnami/charts/commit/e6418de728fd572f4dd2bc4bc329e9edf3f99c89)), closes [#35252](https://github.com/bitnami/charts/issues/35252)
 
 ## <small>23.0.30 (2025-07-21)</small>
 
