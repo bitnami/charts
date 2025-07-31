@@ -386,7 +386,7 @@ jobs:
         if: github.event.pull_request.user.login == 'bitnami-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
-          
+
           # This function returns the chart parameter name based on the rule name
           rule_parameter_from_rule_name() {
             local -r rule_name="${1:-missing rule_name}"
@@ -524,7 +524,7 @@ jobs:
           options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
           run: |
             if [ -d "/charts/bitnami/${CHART}" ]; then
-              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.10.0 /charts/bitnami/${CHART} --format json -o /out/report.json
               # Truncate score to 2 decimals
               printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
             else
