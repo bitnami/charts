@@ -192,7 +192,9 @@ data:
         info "Current master: REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
-
+        {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
+        if [[ "$REDIS_MASTER_HOST" == "$(get_service_ip "$SVC_NAME")" ]]; then
+        {{- else }}
         if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
         {{- end }}
             # Case 3: Active sentinel and master it is this node --> MASTER
