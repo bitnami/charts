@@ -163,8 +163,11 @@ spec:
           args:
             - -ec
             - |
-              cp -nr --preserve=mode /plugins/* /opt/bitnami/discourse/plugins
-              /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
+              rm -rf /opt/bitnami/discourse/plugins
+              ln -sfn /bitnami/discourse/plugins /opt/bitnami/discourse/plugins
+              cp -nr --preserve=mode /plugins/* /opt/bitnami/discourse/plugins/
+              chown -R discourse /opt/bitnami/discourse/plugins/
+              exec /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
