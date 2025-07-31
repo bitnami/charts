@@ -1,8 +1,15 @@
 # Changelog
 
-## 12.0.1 (2025-07-17)
+## 12.0.2 (2025-07-31)
 
-* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#35178](https://github.com/bitnami/charts/pull/35178))
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#35361](https://github.com/bitnami/charts/pull/35361))
+
+## <small>12.0.1 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references (#35178) ([6ebb7b8](https://github.com/bitnami/charts/commit/6ebb7b8d5a1fa040e6090a03c6d6a72fac473e97)), closes [#35178](https://github.com/bitnami/charts/issues/35178)
 
 ## 12.0.0 (2025-07-09)
 
