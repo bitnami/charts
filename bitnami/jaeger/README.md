@@ -493,6 +493,7 @@ This major release updates Jaeger to its new major Jaeger v2. Previous releases 
 Starting from this version, the chart will use the Jaeger v2 binary and the container will no longer include Jaeger v1 binaries in the v2 images.
 
 Additionally, this major release introduces the following changes:
+
 - Removes the cassandra-schema init job, as Jaeger v2 is capable of initializing the schema.
 - Removed the `admin`, `binary` and `grpc` collector port values. Added jaeger legacy ports `jaeger.grpc` (previously `grpc`) and `jaeger.thrift_http` (previously `binary`).
 - Jaeger v2 no longer supports the `admin` port. Prometheus metrics and healthcheck capabilities have been moved into the new ports `metrics` and `healthcheck` for both collector and query nodes.
