@@ -625,6 +625,38 @@ existingServerBlockConfigmap: ""
 ## NOTE: This will override streamServerBlock
 ##
 existingStreamServerBlockConfigmap: ""
+## Collection of NGINX context based includes
+## e.g:
+## contextIncludes:
+##   main: |
+##     load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+##
+contextIncludes:
+  ## @param contextIncludes.main Custom configuration for the main context
+  ##
+  main: ""
+  ## @param contextIncludes.events Custom configuration for the events context
+  ##
+  events: ""
+  ## @param contextIncludes.http Custom configuration for the http context
+  ##
+  http: ""
+## @param existingContextMainConfigmaps List of existing ConfigMaps with custom main context configuration
+## NOTE: These will be mounted alongside contextIncludes.main
+## e.g:
+## existingContextMainConfigmaps:
+##   - "my-modules-config"
+##   - "my-main-directives-config"
+##
+existingContextMainConfigmaps: []
+## @param existingContextEventsConfigmaps List of existing ConfigMaps with custom events context configuration
+## NOTE: These will be mounted alongside contextIncludes.events
+##
+existingContextEventsConfigmaps: []
+## @param existingContextHttpConfigmaps List of existing ConfigMaps with custom http context configuration
+## NOTE: These will be mounted alongside contextIncludes.http
+##
+existingContextHttpConfigmaps: []
 ## @param staticSiteConfigmap Name of existing ConfigMap with the server static site content
 ##
 staticSiteConfigmap: ""
