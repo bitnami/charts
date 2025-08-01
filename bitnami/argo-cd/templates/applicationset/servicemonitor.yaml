@@ -40,7 +40,6 @@ spec:
     matchNames:
       - {{ include "common.names.namespace" . }}
   selector:
-    matchLabels:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics
       app.kubernetes.io/part-of: applicationSet

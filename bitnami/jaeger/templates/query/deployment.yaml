@@ -27,8 +27,14 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: jaeger
         app.kubernetes.io/component: query
-      {{- if .Values.query.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
+      {{- if or .Values.query.podAnnotations (not .Values.query.existingConfigmap) }}
+      annotations:
+        {{- if not .Values.query.existingConfigmap }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/query/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.query.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       {{- end }}
     spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
@@ -76,24 +82,28 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.query.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.query.command "context" $) | nindent 12 }}
-          {{- else }}
-          command: ["/opt/bitnami/jaeger/bin/jaeger-query"]
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.query.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.query.args "context" $) | nindent 12 }}
           {{- else }}
-          args: ["--cassandra.basic.allowed-authenticators=org.apache.cassandra.auth.PasswordAuthenticator"]
+          args:
+            - "--config"
+            - "/opt/bitnami/jaeger/conf/query-config.yaml"
           {{- end }}
           {{- if .Values.query.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.query.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            - name: ui
-              containerPort: {{ .Values.query.containerPorts.api }}
-            - name: admin
-              containerPort: {{ .Values.query.containerPorts.admin }}
+            - name: http
+              containerPort: {{ .Values.query.containerPorts.http }}
+            - name: grpc
+              containerPort: {{ .Values.query.containerPorts.grpc }}
+            - name: healthcheck
+              containerPort: {{ .Values.query.containerPorts.healthcheck }}
+            - name: metrics
+              containerPort: {{ .Values.query.containerPorts.metrics }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ include "jaeger.cassandra.host" . }}
@@ -111,11 +121,13 @@ spec:
             - name: CASSANDRA_DATACENTER
               value: {{ include "jaeger.cassandra.datacenter" . }}
             - name: QUERY_HTTP_SERVER_HOST_PORT
-              value: {{ printf ":%v" .Values.query.containerPorts.api | quote }}
+              value: {{ printf ":%v" .Values.query.containerPorts.http | quote }}
             - name: QUERY_GRPC_SERVER_HOST_PORT
               value: {{ printf ":%v" .Values.query.containerPorts.grpc | quote }}
-            - name: ADMIN_HTTP_HOST_PORT
-              value: {{ printf ":%v" .Values.query.containerPorts.admin | quote }}
+            - name: QUERY_HEALTHCHECK_HOST_PORT
+              value: {{ printf ":%v" .Values.query.containerPorts.healthcheck | quote }}
+            - name: QUERY_METRICS_PORT
+              value: {{ .Values.collector.containerPorts.metrics | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.query.extraEnvVars }}
@@ -136,23 +148,24 @@ spec:
           {{- else if .Values.query.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.query.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /
-              port: admin
+              path: /status
+              port: healthcheck
           {{- end }}
           {{- if .Values.query.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.query.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.query.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: admin
+            httpGet:
+              path: /status
+              port: healthcheck
           {{- end }}
           {{- if .Values.query.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.query.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.query.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /
-              port: admin
+              path: /status
+              port: healthcheck
           {{- end }}
           {{- end }}
           {{- if .Values.query.resources }}
@@ -160,13 +173,19 @@ spec:
           {{- else if ne .Values.query.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.query.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.query.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: configuration
+              mountPath: /opt/bitnami/jaeger/conf
+            {{- if .Values.query.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.query.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.query.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: configuration
+          configMap:
+            name: {{ include "jaeger.query.configMapName"  . }}
         {{- if .Values.query.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

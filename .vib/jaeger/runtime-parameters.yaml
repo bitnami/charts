@@ -5,7 +5,7 @@ query:
       args: ['all']
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: http://jaeger-collector:4318
+          value: http://jaeger-collector:14318
       securityContext:
         runAsNonRoot: true
         privileged: false
@@ -40,14 +40,16 @@ query:
   service:
     type: LoadBalancer
     ports:
-      admin: 16688
-      api: 80
+      grpc: 16688
+      http: 80
 collector:
   service:
     ports:
-      admin: 14270
+      otlp:
+        http: 14318
   containerPorts:
-    admin: 14771
+    otlp:
+      http: 14318
   podSecurityContext:
     enabled: true
     fsGroup: 1002
