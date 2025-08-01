@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.4 (2025-07-24)
+## 24.3.4 (2025-08-01)
 
-* [bitnami/airflow] Fix/add extra env vars secrets to triggerer ([#35047](https://github.com/bitnami/charts/pull/35047))
+* [bitnami/airflow] [Feature request] Add multiple configmap support to Airflow chart ([#35382](https://github.com/bitnami/charts/pull/35382))
+
+## <small>24.2.4 (2025-07-25)</small>
+
+* [bitnami/airflow] Fix/add extra env vars secrets to triggerer (#35047) ([f91d7dc](https://github.com/bitnami/charts/commit/f91d7dc52e9892c9de8cc5eb9a3d3abf14336d9b)), closes [#35047](https://github.com/bitnami/charts/issues/35047)
 
 ## <small>24.2.3 (2025-07-21)</small>
 
