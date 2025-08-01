@@ -216,6 +216,9 @@ query:
   ## @param query.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
   ##
   configuration: {}
+  ## @param query.overrideConfiguration Jaeger query common configuration override. Values defined here takes precedence over the ones defined at `query.configuration`
+  ##
+  overrideConfiguration: {}
   ## @param query.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
   ##
   existingConfigmap: ""
@@ -622,6 +625,9 @@ collector:
   ## @param collector.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
   ##
   configuration: {}
+  ## @param collector.overrideConfiguration Jaeger collector common configuration override. Values defined here takes precedence over the ones defined at `query.configuration`
+  ##
+  overrideConfiguration: {}
   ## @param collector.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
   ##
   existingConfigmap: ""

@@ -36,6 +36,138 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
+Return the Kafka broker configuration.
+ref: https://kafka.apache.org/documentation/#configuration
+*/}}
+{{- define "jaeger.query.configuration" -}}
+{{- if .Values.query.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.query.configuration "context" .) }}
+{{- else }}
+service:
+  extensions: [jaeger_storage, jaeger_query, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: [nop]
+      processors: [batch]
+      exporters: [nop]
+  telemetry:
+    resource:
+      service.name: jaeger-query
+    metrics:
+      level: detailed
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: "${env:QUERY_METRICS_PORT}"
+    logs:
+      level: info
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http:
+      endpoint: "${env:QUERY_HEALTHCHECK_HOST_PORT}"
+  jaeger_query:
+    storage:
+      traces: jaeger_storage
+    grpc:
+      endpoint: "${env:QUERY_GRPC_SERVER_HOST_PORT}"
+    http:
+      endpoint: "${env:QUERY_HTTP_SERVER_HOST_PORT}"
+  jaeger_storage:
+    backends:
+      jaeger_storage: {{ include "jaeger.cassandra.storage" . | nindent 8 }}
+receivers:
+  nop:
+processors:
+  batch:
+exporters:
+  nop:
+{{- end -}}
+{{- end -}}
+
+
+
+{{- define "jaeger.collector.configuration" -}}
+{{- if .Values.collector.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.collector.configuration "context" .) }}
+{{- else }}
+service:
+  extensions: [jaeger_storage, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: {{ include "common.tplvalues.render" (dict "value" .Values.collector.receivers "context" .) | nindent 12 }}
+      processors: [batch]
+      exporters: [jaeger_storage_exporter]
+  telemetry:
+    resource:
+      service.name: jaeger-collector
+    metrics:
+      level: detailed
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: "${env:COLLECTOR_METRICS_PORT}"
+    logs:
+      level: info
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http:
+      endpoint: "${env:COLLECTOR_HEALTHCHECK_HOST_PORT}"
+  jaeger_storage:
+    backends:
+      jaeger_storage: {{ include "jaeger.cassandra.storage" . | nindent 8 }}
+receivers:
+  {{- if has "otlp" .Values.collector.receivers }}
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "${env:COLLECTOR_OTLP_GRPC_HOST_PORT}"
+      http:
+        endpoint: "${env:COLLECTOR_OTLP_HTTP_HOST_PORT}"
+  {{- end }}
+  {{- if has "jaeger" .Values.collector.receivers }}
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: "${env:COLLECTOR_JAEGER_GRPC_SERVER_HOST_PORT}"
+      thrift_http:
+        endpoint: "${env:COLLECTOR_JAEGER_THRIFT_HTTP_HOST_PORT}"
+  {{- end }}
+  {{- if has "zipkin" .Values.collector.receivers }}
+  zipkin:
+    endpoint: "${env:COLLECTOR_ZIPKIN_HOST_PORT}"
+  {{- end }}
+processors:
+  batch:
+exporters:
+  jaeger_storage_exporter:
+    trace_storage: jaeger_storage
+{{- end -}}
+{{- end -}}
+
+{{- define "jaeger.cassandra.storage" -}}
+cassandra:
+  schema:
+    keyspace: "${env:CASSANDRA_KEYSPACE}"
+    create: true
+    datacenter: "${env:CASSANDRA_DATACENTER}"
+  connection:
+    servers: ["${env:CASSANDRA_SERVERS}:${env:CASSANDRA_PORT}"]
+    auth:
+      basic:
+        username: "${env:CASSANDRA_USERNAME}"
+        password: "${env:CASSANDRA_PASSWORD}"
+        allowed_authenticators: ["org.apache.cassandra.auth.PasswordAuthenticator"]
+    tls:
+      insecure: true
+{{- end }}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jaeger.imagePullSecrets" -}}

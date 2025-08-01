@@ -92,16 +92,22 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.collector.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
+            {{- if has "otlp" .Values.collector.receivers }}
             - name: grpc-otlp
               containerPort: {{ .Values.collector.containerPorts.otlp.grpc }}
             - name: http-otlp
               containerPort: {{ .Values.collector.containerPorts.otlp.http }}
+            {{- end }}
+            {{- if has "jaeger" .Values.collector.receivers }}
             - name: grpc-jaeger
               containerPort: {{ .Values.collector.containerPorts.jaeger.grpc }}
             - name: http-jaeger-tf
               containerPort: {{ .Values.collector.containerPorts.jaeger.thrift_http }}
+            {{- end }}
+            {{- if has "zipkin" .Values.collector.receivers }}
             - name: zipkin
               containerPort: {{ .Values.collector.containerPorts.zipkin }}
+            {{- end }}
             - name: metrics
               containerPort: {{ .Values.collector.containerPorts.metrics }}
             - name: healthcheck
@@ -124,16 +130,22 @@ spec:
               value: {{ include "jaeger.cassandra.datacenter" . }}
             - name: CASSANDRA_CREATE_SCHEMA
               value: "true"
-            - name: COLLECTOR_ZIPKIN_HOST_PORT
-              value: {{ printf ":%v" .Values.collector.containerPorts.zipkin | quote }}
-            - name: COLLECTOR_JAEGER_GRPC_SERVER_HOST_PORT
-              value: {{ printf ":%v" .Values.collector.containerPorts.jaeger.grpc | quote }}
-            - name: COLLECTOR_JAEGER_THRIFT_HTTP_HOST_PORT
-              value: {{ printf ":%v" .Values.collector.containerPorts.jaeger.thrift_http | quote }}
+            {{- if has "otlp" .Values.collector.receivers }}
             - name: COLLECTOR_OTLP_GRPC_HOST_PORT
               value: {{ printf ":%v" .Values.collector.containerPorts.otlp.grpc | quote }}
             - name: COLLECTOR_OTLP_HTTP_HOST_PORT
               value: {{ printf ":%v" .Values.collector.containerPorts.otlp.http | quote }}
+            {{- end }}
+            {{- if has "jaeger" .Values.collector.receivers }}
+            - name: COLLECTOR_JAEGER_GRPC_SERVER_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.jaeger.grpc | quote }}
+            - name: COLLECTOR_JAEGER_THRIFT_HTTP_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.jaeger.thrift_http | quote }}
+            {{- end }}
+            {{- if has "zipkin" .Values.collector.receivers }}
+            - name: COLLECTOR_ZIPKIN_HOST_PORT
+              value: {{ printf ":%v" .Values.collector.containerPorts.zipkin | quote }}
+            {{- end }}
             - name: COLLECTOR_HEALTHCHECK_HOST_PORT
               value: {{ printf ":%v" .Values.collector.containerPorts.healthcheck | quote }}
             - name: COLLECTOR_METRICS_PORT

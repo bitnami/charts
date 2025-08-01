@@ -49,11 +49,17 @@ spec:
   {{- end }}
   ingress:
     - ports:
+        {{- if has "otlp" .Values.collector.receivers }}
         - port: {{ .Values.collector.containerPorts.otlp.grpc }}
         - port: {{ .Values.collector.containerPorts.otlp.http }}
+        {{- end }}
+        {{- if has "jaeger" .Values.collector.receivers }}
         - port: {{ .Values.collector.containerPorts.jaeger.thrift_http }}
         - port: {{ .Values.collector.containerPorts.jaeger.grpc }}
+        {{- end }}
+        {{- if has "zipkin" .Values.collector.receivers }}
         - port: {{ .Values.collector.containerPorts.zipkin }}
+        {{- end }}
         - port: {{ .Values.collector.containerPorts.metrics }}
       {{- if not .Values.collector.networkPolicy.allowExternal }}
       from:

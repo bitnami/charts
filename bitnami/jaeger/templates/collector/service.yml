@@ -36,6 +36,7 @@ spec:
   externalTrafficPolicy: {{ .Values.collector.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
+    {{- if has "otlp" .Values.collector.receivers }}
     - name: otlp-grpc
       port: {{ .Values.collector.service.ports.otlp.grpc }}
       targetPort: {{ .Values.collector.containerPorts.otlp.grpc }}
@@ -52,6 +53,8 @@ spec:
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if has "jaeger" .Values.collector.receivers }}
     - name: jaeger-grpc
       port: {{ .Values.collector.service.ports.jaeger.grpc }}
       targetPort: {{ .Values.collector.containerPorts.jaeger.grpc }}
@@ -68,6 +71,8 @@ spec:
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if has "zipkin" .Values.collector.receivers }}
     - name: zipkin
       port: {{ .Values.collector.service.ports.zipkin }}
       targetPort: {{ .Values.collector.containerPorts.zipkin }}
@@ -76,6 +81,7 @@ spec:
       {{- else if eq .Values.collector.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     - name: metrics
       port: {{ .Values.collector.service.ports.metrics }}
       targetPort: {{ .Values.collector.containerPorts.metrics }}
