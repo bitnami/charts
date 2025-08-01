@@ -27,9 +27,11 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: jaeger
         app.kubernetes.io/component: collector
-      {{- if .Values.collector.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.collector.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/collector/configmap.yaml") . | sha256sum }}
+        {{- if .Values.collector.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.collector.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.collector.automountServiceAccountToken }}
