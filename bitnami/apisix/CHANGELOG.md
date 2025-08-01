@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.0 (2025-07-26)
+## 5.1.0 (2025-08-01)
 
 * [bitnami/apisix] fix: Apisix clean uds ([#34987](https://github.com/bitnami/charts/pull/34987))
 
