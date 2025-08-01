@@ -149,12 +149,6 @@ spec:
             - secretRef:
                 name: {{ .Values.extraEnvVarsSecret }}
             {{- end }}
-            {{- if .Values.extraEnvVarsSecrets }}
-            {{- range .Values.extraEnvVarsSecrets }}
-            - secretRef:
-                name: {{ . }}
-            {{- end }}
-            {{- end }}
             {{- if .Values.triggerer.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.triggerer.extraEnvVarsCM }}
@@ -162,6 +156,12 @@ spec:
             {{- if .Values.triggerer.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.triggerer.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
           {{- end }}
           ports:
