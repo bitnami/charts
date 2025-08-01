@@ -336,16 +336,6 @@ Init container definition for waiting for the database to be ready
       ln -sf /opt/bitnami/apisix/deps /usr/local/apisix
       ln -sf /opt/bitnami/apisix/openresty/luajit/share/lua/*/apisix /usr/local/apisix
       mkdir -p /usr/local/apisix/logs
-      # Clean up UDS file before starting APISIX
-      echo "Checking for existing UDS file..."
-      UDS_FILE="/usr/local/apisix/logs/worker_events.sock"
-      if [ -e "$UDS_FILE" ]; then
-          echo "Found existing UDS file: $UDS_FILE - removing it"
-          rm -f "$UDS_FILE"
-          echo "UDS file removed successfully"
-      else
-          echo "No existing UDS file found at: $UDS_FILE"
-      fi
     {{- if .context.Values.usePasswordFiles }}
       {{- if .context.Values.controlPlane.enabled }}
       export APISIX_ADMIN_API_TOKEN="$(< $APISIX_ADMIN_API_TOKEN_FILE)"
