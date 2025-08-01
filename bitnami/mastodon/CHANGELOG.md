@@ -1,8 +1,19 @@
 # Changelog
 
-## 13.0.7 (2025-07-15)
+## 13.0.9 (2025-07-23)
 
-* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35139](https://github.com/bitnami/charts/pull/35139))
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35269](https://github.com/bitnami/charts/pull/35269))
+
+## <small>13.0.8 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35183) ([328116c](https://github.com/bitnami/charts/commit/328116c05c7c9834d0726a360a277d4c3032afee)), closes [#35183](https://github.com/bitnami/charts/issues/35183)
+
+## <small>13.0.7 (2025-07-15)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35139) ([419ff09](https://github.com/bitnami/charts/commit/419ff09ba4b51e863621777d0a17c339b4ed8c5c)), closes [#35139](https://github.com/bitnami/charts/issues/35139)
 
 ## <small>13.0.6 (2025-07-06)</small>
 

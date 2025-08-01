@@ -102,7 +102,9 @@ spec:
         {{- include "dremio.init-containers.copy-default-conf" $ | nindent 8 }}
         {{- end }}
         {{- if $.Values.defaultInitContainers.wait.enabled }}
+        {{- if or (eq $.Values.dremio.distStorageType "minio") (eq $.Values.dremio.distStorageType "aws") }}
         {{- include "dremio.init-containers.wait-for-s3" $ | nindent 8 }}
+        {{- end }}
         {{- include "dremio.init-containers.wait-for-zookeeper" $ | nindent 8 }}
         {{- include "dremio.init-containers.wait-for-master-coordinator" $ | nindent 8 }}
         {{- end }}

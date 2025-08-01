@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.0.18 (2025-07-16)
+## 6.0.21 (2025-07-23)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35159](https://github.com/bitnami/charts/pull/35159))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35265](https://github.com/bitnami/charts/pull/35265))
+
+## <small>6.0.20 (2025-07-22)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35245) ([a678723](https://github.com/bitnami/charts/commit/a678723f7a72036b4d0427652e33bf6d2fc68295)), closes [#35245](https://github.com/bitnami/charts/issues/35245)
+
+## <small>6.0.19 (2025-07-21)</small>
+
+* :warning: This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/appsmith] Update passwordFile secret mountPath (#35223) ([b2dec04](https://github.com/bitnami/charts/commit/b2dec047e4a16c716d5f1b936503d5aa9f20f4fd)), closes [#35223](https://github.com/bitnami/charts/issues/35223)
+
+## <small>6.0.18 (2025-07-16)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35159) ([f884c35](https://github.com/bitnami/charts/commit/f884c3567b15dbb25668f6accd77d4b601518d96)), closes [#35159](https://github.com/bitnami/charts/issues/35159)
 
 ## <small>6.0.17 (2025-07-15)</small>
 

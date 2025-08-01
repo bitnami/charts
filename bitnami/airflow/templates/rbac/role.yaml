@@ -38,6 +38,12 @@ rules:
     verbs:
       - "create"
       - "get"
+  - apiGroups:
+      - ""
+    resources:
+      - "events"
+    verbs:
+      - "list"
   {{- if .Values.rbac.rules }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}

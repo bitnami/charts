@@ -1,8 +1,19 @@
 # Changelog
 
-## 24.7.7 (2025-07-11)
+## 24.8.1 (2025-07-24)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35004](https://github.com/bitnami/charts/pull/35004))
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35278](https://github.com/bitnami/charts/pull/35278))
+
+## 24.8.0 (2025-07-21)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/keycloak] Add support for customization of the Keycloak database schema (#35211) ([aea8732](https://github.com/bitnami/charts/commit/aea8732d32649ae7401c5a951cf0f0519fda907b)), closes [#35211](https://github.com/bitnami/charts/issues/35211)
+
+## <small>24.7.7 (2025-07-11)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#35004) ([827692c](https://github.com/bitnami/charts/commit/827692c4bf27135087b0287ff595440a59dfac85)), closes [#35004](https://github.com/bitnami/charts/issues/35004)
 
 ## <small>24.7.6 (2025-07-09)</small>
 

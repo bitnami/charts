@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.41 (2025-07-15)
+## 5.1.42 (2025-07-26)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35085](https://github.com/bitnami/charts/pull/35085))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35304](https://github.com/bitnami/charts/pull/35304))
+
+## <small>5.1.41 (2025-07-15)</small>
+
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#35085) ([941ab45](https://github.com/bitnami/charts/commit/941ab45b6b46918a554510dbe6d39dcab0f426bd)), closes [#35085](https://github.com/bitnami/charts/issues/35085)
 
 ## <small>5.1.40 (2025-07-09)</small>
 

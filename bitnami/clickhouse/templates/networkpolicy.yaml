@@ -63,8 +63,12 @@ spec:
         {{- if .Values.tls.enabled }}
         - port: {{ .Values.service.ports.tcpSecure }}
         {{- end }}
+        {{- if .Values.exposeMysql }}
         - port: {{ .Values.service.ports.mysql }}
+        {{- end }}
+        {{- if .Values.exposePostgresql }}
         - port: {{ .Values.service.ports.postgresql }}
+        {{- end }}
         - port: {{ .Values.service.ports.interserver }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.service.ports.metrics }}
@@ -82,8 +86,12 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.containerPorts.tcp }}
+        {{- if .Values.exposeMysql }}
         - port: {{ .Values.containerPorts.mysql }}
+        {{- end }}
+        {{- if .Values.exposePostgresql }}
         - port: {{ .Values.containerPorts.postgresql }}
+        {{- end }}
         - port: {{ .Values.containerPorts.interserver }}
         {{- if .Values.tls.enabled }}
         - port: {{ .Values.containerPorts.tcpSecure }}

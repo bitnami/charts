@@ -1,8 +1,19 @@
 # Changelog
 
-## 16.7.19 (2025-07-15)
+## 16.7.21 (2025-07-21)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35116](https://github.com/bitnami/charts/pull/35116))
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35235](https://github.com/bitnami/charts/pull/35235))
+
+## <small>16.7.20 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/postgresql] Rename backup.cronjob.timeZone to backup.cronjob.timezone (#35153) ([8a2dca9](https://github.com/bitnami/charts/commit/8a2dca9f6b2d37d2975fb1f3ddfe23c9ca963336)), closes [#35153](https://github.com/bitnami/charts/issues/35153)
+
+## <small>16.7.19 (2025-07-15)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#35116) ([15c6eee](https://github.com/bitnami/charts/commit/15c6eeeee5d8454b93eeada473a80a0230d6d3ae)), closes [#35116](https://github.com/bitnami/charts/issues/35116)
 
 ## <small>16.7.18 (2025-07-12)</small>
 

@@ -34,14 +34,18 @@ spec:
       port: {{ .Values.containerPorts.tcpSecure }}
       protocol: TCP
     {{- end }}
+    {{- if .Values.exposeMysql }}
     - name: tcp-mysql
       targetPort: tcp-mysql
       port: {{ .Values.containerPorts.mysql }}
       protocol: TCP
+    {{- end }}
+    {{- if .Values.exposePostgresql }}
     - name: tcp-postgresql
       targetPort: tcp-postgresql
       port: {{ .Values.containerPorts.postgresql }}
       protocol: TCP
+    {{- end }}
     - name: http-intersrv
       targetPort: http-intersrv
       port: {{ .Values.containerPorts.interserver }}

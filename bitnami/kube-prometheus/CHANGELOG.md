@@ -1,8 +1,17 @@
 # Changelog
 
-## 11.2.14 (2025-07-16)
+## 11.2.16 (2025-07-21)
 
-* [bitnami/kube-prometheus] fix(thanosRuler) service port ([#35017](https://github.com/bitnami/charts/pull/35017))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35227](https://github.com/bitnami/charts/pull/35227))
+
+## <small>11.2.15 (2025-07-17)</small>
+
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/kube-prometheus] add thanos sidecar service monitor (#34969) ([48eb407](https://github.com/bitnami/charts/commit/48eb4075eeb005b9614fcf32999f8d38bb759b03)), closes [#34969](https://github.com/bitnami/charts/issues/34969)
+
+## <small>11.2.14 (2025-07-16)</small>
+
+* [bitnami/kube-prometheus] fix(thanosRuler) service port (#35017) ([470f116](https://github.com/bitnami/charts/commit/470f116a467250368605aa69200d7288cc5c093e)), closes [#35017](https://github.com/bitnami/charts/issues/35017)
 
 ## <small>11.2.13 (2025-07-14)</small>
 
