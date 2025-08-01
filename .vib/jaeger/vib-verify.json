@@ -61,7 +61,7 @@
             "resources": {
               "path": "/.vib/jaeger/cypress"
             },
-            "endpoint": "lb-jaeger-query-api",
+            "endpoint": "lb-jaeger-query-http",
             "app_protocol": "HTTP"
           }
         },
