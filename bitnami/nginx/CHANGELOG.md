@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.1.1 (2025-08-01)
+
+* [bitnami/nginx] bugfix: allow extraVolumes when used in sidecars ([#35167](https://github.com/bitnami/charts/pull/35167))
+
 ## 21.1.0 (2025-07-31)
 
-* [bitnami/nginx] Add support for context-based configuration includes ([#35347](https://github.com/bitnami/charts/pull/35347))
+* [bitnami/nginx] Add support for context-based configuration includes (#35347) ([507f56e](https://github.com/bitnami/charts/commit/507f56ef31172eb85223fb8ae20a1865761030c0)), closes [#35347](https://github.com/bitnami/charts/issues/35347)
 
 ## <small>21.0.9 (2025-07-31)</small>
 
