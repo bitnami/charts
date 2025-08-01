@@ -97,7 +97,7 @@ spec:
         {{- end }}
         {{- end }}
         {{- if .Values.client.initContainers }}
-        {{- include "common.tplvalues.render" (dict "values" .Values.client.initContainers "context" $) | nindent 8}}
+        {{- include "common.tplvalues.render" (dict "value" .Values.client.initContainers "context" $) | nindent 8}}
         {{- end }}
       containers:
         - name: deepspeed

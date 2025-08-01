@@ -402,7 +402,7 @@ Returns an init-container that prepares the Kafka configuration files for main c
     - name: EXTERNAL_ACCESS_LISTENER_NAME
       value: {{ upper .context.Values.listeners.external.name | quote }}
     {{- $externalAccess := index .context.Values.externalAccess .role }}
-    {{- if eq $externalAccess.service.type "LoadBalancer" }}
+    {{- if or (eq $externalAccess.service.type "LoadBalancer") (and $externalAccess.service.loadBalancerNames (eq $externalAccess.service.type "ClusterIP")) }}
     {{- if not .context.Values.defaultInitContainers.autoDiscovery.enabled }}
     - name: EXTERNAL_ACCESS_HOSTS_LIST
       value: {{ join "," (default $externalAccess.service.loadBalancerIPs $externalAccess.service.loadBalancerNames) | quote }}

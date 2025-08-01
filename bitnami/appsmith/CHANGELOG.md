@@ -1,8 +1,48 @@
 # Changelog
 
-## 6.0.12 (2025-06-25)
+## 6.0.21 (2025-07-23)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#34613](https://github.com/bitnami/charts/pull/34613))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35265](https://github.com/bitnami/charts/pull/35265))
+
+## <small>6.0.20 (2025-07-22)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35245) ([a678723](https://github.com/bitnami/charts/commit/a678723f7a72036b4d0427652e33bf6d2fc68295)), closes [#35245](https://github.com/bitnami/charts/issues/35245)
+
+## <small>6.0.19 (2025-07-21)</small>
+
+* :warning: This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/appsmith] Update passwordFile secret mountPath (#35223) ([b2dec04](https://github.com/bitnami/charts/commit/b2dec047e4a16c716d5f1b936503d5aa9f20f4fd)), closes [#35223](https://github.com/bitnami/charts/issues/35223)
+
+## <small>6.0.18 (2025-07-16)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35159) ([f884c35](https://github.com/bitnami/charts/commit/f884c3567b15dbb25668f6accd77d4b601518d96)), closes [#35159](https://github.com/bitnami/charts/issues/35159)
+
+## <small>6.0.17 (2025-07-15)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35077) ([6f60d0e](https://github.com/bitnami/charts/commit/6f60d0e0e49e1b5f153068682537d7a65c8f2da5)), closes [#35077](https://github.com/bitnami/charts/issues/35077)
+
+## <small>6.0.16 (2025-07-09)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34963) ([65aae23](https://github.com/bitnami/charts/commit/65aae23c91c182a66b5abf434b6bb7d9fbf71371)), closes [#34963](https://github.com/bitnami/charts/issues/34963)
+
+## <small>6.0.15 (2025-07-09)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34902) ([7c4935f](https://github.com/bitnami/charts/commit/7c4935f8a3e70e6611689052ab9334e89fc4c6af)), closes [#34902](https://github.com/bitnami/charts/issues/34902)
+
+## <small>6.0.14 (2025-07-02)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34766) ([50ce4cd](https://github.com/bitnami/charts/commit/50ce4cdd926137aa498c8c90f93a61f511e96887)), closes [#34766](https://github.com/bitnami/charts/issues/34766)
+
+## <small>6.0.13 (2025-07-02)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34764) ([f095bcf](https://github.com/bitnami/charts/commit/f095bcf48b7fb4048a8db98d074ea9a608ef5dbe)), closes [#34764](https://github.com/bitnami/charts/issues/34764)
+
+## <small>6.0.12 (2025-06-25)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#34613) ([e2d7724](https://github.com/bitnami/charts/commit/e2d772407d78bd8bcaa1bbc1a874d040dcca7596)), closes [#34613](https://github.com/bitnami/charts/issues/34613)
 
 ## <small>6.0.11 (2025-06-18)</small>
 

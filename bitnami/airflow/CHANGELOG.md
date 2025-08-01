@@ -1,8 +1,27 @@
 # Changelog
 
-## 24.2.0 (2025-06-24)
+## 24.2.4 (2025-07-24)
 
-* [bitnami/airflow] Move venv to emptydir volume ([#34560](https://github.com/bitnami/charts/pull/34560))
+* [bitnami/airflow] Fix/add extra env vars secrets to triggerer ([#35047](https://github.com/bitnami/charts/pull/35047))
+
+## <small>24.2.3 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/airflow] add events to rbac role (#35201) ([b60d9e6](https://github.com/bitnami/charts/commit/b60d9e6f5b6dc423596e0f1bf6f3ecc412683f78)), closes [#35201](https://github.com/bitnami/charts/issues/35201) [#35152](https://github.com/bitnami/charts/issues/35152)
+
+## <small>24.2.2 (2025-07-15)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35068) ([7a30b32](https://github.com/bitnami/charts/commit/7a30b329dcd9ee666d0ea4f1c87080d67094aede)), closes [#35068](https://github.com/bitnami/charts/issues/35068)
+
+## <small>24.2.1 (2025-07-09)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34953) ([4ebb820](https://github.com/bitnami/charts/commit/4ebb82056d1b836ce081bee4e4142757e840951b)), closes [#34953](https://github.com/bitnami/charts/issues/34953)
+
+## 24.2.0 (2025-06-25)
+
+* [bitnami/airflow] Move venv to emptydir volume (#34560) ([d2e3dc5](https://github.com/bitnami/charts/commit/d2e3dc579cc0e96c8b09fb6083c504b85a3d5c08)), closes [#34560](https://github.com/bitnami/charts/issues/34560)
 
 ## <small>24.1.5 (2025-06-23)</small>
 

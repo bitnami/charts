@@ -1,8 +1,16 @@
 # Changelog
 
+## 26.0.2 (2025-07-30)
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#35344](https://github.com/bitnami/charts/pull/35344))
+
+## <small>26.0.1 (2025-06-30)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#34721) ([52de879](https://github.com/bitnami/charts/commit/52de879090888f1274c6530818f5f76b228c10ab)), closes [#34721](https://github.com/bitnami/charts/issues/34721)
+
 ## 26.0.0 (2025-06-23)
 
-* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#34586](https://github.com/bitnami/charts/pull/34586))
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#34586) ([70c6d74](https://github.com/bitnami/charts/commit/70c6d744a514f02af8237c2a630d65c2231ff81b)), closes [#34586](https://github.com/bitnami/charts/issues/34586)
 
 ## <small>25.1.9 (2025-06-18)</small>
 

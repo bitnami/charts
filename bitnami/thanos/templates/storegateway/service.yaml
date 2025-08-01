@@ -31,6 +31,12 @@ spec:
   {{- if and (eq .Values.storegateway.service.type "LoadBalancer") .Values.storegateway.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.storegateway.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  {{- if .Values.storegateway.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.storegateway.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if .Values.storegateway.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.storegateway.service.ipFamilies | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.storegateway.service.ports.http }}
       targetPort: http

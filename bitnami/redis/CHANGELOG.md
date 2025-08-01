@@ -1,8 +1,36 @@
 # Changelog
 
-## 21.2.6 (2025-06-26)
+## 21.2.13 (2025-07-16)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34645](https://github.com/bitnami/charts/pull/34645))
+* [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
+
+## <small>21.2.12 (2025-07-16)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35149) ([a44f7b9](https://github.com/bitnami/charts/commit/a44f7b90728adfcba5752af1b4f15b4c8517db53)), closes [#35149](https://github.com/bitnami/charts/issues/35149)
+
+## <small>21.2.11 (2025-07-15)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35124) ([525a839](https://github.com/bitnami/charts/commit/525a8396e83dea2ad009102f2e84a8dbc2e8f973)), closes [#35124](https://github.com/bitnami/charts/issues/35124)
+
+## <small>21.2.10 (2025-07-11)</small>
+
+* [bitnami/redis] Fix external service annotations ignored #33270 (#33776) ([cd64f12](https://github.com/bitnami/charts/commit/cd64f12492a47b8e68154737dc75460de67c5bd1)), closes [#33270](https://github.com/bitnami/charts/issues/33270) [#33776](https://github.com/bitnami/charts/issues/33776) [#33270](https://github.com/bitnami/charts/issues/33270)
+
+## <small>21.2.9 (2025-07-09)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34949) ([85fa246](https://github.com/bitnami/charts/commit/85fa246dbb8b1e269f4819da33f178d54f0c3f79)), closes [#34949](https://github.com/bitnami/charts/issues/34949)
+
+## <small>21.2.8 (2025-07-09)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34920) ([91df31b](https://github.com/bitnami/charts/commit/91df31b25b98e7b677b791dec2ca11e5dfb10b3c)), closes [#34920](https://github.com/bitnami/charts/issues/34920)
+
+## <small>21.2.7 (2025-07-06)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34816) ([1b0458e](https://github.com/bitnami/charts/commit/1b0458e88afb4d8486b4843bbba98a1512080626)), closes [#34816](https://github.com/bitnami/charts/issues/34816)
+
+## <small>21.2.6 (2025-06-26)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34645) ([f85791d](https://github.com/bitnami/charts/commit/f85791da996be1e6055c8c72a4976d3e33bf88a2)), closes [#34645](https://github.com/bitnami/charts/issues/34645)
 
 ## <small>21.2.5 (2025-06-18)</small>
 

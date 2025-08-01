@@ -1,8 +1,28 @@
 # Changelog
 
-## 3.0.4 (2025-06-13)
+## 3.0.9 (2025-07-17)
 
-* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context ([#34380](https://github.com/bitnami/charts/pull/34380))
+* [bitnami/dremio] bugfix: conditions to disable S3 storage ([#35169](https://github.com/bitnami/charts/pull/35169))
+
+## <small>3.0.8 (2025-07-15)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35089) ([1d94895](https://github.com/bitnami/charts/commit/1d948958cbf9f74d336ce8f48c79daf5e0482273)), closes [#35089](https://github.com/bitnami/charts/issues/35089)
+
+## <small>3.0.7 (2025-07-14)</small>
+
+* [bitnami/dremio] chore: create helper for headless svc name (#35039) ([15b4f7d](https://github.com/bitnami/charts/commit/15b4f7da289ee386f8c14b3aa7f69bc1ec76c08d)), closes [#35039](https://github.com/bitnami/charts/issues/35039)
+
+## <small>3.0.6 (2025-07-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34988) ([a502aba](https://github.com/bitnami/charts/commit/a502aba30df023e5eb4c1b4bdea7ca908a36e570)), closes [#34988](https://github.com/bitnami/charts/issues/34988)
+
+## <small>3.0.5 (2025-07-03)</small>
+
+* [bitnami/dremio] Engine overrides are clobbered by the last value (#34725) ([cf71b71](https://github.com/bitnami/charts/commit/cf71b7189f5742392c136ffd5c49448a7f8fe8dc)), closes [#34725](https://github.com/bitnami/charts/issues/34725)
+
+## <small>3.0.4 (2025-06-13)</small>
+
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context (#34380) ([f2eeff4](https://github.com/bitnami/charts/commit/f2eeff497d27abdfa56952953a3d8069e84f247d)), closes [#34380](https://github.com/bitnami/charts/issues/34380)
 
 ## <small>3.0.3 (2025-06-10)</small>
 

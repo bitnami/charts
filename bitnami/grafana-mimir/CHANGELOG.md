@@ -1,8 +1,35 @@
 # Changelog
 
-## 3.0.7 (2025-06-26)
+## 3.0.13 (2025-07-31)
 
-* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#34658](https://github.com/bitnami/charts/pull/34658))
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references ([#35359](https://github.com/bitnami/charts/pull/35359))
+
+## <small>3.0.12 (2025-07-29)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#35322) ([7fef3a3](https://github.com/bitnami/charts/commit/7fef3a331ef1a241b95c771d04ed063c043fc9ff)), closes [#35322](https://github.com/bitnami/charts/issues/35322)
+
+## <small>3.0.11 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#35180) ([ce3edd4](https://github.com/bitnami/charts/commit/ce3edd43c6daf304ca1bedc4c8d6bf6fcc96ba38)), closes [#35180](https://github.com/bitnami/charts/issues/35180)
+
+## <small>3.0.10 (2025-07-15)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#35094) ([ad26dd6](https://github.com/bitnami/charts/commit/ad26dd6a7ac88070f982c1ea7aa697d3e00f23b7)), closes [#35094](https://github.com/bitnami/charts/issues/35094)
+
+## <small>3.0.9 (2025-07-09)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34900) ([03d90ee](https://github.com/bitnami/charts/commit/03d90ee1c5ff477cf71f78870ec1579e647a4000)), closes [#34900](https://github.com/bitnami/charts/issues/34900)
+
+## <small>3.0.8 (2025-06-30)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34712) ([76c1bbb](https://github.com/bitnami/charts/commit/76c1bbbda80d9c135300217dbc0cb4820de5e1d6)), closes [#34712](https://github.com/bitnami/charts/issues/34712)
+
+## <small>3.0.7 (2025-06-26)</small>
+
+* [bitnami/grafana-mimir] :zap: :arrow_up: Update dependency references (#34658) ([1d807af](https://github.com/bitnami/charts/commit/1d807af0e1fa0ceb6add82c619e1f7cd806332df)), closes [#34658](https://github.com/bitnami/charts/issues/34658)
 
 ## <small>3.0.6 (2025-06-24)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 8.8.7 (2025-06-13)
+## 9.0.0 (2025-07-17)
 
-* [bitnami/external-dns] Fix bug with trailing comma in azure.json ([#33951](https://github.com/bitnami/charts/pull/33951))
+* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers ([#35175](https://github.com/bitnami/charts/pull/35175))
+
+## <small>8.9.2 (2025-07-08)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#34882) ([84a7516](https://github.com/bitnami/charts/commit/84a7516ae6891bbeb2134ba939408867b46a5ba0)), closes [#34882](https://github.com/bitnami/charts/issues/34882)
+
+## <small>8.9.1 (2025-07-04)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#34653) ([0e8eba0](https://github.com/bitnami/charts/commit/0e8eba0e0de1aff195bd919b42526e775b59fb9d)), closes [#34653](https://github.com/bitnami/charts/issues/34653)
+
+## 8.9.0 (2025-07-04)
+
+* [bitnami/external-dns] Add Support for Cloudflare Regional Services Configuration (#34782) ([7bc8596](https://github.com/bitnami/charts/commit/7bc8596d62919e525934e5847e5106713543e155)), closes [#34782](https://github.com/bitnami/charts/issues/34782)
+
+## <small>8.8.7 (2025-06-26)</small>
+
+* [bitnami/external-dns] Fix bug with trailing comma in azure.json (#33951) ([7ce5a57](https://github.com/bitnami/charts/commit/7ce5a57a45003602014e1f996f6385fefa043491)), closes [#33951](https://github.com/bitnami/charts/issues/33951)
 
 ## <small>8.8.6 (2025-06-13)</small>
 

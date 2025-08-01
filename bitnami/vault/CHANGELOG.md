@@ -1,8 +1,32 @@
 # Changelog
 
-## 1.7.16 (2025-06-25)
+## 1.7.22 (2025-07-24)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34610](https://github.com/bitnami/charts/pull/34610))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35292](https://github.com/bitnami/charts/pull/35292))
+
+## <small>1.7.21 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35137) ([e337e30](https://github.com/bitnami/charts/commit/e337e30c87d16b7c96de4608b42c7d21a69fc8bd)), closes [#35137](https://github.com/bitnami/charts/issues/35137)
+
+## <small>1.7.20 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35062) ([01a5cb5](https://github.com/bitnami/charts/commit/01a5cb5704a71acae15838521240f063c5bbc676)), closes [#35062](https://github.com/bitnami/charts/issues/35062)
+
+## <small>1.7.19 (2025-07-14)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35052) ([c96c9c8](https://github.com/bitnami/charts/commit/c96c9c8e8d11202647d162d6106d2995ed077db3)), closes [#35052](https://github.com/bitnami/charts/issues/35052)
+
+## <small>1.7.18 (2025-07-09)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34959) ([5bf409d](https://github.com/bitnami/charts/commit/5bf409d8067ab028ff4bcb81faefae343a70415d)), closes [#34959](https://github.com/bitnami/charts/issues/34959)
+
+## <small>1.7.17 (2025-07-01)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34640) ([71a3831](https://github.com/bitnami/charts/commit/71a38311640b33d4959c6d58b6566abc15a47ebe)), closes [#34640](https://github.com/bitnami/charts/issues/34640)
+
+## <small>1.7.16 (2025-06-25)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34610) ([31ad11f](https://github.com/bitnami/charts/commit/31ad11f3ac737896ec72ae5be15da214965d4f1a)), closes [#34610](https://github.com/bitnami/charts/issues/34610)
 
 ## <small>1.7.15 (2025-06-13)</small>
 

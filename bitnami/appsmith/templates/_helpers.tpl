@@ -238,7 +238,7 @@ Return the MongoDB Secret Name
       value: {{ include "appsmith.mongodb.port" . | quote }}
     {{- if .Values.usePasswordFiles }}
     - name: APPSMITH_DATABASE_PASSWORD_FILE
-      value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
+      value: {{ printf "/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
     {{- else }}
     - name: APPSMITH_DATABASE_PASSWORD
       valueFrom:
@@ -253,7 +253,7 @@ Return the MongoDB Secret Name
   {{- if  .Values.usePasswordFiles }}
   volumeMounts:
     - name: appsmith-secrets
-      mountPath: /opt/bitnami/appsmith/secrets
+      mountPath: /secrets
   {{- end }}
 {{- end -}}
 

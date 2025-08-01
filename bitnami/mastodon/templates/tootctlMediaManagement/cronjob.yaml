@@ -114,7 +114,7 @@ spec:
                 {{- end }}
                 {{- end }}
                 {{- if .Values.web.extraEnvVars }}
-                {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 16 }}
                 {{- end }}
               envFrom:
                 - configMapRef:

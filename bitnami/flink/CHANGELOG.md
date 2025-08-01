@@ -1,8 +1,17 @@
 # Changelog
 
-## 2.0.4 (2025-06-07)
+## 2.0.6 (2025-07-29)
 
-* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#34246](https://github.com/bitnami/charts/pull/34246))
+* [bitnami/flink] :zap: :arrow_up: Update dependency references ([#35326](https://github.com/bitnami/charts/pull/35326))
+
+## <small>2.0.5 (2025-07-07)</small>
+
+* [bitnami/flink] :zap: :arrow_up: Update dependency references (#34830) ([d9e4505](https://github.com/bitnami/charts/commit/d9e4505f106f3aa83fa61ac70560be36757428f8)), closes [#34830](https://github.com/bitnami/charts/issues/34830)
+
+## <small>2.0.4 (2025-06-07)</small>
+
+* [bitnami/flink] :zap: :arrow_up: Update dependency references (#34246) ([8cfde38](https://github.com/bitnami/charts/commit/8cfde3859edbd220bc30ec07168b344ca210057b)), closes [#34246](https://github.com/bitnami/charts/issues/34246)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.0.3 (2025-05-08)</small>
 

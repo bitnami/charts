@@ -1,8 +1,43 @@
 # Changelog
 
-## 17.0.4 (2025-06-25)
+## 17.2.3 (2025-07-23)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#34622](https://github.com/bitnami/charts/pull/34622))
+* [bitnami/thanos] Fix commonLabels on sharded storegateway ([#35238](https://github.com/bitnami/charts/pull/35238))
+
+## <small>17.2.2 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35226) ([efbbe03](https://github.com/bitnami/charts/commit/efbbe03289f99a78de4ac4c8eeb66d64d4b79bcd)), closes [#35226](https://github.com/bitnami/charts/issues/35226)
+
+## <small>17.2.1 (2025-07-15)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35131) ([b84a27d](https://github.com/bitnami/charts/commit/b84a27db4a60d92308cf7d61122f6cebeeff75ab)), closes [#35131](https://github.com/bitnami/charts/issues/35131)
+
+## 17.2.0 (2025-07-09)
+
+* [bitnami/thanos] addition of parameter to configure statefulset annotations (#33988) ([4232306](https://github.com/bitnami/charts/commit/42323062d64cb6f071615e93c0bc8e0542425c20)), closes [#33988](https://github.com/bitnami/charts/issues/33988) [#34825](https://github.com/bitnami/charts/issues/34825)
+
+## 17.1.0 (2025-07-09)
+
+* [bitnami/thanos] feat: Added support for configuring dual-stack for services (#34825) ([ee5ebdd](https://github.com/bitnami/charts/commit/ee5ebddd317f9b1bb39f4b6c3da9297713b2b156)), closes [#34825](https://github.com/bitnami/charts/issues/34825)
+
+## <small>17.0.7 (2025-07-09)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34956) ([fdff255](https://github.com/bitnami/charts/commit/fdff2559fd6ffc710a8425f49b045477431b4ea4)), closes [#34956](https://github.com/bitnami/charts/issues/34956)
+
+## <small>17.0.6 (2025-07-01)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34747) ([44e6ce5](https://github.com/bitnami/charts/commit/44e6ce5b0d24eb53252484ad6cf7efe4f24bab8c)), closes [#34747](https://github.com/bitnami/charts/issues/34747)
+
+## <small>17.0.5 (2025-06-27)</small>
+
+* [bitnami/thanos] Conditional creation of HorizontalPodAutoscaler resources for Thanos components (#3 ([879bca6](https://github.com/bitnami/charts/commit/879bca6783b372641facf6332eb179dd10569590)), closes [#34256](https://github.com/bitnami/charts/issues/34256)
+
+## <small>17.0.4 (2025-06-25)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#34622) ([b98bf4b](https://github.com/bitnami/charts/commit/b98bf4b149114396ab00faf491efb38aff2b509d)), closes [#34622](https://github.com/bitnami/charts/issues/34622)
 
 ## <small>17.0.3 (2025-06-13)</small>
 

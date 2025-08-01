@@ -1,8 +1,43 @@
 # Changelog
 
-## 11.3.16 (2025-06-16)
+## 11.4.1 (2025-07-23)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#34521](https://github.com/bitnami/charts/pull/34521))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#35259](https://github.com/bitnami/charts/pull/35259))
+
+## 11.4.0 (2025-07-18)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/apache] Support custom scrape_uri in apache exporter (#35050) ([6c008fc](https://github.com/bitnami/charts/commit/6c008fcf2fd8943b243860164f17cd53485f6119)), closes [#35050](https://github.com/bitnami/charts/issues/35050)
+
+## <small>11.3.22 (2025-07-10)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34992) ([2a2be25](https://github.com/bitnami/charts/commit/2a2be25c074bedc94656f17095c2a2cbe4368f19)), closes [#34992](https://github.com/bitnami/charts/issues/34992)
+
+## <small>11.3.21 (2025-07-08)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34887) ([2264249](https://github.com/bitnami/charts/commit/226424903ca9e962fd53e9c66bf8ead82fc7cce2)), closes [#34887](https://github.com/bitnami/charts/issues/34887)
+
+## <small>11.3.20 (2025-07-08)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34868) ([cff4aad](https://github.com/bitnami/charts/commit/cff4aad77db9db6d3d16bc4e92c745c0acc78b5d)), closes [#34868](https://github.com/bitnami/charts/issues/34868)
+
+## <small>11.3.19 (2025-07-01)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34759) ([a6d0474](https://github.com/bitnami/charts/commit/a6d0474065008e2d6c9bc2b998a9da0a3a946fdf)), closes [#34759](https://github.com/bitnami/charts/issues/34759)
+
+## <small>11.3.18 (2025-06-30)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34705) ([cbe30a5](https://github.com/bitnami/charts/commit/cbe30a56c842d4101e94848c2c50ffe28b0d7f1c)), closes [#34705](https://github.com/bitnami/charts/issues/34705)
+
+## <small>11.3.17 (2025-06-26)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34676) ([53cd058](https://github.com/bitnami/charts/commit/53cd05892e9f6239751efff614c36bd5683001df)), closes [#34676](https://github.com/bitnami/charts/issues/34676)
+
+## <small>11.3.16 (2025-06-16)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#34521) ([b1d1c4f](https://github.com/bitnami/charts/commit/b1d1c4f673aed7cad29d3bd018df3cb3d7ebc8d8)), closes [#34521](https://github.com/bitnami/charts/issues/34521)
 
 ## <small>11.3.15 (2025-06-16)</small>
 

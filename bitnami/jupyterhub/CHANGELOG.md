@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.0.16 (2025-06-13)
+## 10.0.2 (2025-07-15)
 
-* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#34400](https://github.com/bitnami/charts/pull/34400))
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#35098](https://github.com/bitnami/charts/pull/35098))
+
+## <small>10.0.1 (2025-07-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#35034) ([8d62526](https://github.com/bitnami/charts/commit/8d62526a3d95724a0fe4c50d6f8e801336415ef2)), closes [#35034](https://github.com/bitnami/charts/issues/35034)
+
+## 10.0.0 (2025-07-02)
+
+* [bitnami/jupyterhub] feat!: :boom: :wrench: Update default Authenticator (#34649) ([f23e83c](https://github.com/bitnami/charts/commit/f23e83cda437d32c66c43dd83d30eb4bed265c54)), closes [#34649](https://github.com/bitnami/charts/issues/34649) [#34646](https://github.com/bitnami/charts/issues/34646)
+
+## <small>9.0.16 (2025-06-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#34400) ([fffcf82](https://github.com/bitnami/charts/commit/fffcf82e09e1cf91d0bdd0ec77b2aaf16034b495)), closes [#34400](https://github.com/bitnami/charts/issues/34400)
 
 ## <small>9.0.15 (2025-06-10)</small>
 

@@ -1,8 +1,63 @@
 # Changelog
 
-## 23.0.19 (2025-06-25)
+## 24.0.1 (2025-07-31)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#34627](https://github.com/bitnami/charts/pull/34627))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35369](https://github.com/bitnami/charts/pull/35369))
+
+## 24.0.0 (2025-07-23)
+
+* [bitnami/ghost] Upgrade MySQL subchart to 14 (#35252) ([e6418de](https://github.com/bitnami/charts/commit/e6418de728fd572f4dd2bc4bc329e9edf3f99c89)), closes [#35252](https://github.com/bitnami/charts/issues/35252)
+
+## <small>23.0.30 (2025-07-21)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35230) ([b89fa2a](https://github.com/bitnami/charts/commit/b89fa2a3a9359a511db4d6b092ca348d38a0eee3)), closes [#35230](https://github.com/bitnami/charts/issues/35230)
+
+## <small>23.0.29 (2025-07-18)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35208) ([623d487](https://github.com/bitnami/charts/commit/623d4871a55de9191a93d00069a09b0ac4e556b6)), closes [#35208](https://github.com/bitnami/charts/issues/35208)
+
+## <small>23.0.28 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/ghost] subPath fix (#34854) ([2aae25a](https://github.com/bitnami/charts/commit/2aae25a2302bd5e49cf10e8db9bc452f7e8dfb8a)), closes [#34854](https://github.com/bitnami/charts/issues/34854)
+
+## <small>23.0.27 (2025-07-15)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35140) ([240df57](https://github.com/bitnami/charts/commit/240df5755136f74c22f50c0794f929486fc63417)), closes [#35140](https://github.com/bitnami/charts/issues/35140)
+
+## <small>23.0.26 (2025-07-11)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35024) ([5c4b174](https://github.com/bitnami/charts/commit/5c4b174c9891e7d3480f0d9f4d085a786f4fa9f5)), closes [#35024](https://github.com/bitnami/charts/issues/35024)
+
+## <small>23.0.25 (2025-07-04)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34808) ([67bba4a](https://github.com/bitnami/charts/commit/67bba4ab0d7603f7fc2f309fbd9beff41c4f146e)), closes [#34808](https://github.com/bitnami/charts/issues/34808)
+
+## <small>23.0.24 (2025-07-04)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34807) ([abb4d50](https://github.com/bitnami/charts/commit/abb4d5061414b405c79b3b053f44b6485d42e38e)), closes [#34807](https://github.com/bitnami/charts/issues/34807)
+
+## <small>23.0.23 (2025-07-02)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34775) ([d4ba643](https://github.com/bitnami/charts/commit/d4ba64352c7fb2bae6176b5f23a1781ba080fb1e)), closes [#34775](https://github.com/bitnami/charts/issues/34775)
+
+## <small>23.0.22 (2025-07-02)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34774) ([04db82c](https://github.com/bitnami/charts/commit/04db82c76c2a8a4837001fbc78c23f5109cb12d1)), closes [#34774](https://github.com/bitnami/charts/issues/34774)
+
+## <small>23.0.21 (2025-07-01)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34760) ([1fe1fd2](https://github.com/bitnami/charts/commit/1fe1fd23d8f1a052e7e2606ffcf76b99f1a1da98)), closes [#34760](https://github.com/bitnami/charts/issues/34760)
+
+## <small>23.0.20 (2025-06-30)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34722) ([58867fa](https://github.com/bitnami/charts/commit/58867faabc395b6260d145f54546b320605a85c5)), closes [#34722](https://github.com/bitnami/charts/issues/34722)
+
+## <small>23.0.19 (2025-06-25)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#34627) ([cb9579a](https://github.com/bitnami/charts/commit/cb9579abad56c0500a6340a06908cffafdf56f86)), closes [#34627](https://github.com/bitnami/charts/issues/34627)
 
 ## <small>23.0.18 (2025-06-24)</small>
 
