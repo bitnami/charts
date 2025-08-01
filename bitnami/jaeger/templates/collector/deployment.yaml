@@ -128,8 +128,6 @@ spec:
               value: {{ include "jaeger.cassandra.keyspace" . }}
             - name: CASSANDRA_DATACENTER
               value: {{ include "jaeger.cassandra.datacenter" . }}
-            - name: CASSANDRA_CREATE_SCHEMA
-              value: "true"
             {{- if has "otlp" .Values.collector.receivers }}
             - name: COLLECTOR_OTLP_GRPC_HOST_PORT
               value: {{ printf ":%v" .Values.collector.containerPorts.otlp.grpc | quote }}
