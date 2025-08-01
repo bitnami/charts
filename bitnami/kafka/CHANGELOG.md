@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.3.9 (2025-07-28)
+## 32.3.10 (2025-08-01)
 
-* [bitnami/kafka] Fix provisioning postScript ([#35310](https://github.com/bitnami/charts/pull/35310))
+* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' ([#35200](https://github.com/bitnami/charts/pull/35200))
+
+## <small>32.3.9 (2025-07-29)</small>
+
+* [bitnami/kafka] Fix provisioning postScript (#35310) ([c5b2cd2](https://github.com/bitnami/charts/commit/c5b2cd2d2ebf0bb50d944e79303438252be34c7a)), closes [#35310](https://github.com/bitnami/charts/issues/35310)
 
 ## <small>32.3.8 (2025-07-25)</small>
 
