@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.0 (2025-07-31)
+## 6.0.0 (2025-08-01)
 
 * [bitnami/jaeger] Major release: Jaeger v2  ([#35352](https://github.com/bitnami/charts/pull/35352))
 
