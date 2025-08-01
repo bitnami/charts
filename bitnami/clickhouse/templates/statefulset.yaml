@@ -181,10 +181,14 @@ spec:
             - name: tcp-secure
               containerPort: {{ $.Values.containerPorts.tcpSecure }}
             {{- end }}
+            {{- if $.Values.exposePostgresql }}
             - name: tcp-postgresql
               containerPort: {{ $.Values.containerPorts.postgresql }}
+            {{- end }}
+            {{- if $.Values.exposeMysql }}
             - name: tcp-mysql
               containerPort: {{ $.Values.containerPorts.mysql }}
+            {{- end }}
             - name: http-intersrv
               containerPort: {{ $.Values.containerPorts.interserver }}
             {{- if $.Values.metrics.enabled }}

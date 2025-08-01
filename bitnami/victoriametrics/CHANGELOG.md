@@ -1,8 +1,28 @@
 # Changelog
 
-## 0.1.20 (2025-06-23)
+## 0.1.25 (2025-07-21)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#34585](https://github.com/bitnami/charts/pull/34585))
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#35228](https://github.com/bitnami/charts/pull/35228))
+
+## <small>0.1.24 (2025-07-15)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#35134) ([e88bc61](https://github.com/bitnami/charts/commit/e88bc61390d8aebd13f96b063bb6769c4ae90057)), closes [#35134](https://github.com/bitnami/charts/issues/35134)
+
+## <small>0.1.23 (2025-07-09)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34960) ([9cd5544](https://github.com/bitnami/charts/commit/9cd5544d782649d4a6158b3ec68bcc0c34501024)), closes [#34960](https://github.com/bitnami/charts/issues/34960)
+
+## <small>0.1.22 (2025-07-08)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34851) ([07fabad](https://github.com/bitnami/charts/commit/07fabad2477de05398b17a2b6ea69264051f2d6a)), closes [#34851](https://github.com/bitnami/charts/issues/34851)
+
+## <small>0.1.21 (2025-07-07)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34826) ([9f4c2a2](https://github.com/bitnami/charts/commit/9f4c2a22e8e2a90e55ff4682954e866dfb8c1c24)), closes [#34826](https://github.com/bitnami/charts/issues/34826)
+
+## <small>0.1.20 (2025-06-23)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#34585) ([9219dbf](https://github.com/bitnami/charts/commit/9219dbfbfa4300a385af587dee7c56765a35c0ff)), closes [#34585](https://github.com/bitnami/charts/issues/34585)
 
 ## <small>0.1.19 (2025-06-14)</small>
 

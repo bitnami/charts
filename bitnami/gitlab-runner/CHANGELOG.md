@@ -1,8 +1,23 @@
 # Changelog
 
-## 1.1.1 (2025-07-14)
+## 1.1.4 (2025-07-28)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35044](https://github.com/bitnami/charts/pull/35044))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35312](https://github.com/bitnami/charts/pull/35312))
+
+## <small>1.1.3 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35188) ([0b16631](https://github.com/bitnami/charts/commit/0b166314aa21c0a869037538493d7e0a550ec3a4)), closes [#35188](https://github.com/bitnami/charts/issues/35188)
+
+## <small>1.1.2 (2025-07-15)</small>
+
+* [bitnami/gitlab-runner] feat: add support for custom image_pull_secrets (#35057) ([9bd3b6d](https://github.com/bitnami/charts/commit/9bd3b6dd43f4592803bb09521311cef324e8d230)), closes [#35057](https://github.com/bitnami/charts/issues/35057)
+
+## <small>1.1.1 (2025-07-14)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35044) ([aefd1d3](https://github.com/bitnami/charts/commit/aefd1d325ab30175d292ef24b86b04715a6fab28)), closes [#35044](https://github.com/bitnami/charts/issues/35044)
 
 ## 1.1.0 (2025-07-14)
 

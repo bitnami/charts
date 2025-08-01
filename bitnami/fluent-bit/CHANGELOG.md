@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.8 (2025-07-09)
+## 3.1.9 (2025-07-23)
 
-* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#34976](https://github.com/bitnami/charts/pull/34976))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#35250](https://github.com/bitnami/charts/pull/35250))
+
+## <small>3.1.8 (2025-07-09)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#34976) ([15a4e75](https://github.com/bitnami/charts/commit/15a4e755979a53e4a447110b513caf0dbc9e4ef4)), closes [#34976](https://github.com/bitnami/charts/issues/34976)
 
 ## <small>3.1.7 (2025-07-07)</small>
 

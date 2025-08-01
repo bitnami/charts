@@ -1,8 +1,27 @@
 # Changelog
 
-## 9.0.29 (2025-07-10)
+## 9.0.33 (2025-07-25)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#34993](https://github.com/bitnami/charts/pull/34993))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35302](https://github.com/bitnami/charts/pull/35302))
+
+## <small>9.0.32 (2025-07-23)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35264) ([62ff532](https://github.com/bitnami/charts/commit/62ff5324436c6fce6a8423f3eed49dc8c9fd43cf)), closes [#35264](https://github.com/bitnami/charts/issues/35264)
+
+## <small>9.0.31 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` (#35221) ([8a5b631](https://github.com/bitnami/charts/commit/8a5b631db38db4c9b9fd411c205746549759491e)), closes [#35221](https://github.com/bitnami/charts/issues/35221)
+
+## <small>9.0.30 (2025-07-15)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35083) ([c0e11e9](https://github.com/bitnami/charts/commit/c0e11e996e67659b2bb335a051fd8c525cbcbf01)), closes [#35083](https://github.com/bitnami/charts/issues/35083)
+
+## <small>9.0.29 (2025-07-10)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#34993) ([e40a5c2](https://github.com/bitnami/charts/commit/e40a5c2288a2472c8a4a8b7e4979414b817fe563)), closes [#34993](https://github.com/bitnami/charts/issues/34993)
 
 ## <small>9.0.28 (2025-07-08)</small>
 

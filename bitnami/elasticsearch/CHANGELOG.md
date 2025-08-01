@@ -1,8 +1,23 @@
 # Changelog
 
-## 22.0.12 (2025-07-11)
+## 22.0.15 (2025-07-29)
 
-* [bitnami/elasticsearch] remove copyTlsCerts init container ([#31960](https://github.com/bitnami/charts/pull/31960))
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35331](https://github.com/bitnami/charts/pull/35331))
+
+## <small>22.0.14 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35244) ([004484a](https://github.com/bitnami/charts/commit/004484a2c694115ffa71e5e3edd87dee862dae1f)), closes [#35244](https://github.com/bitnami/charts/issues/35244)
+
+## <small>22.0.13 (2025-07-15)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35087) ([9468bf1](https://github.com/bitnami/charts/commit/9468bf1648e2eced9c6480927566c3b7870de84a)), closes [#35087](https://github.com/bitnami/charts/issues/35087)
+
+## <small>22.0.12 (2025-07-11)</small>
+
+* [bitnami/elasticsearch] remove copyTlsCerts init container (#31960) ([1322022](https://github.com/bitnami/charts/commit/132202265495626d96a827d205c9d25ed5b6dd4d)), closes [#31960](https://github.com/bitnami/charts/issues/31960) [bitnami/charts#31872](https://github.com/bitnami/charts/issues/31872) [bitnami/charts#25280](https://github.com/bitnami/charts/issues/25280) [bitnami/containers#77525](https://github.com/bitnami/containers/issues/77525)
 
 ## <small>22.0.11 (2025-07-08)</small>
 

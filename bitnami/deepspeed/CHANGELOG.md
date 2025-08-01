@@ -1,8 +1,23 @@
 # Changelog
 
-## 2.3.25 (2025-07-08)
+## 2.3.28 (2025-08-01)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#34888](https://github.com/bitnami/charts/pull/34888))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#35370](https://github.com/bitnami/charts/pull/35370))
+
+## <small>2.3.27 (2025-07-28)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35320) ([ae5c4b4](https://github.com/bitnami/charts/commit/ae5c4b408803a1a763a8f78e463174a20d7e51ef)), closes [#35320](https://github.com/bitnami/charts/issues/35320)
+
+## <small>2.3.26 (2025-07-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35082) ([f19f849](https://github.com/bitnami/charts/commit/f19f8491c45905bdb78accc740cf05e4c324b687)), closes [#35082](https://github.com/bitnami/charts/issues/35082)
+
+## <small>2.3.25 (2025-07-08)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#34888) ([ab51c39](https://github.com/bitnami/charts/commit/ab51c39cf35c5478dff9ebdba305796c777c16e6)), closes [#34888](https://github.com/bitnami/charts/issues/34888)
 
 ## <small>2.3.24 (2025-07-08)</small>
 
