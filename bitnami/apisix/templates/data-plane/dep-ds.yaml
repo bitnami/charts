@@ -106,7 +106,8 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - openresty
+            - bash
+            - -c
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -114,10 +115,21 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - -p
-            - /usr/local/apisix
-            - -g
-            - "daemon off;"
+            - |
+              #!/bin/bash
+              # Clean up UDS file before starting APISIX
+              echo "Checking for existing UDS file..."
+              UDS_FILE="/usr/local/apisix/logs/worker_events.sock"
+              if [ -e "$UDS_FILE" ]; then
+                  echo "Found existing UDS file: $UDS_FILE - removing it"
+                  rm -f "$UDS_FILE"
+                  echo "UDS file removed successfully"
+              else
+                  echo "No existing UDS file found at: $UDS_FILE"
+              fi
+              
+              # Start OpenResty
+              exec openresty -p /usr/local/apisix -g "daemon off;"
           {{- end }}
           env:
             {{- if .Values.dataPlane.extraEnvVars }}
