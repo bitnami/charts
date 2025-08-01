@@ -36,8 +36,7 @@ Create the name of the query deployment
 {{- end -}}
 
 {{/*
-Return the Kafka broker configuration.
-ref: https://kafka.apache.org/documentation/#configuration
+Return the Jaeger query configuration.
 */}}
 {{- define "jaeger.query.configuration" -}}
 {{- if .Values.query.configuration }}
@@ -87,8 +86,9 @@ exporters:
 {{- end -}}
 {{- end -}}
 
-
-
+{{/*
+Return the Jaeger collector configuration.
+*/}}
 {{- define "jaeger.collector.configuration" -}}
 {{- if .Values.collector.configuration }}
 {{- include "common.tplvalues.render" (dict "value" .Values.collector.configuration "context" .) }}
@@ -150,6 +150,10 @@ exporters:
 {{- end -}}
 {{- end -}}
 
+{{/*
+Return the Jaeger Cassandra storage backed configuration.
+This is shared by both collector and query components
+*/}}
 {{- define "jaeger.cassandra.storage" -}}
 cassandra:
   schema:
