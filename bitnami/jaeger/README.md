@@ -86,6 +86,8 @@ externalDatabase.host=myexternalhost
 externalDatabase.port=9042
 ```
 
+The Jaeger keyspace needs to be created in the external Cassandra database prior to the deployment, otherwise Jaeger won't be able to initialise.
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `collector`, `query`.
