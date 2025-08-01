@@ -127,7 +127,7 @@ spec:
             {{- if .Values.triggerer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.triggerer.extraEnvVarsCM .Values.triggerer.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.triggerer.extraEnvVarsCMs .Values.extraEnvVarsCMs }}
+          {{- if or .Values.triggerer.extraEnvVarsCM .Values.triggerer.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets .Values.triggerer.extraEnvVarsCMs .Values.extraEnvVarsCMs }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
