@@ -1,5 +1,9 @@
 # Changelog
 
+## 24.2.5 (2025-08-01)
+
+* [bitnami/airflow] Fix AIRFLOW__API_AUTH__JWT_SECRET ([#35355](https://github.com/bitnami/charts/pull/35355))
+
 ## 24.2.4 (2025-07-24)
 
 * [bitnami/airflow] Fix/add extra env vars secrets to triggerer ([#35047](https://github.com/bitnami/charts/pull/35047))
