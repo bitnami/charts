@@ -388,7 +388,7 @@ Add environment variables to configure airflow common values
       key: airflow-secret-key
 {{- end }}
 {{- if (include "airflow.isImageMajorVersion3" .) }}
-- name: AIRFLOW__API_AUTH__JWT_SECRET_CMD
+- name: AIRFLOW__API_AUTH__JWT_SECRET
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.secretName" . }}
