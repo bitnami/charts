@@ -136,7 +136,7 @@ spec:
             {{- if .Values.web.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.web.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.web.extraEnvVarsCM .Values.web.extraEnvVarsSecret .Values.web.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets .Values.extraEnvVarsCMs .Values.web.extraEnvVarsCMs }}
+          {{- if or .Values.web.extraEnvVarsCM .Values.web.extraEnvVarsCMs .Values.web.extraEnvVarsSecret .Values.web.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsCMs .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
