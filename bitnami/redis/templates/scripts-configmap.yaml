@@ -71,8 +71,6 @@ data:
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
-
     if [ -n "$REDIS_EXTERNAL_MASTER_HOST" ]; then
         REDIS_SERVICE="$REDIS_EXTERNAL_MASTER_HOST"
     else
@@ -115,6 +113,39 @@ data:
         retry_while "eval $sentinel_info_command" 2 5
     }
 
+    {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
+
+    SERVICE_NAMES="{{- $fullname := include "common.names.fullname" . -}}
+    {{- range $i, $e := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+        {{- if $i }} {{ end }}{{ printf "%s-svc-%d" $fullname $i }}
+    {{- end }}"
+    SERVICE_IPS="{{- range $i, $ip := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+    {{- if $i }} {{ end }}{{ $ip }}
+    {{- end }}"
+
+
+    # Helper function to get IP by service name
+    get_service_ip() {
+        search_name="$1"
+        set -- $SERVICE_NAMES
+        for i in $(seq 1 $#); do
+            eval name=\${$i}
+            if [ "$name" = "$search_name" ]; then
+            set -- $SERVICE_IPS
+            eval echo \${$i}
+            return 0
+            fi
+        done
+        return 1
+    }
+    
+    SVC_NAME=$(hostname | sed 's/node/svc/g')
+    CURRENT_SERVICE_IP=$(get_service_ip "$SVC_NAME")
+    echo "CURRENT_SERVICE_IP: $CURRENT_SERVICE_IP"
+    {{- else }}
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    {{- end }}
+
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
     useradd redis
     chown -R redis {{ .Values.replica.persistence.path }}
@@ -124,7 +155,7 @@ data:
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
 
     # check if there is a master
-    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+    master_in_persisted_conf="$(get_service_ip "$SVC_NAME")"
     master_port_in_persisted_conf="$REDIS_MASTER_PORT_NUMBER"
     master_in_sentinel="$(get_sentinel_master_info)"
     redisRetVal=$?
@@ -141,7 +172,11 @@ data:
     fi
 
     if [[ $redisRetVal -ne 0 ]]; then
+        {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
+        if [[ "$master_in_persisted_conf" == "$(get_service_ip "$SVC_NAME")" ]]; then
+        {{- else }}
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        {{- end }}
             # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
             info "Configuring the node as master"
             export REDIS_REPLICATION_MODE="master"
@@ -158,8 +193,11 @@ data:
         info "Current master: REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
-
+        {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
+        if [[ "$REDIS_MASTER_HOST" == "$(get_service_ip "$SVC_NAME")" ]]; then
+        {{- else }}
         if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        {{- end }}
             # Case 3: Active sentinel and master it is this node --> MASTER
             info "Configuring the node as master"
             export REDIS_REPLICATION_MODE="master"
@@ -503,7 +541,37 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libos.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
+
+    SERVICE_NAMES="{{ $fullname := include "common.names.fullname" . -}}
+    {{- range $i, $e := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+        {{- if $i }} {{ end }}{{ printf "%s-svc-%d" $fullname $i }}
+    {{- end }}"
+    SERVICE_IPS="{{- range $i, $ip := .Values.sentinel.externalAccess.service.loadBalancerIP -}}
+    {{- if $i }} {{ end }}{{ $ip }}
+    {{- end }}"
+
+
+    # Helper function to get IP by service name
+    get_service_ip() {
+        search_name="$1"
+        set -- $SERVICE_NAMES
+        for i in $(seq 1 $#); do
+            eval name=\${$i}
+            if [ "$name" = "$search_name" ]; then
+            set -- $SERVICE_IPS
+            eval echo \${$i}
+            return 0
+            fi
+        done
+        return 1
+    }
+    
+    SVC_NAME=$(hostname | sed 's/node/svc/g')
+    {{- else }}
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    {{- end }}
+
 
     get_full_hostname() {
         hostname="$1"
@@ -539,10 +607,38 @@ data:
             redis-cli -p "$REDIS_SENTINEL_PORT" sentinel "$@"
         fi
     }
+
     sentinel_failover_finished() {
-      REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
-      REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
-      [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        echo "REDIS_SENTINEL_INFO: $REDIS_SENTINEL_INFO"
+        REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
+        echo "REDIS_MASTER_HOST: $REDIS_MASTER_HOST"
+        {{- if .Values.sentinel.externalAccess.enabled }}
+        # Get the current service name and its IP
+        CURRENT_SERVICE_NAME="$SVC_NAME"
+        echo "CURRENT_SERVICE_NAME: $CURRENT_SERVICE_NAME"
+        CURRENT_SERVICE_IP=$(get_service_ip "$CURRENT_SERVICE_NAME")
+        echo "CURRENT_SERVICE_IP: $CURRENT_SERVICE_IP"
+        # Check if both variables are not empty
+        if [[ -z "$REDIS_MASTER_HOST" ]]; then
+            echo "WARNING: REDIS_MASTER_HOST is empty, assuming failover not finished"
+            return 1
+        fi
+        
+        if [[ -z "$CURRENT_SERVICE_IP" ]]; then
+            echo "WARNING: CURRENT_SERVICE_IP is empty, assuming failover not finished"
+            return 1
+        fi
+        [[ "$REDIS_MASTER_HOST" != "$CURRENT_SERVICE_IP" ]]
+        {{- else }}
+        echo "REDIS_MASTER_HOST: $(get_full_hostname $HOSTNAME)"
+        # Check if both variables are not empty
+        if [[ -z "$REDIS_MASTER_HOST" ]]; then
+            echo "WARNING: REDIS_MASTER_HOST is empty, assuming failover not finished"
+            return 1
+        fi
+        [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+        {{- end }}
     }
 
     {{ if .Values.auth.sentinel -}}
@@ -614,7 +710,6 @@ data:
     }
     
     SVC_NAME=$(hostname | sed 's/node/svc/g')
-    EXTERNAL_SERVICE="$SVC_NAME.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     {{- else }}
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     {{- end }}
@@ -667,9 +762,24 @@ data:
         echo "CURRENT_SERVICE_NAME: $CURRENT_SERVICE_NAME"
         CURRENT_SERVICE_IP=$(get_service_ip "$CURRENT_SERVICE_NAME")
         echo "CURRENT_SERVICE_IP: $CURRENT_SERVICE_IP"
+        # Check if both variables are not empty
+        if [[ -z "$REDIS_MASTER_HOST" ]]; then
+            echo "WARNING: REDIS_MASTER_HOST is empty, assuming failover not finished"
+            return 1
+        fi
+        
+        if [[ -z "$CURRENT_SERVICE_IP" ]]; then
+            echo "WARNING: CURRENT_SERVICE_IP is empty, assuming failover not finished"
+            return 1
+        fi
         [[ "$REDIS_MASTER_HOST" != "$CURRENT_SERVICE_IP" ]]
         {{- else }}
         echo "REDIS_MASTER_HOST: $(get_full_hostname $HOSTNAME)"
+        # Check if both variables are not empty
+        if [[ -z "$REDIS_MASTER_HOST" ]]; then
+            echo "WARNING: REDIS_MASTER_HOST is empty, assuming failover not finished"
+            return 1
+        fi
         [[ "$REDIS_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
         {{- end }}
     }
