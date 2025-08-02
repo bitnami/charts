@@ -129,11 +129,23 @@ spec:
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.worker.extraEnvVarsCM .Values.worker.extraEnvVarsSecret .Values.worker.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
+          {{- if or .Values.worker.extraEnvVarsCM .Values.worker.extraEnvVarsCMs .Values.worker.extraEnvVarsSecret .Values.worker.extraEnvVarsSecrets .Values.extraEnvVarsCM .Values.extraEnvVarsCMs .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsCMs }}
+            {{- range .Values.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.worker.extraEnvVarsCMs }}
+            {{- range .Values.worker.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
