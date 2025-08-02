@@ -121,6 +121,9 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
+## @param revisionHistoryLimit Number of old replicasets to retain
+##
+revisionHistoryLimit: 10
 ## @param schedulerName Alternative scheduler
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
