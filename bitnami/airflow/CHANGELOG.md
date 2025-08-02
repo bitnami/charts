@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.4 (2025-07-24)
+## 24.2.5 (2025-08-02)
 
-* [bitnami/airflow] Fix/add extra env vars secrets to triggerer ([#35047](https://github.com/bitnami/charts/pull/35047))
+* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
+
+## <small>24.2.4 (2025-07-25)</small>
+
+* [bitnami/airflow] Fix/add extra env vars secrets to triggerer (#35047) ([f91d7dc](https://github.com/bitnami/charts/commit/f91d7dc52e9892c9de8cc5eb9a3d3abf14336d9b)), closes [#35047](https://github.com/bitnami/charts/issues/35047)
 
 ## <small>24.2.3 (2025-07-21)</small>
 
