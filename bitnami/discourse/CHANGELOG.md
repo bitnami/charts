@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.6 (2025-07-31)
+## 16.0.6 (2025-08-03)
 
 * [bitnami/discourse] fix: discourse not install persistent plugin ([#35350](https://github.com/bitnami/charts/pull/35350))
 
