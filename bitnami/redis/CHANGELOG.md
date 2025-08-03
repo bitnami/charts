@@ -1,6 +1,6 @@
 # Changelog
 
-## 21.2.14 (2025-07-31)
+## 21.2.14 (2025-08-03)
 
 * [bitnami/redis] fix(redis): add support for script prestop prestart with external access ([#35364](https://github.com/bitnami/charts/pull/35364))
 
