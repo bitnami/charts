@@ -1,8 +1,27 @@
 # Changelog
 
-## 7.1.8 (2025-07-09)
+## 7.1.12 (2025-08-01)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#34915](https://github.com/bitnami/charts/pull/34915))
+* [bitnami/influxdb] fix typo in namespace inclusion (ingress-tls-secret) ([#34984](https://github.com/bitnami/charts/pull/34984))
+
+## <small>7.1.11 (2025-07-29)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35336) ([c94d0d6](https://github.com/bitnami/charts/commit/c94d0d60b0875038177cc149e4a4d91a9f461cec)), closes [#35336](https://github.com/bitnami/charts/issues/35336)
+
+## <small>7.1.10 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35090) ([d62c0ed](https://github.com/bitnami/charts/commit/d62c0ed64ce38d54e26d698c870b495f5a94f5be)), closes [#35090](https://github.com/bitnami/charts/issues/35090)
+
+## <small>7.1.9 (2025-07-16)</small>
+
+* [bitnami/influxdb] feat: improve tests stability (#35071) ([efb2eb0](https://github.com/bitnami/charts/commit/efb2eb0140c3668c4411675a3ce9efc808032cf5)), closes [#35071](https://github.com/bitnami/charts/issues/35071)
+
+## <small>7.1.8 (2025-07-09)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#34915) ([7af0b6c](https://github.com/bitnami/charts/commit/7af0b6c665c12f4fce3b5e0e1b20800bd67fdb32)), closes [#34915](https://github.com/bitnami/charts/issues/34915)
 
 ## <small>7.1.7 (2025-07-03)</small>
 

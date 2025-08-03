@@ -1,8 +1,23 @@
 # Changelog
 
-## 5.0.6 (2025-07-08)
+## 5.1.0 (2025-08-01)
 
-* [bitnami/apisix] :zap: :arrow_up: Update dependency references ([#34865](https://github.com/bitnami/charts/pull/34865))
+* [bitnami/apisix] fix: Apisix clean uds ([#34987](https://github.com/bitnami/charts/pull/34987))
+
+## <small>5.0.8 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/charts/issues/35218] Share context with apisix.etcd.authEnabled function (#35257) ([017722c](https://github.com/bitnami/charts/commit/017722ccd67a005d541e3aa72275d0484ba5838b)), closes [#35257](https://github.com/bitnami/charts/issues/35257)
+
+## <small>5.0.7 (2025-07-15)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35079) ([03f66b2](https://github.com/bitnami/charts/commit/03f66b2c6caaaf14477cb720e8dff0c43407f686)), closes [#35079](https://github.com/bitnami/charts/issues/35079)
+
+## <small>5.0.6 (2025-07-08)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34865) ([5c9287c](https://github.com/bitnami/charts/commit/5c9287c28a82889e83ab6390d5327fa53a9a0a9a)), closes [#34865](https://github.com/bitnami/charts/issues/34865)
 
 ## <small>5.0.5 (2025-07-07)</small>
 

@@ -1,8 +1,23 @@
 # Changelog
 
-## 9.3.9 (2025-07-10)
+## 9.4.0 (2025-07-25)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34995](https://github.com/bitnami/charts/pull/34995))
+* [bitnami/clickhouse] feat: MySQL & PostgreSQL ports to be optionally exposed ([#35294](https://github.com/bitnami/charts/pull/35294))
+
+## <small>9.3.11 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35283) ([b266e90](https://github.com/bitnami/charts/commit/b266e9010ee1cf4c6d0fbf1b5444e57ecf281ec3)), closes [#35283](https://github.com/bitnami/charts/issues/35283)
+
+## <small>9.3.10 (2025-07-15)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35073) ([ea52dae](https://github.com/bitnami/charts/commit/ea52daef3837825321b6851f06dc945f6e5a3f91)), closes [#35073](https://github.com/bitnami/charts/issues/35073)
+
+## <small>9.3.9 (2025-07-10)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34995) ([d440e80](https://github.com/bitnami/charts/commit/d440e80abce56277bacd6489306507d62ba08fc6)), closes [#34995](https://github.com/bitnami/charts/issues/34995)
 
 ## <small>9.3.8 (2025-06-27)</small>
 

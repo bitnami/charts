@@ -1,8 +1,27 @@
 # Changelog
 
-## 22.0.2 (2025-07-08)
+## 22.0.6 (2025-07-26)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34864](https://github.com/bitnami/charts/pull/34864))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35305](https://github.com/bitnami/charts/pull/35305))
+
+## <small>22.0.5 (2025-07-23)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35263) ([c61fc1d](https://github.com/bitnami/charts/commit/c61fc1de731cc1d40089a1bfc025f225f084989e)), closes [#35263](https://github.com/bitnami/charts/issues/35263)
+
+## <small>22.0.4 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/drupal] Update passwordFile secret mountPath (#35224) ([c0b69a8](https://github.com/bitnami/charts/commit/c0b69a83e15d6ae3ed1bf8edaafcd852eb2ee1d8)), closes [#35224](https://github.com/bitnami/charts/issues/35224)
+
+## <small>22.0.3 (2025-07-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35076) ([d7f12ab](https://github.com/bitnami/charts/commit/d7f12ab976196f777375247662b49c4982b8dabe)), closes [#35076](https://github.com/bitnami/charts/issues/35076)
+
+## <small>22.0.2 (2025-07-08)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34864) ([2a1712d](https://github.com/bitnami/charts/commit/2a1712de992cd5c0e711c3bec5d29560ac46ea70)), closes [#34864](https://github.com/bitnami/charts/issues/34864)
 
 ## <small>22.0.1 (2025-06-26)</small>
 

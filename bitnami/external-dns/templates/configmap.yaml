@@ -14,10 +14,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-{{- if .Values.designate.customCA.enabled }}
-  {{ .Values.designate.customCA.filename }}: |
-{{ .Values.designate.customCA.content | indent 4 }}
-{{- end }}
 {{- if .Values.rfc2136.rfc3645Enabled }}
   krb5.conf: |
 {{ .Values.rfc2136.kerberosConfig | indent 4 }}

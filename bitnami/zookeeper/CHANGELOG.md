@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.8.4 (2025-06-27)
+## 13.8.5 (2025-07-15)
 
-* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#34692](https://github.com/bitnami/charts/pull/34692))
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#35138](https://github.com/bitnami/charts/pull/35138))
+
+## <small>13.8.4 (2025-06-27)</small>
+
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references (#34692) ([f1949b8](https://github.com/bitnami/charts/commit/f1949b8ca8e1843db789f1ec3186fe757bb36b5e)), closes [#34692](https://github.com/bitnami/charts/issues/34692)
 
 ## <small>13.8.3 (2025-05-28)</small>
 

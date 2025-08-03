@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.19 (2025-07-09)
+## 6.4.20 (2025-08-01)
 
-* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34923](https://github.com/bitnami/charts/pull/34923))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#35373](https://github.com/bitnami/charts/pull/35373))
+
+## <small>6.4.19 (2025-07-09)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34923) ([d8f3db4](https://github.com/bitnami/charts/commit/d8f3db4c59de5594f1e5d763c23fc011717d3c87)), closes [#34923](https://github.com/bitnami/charts/issues/34923)
 
 ## <small>6.4.18 (2025-06-16)</small>
 

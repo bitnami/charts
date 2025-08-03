@@ -1,8 +1,55 @@
 # Changelog
 
-## 4.0.49 (2025-07-11)
+## 4.0.60 (2025-08-01)
 
-* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35022](https://github.com/bitnami/charts/pull/35022))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35380](https://github.com/bitnami/charts/pull/35380))
+
+## <small>4.0.59 (2025-07-29)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35329) ([abc33b8](https://github.com/bitnami/charts/commit/abc33b864a32f67673ad013c0341297ee4cf4496)), closes [#35329](https://github.com/bitnami/charts/issues/35329)
+
+## <small>4.0.58 (2025-07-28)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35319) ([01613a5](https://github.com/bitnami/charts/commit/01613a56783f1d3cb9b0ec3778774ba33332ab80)), closes [#35319](https://github.com/bitnami/charts/issues/35319)
+
+## <small>4.0.57 (2025-07-25)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35296) ([8c1d1b6](https://github.com/bitnami/charts/commit/8c1d1b6315586c900ff5fbee7804f5bcbb02543f)), closes [#35296](https://github.com/bitnami/charts/issues/35296)
+
+## <small>4.0.56 (2025-07-24)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35285) ([1d2fb18](https://github.com/bitnami/charts/commit/1d2fb181b9c7f93318f76bd43611c2122cbd22a8)), closes [#35285](https://github.com/bitnami/charts/issues/35285)
+
+## <small>4.0.55 (2025-07-21)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35229) ([b46ad7f](https://github.com/bitnami/charts/commit/b46ad7f27b2a303dd31d1cf2149d792ee50344c9)), closes [#35229](https://github.com/bitnami/charts/issues/35229)
+
+## <small>4.0.54 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35199) ([5dbf23f](https://github.com/bitnami/charts/commit/5dbf23f5749290e18b5aab1cf092d6976ecc8260)), closes [#35199](https://github.com/bitnami/charts/issues/35199)
+
+## <small>4.0.53 (2025-07-16)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35162) ([4a917ca](https://github.com/bitnami/charts/commit/4a917ca180d03d0ceaab9f3594890f5b395965f8)), closes [#35162](https://github.com/bitnami/charts/issues/35162)
+
+## <small>4.0.52 (2025-07-15)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35146) ([9d1bf06](https://github.com/bitnami/charts/commit/9d1bf0618169c028d23b5270dfe2d0b08bfd9e6f)), closes [#35146](https://github.com/bitnami/charts/issues/35146)
+
+## <small>4.0.51 (2025-07-15)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35141) ([aec53c2](https://github.com/bitnami/charts/commit/aec53c20776d192a12915c20c07c7701d2c1d02f)), closes [#35141](https://github.com/bitnami/charts/issues/35141)
+
+## <small>4.0.50 (2025-07-15)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35075) ([2b9942b](https://github.com/bitnami/charts/commit/2b9942b7625372f3bb4c8a9b9eaf56ee68497981)), closes [#35075](https://github.com/bitnami/charts/issues/35075)
+
+## <small>4.0.49 (2025-07-11)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35022) ([e72e7a9](https://github.com/bitnami/charts/commit/e72e7a919b3fad043542a0191deec10ab80240c6)), closes [#35022](https://github.com/bitnami/charts/issues/35022)
 
 ## <small>4.0.48 (2025-07-11)</small>
 

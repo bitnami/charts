@@ -120,6 +120,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
+    {{- if .context.Values.exposeMysql }}
     - name: tcp-mysql
       targetPort: tcp-mysql
       port: {{ .context.Values.service.ports.mysql }}
@@ -133,6 +134,8 @@ spec:
       {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
+    {{- if .context.Values.exposePostgresql }}
     - name: tcp-postgresql
       targetPort: tcp-postgresql
       port: {{ .context.Values.service.ports.postgresql }}
@@ -146,6 +149,7 @@ spec:
       {{- else if eq .context.Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- end }}
     - name: http-intersrv
       targetPort: http-intersrv
       port: {{ .context.Values.service.ports.interserver }}

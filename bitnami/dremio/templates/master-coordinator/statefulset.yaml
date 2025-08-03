@@ -28,7 +28,7 @@ spec:
       app.kubernetes.io/part-of: dremio
       app.kubernetes.io/component: master-coordinator
       app: dremio-coordinator
-  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  serviceName: {{ template "dremio.headlessServiceName" . }}
   {{- if .Values.masterCoordinator.updateStrategy }}
   updateStrategy: {{- toYaml .Values.masterCoordinator.updateStrategy | nindent 4 }}
   {{- end }}
@@ -90,7 +90,9 @@ spec:
         {{- include "dremio.init-containers.copy-default-conf" . | nindent 8 }}
         {{- end }}
         {{- if .Values.defaultInitContainers.wait.enabled }}
+        {{- if or (eq .Values.dremio.distStorageType "minio") (eq .Values.dremio.distStorageType "aws") }}
         {{- include "dremio.init-containers.wait-for-s3" . | nindent 8 }}
+        {{- end }}
         {{- include "dremio.init-containers.wait-for-zookeeper" . | nindent 8 }}
         {{- end }}
         {{- if .Values.defaultInitContainers.generateConf.enabled }}

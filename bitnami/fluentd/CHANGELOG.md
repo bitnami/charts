@@ -1,8 +1,24 @@
 # Changelog
 
-## 7.1.9 (2025-06-14)
+## 7.2.3 (2025-07-30)
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#34503](https://github.com/bitnami/charts/pull/34503))
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#35341](https://github.com/bitnami/charts/pull/35341))
+
+## <small>7.2.2 (2025-07-16)</small>
+
+* [bitnami/fluentd] feat: Support for config dual-stack for services (#34827) ([a85496e](https://github.com/bitnami/charts/commit/a85496ed73f248785575019bfef78af8552e5f9d)), closes [#34827](https://github.com/bitnami/charts/issues/34827)
+
+## <small>7.2.1 (2025-07-14)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35043) ([2c3e789](https://github.com/bitnami/charts/commit/2c3e78954e46c399441d68b582a8b0dba40e2ec9)), closes [#35043](https://github.com/bitnami/charts/issues/35043)
+
+## 7.2.0 (2025-07-14)
+
+* [bitnami/fluentd] Make  volume mount read-only (#35038) ([f7961f2](https://github.com/bitnami/charts/commit/f7961f2fc3ee9de839a58ffb83d17d4b9b8b8199)), closes [#35038](https://github.com/bitnami/charts/issues/35038)
+
+## <small>7.1.9 (2025-06-14)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#34503) ([e1a35fe](https://github.com/bitnami/charts/commit/e1a35fec9a34ab0542eb021f6038efdae00405f9)), closes [#34503](https://github.com/bitnami/charts/issues/34503)
 
 ## <small>7.1.8 (2025-05-15)</small>
 

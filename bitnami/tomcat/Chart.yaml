@@ -5,9 +5,9 @@ annotations:
   category: ApplicationServer
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:1.3.0-debian-12-r3
+      image: docker.io/bitnami/jmx-exporter:1.3.0-debian-12-r4
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r47
+      image: docker.io/bitnami/os-shell:12-debian-12-r48
     - name: tomcat
       image: docker.io/bitnami/tomcat:11.0.9-debian-12-r0
   licenses: Apache-2.0
@@ -38,4 +38,4 @@ maintainers:
 name: tomcat
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
-version: 12.0.0
+version: 12.0.1
