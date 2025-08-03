@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.2.5 (2025-08-02)
+## 24.2.5 (2025-08-03)
 
 * [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
 
