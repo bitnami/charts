@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.2.5 (2025-08-02)
+## 24.2.5 (2025-08-03)
 
 * [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET ([#35355](https://github.com/bitnami/charts/pull/35355))
 
