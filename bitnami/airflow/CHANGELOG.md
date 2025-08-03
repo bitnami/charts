@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.3.0 (2025-08-02)
+## 24.3.0 (2025-08-03)
 
 * [bitnami/airflow] [Feature request] Support multiple configmaps in Airflow chart ([#35386](https://github.com/bitnami/charts/pull/35386))
 
