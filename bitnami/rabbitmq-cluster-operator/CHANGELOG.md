@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 4.4.28 (2025-08-04)
+
+* [bitnami/rabbitmq-cluster-operator] Fix message topology pod monitoring port name
+
 ## 4.4.27 (2025-08-04)
 
 * [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#35390](https://github.com/bitnami/charts/pull/35390))
