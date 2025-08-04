@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.8.1 (2025-07-24)
+## 24.9.0 (2025-08-03)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35278](https://github.com/bitnami/charts/pull/35278))
+* feat(keycloak/ingress): support template value for ingress and admin … ([#35025](https://github.com/bitnami/charts/pull/35025))
+
+## <small>24.8.1 (2025-07-24)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#35278) ([7e8888d](https://github.com/bitnami/charts/commit/7e8888d3748c31f4081c3ce9aa9e99b8750f0701)), closes [#35278](https://github.com/bitnami/charts/issues/35278)
 
 ## 24.8.0 (2025-07-21)
 
