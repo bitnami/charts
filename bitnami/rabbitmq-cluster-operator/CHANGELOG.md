@@ -1,8 +1,15 @@
 # Changelog
 
-## 4.4.26 (2025-07-24)
+## 4.4.27 (2025-08-04)
 
-* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#35286](https://github.com/bitnami/charts/pull/35286))
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#35390](https://github.com/bitnami/charts/pull/35390))
+
+## <small>4.4.26 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#35286) ([338a13d](https://github.com/bitnami/charts/commit/338a13d795841d320eef1afd7991e948523a1a3b)), closes [#35286](https://github.com/bitnami/charts/issues/35286)
 
 ## <small>4.4.25 (2025-07-09)</small>
 
