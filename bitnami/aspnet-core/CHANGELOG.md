@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.15 (2025-08-05)
+## 7.0.16 (2025-08-05)
 
-* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#35404](https://github.com/bitnami/charts/pull/35404))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#35431](https://github.com/bitnami/charts/pull/35431))
+
+## <small>7.0.15 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#35404) ([c1ef920](https://github.com/bitnami/charts/commit/c1ef920dabee293e34da868adfe76ab85c8741d8)), closes [#35404](https://github.com/bitnami/charts/issues/35404)
 
 ## <small>7.0.14 (2025-07-17)</small>
 
