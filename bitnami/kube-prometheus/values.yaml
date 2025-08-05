@@ -3332,10 +3332,27 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
-##
 rbac:
   create: true
   pspEnabled: true
+  ## @param rbac.rules.operator Custom RBAC rules to set on Prometheus Operator ClusterRole
+  ## @param rbac.rules.prometheus Custom RBAC rules to set on Prometheus ClusterRole
+  ## e.g:
+  ## rbac:
+  ##   rules:
+  ##     operator: []
+  ##     prometheus:
+  ##       - apiGroups:
+  ##           - ""
+  ##         resources:
+  ##           - pods
+  ##         verbs:
+  ##           - get
+  ##           - list
+  ##
+  rules:
+    operator: []
+    prometheus: []
 
 ## @section Thanos Ruler Parameters
 ##

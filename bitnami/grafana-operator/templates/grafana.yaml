@@ -181,16 +181,14 @@ spec:
   {{- if .Values.grafana.ingress.enabled }}
   ingress:
     spec:
-      {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+      {{- if .Values.grafana.ingress.ingressClassName }}
       ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
       {{- end }}
       rules:
         - http:
             paths:
               - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
-                {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
                 pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
-                {{- end }}
                 backend:
                   service:
                     name: {{ printf "%s-grafana-service" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
