@@ -126,4 +126,7 @@ rules:
       - storageclasses
     verbs:
       - get
+  {{- if and .Values.rbac.rules.operator }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.rbac.rules.operator "context" $) | nindent 2 }}
+  {{- end }}
 {{- end }}

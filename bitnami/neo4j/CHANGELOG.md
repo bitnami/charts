@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.4.11 (2025-07-15)
+## 0.4.12 (2025-08-04)
 
-* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#35106](https://github.com/bitnami/charts/pull/35106))
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#35398](https://github.com/bitnami/charts/pull/35398))
+
+## <small>0.4.11 (2025-07-15)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#35106) ([a5d5cf9](https://github.com/bitnami/charts/commit/a5d5cf9739327966714059e8fd6bcbee7a40deca)), closes [#35106](https://github.com/bitnami/charts/issues/35106)
 
 ## <small>0.4.10 (2025-07-10)</small>
 
