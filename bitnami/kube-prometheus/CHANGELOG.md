@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.2.18 (2025-08-05)
+
+* [bitnami/kube-prometheus] Remove references to deprecated helpers ([#35410](https://github.com/bitnami/charts/pull/35410))
+
 ## 11.3.0 (2025-08-05)
 
-* [bitnami/kube-prometheus] add extraRbac ([#34968](https://github.com/bitnami/charts/pull/34968))
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kube-prometheus] add extraRbac (#34968) ([954f3ad](https://github.com/bitnami/charts/commit/954f3ad925d78ea048150df00794be1b856b7b77)), closes [#34968](https://github.com/bitnami/charts/issues/34968)
 
 ## <small>11.2.16 (2025-07-21)</small>
 
