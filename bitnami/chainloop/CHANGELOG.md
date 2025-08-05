@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.60 (2025-08-01)
+## 4.0.61 (2025-08-05)
 
-* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35380](https://github.com/bitnami/charts/pull/35380))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35413](https://github.com/bitnami/charts/pull/35413))
+
+## <small>4.0.60 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35380) ([28652b6](https://github.com/bitnami/charts/commit/28652b6b91855cf96f26000ef47d5380e991b87e)), closes [#35380](https://github.com/bitnami/charts/issues/35380)
 
 ## <small>4.0.59 (2025-07-29)</small>
 
