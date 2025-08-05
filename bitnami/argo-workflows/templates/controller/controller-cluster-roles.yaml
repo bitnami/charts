@@ -122,6 +122,13 @@ rules:
       - create
       - get
       - delete
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - watch
   {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
   - apiGroups:
       - ""

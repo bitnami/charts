@@ -1,8 +1,23 @@
 # Changelog
 
-## 9.4.2 (2025-07-09)
+## 9.4.5 (2025-07-31)
 
-* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#34937](https://github.com/bitnami/charts/pull/34937))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#35367](https://github.com/bitnami/charts/pull/35367))
+
+## <small>9.4.4 (2025-07-23)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35267) ([1c7c0c4](https://github.com/bitnami/charts/commit/1c7c0c4bb955c4f607b9a407c1b1ea929052afdd)), closes [#35267](https://github.com/bitnami/charts/issues/35267)
+
+## <small>9.4.3 (2025-07-15)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35105) ([8883884](https://github.com/bitnami/charts/commit/8883884c66f2935edde0ece1f486ed7cf35aa810)), closes [#35105](https://github.com/bitnami/charts/issues/35105)
+
+## <small>9.4.2 (2025-07-09)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#34937) ([c476b81](https://github.com/bitnami/charts/commit/c476b81fc612ddc6ed2b7256f77eacf34915013a)), closes [#34937](https://github.com/bitnami/charts/issues/34937)
 
 ## <small>9.4.1 (2025-06-27)</small>
 

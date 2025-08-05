@@ -127,6 +127,6 @@ rules:
     verbs:
       - get
   {{- if and .Values.rbac.rules.operator }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.rbac.rules.operatorc "context" $) | nindent 2 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.rbac.rules.operator "context" $) | nindent 2 }}
   {{- end }}
 {{- end }}

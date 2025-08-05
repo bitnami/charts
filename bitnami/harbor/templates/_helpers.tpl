@@ -539,10 +539,10 @@ harbor: External PostgreSQL password
 
 {{/* Validate values of Harbor - must provide a valid exposureType */}}
 {{- define "harbor.validateValues.exposureType" -}}
-{{- if and (ne .Values.exposureType "ingress") (ne .Values.exposureType "proxy") -}}
+{{- if and (ne .Values.exposureType "ingress") (ne .Values.exposureType "proxy") (ne .Values.exposureType "none") -}}
 harbor: exposureType
-    Invalid exposureType selected. Valid values are "ingress" and
-    "proxy". Please set a valid exposureType (--set exposureType="xxxx")
+    Invalid exposureType selected. Valid values are "ingress", "proxy" and "none".
+    Please set a valid exposureType (--set exposureType="xxxx")
 {{- end -}}
 {{- end -}}
 

@@ -104,10 +104,10 @@ nginx: cloneStaticSiteFromGit
 
 {{/* Validate values of NGINX - Incorrect extra volume settings */}}
 {{- define "nginx.validateValues.extraVolumes" -}}
-{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneStaticSiteFromGit.extraVolumeMounts)) -}}
+{{- if and (.Values.extraVolumes) (not (or .Values.extraVolumeMounts .Values.cloneStaticSiteFromGit.extraVolumeMounts .Values.sidecars)) -}}
 nginx: missing-extra-volume-mounts
     You specified extra volumes but not mount points for them. Please set
-    the extraVolumeMounts value
+    the extraVolumeMounts value or use them in sidecars
 {{- end -}}
 {{- end -}}
 

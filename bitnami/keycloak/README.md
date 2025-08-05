@@ -16,6 +16,17 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 
 Looking to use Keycloak in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
@@ -95,6 +106,7 @@ externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
 externalDatabase.port=5432
+externalDatabase.schema=public
 ```
 
 > NOTE: Only PostgreSQL database server is supported as external database
@@ -504,7 +516,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
 | `service.headless.extraPorts`           | Extra ports to expose on Keycloak headless service                                                                               | `[]`                     |
 | `ingress.enabled`                       | Enable ingress record generation for Keycloak                                                                                    | `false`                  |
-| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)                            | `""`                     |
 | `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.controller`                    | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
@@ -522,7 +534,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `adminIngress.enabled`                  | Enable admin ingress record generation for Keycloak                                                                              | `false`                  |
-| `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)                            | `""`                     |
 | `adminIngress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `adminIngress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `adminIngress.controller`               | The ingress controller type. Currently supports `default` and `gce`                                                              | `default`                |
@@ -676,6 +688,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `externalDatabase.user`                      | Non-root username for Keycloak                                                                                    | `bn_keycloak`      |
 | `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
 | `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
+| `externalDatabase.schema`                    | Keycloak database schema                                                                                          | `public`           |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
 | `externalDatabase.existingSecretHostKey`     | Name of an existing secret key containing the database host name                                                  | `""`               |
 | `externalDatabase.existingSecretPortKey`     | Name of an existing secret key containing the database port                                                       | `""`               |

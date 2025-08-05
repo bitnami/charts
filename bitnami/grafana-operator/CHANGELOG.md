@@ -1,8 +1,23 @@
 # Changelog
 
-## 4.9.23 (2025-06-18)
+## 4.9.26 (2025-08-04)
 
-* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#34534](https://github.com/bitnami/charts/pull/34534))
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#35395](https://github.com/bitnami/charts/pull/35395))
+
+## <small>4.9.25 (2025-07-25)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references (#35299) ([e10fb0c](https://github.com/bitnami/charts/commit/e10fb0c5895f481e5902fae2de5df2a151622b1a)), closes [#35299](https://github.com/bitnami/charts/issues/35299)
+
+## <small>4.9.24 (2025-07-08)</small>
+
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references (#34899) ([defae01](https://github.com/bitnami/charts/commit/defae01aceb79b81742451a160d99b9d590c42fe)), closes [#34899](https://github.com/bitnami/charts/issues/34899)
+
+## <small>4.9.23 (2025-06-18)</small>
+
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references (#34534) ([b9a513c](https://github.com/bitnami/charts/commit/b9a513c6cd097871e36ede7b77df16ef6691d67c)), closes [#34534](https://github.com/bitnami/charts/issues/34534)
 
 ## <small>4.9.22 (2025-06-13)</small>
 

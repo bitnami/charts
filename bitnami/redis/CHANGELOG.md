@@ -1,8 +1,32 @@
 # Changelog
 
-## 21.2.9 (2025-07-09)
+## 21.2.14 (2025-08-03)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#34949](https://github.com/bitnami/charts/pull/34949))
+* [bitnami/redis] fix(redis): add support for script prestop prestart with external access ([#35364](https://github.com/bitnami/charts/pull/35364))
+
+## <small>21.2.13 (2025-07-23)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/redis] Add Redis Open Source 8 Load Modules Docs (#35171) ([ce07616](https://github.com/bitnami/charts/commit/ce07616d4a41f96bad7d50b1e58a46f0022a2a8f)), closes [#35171](https://github.com/bitnami/charts/issues/35171)
+* [bitnami/redis] Bugfix/script prestop redis external access (#34806) ([65f4f25](https://github.com/bitnami/charts/commit/65f4f25fa648d8ac8ca633728498961ad0bd0c1e)), closes [#34806](https://github.com/bitnami/charts/issues/34806)
+
+## <small>21.2.12 (2025-07-16)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35149) ([a44f7b9](https://github.com/bitnami/charts/commit/a44f7b90728adfcba5752af1b4f15b4c8517db53)), closes [#35149](https://github.com/bitnami/charts/issues/35149)
+
+## <small>21.2.11 (2025-07-15)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35124) ([525a839](https://github.com/bitnami/charts/commit/525a8396e83dea2ad009102f2e84a8dbc2e8f973)), closes [#35124](https://github.com/bitnami/charts/issues/35124)
+
+## <small>21.2.10 (2025-07-11)</small>
+
+* [bitnami/redis] Fix external service annotations ignored #33270 (#33776) ([cd64f12](https://github.com/bitnami/charts/commit/cd64f12492a47b8e68154737dc75460de67c5bd1)), closes [#33270](https://github.com/bitnami/charts/issues/33270) [#33776](https://github.com/bitnami/charts/issues/33776) [#33270](https://github.com/bitnami/charts/issues/33270)
+
+## <small>21.2.9 (2025-07-09)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#34949) ([85fa246](https://github.com/bitnami/charts/commit/85fa246dbb8b1e269f4819da33f178d54f0c3f79)), closes [#34949](https://github.com/bitnami/charts/issues/34949)
 
 ## <small>21.2.8 (2025-07-09)</small>
 

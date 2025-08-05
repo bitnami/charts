@@ -111,7 +111,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 26.3.1-debian-12-r0
+  tag: 26.3.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -620,7 +620,7 @@ ingress:
   ## @param ingress.enabled Enable ingress record generation for Keycloak
   ##
   enabled: false
-  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
@@ -737,7 +737,7 @@ adminIngress:
   ## @param adminIngress.enabled Enable admin ingress record generation for Keycloak
   ##
   enabled: false
-  ## @param adminIngress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## @param adminIngress.ingressClassName IngressClass that will be be used to implement the Ingress (evaluated as template) (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
@@ -1135,7 +1135,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 6.4.0-debian-12-r9
+    tag: 6.4.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1353,6 +1353,7 @@ postgresql:
 ## @param externalDatabase.user Non-root username for Keycloak
 ## @param externalDatabase.password Password for the non-root username for Keycloak
 ## @param externalDatabase.database Keycloak database name
+## @param externalDatabase.schema Keycloak database schema
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
 ## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name
 ## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port
@@ -1366,6 +1367,7 @@ externalDatabase:
   port: 5432
   user: bn_keycloak
   database: bitnami_keycloak
+  schema: public
   password: ""
   existingSecret: ""
   existingSecretHostKey: ""

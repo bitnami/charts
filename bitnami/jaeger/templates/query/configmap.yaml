@@ -1,0 +1,76 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the Jaeger query configuration.
+*/}}
+{{- define "jaeger.query.configuration" -}}
+{{- if .Values.query.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.query.configuration "context" .) }}
+{{- else }}
+service:
+  extensions: [jaeger_storage, jaeger_query, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: [nop]
+      processors: [batch]
+      exporters: [nop]
+  telemetry:
+    resource:
+      service.name: jaeger-query
+    metrics:
+      level: detailed
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: "${env:QUERY_METRICS_PORT}"
+    logs:
+      level: info
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http:
+      endpoint: "${env:QUERY_HEALTHCHECK_HOST_PORT}"
+  jaeger_query:
+    storage:
+      traces: jaeger_storage
+    grpc:
+      endpoint: "${env:QUERY_GRPC_SERVER_HOST_PORT}"
+    http:
+      endpoint: "${env:QUERY_HTTP_SERVER_HOST_PORT}"
+  jaeger_storage:
+    backends:
+      jaeger_storage: {{ include "jaeger.cassandra.storage" . | nindent 8 }}
+receivers:
+  nop:
+processors:
+  batch:
+exporters:
+  nop:
+{{- end -}}
+{{- end -}}
+
+{{- if not .Values.query.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "jaeger.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: query
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- $configuration := include "jaeger.query.configuration" . | fromYaml -}}
+  {{- if .Values.query.overrideConfiguration }}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.query.overrideConfiguration "context" .) | fromYaml }}
+  {{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+  {{- end }}
+data:
+  query-config.yaml: |-
+    {{- toYaml $configuration | nindent 4 }}
+{{- end }}

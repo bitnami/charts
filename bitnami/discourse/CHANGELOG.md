@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.0.3 (2025-06-25)
+## 16.0.5 (2025-07-30)
 
-* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#34612](https://github.com/bitnami/charts/pull/34612))
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#35339](https://github.com/bitnami/charts/pull/35339))
+
+## <small>16.0.4 (2025-07-15)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#35081) ([4808b67](https://github.com/bitnami/charts/commit/4808b6713209dc88f1f45c56c3435f24a7744566)), closes [#35081](https://github.com/bitnami/charts/issues/35081)
+
+## <small>16.0.3 (2025-06-25)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#34612) ([c127caf](https://github.com/bitnami/charts/commit/c127caf6823d48ada3c643171200cfa06816de44)), closes [#34612](https://github.com/bitnami/charts/issues/34612)
 
 ## <small>16.0.2 (2025-06-12)</small>
 

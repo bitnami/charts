@@ -16,6 +16,17 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 
 Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
 ## Introduction
 
 This chart bootstraps a [ExternalDNS](https://github.com/bitnami/containers/tree/main/bitnami/external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
@@ -89,6 +100,44 @@ You can use the following arguments:
 ```console
 --set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
+
+### Webhook Providers
+
+Webhook providers allow integrating ExternalDNS with DNS providers through an HTTP interface. This approach decouples ExternalDNS and the Providers code which can be running in separate processes.
+
+With the Bitnami ExternalDNS chart, you can deploy Webhook Providers and configure ExternalDNS easely using `sidecars` and `extraArgs` values:
+
+```yaml
+provider: webhook
+
+extraArgs:
+  webhook-provider-url: http://localhost:8080
+  txt-prefix: reg-
+
+sidecars:
+  - name: my-webhook
+    image: <external-dns-webhook-image>
+    ports:
+      - containerPort: 8080
+        name: http
+    livenessProbe:
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      tcpSocket:
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    env:
+      - name: <WEBHOOK-CONFIG-ENV-VAR>
+        value: TEST
+      ...
+```
+
+More information about these new providers can be found in the [ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns/tree/master#new-providers)
 
 ## Tutorials
 
@@ -230,20 +279,6 @@ helm install my-release \
 | `coredns.etcdTLS.caFilename`                        | When using the CoreDNS provider, specify CA PEM file name from the `coredns.etcdTLS.secretName`                                                                                                                   | `ca.crt`                       |
 | `coredns.etcdTLS.certFilename`                      | When using the CoreDNS provider, specify cert PEM file name from the `coredns.etcdTLS.secretName`                                                                                                                 | `cert.pem`                     |
 | `coredns.etcdTLS.keyFilename`                       | When using the CoreDNS provider, specify private key PEM file name from the `coredns.etcdTLS.secretName`                                                                                                          | `key.pem`                      |
-| `designate.username`                                | When using the Designate provider, specify the OpenStack authentication username. (optional)                                                                                                                      | `""`                           |
-| `designate.password`                                | When using the Designate provider, specify the OpenStack authentication password. (optional)                                                                                                                      | `""`                           |
-| `designate.applicationCredentialId`                 | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.username`. (optional)                                                           | `""`                           |
-| `designate.applicationCredentialSecret`             | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.password`. (optional)                                                           | `""`                           |
-| `designate.authUrl`                                 | When using the Designate provider, specify the OpenStack authentication Url. (optional)                                                                                                                           | `""`                           |
-| `designate.regionName`                              | When using the Designate provider, specify the OpenStack region name. (optional)                                                                                                                                  | `""`                           |
-| `designate.userDomainName`                          | When using the Designate provider, specify the OpenStack user domain name. (optional)                                                                                                                             | `""`                           |
-| `designate.projectName`                             | When using the Designate provider, specify the OpenStack project name. (optional)                                                                                                                                 | `""`                           |
-| `designate.authType`                                | When using the Designate provider, specify the OpenStack auth type. (optional)                                                                                                                                    | `""`                           |
-| `designate.customCAHostPath`                        | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`                                                                | `""`                           |
-| `designate.customCA.enabled`                        | When using the Designate provider, enable a custom CA (optional)                                                                                                                                                  | `false`                        |
-| `designate.customCA.content`                        | When using the Designate provider, set the content of the custom CA                                                                                                                                               | `""`                           |
-| `designate.customCA.mountPath`                      | When using the Designate provider, set the mountPath in which to mount the custom CA configuration                                                                                                                | `/config/designate`            |
-| `designate.customCA.filename`                       | When using the Designate provider, set the custom CA configuration filename                                                                                                                                       | `designate-ca.pem`             |
 | `exoscale.apiKey`                                   | When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APIKEY` to set (optional)                                                                                                                                | `""`                           |
 | `exoscale.apiToken`                                 | When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APISECRET` to set (optional)                                                                                                                             | `""`                           |
 | `exoscale.secretName`                               | Use an existing secret with keys "exoscale_api_key" and "exoscale_api_token" defined.                                                                                                                             | `""`                           |
@@ -255,23 +290,6 @@ helm install my-release \
 | `google.serviceAccountSecretKey`                    | When using the Google provider with an existing secret, specify the key name (optional)                                                                                                                           | `credentials.json`             |
 | `google.serviceAccountKey`                          | When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)                                                      | `""`                           |
 | `google.zoneVisibility`                             | When using the Google provider, fiter for zones of a specific visibility (private or public)                                                                                                                      | `""`                           |
-| `hetzner.token`                                     | When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.)                                      | `""`                           |
-| `hetzner.secretName`                                | When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)                                                                          | `""`                           |
-| `hetzner.secretKey`                                 | When using the Hetzner provider with an existing secret, specify the key name (optional)                                                                                                                          | `hetzner_token`                |
-| `infoblox.wapiUsername`                             | When using the Infoblox provider, specify the Infoblox WAPI username                                                                                                                                              | `admin`                        |
-| `infoblox.wapiPassword`                             | When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)                                                                                                            | `""`                           |
-| `infoblox.gridHost`                                 | When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)                                                                                                                | `""`                           |
-| `infoblox.view`                                     | Infoblox view                                                                                                                                                                                                     | `""`                           |
-| `infoblox.secretName`                               | Existing secret name, when in place wapiUsername and wapiPassword are not required                                                                                                                                | `""`                           |
-| `infoblox.domainFilter`                             | When using the Infoblox provider, specify the domain (optional)                                                                                                                                                   | `""`                           |
-| `infoblox.nameRegex`                                | When using the Infoblox provider, specify the name regex filter (optional)                                                                                                                                        | `""`                           |
-| `infoblox.noSslVerify`                              | When using the Infoblox provider, disable SSL verification (optional)                                                                                                                                             | `false`                        |
-| `infoblox.wapiPort`                                 | When using the Infoblox provider, specify the Infoblox WAPI port (optional)                                                                                                                                       | `""`                           |
-| `infoblox.wapiVersion`                              | When using the Infoblox provider, specify the Infoblox WAPI version (optional)                                                                                                                                    | `""`                           |
-| `infoblox.wapiConnectionPoolSize`                   | When using the Infoblox provider, specify the Infoblox WAPI request connection pool size (optional)                                                                                                               | `""`                           |
-| `infoblox.wapiHttpTimeout`                          | When using the Infoblox provider, specify the Infoblox WAPI request timeout in seconds (optional)                                                                                                                 | `""`                           |
-| `infoblox.maxResults`                               | When using the Infoblox provider, specify the Infoblox Max Results (optional)                                                                                                                                     | `""`                           |
-| `infoblox.createPtr`                                | When using the Infoblox provider, specify the Infoblox create PTR flag (optional)                                                                                                                                 | `false`                        |
 | `linode.apiToken`                                   | When using the Linode provider, `LINODE_TOKEN` to set (optional)                                                                                                                                                  | `""`                           |
 | `linode.secretName`                                 | Use an existing secret with key "linode_api_token" defined.                                                                                                                                                       | `""`                           |
 | `ns1.minTTL`                                        | When using the ns1 provider, specify minimal TTL, as an integer, for records                                                                                                                                      | `10`                           |
@@ -321,9 +339,6 @@ helm install my-release \
 | `pdns.secretName`                                   | When using the PowerDNS provider, specify as secret name containing the API Key                                                                                                                                   | `""`                           |
 | `transip.account`                                   | When using the TransIP provider, specify the account name.                                                                                                                                                        | `""`                           |
 | `transip.apiKey`                                    | When using the TransIP provider, specify the API key to use.                                                                                                                                                      | `""`                           |
-| `vinyldns.host`                                     | When using the VinylDNS provider, specify the VinylDNS API host.                                                                                                                                                  | `""`                           |
-| `vinyldns.accessKey`                                | When using the VinylDNS provider, specify the Access Key to use.                                                                                                                                                  | `""`                           |
-| `vinyldns.secretKey`                                | When using the VinylDNS provider, specify the Secret key to use.                                                                                                                                                  | `""`                           |
 | `domainFilters`                                     | Limit possible target zones by domain suffixes (optional)                                                                                                                                                         | `[]`                           |
 | `excludeDomains`                                    | Exclude subdomains (optional)                                                                                                                                                                                     | `[]`                           |
 | `regexDomainFilter`                                 | Limit possible target zones by regex domain suffixes (optional)                                                                                                                                                   | `""`                           |
@@ -489,6 +504,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/exter
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+Unsupported in-tree providers have been removed: OpenStack Designate, Hetzner, Infoblox, VinylDNS
 
 ### To 8.7.0
 
