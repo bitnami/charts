@@ -2,11 +2,13 @@
 
 ## 11.3.0 (2025-08-05)
 
-* [bitnami/kube-prometheus] add rbac.rules ([#34968](https://github.com/bitnami/charts/pull/34968))
+* [bitnami/kube-prometheus] add extraRbac ([#34968](https://github.com/bitnami/charts/pull/34968))
 
-## 11.2.16 (2025-07-21)
+## <small>11.2.16 (2025-07-21)</small>
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35227](https://github.com/bitnami/charts/pull/35227))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35227) ([46f60cb](https://github.com/bitnami/charts/commit/46f60cb83dfdbbfb4973634616bf100bdd4a0832)), closes [#35227](https://github.com/bitnami/charts/issues/35227)
 
 ## <small>11.2.15 (2025-07-17)</small>
 
