@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.5.33 (2025-07-23)
+## 16.5.36 (2025-08-05)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#35266](https://github.com/bitnami/charts/pull/35266))
+* [bitnami/mongodb] Replace `0o` octal notation with `0###` ([#35406](https://github.com/bitnami/charts/pull/35406))
+
+## <small>16.5.35 (2025-07-31)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35366) ([44d6930](https://github.com/bitnami/charts/commit/44d6930ef787929099fb7c94435ff40ea5f55d3d)), closes [#35366](https://github.com/bitnami/charts/issues/35366)
+
+## <small>16.5.34 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35363) ([a1afc6a](https://github.com/bitnami/charts/commit/a1afc6a960233a7136c2f744ff1ecd8696578cc9)), closes [#35363](https://github.com/bitnami/charts/issues/35363)
+
+## <small>16.5.33 (2025-07-23)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#35266) ([c2f5ea2](https://github.com/bitnami/charts/commit/c2f5ea2e862fd546aad33de63a077bd037fcd6e5)), closes [#35266](https://github.com/bitnami/charts/issues/35266)
 
 ## <small>16.5.32 (2025-07-17)</small>
 

@@ -1,8 +1,17 @@
 # Changelog
 
-## 26.8.0 (2025-07-18)
+## 26.8.2 (2025-08-01)
 
-* [bitnami/harbor] feat: allow to disable ingress ([#35194](https://github.com/bitnami/charts/pull/35194))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35379](https://github.com/bitnami/charts/pull/35379))
+
+## <small>26.8.1 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35362) ([ec4be93](https://github.com/bitnami/charts/commit/ec4be93cd57ad58cdd26391b6e752a325917ed30)), closes [#35362](https://github.com/bitnami/charts/issues/35362)
+
+## 26.8.0 (2025-07-21)
+
+* [bitnami/harbor] feat: allow to disable ingress (#35194) ([c258377](https://github.com/bitnami/charts/commit/c258377102c006770689500ef22b8cf331f64563)), closes [#35194](https://github.com/bitnami/charts/issues/35194)
 
 ## <small>26.7.12 (2025-07-17)</small>
 

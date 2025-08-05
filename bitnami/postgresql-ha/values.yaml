@@ -1132,7 +1132,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.6.2-debian-12-r4
+    tag: 4.6.2-debian-12-r6
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1172,9 +1172,6 @@ pgpool:
   ## @param pgpool.existingSecret Pgpool-II admin password using existing secret
   ##
   existingSecret: ""
-  ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
-  ##
-  srCheckDatabase: postgres
   ## @param pgpool.labels Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
@@ -1487,11 +1484,13 @@ pgpool:
   ## @param pgpool.adminPassword Pgpool-II Admin password
   ## @param pgpool.srCheckUsername Pgpool-II Streaming Replication Check username
   ## @param pgpool.srCheckPassword Pgpool-II Streaming Replication Check password
+  ## @param pgpool.srCheckDatabase Name of the database to perform Streaming Replication Check
   ##
   adminUsername: admin
   adminPassword: ""
   srCheckUsername: "sr_check_user"
   srCheckPassword: ""
+  srCheckDatabase: postgres
   ## @param pgpool.usePasswordFiles Set to `true` to mount pgpool secret as a file instead of passing environment variable
   ##
   usePasswordFiles: true
@@ -1507,6 +1506,10 @@ pgpool:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   logHostname: true
+  ## @param pgpool.logPcpProcesses Log PCP processes (PGPOOL_ENABLE_LOG_PCP_PROCESSES)
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
+  ##
+  logPcpProcesses: true
   ## @param pgpool.logPerNodeStatement Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
@@ -1552,6 +1555,10 @@ pgpool:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   connectionLifeTime: ""
+  ## @param pgpool.useConnectionCache Use connection cache (PGPOOL_ENABLE_CONNECTION_CACHE)
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
+  ##
+  useConnectionCache: true
   ## @param pgpool.useLoadBalancing Use Pgpool-II Load-Balancing
   ##
   useLoadBalancing: true

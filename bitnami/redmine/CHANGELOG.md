@@ -1,8 +1,12 @@
 # Changelog
 
-## 33.0.3 (2025-07-15)
+## 33.0.4 (2025-08-05)
 
-* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#35127](https://github.com/bitnami/charts/pull/35127))
+* [bitnami/redmine] Remove references to deprecated helpers ([#35411](https://github.com/bitnami/charts/pull/35411))
+
+## <small>33.0.3 (2025-07-15)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#35127) ([8206761](https://github.com/bitnami/charts/commit/820676126056a853e4b830649cde5e57ee9b4d1d)), closes [#35127](https://github.com/bitnami/charts/issues/35127)
 
 ## <small>33.0.2 (2025-07-08)</small>
 

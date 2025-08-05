@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.22 (2025-07-30)
+## 6.0.23 (2025-08-05)
 
 * [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35343](https://github.com/bitnami/charts/pull/35343))
+
+## <small>6.0.22 (2025-08-05)</small>
+
+* [bitnami/appsmith] Update MongoDB subchart ([#35415](https://github.com/bitnami/charts/pull/35415))
 
 ## <small>6.0.21 (2025-07-23)</small>
 

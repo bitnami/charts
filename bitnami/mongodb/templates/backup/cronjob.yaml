@@ -198,7 +198,7 @@ spec:
             - name: common-scripts
               configMap:
                 name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
-                defaultMode: 0o550
+                defaultMode: 0550
             {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
             - name: mongodb-secrets
               secret:
@@ -214,10 +214,10 @@ spec:
                 items:
                 - key: mongodb-ca-cert
                   path: mongodb-ca-cert
-                  mode: 0o600
+                  mode: 0600
                 - key: mongodb-ca-key
                   path: mongodb-ca-key
-                  mode: 0o600
+                  mode: 0600
             {{- else }}
             - name: mongodb-certs-0
               secret:

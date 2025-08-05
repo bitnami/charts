@@ -1,8 +1,21 @@
 # Changelog
 
-## 21.0.8 (2025-07-17)
+## 21.1.1 (2025-08-01)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#35176](https://github.com/bitnami/charts/pull/35176))
+* [bitnami/nginx] bugfix: allow extraVolumes when used in sidecars ([#35167](https://github.com/bitnami/charts/pull/35167))
+
+## 21.1.0 (2025-07-31)
+
+* [bitnami/nginx] Add support for context-based configuration includes (#35347) ([507f56e](https://github.com/bitnami/charts/commit/507f56ef31172eb85223fb8ae20a1865761030c0)), closes [#35347](https://github.com/bitnami/charts/issues/35347)
+
+## <small>21.0.9 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#35360) ([191f79e](https://github.com/bitnami/charts/commit/191f79e715faea84142f1f25c9a14a3a96ae8890)), closes [#35360](https://github.com/bitnami/charts/issues/35360)
+
+## <small>21.0.8 (2025-07-17)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#35176) ([241a621](https://github.com/bitnami/charts/commit/241a62161823b90185aaa1bdd89a0f4660c79f49)), closes [#35176](https://github.com/bitnami/charts/issues/35176)
 
 ## <small>21.0.7 (2025-07-17)</small>
 
