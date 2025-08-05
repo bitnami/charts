@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.2.5 (2025-08-03)
+## 24.2.6 (2025-08-05)
 
 * [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
+
+## <small>24.2.5 (2025-08-03)</small>
+
+* [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET ([#35355](https://github.com/bitnami/charts/pull/35355))
 
 ## <small>24.2.4 (2025-07-25)</small>
 

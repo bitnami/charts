@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.2.13 (2025-07-16)
+## 21.2.14 (2025-08-03)
 
-* [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
+* [bitnami/redis] fix(redis): add support for script prestop prestart with external access ([#35364](https://github.com/bitnami/charts/pull/35364))
+
+## <small>21.2.13 (2025-07-23)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/redis] Add Redis Open Source 8 Load Modules Docs (#35171) ([ce07616](https://github.com/bitnami/charts/commit/ce07616d4a41f96bad7d50b1e58a46f0022a2a8f)), closes [#35171](https://github.com/bitnami/charts/issues/35171)
+* [bitnami/redis] Bugfix/script prestop redis external access (#34806) ([65f4f25](https://github.com/bitnami/charts/commit/65f4f25fa648d8ac8ca633728498961ad0bd0c1e)), closes [#34806](https://github.com/bitnami/charts/issues/34806)
 
 ## <small>21.2.12 (2025-07-16)</small>
 
