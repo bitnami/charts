@@ -4,9 +4,10 @@
 
 * [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
 
-## <small>24.2.5 (2025-08-03)</small>
+## <small>24.2.5 (2025-08-04)</small>
 
-* [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET ([#35355](https://github.com/bitnami/charts/pull/35355))
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET (#35355) ([7e87866](https://github.com/bitnami/charts/commit/7e87866f2b50d2494f760ef075c91f31e6986ea3)), closes [#35355](https://github.com/bitnami/charts/issues/35355)
 
 ## <small>24.2.4 (2025-07-25)</small>
 
