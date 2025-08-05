@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.6 (2025-07-26)
+## 22.0.7 (2025-08-05)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35305](https://github.com/bitnami/charts/pull/35305))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35417](https://github.com/bitnami/charts/pull/35417))
+
+## <small>22.0.6 (2025-07-26)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35305) ([0cedc0b](https://github.com/bitnami/charts/commit/0cedc0b79f915b7a740136cefa4539d0294461e1)), closes [#35305](https://github.com/bitnami/charts/issues/35305)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
 
 ## <small>22.0.5 (2025-07-23)</small>
 
