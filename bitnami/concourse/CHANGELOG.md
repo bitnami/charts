@@ -1,8 +1,15 @@
 # Changelog
 
-## 5.1.42 (2025-07-26)
+## 5.1.43 (2025-08-01)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35304](https://github.com/bitnami/charts/pull/35304))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35384](https://github.com/bitnami/charts/pull/35384))
+
+## <small>5.1.42 (2025-07-26)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#35304) ([d3b6151](https://github.com/bitnami/charts/commit/d3b615191c9b8dd35ccd5c9e4914bf81a8feb4a2)), closes [#35304](https://github.com/bitnami/charts/issues/35304)
 
 ## <small>5.1.41 (2025-07-15)</small>
 
