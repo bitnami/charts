@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.9.26 (2025-08-04)
+## 4.9.27 (2025-08-05)
 
-* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#35395](https://github.com/bitnami/charts/pull/35395))
+* [bitnami/grafana-operator] Remove references to deprecated helpers ([#35409](https://github.com/bitnami/charts/pull/35409))
+
+## <small>4.9.26 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references (#35395) ([5cd5bd8](https://github.com/bitnami/charts/commit/5cd5bd8ef192f62ec63b0dfcb384ac822303180f)), closes [#35395](https://github.com/bitnami/charts/issues/35395)
 
 ## <small>4.9.25 (2025-07-25)</small>
 
