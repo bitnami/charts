@@ -315,7 +315,7 @@ spec:
               - secret:
                   name: {{ include "airflow.ldap.secretName" . }}
               {{- end }}
-              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
               - secret:
                   name: {{ include "airflow.redis.secretName" . }}
               {{- end }}
