@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.27 (2025-08-05)
+## 4.9.28 (2025-08-05)
 
-* [bitnami/grafana-operator] Remove references to deprecated helpers ([#35409](https://github.com/bitnami/charts/pull/35409))
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#35418](https://github.com/bitnami/charts/pull/35418))
+
+## <small>4.9.27 (2025-08-05)</small>
+
+* [bitnami/grafana-operator] Remove references to deprecated helpers (#35409) ([b15f00b](https://github.com/bitnami/charts/commit/b15f00b7d4f8937c445bc8afb0f6341cac57f7ac)), closes [#35409](https://github.com/bitnami/charts/issues/35409)
 
 ## <small>4.9.26 (2025-08-04)</small>
 
