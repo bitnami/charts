@@ -1,19 +1,8 @@
 # Changelog
 
-## 0.2.26 (2025-08-06)
+## 0.2.24 (2025-07-24)
 
-* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#35459](https://github.com/bitnami/charts/pull/35459))
-
-## <small>0.2.25 (2025-07-29)</small>
-
-* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35334) ([53d88b4](https://github.com/bitnami/charts/commit/53d88b4376544e383fcabf2a206709db87ce4629)), closes [#35334](https://github.com/bitnami/charts/issues/35334)
-
-## <small>0.2.24 (2025-07-24)</small>
-
-* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
-* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
-* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
-* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35284) ([ef3ea03](https://github.com/bitnami/charts/commit/ef3ea03731b3b0ed98214f35ff9f53fff5f91c86)), closes [#35284](https://github.com/bitnami/charts/issues/35284)
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#35284](https://github.com/bitnami/charts/pull/35284))
 
 ## <small>0.2.23 (2025-07-15)</small>
 
