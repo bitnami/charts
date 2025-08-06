@@ -5,7 +5,7 @@ annotations:
   category: CMS
   images: |
     - name: appsmith
-      image: docker.io/bitnami/appsmith:1.83.0-debian-12-r0
+      image: docker.io/bitnami/appsmith:1.84.0-debian-12-r0
     - name: haproxy
       image: docker.io/bitnami/haproxy:3.2.3-debian-12-r1
     - name: os-shell
@@ -13,7 +13,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 1.83.0
+appVersion: 1.84.0
 dependencies:
 - condition: redis.enabled
   name: redis
