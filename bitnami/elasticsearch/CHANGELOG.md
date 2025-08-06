@@ -1,8 +1,13 @@
 # Changelog
 
+## 22.1.1 (2025-08-06)
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35466](https://github.com/bitnami/charts/pull/35466))
+
 ## 22.1.0 (2025-08-01)
 
-* [bitnami/elasticsearch] Service name ([#33775](https://github.com/bitnami/charts/pull/33775))
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/elasticsearch] Service name (#33775) ([d9ff024](https://github.com/bitnami/charts/commit/d9ff02400977a855e9e3b4e000849225fe1d8af0)), closes [#33775](https://github.com/bitnami/charts/issues/33775)
 
 ## <small>22.0.15 (2025-07-29)</small>
 
