@@ -1,8 +1,13 @@
 # Changelog
 
-## 22.0.7 (2025-08-05)
+## 22.0.8 (2025-08-06)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35417](https://github.com/bitnami/charts/pull/35417))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35451](https://github.com/bitnami/charts/pull/35451))
+
+## <small>22.0.7 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35417) ([b2d335b](https://github.com/bitnami/charts/commit/b2d335bb7f72886c94b3d956cea4c4a26a905737)), closes [#35417](https://github.com/bitnami/charts/issues/35417)
 
 ## <small>22.0.6 (2025-07-26)</small>
 
