@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.0 (2025-08-05)
+## 24.3.1 (2025-08-06)
 
-* [bitnami/airflow] [Feature request] Support multiple configmaps in Airflow chart ([#35386](https://github.com/bitnami/charts/pull/35386))
+* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
+
+## 24.3.0 (2025-08-06)
+
+* [bitnami/airflow] [Feature request] Support multiple configmaps in Airflow chart (#35386) ([d404f90](https://github.com/bitnami/charts/commit/d404f9071f2a15a80b4f2031e3a9b753423b64aa)), closes [#35386](https://github.com/bitnami/charts/issues/35386)
 
 ## <small>24.2.5 (2025-08-04)</small>
 
