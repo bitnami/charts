@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.2.18 (2025-08-05)
+## 11.3.2 (2025-08-06)
 
-* [bitnami/kube-prometheus] Remove references to deprecated helpers ([#35410](https://github.com/bitnami/charts/pull/35410))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35434](https://github.com/bitnami/charts/pull/35434))
+
+## <small>11.3.1 (2025-08-05)</small>
+
+* [bitnami/kube-prometheus] Bump chart version (#35429) ([de75b99](https://github.com/bitnami/charts/commit/de75b995298db6636b3658fce4ee61ddec10d914)), closes [#35429](https://github.com/bitnami/charts/issues/35429)
+
+## <small>11.2.18 (2025-08-05)</small>
+
+* [bitnami/kube-prometheus] Remove references to deprecated helpers (#35410) ([57b4039](https://github.com/bitnami/charts/commit/57b4039d64ba0e8e67d942dc363c934118645e85)), closes [#35410](https://github.com/bitnami/charts/issues/35410)
 
 ## 11.3.0 (2025-08-05)
 

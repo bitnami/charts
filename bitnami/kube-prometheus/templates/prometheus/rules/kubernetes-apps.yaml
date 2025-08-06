@@ -125,13 +125,13 @@ spec:
                   unless
                 kube_statefulset_status_update_revision{job="kube-state-metrics", namespace=~".*"}
               )
-                *
+                * on (namespace, statefulset, job, cluster)
               (
                 kube_statefulset_replicas{job="kube-state-metrics", namespace=~".*"}
                   !=
                 kube_statefulset_status_replicas_updated{job="kube-state-metrics", namespace=~".*"}
               )
-            )  and (
+            )  and on (namespace, statefulset, job, cluster) (
               changes(kube_statefulset_status_replicas_updated{job="kube-state-metrics", namespace=~".*"}[5m])
                 ==
               0
@@ -148,19 +148,19 @@ spec:
             (
               (
                 kube_daemonset_status_current_number_scheduled{job="kube-state-metrics", namespace=~".*"}
-                 !=
+                  !=
                 kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics", namespace=~".*"}
               ) or (
                 kube_daemonset_status_number_misscheduled{job="kube-state-metrics", namespace=~".*"}
-                 !=
+                  !=
                 0
               ) or (
                 kube_daemonset_status_updated_number_scheduled{job="kube-state-metrics", namespace=~".*"}
-                 !=
+                  !=
                 kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics", namespace=~".*"}
               ) or (
                 kube_daemonset_status_number_available{job="kube-state-metrics", namespace=~".*"}
-                 !=
+                  !=
                 kube_daemonset_status_desired_number_scheduled{job="kube-state-metrics", namespace=~".*"}
               )
             ) and (
