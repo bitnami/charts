@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.4.2 (2025-08-05)
+## 11.4.3 (2025-08-06)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#35432](https://github.com/bitnami/charts/pull/35432))
+* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#35448](https://github.com/bitnami/charts/pull/35448))
+
+## <small>11.4.2 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#35432) ([0d7d5ab](https://github.com/bitnami/charts/commit/0d7d5ab43292091f89d0fbc21d751973c2bf9b5f)), closes [#35432](https://github.com/bitnami/charts/issues/35432)
 
 ## <small>11.4.1 (2025-07-23)</small>
 
