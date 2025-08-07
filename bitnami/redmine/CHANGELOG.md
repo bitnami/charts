@@ -1,8 +1,12 @@
 # Changelog
 
-## 33.0.5 (2025-08-07)
+## 33.0.6 (2025-08-07)
 
-* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#35652](https://github.com/bitnami/charts/pull/35652))
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#35673](https://github.com/bitnami/charts/pull/35673))
+
+## <small>33.0.5 (2025-08-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#35652) ([64acacf](https://github.com/bitnami/charts/commit/64acacffb2b7cb11928bee1812c2adf64b30a113)), closes [#35652](https://github.com/bitnami/charts/issues/35652)
 
 ## <small>33.0.4 (2025-08-05)</small>
 
