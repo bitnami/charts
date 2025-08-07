@@ -1,8 +1,15 @@
 # Changelog
 
-## 7.9.4 (2025-07-29)
+## 7.9.5 (2025-08-07)
 
-* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#35321](https://github.com/bitnami/charts/pull/35321))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#35498](https://github.com/bitnami/charts/pull/35498))
+
+## <small>7.9.4 (2025-07-29)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#35321) ([aef6f73](https://github.com/bitnami/charts/commit/aef6f73aff7f162f727a391943ed58ad4cfad9d5)), closes [#35321](https://github.com/bitnami/charts/issues/35321)
 
 ## <small>7.9.3 (2025-07-15)</small>
 
