@@ -1,12 +1,8 @@
 # Changelog
 
-## 1.4.8 (2025-08-07)
+## 1.4.7 (2025-07-15)
 
-* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#35569](https://github.com/bitnami/charts/pull/35569))
-
-## <small>1.4.7 (2025-07-15)</small>
-
-* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#35103) ([211d286](https://github.com/bitnami/charts/commit/211d28600f80cf612bcf234165234bfeef76660a)), closes [#35103](https://github.com/bitnami/charts/issues/35103)
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#35103](https://github.com/bitnami/charts/pull/35103))
 
 ## <small>1.4.6 (2025-07-10)</small>
 
