@@ -78,7 +78,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2025.7.23-debian-12-r1
+  tag: 2025.7.23-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -511,7 +511,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r49
+      tag: 12-debian-12-r50
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
