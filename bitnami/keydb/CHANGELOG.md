@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.18 (2025-08-07)
+## 0.5.19 (2025-08-07)
 
-* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#35579](https://github.com/bitnami/charts/pull/35579))
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#35617](https://github.com/bitnami/charts/pull/35617))
+
+## <small>0.5.18 (2025-08-07)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35579) ([1355f5e](https://github.com/bitnami/charts/commit/1355f5e18e2b9cfe2846abe1b6293d2ddd4cd6bc)), closes [#35579](https://github.com/bitnami/charts/issues/35579)
 
 ## <small>0.5.17 (2025-08-07)</small>
 
