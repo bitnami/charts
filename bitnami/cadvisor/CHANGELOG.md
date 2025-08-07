@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.11 (2025-07-08)
+## 0.1.12 (2025-08-06)
 
-* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#34857](https://github.com/bitnami/charts/pull/34857))
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#35455](https://github.com/bitnami/charts/pull/35455))
+
+## <small>0.1.11 (2025-07-08)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34857) ([b7ea5bf](https://github.com/bitnami/charts/commit/b7ea5bfcf9d77a1a2ae1fb1fe3a3200c5f045fc8)), closes [#34857](https://github.com/bitnami/charts/issues/34857)
 
 ## <small>0.1.10 (2025-06-24)</small>
 

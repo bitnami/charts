@@ -1,12 +1,15 @@
 # Changelog
 
-## 25.0.5 (2025-07-23)
+## 25.0.6 (2025-08-06)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35260](https://github.com/bitnami/charts/pull/35260))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35447](https://github.com/bitnami/charts/pull/35447))
+
+## <small>25.0.5 (2025-07-23)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35260) ([413d66e](https://github.com/bitnami/charts/commit/413d66ece820cbe25d43e74fc91dad9a67897047)), closes [#35260](https://github.com/bitnami/charts/issues/35260)
 
 ## <small>25.0.4 (2025-07-21)</small>
 
-* :warning: This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
 * [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
 * [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
 * [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)

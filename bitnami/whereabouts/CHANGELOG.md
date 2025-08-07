@@ -1,8 +1,15 @@
 # Changelog
 
-## 1.2.17 (2025-07-24)
+## 1.2.18 (2025-08-07)
 
-* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#35290](https://github.com/bitnami/charts/pull/35290))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#35539](https://github.com/bitnami/charts/pull/35539))
+
+## <small>1.2.17 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#35290) ([1fcbd72](https://github.com/bitnami/charts/commit/1fcbd72da1f3f8d9299b962042688d61ee68d8ec)), closes [#35290](https://github.com/bitnami/charts/issues/35290)
 
 ## <small>1.2.16 (2025-07-15)</small>
 

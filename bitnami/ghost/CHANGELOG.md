@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.0.1 (2025-07-31)
+## 24.0.2 (2025-08-07)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35369](https://github.com/bitnami/charts/pull/35369))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35561](https://github.com/bitnami/charts/pull/35561))
+
+## <small>24.0.1 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35369) ([2edaf4b](https://github.com/bitnami/charts/commit/2edaf4b2bf522db5824caca01687bd5a55b5491e)), closes [#35369](https://github.com/bitnami/charts/issues/35369)
 
 ## 24.0.0 (2025-07-23)
 

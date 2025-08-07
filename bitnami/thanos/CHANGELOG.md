@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.2.3 (2025-07-23)
+## 17.2.4 (2025-08-07)
 
-* [bitnami/thanos] Fix commonLabels on sharded storegateway ([#35238](https://github.com/bitnami/charts/pull/35238))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35533](https://github.com/bitnami/charts/pull/35533))
+
+## <small>17.2.3 (2025-07-23)</small>
+
+* [bitnami/thanos] Fix commonLabels on sharded storegateway (#35238) ([c72feda](https://github.com/bitnami/charts/commit/c72feda3e1ee6850375c93657af2c81f9cd9bddf)), closes [#35238](https://github.com/bitnami/charts/issues/35238)
 
 ## <small>17.2.2 (2025-07-21)</small>
 
