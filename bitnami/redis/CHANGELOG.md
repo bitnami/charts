@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.18 (2025-08-07)
+## 21.2.19 (2025-08-07)
 
-* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#35653](https://github.com/bitnami/charts/pull/35653))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#35672](https://github.com/bitnami/charts/pull/35672))
+
+## <small>21.2.18 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35653) ([1341963](https://github.com/bitnami/charts/commit/134196378d6baf5fe2760bbb09ff1efd8a98b6d9)), closes [#35653](https://github.com/bitnami/charts/issues/35653)
 
 ## <small>21.2.17 (2025-08-07)</small>
 
