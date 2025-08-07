@@ -1,8 +1,13 @@
 # Changelog
 
-## 32.3.10 (2025-08-01)
+## 32.3.11 (2025-08-07)
 
-* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' ([#35200](https://github.com/bitnami/charts/pull/35200))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#35494](https://github.com/bitnami/charts/pull/35494))
+
+## <small>32.3.10 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' (#35200) ([6cda3bc](https://github.com/bitnami/charts/commit/6cda3bc40d5acac356caf8a8b9a7f145ddca6018)), closes [#35200](https://github.com/bitnami/charts/issues/35200)
 
 ## <small>32.3.9 (2025-07-29)</small>
 
