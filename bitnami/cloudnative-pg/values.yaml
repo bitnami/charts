@@ -737,7 +737,7 @@ pluginBarmanCloud:
   sidecarImage:
     registry: docker.io
     repository: bitnami/plugin-barman-cloud-sidecar
-    tag: 0.5.0-debian-12-r20
+    tag: 0.5.0-debian-12-r22
     digest: ""
   ## @param pluginBarmanCloud.replicaCount Number of plugin-barman-cloud replicas to deploy
   ##
