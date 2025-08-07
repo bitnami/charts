@@ -315,7 +315,7 @@ spec:
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:
-            name: {{ include "keycloak.initdbScriptsCM" . }}
+            name: {{ include "keycloak.initdbScripts.configmapName" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}

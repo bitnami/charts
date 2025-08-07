@@ -40,7 +40,7 @@ spec:
         {{- end }}
     # Allow connection to PostgreSQL
     - ports:
-        - port: {{ include "keycloak.databasePort" . | int }}
+        - port: {{ include "keycloak.database.port" . | int }}
       {{- if .Values.postgresql.enabled }}
       to:
         - podSelector:

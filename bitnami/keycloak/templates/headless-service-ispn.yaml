@@ -9,7 +9,7 @@ kind: Service
 metadata:
   name: {{ template "keycloak.headless.ispn.serviceName" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
     app.kubernetes.io/part-of: keycloak
   {{- if or .Values.commonAnnotations .Values.service.headless.annotations }}

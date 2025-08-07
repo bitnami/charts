@@ -106,7 +106,7 @@ Return the keycloak-config-cli configuration ConfigMap name.
 {{/*
 Return the Database hostname
 */}}
-{{- define "keycloak.databaseHost" -}}
+{{- define "keycloak.database.host" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- include "keycloak.postgresql.fullname" . -}}{{- if eq .Values.postgresql.architecture "replication" }}-primary{{- end -}}
 {{- else -}}
@@ -117,14 +117,14 @@ Return the Database hostname
 {{/*
 Return the Database port
 */}}
-{{- define "keycloak.databasePort" -}}
+{{- define "keycloak.database.port" -}}
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled -}}
 {{- end -}}
 
 {{/*
 Return the Database database name
 */}}
-{{- define "keycloak.databaseName" -}}
+{{- define "keycloak.database.name" -}}
 {{- if .Values.postgresql.enabled }}
     {{- coalesce (((.Values.global).postgresql).auth).database .Values.postgresql.auth.database "postgres" -}}
 {{- else -}}
@@ -135,7 +135,7 @@ Return the Database database name
 {{/*
 Return the Database user
 */}}
-{{- define "keycloak.databaseUser" -}}
+{{- define "keycloak.database.user" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- coalesce (((.Values.global).postgresql).auth).username .Values.postgresql.auth.username | default "" -}}
 {{- else -}}
@@ -146,7 +146,7 @@ Return the Database user
 {{/*
 Return the Database schema
 */}}
-{{- define "keycloak.databaseSchema" -}}
+{{- define "keycloak.database.schema" -}}
 {{- ternary "public" .Values.externalDatabase.schema .Values.postgresql.enabled -}}
 {{- end -}}
 
@@ -190,7 +190,7 @@ Return the Database secret key that contains the database password
 {{/*
 Return the Keycloak initdb scripts ConfigMap name.
 */}}
-{{- define "keycloak.initdbScriptsCM" -}}
+{{- define "keycloak.initdbScripts.configmapName" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
     {{- tpl .Values.initdbScriptsConfigMap . -}}
 {{- else -}}
