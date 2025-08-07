@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.7.23 (2025-08-06)
+## 1.7.24 (2025-08-07)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35433](https://github.com/bitnami/charts/pull/35433))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35542](https://github.com/bitnami/charts/pull/35542))
+
+## <small>1.7.23 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35433) ([6ae23f3](https://github.com/bitnami/charts/commit/6ae23f3b150306ca51b9e770e135087db2119ec4)), closes [#35433](https://github.com/bitnami/charts/issues/35433)
 
 ## <small>1.7.22 (2025-07-24)</small>
 
