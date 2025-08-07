@@ -1,8 +1,13 @@
 # Changelog
 
-## 24.9.0 (2025-08-03)
+## 25.0.0 (2025-08-07)
 
-* feat(keycloak/ingress): support template value for ingress and admin … ([#35025](https://github.com/bitnami/charts/pull/35025))
+* [bitnami/keycloak] feat: native metrics & refactor ([#35568](https://github.com/bitnami/charts/pull/35568))
+
+## 24.9.0 (2025-08-04)
+
+* feat(keycloak/ingress): support template value for ingress and admin … (#35025) ([da4aaf3](https://github.com/bitnami/charts/commit/da4aaf376e800760fd5ada2b07e3c85c7c8ddd95)), closes [#35025](https://github.com/bitnami/charts/issues/35025)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
 
 ## <small>24.8.1 (2025-07-24)</small>
 
