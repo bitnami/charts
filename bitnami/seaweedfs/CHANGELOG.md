@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.0.11 (2025-08-01)
+## 5.0.12 (2025-08-07)
 
-* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#35371](https://github.com/bitnami/charts/pull/35371))
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#35527](https://github.com/bitnami/charts/pull/35527))
+
+## <small>5.0.11 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#35371) ([b2c0011](https://github.com/bitnami/charts/commit/b2c0011f33538b6963d316802e6e4905cf4d0435)), closes [#35371](https://github.com/bitnami/charts/issues/35371)
 
 ## <small>5.0.10 (2025-07-21)</small>
 
