@@ -21,7 +21,7 @@ data:
   KC_LOG_CONSOLE_OUTPUT: {{ .Values.logging.output | quote }}
   KC_BOOTSTRAP_ADMIN_USERNAME: {{ .Values.auth.adminUser | quote }}
   {{- if .Values.usePasswordFiles }}
-  KC_BOOTSTRAP_ADMIN_PASSWORD_FILE:  {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.secretKey" .) }}
+  KC_BOOTSTRAP_ADMIN_PASSWORD_FILE: {{ printf "/opt/bitnami/keycloak/secrets/%s" (include "keycloak.secretKey" .) }}
   {{- end }}
   KC_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   KC_HTTP_MANAGEMENT_PORT: {{ .Values.containerPorts.management | quote }}
@@ -31,10 +31,10 @@ data:
   {{- if .Values.ingress.enabled }}
   KC_HOSTNAME_STRICT: {{ ternary "true" "false" .Values.hostnameStrict | quote }}
 {{- if .Values.ingress.hostname }}
-  {{- $path := tpl .Values.ingress.path . -}}
+  {{- $path := tpl .Values.ingress.path . }}
   {{- if and (eq .Values.ingress.controller "gce") (hasSuffix "*" $path) }}
-    {{- $path = trimSuffix "*" $path -}}
-  {{- end -}}
+    {{- $path = trimSuffix "*" $path }}
+  {{- end }}
   KC_HOSTNAME: {{ printf "%s://%s%s" (ternary "https" "http" (or .Values.ingress.tls (not (empty .Values.proxyHeaders)))) (tpl .Values.ingress.hostname .) $path | quote }}
   {{- end }}
 {{- end }}
