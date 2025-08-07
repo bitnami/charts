@@ -1,8 +1,21 @@
 # Changelog
 
-## 21.2.14 (2025-08-03)
+## 21.2.15 (2025-08-07)
 
-* [bitnami/redis] fix(redis): add support for script prestop prestart with external access ([#35364](https://github.com/bitnami/charts/pull/35364))
+* [bitnami/redis] Add support to redis master service with useHostnames false ([#35536](https://github.com/bitnami/charts/pull/35536))
+
+## <small>21.2.16 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35523) ([f967ba4](https://github.com/bitnami/charts/commit/f967ba4360f0c206b19a1d3e42f18b0fedc7cce7)), closes [#35523](https://github.com/bitnami/charts/issues/35523)
+
+## <small>21.2.15 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35499) ([df36d53](https://github.com/bitnami/charts/commit/df36d53f924c581b428fe8d9a835191c90e1f037)), closes [#35499](https://github.com/bitnami/charts/issues/35499)
+
+## <small>21.2.14 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/redis] fix(redis): add support for script prestop prestart with external access (#35364) ([f60124c](https://github.com/bitnami/charts/commit/f60124c791fffd6f55f1eaaa7bfc85a81fd4c40a)), closes [#35364](https://github.com/bitnami/charts/issues/35364)
 
 ## <small>21.2.13 (2025-07-23)</small>
 
