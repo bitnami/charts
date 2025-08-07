@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.4.26 (2025-07-24)
+## 11.4.28 (2025-08-07)
 
-* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#35277](https://github.com/bitnami/charts/pull/35277))
+* [bitnami/consul] :zap: :arrow_up: Update dependency references ([#35549](https://github.com/bitnami/charts/pull/35549))
+
+## <small>11.4.27 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#35461) ([c1efbb1](https://github.com/bitnami/charts/commit/c1efbb1adc0a618cc76c7f758b2e5b6bade5b25d)), closes [#35461](https://github.com/bitnami/charts/issues/35461)
+
+## <small>11.4.26 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/consul] :zap: :arrow_up: Update dependency references (#35277) ([686096d](https://github.com/bitnami/charts/commit/686096d5c21111a055645930c3af9fcedaca5347)), closes [#35277](https://github.com/bitnami/charts/issues/35277)
 
 ## <small>11.4.25 (2025-07-15)</small>
 
