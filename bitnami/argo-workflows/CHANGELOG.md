@@ -1,8 +1,17 @@
 # Changelog
 
-## 13.0.1 (2025-07-25)
+## 13.0.3 (2025-08-07)
 
-* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#35261](https://github.com/bitnami/charts/pull/35261))
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#35538](https://github.com/bitnami/charts/pull/35538))
+
+## <small>13.0.2 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35454) ([53fdd77](https://github.com/bitnami/charts/commit/53fdd774886e44b9c222b378d0b0cd1e850e3e80)), closes [#35454](https://github.com/bitnami/charts/issues/35454)
+
+## <small>13.0.1 (2025-07-25)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35261) ([737af5f](https://github.com/bitnami/charts/commit/737af5f780ebc544781f9bf9bdcd615c885519d7)), closes [#35261](https://github.com/bitnami/charts/issues/35261)
 
 ## 13.0.0 (2025-07-23)
 
