@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.9.5 (2025-08-07)
+## 7.9.6 (2025-08-07)
 
-* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#35498](https://github.com/bitnami/charts/pull/35498))
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references ([#35621](https://github.com/bitnami/charts/pull/35621))
+
+## <small>7.9.5 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/memcached] :zap: :arrow_up: Update dependency references (#35498) ([f37a1d4](https://github.com/bitnami/charts/commit/f37a1d49dcadab99670b7f0fc6d3ae2ba882062e)), closes [#35498](https://github.com/bitnami/charts/issues/35498)
 
 ## <small>7.9.4 (2025-07-29)</small>
 
