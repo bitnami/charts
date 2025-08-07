@@ -1,8 +1,15 @@
 # Changelog
 
-## 9.0.0 (2025-07-17)
+## 9.0.1 (2025-08-06)
 
-* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers ([#35175](https://github.com/bitnami/charts/pull/35175))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#35469](https://github.com/bitnami/charts/pull/35469))
+
+## 9.0.0 (2025-07-18)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers (#35175) ([1ff8041](https://github.com/bitnami/charts/commit/1ff8041dbe8f72fa019234b86c082cc66a04d81a)), closes [#35175](https://github.com/bitnami/charts/issues/35175)
 
 ## <small>8.9.2 (2025-07-08)</small>
 
