@@ -1,16 +1,8 @@
 # Changelog
 
-## 26.8.4 (2025-08-07)
+## 26.8.2 (2025-08-01)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35563](https://github.com/bitnami/charts/pull/35563))
-
-## <small>26.8.3 (2025-08-07)</small>
-
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35485) ([2bd9036](https://github.com/bitnami/charts/commit/2bd9036afab16d32f91aac07ee54ac0e749123dc)), closes [#35485](https://github.com/bitnami/charts/issues/35485)
-
-## <small>26.8.2 (2025-08-01)</small>
-
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35379) ([d724887](https://github.com/bitnami/charts/commit/d72488719a9554d504080f102269c03c129245c0)), closes [#35379](https://github.com/bitnami/charts/issues/35379)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35379](https://github.com/bitnami/charts/pull/35379))
 
 ## <small>26.8.1 (2025-07-31)</small>
 

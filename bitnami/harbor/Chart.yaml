@@ -11,13 +11,13 @@ annotations:
     - name: harbor-exporter
       image: docker.io/bitnami/harbor-exporter:2.13.2-debian-12-r1
     - name: harbor-jobservice
-      image: docker.io/bitnami/harbor-jobservice:2.13.2-debian-12-r1
+      image: docker.io/bitnami/harbor-jobservice:2.13.2-debian-12-r2
     - name: harbor-portal
       image: docker.io/bitnami/harbor-portal:2.13.2-debian-12-r0
     - name: harbor-registry
       image: docker.io/bitnami/harbor-registry:2.13.2-debian-12-r1
     - name: harbor-registryctl
-      image: docker.io/bitnami/harbor-registryctl:2.13.2-debian-12-r1
+      image: docker.io/bitnami/harbor-registryctl:2.13.2-debian-12-r2
     - name: nginx
       image: docker.io/bitnami/nginx:1.29.0-debian-12-r5
     - name: os-shell
