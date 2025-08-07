@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.1.1 (2025-08-06)
+## 22.1.2 (2025-08-07)
 
-* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35466](https://github.com/bitnami/charts/pull/35466))
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35559](https://github.com/bitnami/charts/pull/35559))
+
+## <small>22.1.1 (2025-08-07)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35466) ([767a29d](https://github.com/bitnami/charts/commit/767a29d7e050cceb004518f6e53784aa123e7596)), closes [#35466](https://github.com/bitnami/charts/issues/35466)
 
 ## 22.1.0 (2025-08-01)
 
