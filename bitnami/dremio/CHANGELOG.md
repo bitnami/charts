@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.9 (2025-07-17)
+## 3.0.10 (2025-08-07)
 
-* [bitnami/dremio] bugfix: conditions to disable S3 storage ([#35169](https://github.com/bitnami/charts/pull/35169))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#35558](https://github.com/bitnami/charts/pull/35558))
+
+## <small>3.0.9 (2025-07-17)</small>
+
+* [bitnami/dremio] bugfix: conditions to disable S3 storage (#35169) ([ab98ea5](https://github.com/bitnami/charts/commit/ab98ea57170079d0f6709441c20a2a1f221ee614)), closes [#35169](https://github.com/bitnami/charts/issues/35169)
 
 ## <small>3.0.8 (2025-07-15)</small>
 
