@@ -1,8 +1,12 @@
 # Changelog
 
-## 24.3.1 (2025-08-06)
+## 24.3.2 (2025-08-07)
 
-* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key ([#35385](https://github.com/bitnami/charts/pull/35385))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#35528](https://github.com/bitnami/charts/pull/35528))
+
+## <small>24.3.1 (2025-08-06)</small>
+
+* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key (#35385) ([29e0a98](https://github.com/bitnami/charts/commit/29e0a98d10905a2b7caf070ccbbe83f68ad15e08)), closes [#35385](https://github.com/bitnami/charts/issues/35385)
 
 ## 24.3.0 (2025-08-06)
 
