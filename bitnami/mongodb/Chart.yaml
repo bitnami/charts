@@ -9,7 +9,7 @@ annotations:
     - name: mongodb
       image: docker.io/bitnami/mongodb:8.0.12-debian-12-r0
     - name: mongodb-exporter
-      image: docker.io/bitnami/mongodb-exporter:0.46.0-debian-12-r0
+      image: docker.io/bitnami/mongodb-exporter:0.46.0-debian-12-r1
     - name: nginx
       image: docker.io/bitnami/nginx:1.29.0-debian-12-r5
     - name: os-shell
