@@ -1,8 +1,16 @@
 # Changelog
 
+## 16.1.1 (2025-08-07)
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#35517](https://github.com/bitnami/charts/pull/35517))
+
 ## 16.1.0 (2025-08-04)
 
-* [bitnami/postgresql-ha] feat: add support for disabling connection cache ([#35389](https://github.com/bitnami/charts/pull/35389))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/postgresql-ha] feat: add support for disabling connection cache (#35389) ([df4bc69](https://github.com/bitnami/charts/commit/df4bc697954960a4e84b9a490e26b70194618245)), closes [#35389](https://github.com/bitnami/charts/issues/35389)
 
 ## <small>16.0.22 (2025-07-15)</small>
 
