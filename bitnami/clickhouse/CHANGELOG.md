@@ -1,12 +1,8 @@
 # Changelog
 
-## 9.4.1 (2025-08-07)
-
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#35335](https://github.com/bitnami/charts/pull/35335))
-
 ## 9.4.0 (2025-07-25)
 
-* [bitnami/clickhouse] feat: MySQL & PostgreSQL ports to be optionally exposed (#35294) ([bff9e31](https://github.com/bitnami/charts/commit/bff9e31d396d064fc9c7a0fbeda3bfecf999e1b2)), closes [#35294](https://github.com/bitnami/charts/issues/35294)
+* [bitnami/clickhouse] feat: MySQL & PostgreSQL ports to be optionally exposed ([#35294](https://github.com/bitnami/charts/pull/35294))
 
 ## <small>9.3.11 (2025-07-24)</small>
 
