@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.37 (2025-08-07)
+## 9.0.38 (2025-08-07)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35638](https://github.com/bitnami/charts/pull/35638))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35671](https://github.com/bitnami/charts/pull/35671))
+
+## <small>9.0.37 (2025-08-07)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35638) ([5602459](https://github.com/bitnami/charts/commit/56024596e95ccf3bb09da962e3d6f3bdb302e3dd)), closes [#35638](https://github.com/bitnami/charts/issues/35638)
 
 ## <small>9.0.36 (2025-08-07)</small>
 
