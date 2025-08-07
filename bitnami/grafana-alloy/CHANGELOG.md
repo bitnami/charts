@@ -1,8 +1,14 @@
 # Changelog
 
-## 1.0.1 (2025-08-06)
+## 1.0.2 (2025-08-07)
 
-* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#35462](https://github.com/bitnami/charts/pull/35462))
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#35479](https://github.com/bitnami/charts/pull/35479))
+
+## <small>1.0.1 (2025-08-06)</small>
+
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references (#35462) ([eb6d213](https://github.com/bitnami/charts/commit/eb6d213d58f54e2f9a51cf43ea88b859a997bbaf)), closes [#35462](https://github.com/bitnami/charts/issues/35462)
 
 ## 1.0.0 (2025-07-17)
 
