@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-k6
-      image: docker.io/bitnami/grafana-k6:1.1.0-debian-12-r3
+      image: docker.io/bitnami/grafana-k6:1.1.0-debian-12-r4
     - name: grafana-k6-operator
       image: docker.io/bitnami/grafana-k6-operator:0.0.22-debian-12-r2
     - name: os-shell
@@ -35,4 +35,4 @@ maintainers:
 name: grafana-k6-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-k6-operator
-version: 1.0.3
+version: 1.0.4
