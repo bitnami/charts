@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.6.9 (2025-08-07)
+## 9.6.10 (2025-08-07)
 
-* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#35654](https://github.com/bitnami/charts/pull/35654))
+* [bitnami/solr] :zap: :arrow_up: Update dependency references ([#35677](https://github.com/bitnami/charts/pull/35677))
+
+## <small>9.6.9 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/solr] :zap: :arrow_up: Update dependency references (#35654) ([59a92ac](https://github.com/bitnami/charts/commit/59a92ac0f421e0746ebd147073a66b2811530165)), closes [#35654](https://github.com/bitnami/charts/issues/35654)
 
 ## <small>9.6.8 (2025-07-24)</small>
 
