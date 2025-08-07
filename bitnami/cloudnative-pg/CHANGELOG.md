@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.0.9 (2025-08-06)
+## 1.0.10 (2025-08-07)
 
-* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#35460](https://github.com/bitnami/charts/pull/35460))
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#35516](https://github.com/bitnami/charts/pull/35516))
+
+## <small>1.0.9 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references (#35460) ([d6b453b](https://github.com/bitnami/charts/commit/d6b453b31ae207e7a7bce6b7ee65f417b6adee23)), closes [#35460](https://github.com/bitnami/charts/issues/35460)
 
 ## <small>1.0.8 (2025-07-25)</small>
 
