@@ -1,8 +1,16 @@
 # Changelog
 
-## 33.0.4 (2025-08-05)
+## 33.0.5 (2025-08-07)
 
-* [bitnami/redmine] Remove references to deprecated helpers ([#35411](https://github.com/bitnami/charts/pull/35411))
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references ([#35652](https://github.com/bitnami/charts/pull/35652))
+
+## <small>33.0.4 (2025-08-05)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/redmine] Remove references to deprecated helpers (#35411) ([945fe90](https://github.com/bitnami/charts/commit/945fe9002c88db38d41bc88581e14e27ece7208b)), closes [#35411](https://github.com/bitnami/charts/issues/35411)
 
 ## <small>33.0.3 (2025-07-15)</small>
 
