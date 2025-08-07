@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.12 (2025-08-07)
+## 5.0.13 (2025-08-07)
 
-* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#35527](https://github.com/bitnami/charts/pull/35527))
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#35591](https://github.com/bitnami/charts/pull/35591))
+
+## <small>5.0.12 (2025-08-07)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#35527) ([77d0c03](https://github.com/bitnami/charts/commit/77d0c032da1850f5f0b1b419fffa22172b7a9040)), closes [#35527](https://github.com/bitnami/charts/issues/35527)
 
 ## <small>5.0.11 (2025-08-01)</small>
 
