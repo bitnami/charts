@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.2.19 (2025-08-06)
+## 3.2.19 (2025-08-07)
 
 * [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35474](https://github.com/bitnami/charts/pull/35474))
 
