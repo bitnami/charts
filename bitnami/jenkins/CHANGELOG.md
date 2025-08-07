@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.6.14 (2025-07-28)
+## 13.6.15 (2025-08-07)
 
-* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#35317](https://github.com/bitnami/charts/pull/35317))
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#35571](https://github.com/bitnami/charts/pull/35571))
+
+## <small>13.6.14 (2025-07-28)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#35317) ([2aea959](https://github.com/bitnami/charts/commit/2aea959eb1d771003a8ebf75650c9394bb7290d8)), closes [#35317](https://github.com/bitnami/charts/issues/35317)
 
 ## <small>13.6.13 (2025-07-25)</small>
 
