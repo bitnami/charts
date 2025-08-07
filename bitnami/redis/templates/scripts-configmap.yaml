@@ -412,10 +412,13 @@ data:
         export REDIS_REPLICATION_MODE="replica"
     fi
 
-    {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
+        {{- if .Values.useHostnames }}
         echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
+        {{- else }}
+        echo "${REDIS_MASTER_HOST}" > /etc/shared/current
+        {{- end }}
     fi
     {{- end }}
 
@@ -807,12 +810,17 @@ data:
     fi
 
   {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
-  push-master-label.sh: |
-    #!/bin/bash
-    # https://download.redis.io/redis-stable/sentinel.conf
+    push-master-label.sh: |
+      #!/bin/bash
+      # https://download.redis.io/redis-stable/sentinel.conf
 
-    echo "${6/.*}" > /etc/shared/current
-    echo "${4/.*}" > /etc/shared/previous
+      {{- if .Values.useHostnames }}
+      echo "${6/.*}" > /etc/shared/current
+      echo "${4/.*}" > /etc/shared/previous
+      {{- else }}
+      echo "$6" > /etc/shared/current
+      echo "$4" > /etc/shared/previous
+      {{- end }}
   {{- end }}
 {{- else }}
   start-master.sh: |
@@ -1000,25 +1008,79 @@ metadata:
 data:
   update-master-label.sh: |
     #!/bin/bash
+    set -euo pipefail
+
+    LOCK_FILE="/etc/shared/update-master-label.lock"
+
+    {{- if eq .Values.useHostnames false }}
+    resolve_pod() {
+        local pod_ip="$1"
+        kubectl get pods -o custom-columns=":metadata.name" --field-selector=status.podIP="$pod_ip" --no-headers 2>/dev/null | head -n1
+    }
+    {{- end }}
+
+    flock -n "$LOCK_FILE" bash <<'EOF'
     while true; do
         while [ ! -f "/etc/shared/current" ] && [ ! -f "/etc/shared/terminate" ]; do
             sleep 1
         done
 
         if [ -f "/etc/shared/current" ]; then
-            echo "new master elected, updating label(s)..."
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
-            if [ -f /etc/shared/previous ]; then
-                kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+            current_master="$(< "/etc/shared/current")"
+            echo "Current master: $current_master"
+
+            if [ -f "/etc/shared/previous" ]; then
+                previous_master="$(< "/etc/shared/previous")"
+
+                if [ "$current_master" == "$previous_master" ]; then
+                    echo "Master has not changed ($current_master), skipping label update and cleaning state"
+                    rm -f /etc/shared/current /etc/shared/previous
+                    continue
+                fi
             fi
-            rm "/etc/shared/current" "/etc/shared/previous"
+
+            pod_name="$current_master"
+            {{- if eq .Values.useHostnames false }}
+            pod_name="$(resolve_pod "$current_master")"
+            echo "Current master IP resolved to pod $pod_name"
+            {{- end }}
+
+            if [ -n "$pod_name" ]; then
+                echo "Labeling new master pod $pod_name"
+                kubectl label pod --field-selector=metadata.name="$pod_name" isMaster="true" --overwrite || echo "Failed to label master"
+                kubectl label pod --field-selector=metadata.name="$pod_name" app.kubernetes.io/role- || echo "Failed to remove role label"
+            else
+                echo "Could not resolve pod for current master"
+            fi
+
+            if [ -f /etc/shared/previous ]; then
+                previous_master="$(< "/etc/shared/previous")"
+                echo "Previous master: $previous_master"
+
+                {{- if eq .Values.useHostnames false }}
+                previous_pod="$(resolve_pod "$previous_master")"
+                echo "Previous master IP resolved to pod $previous_pod"
+                {{- else }}
+                previous_pod="$previous_master"
+                {{- end }}
+
+                if [ -n "$previous_pod" ]; then
+                    echo "Removing master label from previous pod $previous_pod"
+                    kubectl label pod --field-selector=metadata.name="$previous_pod" isMaster="false" --overwrite || echo "Failed to remove label"
+                else
+                    echo "Could not resolve pod for previous master"
+                fi
+            fi
+
+            echo "Cleaning state files"
+            rm -f /etc/shared/current /etc/shared/previous
         fi
 
         if [ -f "/etc/shared/terminate" ]; then
-            echo "received signal to terminate"
+            echo "Terminating on request"
             rm "/etc/shared/terminate"
             exit
         fi
     done
+    EOF
 {{- end }}
