@@ -1,8 +1,17 @@
 # Changelog
 
-## 5.1.6 (2025-07-24)
+## 5.1.8 (2025-08-07)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#35276](https://github.com/bitnami/charts/pull/35276))
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#35476](https://github.com/bitnami/charts/pull/35476))
+
+## <small>5.1.7 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#35424) ([fa16894](https://github.com/bitnami/charts/commit/fa16894da2232e365d052f3ed6f4032a32afa7fb)), closes [#35424](https://github.com/bitnami/charts/issues/35424)
+
+## <small>5.1.6 (2025-07-24)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#35276) ([e391166](https://github.com/bitnami/charts/commit/e39116634bc5e44f62433307942149dda1ab5c3d)), closes [#35276](https://github.com/bitnami/charts/issues/35276)
 
 ## <small>5.1.5 (2025-07-22)</small>
 

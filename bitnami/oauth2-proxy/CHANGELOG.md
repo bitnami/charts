@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.6 (2025-07-31)
+## 7.0.7 (2025-08-07)
 
-* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#35368](https://github.com/bitnami/charts/pull/35368))
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#35514](https://github.com/bitnami/charts/pull/35514))
+
+## <small>7.0.6 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35368) ([5410eab](https://github.com/bitnami/charts/commit/5410eabff83d9084b3258b3b66b3b6aba9496a68)), closes [#35368](https://github.com/bitnami/charts/issues/35368)
 
 ## <small>7.0.5 (2025-07-17)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.4 (2025-07-28)
+## 1.1.5 (2025-08-07)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35312](https://github.com/bitnami/charts/pull/35312))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35478](https://github.com/bitnami/charts/pull/35478))
+
+## <small>1.1.4 (2025-07-28)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35312) ([131a054](https://github.com/bitnami/charts/commit/131a054622302c9a02fd1526d1b114be035ea17a)), closes [#35312](https://github.com/bitnami/charts/issues/35312)
 
 ## <small>1.1.3 (2025-07-17)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
-## 4.0.60 (2025-08-01)
+## 4.0.66 (2025-08-07)
 
-* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35380](https://github.com/bitnami/charts/pull/35380))
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references ([#35545](https://github.com/bitnami/charts/pull/35545))
+
+## <small>4.0.65 (2025-08-07)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35465) ([1c0a1b2](https://github.com/bitnami/charts/commit/1c0a1b2c8a37395ab26a67979ff8b5391d40a3cb)), closes [#35465](https://github.com/bitnami/charts/issues/35465)
+
+## <small>4.0.64 (2025-08-06)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35457) ([abf9726](https://github.com/bitnami/charts/commit/abf9726ba79d3d8e55a557ea63d65710a0e7fca6)), closes [#35457](https://github.com/bitnami/charts/issues/35457)
+
+## <small>4.0.63 (2025-08-06)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35441) ([e2270d3](https://github.com/bitnami/charts/commit/e2270d3d7c71a19f25aafa9770b9f3a15b0c5e98)), closes [#35441](https://github.com/bitnami/charts/issues/35441)
+
+## <small>4.0.62 (2025-08-05)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35422) ([22c553f](https://github.com/bitnami/charts/commit/22c553f35e8a3eafd48e9e1141be939c7ad6e50a)), closes [#35422](https://github.com/bitnami/charts/issues/35422)
+
+## <small>4.0.61 (2025-08-05)</small>
+
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35413) ([67dbad7](https://github.com/bitnami/charts/commit/67dbad78f412690322471a9b104332cfc637cd30)), closes [#35413](https://github.com/bitnami/charts/issues/35413)
+
+## <small>4.0.60 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/chainloop] :zap: :arrow_up: Update dependency references (#35380) ([28652b6](https://github.com/bitnami/charts/commit/28652b6b91855cf96f26000ef47d5380e991b87e)), closes [#35380](https://github.com/bitnami/charts/issues/35380)
 
 ## <small>4.0.59 (2025-07-29)</small>
 

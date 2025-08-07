@@ -1,8 +1,13 @@
 # Changelog
 
-## 3.1.10 (2025-08-04)
+## 3.1.11 (2025-08-07)
 
-* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#35393](https://github.com/bitnami/charts/pull/35393))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#35534](https://github.com/bitnami/charts/pull/35534))
+
+## <small>3.1.10 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#35393) ([e9c0b8d](https://github.com/bitnami/charts/commit/e9c0b8dfa35c66f03290ba97265b12efeb7c226b)), closes [#35393](https://github.com/bitnami/charts/issues/35393)
 
 ## <small>3.1.9 (2025-07-23)</small>
 
