@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.0.2 (2025-07-15)
+## 1.0.3 (2025-08-07)
 
-* [bitnami/grafana-k6-operator] :zap: :arrow_up: Update dependency references ([#35086](https://github.com/bitnami/charts/pull/35086))
+* [bitnami/grafana-k6-operator] :zap: :arrow_up: Update dependency references ([#35480](https://github.com/bitnami/charts/pull/35480))
+
+## <small>1.0.2 (2025-07-15)</small>
+
+* [bitnami/grafana-k6-operator] :zap: :arrow_up: Update dependency references (#35086) ([498ce07](https://github.com/bitnami/charts/commit/498ce078dac055bf37d15af0181987146fca6ec1)), closes [#35086](https://github.com/bitnami/charts/issues/35086)
 
 ## <small>1.0.1 (2025-07-08)</small>
 
