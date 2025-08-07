@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.0.2 (2025-07-09)
+## 15.0.3 (2025-08-07)
 
-* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#34929](https://github.com/bitnami/charts/pull/34929))
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#35505](https://github.com/bitnami/charts/pull/35505))
+
+## <small>15.0.2 (2025-07-09)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34929) ([62c7dd5](https://github.com/bitnami/charts/commit/62c7dd581d0fc1d90de9fd7d9af5c5622fa2539d)), closes [#34929](https://github.com/bitnami/charts/issues/34929)
 
 ## <small>15.0.1 (2025-06-30)</small>
 
