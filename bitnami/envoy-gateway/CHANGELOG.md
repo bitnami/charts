@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.1.8 (2025-08-05)
+## 1.1.9 (2025-08-06)
 
-* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35427](https://github.com/bitnami/charts/pull/35427))
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35467](https://github.com/bitnami/charts/pull/35467))
+
+## <small>1.1.8 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35427) ([cd7e44e](https://github.com/bitnami/charts/commit/cd7e44e4399c3f841d9dfd9146598da4b32c70c0)), closes [#35427](https://github.com/bitnami/charts/issues/35427)
 
 ## <small>1.1.7 (2025-07-24)</small>
 
