@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.14 (2025-07-09)
+## 2.3.15 (2025-08-07)
 
-* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#34910](https://github.com/bitnami/charts/pull/34910))
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#35489](https://github.com/bitnami/charts/pull/35489))
+
+## <small>2.3.14 (2025-07-09)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34910) ([738da70](https://github.com/bitnami/charts/commit/738da701c3d2e3f61939f1baa617effc8683dc79)), closes [#34910](https://github.com/bitnami/charts/issues/34910)
 
 ## <small>2.3.13 (2025-06-13)</small>
 
