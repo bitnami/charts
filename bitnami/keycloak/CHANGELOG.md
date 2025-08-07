@@ -1,8 +1,8 @@
 # Changelog
 
-## 25.0.0 (2025-08-07)
+## 24.9.1 (2025-08-07)
 
-* [bitnami/keycloak] feat: native metrics & refactor ([#35568](https://github.com/bitnami/charts/pull/35568))
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35578](https://github.com/bitnami/charts/pull/35578))
 
 ## 24.9.0 (2025-08-04)
 
