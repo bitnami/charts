@@ -1,8 +1,13 @@
 # Changelog
 
-## 17.2.4 (2025-08-07)
+## 17.2.5 (2025-08-07)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35533](https://github.com/bitnami/charts/pull/35533))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35635](https://github.com/bitnami/charts/pull/35635))
+
+## <small>17.2.4 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35533) ([9c6effd](https://github.com/bitnami/charts/commit/9c6effd63b2073ef38cf8e2a82729f07a2b01d8c)), closes [#35533](https://github.com/bitnami/charts/issues/35533)
 
 ## <small>17.2.3 (2025-07-23)</small>
 
