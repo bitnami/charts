@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.1 (2025-08-01)
+## 21.1.2 (2025-08-07)
 
-* [bitnami/nginx] bugfix: allow extraVolumes when used in sidecars ([#35167](https://github.com/bitnami/charts/pull/35167))
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#35475](https://github.com/bitnami/charts/pull/35475))
+
+## <small>21.1.1 (2025-08-01)</small>
+
+* [bitnami/nginx] bugfix: allow extraVolumes when used in sidecars (#35167) ([3641f15](https://github.com/bitnami/charts/commit/3641f15d6d20339556bba79f45af6e5f83381931)), closes [#35167](https://github.com/bitnami/charts/issues/35167)
 
 ## 21.1.0 (2025-07-31)
 
