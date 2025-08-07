@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.0.14 (2025-07-15)
+## 5.0.15 (2025-08-07)
 
-* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#35064](https://github.com/bitnami/charts/pull/35064))
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#35492](https://github.com/bitnami/charts/pull/35492))
+
+## <small>5.0.14 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35064) ([ddb5f3a](https://github.com/bitnami/charts/commit/ddb5f3a4758e5d9eb7859d0159fe0c84c289d218)), closes [#35064](https://github.com/bitnami/charts/issues/35064)
 
 ## <small>5.0.13 (2025-07-15)</small>
 
