@@ -1,8 +1,14 @@
 # Changelog
 
-## 25.0.6 (2025-08-06)
+## 25.0.7 (2025-08-07)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35447](https://github.com/bitnami/charts/pull/35447))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35661](https://github.com/bitnami/charts/pull/35661))
+
+## <small>25.0.6 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35447) ([9211e12](https://github.com/bitnami/charts/commit/9211e1204ca726c7da1d94a9f1ea0a2eb687123b)), closes [#35447](https://github.com/bitnami/charts/issues/35447)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
 
 ## <small>25.0.5 (2025-07-23)</small>
 
