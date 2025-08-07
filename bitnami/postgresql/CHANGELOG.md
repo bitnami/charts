@@ -1,8 +1,13 @@
 # Changelog
 
-## 16.7.22 (2025-08-07)
+## 16.7.23 (2025-08-07)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35518](https://github.com/bitnami/charts/pull/35518))
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35631](https://github.com/bitnami/charts/pull/35631))
+
+## <small>16.7.22 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#35518) ([4f82f0a](https://github.com/bitnami/charts/commit/4f82f0aa93399b88880c20b83cecd14d1876c749)), closes [#35518](https://github.com/bitnami/charts/issues/35518)
 
 ## <small>16.7.21 (2025-07-21)</small>
 
