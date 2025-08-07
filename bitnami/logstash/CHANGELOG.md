@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.0.9 (2025-08-07)
+## 7.0.10 (2025-08-07)
 
-* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35644](https://github.com/bitnami/charts/pull/35644))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35681](https://github.com/bitnami/charts/pull/35681))
+
+## <small>7.0.9 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35644) ([d26cd40](https://github.com/bitnami/charts/commit/d26cd40d6647f3df817fad0d8477ad6734ad2dea)), closes [#35644](https://github.com/bitnami/charts/issues/35644)
 
 ## <small>7.0.8 (2025-07-29)</small>
 
