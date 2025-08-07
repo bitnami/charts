@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.11 (2025-08-07)
+## 13.0.12 (2025-08-07)
 
-* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35592](https://github.com/bitnami/charts/pull/35592))
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35619](https://github.com/bitnami/charts/pull/35619))
+
+## <small>13.0.11 (2025-08-07)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35592) ([148d426](https://github.com/bitnami/charts/commit/148d42603cc31e0c1b31b5161c8ce50f4b95911c)), closes [#35592](https://github.com/bitnami/charts/issues/35592)
 
 ## <small>13.0.10 (2025-08-05)</small>
 
