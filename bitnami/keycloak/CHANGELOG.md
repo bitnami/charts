@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.0.0 (2025-08-07)
+## 25.0.0 (2025-08-08)
 
 * [bitnami/keycloak] feat: native metrics & refactor ([#35568](https://github.com/bitnami/charts/pull/35568))
 
