@@ -3169,7 +3169,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r49
+    tag: 12-debian-12-r50
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

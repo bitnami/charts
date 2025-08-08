@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.3 (2025-08-07)
+## 12.0.4 (2025-08-07)
 
-* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#35511](https://github.com/bitnami/charts/pull/35511))
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references ([#35630](https://github.com/bitnami/charts/pull/35630))
+
+## <small>12.0.3 (2025-08-07)</small>
+
+* [bitnami/nginx-ingress-controller] :zap: :arrow_up: Update dependency references (#35511) ([99e4d95](https://github.com/bitnami/charts/commit/99e4d9535f9f7c328715a2189035599c76b3de1b)), closes [#35511](https://github.com/bitnami/charts/issues/35511)
 
 ## <small>12.0.2 (2025-07-31)</small>
 

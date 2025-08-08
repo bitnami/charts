@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.0.4 (2025-08-07)
+## 10.0.5 (2025-08-07)
 
-* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#35593](https://github.com/bitnami/charts/pull/35593))
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references ([#35620](https://github.com/bitnami/charts/pull/35620))
+
+## <small>10.0.4 (2025-08-07)</small>
+
+* [bitnami/matomo] :zap: :arrow_up: Update dependency references (#35593) ([0e7ad11](https://github.com/bitnami/charts/commit/0e7ad11b40e70f80a2b83642e4d7da83e3f8345e)), closes [#35593](https://github.com/bitnami/charts/issues/35593)
 
 ## <small>10.0.3 (2025-08-06)</small>
 
