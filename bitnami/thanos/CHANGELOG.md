@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.2.5 (2025-08-07)
+## 17.2.6 (2025-08-08)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35635](https://github.com/bitnami/charts/pull/35635))
+* [bitnami/thanos]: correct labelSelector with shard key for storegateway affinity ([#35440](https://github.com/bitnami/charts/pull/35440))
+
+## <small>17.2.5 (2025-08-07)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35635) ([3356744](https://github.com/bitnami/charts/commit/3356744640e3af8a7d3db823f15ce442e157abeb)), closes [#35635](https://github.com/bitnami/charts/issues/35635)
 
 ## <small>17.2.4 (2025-08-07)</small>
 
