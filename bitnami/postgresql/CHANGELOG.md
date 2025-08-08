@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.7.23 (2025-08-08)
+## 16.7.24 (2025-08-08)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35631](https://github.com/bitnami/charts/pull/35631))
+* [bitnami/postgresql] Remove hardcoded references to image repository ([#35694](https://github.com/bitnami/charts/pull/35694))
+
+## <small>16.7.23 (2025-08-08)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#35631) ([652fbf8](https://github.com/bitnami/charts/commit/652fbf8f02c27adce46fcdb9fa979a0240f97039)), closes [#35631](https://github.com/bitnami/charts/issues/35631)
 
 ## <small>16.7.22 (2025-08-07)</small>
 
