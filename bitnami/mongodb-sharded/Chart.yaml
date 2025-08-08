@@ -5,7 +5,7 @@ annotations:
   category: Database
   images: |
     - name: mongodb-exporter
-      image: docker.io/bitnami/mongodb-exporter:0.46.0-debian-12-r1
+      image: docker.io/bitnami/mongodb-exporter:0.47.0-debian-12-r0
     - name: mongodb-sharded
       image: docker.io/bitnami/mongodb-sharded:8.0.12-debian-12-r1
     - name: os-shell
@@ -38,4 +38,4 @@ maintainers:
 name: mongodb-sharded
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
-version: 9.4.8
+version: 9.4.9
