@@ -1,8 +1,13 @@
 # Changelog
 
-## 7.2.4 (2025-08-07)
+## 7.2.5 (2025-08-08)
 
-* [bitnami/fluentd] :zap: :arrow_up: Update dependency references ([#35555](https://github.com/bitnami/charts/pull/35555))
+* [bitnami/fluentd] Remove hardcoded references to image repository ([#35693](https://github.com/bitnami/charts/pull/35693))
+
+## <small>7.2.4 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35555) ([7bf83ed](https://github.com/bitnami/charts/commit/7bf83ed191988107f596bed9f0be9bfa2ac4bdca)), closes [#35555](https://github.com/bitnami/charts/issues/35555)
 
 ## <small>7.2.3 (2025-07-30)</small>
 
