@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.6 (2025-08-07)
+## 21.0.7 (2025-08-08)
 
-* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#35618](https://github.com/bitnami/charts/pull/35618))
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#35702](https://github.com/bitnami/charts/pull/35702))
+
+## <small>21.0.6 (2025-08-07)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35618) ([4f3de22](https://github.com/bitnami/charts/commit/4f3de22b9031e27242cfa01cd6d7eb9834a717bd)), closes [#35618](https://github.com/bitnami/charts/issues/35618)
 
 ## <small>21.0.5 (2025-08-07)</small>
 
