@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.4.5 (2025-08-07)
+## 11.4.6 (2025-08-08)
 
-* [bitnami/apache] :zap: :arrow_up: Update dependency references ([#35544](https://github.com/bitnami/charts/pull/35544))
+* [bitnami/apache] Remove hardcoded references to image repository ([#35691](https://github.com/bitnami/charts/pull/35691))
+
+## <small>11.4.5 (2025-08-07)</small>
+
+* [bitnami/apache] :zap: :arrow_up: Update dependency references (#35544) ([7c8eb6c](https://github.com/bitnami/charts/commit/7c8eb6cff8c8d2bd64c5d7af39abf1ce281a802d)), closes [#35544](https://github.com/bitnami/charts/issues/35544)
 
 ## <small>11.4.4 (2025-08-07)</small>
 
