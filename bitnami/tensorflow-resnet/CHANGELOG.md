@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.12 (2025-08-07)
+## 4.3.12 (2025-08-08)
 
 * [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#35679](https://github.com/bitnami/charts/pull/35679))
 
