@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.23 (2025-08-07)
+## 6.0.23 (2025-08-08)
 
 * [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35343](https://github.com/bitnami/charts/pull/35343))
 
