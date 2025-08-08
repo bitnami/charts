@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.10 (2025-08-07)
+## 12.3.10 (2025-08-08)
 
 * [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#35419](https://github.com/bitnami/charts/pull/35419))
 
