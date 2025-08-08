@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.9.2 (2025-08-07)
+## 24.9.2 (2025-08-08)
 
 * [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35616](https://github.com/bitnami/charts/pull/35616))
 
