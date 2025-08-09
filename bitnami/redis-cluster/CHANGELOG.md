@@ -1,8 +1,12 @@
 # Changelog
 
+## 13.0.1 (2025-08-09)
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#35713](https://github.com/bitnami/charts/pull/35713))
+
 ## 13.0.0 (2025-08-08)
 
-* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#35699](https://github.com/bitnami/charts/pull/35699))
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#35699) ([8a06c70](https://github.com/bitnami/charts/commit/8a06c70949d309d049c6893f18a729b48d6c7b95)), closes [#35699](https://github.com/bitnami/charts/issues/35699)
 
 ## <small>12.0.16 (2025-08-07)</small>
 
