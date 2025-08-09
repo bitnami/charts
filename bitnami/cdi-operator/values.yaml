@@ -1,0 +1,897 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+    ## @param global.compatibility.omitEmptySeLinuxOptions If set to true, removes the seLinuxOptions from the securityContexts when it is set to an empty object
+    ##
+    omitEmptySeLinuxOptions: false
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+## @section cdioperator Parameters
+##
+
+## cdioperator
+##
+cdioperator:
+  ## Bitnami cdioperator image
+  ## ref: https://hub.docker.com/r/bitnami/cdioperator/tags/
+  ## @param cdioperator.image.registry [default: REGISTRY_NAME] cdioperator image registry
+  ## @param cdioperator.image.repository [default: REPOSITORY_NAME/cdioperator] cdioperator image repository
+  ## @skip cdioperator.image.tag cdioperator image tag (immutable tags are recommended)
+  ## @param cdioperator.image.digest cdioperator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param cdioperator.image.pullPolicy cdioperator image pull policy
+  ## @param cdioperator.image.pullSecrets cdioperator image pull secrets
+  ## @param cdioperator.image.debug Enable cdioperator image debug mode
+  ##
+  image:
+    registry: quay.io/kubevirt
+    repository: cdi-operator
+    tag: v1.62.0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    debug: false
+  ## @param cdioperator.replicaCount Number of cdioperator replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param cdioperator.containerPorts.metrics cdioperator HTTP container port
+  ##
+  containerPorts:
+    metrics: 8080
+  ## @param cdioperator.extraContainerPorts Optionally specify extra list of additional ports for cdioperator containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for cdioperator containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param cdioperator.livenessProbe.enabled Enable livenessProbe on cdioperator containers
+  ## @param cdioperator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param cdioperator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param cdioperator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param cdioperator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param cdioperator.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 1
+    successThreshold: 5
+  ## @param cdioperator.readinessProbe.enabled Enable readinessProbe on cdioperator containers
+  ## @param cdioperator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param cdioperator.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param cdioperator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param cdioperator.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param cdioperator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 1
+    successThreshold: 5
+  ## @param cdioperator.startupProbe.enabled Enable startupProbe on cdioperator containers
+  ## @param cdioperator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param cdioperator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param cdioperator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param cdioperator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param cdioperator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 1
+    successThreshold: 5
+  ## @param cdioperator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param cdioperator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param cdioperator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## cdioperator resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param cdioperator.resourcesPreset Set cdioperator container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cdioperator.resources is set (cdioperator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param cdioperator.resources.requests.cpu CPU request for the CDI operator.
+  ## @param cdioperator.resources.requests.memory Memory resource request
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 150Mi
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param cdioperator.podSecurityContext.enabled Enable cdioperator pods' Security Context
+  ## @param cdioperator.podSecurityContext.runAsNonRoot Ensure the pod runs as a non-root user
+  ##
+  podSecurityContext:
+     enabled: true
+     runAsNonRoot: true
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param cdioperator.containerSecurityContext.enabled Enabled cdioperator container' Security Context
+  ## @param cdioperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in cdioperator container
+  ## @param cdioperator.containerSecurityContext.runAsNonRoot Set runAsNonRoot in cdioperator container' Security Context
+  ## @param cdioperator.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in cdioperator container' Security Context
+  ## @param cdioperator.containerSecurityContext.capabilities.drop List of capabilities to be dropped in cdioperator container
+  ## @param cdioperator.containerSecurityContext.seccompProfile.type Set seccomp profile in cdioperator container
+  ##
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+
+  ## @param cdioperator.existingConfigmap The name of an existing ConfigMap with your custom configuration for cdioperator
+  ##
+  existingConfigmap: ""
+  ## @param cdioperator.command Override default cdioperator container command (useful when using custom images)
+  ##
+  command: []
+  ## @param cdioperator.args Override default cdioperator container args (useful when using custom images)
+  ##
+  args: []
+  ## @param cdioperator.automountServiceAccountToken Mount Service Account token in cdioperator pods
+  ##
+  automountServiceAccountToken: true
+  ## @param cdioperator.hostAliases cdioperator pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param cdioperator.daemonsetAnnotations Annotations for cdioperator daemonset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  daemonsetAnnotations: {}
+  ## @param cdioperator.deploymentAnnotations Annotations for cdioperator deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param cdioperator.statefulsetAnnotations Annotations for cdioperator statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param cdioperator.podLabels Extra labels for cdioperator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param cdioperator.podAnnotations.openshift.io/required-scc Security context constraint required for OpenShift
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+     openshift.io/required-scc: restricted-v2
+  ## @param cdioperator.podAffinityPreset Pod affinity preset. Ignored if `cdioperator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param cdioperator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `cdioperator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node cdioperator.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param cdioperator.nodeAffinityPreset.type Node affinity preset type. Ignored if `cdioperator.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param cdioperator.nodeAffinityPreset.key Node label key to match. Ignored if `cdioperator.affinity` is set
+    ##
+    key: ""
+    ## @param cdioperator.nodeAffinityPreset.values Node label values to match. Ignored if `cdioperator.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+
+  ## @param cdioperator.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].key Label key for pod affinity
+  ## @param cdioperator.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].operator Label operator for pod affinity
+  ## @param cdioperator.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].values Label values for pod affinity
+  ## @param cdioperator.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.topologyKey Topology key for pod affinity
+  ## @param cdioperator.affinity.podAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight Weight for pod affinity preference
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `cdioperator.podAffinityPreset`, `cdioperator.podAntiAffinityPreset`, and `cdioperator.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity:
+    podAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: cdi.kubevirt.io
+              operator: In
+              values:
+              - cdi-operator
+          topologyKey: kubernetes.io/hostname
+        weight: 1
+  ## @param cdioperator.nodeSelector.kubernetes.io/os The operating system label to select nodes (e.g., linux)
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector:
+    kubernetes.io/os: linux
+  ## @param cdioperator.tolerations[0].key The taint key that the toleration applies to
+  ## @param cdioperator.tolerations[0].operator The operator for the toleration (e.g., Exists, Equal)
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: [ { key: CriticalAddonsOnly, operator: Exists } ]
+  ## ONLY FOR DEPLOYMENTS:
+  ## @param cdioperator.updateStrategy cdioperator deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## ONLY FOR STATEFULSETS:
+  ## @param cdioperator.updateStrategy cdioperator statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy: {}
+    ## ONLY FOR DEPLOYMENTS:
+    ## Can be set to RollingUpdate or Recreate
+    ## ONLY FOR STATEFULSETS:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+
+  ## ONLY FOR STATEFULSETS:
+  ## @param cdioperator.podManagementPolicy Pod management policy for cdioperator statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param cdioperator.priorityClassName cdioperator pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param cdioperator.topologySpreadConstraints Topology Spread Constraints for cdioperator pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param cdioperator.schedulerName Name of the k8s scheduler (other than default) for cdioperator pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param cdioperator.terminationGracePeriodSeconds Seconds cdioperator pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param cdioperator.lifecycleHooks for cdioperator containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param cdioperator.extraEnvVars Array with extra environment variables to add to cdioperator containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param cdioperator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for cdioperator containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param cdioperator.extraEnvVarsSecret Name of existing Secret containing extra env vars for cdioperator containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param cdioperator.extraVolumes Optionally specify extra list of additional volumes for the cdioperator pods
+  ##
+  extraVolumes: []
+  ## @param cdioperator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cdioperator containers
+  ##
+  extraVolumeMounts: []
+  ## @param cdioperator.sidecars Add additional sidecar containers to the cdioperator pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param cdioperator.initContainers Add additional init containers to the cdioperator pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param cdioperator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param cdioperator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param cdioperator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cdioperator.pdb.minAvailable` and `cdioperator.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param cdioperator.autoscaling.vpa.enabled Enable VPA for cdioperator pods
+    ## @param cdioperator.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param cdioperator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param cdioperator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param cdioperator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param cdioperator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param cdioperator.autoscaling.hpa.enabled Enable HPA for cdioperator pods
+    ## @param cdioperator.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param cdioperator.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param cdioperator.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param cdioperator.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+## @section Traffic Exposure Parameters
+##
+
+## cdioperator service parameters
+##
+service:
+  ## @param service.type cdioperator service type
+  ##
+  type: LoadBalancer
+  ## @param service.ports.http cdioperator service HTTP port
+  ## @param service.ports.https cdioperator service HTTPS port
+  ##
+  ports:
+    http: 80
+    https: 443
+  ## Node ports to expose
+  ## @param service.nodePorts.http Node port for HTTP
+  ## @param service.nodePorts.https Node port for HTTPS
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    http: ""
+    https: ""
+  ## @param service.clusterIP cdioperator service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP cdioperator service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges cdioperator service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy cdioperator service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for cdioperator service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in cdioperator service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+## cdioperator ingress parameters
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for cdioperator
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: cdioperator.local
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: cdioperator.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - cdioperator.local
+  ##   secretName: cdioperator.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: cdioperator.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Persistence Parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: true
+  ## @param persistence.mountPath Path to mount the volume at.
+  ##
+  mountPath: /bitnami/cdioperator/data
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+
+  ## @param rbac.clusterrole.create Specifies whether a ClusterRole should be created
+  clusterrole:
+    create: true
+    ## @param rbac.clusterrole.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## cdi
+##
+cdi:
+  ## @param cdi.pullPolicy cdi image pull policy
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+
+  config:
+    ## cdi resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param cdi.config.podResourcePreset Set cdioperator container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cdioperator.resources is set (cdioperator.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    podResourcePreset: "none"
+
+    ## @param cdi.config.podResource Set CDI container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## podResource:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    podResource: {}
+
+    ## List of available featureGates : https://github.com/kubevirt/containerized-data-importer/blob/main/pkg/feature-gates/feature-gates.go
+    ## @param cdi.config.featureGates.HonorWaitForFirstConsumer Set CDI featureGates HonorWaitForFirstConsumer (enable by default)
+    ## @param cdi.config.featureGates.DataVolumeClaimAdoption Set CDI featureGates DataVolumeClaimAdoption (disable by default)
+    ## @param cdi.config.featureGates.WebhookPvcRendering Set CDI featureGates WebhookPvcRendering (disable by default)
+    ## @param cdi.config.extraFeatureGates Add CDI FeatureGates (not available on helm)
+    featureGates:
+      HonorWaitForFirstConsumer: true
+      DataVolumeClaimAdoption: false
+      WebhookPvcRendering: false
+
+    extraFeatureGates: []
+
+  infra:
+    ## @param cdi.infra.nodeSelector.kubernetes.io/os The operating system label to select nodes (e.g., linux)
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector:
+      kubernetes.io/os: linux
+    ## @param cdi.infra.tolerations[0].key The taint key that the toleration applies to
+    ## @param cdi.infra.tolerations[0].operator The operator for the toleration (e.g., Exists, Equal)
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: [ { key: CriticalAddonsOnly, operator: Exists } ]
+
+  workload:
+    ## @param cdi.workload.nodeSelector.kubernetes.io/os The operating system label to select nodes (e.g., linux)
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector:
+      kubernetes.io/os: linux
+
+## job
+##
+job:
+  ## @param job.image job image (kubectl))
+  image: bitnami/kubectl
