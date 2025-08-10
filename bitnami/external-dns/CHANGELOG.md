@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.0.1 (2025-08-06)
+## 9.0.2 (2025-08-08)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#35469](https://github.com/bitnami/charts/pull/35469))
+* [bitnami/external-dns] Remove hardcoded references to image repository ([#35692](https://github.com/bitnami/charts/pull/35692))
+
+## <small>9.0.1 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#35469) ([9bbf214](https://github.com/bitnami/charts/commit/9bbf2141cf0c3613741785474f0ed931d6213ca7)), closes [#35469](https://github.com/bitnami/charts/issues/35469)
 
 ## 9.0.0 (2025-07-18)
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.2.20 (2025-08-08)
+## 22.0.2 (2025-08-08)
 
 * [bitnami/redis] Fix Redis sentinel initialization with single replica ([#35667](https://github.com/bitnami/charts/pull/35667))
+
+## <small>22.0.1 (2025-08-09)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#35711](https://github.com/bitnami/charts/pull/35711))
+
+## 22.0.0 (2025-08-08)
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35700) ([56f58c8](https://github.com/bitnami/charts/commit/56f58c8b039794c7c77efae60a41b8016ff83396)), closes [#35700](https://github.com/bitnami/charts/issues/35700)
 
 ## <small>21.2.19 (2025-08-07)</small>
 
