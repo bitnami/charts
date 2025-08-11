@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.0.13 (2025-08-08)
+## 14.0.0 (2025-08-11)
 
-* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35703](https://github.com/bitnami/charts/pull/35703))
+* [bitnami/mastodon] Upgrade to Redis subchart 22 ([#35721](https://github.com/bitnami/charts/pull/35721))
+
+## <small>13.0.13 (2025-08-08)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35703) ([81c0893](https://github.com/bitnami/charts/commit/81c089304112a09197f32b434f0de43800515c3e)), closes [#35703](https://github.com/bitnami/charts/issues/35703)
 
 ## <small>13.0.12 (2025-08-07)</small>
 
