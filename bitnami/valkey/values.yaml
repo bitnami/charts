@@ -1640,14 +1640,14 @@ metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose Valkey metrics
   ##
   enabled: false
-  ## Bitnami Valkey Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/valkey-exporter/tags/
-  ## @param metrics.image.registry [default: REGISTRY_NAME] Valkey Exporter image registry
-  ## @param metrics.image.repository [default: REPOSITORY_NAME/valkey-exporter] Valkey Exporter image repository
-  ## @skip metrics.image.tag Valkey Exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Valkey Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param metrics.image.pullPolicy Valkey Exporter image pull policy
-  ## @param metrics.image.pullSecrets Valkey Exporter image pull secrets
+  ## Bitnami Redis Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Redis Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/redis-exporter] Redis Exporter image repository
+  ## @skip metrics.image.tag Redis Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Redis Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Redis Exporter image pull policy
+  ## @param metrics.image.pullSecrets Redis Exporter image pull secrets
   ##
   image:
     registry: docker.io
@@ -1727,13 +1727,13 @@ metrics:
   ## Useful for certificate CN/SAN matching
   ##
   valkeyTargetHost: "localhost"
-  ## @param metrics.extraArgs Extra arguments for Valkey exporter, for example:
+  ## @param metrics.extraArgs Extra arguments for Redis exporter, for example:
   ## e.g.:
   ## extraArgs:
   ##   check-keys: myKey,myOtherKey
   ##
   extraArgs: {}
-  ## @param metrics.extraEnvVars Array with extra environment variables to add to Valkey exporter
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Redis exporter
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
@@ -1742,15 +1742,15 @@ metrics:
   extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled Valkey exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Enabled Redis exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Valkey exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set Valkey exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Valkey exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Valkey exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.runAsUser Set Redis exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Redis exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Redis exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Redis exporter containers' Security Context allowPrivilegeEscalation
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set Valkey exporter containers' Security Context seccompProfile
-  ## @param metrics.containerSecurityContext.capabilities.drop Set Valkey exporter containers' Security Context capabilities to drop
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Redis exporter containers' Security Context seccompProfile
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Redis exporter containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
@@ -1770,7 +1770,7 @@ metrics:
   ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey metrics sidecar
   ##
   extraVolumeMounts: []
-  ## Valkey exporter resource requests and limits
+  ## Redis exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -1787,37 +1787,37 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## @param metrics.podLabels Extra labels for Valkey exporter pods
+  ## @param metrics.podLabels Extra labels for Redis exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param metrics.podAnnotations [object] Annotations for Valkey exporter pods
+  ## @param metrics.podAnnotations [object] Annotations for Redis exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9121"
-  ## Valkey exporter service parameters
+  ## Redis exporter service parameters
   ##
   service:
     ## @param metrics.service.enabled Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor
     ##
     enabled: true
-    ## @param metrics.service.type Valkey exporter service type
+    ## @param metrics.service.type Redis exporter service type
     ##
     type: ClusterIP
-    ## @param metrics.service.ports.http Valkey exporter service port
+    ## @param metrics.service.ports.http Redis exporter service port
     ##
     ports:
       http: 9121
-    ## @param metrics.service.externalTrafficPolicy Valkey exporter service external traffic policy
+    ## @param metrics.service.externalTrafficPolicy Redis exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param metrics.service.loadBalancerIP Valkey exporter service Load Balancer IP
+    ## @param metrics.service.loadBalancerIP Redis exporter service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
@@ -1825,17 +1825,17 @@ metrics:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerClass: ""
-    ## @param metrics.service.loadBalancerSourceRanges Valkey exporter service Load Balancer sources
+    ## @param metrics.service.loadBalancerSourceRanges Redis exporter service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g.
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param metrics.service.annotations Additional custom annotations for Valkey exporter service
+    ## @param metrics.service.annotations Additional custom annotations for Redis exporter service
     ##
     annotations: {}
-    ## @param metrics.service.clusterIP Valkey exporter service Cluster IP
+    ## @param metrics.service.clusterIP Redis exporter service Cluster IP
     ##
     clusterIP: ""
   ## Prometheus Service Monitor
