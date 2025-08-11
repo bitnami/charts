@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.8.5 (2025-08-07)
+## 27.0.0 (2025-08-11)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35611](https://github.com/bitnami/charts/pull/35611))
+* [bitnami/harbor] Upgrade to Redis subchart 22 ([#35722](https://github.com/bitnami/charts/pull/35722))
+
+## <small>26.8.5 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35611) ([1cf61c0](https://github.com/bitnami/charts/commit/1cf61c01dc4786859742bec313826234db93ca00)), closes [#35611](https://github.com/bitnami/charts/issues/35611)
 
 ## <small>26.8.4 (2025-08-07)</small>
 
