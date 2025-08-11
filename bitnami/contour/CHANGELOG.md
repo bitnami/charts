@@ -1,8 +1,13 @@
 # Changelog
 
-## 21.0.13 (2025-07-31)
+## 21.0.14 (2025-08-11)
 
-* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35357](https://github.com/bitnami/charts/pull/35357))
+* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35425](https://github.com/bitnami/charts/pull/35425))
+
+## <small>21.0.13 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35357) ([fc363d3](https://github.com/bitnami/charts/commit/fc363d32c3000a71682229060258f093ef7951ec)), closes [#35357](https://github.com/bitnami/charts/issues/35357)
 
 ## <small>21.0.12 (2025-07-24)</small>
 
