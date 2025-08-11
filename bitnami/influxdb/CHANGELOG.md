@@ -1,8 +1,21 @@
 # Changelog
 
-## 7.1.12 (2025-08-01)
+## 7.1.15 (2025-08-07)
 
-* [bitnami/influxdb] fix typo in namespace inclusion (ingress-tls-secret) ([#34984](https://github.com/bitnami/charts/pull/34984))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#35643](https://github.com/bitnami/charts/pull/35643))
+
+## <small>7.1.14 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35583) ([f8ca46b](https://github.com/bitnami/charts/commit/f8ca46b87ec45237d10c60a00d87b8619c344157)), closes [#35583](https://github.com/bitnami/charts/issues/35583)
+
+## <small>7.1.13 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35493) ([08e89e5](https://github.com/bitnami/charts/commit/08e89e5add5fab7a7daa4a7fbe942b1f9a4b4a33)), closes [#35493](https://github.com/bitnami/charts/issues/35493)
+
+## <small>7.1.12 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/influxdb] fix typo in namespace inclusion (ingress-tls-secret) (#34984) ([cb0ad0a](https://github.com/bitnami/charts/commit/cb0ad0a93825f54ab9fc0516a46e991785184943)), closes [#34984](https://github.com/bitnami/charts/issues/34984)
 
 ## <small>7.1.11 (2025-07-29)</small>
 

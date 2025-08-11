@@ -1,8 +1,29 @@
 # Changelog
 
-## 13.0.9 (2025-07-23)
+## 14.0.0 (2025-08-11)
 
-* [bitnami/mastodon] :zap: :arrow_up: Update dependency references ([#35269](https://github.com/bitnami/charts/pull/35269))
+* [bitnami/mastodon] Upgrade to Redis subchart 22 ([#35721](https://github.com/bitnami/charts/pull/35721))
+
+## <small>13.0.13 (2025-08-08)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35703) ([81c0893](https://github.com/bitnami/charts/commit/81c089304112a09197f32b434f0de43800515c3e)), closes [#35703](https://github.com/bitnami/charts/issues/35703)
+
+## <small>13.0.12 (2025-08-07)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35619) ([52a168c](https://github.com/bitnami/charts/commit/52a168cf7984aa0ca26f47f93188af3c876adb0d)), closes [#35619](https://github.com/bitnami/charts/issues/35619)
+
+## <small>13.0.11 (2025-08-07)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35592) ([148d426](https://github.com/bitnami/charts/commit/148d42603cc31e0c1b31b5161c8ce50f4b95911c)), closes [#35592](https://github.com/bitnami/charts/issues/35592)
+
+## <small>13.0.10 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35428) ([daeb6a0](https://github.com/bitnami/charts/commit/daeb6a0dfaa58cbec30b5c2c52b17bcb1915da87)), closes [#35428](https://github.com/bitnami/charts/issues/35428)
+
+## <small>13.0.9 (2025-07-23)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35269) ([c9bbc3c](https://github.com/bitnami/charts/commit/c9bbc3c02b99fd9df1fc15459e4f70c5873f40f8)), closes [#35269](https://github.com/bitnami/charts/issues/35269)
 
 ## <small>13.0.8 (2025-07-17)</small>
 

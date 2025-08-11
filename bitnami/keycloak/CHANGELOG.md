@@ -1,8 +1,21 @@
 # Changelog
 
-## 24.9.0 (2025-08-03)
+## 25.0.1 (2025-08-11)
 
-* feat(keycloak/ingress): support template value for ingress and admin … ([#35025](https://github.com/bitnami/charts/pull/35025))
+* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl ([#35726](https://github.com/bitnami/charts/pull/35726))
+
+## 25.0.0 (2025-08-08)
+
+* [bitnami/keycloak] feat: native metrics & refactor (#35568) ([0941bbc](https://github.com/bitnami/charts/commit/0941bbcbeca0b8b8d487e710701628e1f22e9f61)), closes [#35568](https://github.com/bitnami/charts/issues/35568)
+
+## <small>24.9.1 (2025-08-07)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#35578) ([6f18b10](https://github.com/bitnami/charts/commit/6f18b10318ec5c39d3a0dab34ae93efa90d70884)), closes [#35578](https://github.com/bitnami/charts/issues/35578)
+
+## 24.9.0 (2025-08-04)
+
+* feat(keycloak/ingress): support template value for ingress and admin … (#35025) ([da4aaf3](https://github.com/bitnami/charts/commit/da4aaf376e800760fd5ada2b07e3c85c7c8ddd95)), closes [#35025](https://github.com/bitnami/charts/issues/35025)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
 
 ## <small>24.8.1 (2025-07-24)</small>
 

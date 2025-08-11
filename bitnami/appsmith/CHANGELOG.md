@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.0.23 (2025-08-08)
+## 7.0.0 (2025-08-11)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35343](https://github.com/bitnami/charts/pull/35343))
+* [bitnami/appsmith] Upgrade to Redis subchart 22 ([#35729](https://github.com/bitnami/charts/pull/35729))
 
 ## <small>6.0.22 (2025-08-05)</small>
 

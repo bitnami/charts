@@ -1,8 +1,32 @@
 # Changelog
 
+## 3.1.5 (2025-08-08)
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#35582](https://github.com/bitnami/charts/pull/35582))
+
+## <small>3.1.4 (2025-08-07)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#35565) ([d71a677](https://github.com/bitnami/charts/commit/d71a677fab5d32c4332342733225f0a1a208b861)), closes [#35565](https://github.com/bitnami/charts/issues/35565)
+
+## <small>3.1.3 (2025-08-07)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#35547) ([fdb555b](https://github.com/bitnami/charts/commit/fdb555b6fe7ec4ac3c60f6b92b46949954e9a166)), closes [#35547](https://github.com/bitnami/charts/issues/35547)
+
+## <small>3.1.2 (2025-08-07)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#35487) ([d3545c6](https://github.com/bitnami/charts/commit/d3545c6237001a07ee73dfec81e605acc8122363)), closes [#35487](https://github.com/bitnami/charts/issues/35487)
+
+## <small>3.1.1 (2025-08-07)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#35458) ([6004a46](https://github.com/bitnami/charts/commit/6004a46f244f09ccfba86969c583f6d882d28b03)), closes [#35458](https://github.com/bitnami/charts/issues/35458)
+
 ## 3.1.0 (2025-08-01)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#35330](https://github.com/bitnami/charts/pull/35330))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#35330) ([4caffbb](https://github.com/bitnami/charts/commit/4caffbb4b784e851aceb982937f4dd028ca3ff76)), closes [#35330](https://github.com/bitnami/charts/issues/35330)
 
 ## <small>3.0.8 (2025-07-16)</small>
 

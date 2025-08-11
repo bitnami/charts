@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.17 (2025-07-09)
+## 4.5.18 (2025-08-07)
 
-* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references ([#34932](https://github.com/bitnami/charts/pull/34932))
+* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references ([#35513](https://github.com/bitnami/charts/pull/35513))
+
+## <small>4.5.17 (2025-07-09)</small>
+
+* [bitnami/node-exporter] :zap: :arrow_up: Update dependency references (#34932) ([51dfd91](https://github.com/bitnami/charts/commit/51dfd9191d02682823fcac4826acec7f369e8af6)), closes [#34932](https://github.com/bitnami/charts/issues/34932)
 
 ## <small>4.5.16 (2025-06-16)</small>
 

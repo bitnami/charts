@@ -18,7 +18,7 @@ dependencies:
 - condition: redis.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.x.x
+  version: 22.x.x
 - condition: mongodb.enabled
   name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -41,4 +41,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 6.0.23
+version: 7.0.1

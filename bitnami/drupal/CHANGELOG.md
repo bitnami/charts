@@ -1,8 +1,30 @@
 # Changelog
 
-## 22.0.6 (2025-07-26)
+## 22.0.11 (2025-08-07)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35305](https://github.com/bitnami/charts/pull/35305))
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#35603](https://github.com/bitnami/charts/pull/35603))
+
+## <small>22.0.10 (2025-08-07)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35564) ([2e55a30](https://github.com/bitnami/charts/commit/2e55a301ac6df43f603868153cfd705bbb2f7413)), closes [#35564](https://github.com/bitnami/charts/issues/35564)
+
+## <small>22.0.9 (2025-08-07)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35551) ([908971b](https://github.com/bitnami/charts/commit/908971b85a9a60e363d574637f24a4d40d935a87)), closes [#35551](https://github.com/bitnami/charts/issues/35551)
+
+## <small>22.0.8 (2025-08-06)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35451) ([7c1f22d](https://github.com/bitnami/charts/commit/7c1f22d86c39559271353bec245706e5be36050e)), closes [#35451](https://github.com/bitnami/charts/issues/35451)
+
+## <small>22.0.7 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35417) ([b2d335b](https://github.com/bitnami/charts/commit/b2d335bb7f72886c94b3d956cea4c4a26a905737)), closes [#35417](https://github.com/bitnami/charts/issues/35417)
+
+## <small>22.0.6 (2025-07-26)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35305) ([0cedc0b](https://github.com/bitnami/charts/commit/0cedc0b79f915b7a740136cefa4539d0294461e1)), closes [#35305](https://github.com/bitnami/charts/issues/35305)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
 
 ## <small>22.0.5 (2025-07-23)</small>
 

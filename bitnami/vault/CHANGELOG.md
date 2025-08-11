@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.7.22 (2025-07-24)
+## 1.7.25 (2025-08-07)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35292](https://github.com/bitnami/charts/pull/35292))
+* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35636](https://github.com/bitnami/charts/pull/35636))
+
+## <small>1.7.24 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35542) ([50ede49](https://github.com/bitnami/charts/commit/50ede497c022353427f9ca13c795178dc29c3523)), closes [#35542](https://github.com/bitnami/charts/issues/35542)
+
+## <small>1.7.23 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35433) ([6ae23f3](https://github.com/bitnami/charts/commit/6ae23f3b150306ca51b9e770e135087db2119ec4)), closes [#35433](https://github.com/bitnami/charts/issues/35433)
+
+## <small>1.7.22 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35292) ([a7087eb](https://github.com/bitnami/charts/commit/a7087eb59f88858844d21f442150f14bca2e97ee)), closes [#35292](https://github.com/bitnami/charts/issues/35292)
 
 ## <small>1.7.21 (2025-07-15)</small>
 
