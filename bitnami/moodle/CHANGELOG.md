@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.0.5 (2025-08-07)
+## 27.0.6 (2025-08-11)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35626](https://github.com/bitnami/charts/pull/35626))
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35718](https://github.com/bitnami/charts/pull/35718))
+
+## <small>27.0.5 (2025-08-07)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35626) ([a5292e4](https://github.com/bitnami/charts/commit/a5292e422f9656384796ee3c3ac2a66dcc5e0d92)), closes [#35626](https://github.com/bitnami/charts/issues/35626)
 
 ## <small>27.0.4 (2025-08-06)</small>
 
