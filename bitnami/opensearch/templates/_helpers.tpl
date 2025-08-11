@@ -576,8 +576,10 @@ Add environment variables to configure database values
 {{- end }}
 - name: OPENSEARCH_SECURITY_NODES_DN
   value: {{ coalesce .Values.security.tls.nodesDN ( join ";" $nodesDN ) }}
+{{- if .Values.security.tls.adminDN }}
 - name: OPENSEARCH_SECURITY_ADMIN_DN
-  value: {{ coalesce .Values.security.tls.adminDN "CN=admin;CN=admin" }}
+  value: {{ .Values.security.tls.adminDN }}
+{{- end }}
 - name: OPENSEARCH_ENABLE_SECURITY
   value: "true"
 {{- if .Values.usePasswordFiles }}
