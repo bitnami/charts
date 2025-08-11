@@ -1,8 +1,12 @@
 # Changelog
 
+## 25.0.1 (2025-08-11)
+
+* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl ([#35726](https://github.com/bitnami/charts/pull/35726))
+
 ## 25.0.0 (2025-08-08)
 
-* [bitnami/keycloak] feat: native metrics & refactor ([#35568](https://github.com/bitnami/charts/pull/35568))
+* [bitnami/keycloak] feat: native metrics & refactor (#35568) ([0941bbc](https://github.com/bitnami/charts/commit/0941bbcbeca0b8b8d487e710701628e1f22e9f61)), closes [#35568](https://github.com/bitnami/charts/issues/35568)
 
 ## <small>24.9.1 (2025-08-07)</small>
 
