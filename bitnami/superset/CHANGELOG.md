@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.0.2 (2025-08-07)
+## 5.0.0 (2025-08-11)
 
-* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#35684](https://github.com/bitnami/charts/pull/35684))
+* [bitnami/superset] Upgrade to Redis subchart 22 ([#35723](https://github.com/bitnami/charts/pull/35723))
+
+## <small>4.0.2 (2025-08-07)</small>
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#35684) ([20b9701](https://github.com/bitnami/charts/commit/20b970147099aebebd66f8f2ffab2477c47810ee)), closes [#35684](https://github.com/bitnami/charts/issues/35684)
 
 ## <small>4.0.1 (2025-07-30)</small>
 
