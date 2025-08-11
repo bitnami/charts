@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.10 (2025-08-07)
+## 1.3.11 (2025-08-11)
 
-* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#35685](https://github.com/bitnami/charts/pull/35685))
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#35735](https://github.com/bitnami/charts/pull/35735))
+
+## <small>1.3.10 (2025-08-07)</small>
+
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#35685) ([dbc1d5a](https://github.com/bitnami/charts/commit/dbc1d5ab9755b04569ee83db887b756bbe0735e5)), closes [#35685](https://github.com/bitnami/charts/issues/35685)
 
 ## <small>1.3.9 (2025-08-07)</small>
 
