@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.3.9 (2025-07-15)
+## 12.3.10 (2025-08-11)
 
-* [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#35078](https://github.com/bitnami/charts/pull/35078))
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#35419](https://github.com/bitnami/charts/pull/35419))
+
+## <small>12.3.9 (2025-07-15)</small>
+
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#35078) ([ac45268](https://github.com/bitnami/charts/commit/ac45268232d39c92ead078e20bab50d14a890680)), closes [#35078](https://github.com/bitnami/charts/issues/35078)
 
 ## <small>12.3.8 (2025-06-20)</small>
 
