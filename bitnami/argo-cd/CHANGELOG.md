@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.39 (2025-08-08)
+## 10.0.0 (2025-08-11)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#35701](https://github.com/bitnami/charts/pull/35701))
+* [bitnami/argo-cd] Upgrade to Redis subchart 22 ([#35727](https://github.com/bitnami/charts/pull/35727))
+
+## <small>9.0.39 (2025-08-08)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35701) ([f5de559](https://github.com/bitnami/charts/commit/f5de5597eda831d60f77bf7c1d879c0b8fd50ba9)), closes [#35701](https://github.com/bitnami/charts/issues/35701)
 
 ## <small>9.0.38 (2025-08-07)</small>
 
