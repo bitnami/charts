@@ -1,8 +1,17 @@
 # Changelog
 
-## 0.1.26 (2025-08-04)
+## 0.1.28 (2025-08-07)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#35399](https://github.com/bitnami/charts/pull/35399))
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#35637](https://github.com/bitnami/charts/pull/35637))
+
+## <small>0.1.27 (2025-08-07)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#35543) ([a892a7b](https://github.com/bitnami/charts/commit/a892a7b1597b006acb1aab024432572ec1264a3d)), closes [#35543](https://github.com/bitnami/charts/issues/35543)
+
+## <small>0.1.26 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#35399) ([fa326d5](https://github.com/bitnami/charts/commit/fa326d5de3629956f9b29ceef2872faca4f08055)), closes [#35399](https://github.com/bitnami/charts/issues/35399)
 
 ## <small>0.1.25 (2025-07-21)</small>
 

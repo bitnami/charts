@@ -1,12 +1,25 @@
 # Changelog
 
-## 25.0.5 (2025-07-23)
+## 25.0.8 (2025-08-07)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35260](https://github.com/bitnami/charts/pull/35260))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#35683](https://github.com/bitnami/charts/pull/35683))
+
+## <small>25.0.7 (2025-08-07)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35661) ([66087f4](https://github.com/bitnami/charts/commit/66087f4a076512b3d0de69cba15aa033f4daf07d)), closes [#35661](https://github.com/bitnami/charts/issues/35661)
+
+## <small>25.0.6 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35447) ([9211e12](https://github.com/bitnami/charts/commit/9211e1204ca726c7da1d94a9f1ea0a2eb687123b)), closes [#35447](https://github.com/bitnami/charts/issues/35447)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
+
+## <small>25.0.5 (2025-07-23)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35260) ([413d66e](https://github.com/bitnami/charts/commit/413d66ece820cbe25d43e74fc91dad9a67897047)), closes [#35260](https://github.com/bitnami/charts/issues/35260)
 
 ## <small>25.0.4 (2025-07-21)</small>
 
-* :warning: This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
 * [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
 * [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
 * [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)

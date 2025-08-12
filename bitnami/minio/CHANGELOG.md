@@ -1,8 +1,21 @@
 # Changelog
 
-## 17.0.16 (2025-07-23)
+## 17.0.19 (2025-08-07)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35268](https://github.com/bitnami/charts/pull/35268))
+* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35674](https://github.com/bitnami/charts/pull/35674))
+
+## <small>17.0.18 (2025-08-07)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#35645) ([d3554ff](https://github.com/bitnami/charts/commit/d3554ff9c8e6c8871a79e682ef1ab93ba60c1738)), closes [#35645](https://github.com/bitnami/charts/issues/35645)
+
+## <small>17.0.17 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#35503) ([114d0a3](https://github.com/bitnami/charts/commit/114d0a32b0f8cb0a4163fe5a532d1ec5ee07e666)), closes [#35503](https://github.com/bitnami/charts/issues/35503)
+
+## <small>17.0.16 (2025-07-23)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#35268) ([c9a44e5](https://github.com/bitnami/charts/commit/c9a44e5bf08bf071db446c5b1a6a976720aac460)), closes [#35268](https://github.com/bitnami/charts/issues/35268)
 
 ## <small>17.0.15 (2025-07-19)</small>
 

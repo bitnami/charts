@@ -1,8 +1,20 @@
 # Changelog
 
-## 19.0.1 (2025-07-08)
+## 19.0.3 (2025-08-07)
 
-* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#34867](https://github.com/bitnami/charts/pull/34867))
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#35665](https://github.com/bitnami/charts/pull/35665))
+
+## <small>19.0.2 (2025-08-06)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references (#35450) ([60026c2](https://github.com/bitnami/charts/commit/60026c2ff8f4a263d1ff0128e5dda7c28a0fd6bf)), closes [#35450](https://github.com/bitnami/charts/issues/35450)
+
+## <small>19.0.1 (2025-07-08)</small>
+
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references (#34867) ([6012989](https://github.com/bitnami/charts/commit/6012989d7de871df2307b3e6c90ea8e47a26a2f9)), closes [#34867](https://github.com/bitnami/charts/issues/34867)
 
 ## 19.0.0 (2025-06-25)
 
