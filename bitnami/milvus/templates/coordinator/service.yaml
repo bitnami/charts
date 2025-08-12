@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.coordinator.enabled }}
+{{- if and .Values.coordinator.enabled (or .Values.coordinator.metrics.enabled .Values.coordinator.service.extraPorts)}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -43,15 +43,6 @@ spec:
   loadBalancerIP: {{ .Values.coordinator.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: grpc
-      port: {{ .Values.coordinator.service.ports.grpc }}
-      targetPort: grpc
-      protocol: TCP
-      {{- if (and (or (eq .Values.coordinator.service.type "NodePort") (eq .Values.coordinator.service.type "LoadBalancer")) (not (empty .Values.coordinator.service.nodePorts.grpc))) }}
-      nodePort: {{ .Values.coordinator.service.nodePorts.grpc }}
-      {{- else if eq .Values.coordinator.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
     {{- if .Values.coordinator.metrics.enabled }}
     - name: http-metrics
       port: {{ .Values.coordinator.service.ports.metrics }}

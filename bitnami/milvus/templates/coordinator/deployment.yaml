@@ -123,8 +123,6 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.coordinator.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.coordinator.containerPorts.grpc }}
-              name: grpc
             - containerPort: {{ .Values.coordinator.containerPorts.metrics }}
               name: http-metrics
           {{- if .Values.coordinator.resources }}

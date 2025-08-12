@@ -199,11 +199,6 @@ milvus:
       saslPassword: {{ print "{{ MILVUS_KAFKA_PASSWORD }}" | quote }}
       {{- end }}
 
-    # Coordinator
-    mixCoord:
-      address: {{ include "milvus.coordinator.fullname" . }}
-      port: {{ .Values.coordinator.service.ports.grpc }}
-
     # Data node
     dataNode:
       port: {{ .Values.dataNode.service.ports.grpc }}
@@ -530,9 +525,7 @@ coordinator:
   ## @param coordinator.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
   ##
   defaultConfig: |
-    # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
     mixCoord:
-      port: {{ .Values.coordinator.containerPorts.grpc }}
       enableActiveStandby: true
   ## @param coordinator.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
@@ -552,10 +545,8 @@ coordinator:
   ## @param coordinator.replicaCount Number of Coordinator replicas to deploy
   ##
   replicaCount: 1
-  ## @param coordinator.containerPorts.grpc GRPC port for Coordinator
   ## @param coordinator.containerPorts.metrics Metrics port for Coordinator
   containerPorts:
-    grpc: 19530
     metrics: 9091
   ## Configure extra options for Coordinator containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -858,19 +849,15 @@ coordinator:
     ## @param coordinator.service.type Coordinator service type
     ##
     type: ClusterIP
-    ## @param coordinator.service.ports.grpc Coordinator GRPC service port
     ## @param coordinator.service.ports.metrics Coordinator Metrics service port
     ##
     ports:
-      grpc: 19530
       metrics: 9091
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
-    ## @param coordinator.service.nodePorts.grpc Node port for GRPC
     ## @param coordinator.service.nodePorts.metrics Node port for Metrics
     ##
     nodePorts:
-      grpc: ""
       metrics: ""
     ## @param coordinator.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
@@ -973,7 +960,7 @@ coordinator:
     ## @param coordinator.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.coordinator.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.coordinator.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1478,7 +1465,7 @@ dataNode:
     ## @param dataNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.dataNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.dataNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1983,7 +1970,7 @@ queryNode:
     ## @param queryNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.queryNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.queryNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -2487,7 +2474,7 @@ streamingNode:
     ## @param streamingNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.streamingNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.streamingNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -3020,7 +3007,7 @@ proxy:
     ## @param proxy.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.proxy.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.proxy.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
