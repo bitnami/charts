@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.14 (2025-08-11)
+## 16.0.14 (2025-08-12)
 
 * [bitnami/rabbitmq] Migrate deprecated queue_leader_locator configuration ([#35748](https://github.com/bitnami/charts/pull/35748))
 
