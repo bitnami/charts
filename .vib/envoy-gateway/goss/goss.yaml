@@ -2,11 +2,12 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  # No special API endpoint documented in the admin interface
   http://envoy-gateway:{{ .Vars.service.ports.admin }}:
-    status: 404
+    status: 200
+    body:
+      - 'Envoy Gateway Admin Console'
   http://127.0.0.1:{{ .Vars.containerPorts.admin }}:
-    status: 404
+    status: 200
   http://envoy-gateway:{{ .Vars.service.ports.metrics }}/metrics:
     status: 200
     body:
