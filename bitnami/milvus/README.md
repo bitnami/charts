@@ -63,7 +63,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections) to true. This will expose the Milvus native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `coordinator`, `dataNode`, `queryNode`, `streamingNode` and `proxy` sections) to true. This will expose the Milvus native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -71,7 +71,7 @@ It is necessary to have a working installation of Prometheus or Prometheus Opera
 
 #### Integration with Prometheus Operator
 
-The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `dataCoord`, `dataNode`, `indexCoord`, `indexNode`, `proxy`, `queryCoord`, `queryNode` and `rootCoord` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `*.metrics.serviceMonitor.enabled=true` (under the `coordinator`, `dataNode`, `queryNode`, `streamingNode` and `proxy` sections). Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
 
 ```text
 no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
@@ -87,7 +87,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Milvus configuration
 
-The Milvus configuration file `milvus.yaml` is shared across the different components: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode` and `indexNode`. This is set in the `milvus.defaultConfig` value. This configuration can be extended with extra settings using the `milvus.extraConfig` value. For specific component configuration edit the `extraConfig` section inside each of the previously mentioned components. Check the official [Milvis documentation](https://milvus.io/docs) for the list of possible configurations.
+The Milvus configuration file `milvus.yaml` is shared across the different components: `coordinator`, `dataNode`, `queryNode` and `streamingNode`. This is set in the `milvus.defaultConfig` value. This configuration can be extended with extra settings using the `milvus.extraConfig` value. For specific component configuration edit the `extraConfig` section inside each of the previously mentioned components. Check the official [Milvis documentation](https://milvus.io/docs) for the list of possible configurations.
 
 ### Backup and restore
 
@@ -95,7 +95,7 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 
 ### Additional environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode`.
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `streamingNode`, `attu` and `queryNode`.
 
 ```yaml
 dataCoord:
@@ -118,7 +118,7 @@ dataNode:
     - name: LOG_LEVEL
       value: error
 
-indexNode:
+streamingNode:
   extraEnvVars:
     - name: LOG_LEVEL
       value: error
@@ -133,7 +133,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` .
+If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `streamingNode`, `attu` and `queryNode` .
 
 ```yaml
 sidecars:
@@ -186,7 +186,7 @@ kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --fro
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `streamingNode`, `attu` and `queryNode`.
 
 ### External kafka support
 
@@ -1876,6 +1876,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvu
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major updates `milvus` to its latest version, 2.6.0. This new version introduces important architectural changes:
+
+- root-coordinator, data-coordinator, index-coordinator and query-coordinator have all been unified into a single coordinator component, called coordinator. Therefore, values `rootCoord.*`, `dataCoord.*`, `queryCoord.*` and `indexCoord.*` have been removed and new values `coordinator.*` have been added to the chart.
+- Capabilites of the data-node and index-node have been merged into the data-node, values `indexNode.*` have been removed from the chart.
+- New component streaming-node have been added, introducing new chart values `streamingNode.*`.
 
 ### To 15.0.0
 
