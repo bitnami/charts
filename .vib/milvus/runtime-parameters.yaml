@@ -32,7 +32,7 @@ proxy:
     create: true
   automountServiceAccountToken: true
 
-mixCoord:
+coordinator:
   enabled: true
   metrics:
     enabled: true

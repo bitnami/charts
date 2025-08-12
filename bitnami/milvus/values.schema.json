@@ -1352,7 +1352,7 @@
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": "Enable Mix Coordinator deployment",
+                    "description": "Enable Coordinator deployment",
                     "default": true
                 },
                 "extraEnvVars": {
@@ -1405,7 +1405,7 @@
                 },
                 "replicaCount": {
                     "type": "number",
-                    "description": "Number of Mix Coordinator replicas to deploy",
+                    "description": "Number of Coordinator replicas to deploy",
                     "default": 1
                 },
                 "containerPorts": {
@@ -1413,12 +1413,12 @@
                     "properties": {
                         "grpc": {
                             "type": "number",
-                            "description": "GRPC port for Mix Coordinator",
+                            "description": "GRPC port for Coordinator",
                             "default": 19530
                         },
                         "metrics": {
                             "type": "number",
-                            "description": "Metrics port for Mix Coordinator",
+                            "description": "Metrics port for Coordinator",
                             "default": 9091
                         }
                     }
@@ -1428,7 +1428,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable livenessProbe on Mix Coordinator nodes",
+                            "description": "Enable livenessProbe on Coordinator nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -1463,7 +1463,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable readinessProbe on Mix Coordinator nodes",
+                            "description": "Enable readinessProbe on Coordinator nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -1498,7 +1498,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable startupProbe on Mix Coordinator containers",
+                            "description": "Enable startupProbe on Coordinator containers",
                             "default": false
                         },
                         "initialDelaySeconds": {
@@ -1558,7 +1558,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Mix Coordinator pods' Security Context",
+                            "description": "Enabled Coordinator pods' Security Context",
                             "default": true
                         },
                         "fsGroupChangePolicy": {
@@ -1580,7 +1580,7 @@
                         },
                         "fsGroup": {
                             "type": "number",
-                            "description": "Set Mix Coordinator pod's Security Context fsGroup",
+                            "description": "Set Coordinator pod's Security Context fsGroup",
                             "default": 1001
                         }
                     }
@@ -1714,17 +1714,17 @@
                 },
                 "affinity": {
                     "type": "object",
-                    "description": "Affinity for Mix Coordinator pods assignment",
+                    "description": "Affinity for Coordinator pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
                     "type": "object",
-                    "description": "Node labels for Mix Coordinator pods assignment",
+                    "description": "Node labels for Coordinator pods assignment",
                     "default": {}
                 },
                 "tolerations": {
                     "type": "array",
-                    "description": "Tolerations for Mix Coordinator pods assignment",
+                    "description": "Tolerations for Coordinator pods assignment",
                     "default": [],
                     "items": {}
                 },
@@ -1736,7 +1736,7 @@
                 },
                 "priorityClassName": {
                     "type": "string",
-                    "description": "Mix Coordinator pods' priorityClassName",
+                    "description": "Coordinator pods' priorityClassName",
                     "default": ""
                 },
                 "schedulerName": {
@@ -1749,31 +1749,31 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Mix Coordinator statefulset strategy type",
+                            "description": "Coordinator statefulset strategy type",
                             "default": "RollingUpdate"
                         },
                         "rollingUpdate": {
                             "type": "object",
-                            "description": "Mix Coordinator statefulset rolling update configuration parameters",
+                            "description": "Coordinator statefulset rolling update configuration parameters",
                             "default": {}
                         }
                     }
                 },
                 "extraVolumes": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for the Mix Coordinator pod(s)",
+                    "description": "Optionally specify extra list of additional volumes for the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for the Mix Coordinator container(s)",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Coordinator container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
                     "type": "array",
-                    "description": "Add additional sidecar containers to the Mix Coordinator pod(s)",
+                    "description": "Add additional sidecar containers to the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -1784,7 +1784,7 @@
                 },
                 "initContainers": {
                     "type": "array",
-                    "description": "Add additional init containers to the Mix Coordinator pod(s)",
+                    "description": "Add additional init containers to the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -1793,7 +1793,7 @@
                     "properties": {
                         "create": {
                             "type": "boolean",
-                            "description": "Enable creation of ServiceAccount for Mix Coordinator pods",
+                            "description": "Enable creation of ServiceAccount for Coordinator pods",
                             "default": true
                         },
                         "name": {
@@ -1909,7 +1909,7 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Mix Coordinator service type",
+                            "description": "Coordinator service type",
                             "default": "ClusterIP"
                         },
                         "ports": {
@@ -1917,12 +1917,12 @@
                             "properties": {
                                 "grpc": {
                                     "type": "number",
-                                    "description": "Mix Coordinator GRPC service port",
+                                    "description": "Coordinator GRPC service port",
                                     "default": 19530
                                 },
                                 "metrics": {
                                     "type": "number",
-                                    "description": "Mix Coordinator Metrics service port",
+                                    "description": "Coordinator Metrics service port",
                                     "default": 9091
                                 }
                             }
@@ -1954,33 +1954,33 @@
                         },
                         "clusterIP": {
                             "type": "string",
-                            "description": "Mix Coordinator service Cluster IP",
+                            "description": "Coordinator service Cluster IP",
                             "default": ""
                         },
                         "loadBalancerIP": {
                             "type": "string",
-                            "description": "Mix Coordinator service Load Balancer IP",
+                            "description": "Coordinator service Load Balancer IP",
                             "default": ""
                         },
                         "loadBalancerSourceRanges": {
                             "type": "array",
-                            "description": "Mix Coordinator service Load Balancer sources",
+                            "description": "Coordinator service Load Balancer sources",
                             "default": [],
                             "items": {}
                         },
                         "externalTrafficPolicy": {
                             "type": "string",
-                            "description": "Mix Coordinator service external traffic policy",
+                            "description": "Coordinator service external traffic policy",
                             "default": "Cluster"
                         },
                         "annotations": {
                             "type": "object",
-                            "description": "Additional custom annotations for Mix Coordinator service",
+                            "description": "Additional custom annotations for Coordinator service",
                             "default": {}
                         },
                         "extraPorts": {
                             "type": "array",
-                            "description": "Extra ports to expose in the Mix Coordinator service",
+                            "description": "Extra ports to expose in the Coordinator service",
                             "default": [],
                             "items": {}
                         }

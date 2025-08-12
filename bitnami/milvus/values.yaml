@@ -199,7 +199,7 @@ milvus:
       saslPassword: {{ print "{{ MILVUS_KAFKA_PASSWORD }}" | quote }}
       {{- end }}
 
-    # Mix coordinator
+    # Coordinator
     mixCoord:
       address: {{ include "milvus.coordinator.fullname" . }}
       port: {{ .Values.coordinator.service.ports.grpc }}
@@ -508,10 +508,10 @@ initJob:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-## @section Mix Coordinator Deployment Parameters
+## @section Coordinator Deployment Parameters
 ##
 coordinator:
-  ## @param coordinator.enabled Enable Mix Coordinator deployment
+  ## @param coordinator.enabled Enable Coordinator deployment
   ##
   enabled: true
   ## @param coordinator.extraEnvVars Array with extra environment variables to add to data coordinator nodes
@@ -549,17 +549,17 @@ coordinator:
   ## @param coordinator.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param coordinator.replicaCount Number of Mix Coordinator replicas to deploy
+  ## @param coordinator.replicaCount Number of Coordinator replicas to deploy
   ##
   replicaCount: 1
-  ## @param coordinator.containerPorts.grpc GRPC port for Mix Coordinator
-  ## @param coordinator.containerPorts.metrics Metrics port for Mix Coordinator
+  ## @param coordinator.containerPorts.grpc GRPC port for Coordinator
+  ## @param coordinator.containerPorts.metrics Metrics port for Coordinator
   containerPorts:
     grpc: 19530
     metrics: 9091
-  ## Configure extra options for Mix Coordinator containers' liveness, readiness and startup probes
+  ## Configure extra options for Coordinator containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param coordinator.livenessProbe.enabled Enable livenessProbe on Mix Coordinator nodes
+  ## @param coordinator.livenessProbe.enabled Enable livenessProbe on Coordinator nodes
   ## @param coordinator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param coordinator.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param coordinator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -573,7 +573,7 @@ coordinator:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param coordinator.readinessProbe.enabled Enable readinessProbe on Mix Coordinator nodes
+  ## @param coordinator.readinessProbe.enabled Enable readinessProbe on Coordinator nodes
   ## @param coordinator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param coordinator.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param coordinator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -587,7 +587,7 @@ coordinator:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param coordinator.startupProbe.enabled Enable startupProbe on Mix Coordinator containers
+  ## @param coordinator.startupProbe.enabled Enable startupProbe on Coordinator containers
   ## @param coordinator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param coordinator.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param coordinator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -629,11 +629,11 @@ coordinator:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param coordinator.podSecurityContext.enabled Enabled Mix Coordinator pods' Security Context
+  ## @param coordinator.podSecurityContext.enabled Enabled Coordinator pods' Security Context
   ## @param coordinator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param coordinator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param coordinator.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param coordinator.podSecurityContext.fsGroup Set Mix Coordinator pod's Security Context fsGroup
+  ## @param coordinator.podSecurityContext.fsGroup Set Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -714,16 +714,16 @@ coordinator:
     ##   - e2e-az2
     ##
     values: []
-  ## @param coordinator.affinity Affinity for Mix Coordinator pods assignment
+  ## @param coordinator.affinity Affinity for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## NOTE: `coordinator.podAffinityPreset`, `coordinator.podAntiAffinityPreset`, and `coordinator.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param coordinator.nodeSelector Node labels for Mix Coordinator pods assignment
+  ## @param coordinator.nodeSelector Node labels for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param coordinator.tolerations Tolerations for Mix Coordinator pods assignment
+  ## @param coordinator.tolerations Tolerations for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -731,27 +731,27 @@ coordinator:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param coordinator.priorityClassName Mix Coordinator pods' priorityClassName
+  ## @param coordinator.priorityClassName Coordinator pods' priorityClassName
   ##
   priorityClassName: ""
   ## @param coordinator.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param coordinator.updateStrategy.type Mix Coordinator statefulset strategy type
-  ## @param coordinator.updateStrategy.rollingUpdate Mix Coordinator statefulset rolling update configuration parameters
+  ## @param coordinator.updateStrategy.type Coordinator statefulset strategy type
+  ## @param coordinator.updateStrategy.rollingUpdate Coordinator statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param coordinator.extraVolumes Optionally specify extra list of additional volumes for the Mix Coordinator pod(s)
+  ## @param coordinator.extraVolumes Optionally specify extra list of additional volumes for the Coordinator pod(s)
   ##
   extraVolumes: []
-  ## @param coordinator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Mix Coordinator container(s)
+  ## @param coordinator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Coordinator container(s)
   ##
   extraVolumeMounts: []
-  ## @param coordinator.sidecars Add additional sidecar containers to the Mix Coordinator pod(s)
+  ## @param coordinator.sidecars Add additional sidecar containers to the Coordinator pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -765,7 +765,7 @@ coordinator:
   ## @param coordinator.enableDefaultInitContainers Deploy default init containers
   ##
   enableDefaultInitContainers: true
-  ## @param coordinator.initContainers Add additional init containers to the Mix Coordinator pod(s)
+  ## @param coordinator.initContainers Add additional init containers to the Coordinator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -775,11 +775,11 @@ coordinator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Service account for Mix Coordinator to use
+  ## Service account for Coordinator to use
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## @param coordinator.serviceAccount.create Enable creation of ServiceAccount for Mix Coordinator pods
+    ## @param coordinator.serviceAccount.create Enable creation of ServiceAccount for Coordinator pods
     ##
     create: true
     ## @param coordinator.serviceAccount.name The name of the ServiceAccount to use
@@ -803,7 +803,7 @@ coordinator:
     create: true
     minAvailable: ""
     maxUnavailable: ""
-  ## @section Mix Coordinator Autoscaling configuration
+  ## @section Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
   autoscaling:
@@ -849,17 +849,17 @@ coordinator:
       ## @param coordinator.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-  ## @section Mix Coordinator Traffic Exposure Parameters
+  ## @section Coordinator Traffic Exposure Parameters
   ##
 
   ## data coordinator service parameters
   ##
   service:
-    ## @param coordinator.service.type Mix Coordinator service type
+    ## @param coordinator.service.type Coordinator service type
     ##
     type: ClusterIP
-    ## @param coordinator.service.ports.grpc Mix Coordinator GRPC service port
-    ## @param coordinator.service.ports.metrics Mix Coordinator Metrics service port
+    ## @param coordinator.service.ports.grpc Coordinator GRPC service port
+    ## @param coordinator.service.ports.metrics Coordinator Metrics service port
     ##
     ports:
       grpc: 19530
@@ -883,30 +883,30 @@ coordinator:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param coordinator.service.clusterIP Mix Coordinator service Cluster IP
+    ## @param coordinator.service.clusterIP Coordinator service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param coordinator.service.loadBalancerIP Mix Coordinator service Load Balancer IP
+    ## @param coordinator.service.loadBalancerIP Coordinator service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param coordinator.service.loadBalancerSourceRanges Mix Coordinator service Load Balancer sources
+    ## @param coordinator.service.loadBalancerSourceRanges Coordinator service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param coordinator.service.externalTrafficPolicy Mix Coordinator service external traffic policy
+    ## @param coordinator.service.externalTrafficPolicy Coordinator service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param coordinator.service.annotations Additional custom annotations for Mix Coordinator service
+    ## @param coordinator.service.annotations Additional custom annotations for Coordinator service
     ##
     annotations: {}
-    ## @param coordinator.service.extraPorts Extra ports to expose in the Mix Coordinator service
+    ## @param coordinator.service.extraPorts Extra ports to expose in the Coordinator service
     ##
     extraPorts: []
   ## Network Policy configuration
@@ -963,7 +963,7 @@ coordinator:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-  ## @section Mix Coordinator Metrics Parameters
+  ## @section Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
   metrics:

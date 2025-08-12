@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://milvus-mix-coordinator:{{ .Vars.mixCoord.service.ports.metrics }}/metrics:
+  http://milvus-coordinator:{{ .Vars.coordinator.service.ports.metrics }}/metrics:
     status: 200
     body:
       - milvus_num_node
@@ -29,7 +29,7 @@ http:
     body:
       - milvus_num_node
 addr:
-  tcp://milvus-mix-coordinator:{{ .Vars.mixCoord.service.ports.grpc }}:
+  tcp://milvus-coordinator:{{ .Vars.coordinator.service.ports.grpc }}:
     reachable: true
     timeout: 500
   tcp://milvus-data-node:{{ .Vars.dataNode.service.ports.grpc }}:

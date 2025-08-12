@@ -32,14 +32,14 @@ Return the proper Wait container image name
 {{- end -}}
 
 {{/*
-Return the proper Milvus Mix Coordinator fullname
+Return the proper Milvus Coordinator fullname
 */}}
 {{- define "milvus.coordinator.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "coordinator" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Name of the Milvus Mix Coordinator service account to use
+Name of the Milvus Coordinator service account to use
 */}}
 {{- define "milvus.coordinator.serviceAccountName" -}}
 {{- if .Values.coordinator.serviceAccount.create -}}
@@ -50,7 +50,7 @@ Name of the Milvus Mix Coordinator service account to use
 {{- end -}}
 
 {{/*
-Get the extra configuration configmap for Milvus Mix Coordinator
+Get the extra configuration configmap for Milvus Coordinator
 */}}
 {{- define "milvus.coordinator.configmapName" -}}
 {{- if .Values.coordinator.existingConfigMap -}}
@@ -61,7 +61,7 @@ Get the extra configuration configmap for Milvus Mix Coordinator
 {{- end -}}
 
 {{/*
-Get the extra configuration configmap for Milvus Mix Coordinator
+Get the extra configuration configmap for Milvus Coordinator
 */}}
 {{- define "milvus.coordinator.extraConfigmapName" -}}
 {{- if .Values.coordinator.extraConfigExistingConfigMap -}}
