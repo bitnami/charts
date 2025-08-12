@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.14 (2025-08-11)
+## 21.1.0 (2025-08-12)
 
-* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35730](https://github.com/bitnami/charts/pull/35730))
+* [bitnami/contour] feat: Standardize default Envoy init-config init-container ([#35760](https://github.com/bitnami/charts/pull/35760))
+
+## <small>21.0.14 (2025-08-11)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35730) ([eaac71d](https://github.com/bitnami/charts/commit/eaac71d24288ff6e462b6bfd85f4a9db2c445d68)), closes [#35730](https://github.com/bitnami/charts/issues/35730)
 
 ## <small>21.0.13 (2025-07-31)</small>
 
