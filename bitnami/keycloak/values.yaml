@@ -1288,3 +1288,4 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretPasswordKey: ""
   annotations: {}
+  extraParams: ""

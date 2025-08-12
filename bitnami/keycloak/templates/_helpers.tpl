@@ -151,6 +151,15 @@ Return the Database schema
 {{- end -}}
 
 {{/*
+Return extra connection parameters for the Database DSN
+*/}}
+{{- define "keycloak.database.extraParams" -}}
+{{- if .Values.externalDatabase.extraParams -}}
+    {{- printf "&%s" (tpl .Values.externalDatabase.extraParams .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Database secret name
 */}}
 {{- define "keycloak.database.secretName" -}}
