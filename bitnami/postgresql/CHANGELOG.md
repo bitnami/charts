@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.7.24 (2025-08-08)
+## 16.8.0 (2025-08-13)
 
-* [bitnami/postgresql] Remove hardcoded references to image repository ([#35694](https://github.com/bitnami/charts/pull/35694))
+* [bitnami:postgresql] feat: add support for affinity to backup cronjob ([#35766](https://github.com/bitnami/charts/pull/35766))
+
+## <small>16.7.24 (2025-08-08)</small>
+
+* [bitnami/postgresql] Remove hardcoded references to image repository (#35694) ([bc094f7](https://github.com/bitnami/charts/commit/bc094f791daca01aa0b07e73ded566fef3a07896)), closes [#35694](https://github.com/bitnami/charts/issues/35694)
 
 ## <small>16.7.23 (2025-08-08)</small>
 
