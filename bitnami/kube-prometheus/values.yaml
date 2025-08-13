@@ -1440,7 +1440,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.39.2-debian-12-r1
+      tag: 0.39.2-debian-12-r2
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -3372,7 +3372,7 @@ thanosRuler:
   image:
     registry: docker.io
     repository: bitnami/thanos
-    tag: 0.39.2-debian-12-r1
+    tag: 0.39.2-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     pullSecrets: []
