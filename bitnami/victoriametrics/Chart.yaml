@@ -9,7 +9,7 @@ annotations:
     - name: victoriametrics-vmagent
       image: docker.io/bitnami/victoriametrics-vmagent:1.123.0-debian-12-r2
     - name: victoriametrics-vmalert
-      image: docker.io/bitnami/victoriametrics-vmalert:1.123.0-debian-12-r1
+      image: docker.io/bitnami/victoriametrics-vmalert:1.123.0-debian-12-r2
     - name: victoriametrics-vmauth
       image: docker.io/bitnami/victoriametrics-vmauth:1.123.0-debian-12-r1
     - name: victoriametrics-vminsert
