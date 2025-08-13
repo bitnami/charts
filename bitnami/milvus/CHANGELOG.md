@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2025-08-13)
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#35787](https://github.com/bitnami/charts/pull/35787))
+
 ## 16.0.0 (2025-08-13)
 
-* [bitnami/milvus] :arrow_up: Major release: Milvus 2.6.0 architecture update ([#35416](https://github.com/bitnami/charts/pull/35416))
+* [bitnami/milvus] :arrow_up: Major release: Milvus 2.6.0 architecture update (#35416) ([add3279](https://github.com/bitnami/charts/commit/add327965d7501d876cd851562e6eb6dca386a45)), closes [#35416](https://github.com/bitnami/charts/issues/35416)
 
 ## <small>15.0.16 (2025-08-05)</small>
 
