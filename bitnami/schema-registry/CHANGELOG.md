@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.0.4 (2025-08-07)
+## 26.0.5 (2025-08-13)
 
-* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references ([#35675](https://github.com/bitnami/charts/pull/35675))
+* [bitnami/schema-registry] Fix Schema Registry with SCRAM-SHA-512 and external MSK fails due to mandatory jksSecret ([#35772](https://github.com/bitnami/charts/pull/35772))
+
+## <small>26.0.4 (2025-08-07)</small>
+
+* [bitnami/schema-registry] :zap: :arrow_up: Update dependency references (#35675) ([fd44940](https://github.com/bitnami/charts/commit/fd44940e5ae1d5f6fe355662959b32b78bd80de5)), closes [#35675](https://github.com/bitnami/charts/issues/35675)
 
 ## <small>26.0.3 (2025-08-01)</small>
 
