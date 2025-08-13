@@ -738,7 +738,7 @@ server:
     ## @param server.rbac.discovery Specifies the discovery role
     ##
     discovery:
-      ## @param server.rbac.leaderElection.rules
+      ## @param server.rbac.discovery.rules
       ## Example:
       ## rules:
       ##   - apiGroups:
