@@ -1,6 +1,6 @@
 # Changelog
 
-## 12.3.11 (2025-08-12)
+## 12.3.11 (2025-08-13)
 
 * [bitnami/cassandra] Authentication failures when connecting to Cassandra from non-seed (secondary) nodes in multi-replica deployments.   ([#35768](https://github.com/bitnami/charts/pull/35768))
 
