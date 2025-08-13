@@ -682,6 +682,84 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## @param server.rbac.leaderElection Specifies the leader election role
+    ##
+    leaderElection:
+      ## @param server.rbac.leaderElection.rules
+      ## Example:
+      ## rules:
+      ##   - apiGroups:
+      ##       - ""
+      ##     resources:
+      ##       - pods
+      ##     verbs:
+      ##       - get
+      ##       - list
+      ##
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps/status
+          verbs:
+            - get
+            - update
+            - patch
+        - apiGroups:
+            - ""
+          resources:
+            - events
+          verbs:
+            - create
+        - apiGroups:
+            - "coordination.k8s.io"
+          resources:
+            - leases
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+    ## @param server.rbac.discovery Specifies the discovery role
+    ##
+    discovery:
+      ## @param server.rbac.leaderElection.rules
+      ## Example:
+      ## rules:
+      ##   - apiGroups:
+      ##       - ""
+      ##     resources:
+      ##       - pods
+      ##     verbs:
+      ##       - get
+      ##       - list
+      ##
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - pods
+          verbs:
+            - get
+            - watch
+            - list
+            - update
+            - patch
   ## ServiceAccount configuration
   ##
   serviceAccount:
