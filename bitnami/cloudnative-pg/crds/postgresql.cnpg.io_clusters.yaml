@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/tags/v{version}/config/crd/bases/postgresql.cnpg.io_clusters.yaml
-# Version: 1.26.1
+# Version: 1.27.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -4013,6 +4013,67 @@ spec:
                       This should only be used for debugging and troubleshooting.
                       Defaults to false.
                     type: boolean
+                  extensions:
+                    description: The configuration of the extensions to be added
+                    items:
+                      description: |-
+                        ExtensionConfiguration is the configuration used to add
+                        PostgreSQL extensions to the Cluster.
+                      properties:
+                        dynamic_library_path:
+                          description: |-
+                            The list of directories inside the image which should be added to dynamic_library_path.
+                            If not defined, defaults to "/lib".
+                          items:
+                            type: string
+                          type: array
+                        extension_control_path:
+                          description: |-
+                            The list of directories inside the image which should be added to extension_control_path.
+                            If not defined, defaults to "/share".
+                          items:
+                            type: string
+                          type: array
+                        image:
+                          description: The image containing the extension, required
+                          properties:
+                            pullPolicy:
+                              description: |-
+                                Policy for pulling OCI objects. Possible values are:
+                                Always: the kubelet always attempts to pull the reference. Container creation will fail If the pull fails.
+                                Never: the kubelet never pulls the reference and only uses a local image or artifact. Container creation will fail if the reference isn't present.
+                                IfNotPresent: the kubelet pulls if the reference isn't already present on disk. Container creation will fail if the reference isn't present and the pull fails.
+                                Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+                              type: string
+                            reference:
+                              description: |-
+                                Required: Image or artifact reference to be used.
+                                Behaves in the same way as pod.spec.containers[*].image.
+                                Pull secrets will be assembled in the same way as for the container image by looking up node credentials, SA image pull secrets, and pod spec image pull secrets.
+                                More info: https://kubernetes.io/docs/concepts/containers/images
+                                This field is optional to allow higher level config management to default or override
+                                container images in workload controllers like Deployments and StatefulSets.
+                              type: string
+                          type: object
+                          x-kubernetes-validations:
+                          - message: An image reference is required
+                            rule: has(self.reference)
+                        ld_library_path:
+                          description: The list of directories inside the image which
+                            should be added to ld_library_path.
+                          items:
+                            type: string
+                          type: array
+                        name:
+                          description: The name of the extension, required
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+                          type: string
+                      required:
+                      - image
+                      - name
+                      type: object
+                    type: array
                   ldap:
                     description: Options to specify LDAP configuration
                     properties:
@@ -4251,6 +4312,30 @@ spec:
                           More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes
                         format: int32
                         type: integer
+                      isolationCheck:
+                        description: |-
+                          Configure the feature that extends the liveness probe for a primary
+                          instance. In addition to the basic checks, this verifies whether the
+                          primary is isolated from the Kubernetes API server and from its
+                          replicas, ensuring that it can be safely shut down if network
+                          partition or API unavailability is detected. Enabled by default.
+                        properties:
+                          connectionTimeout:
+                            default: 1000
+                            description: Timeout in milliseconds for connections during
+                              the primary isolation check
+                            type: integer
+                          enabled:
+                            default: true
+                            description: Whether primary isolation checking is enabled
+                              for the liveness probe
+                            type: boolean
+                          requestTimeout:
+                            default: 1000
+                            description: Timeout in milliseconds for requests during
+                              the primary isolation check
+                            type: integer
+                        type: object
                       periodSeconds:
                         description: |-
                           How often (in seconds) to perform the probe.
@@ -4822,6 +4907,15 @@ spec:
                           This can only be set at creation time. By default set to `_cnpg_`.
                         pattern: ^[0-9a-z_]*$
                         type: string
+                      synchronizeLogicalDecoding:
+                        description: |-
+                          When enabled, the operator automatically manages synchronization of logical
+                          decoding (replication) slots across high-availability clusters.
+
+                          Requires one of the following conditions:
+                          - PostgreSQL version 17 or later
+                          - PostgreSQL version < 17 with pg_failover_slots extension enabled
+                        type: boolean
                     type: object
                   synchronizeReplicas:
                     description: Configures the synchronization of the user defined
