@@ -1,12 +1,8 @@
 # Changelog
 
-## 13.0.5 (2025-08-13)
+## 13.0.4 (2025-08-12)
 
-* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#35788](https://github.com/bitnami/charts/pull/35788))
-
-## <small>13.0.4 (2025-08-12)</small>
-
-* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35755) ([b2d0ffc](https://github.com/bitnami/charts/commit/b2d0ffc22544d9bedb52253cb91607a1ff58a09c)), closes [#35755](https://github.com/bitnami/charts/issues/35755)
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#35755](https://github.com/bitnami/charts/pull/35755))
 
 ## <small>13.0.3 (2025-08-07)</small>
 
