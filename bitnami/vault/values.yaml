@@ -682,10 +682,9 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
-    ## @param server.rbac.leaderElection Specifies the leader election role
-    ##
+
     leaderElection:
-      ## @param server.rbac.leaderElection.rules
+      ## @param server.rbac.leaderElection.rules [array] Specifies the leader election role rules
       ## Example:
       ## rules:
       ##   - apiGroups:
@@ -735,10 +734,9 @@ server:
             - update
             - patch
             - delete
-    ## @param server.rbac.discovery Specifies the discovery role
-    ##
+
     discovery:
-      ## @param server.rbac.discovery.rules
+      ## @param server.rbac.discovery.rules [array] Specifies the discovery role rules
       ## Example:
       ## rules:
       ##   - apiGroups:
