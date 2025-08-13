@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.2 (2025-08-08)
+## 9.0.3 (2025-08-13)
 
-* [bitnami/external-dns] Remove hardcoded references to image repository ([#35692](https://github.com/bitnami/charts/pull/35692))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#35803](https://github.com/bitnami/charts/pull/35803))
+
+## <small>9.0.2 (2025-08-08)</small>
+
+* [bitnami/external-dns] Remove hardcoded references to image repository (#35692) ([c92dc69](https://github.com/bitnami/charts/commit/c92dc6938a794fd26dbb409d137b6d6b9afa6512)), closes [#35692](https://github.com/bitnami/charts/issues/35692)
 
 ## <small>9.0.1 (2025-08-07)</small>
 
