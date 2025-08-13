@@ -239,7 +239,7 @@ milvus:
   ## @param milvus.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
-  ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
 initJob:
@@ -379,7 +379,7 @@ initJob:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
+  ## Configure extra options for init job containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param initJob.livenessProbe.enabled Enable livenessProbe on init job
   ## @param initJob.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -409,7 +409,7 @@ initJob:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param initJob.startupProbe.enabled Enable startupProbe on Data Coordinator containers
+  ## @param initJob.startupProbe.enabled Enable startupProbe on init job
   ## @param initJob.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param initJob.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param initJob.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -509,17 +509,17 @@ coordinator:
   ## @param coordinator.enabled Enable Coordinator deployment
   ##
   enabled: true
-  ## @param coordinator.extraEnvVars Array with extra environment variables to add to data coordinator nodes
+  ## @param coordinator.extraEnvVars Array with extra environment variables to add to coordinator nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param coordinator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data coordinator nodes
+  ## @param coordinator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for coordinator nodes
   ##
   extraEnvVarsCM: ""
-  ## @param coordinator.extraEnvVarsSecret Name of existing Secret containing extra env vars for data coordinator nodes
+  ## @param coordinator.extraEnvVarsSecret Name of existing Secret containing extra env vars for coordinator nodes
   ##
   extraEnvVarsSecret: ""
   ## @param coordinator.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
@@ -533,7 +533,7 @@ coordinator:
   ## @param coordinator.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param coordinator.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param coordinator.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param coordinator.command Override default container command (useful when using custom images)
@@ -601,7 +601,7 @@ coordinator:
   ## @param coordinator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## data coordinator resource requests and limits
+  ## coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param coordinator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if coordinator.resources is set (coordinator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -658,7 +658,7 @@ coordinator:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param coordinator.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
+  ## @param coordinator.lifecycleHooks for the coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param coordinator.runtimeClassName Name of the runtime class to be used by pod(s)
@@ -668,37 +668,37 @@ coordinator:
   ## @param coordinator.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param coordinator.hostAliases data coordinator pods host aliases
+  ## @param coordinator.hostAliases coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param coordinator.podLabels Extra labels for data coordinator pods
+  ## @param coordinator.podLabels Extra labels for coordinator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param coordinator.podAnnotations Annotations for data coordinator pods
+  ## @param coordinator.podAnnotations Annotations for coordinator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param coordinator.podAffinityPreset Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param coordinator.podAffinityPreset Pod affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param coordinator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param coordinator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Node data coordinator.affinity preset
+  ## Node coordinator.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param coordinator.nodeAffinityPreset.type Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param coordinator.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param coordinator.nodeAffinityPreset.key Node label key to match. Ignored if `data coordinator.affinity` is set
+    ## @param coordinator.nodeAffinityPreset.key Node label key to match. Ignored if `coordinator.affinity` is set
     ##
     key: ""
-    ## @param coordinator.nodeAffinityPreset.values Node label values to match. Ignored if `data coordinator.affinity` is set
+    ## @param coordinator.nodeAffinityPreset.values Node label values to match. Ignored if `coordinator.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
@@ -822,16 +822,16 @@ coordinator:
         ##
         updateMode: Auto
     hpa:
-      ## @param coordinator.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param coordinator.autoscaling.hpa.enabled Enable HPA for Milvus Coordinator
       ##
       enabled: false
       ## @param coordinator.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param coordinator.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param coordinator.autoscaling.hpa.minReplicas Minimum number of Milvus Coordinator replicas
       ##
       minReplicas: ""
-      ## @param coordinator.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param coordinator.autoscaling.hpa.maxReplicas Maximum number of Milvus Coordinator replicas
       ##
       maxReplicas: ""
       ## @param coordinator.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -843,7 +843,7 @@ coordinator:
   ## @section Coordinator Traffic Exposure Parameters
   ##
 
-  ## data coordinator service parameters
+  ## coordinator service parameters
   ##
   service:
     ## @param coordinator.service.type Coordinator service type
@@ -1032,7 +1032,7 @@ dataNode:
   ## @param dataNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param dataNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param dataNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param dataNode.command Override default container command (useful when using custom images)
@@ -1323,16 +1323,16 @@ dataNode:
         ##
         updateMode: Auto
     hpa:
-      ## @param dataNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param dataNode.autoscaling.hpa.enabled Enable HPA for Milvus Data node
       ##
       enabled: false
       ## @param dataNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param dataNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param dataNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data node replicas
       ##
       minReplicas: ""
-      ## @param dataNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param dataNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data node replicas
       ##
       maxReplicas: ""
       ## @param dataNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -1537,7 +1537,7 @@ queryNode:
   ## @param queryNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param queryNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param queryNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param queryNode.command Override default container command (useful when using custom images)
@@ -1828,16 +1828,16 @@ queryNode:
         ##
         updateMode: Auto
     hpa:
-      ## @param queryNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param queryNode.autoscaling.hpa.enabled Enable HPA for Milvus Query node
       ##
       enabled: false
       ## @param queryNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param queryNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param queryNode.autoscaling.hpa.minReplicas Minimum number of Milvus Query node replicas
       ##
       minReplicas: ""
-      ## @param queryNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param queryNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Query node replicas
       ##
       maxReplicas: ""
       ## @param queryNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -2041,7 +2041,7 @@ streamingNode:
   ## @param streamingNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param streamingNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param streamingNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param streamingNode.command Override default container command (useful when using custom images)
@@ -2332,16 +2332,16 @@ streamingNode:
         ##
         updateMode: Auto
     hpa:
-      ## @param streamingNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param streamingNode.autoscaling.hpa.enabled Enable HPA for Milvus Streaming node
       ##
       enabled: false
       ## @param streamingNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param streamingNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param streamingNode.autoscaling.hpa.minReplicas Minimum number of Milvus Streaming node replicas
       ##
       minReplicas: ""
-      ## @param streamingNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param streamingNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Streaming node replicas
       ##
       maxReplicas: ""
       ## @param streamingNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -2572,7 +2572,7 @@ proxy:
   ## @param proxy.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param proxy.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param proxy.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the proxy nodes
   ##
   extraConfigExistingConfigMap: ""
   ## @param proxy.command Override default container command (useful when using custom images)
@@ -2865,16 +2865,16 @@ proxy:
         ##
         updateMode: Auto
     hpa:
-      ## @param proxy.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param proxy.autoscaling.hpa.enabled Enable HPA for Milvus proxy
       ##
       enabled: false
       ## @param proxy.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param proxy.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param proxy.autoscaling.hpa.minReplicas Minimum number of Milvus proxy replicas
       ##
       minReplicas: ""
-      ## @param proxy.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param proxy.autoscaling.hpa.maxReplicas Maximum number of Milvus proxy replicas
       ##
       maxReplicas: ""
       ## @param proxy.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -3382,16 +3382,16 @@ attu:
         ##
         updateMode: Auto
     hpa:
-      ## @param attu.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param attu.autoscaling.hpa.enabled Enable HPA for Milvus attu
       ##
       enabled: false
       ## @param attu.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param attu.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param attu.autoscaling.hpa.minReplicas Minimum number of Milvus attu replicas
       ##
       minReplicas: ""
-      ## @param attu.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param attu.autoscaling.hpa.maxReplicas Maximum number of Milvus attu replicas
       ##
       maxReplicas: ""
       ## @param attu.autoscaling.hpa.targetCPU Target CPU utilization percentage
