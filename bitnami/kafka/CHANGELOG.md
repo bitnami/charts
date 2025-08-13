@@ -1,8 +1,12 @@
 # Changelog
 
-## 32.3.14 (2025-08-07)
+## 32.4.0 (2025-08-13)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#35615](https://github.com/bitnami/charts/pull/35615))
+* [bitnami/kafka] feat: conditional implementation of network policy ([#35771](https://github.com/bitnami/charts/pull/35771))
+
+## <small>32.3.14 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35615) ([057b964](https://github.com/bitnami/charts/commit/057b9642d17ae3cf6f5be25cdfdefdcc335c3357)), closes [#35615](https://github.com/bitnami/charts/issues/35615)
 
 ## <small>32.3.13 (2025-08-07)</small>
 
