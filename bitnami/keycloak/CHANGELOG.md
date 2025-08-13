@@ -1,5 +1,9 @@
 # Changelog
 
+## 25.0.3 (2025-08-13)
+
+* [bitnami/keycloak] feat: add `externalDatabase.extraParams` for custom JDBC connection parameters ([#35770](https://github.com/bitnami/charts/pull/35770))
+
 ## 25.0.2 (2025-08-12)
 
 * [bitnami/keycloak] bugfix: validation when production is enabled ([#35757](https://github.com/bitnami/charts/pull/35757))
