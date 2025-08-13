@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.7.25 (2025-08-07)
+## 1.8.0 (2025-08-13)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#35636](https://github.com/bitnami/charts/pull/35636))
+* [bitnami/vault] Add ability to modify or extend the vault sever RBAC roles ([#35774](https://github.com/bitnami/charts/pull/35774))
+
+## <small>1.7.25 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35636) ([ae931de](https://github.com/bitnami/charts/commit/ae931dee0f8acfd1c32a96687d257ec32b04620a)), closes [#35636](https://github.com/bitnami/charts/issues/35636)
 
 ## <small>1.7.24 (2025-08-07)</small>
 
