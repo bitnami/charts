@@ -305,7 +305,7 @@ spec:
           configMap:
             name: {{ include "schema-registry.log4j.configmapName" . }}
         {{ end }}
-        {{- if and (or (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled) .Values.auth.kafka.jksSecret }}
+        {{- if or (and (contains "SSL" $kafkaProtocol) .Values.auth.kafka.jksSecret) .Values.auth.tls.enabled }}
         - name: certificates
           projected:
             defaultMode: 0400
