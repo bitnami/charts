@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-tempo
-      image: docker.io/bitnami/grafana-tempo:2.8.2-debian-12-r0
+      image: docker.io/bitnami/grafana-tempo:2.8.2-debian-12-r1
     - name: grafana-tempo-query
       image: docker.io/bitnami/grafana-tempo-query:2.8.2-debian-12-r1
     - name: grafana-tempo-vulture
