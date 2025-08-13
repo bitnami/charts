@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: kuberay-apiserver
-      image: docker.io/bitnami/kuberay-apiserver:1.4.2-debian-12-r1
+      image: docker.io/bitnami/kuberay-apiserver:1.4.2-debian-12-r2
     - name: kuberay-operator
-      image: docker.io/bitnami/kuberay-operator:1.4.2-debian-12-r1
+      image: docker.io/bitnami/kuberay-operator:1.4.2-debian-12-r2
     - name: ray
       image: docker.io/bitnami/ray:2.48.0-debian-12-r15
   licenses: Apache-2.0
@@ -34,4 +34,4 @@ maintainers:
 name: kuberay
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 1.4.27
+version: 1.4.28
