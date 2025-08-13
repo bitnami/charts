@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.5 (2025-08-07)
+## 11.3.6 (2025-08-13)
 
-* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35531](https://github.com/bitnami/charts/pull/35531))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35828](https://github.com/bitnami/charts/pull/35828))
+
+## <small>11.3.5 (2025-08-07)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35531) ([822d387](https://github.com/bitnami/charts/commit/822d387f9d3de786836d10a74ad80c9ae7f8c593)), closes [#35531](https://github.com/bitnami/charts/issues/35531)
 
 ## <small>11.3.4 (2025-08-07)</small>
 
