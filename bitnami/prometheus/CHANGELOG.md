@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.22 (2025-08-14)
+## 2.1.23 (2025-08-14)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#35869](https://github.com/bitnami/charts/pull/35869))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#35906](https://github.com/bitnami/charts/pull/35906))
+
+## <small>2.1.22 (2025-08-14)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35869) ([f9af14d](https://github.com/bitnami/charts/commit/f9af14de5dbc262093d0a5786c697c036062093c)), closes [#35869](https://github.com/bitnami/charts/issues/35869)
 
 ## <small>2.1.21 (2025-08-13)</small>
 
