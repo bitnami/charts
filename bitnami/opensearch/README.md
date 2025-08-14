@@ -305,7 +305,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                               | `""`                        |
 | `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                  | `""`                        |
 | `security.tls.nodesDN`                     | A comma separated list of DN for nodes                                                                  | `""`                        |
-| `security.tls.adminDN`                     | A comma separated list of DN for admins                                                                 | `""`                        |
+| `security.tls.adminDN`                     | A comma separated list of DN for admins                                                                 | `CN=admin;CN=admin`         |
 
 ### Traffic Exposure Parameters
 

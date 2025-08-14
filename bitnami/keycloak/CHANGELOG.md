@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.1 (2025-08-11)
+## 25.0.2 (2025-08-12)
 
-* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl ([#35726](https://github.com/bitnami/charts/pull/35726))
+* [bitnami/keycloak] bugfix: validation when production is enabled ([#35757](https://github.com/bitnami/charts/pull/35757))
+
+## <small>25.0.1 (2025-08-11)</small>
+
+* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl (#35726) ([25b6602](https://github.com/bitnami/charts/commit/25b6602175afaed1c1becce833463d4005e24598)), closes [#35726](https://github.com/bitnami/charts/issues/35726)
 
 ## 25.0.0 (2025-08-08)
 

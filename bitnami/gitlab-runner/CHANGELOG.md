@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.1.5 (2025-08-07)
+## 1.1.6 (2025-08-14)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35478](https://github.com/bitnami/charts/pull/35478))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#35871](https://github.com/bitnami/charts/pull/35871))
+
+## <small>1.1.5 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35478) ([1289ee3](https://github.com/bitnami/charts/commit/1289ee381f97ef5a68be658466f4899e92fb4575)), closes [#35478](https://github.com/bitnami/charts/issues/35478)
 
 ## <small>1.1.4 (2025-07-28)</small>
 

@@ -100,7 +100,7 @@ spec:
             - /bin/bash
             - -ec
             - |
-              {{- if contains "SSL" $kafkaProtocol }}
+              {{- if and (contains "SSL" $kafkaProtocol) .Values.auth.kafka.jksSecret }}
               ID="${MY_POD_NAME#"{{ $fullname }}-"}"
               if [[ -f "/certs/schema-registry.truststore.jks" ]] && [[ -f "/certs/schema-registry-${ID}.keystore.jks" ]]; then
                   mkdir -p /opt/bitnami/schema-registry/certs
@@ -274,7 +274,7 @@ spec:
               mountPath: /bitnami/schema-registry/etc/schema-registry/log4j.properties
               subPath: log4j.properties
             {{- end }}
-            {{- if contains "SSL" $kafkaProtocol }}
+            {{- if and (contains "SSL" $kafkaProtocol) .Values.auth.kafka.jksSecret }}
             - name: certificates
               mountPath: /certs
               readOnly: true
@@ -305,12 +305,12 @@ spec:
           configMap:
             name: {{ include "schema-registry.log4j.configmapName" . }}
         {{ end }}
-        {{- if or (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled }}
+        {{- if or (and (contains "SSL" $kafkaProtocol) .Values.auth.kafka.jksSecret) .Values.auth.tls.enabled }}
         - name: certificates
           projected:
             defaultMode: 0400
             sources:
-            {{- if contains "SSL" $kafkaProtocol }}
+            {{- if and (contains "SSL" $kafkaProtocol) .Values.auth.kafka.jksSecret }}
             - secret:
                 name: {{ printf "%s" (tpl .Values.auth.kafka.jksSecret $) }}
             {{- end }}

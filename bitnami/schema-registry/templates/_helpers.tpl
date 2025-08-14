@@ -123,7 +123,6 @@ Compile all warnings into a single message, and call fail.
 {{- define "schema-registry.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "schema-registry.validateValues.authentication.sasl" .) -}}
-{{- $messages := append $messages (include "schema-registry.validateValues.authentication.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -150,15 +149,6 @@ schema-registry: externalKafka.sasl.user externalKafka.sasl.password
       - externalKafka.sasl.user
       - externalKafka.sasl.password
       - externalKafka.sasl.existingSecret (takes precedence over password)
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Schema Registry - TLS authentication */}}
-{{- define "schema-registry.validateValues.authentication.tls" -}}
-{{- $kafkaProtocol := upper (ternary .Values.kafka.listeners.client.protocol .Values.externalKafka.listener.protocol .Values.kafka.enabled) -}}
-{{- if and (contains "SSL" $kafkaProtocol) (not .Values.auth.kafka.jksSecret) }}
-kafka: auth.kafka.jksSecret
-    A secret containing the Schema Registry JKS files is required when TLS encryption in enabled
 {{- end -}}
 {{- end -}}
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 1.2.18 (2025-08-07)
+## 1.2.19 (2025-08-13)
 
-* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#35539](https://github.com/bitnami/charts/pull/35539))
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references ([#35842](https://github.com/bitnami/charts/pull/35842))
+
+## <small>1.2.18 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/whereabouts] :zap: :arrow_up: Update dependency references (#35539) ([b301f9c](https://github.com/bitnami/charts/commit/b301f9cc3d96623685387d4064e32d00c62bbe04)), closes [#35539](https://github.com/bitnami/charts/issues/35539)
 
 ## <small>1.2.17 (2025-07-24)</small>
 

@@ -1,8 +1,13 @@
 # Changelog
 
-## 9.4.1 (2025-08-07)
+## 9.4.2 (2025-08-12)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#35335](https://github.com/bitnami/charts/pull/35335))
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#35764](https://github.com/bitnami/charts/pull/35764))
+
+## <small>9.4.1 (2025-08-10)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35335) ([4c817e4](https://github.com/bitnami/charts/commit/4c817e49f46faf737d63e3483489dbbaf75df4b1)), closes [#35335](https://github.com/bitnami/charts/issues/35335)
 
 ## 9.4.0 (2025-07-25)
 

@@ -32,41 +32,13 @@ proxy:
     create: true
   automountServiceAccountToken: true
 
-dataCoord:
+coordinator:
   enabled: true
   metrics:
     enabled: true
   service:
     ports:
-      grpc: 8004
-      metrics: 8005
-
-rootCoord:
-  enabled: true
-  metrics:
-    enabled: true
-  service:
-    ports:
-      grpc: 8006
       metrics: 8007
-
-indexCoord:
-  enabled: true
-  metrics:
-    enabled: true
-  service:
-    ports:
-      grpc: 8008
-      metrics: 8009
-
-queryCoord:
-  enabled: true
-  metrics:
-    enabled: true
-  service:
-    ports:
-      grpc: 8010
-      metrics: 8011
 
 dataNode:
   enabled: true
@@ -86,7 +58,7 @@ queryNode:
       grpc: 8014
       metrics: 8015
 
-indexNode:
+streamingNode:
   enabled: true
   metrics:
     enabled: true
