@@ -25,6 +25,7 @@ data:
   {{- end }}
   KC_HTTP_PORT: {{ .Values.containerPorts.http | quote }}
   KC_HTTP_MANAGEMENT_PORT: {{ .Values.containerPorts.management | quote }}
+  KC_HTTP_ENABLED: {{ ternary "true" "false" (or .Values.httpEnabled (not .Values.tls.enabled)) | quote }}
   {{- if .Values.proxyHeaders }}
   KC_PROXY_HEADERS: {{ .Values.proxyHeaders | quote }}
   {{- end }}
