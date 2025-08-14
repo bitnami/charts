@@ -1,8 +1,14 @@
 # Changelog
 
-## 16.5.36 (2025-08-05)
+## 16.5.37 (2025-08-07)
 
-* [bitnami/mongodb] Replace `0o` octal notation with `0###` ([#35406](https://github.com/bitnami/charts/pull/35406))
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#35497](https://github.com/bitnami/charts/pull/35497))
+
+## <small>16.5.36 (2025-08-05)</small>
+
+* [bitnami/mongodb] Replace `0o` octal notation with `0
+###` (#35406) ([07cef53](https://github.com/bitnami/charts/commit/07cef5311329c59da5ad0784c0890ebf3121ecc1)), closes [#35406](https://github.com/bitnami/charts/issues/35406)
+
 
 ## <small>16.5.35 (2025-07-31)</small>
 

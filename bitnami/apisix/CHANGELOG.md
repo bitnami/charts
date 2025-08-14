@@ -1,8 +1,17 @@
 # Changelog
 
+## 5.1.2 (2025-08-07)
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references ([#35540](https://github.com/bitnami/charts/pull/35540))
+
+## <small>5.1.1 (2025-08-06)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35452) ([434b20c](https://github.com/bitnami/charts/commit/434b20c1c9033779e91dbfba6994d970198fa89c)), closes [#35452](https://github.com/bitnami/charts/issues/35452)
+
 ## 5.1.0 (2025-08-01)
 
-* [bitnami/apisix] fix: Apisix clean uds ([#34987](https://github.com/bitnami/charts/pull/34987))
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/apisix] fix: Apisix clean uds (#34987) ([917cf05](https://github.com/bitnami/charts/commit/917cf05244decd9934919e1e6bd5b0c6e4309277)), closes [#34987](https://github.com/bitnami/charts/issues/34987)
 
 ## <small>5.0.8 (2025-07-24)</small>
 

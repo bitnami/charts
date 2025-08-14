@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.1.43 (2025-08-01)
+## 5.1.44 (2025-08-06)
 
-* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35384](https://github.com/bitnami/charts/pull/35384))
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35463](https://github.com/bitnami/charts/pull/35463))
+
+## <small>5.1.43 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/concourse] :zap: :arrow_up: Update dependency references (#35384) ([af55f1f](https://github.com/bitnami/charts/commit/af55f1f7c658d2c8845ec6e00e3983e3554df6d6)), closes [#35384](https://github.com/bitnami/charts/issues/35384)
 
 ## <small>5.1.42 (2025-07-26)</small>
 

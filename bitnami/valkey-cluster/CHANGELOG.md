@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.18 (2025-07-15)
+## 3.0.19 (2025-08-07)
 
-* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#35132](https://github.com/bitnami/charts/pull/35132))
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#35525](https://github.com/bitnami/charts/pull/35525))
+
+## <small>3.0.18 (2025-07-15)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35132) ([f8cbeb2](https://github.com/bitnami/charts/commit/f8cbeb2cfbb6b0dcdf67edc536bbe075a16f7cef)), closes [#35132](https://github.com/bitnami/charts/issues/35132)
 
 ## <small>3.0.17 (2025-07-09)</small>
 
