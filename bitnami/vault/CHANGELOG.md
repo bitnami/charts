@@ -1,8 +1,16 @@
 # Changelog
 
+## 1.9.0 (2025-08-14)
+
+* [bitnami/vault] Add ability to disable the cluster role binding for server rbac ([#35861](https://github.com/bitnami/charts/pull/35861))
+
+## <small>1.8.1 (2025-08-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35839) ([af2dba9](https://github.com/bitnami/charts/commit/af2dba9fe07af98c9c5f094d24207250e462ffb0)), closes [#35839](https://github.com/bitnami/charts/issues/35839)
+
 ## 1.8.0 (2025-08-13)
 
-* [bitnami/vault] Add ability to modify or extend the vault sever RBAC roles ([#35774](https://github.com/bitnami/charts/pull/35774))
+* [bitnami/vault] Add ability to modify or extend the vault sever RBAC roles (#35774) ([f6fa389](https://github.com/bitnami/charts/commit/f6fa389e36433f6a859b40eda3447ccab1dcc25c)), closes [#35774](https://github.com/bitnami/charts/issues/35774)
 
 ## <small>1.7.25 (2025-08-07)</small>
 
