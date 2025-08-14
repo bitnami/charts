@@ -1,0 +1,144 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    cdi.kubevirt.io: cdi-operator
+    name: cdi-operator
+    operator.cdi.kubevirt.io: ""
+    prometheus.cdi.kubevirt.io: "true"
+spec:
+  {{- if not .Values.cdioperator.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.cdioperator.replicaCount }}
+  {{- end }}
+  {{- if .Values.cdioperator.updateStrategy }}
+  strategy: {{- toYaml .Values.cdioperator.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.cdioperator.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      name: cdi-operator
+      operator.cdi.kubevirt.io: ""
+  template:
+    metadata:
+      {{- if .Values.cdioperator.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        cdi.kubevirt.io: cdi-operator
+        name: cdi-operator
+        operator.cdi.kubevirt.io: ""
+        prometheus.cdi.kubevirt.io: "true"
+    spec:
+      serviceAccountName: {{ template "cdioperator.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.cdioperator.automountServiceAccountToken }}
+      {{- if .Values.cdioperator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cdioperator.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.cdioperator.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.cdioperator.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cdioperator.podAffinityPreset "component" "operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.cdioperator.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.cdioperator.podAntiAffinityPreset "component" "operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.cdioperator.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.cdioperator.nodeAffinityPreset.type "key" .Values.cdioperator.nodeAffinityPreset.key "values" .Values.cdioperator.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.cdioperator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.cdioperator.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cdioperator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cdioperator.priorityClassName }}
+      priorityClassName: {{ .Values.cdioperator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.cdioperator.schedulerName }}
+      schedulerName: {{ .Values.cdioperator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.cdioperator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cdioperator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.cdioperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.cdioperator.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.cdioperator.terminationGracePeriodSeconds }}
+      {{- end }}
+      containers:
+        - name: cdi-operator
+          image: {{ template "cdioperator.image" . }}
+          imagePullPolicy: {{ .Values.cdioperator.image.pullPolicy }}
+          {{- if .Values.cdioperator.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cdioperator.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.cdioperator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.cdioperator.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.args "context" $) | nindent 12 }}
+          {{- end }}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          env:
+          - name: DEPLOY_CLUSTER_RESOURCES
+            value: "true"
+          - name: OPERATOR_VERSION
+            value: {{ .Values.cdioperator.image.tag }}
+          - name: CONTROLLER_IMAGE
+            value: quay.io/kubevirt/cdi-controller:{{ .Values.cdioperator.image.tag }}
+          - name: IMPORTER_IMAGE
+            value: quay.io/kubevirt/cdi-importer:{{ .Values.cdioperator.image.tag }}
+          - name: CLONER_IMAGE
+            value: quay.io/kubevirt/cdi-cloner:{{ .Values.cdioperator.image.tag }}
+          - name: OVIRT_POPULATOR_IMAGE
+            value: quay.io/kubevirt/cdi-importer:{{ .Values.cdioperator.image.tag }}
+          - name: APISERVER_IMAGE
+            value: quay.io/kubevirt/cdi-apiserver:{{ .Values.cdioperator.image.tag }}
+          - name: UPLOAD_SERVER_IMAGE
+            value: quay.io/kubevirt/cdi-uploadserver:{{ .Values.cdioperator.image.tag }}
+          - name: UPLOAD_PROXY_IMAGE
+            value: quay.io/kubevirt/cdi-uploadproxy:{{ .Values.cdioperator.image.tag }}
+          - name: VERBOSITY
+            value: "1"
+          - name: PULL_POLICY
+            value: IfNotPresent
+          - name: MONITORING_NAMESPACE
+            {{- if .Values.cdioperator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.cdioperator.resources }}
+          resources: {{- toYaml .Values.cdioperator.resources | nindent 12 }}
+          {{- else if ne .Values.cdioperator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cdioperator.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: metrics
+              protocol: TCP
+              containerPort: {{ .Values.cdioperator.containerPorts.metrics }}
+            {{- if .Values.cdioperator.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- end }}
+          {{- if .Values.cdioperator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cdioperator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.cdioperator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.cdioperator.sidecars "context" $) | nindent 8 }}
+        {{- end }}
