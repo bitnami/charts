@@ -1,12 +1,12 @@
 # Changelog
 
-## 5.1.0 (2025-08-13)
+## 5.1.0 (2025-08-14)
 
 * [bitnami/kube-state-metrics] fix: OOM Killed ([#35785](https://github.com/bitnami/charts/pull/35785))
 
 ## <small>5.0.16 (2025-08-13)</small>
 
-* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#35843](https://github.com/bitnami/charts/pull/35843))
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35843) ([77cd410](https://github.com/bitnami/charts/commit/77cd4100bb87ecebf2e675ecd8e4dcaa87b8245b)), closes [#35843](https://github.com/bitnami/charts/issues/35843)
 
 ## <small>5.0.15 (2025-08-07)</small>
 
