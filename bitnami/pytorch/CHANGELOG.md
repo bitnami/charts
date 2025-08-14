@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.3.21 (2025-08-07)
+## 4.3.23 (2025-08-14)
 
-* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#35529](https://github.com/bitnami/charts/pull/35529))
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references ([#35912](https://github.com/bitnami/charts/pull/35912))
+
+## <small>4.3.22 (2025-08-07)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#35649) ([28e2259](https://github.com/bitnami/charts/commit/28e2259bb2fd3c8cc2a9927584f4cb9f646db425)), closes [#35649](https://github.com/bitnami/charts/issues/35649)
+
+## <small>4.3.21 (2025-08-07)</small>
+
+* [bitnami/pytorch] :zap: :arrow_up: Update dependency references (#35529) ([2af1174](https://github.com/bitnami/charts/commit/2af117477c37bfbef1144d4bf3b3fd98a3388a56)), closes [#35529](https://github.com/bitnami/charts/issues/35529)
 
 ## <small>4.3.20 (2025-08-07)</small>
 
