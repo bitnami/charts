@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.17 (2025-08-07)
+## 12.0.18 (2025-08-14)
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35604](https://github.com/bitnami/charts/pull/35604))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35870](https://github.com/bitnami/charts/pull/35870))
+
+## <small>12.0.17 (2025-08-07)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35604) ([ddedccc](https://github.com/bitnami/charts/commit/ddedccca22495fb8e688a692f096419a80218d57)), closes [#35604](https://github.com/bitnami/charts/issues/35604)
 
 ## <small>12.0.16 (2025-08-07)</small>
 
