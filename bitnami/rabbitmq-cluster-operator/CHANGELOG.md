@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.4.28 (2025-08-04)
+## 4.4.31 (2025-08-07)
 
-* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#35397](https://github.com/bitnami/charts/pull/35397))
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#35668](https://github.com/bitnami/charts/pull/35668))
+
+## <small>4.4.30 (2025-08-07)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#35526) ([ec23527](https://github.com/bitnami/charts/commit/ec2352749bf919e6017ed95916f573d10d0338ed)), closes [#35526](https://github.com/bitnami/charts/issues/35526)
+
+## <small>4.4.29 (2025-08-05)</small>
+
+* [bitnami/rabbitmq-cluster-operator]: Invalid PodMonitoring name in messaging-topology-operator(#3539 ([3ab9219](https://github.com/bitnami/charts/commit/3ab92195e4dc07f1dd7212dfded780115ce3a61b)), closes [#35391](https://github.com/bitnami/charts/issues/35391) [#35392](https://github.com/bitnami/charts/issues/35392) [#35391](https://github.com/bitnami/charts/issues/35391)
+
+## <small>4.4.28 (2025-08-04)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#35397) ([074e8af](https://github.com/bitnami/charts/commit/074e8af650ed021da1506dab82ad8d0ed883a926)), closes [#35397](https://github.com/bitnami/charts/issues/35397)
 
 ## <small>4.4.27 (2025-08-04)</small>
 

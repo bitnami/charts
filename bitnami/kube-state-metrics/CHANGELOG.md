@@ -4,6 +4,10 @@
 
 * [bitnami/kube-state-metrics] fix: OOM Killed ([#35785](https://github.com/bitnami/charts/pull/35785))
 
+## <small>5.0.16 (2025-08-13)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#35843](https://github.com/bitnami/charts/pull/35843))
+
 ## <small>5.0.15 (2025-08-07)</small>
 
 * [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)

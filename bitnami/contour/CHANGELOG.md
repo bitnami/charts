@@ -1,8 +1,25 @@
 # Changelog
 
-## 21.0.13 (2025-07-31)
+## 21.1.2 (2025-08-13)
 
-* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35357](https://github.com/bitnami/charts/pull/35357))
+* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35845](https://github.com/bitnami/charts/pull/35845))
+
+## <small>21.1.1 (2025-08-13)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35795) ([f2c715a](https://github.com/bitnami/charts/commit/f2c715ad307f93eb8d736df93baee9cb9d2ac703)), closes [#35795](https://github.com/bitnami/charts/issues/35795)
+
+## 21.1.0 (2025-08-12)
+
+* [bitnami/contour] feat: Standardize default Envoy init-config init-container (#35760) ([0ea2102](https://github.com/bitnami/charts/commit/0ea2102e9e66fbeba562bafb0ce16cc36de91160)), closes [#35760](https://github.com/bitnami/charts/issues/35760)
+
+## <small>21.0.14 (2025-08-11)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35730) ([eaac71d](https://github.com/bitnami/charts/commit/eaac71d24288ff6e462b6bfd85f4a9db2c445d68)), closes [#35730](https://github.com/bitnami/charts/issues/35730)
+
+## <small>21.0.13 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35357) ([fc363d3](https://github.com/bitnami/charts/commit/fc363d32c3000a71682229060258f093ef7951ec)), closes [#35357](https://github.com/bitnami/charts/issues/35357)
 
 ## <small>21.0.12 (2025-07-24)</small>
 

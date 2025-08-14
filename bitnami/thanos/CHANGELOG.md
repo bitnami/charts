@@ -1,8 +1,29 @@
 # Changelog
 
-## 17.2.3 (2025-07-23)
+## 17.3.1 (2025-08-13)
 
-* [bitnami/thanos] Fix commonLabels on sharded storegateway ([#35238](https://github.com/bitnami/charts/pull/35238))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35837](https://github.com/bitnami/charts/pull/35837))
+
+## 17.3.0 (2025-08-13)
+
+* [bitnami/thanos] Add hpa behavior (#35753) ([3f96f2e](https://github.com/bitnami/charts/commit/3f96f2e5ffcb34e08ec6cdeb9e5b5141722a76d8)), closes [#35753](https://github.com/bitnami/charts/issues/35753)
+
+## <small>17.2.6 (2025-08-08)</small>
+
+* [bitnami/thanos]: correct labelSelector with shard key for storegateway affinity (#35440) ([fd5ce7a](https://github.com/bitnami/charts/commit/fd5ce7a7568e423e1659946aa4e2febaf67044a8)), closes [#35440](https://github.com/bitnami/charts/issues/35440)
+
+## <small>17.2.5 (2025-08-07)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35635) ([3356744](https://github.com/bitnami/charts/commit/3356744640e3af8a7d3db823f15ce442e157abeb)), closes [#35635](https://github.com/bitnami/charts/issues/35635)
+
+## <small>17.2.4 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35533) ([9c6effd](https://github.com/bitnami/charts/commit/9c6effd63b2073ef38cf8e2a82729f07a2b01d8c)), closes [#35533](https://github.com/bitnami/charts/issues/35533)
+
+## <small>17.2.3 (2025-07-23)</small>
+
+* [bitnami/thanos] Fix commonLabels on sharded storegateway (#35238) ([c72feda](https://github.com/bitnami/charts/commit/c72feda3e1ee6850375c93657af2c81f9cd9bddf)), closes [#35238](https://github.com/bitnami/charts/issues/35238)
 
 ## <small>17.2.2 (2025-07-21)</small>
 

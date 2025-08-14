@@ -1,8 +1,21 @@
 # Changelog
 
-## 2.3.28 (2025-08-01)
+## 2.3.31 (2025-08-07)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#35370](https://github.com/bitnami/charts/pull/35370))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#35640](https://github.com/bitnami/charts/pull/35640))
+
+## <small>2.3.30 (2025-08-07)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35556) ([c3ada76](https://github.com/bitnami/charts/commit/c3ada760013a501a70f784113056f864a9564537)), closes [#35556](https://github.com/bitnami/charts/issues/35556)
+
+## <small>2.3.29 (2025-08-07)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35473) ([a655602](https://github.com/bitnami/charts/commit/a65560295646d4d9e808d208ad27110f6925902b)), closes [#35473](https://github.com/bitnami/charts/issues/35473)
+
+## <small>2.3.28 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35370) ([159c5c1](https://github.com/bitnami/charts/commit/159c5c104125cd703feeeacaa3492a82bc7e5d0e)), closes [#35370](https://github.com/bitnami/charts/issues/35370)
 
 ## <small>2.3.27 (2025-07-28)</small>
 

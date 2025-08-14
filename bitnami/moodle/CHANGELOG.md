@@ -1,8 +1,24 @@
 # Changelog
 
-## 27.0.3 (2025-07-15)
+## 27.0.6 (2025-08-11)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35115](https://github.com/bitnami/charts/pull/35115))
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35718](https://github.com/bitnami/charts/pull/35718))
+
+## <small>27.0.5 (2025-08-07)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35626) ([a5292e4](https://github.com/bitnami/charts/commit/a5292e422f9656384796ee3c3ac2a66dcc5e0d92)), closes [#35626](https://github.com/bitnami/charts/issues/35626)
+
+## <small>27.0.4 (2025-08-06)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35446) ([83131f2](https://github.com/bitnami/charts/commit/83131f2e88e01db6ff8e9da85d8975fb9f72528f)), closes [#35446](https://github.com/bitnami/charts/issues/35446)
+
+## <small>27.0.3 (2025-07-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35115) ([a35aa17](https://github.com/bitnami/charts/commit/a35aa17f568e44948b5c26abddf885a7101233ae)), closes [#35115](https://github.com/bitnami/charts/issues/35115)
 
 ## <small>27.0.2 (2025-07-10)</small>
 

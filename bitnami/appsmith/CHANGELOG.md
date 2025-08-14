@@ -1,8 +1,31 @@
 # Changelog
 
-## 6.0.21 (2025-07-23)
+## 7.0.3 (2025-08-13)
 
-* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35265](https://github.com/bitnami/charts/pull/35265))
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35849](https://github.com/bitnami/charts/pull/35849))
+
+## <small>7.0.2 (2025-08-13)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35810) ([0e0c03f](https://github.com/bitnami/charts/commit/0e0c03f25287e214c591cdb6da0ae20688e4a40a)), closes [#35810](https://github.com/bitnami/charts/issues/35810)
+
+## <small>7.0.1 (2025-08-11)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35738) ([14a410e](https://github.com/bitnami/charts/commit/14a410e9d074d4ed6322f9ecffc13ef410758401)), closes [#35738](https://github.com/bitnami/charts/issues/35738)
+
+## 7.0.0 (2025-08-11)
+
+* [bitnami/appsmith] Upgrade to Redis subchart 22 (#35729) ([80ef5e2](https://github.com/bitnami/charts/commit/80ef5e2a0c1adc6ad44b67e8456bfb405682e521)), closes [#35729](https://github.com/bitnami/charts/issues/35729)
+
+## <small>6.0.22 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/appsmith] Fix example errors in README.md (#35337) ([660a40e](https://github.com/bitnami/charts/commit/660a40e668b8bd4f0a420f93ae82f0c62bff91f0)), closes [#35337](https://github.com/bitnami/charts/issues/35337)
+* [bitnami/appsmith] Update MongoDB subchart (#35415) ([b4f1dfe](https://github.com/bitnami/charts/commit/b4f1dfe88d28f989854e22b6c5067c501799df85)), closes [#35415](https://github.com/bitnami/charts/issues/35415)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
+
+## <small>6.0.21 (2025-07-23)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35265) ([c0fe116](https://github.com/bitnami/charts/commit/c0fe116ecae4fefd26c9a771449a7224e07df81e)), closes [#35265](https://github.com/bitnami/charts/issues/35265)
 
 ## <small>6.0.20 (2025-07-22)</small>
 
@@ -10,7 +33,6 @@
 
 ## <small>6.0.19 (2025-07-21)</small>
 
-* :warning: This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
 * [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
 * [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
 * [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)

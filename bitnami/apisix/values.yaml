@@ -93,7 +93,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.13.0-debian-12-r1
+  tag: 3.13.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1704,7 +1704,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r76
+    tag: 3.0.1-debian-12-r79
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2450,7 +2450,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.4-debian-12-r11
+    tag: 1.8.4-debian-12-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3169,7 +3169,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r48
+    tag: 12-debian-12-r50
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

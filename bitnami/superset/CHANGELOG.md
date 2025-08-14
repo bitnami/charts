@@ -1,8 +1,20 @@
 # Changelog
 
-## 4.0.1 (2025-07-30)
+## 5.0.0 (2025-08-11)
 
-* [bitnami/superset] :zap: :arrow_up: Update dependency references ([#35345](https://github.com/bitnami/charts/pull/35345))
+* [bitnami/superset] Upgrade to Redis subchart 22 ([#35723](https://github.com/bitnami/charts/pull/35723))
+
+## <small>4.0.2 (2025-08-07)</small>
+
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#35684) ([20b9701](https://github.com/bitnami/charts/commit/20b970147099aebebd66f8f2ffab2477c47810ee)), closes [#35684](https://github.com/bitnami/charts/issues/35684)
+
+## <small>4.0.1 (2025-07-30)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/superset] :zap: :arrow_up: Update dependency references (#35345) ([2b341db](https://github.com/bitnami/charts/commit/2b341dbb1c49630cef316ea5cf0d3c4835f13108)), closes [#35345](https://github.com/bitnami/charts/issues/35345)
 
 ## 4.0.0 (2025-06-30)
 

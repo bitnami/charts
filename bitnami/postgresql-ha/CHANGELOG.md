@@ -1,8 +1,24 @@
 # Changelog
 
+## 16.2.0 (2025-08-13)
+
+* [bitnami:postgresql-ha] feat: add support for affinity to backup cronjob ([#35773](https://github.com/bitnami/charts/pull/35773))
+
+## <small>16.1.2 (2025-08-07)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35648) ([d524d01](https://github.com/bitnami/charts/commit/d524d01b7c5293307c6a264372bd796e75296062)), closes [#35648](https://github.com/bitnami/charts/issues/35648)
+
+## <small>16.1.1 (2025-08-07)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35517) ([4167326](https://github.com/bitnami/charts/commit/4167326b7be2a3531c5e28678287ce8368fda083)), closes [#35517](https://github.com/bitnami/charts/issues/35517)
+
 ## 16.1.0 (2025-08-04)
 
-* [bitnami/postgresql-ha] feat: add support for disabling connection cache ([#35389](https://github.com/bitnami/charts/pull/35389))
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/postgresql-ha] feat: add support for disabling connection cache (#35389) ([df4bc69](https://github.com/bitnami/charts/commit/df4bc697954960a4e84b9a490e26b70194618245)), closes [#35389](https://github.com/bitnami/charts/issues/35389)
 
 ## <small>16.0.22 (2025-07-15)</small>
 

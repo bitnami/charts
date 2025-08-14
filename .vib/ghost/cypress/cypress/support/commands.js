@@ -39,7 +39,7 @@ Cypress.Commands.add(
     // In Ghost, logging is not considered as completed until the Dashboard view
     // is visible. Navigating to any other site before that will lead to an error
     // 500
-    cy.contains('h2', 'Dashboard').should('be.visible');
+    cy.contains('h1', 'Analytics').should('be.visible');
   }
 );
 

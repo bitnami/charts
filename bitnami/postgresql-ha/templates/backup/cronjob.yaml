@@ -47,6 +47,13 @@ spec:
           {{- if .Values.backup.cronjob.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.tolerations "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.backup.cronjob.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.affinity "context" $) | nindent 12 }}
+          {{- else }}
+          affinity:
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.cronjob.podAffinityPreset "component" "backup" "customLabels" $labels "context" $) | nindent 14 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.backup.cronjob.nodeAffinityPreset.type "key" .Values.backup.cronjob.nodeAffinityPreset.key "values" .Values.backup.cronjob.nodeAffinityPreset.values) | nindent 14 }}
+          {{- end }}
           containers:
           - name: {{ include "postgresql-ha.postgresql" . }}-pgdumpall
             image: {{ include "postgresql-ha.postgresql.image" . }}
