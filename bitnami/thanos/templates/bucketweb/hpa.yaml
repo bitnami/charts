@@ -15,6 +15,10 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.bucketweb.autoscaling.behavior }}
+  behavior:
+    {{- toYaml .Values.bucketweb.autoscaling.behavior | nindent 4 }}
+  {{- end }}
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment

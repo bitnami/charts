@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.0.26 (2025-08-07)
+## 3.0.30 (2025-08-14)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#35658](https://github.com/bitnami/charts/pull/35658))
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#35859](https://github.com/bitnami/charts/pull/35859))
+
+## <small>3.0.29 (2025-08-13)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#35830) ([b67e53b](https://github.com/bitnami/charts/commit/b67e53bd415fc59019df7cfa4af014e66bbde6f5)), closes [#35830](https://github.com/bitnami/charts/issues/35830)
+
+## <small>3.0.28 (2025-08-09)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#35714) ([9036385](https://github.com/bitnami/charts/commit/9036385f6a1ffbdfb8c766a789aa05006b073164)), closes [#35714](https://github.com/bitnami/charts/issues/35714)
+
+## <small>3.0.27 (2025-08-08)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#35695) ([415f564](https://github.com/bitnami/charts/commit/415f56454bd400b902f80cd1594f17a96ed71488)), closes [#35695](https://github.com/bitnami/charts/issues/35695)
+
+## <small>3.0.26 (2025-08-07)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#35658) ([2dbe59c](https://github.com/bitnami/charts/commit/2dbe59c8bfba5d3060fb6ffa7549110d53878113)), closes [#35658](https://github.com/bitnami/charts/issues/35658)
 
 ## <small>3.0.25 (2025-08-07)</small>
 

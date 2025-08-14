@@ -29,23 +29,14 @@ Installed components:
   {{- if .Values.proxy.enabled }}
   * proxy
   {{- end }}
-  {{- if .Values.dataCoord.enabled }}
-  * data-coordinator
-  {{- end }}
-  {{- if .Values.indexCoord.enabled }}
-  * index-coordinator
-  {{- end }}
-  {{- if .Values.queryCoord.enabled }}
-  * query-coordinator
-  {{- end }}
-  {{- if .Values.rootCoord.enabled }}
-  * root-coordinator
+  {{- if .Values.coordinator.enabled }}
+  * coordinator
   {{- end }}
   {{- if .Values.dataNode.enabled }}
   * data-node
   {{- end }}
-  {{- if .Values.indexNode.enabled }}
-  * index-node
+  {{- if .Values.streamingNode.enabled }}
+  * streaming-node
   {{- end }}
   {{- if .Values.queryNode.enabled }}
   * query-node
@@ -120,6 +111,6 @@ Check the upstream Milvus documentation: https://milvus.io/docs
 {{- include "milvus.validateValues" . }}
 
 {{- end }}
-{{- include "common.warnings.resources" (dict "sections" (list "attu" "dataCoord" "dataNode" "indexCoord" "indexNode" "initJob" "proxy" "queryCoord" "queryNode" "rootCoord" "waitContainer") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "attu" "coordinator" "dataNode" "queryNode" "streamingNode" "initJob" "proxy" "waitContainer") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.milvus.image .Values.initJob.image .Values.attu.image .Values.waitContainer.image) "context" $) }}
 {{- include "common.errors.insecureImages" (dict "images" (list .Values.milvus.image .Values.initJob.image .Values.attu.image .Values.waitContainer.image) "context" $) }}

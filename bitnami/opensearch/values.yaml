@@ -352,7 +352,7 @@ security:
     nodesDN: ""
     ## @param security.tls.adminDN A comma separated list of DN for admins
     ##
-    adminDN: ""
+    adminDN: "CN=admin;CN=admin"
 
 ## @section Traffic Exposure Parameters
 

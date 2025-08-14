@@ -1,8 +1,20 @@
 # Changelog
 
-## 24.9.1 (2025-08-07)
+## 25.0.2 (2025-08-12)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#35578](https://github.com/bitnami/charts/pull/35578))
+* [bitnami/keycloak] bugfix: validation when production is enabled ([#35757](https://github.com/bitnami/charts/pull/35757))
+
+## <small>25.0.1 (2025-08-11)</small>
+
+* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl (#35726) ([25b6602](https://github.com/bitnami/charts/commit/25b6602175afaed1c1becce833463d4005e24598)), closes [#35726](https://github.com/bitnami/charts/issues/35726)
+
+## 25.0.0 (2025-08-08)
+
+* [bitnami/keycloak] feat: native metrics & refactor (#35568) ([0941bbc](https://github.com/bitnami/charts/commit/0941bbcbeca0b8b8d487e710701628e1f22e9f61)), closes [#35568](https://github.com/bitnami/charts/issues/35568)
+
+## <small>24.9.1 (2025-08-07)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#35578) ([6f18b10](https://github.com/bitnami/charts/commit/6f18b10318ec5c39d3a0dab34ae93efa90d70884)), closes [#35578](https://github.com/bitnami/charts/issues/35578)
 
 ## 24.9.0 (2025-08-04)
 
