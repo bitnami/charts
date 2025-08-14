@@ -683,6 +683,10 @@ server:
     ##
     create: true
 
+    ## @param server.rbac.createClusterRoleBinding Specifies whether a ClusterRoleBinding should be created
+    ##
+    createClusterRoleBinding: true
+
     leaderElection:
       ## @param server.rbac.leaderElection.rules [array] Specifies the leader election role rules
       ## Example:
