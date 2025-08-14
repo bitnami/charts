@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.1.12 (2025-08-13)
+## 3.1.12 (2025-08-14)
 
 * [bitnami/fluent-bit] fix: add extraContainerPorts value(s) to container configuration for fluent-bit deployment ([#35806](https://github.com/bitnami/charts/pull/35806))
 
