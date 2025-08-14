@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.2 (2025-08-12)
+## 25.1.0 (2025-08-14)
 
-* [bitnami/keycloak] bugfix: validation when production is enabled ([#35757](https://github.com/bitnami/charts/pull/35757))
+* [bitnami/keycloak] feat: add parameter to enable HTTP endpoint ([#35881](https://github.com/bitnami/charts/pull/35881))
+
+## <small>25.0.2 (2025-08-12)</small>
+
+* [bitnami/keycloak] bugfix: validation when production is enabled (#35757) ([14e2c8a](https://github.com/bitnami/charts/commit/14e2c8a3030bd82ac7ba9d843cfa4f09a5645dc2)), closes [#35757](https://github.com/bitnami/charts/issues/35757)
 
 ## <small>25.0.1 (2025-08-11)</small>
 
