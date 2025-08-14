@@ -130,6 +130,7 @@ config:
     - name: "dump"
       file:
         path: "/dev/stdout"
+        layout: null
         ## Example:
         ## layout:
         ##   message: "{{ .Message }}"
