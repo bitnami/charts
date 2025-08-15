@@ -4,6 +4,10 @@
 
 * [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#36013](https://github.com/bitnami/charts/pull/36013))
 
+## <small>25.0.17 (2025-08-15)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#36002) ([680f61c](https://github.com/bitnami/charts/commit/680f61c9874448a23d392311dccc20a7ef502c9d)), closes [#36002](https://github.com/bitnami/charts/issues/36002)
+
 ## <small>25.0.16 (2025-08-15)</small>
 
 * [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#35996) ([200532a](https://github.com/bitnami/charts/commit/200532afa2073eec54cd8b3eacf4f65fe1825c1d)), closes [#35996](https://github.com/bitnami/charts/issues/35996)
