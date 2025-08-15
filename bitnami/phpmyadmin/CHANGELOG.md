@@ -1,8 +1,8 @@
 # Changelog
 
-## 19.0.19 (2025-08-15)
+## 19.0.20 (2025-08-15)
 
-* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#36043](https://github.com/bitnami/charts/pull/36043))
+* [bitnami/phpmyadmin] :zap: :arrow_up: Update dependency references ([#36048](https://github.com/bitnami/charts/pull/36048))
 
 ## <small>19.0.18 (2025-08-15)</small>
 
