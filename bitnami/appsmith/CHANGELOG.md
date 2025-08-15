@@ -1,8 +1,20 @@
 # Changelog
 
+## 7.0.3 (2025-08-13)
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references ([#35849](https://github.com/bitnami/charts/pull/35849))
+
+## <small>7.0.2 (2025-08-13)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35810) ([0e0c03f](https://github.com/bitnami/charts/commit/0e0c03f25287e214c591cdb6da0ae20688e4a40a)), closes [#35810](https://github.com/bitnami/charts/issues/35810)
+
+## <small>7.0.1 (2025-08-11)</small>
+
+* [bitnami/appsmith] :zap: :arrow_up: Update dependency references (#35738) ([14a410e](https://github.com/bitnami/charts/commit/14a410e9d074d4ed6322f9ecffc13ef410758401)), closes [#35738](https://github.com/bitnami/charts/issues/35738)
+
 ## 7.0.0 (2025-08-11)
 
-* [bitnami/appsmith] Upgrade to Redis subchart 22 ([#35729](https://github.com/bitnami/charts/pull/35729))
+* [bitnami/appsmith] Upgrade to Redis subchart 22 (#35729) ([80ef5e2](https://github.com/bitnami/charts/commit/80ef5e2a0c1adc6ad44b67e8456bfb405682e521)), closes [#35729](https://github.com/bitnami/charts/issues/35729)
 
 ## <small>6.0.22 (2025-08-05)</small>
 

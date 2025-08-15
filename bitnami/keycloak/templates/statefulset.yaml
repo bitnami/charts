@@ -203,14 +203,15 @@ spec:
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
               path: {{ .Values.httpRelativePath }}
-              port: http
+              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" .) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" .) | nindent 12 }}
@@ -218,7 +219,8 @@ spec:
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
               path: {{ .Values.httpRelativePath }}realms/{{ .Values.adminRealm | default "master" }}
-              port: http
+              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
           {{- end }}
           volumeMounts:

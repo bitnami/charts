@@ -1,8 +1,12 @@
 # Changelog
 
+## 25.0.1 (2025-08-14)
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#35898](https://github.com/bitnami/charts/pull/35898))
+
 ## 25.0.0 (2025-08-11)
 
-* [bitnami/airflow] Upgrade to Redis subchart 22 ([#35728](https://github.com/bitnami/charts/pull/35728))
+* [bitnami/airflow] Upgrade to Redis subchart 22 (#35728) ([5c3c29b](https://github.com/bitnami/charts/commit/5c3c29b1243b314b38a943934a9f5129dfc221ac)), closes [#35728](https://github.com/bitnami/charts/issues/35728)
 
 ## <small>24.3.4 (2025-08-09)</small>
 

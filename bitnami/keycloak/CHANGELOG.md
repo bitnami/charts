@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.3 (2025-08-13)
+## 25.1.1 (2025-08-13)
 
 * [bitnami/keycloak] Add externalDatabase.extraParams for custom JDBC connection parameters ([#35770](https://github.com/bitnami/charts/pull/35770))
+
+## 25.1.0 (2025-08-14)
+
+* [bitnami/keycloak] feat: add parameter to enable HTTP endpoint ([#35881](https://github.com/bitnami/charts/pull/35881))
 
 ## <small>25.0.2 (2025-08-12)</small>
 

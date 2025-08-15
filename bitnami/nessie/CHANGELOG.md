@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.0.28 (2025-08-07)
+## 2.0.29 (2025-08-14)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#35627](https://github.com/bitnami/charts/pull/35627))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#35920](https://github.com/bitnami/charts/pull/35920))
+
+## <small>2.0.28 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35627) ([f99bfe3](https://github.com/bitnami/charts/commit/f99bfe39a396f1a27dbbf133da3c080f2763f42a)), closes [#35627](https://github.com/bitnami/charts/issues/35627)
 
 ## <small>2.0.27 (2025-07-21)</small>
 

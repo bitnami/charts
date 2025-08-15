@@ -1,8 +1,20 @@
 # Changelog
 
-## 12.1.4 (2025-08-07)
+## 12.1.7 (2025-08-13)
 
-* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#35689](https://github.com/bitnami/charts/pull/35689))
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references ([#35854](https://github.com/bitnami/charts/pull/35854))
+
+## <small>12.1.6 (2025-08-13)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#35812) ([501d76c](https://github.com/bitnami/charts/commit/501d76c5bf55d44b75e21a9d863a3e2eac3d336e)), closes [#35812](https://github.com/bitnami/charts/issues/35812)
+
+## <small>12.1.5 (2025-08-13)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#35776) ([20f7a3e](https://github.com/bitnami/charts/commit/20f7a3e3a0c4cd2bc43fec4be8d899018b005b87)), closes [#35776](https://github.com/bitnami/charts/issues/35776)
+
+## <small>12.1.4 (2025-08-07)</small>
+
+* [bitnami/grafana] :zap: :arrow_up: Update dependency references (#35689) ([23b3046](https://github.com/bitnami/charts/commit/23b3046d349d32bf33fb758abaf3d2c01e2494f9)), closes [#35689](https://github.com/bitnami/charts/issues/35689)
 
 ## <small>12.1.3 (2025-08-07)</small>
 
