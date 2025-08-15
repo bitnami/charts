@@ -5,7 +5,7 @@ annotations:
   category: MachineLearning
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.50.1-debian-12-r14
+      image: docker.io/bitnami/git:2.50.1-debian-12-r15
     - name: mlflow
       image: docker.io/bitnami/mlflow:3.2.0-debian-12-r7
     - name: os-shell
