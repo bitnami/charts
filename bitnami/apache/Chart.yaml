@@ -7,7 +7,7 @@ annotations:
     - name: apache
       image: docker.io/bitnami/apache:2.4.65-debian-12-r2
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r41
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r42
     - name: git
       image: docker.io/bitnami/git:2.50.1-debian-12-r20
   licenses: Apache-2.0
