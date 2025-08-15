@@ -9,7 +9,7 @@ annotations:
     - name: dotnet-sdk
       image: docker.io/bitnami/dotnet-sdk:9.0.304-debian-12-r1
     - name: git
-      image: docker.io/bitnami/git:2.50.1-debian-12-r13
+      image: docker.io/bitnami/git:2.50.1-debian-12-r14
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
