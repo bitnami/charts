@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.31 (2025-08-14)
+## 3.0.31 (2025-08-15)
 
 * [bitnami/valkey] doc: fix default value in README ([#35741](https://github.com/bitnami/charts/pull/35741))
 
