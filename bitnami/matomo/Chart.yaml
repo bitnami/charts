@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r41
+      image: docker.io/bitnami/apache-exporter:1.0.10-debian-12-r42
     - name: matomo
       image: docker.io/bitnami/matomo:5.3.2-debian-12-r11
     - name: os-shell
