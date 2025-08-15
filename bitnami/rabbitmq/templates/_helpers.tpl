@@ -278,3 +278,20 @@ Get the extraConfigurationExistingSecret secret.
     {{- tpl .Values.extraConfiguration . -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the value for queue_leader_locator.  This will provide backwards compatibility for the old queue_master_locator configuration,
+mapping old values into the correct new values.
+*/}}
+{{- define "rabbitmq.queueLocator" -}}
+{{- $value := .Values.queue_leader_locator -}}
+
+{{- if not (empty .Values.queue_master_locator) -}}
+    {{- if eq .Values.queue_master_locator "client-local" -}}
+        {{- $value = "client-local" -}}
+    {{- else -}}
+        {{- $value = "balanced" -}}
+    {{- end -}}
+{{- end -}}
+{{- $value -}}
+{{- end -}}

@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.13 (2025-08-07)
+## 16.0.14 (2025-08-13)
 
-* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#35650](https://github.com/bitnami/charts/pull/35650))
+* [bitnami/rabbitmq] Migrate deprecated queue_leader_locator configuration ([#35748](https://github.com/bitnami/charts/pull/35748))
+
+## <small>16.0.13 (2025-08-07)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#35650) ([29e7af1](https://github.com/bitnami/charts/commit/29e7af193d705c9d729b5fd394a0f7dabc2fe513)), closes [#35650](https://github.com/bitnami/charts/issues/35650)
 
 ## <small>16.0.12 (2025-08-04)</small>
 
