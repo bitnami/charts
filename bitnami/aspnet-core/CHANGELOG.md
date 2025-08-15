@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.0.26 (2025-08-15)
+## 7.0.27 (2025-08-15)
 
-* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#36008](https://github.com/bitnami/charts/pull/36008))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#36018](https://github.com/bitnami/charts/pull/36018))
+
+## <small>7.0.26 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36008) ([b289307](https://github.com/bitnami/charts/commit/b289307306a693cf3b58c705c30646fa65f645a0)), closes [#36008](https://github.com/bitnami/charts/issues/36008)
 
 ## <small>7.0.25 (2025-08-15)</small>
 
