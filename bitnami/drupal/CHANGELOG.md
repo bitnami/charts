@@ -4,6 +4,10 @@
 
 * [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#36049](https://github.com/bitnami/charts/pull/36049))
 
+## <small>22.0.25 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36042) ([4cc81ea](https://github.com/bitnami/charts/commit/4cc81ea13f8c3bbcc6af68a8650d5a8ce398408f)), closes [#36042](https://github.com/bitnami/charts/issues/36042)
+
 ## <small>22.0.24 (2025-08-15)</small>
 
 * [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36034) ([3ed787a](https://github.com/bitnami/charts/commit/3ed787a5cb4ac19063130e4de22a7330973d7f64)), closes [#36034](https://github.com/bitnami/charts/issues/36034)
