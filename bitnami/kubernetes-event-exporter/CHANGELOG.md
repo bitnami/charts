@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.6.2 (2025-08-14)
+## 3.6.3 (2025-08-15)
 
-* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references ([#35876](https://github.com/bitnami/charts/pull/35876))
+* [bitnami/kubernetes-event-exporter] fix: kubernetes-event-exporter default config layout shows empty logs ([#35983](https://github.com/bitnami/charts/pull/35983))
+
+## <small>3.6.2 (2025-08-14)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#35876) ([b0c5443](https://github.com/bitnami/charts/commit/b0c54435261faca50b050fb06cb55a81fc82af8b)), closes [#35876](https://github.com/bitnami/charts/issues/35876)
 
 ## <small>3.6.1 (2025-08-07)</small>
 
