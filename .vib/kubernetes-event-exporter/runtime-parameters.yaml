@@ -7,7 +7,7 @@ config:
     - name: dump
       file:
         path: /dev/stdout
-        layout: {}
+        layout: null
   route:
     routes:
       - match:
