@@ -1,8 +1,32 @@
 # Changelog
 
-## 7.0.27 (2025-08-15)
+## 7.0.33 (2025-08-15)
 
-* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#36018](https://github.com/bitnami/charts/pull/36018))
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references ([#36078](https://github.com/bitnami/charts/pull/36078))
+
+## <small>7.0.32 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36074) ([6e8ac58](https://github.com/bitnami/charts/commit/6e8ac58f23824b92733c9f50b32c2751bd337558)), closes [#36074](https://github.com/bitnami/charts/issues/36074)
+
+## <small>7.0.31 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36063) ([454673c](https://github.com/bitnami/charts/commit/454673c46cf7552016f58276f2c9b9a08da8f33b)), closes [#36063](https://github.com/bitnami/charts/issues/36063)
+
+## <small>7.0.30 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36056) ([f60c3f0](https://github.com/bitnami/charts/commit/f60c3f087090242fda832208463bc6f5245a74cc)), closes [#36056](https://github.com/bitnami/charts/issues/36056)
+
+## <small>7.0.29 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36047) ([06fc2df](https://github.com/bitnami/charts/commit/06fc2df37e5c99f9a29bb42abbe6158dd85b635b)), closes [#36047](https://github.com/bitnami/charts/issues/36047)
+
+## <small>7.0.28 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36028) ([7244079](https://github.com/bitnami/charts/commit/72440791997cfdda9f85d9edc1f3e166615cf51d)), closes [#36028](https://github.com/bitnami/charts/issues/36028)
+
+## <small>7.0.27 (2025-08-15)</small>
+
+* [bitnami/aspnet-core] :zap: :arrow_up: Update dependency references (#36018) ([6a1bb12](https://github.com/bitnami/charts/commit/6a1bb12d1f6c923f5fae40c55c8006bd03d82bde)), closes [#36018](https://github.com/bitnami/charts/issues/36018)
 
 ## <small>7.0.26 (2025-08-15)</small>
 

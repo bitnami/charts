@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.3.41 (2025-08-15)
+## 2.3.47 (2025-08-15)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#36016](https://github.com/bitnami/charts/pull/36016))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#36076](https://github.com/bitnami/charts/pull/36076))
+
+## <small>2.3.46 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36072) ([355c15a](https://github.com/bitnami/charts/commit/355c15ab56680c878d20ea4b08cd14fa3fb01e47)), closes [#36072](https://github.com/bitnami/charts/issues/36072)
+
+## <small>2.3.45 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36066) ([60ea816](https://github.com/bitnami/charts/commit/60ea81684fe75be89a86d6d0bb38c5bfceedf89b)), closes [#36066](https://github.com/bitnami/charts/issues/36066)
+
+## <small>2.3.44 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36055) ([9cb2c4e](https://github.com/bitnami/charts/commit/9cb2c4eab74a0d8f96fa4ac7674f8ef752353190)), closes [#36055](https://github.com/bitnami/charts/issues/36055)
+
+## <small>2.3.43 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36045) ([571ab5d](https://github.com/bitnami/charts/commit/571ab5d69a930389cd842bef3d07d5551cde0bc2)), closes [#36045](https://github.com/bitnami/charts/issues/36045)
+
+## <small>2.3.42 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36027) ([5a5502c](https://github.com/bitnami/charts/commit/5a5502c0d7602cce09e96e5a13e2f5129f2782ca)), closes [#36027](https://github.com/bitnami/charts/issues/36027)
+
+## <small>2.3.41 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36016) ([d8461de](https://github.com/bitnami/charts/commit/d8461dec6cb0e770204bb70576fdb5c5ac20d5ea)), closes [#36016](https://github.com/bitnami/charts/issues/36016)
 
 ## <small>2.3.40 (2025-08-15)</small>
 
