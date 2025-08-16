@@ -1,8 +1,64 @@
 # Changelog
 
-## 2.3.33 (2025-08-14)
+## 2.3.47 (2025-08-15)
 
-* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#35927](https://github.com/bitnami/charts/pull/35927))
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references ([#36076](https://github.com/bitnami/charts/pull/36076))
+
+## <small>2.3.46 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36072) ([355c15a](https://github.com/bitnami/charts/commit/355c15ab56680c878d20ea4b08cd14fa3fb01e47)), closes [#36072](https://github.com/bitnami/charts/issues/36072)
+
+## <small>2.3.45 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36066) ([60ea816](https://github.com/bitnami/charts/commit/60ea81684fe75be89a86d6d0bb38c5bfceedf89b)), closes [#36066](https://github.com/bitnami/charts/issues/36066)
+
+## <small>2.3.44 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36055) ([9cb2c4e](https://github.com/bitnami/charts/commit/9cb2c4eab74a0d8f96fa4ac7674f8ef752353190)), closes [#36055](https://github.com/bitnami/charts/issues/36055)
+
+## <small>2.3.43 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36045) ([571ab5d](https://github.com/bitnami/charts/commit/571ab5d69a930389cd842bef3d07d5551cde0bc2)), closes [#36045](https://github.com/bitnami/charts/issues/36045)
+
+## <small>2.3.42 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36027) ([5a5502c](https://github.com/bitnami/charts/commit/5a5502c0d7602cce09e96e5a13e2f5129f2782ca)), closes [#36027](https://github.com/bitnami/charts/issues/36027)
+
+## <small>2.3.41 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36016) ([d8461de](https://github.com/bitnami/charts/commit/d8461dec6cb0e770204bb70576fdb5c5ac20d5ea)), closes [#36016](https://github.com/bitnami/charts/issues/36016)
+
+## <small>2.3.40 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#36007) ([8d0451f](https://github.com/bitnami/charts/commit/8d0451f11d377a58448d0d7a737e32d3e83a84a9)), closes [#36007](https://github.com/bitnami/charts/issues/36007)
+
+## <small>2.3.39 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35995) ([30e86fc](https://github.com/bitnami/charts/commit/30e86fcf26156654a9ea5cf631348e2b7a23f58f)), closes [#35995](https://github.com/bitnami/charts/issues/35995)
+
+## <small>2.3.38 (2025-08-15)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35985) ([6697fa3](https://github.com/bitnami/charts/commit/6697fa3e347e7e463737359fe679f6758d87f07c)), closes [#35985](https://github.com/bitnami/charts/issues/35985)
+
+## <small>2.3.37 (2025-08-14)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35972) ([7d834e9](https://github.com/bitnami/charts/commit/7d834e9dd5468c8b079e0354a9c191145313decb)), closes [#35972](https://github.com/bitnami/charts/issues/35972)
+
+## <small>2.3.36 (2025-08-14)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35961) ([311a93a](https://github.com/bitnami/charts/commit/311a93ad3b46778f45899232ffdb09cafa9922ac)), closes [#35961](https://github.com/bitnami/charts/issues/35961)
+
+## <small>2.3.35 (2025-08-14)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35949) ([96faf48](https://github.com/bitnami/charts/commit/96faf480c4151da6b232f88dc7ce2193b95ca39f)), closes [#35949](https://github.com/bitnami/charts/issues/35949)
+
+## <small>2.3.34 (2025-08-14)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35936) ([aac5194](https://github.com/bitnami/charts/commit/aac51940aa18f482039e057c7fc8201aea18c799)), closes [#35936](https://github.com/bitnami/charts/issues/35936)
+
+## <small>2.3.33 (2025-08-14)</small>
+
+* [bitnami/deepspeed] :zap: :arrow_up: Update dependency references (#35927) ([ee50a37](https://github.com/bitnami/charts/commit/ee50a3747f9d39ed579a9c83237326136b46acf2)), closes [#35927](https://github.com/bitnami/charts/issues/35927)
 
 ## <small>2.3.32 (2025-08-14)</small>
 
