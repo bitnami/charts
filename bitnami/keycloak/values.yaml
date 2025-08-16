@@ -1279,6 +1279,7 @@ postgresql:
 ## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ## @param externalDatabase.annotations Additional custom annotations for external database secret object
+## @param externalDatabase.extraParams Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).
 ##
 externalDatabase:
   host: ""
@@ -1291,3 +1292,4 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretPasswordKey: ""
   annotations: {}
+  extraParams: ""

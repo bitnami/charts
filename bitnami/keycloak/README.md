@@ -698,6 +698,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 | `externalDatabase.annotations`               | Additional custom annotations for external database secret object                                                 | `{}`               |
+| `externalDatabase.extraParams`               | Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).                                       | `""`               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
