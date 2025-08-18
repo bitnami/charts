@@ -958,9 +958,6 @@ networkPolicy:
 ## @section CronJob parameters
 ##
 cronjobs:
-  ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
-  ##
-  # enabled: true
   taskScheduler:
     ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
     ##
