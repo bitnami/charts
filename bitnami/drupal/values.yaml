@@ -517,9 +517,6 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
 
   ## @param ingress.pathType Ingress Path type
   ##
