@@ -449,9 +449,6 @@ ingress:
   ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
   ##
   apiVersion: ""
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
 
   ## @param ingress.hostname When the ingress is enabled, a host pointing to this will be created
   ##
