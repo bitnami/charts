@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.0.23 (2025-08-18)
+## 28.0.0 (2025-08-18)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#36104](https://github.com/bitnami/charts/pull/36104))
+* [bitnami/moodle] Upgrade to MariaDB 12.0 ([#36117](https://github.com/bitnami/charts/pull/36117))
+
+## <small>27.0.23 (2025-08-18)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36104) ([a4cd856](https://github.com/bitnami/charts/commit/a4cd8569dd367f49923d1e918bed8a15d0c0d5ed)), closes [#36104](https://github.com/bitnami/charts/issues/36104)
 
 ## <small>27.0.22 (2025-08-17)</small>
 
