@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.0.25 (2025-08-16)
+## 25.0.26 (2025-08-18)
 
-* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#36085](https://github.com/bitnami/charts/pull/36085))
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references ([#36103](https://github.com/bitnami/charts/pull/36103))
+
+## <small>25.0.25 (2025-08-16)</small>
+
+* [bitnami/wordpress] :zap: :arrow_up: Update dependency references (#36085) ([1f010b4](https://github.com/bitnami/charts/commit/1f010b4d02165a6fb44ffbcbe674c25efb329b2d)), closes [#36085](https://github.com/bitnami/charts/issues/36085)
 
 ## <small>25.0.24 (2025-08-15)</small>
 
