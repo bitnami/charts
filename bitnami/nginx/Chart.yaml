@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.50.1-debian-12-r31
+      image: docker.io/bitnami/git:2.51.0-debian-12-r0
     - name: nginx
       image: docker.io/bitnami/nginx:1.29.1-debian-12-r0
     - name: nginx-exporter
@@ -37,4 +37,4 @@ maintainers:
 name: nginx
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx
-version: 21.1.22
+version: 21.1.23
