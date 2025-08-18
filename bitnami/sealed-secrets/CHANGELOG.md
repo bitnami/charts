@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.5.18 (2025-08-14)
+## 2.5.19 (2025-08-18)
 
-* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#35896](https://github.com/bitnami/charts/pull/35896))
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#36096](https://github.com/bitnami/charts/pull/36096))
+
+## <small>2.5.18 (2025-08-14)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#35896) ([f269113](https://github.com/bitnami/charts/commit/f269113197fa91193d31c79b8a0a4ed0c1788acf)), closes [#35896](https://github.com/bitnami/charts/issues/35896)
 
 ## <small>2.5.17 (2025-08-07)</small>
 
