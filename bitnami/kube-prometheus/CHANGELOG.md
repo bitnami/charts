@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.6 (2025-08-14)
+## 11.3.8 (2025-08-14)
 
-* [bitnami/kube-prometheus] fix: thanosRuler should not b64enc a stringData ([#35808](https://github.com/bitnami/charts/pull/35808))
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references ([#35908](https://github.com/bitnami/charts/pull/35908))
+
+## <small>11.3.7 (2025-08-14)</small>
+
+* [bitnami/kube-prometheus] :zap: :arrow_up: Update dependency references (#35866) ([ff49b68](https://github.com/bitnami/charts/commit/ff49b68203c1b06a23f892d4b55942fc13d9940f)), closes [#35866](https://github.com/bitnami/charts/issues/35866)
 
 ## <small>11.3.6 (2025-08-13)</small>
 

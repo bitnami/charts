@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.1.1 (2025-08-13)
+## 21.1.3 (2025-08-15)
 
-* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#35795](https://github.com/bitnami/charts/pull/35795))
+* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#36080](https://github.com/bitnami/charts/pull/36080))
+
+## <small>21.1.2 (2025-08-13)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35845) ([e8c7fe9](https://github.com/bitnami/charts/commit/e8c7fe904f6006b2cc9ca4ba17f4322cb690d8f5)), closes [#35845](https://github.com/bitnami/charts/issues/35845)
+
+## <small>21.1.1 (2025-08-13)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35795) ([f2c715a](https://github.com/bitnami/charts/commit/f2c715ad307f93eb8d736df93baee9cb9d2ac703)), closes [#35795](https://github.com/bitnami/charts/issues/35795)
 
 ## 21.1.0 (2025-08-12)
 

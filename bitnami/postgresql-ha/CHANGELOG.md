@@ -1,8 +1,16 @@
 # Changelog
 
+## 16.2.2 (2025-08-14)
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#35919](https://github.com/bitnami/charts/pull/35919))
+
+## <small>16.2.1 (2025-08-14)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35894) ([a7b9eec](https://github.com/bitnami/charts/commit/a7b9eec627c3eec934aeba1a4ee51f1181a3ad00)), closes [#35894](https://github.com/bitnami/charts/issues/35894)
+
 ## 16.2.0 (2025-08-13)
 
-* [bitnami:postgresql-ha] feat: add support for affinity to backup cronjob ([#35773](https://github.com/bitnami/charts/pull/35773))
+* [bitnami:postgresql-ha] feat: add support for affinity to backup cronjob (#35773) ([57039a2](https://github.com/bitnami/charts/commit/57039a2cf5a9a7a972a120a0528ce2119fbbee85)), closes [#35773](https://github.com/bitnami/charts/issues/35773)
 
 ## <small>16.1.2 (2025-08-07)</small>
 

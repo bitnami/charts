@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.3.0 (2025-08-12)
+## 17.3.1 (2025-08-13)
 
-* [bitnami/thanos] Add hpa behavior ([#35753](https://github.com/bitnami/charts/pull/35753))
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35837](https://github.com/bitnami/charts/pull/35837))
+
+## 17.3.0 (2025-08-13)
+
+* [bitnami/thanos] Add hpa behavior (#35753) ([3f96f2e](https://github.com/bitnami/charts/commit/3f96f2e5ffcb34e08ec6cdeb9e5b5141722a76d8)), closes [#35753](https://github.com/bitnami/charts/issues/35753)
 
 ## <small>17.2.6 (2025-08-08)</small>
 
