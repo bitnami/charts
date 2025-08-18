@@ -857,9 +857,6 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
-  ## @param persistence.accessMode Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)
-  ##
-  accessMode: ReadWriteOnce
   ## @param persistence.size Persistent Volume size
   ##
   size: 10Gi
