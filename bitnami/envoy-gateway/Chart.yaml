@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: envoy
-      image: docker.io/bitnami/envoy:1.35.0-debian-12-r1
+      image: docker.io/bitnami/envoy:1.35.1-debian-12-r0
     - name: envoy-gateway
       image: docker.io/bitnami/envoy-gateway:1.5.0-debian-12-r1
     - name: envoy-ratelimit
@@ -36,4 +36,4 @@ maintainers:
 name: envoy-gateway
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/envoy-gateway
-version: 2.0.3
+version: 2.0.4
