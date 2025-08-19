@@ -17,7 +17,7 @@ metadata:
   labels: {{- include "common.labels.standard" (dict "customLabels" .context.Values.commonLabels "context" .context) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
     app.kubernetes.io/part-of: clickhouse
-    {{- if and .context.Values.metrics.enabled .context.Values.metrics.serviceMonitor.enabled }}
+    {{- if and .context.Values.metrics.enabled (not .context.Values.metrics.serviceMonitor.enabled) }}
     {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
     prometheus.io/scrape: "true"
     {{- end }}
