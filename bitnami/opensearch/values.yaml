@@ -351,6 +351,17 @@ security:
     ##
     nodesDN: ""
     ## @param security.tls.adminDN A comma separated list of DN for admins
+    ## Note that this parameter has lower priority than extraConfig.plugins.security.authcz.admin_dn and will be overridden if both parameters are set.
+    ## See https://github.com/bitnami/charts/issues/35666 for details. (valid for images newer than bitnami/opensearch:3.1.0-debian-12-r2)
+    ##
+    ## Also, due to specifics of the config bootstrap script implementation, spaces will be treated as separators.  
+    ## For example, "CN=admin,O=Some Organisation,L=SomeCity,C=SomeCountry" will become:
+    ##   admin_dn:
+    ##   - CN=admin,O=Some
+    ##   - Organisation,L=SomeCity,C=SomeCountry
+    ##
+    ## To avoid this, consider using extraConfig.plugins.security.authcz.admin_dn instead.
+    ##
     ##
     adminDN: "CN=admin;CN=admin"
 
