@@ -2,7 +2,7 @@
 
 ## 9.4.4 (2025-08-19)
 
-* Clickhouse fix scrape ([#36143](https://github.com/bitnami/charts/pull/36143))
+* [bitnami/clickhouse] fix: avoid duplicate targets ([#36143](https://github.com/bitnami/charts/pull/36143))
 
 ## <small>9.4.3 (2025-08-14)</small>
 
