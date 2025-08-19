@@ -27,7 +27,7 @@ spec:
         app.kubernetes.io/component: keycloak-config-cli
         app.kubernetes.io/part-of: keycloak
       annotations:
-        {{- if and .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) -}}
+        {{- if and .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/keycloak-config-cli-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.keycloakConfigCli.podAnnotations }}

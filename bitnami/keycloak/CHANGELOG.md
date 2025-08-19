@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.0 (2025-08-14)
+## 25.1.1 (2025-08-19)
 
-* [bitnami/keycloak] feat: add parameter to enable HTTP endpoint ([#35881](https://github.com/bitnami/charts/pull/35881))
+* [bitnami/keycloak] Fix trailing dash in Config CLI Job ([#35784](https://github.com/bitnami/charts/pull/35784))
+
+## 25.1.0 (2025-08-15)
+
+* [bitnami/keycloak] feat: add parameter to enable HTTP endpoint (#35881) ([90b385c](https://github.com/bitnami/charts/commit/90b385cfee09574633fe229881a000a088ef986c)), closes [#35881](https://github.com/bitnami/charts/issues/35881)
 
 ## <small>25.0.2 (2025-08-12)</small>
 
