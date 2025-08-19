@@ -1,0 +1,135 @@
+name: Build charts on PR
+
+on:
+  pull_request:
+    types: 
+      - labeled
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  find_charts_to_build:
+    name: Find charts to build
+    runs-on: ubuntu-22.04
+    if: contains(github.event.pull_request.labels.*.name, 'chart-build')
+    outputs:
+      charts_to_build: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed directories
+        id: changed-files
+        uses: tj-actions/changed-files@v39
+        with:
+          dir_names: true
+          dir_names_max_depth: 1
+          json: true
+          files_ignore: |
+            .github/**
+            README.md
+
+      - id: set-matrix
+        run: echo "matrix={\"chart\":${{ steps.changed-files.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+
+  build_chart:
+    name: Build chart package
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+      contents: read
+    if: contains(github.event.pull_request.labels.*.name, 'chart-build')
+    needs: find_charts_to_build
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.find_charts_to_build.outputs.charts_to_build) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/build_publish_chart
+        with:
+          chart: ${{ matrix.chart }}
+          devel: true
+          publish: false
+          gcp_infra_service_account: ${{ secrets.GCP_INFRA_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.GCP_INFRA_WORKLOAD_IDENTITY_PROVIDER }}
+      - name: Upload chart package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chart-package-${{ matrix.chart }}
+          path: /tmp/${{ matrix.chart }}/*.tgz
+
+  publish_legacy:
+    name: Build & publish dev charts (legacy)
+    runs-on: ubuntu-22.04
+    if: contains(github.event.pull_request.labels.*.name, 'chart-build')
+    needs: [find_charts_to_build, build_chart]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.find_charts_to_build.outputs.charts_to_build) }}
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download chart package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chart-package-${{ matrix.chart }}
+          path: ./chart-package
+      - name: Resolve chart package path
+        id: resolve_chart_path
+        run: |
+          echo "CHART_PATH=$(ls ./chart-package/${{ matrix.chart }}-*.tgz)" >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/build_publish_chart
+        with:
+          chart: ${{ matrix.chart }}
+          devel: true
+          publish: true
+          chart_package_path: ${{ steps.resolve_chart_path.outputs.CHART_PATH }}
+          gcp_region: europe-west1
+          gcp_infra_project: passculture-infra-prod
+          gcp_registry_name: pass-culture-helm-registry
+          gcp_infra_service_account: ${{ secrets.GCP_INFRA_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.GCP_INFRA_WORKLOAD_IDENTITY_PROVIDER }}
+
+  publish_newinfra:
+    name: Build & publish dev charts (new infra)
+    runs-on: ubuntu-22.04
+    if: contains(github.event.pull_request.labels.*.name, 'chart-build')
+    needs: [find_charts_to_build, build_chart]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.find_charts_to_build.outputs.charts_to_build) }}
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download chart package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chart-package-${{ matrix.chart }}
+          path: ./chart-package
+      - name: Resolve chart package path
+        id: resolve_chart_path
+        run: |
+          echo "CHART_PATH=$(ls ./chart-package/${{ matrix.chart }}-*.tgz)" >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/build_publish_chart
+        with:
+          chart: ${{ matrix.chart }}
+          devel: true
+          publish: true
+          chart_package_path: ${{ steps.resolve_chart_path.outputs.CHART_PATH }}
+          gcp_region: europe
+          gcp_infra_project: pc-infra-prd
+          gcp_registry_name: pass-culture-helm-registry
+          gcp_infra_service_account: ${{ secrets.HELM_CHART_CI_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PRD }}

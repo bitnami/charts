@@ -1,0 +1,118 @@
+name: Build and publish chart
+description: Build and publish a single helm chart to a GCP Artifact Registry
+inputs:
+  chart:
+    description: Name of the chart (directory)
+    required: true
+  devel:
+    description: Build the chart in development mode (-devel)
+    default: "false"
+    required: false
+  publish:
+    description: Publish the chart after building it
+    default: "false"
+    required: false
+  gcp_region:
+    description: GCP region of the Artifact Registry
+    required: true
+  gcp_infra_project:
+    description: GCP project containing the legacy registry
+    required: true
+  gcp_registry_name:
+    description: Artifact Registry name (legacy Helm)
+    required: true
+  gcp_infra_service_account:
+    description: GCP service account for legacy project
+    required: true
+  gcp_infra_workload_identity_provider:
+    description: GCP Workload Identity Provider for legacy project
+    required: true
+  chart_package_path:
+    description: Path to an already packaged chart (.tgz). If set, skips build and uses this file for publish.
+    required: false
+outputs:
+  built_chart_path:
+    description: "Path to the built chart"
+    value: ${{ steps.set-outputs.outputs.built_chart_path }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: gcp-auth-legacy
+      name: Authenticate to GCP (legacy)
+      uses: google-github-actions/auth@v1
+      with:
+        create_credentials_file: true
+        workload_identity_provider: ${{ inputs.gcp_infra_workload_identity_provider }}
+        service_account: ${{ inputs.gcp_infra_service_account }}
+
+    - name: Install Helm
+      shell: bash
+      run: curl -s https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+    - name: Package chart (stable)
+      shell: bash
+      if: inputs.devel != 'true' && !inputs.chart_package_path
+      run: |
+        set -e
+        TAG=$(awk '/version:/{print $2}' "${{ inputs.chart }}/Chart.yaml")
+        helm package -d /tmp/"${{ inputs.chart }}" "${{ inputs.chart }}"
+        echo "CHART_FILE=${{ inputs.chart }}-${TAG}" >> "$GITHUB_ENV"
+        echo "CHART_PACKAGE_PATH=/tmp/${{ inputs.chart }}/${{ inputs.chart }}-${TAG}.tgz" >> "$GITHUB_ENV"
+
+    - name: Package chart (development mode)
+      shell: bash
+      if: inputs.devel == 'true' && !inputs.chart_package_path
+      run: |
+        set -e
+        TAG=$(awk '/version:/{print $2}' "${{ inputs.chart }}/Chart.yaml")
+        INCREMENTED_TAG=$(python -c "v = '${TAG}'.split('.'); v[2] = str(int(v[2]) + 1); print('.'.join(v))")
+        helm package --version="${INCREMENTED_TAG}-devel" -d /tmp/"${{ inputs.chart }}" "${{ inputs.chart }}"
+        echo "CHART_FILE=${{ inputs.chart }}-${INCREMENTED_TAG}-devel" >> "$GITHUB_ENV"
+        echo "CHART_PACKAGE_PATH=/tmp/${{ inputs.chart }}/${{ inputs.chart }}-${INCREMENTED_TAG}-devel.tgz" >> "$GITHUB_ENV"
+
+    - name: Set chart package path from input
+      shell: bash
+      if: inputs.chart_package_path
+      run: |
+        echo "CHART_PACKAGE_PATH=${{ inputs.chart_package_path }}" >> "$GITHUB_ENV"
+
+    - name: Configure Docker auth for Helm (legacy)
+      shell: bash
+      if: inputs.publish == 'true'
+      run: echo yes | gcloud auth configure-docker "${{ inputs.gcp_region }}-docker.pkg.dev"
+
+    - name: Check if stable chart version already exists
+      shell: bash
+      if: inputs.devel != 'true' && inputs.publish == 'true' && !inputs.chart_package_path
+      run: |
+        set -e
+        TAG=$(awk '/version:/{print $2}' "${{ inputs.chart }}/Chart.yaml")
+        REPO="oci://${{ inputs.gcp_region }}-docker.pkg.dev/${{ inputs.gcp_infra_project }}/${{ inputs.gcp_registry_name }}"
+        if ! helm pull "$REPO/${{ inputs.chart }}" --version "$TAG"; then
+          echo "PUSH_CHART=true" >> "$GITHUB_ENV"
+        else
+          helm pull "$REPO/${{ inputs.chart }}" --version "$TAG" --untar -d /tmp/
+          if diff -qr "${{ inputs.chart }}" "/tmp/${{ inputs.chart }}"; then
+            echo "Chart version ${TAG} already exists and is identical. Skipping."
+            echo "PUSH_CHART=false" >> "$GITHUB_ENV"
+            exit 0
+          else
+            echo "Chart version ${TAG} already exists but differs. Please bump version."
+            exit 1
+          fi
+        fi
+
+    - name: Push chart
+      shell: bash
+      if: inputs.publish == 'true' && (inputs.devel == 'true' || env.PUSH_CHART == 'true' || inputs.chart_package_path)
+      run: |
+        set -e
+        REPO="oci://${{ inputs.gcp_region }}-docker.pkg.dev/${{ inputs.gcp_infra_project }}/${{ inputs.gcp_registry_name }}"
+        helm push "${CHART_PACKAGE_PATH}" "$REPO"
+
+    - name: Set outputs
+      shell: bash
+      id: set-outputs
+      run: |
+        echo "built_chart_path=${CHART_PACKAGE_PATH}" >> "$GITHUB_OUTPUT"

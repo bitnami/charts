@@ -1,0 +1,147 @@
+name: Release a chart version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version increase to apply to the chart"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      chart:
+        description: "Chart to release"
+        required: true
+        type: string
+
+jobs:
+  update_chart_version:
+    runs-on: ubuntu-22.04
+    name: Update chart version
+    environment: main
+    permissions:
+      id-token: write
+      contents: write
+    outputs:
+      chart: ${{ inputs.chart }}
+      new_version: ${{ steps.choose-new-version.outputs.new_version }}
+    steps:
+      - name: Auth to Google
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.GCP_INFRA_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_INFRA_SERVICE_ACCOUNT }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: get-current-version
+        run: |
+          current_version=$(awk '/version:/{print $2}' ${{ inputs.chart }}/Chart.yaml)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+
+      - name: Compute next semver
+        id: next-semver
+        uses: WyriHaximus/github-action-next-semvers@v1
+        with:
+          version: ${{ steps.get-current-version.outputs.current_version }}
+
+      - name: Choose new version
+        id: choose-new-version
+        run: |
+          echo "new_version=${{ steps.next-semver.outputs[inputs.bump] }}" >> $GITHUB_OUTPUT
+
+      - name: Bump chart version
+        run: |
+          yq -i '.version = "${{ steps.choose-new-version.outputs.new_version }}"' ${{ inputs.chart }}/Chart.yaml
+
+      - uses: ./.github/actions/build_publish_chart
+        id: build-chart
+        name: Build chart before push
+        with:
+          chart: ${{ inputs.chart }}
+          devel: false
+          publish: false
+          gcp_infra_service_account: ${{ secrets.HELM_CHART_CI_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PRD }}
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: "${{ inputs.chart }}/Chart.yaml"
+          message: "release(${{ inputs.chart }}): ${{ steps.choose-new-version.outputs.new_version }}"
+          committer_name: Pass Culture SA
+          committer_email: ops@passculture.app
+          push: true
+          tag: "${{ steps.choose-new-version.outputs.new_version }}@${{ inputs.chart }}"
+
+      - name: Upload chart package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chart-package-${{ inputs.chart }}
+          path: ${{ steps.build-chart.outputs.built_chart_path }}
+
+  publish_legacy:
+    name: Publish to legacy registry
+    runs-on: ubuntu-22.04
+    needs: [update_chart_version]
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download chart package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chart-package-${{ inputs.chart }}
+          path: ./chart-package
+      - name: Resolve chart package path
+        id: resolve_chart_path
+        run: |
+          echo "CHART_PATH=$(ls ./chart-package/${{ inputs.chart }}-*.tgz)" >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/build_publish_chart
+        name: Publish ${{ inputs.chart }} to legacy
+        with:
+          chart: ${{ inputs.chart }}
+          devel: false
+          publish: true
+          chart_package_path: ${{ steps.resolve_chart_path.outputs.CHART_PATH }}
+          gcp_region: europe-west1
+          gcp_infra_project: passculture-infra-prod
+          gcp_registry_name: pass-culture-helm-registry
+          gcp_infra_service_account: ${{ secrets.GCP_INFRA_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.GCP_INFRA_WORKLOAD_IDENTITY_PROVIDER }}
+
+  publish_newinfra:
+    name: Publish to new infra registry
+    runs-on: ubuntu-22.04
+    needs: [update_chart_version]
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download chart package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chart-package-${{ inputs.chart }}
+          path: ./chart-package
+      - name: Resolve chart package path
+        id: resolve_chart_path
+        run: |
+          echo "CHART_PATH=$(ls ./chart-package/${{ inputs.chart }}-*.tgz)" >> $GITHUB_OUTPUT
+      - uses: ./.github/actions/build_publish_chart
+        name: Publish ${{ inputs.chart }} to new infra
+        with:
+          chart: ${{ inputs.chart }}
+          devel: false
+          publish: true
+          chart_package_path: ${{ steps.resolve_chart_path.outputs.CHART_PATH }}
+          gcp_region: europe
+          gcp_infra_project: pc-infra-prd
+          gcp_registry_name: pass-culture-helm-registry
+          gcp_infra_service_account: ${{ secrets.HELM_CHART_CI_SERVICE_ACCOUNT }}
+          gcp_infra_workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PRD }}
