@@ -1,7 +1,6 @@
 module.exports = {
   env: {
-    username: 'vib-user',
-    password: 'ComplicatedPassword123!4',
+    token: 'deadbeefdeadbeefdeadbeef',
   },
   defaultCommandTimeout: 30000,
   e2e: {

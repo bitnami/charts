@@ -10,17 +10,19 @@ import {
 
 it('allows to create a service in the dashboard', () => {
   cy.login();
-  cy.visit('/service/list');
   // Go to the services page
-  cy.get('button').contains('Create').click();
+  cy.get('span').contains('Services').click();
   // Create a service
   cy.fixture('service').then((svc) => {
-    cy.get('#name').type(`${svc.service.name}${random}`);
-    cy.get('[placeholder*="Hostname"]').type(`${random}-${svc.service.host}`)
-    cy.get('button').contains('Next').click();
-    cy.contains('After customizing the plugin');
-    cy.get('button').contains('Next').click();
-    cy.get('button').contains('Submit').click();
+    cy.get('button').contains('Add Service').click();
+    cy.get('[name="name"]').type(`${svc.service.name}${random}`);
+    cy.get('button').contains('Add a Node').click();
+    cy.get('[name="name"]').type(`${svc.service.name}${random}`);
+    cy.get('[placeholder*="Please enter" type="text"]').type(`${svc.service.host}`)
+    cy.get('[placeholder*="Please enter" value="1"]').clear().type(80);
+    cy.get('button[type="submit"]').click();
+    cy.contains('Service Detail');
+    cy.get('span').contains('Services').click();
     cy.get('tr').contains(`${svc.service.name}${random}`);
   });
 });

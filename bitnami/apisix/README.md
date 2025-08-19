@@ -58,7 +58,7 @@ To make this process easier, the chart contains the `resourcesPreset` values, wh
 
 ### Prometheus metrics
 
-This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataPlane`, `controlPlane` and `ingressController` sections) to true. This will expose the Apisix native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
+This chart can be integrated with Prometheus by setting `*.metrics.enabled` (under the `dataPlane`, `controlPlane` and `ingressController` sections) to true. This will expose the APISIX native Prometheus port in both the containers and services. The services will also have the necessary annotations to be automatically scraped by Prometheus.
 
 #### Prometheus requirements
 
@@ -1108,6 +1108,14 @@ helm install my-release -f values.yaml my-repo/apisix
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major release removes the `bitnami/apisix-dashboard` container and its deployment templates from the chart. Starting APISIX version 3.13.0, the dashboard component has been integrated into the `bitnami/apisix` container.
+
+APISIX Dashboards no longer have a dedicated service, it will be exposed under the APISIX Control Plane adminAPI service port, under the `/ui` route.
+
+All `dashboard.*` values have been removed. New value `controlPlane.dashboardEnabled` has been added.
 
 ### To 5.0.0
 

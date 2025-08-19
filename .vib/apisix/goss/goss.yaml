@@ -27,11 +27,8 @@ http:
     status: 200
     body:
       - /apisix_nginx_.*/
-  http://apisix-dashboard:{{ .Vars.dashboard.service.ports.http }}:
+  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/ui:
     status: 200
-  https://apisix-dashboard:{{ .Vars.dashboard.service.ports.https }}:
-    status: 200
-    allow-insecure: true
   http://apisix-ingress-controller:{{ .Vars.ingressController.service.ports.http }}/metrics:
     status: 200
     body:
