@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.30 (2025-08-18)
+## 0.1.31 (2025-08-19)
 
-* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references ([#36112](https://github.com/bitnami/charts/pull/36112))
+* [bitnami/victoriametrics] Fix prometheus.io/scrape label ([#36142](https://github.com/bitnami/charts/pull/36142))
+
+## <small>0.1.30 (2025-08-18)</small>
+
+* [bitnami/victoriametrics] :zap: :arrow_up: Update dependency references (#36112) ([d2404b7](https://github.com/bitnami/charts/commit/d2404b77c7d23c0197ae6d524d797960f33a0e7a)), closes [#36112](https://github.com/bitnami/charts/issues/36112)
 
 ## <small>0.1.29 (2025-08-13)</small>
 
