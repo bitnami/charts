@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.8 (2025-08-12)
+## 2.0.9 (2025-08-19)
 
-* [bitnami/opensearch] Add ability to unset OPENSEARCH_SECURITY_ADMIN_DN variable to fix issue/35666 ([#35746](https://github.com/bitnami/charts/pull/35746))
+* [bitnami/opensearch] add docs to clarify parameter behavior. ([#36134](https://github.com/bitnami/charts/pull/36134))
+
+## <small>2.0.8 (2025-08-12)</small>
+
+* [bitnami/opensearch] Add ability to unset OPENSEARCH_SECURITY_ADMIN_DN variable to fix issue/35666 ( ([a7b9ee7](https://github.com/bitnami/charts/commit/a7b9ee7071ce33ca4a6fd9a72e54a4037399382b)), closes [#35746](https://github.com/bitnami/charts/issues/35746)
 
 ## <small>2.0.7 (2025-08-07)</small>
 
