@@ -27,7 +27,7 @@ http:
     status: 200
     body:
       - /apisix_nginx_.*/
-  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/ui:
+  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/ui/:
     status: 200
   http://apisix-ingress-controller:{{ .Vars.ingressController.service.ports.http }}/metrics:
     status: 200

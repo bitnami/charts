@@ -39,10 +39,6 @@ controlPlane:
       configServer: 8888
       https: 9282
       metrics: 8004
-  # APISIX does not set X-Forwarded-* headers in the nginx configuration
-  # Because of that, the containerPort should match the service port, otherwise redirects may fail
-  containerPorts:
-    adminAPI: 443
 ingressController:
   extraConfig:
     kubernetes:

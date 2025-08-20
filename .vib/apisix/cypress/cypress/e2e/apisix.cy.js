@@ -26,6 +26,7 @@ it('allows to create a service in the dashboard', () => {
     do {
       try {
         cy.get('button[type="submit"]').click();
+        retries = 0;
       } catch (e) {
         if (retries === 0) {
           throw new Error('Service submit failed.');

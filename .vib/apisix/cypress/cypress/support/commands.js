@@ -20,10 +20,10 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (token = Cypress.env('token')) => {
-    cy.visit('/ui');
+    cy.visit('/ui/');
     cy.get('label').contains('Admin Key');
     cy.get('input').should('be.enabled').type(token);
-    cy.visit('/ui');
+    cy.visit('/ui/');
   }
 );
 
