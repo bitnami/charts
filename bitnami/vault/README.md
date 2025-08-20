@@ -372,6 +372,9 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | Name                                                 | Description                                                      | Value   |
 | ---------------------------------------------------- | ---------------------------------------------------------------- | ------- |
 | `server.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `server.rbac.createClusterRoleBinding`               | Specifies whether a ClusterRoleBinding should be created         | `true`  |
+| `server.rbac.leaderElection.rules`                   | Specifies the leader election role rules                         | `[]`    |
+| `server.rbac.discovery.rules`                        | Specifies the discovery role rules                               | `[]`    |
 | `server.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
 | `server.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
 | `server.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |

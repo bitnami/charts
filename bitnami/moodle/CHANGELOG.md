@@ -1,8 +1,80 @@
 # Changelog
 
-## 27.0.6 (2025-08-11)
+## 28.0.0 (2025-08-18)
 
-* [bitnami/moodle] :zap: :arrow_up: Update dependency references ([#35718](https://github.com/bitnami/charts/pull/35718))
+* [bitnami/moodle] Upgrade to MariaDB 12.0 ([#36117](https://github.com/bitnami/charts/pull/36117))
+
+## <small>27.0.23 (2025-08-18)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36104) ([a4cd856](https://github.com/bitnami/charts/commit/a4cd8569dd367f49923d1e918bed8a15d0c0d5ed)), closes [#36104](https://github.com/bitnami/charts/issues/36104)
+
+## <small>27.0.22 (2025-08-17)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36051) ([23cd7ba](https://github.com/bitnami/charts/commit/23cd7ba04fd9b77514f9ae7ec70c872c54220dae)), closes [#36051](https://github.com/bitnami/charts/issues/36051)
+
+## <small>27.0.21 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36041) ([94f635b](https://github.com/bitnami/charts/commit/94f635be24413248a5c48e374317fb30aa86e350)), closes [#36041](https://github.com/bitnami/charts/issues/36041)
+
+## <small>27.0.20 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36036) ([f014812](https://github.com/bitnami/charts/commit/f0148126b816bc8d3c6626dfa6459e33e4766f24)), closes [#36036](https://github.com/bitnami/charts/issues/36036)
+
+## <small>27.0.19 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36030) ([0e46927](https://github.com/bitnami/charts/commit/0e469275272f63774eca96b258e31d51f215740c)), closes [#36030](https://github.com/bitnami/charts/issues/36030)
+
+## <small>27.0.18 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36012) ([a16d057](https://github.com/bitnami/charts/commit/a16d0578634304a1212770cb7ddbe96b7975ba42)), closes [#36012](https://github.com/bitnami/charts/issues/36012)
+
+## <small>27.0.17 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#36004) ([e6f4b12](https://github.com/bitnami/charts/commit/e6f4b12d051e95d6d2c3a013182958df9ec5a4bb)), closes [#36004](https://github.com/bitnami/charts/issues/36004)
+
+## <small>27.0.16 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35999) ([511b98a](https://github.com/bitnami/charts/commit/511b98ab2cd8f8bedfb90f15a0cf74cf257f06bd)), closes [#35999](https://github.com/bitnami/charts/issues/35999)
+
+## <small>27.0.15 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35987) ([2016249](https://github.com/bitnami/charts/commit/2016249c0ff9bb104f57dcf410cc7e85952977e1)), closes [#35987](https://github.com/bitnami/charts/issues/35987)
+
+## <small>27.0.14 (2025-08-15)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35978) ([5002c28](https://github.com/bitnami/charts/commit/5002c28d0aa4951bf7ad0432779378d050bec8b1)), closes [#35978](https://github.com/bitnami/charts/issues/35978)
+
+## <small>27.0.13 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35966) ([b198913](https://github.com/bitnami/charts/commit/b198913adf6f81c60fa57e45d3e20e7eaeb00e52)), closes [#35966](https://github.com/bitnami/charts/issues/35966)
+
+## <small>27.0.12 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35958) ([93bab51](https://github.com/bitnami/charts/commit/93bab513f4d112e55b487fc722387cd983b57c15)), closes [#35958](https://github.com/bitnami/charts/issues/35958)
+
+## <small>27.0.11 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35943) ([cad0ca3](https://github.com/bitnami/charts/commit/cad0ca3138202858fef38023b4f01b36a774ed8b)), closes [#35943](https://github.com/bitnami/charts/issues/35943)
+
+## <small>27.0.10 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35938) ([eb8ff0e](https://github.com/bitnami/charts/commit/eb8ff0edbfe483768e09cc69111cee1fcf30b9bf)), closes [#35938](https://github.com/bitnami/charts/issues/35938)
+
+## <small>27.0.9 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35928) ([840de49](https://github.com/bitnami/charts/commit/840de49ed9c09abbdc71ad73efd7ad0653e86162)), closes [#35928](https://github.com/bitnami/charts/issues/35928)
+
+## <small>27.0.8 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35917) ([d375ad2](https://github.com/bitnami/charts/commit/d375ad284c2cb3b08a2e24047448d241ea4e9c2f)), closes [#35917](https://github.com/bitnami/charts/issues/35917)
+
+## <small>27.0.7 (2025-08-14)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35903) ([82d32cf](https://github.com/bitnami/charts/commit/82d32cfb5cc8e5965310c312020b43f4aacda85e)), closes [#35903](https://github.com/bitnami/charts/issues/35903)
+
+## <small>27.0.6 (2025-08-11)</small>
+
+* [bitnami/moodle] :zap: :arrow_up: Update dependency references (#35718) ([37f9689](https://github.com/bitnami/charts/commit/37f9689f9d0a2f609e4120f4ad39ededbad884d0)), closes [#35718](https://github.com/bitnami/charts/issues/35718)
 
 ## <small>27.0.5 (2025-08-07)</small>
 

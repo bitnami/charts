@@ -1347,12 +1347,12 @@
                 }
             }
         },
-        "rootCoord": {
+        "coordinator": {
             "type": "object",
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": "Enable Root Coordinator deployment",
+                    "description": "Enable Coordinator deployment",
                     "default": true
                 },
                 "extraEnvVars": {
@@ -1405,7 +1405,7 @@
                 },
                 "replicaCount": {
                     "type": "number",
-                    "description": "Number of Root Coordinator replicas to deploy",
+                    "description": "Number of Coordinator replicas to deploy",
                     "default": 1
                 },
                 "containerPorts": {
@@ -1413,12 +1413,12 @@
                     "properties": {
                         "grpc": {
                             "type": "number",
-                            "description": "GRPC port for Root Coordinator",
+                            "description": "GRPC port for Coordinator",
                             "default": 19530
                         },
                         "metrics": {
                             "type": "number",
-                            "description": "Metrics port for Root Coordinator",
+                            "description": "Metrics port for Coordinator",
                             "default": 9091
                         }
                     }
@@ -1428,7 +1428,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable livenessProbe on Root Coordinator nodes",
+                            "description": "Enable livenessProbe on Coordinator nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -1463,7 +1463,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable readinessProbe on Root Coordinator nodes",
+                            "description": "Enable readinessProbe on Coordinator nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -1498,7 +1498,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable startupProbe on Root Coordinator containers",
+                            "description": "Enable startupProbe on Coordinator containers",
                             "default": false
                         },
                         "initialDelaySeconds": {
@@ -1545,7 +1545,7 @@
                 },
                 "resourcesPreset": {
                     "type": "string",
-                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if coordinator.resources is set (coordinator.resources is recommended for production).",
                     "default": "micro"
                 },
                 "resources": {
@@ -1558,7 +1558,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Root Coordinator pods' Security Context",
+                            "description": "Enabled Coordinator pods' Security Context",
                             "default": true
                         },
                         "fsGroupChangePolicy": {
@@ -1580,7 +1580,7 @@
                         },
                         "fsGroup": {
                             "type": "number",
-                            "description": "Set Root Coordinator pod's Security Context fsGroup",
+                            "description": "Set Coordinator pod's Security Context fsGroup",
                             "default": 1001
                         }
                     }
@@ -1714,17 +1714,17 @@
                 },
                 "affinity": {
                     "type": "object",
-                    "description": "Affinity for Root Coordinator pods assignment",
+                    "description": "Affinity for Coordinator pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
                     "type": "object",
-                    "description": "Node labels for Root Coordinator pods assignment",
+                    "description": "Node labels for Coordinator pods assignment",
                     "default": {}
                 },
                 "tolerations": {
                     "type": "array",
-                    "description": "Tolerations for Root Coordinator pods assignment",
+                    "description": "Tolerations for Coordinator pods assignment",
                     "default": [],
                     "items": {}
                 },
@@ -1736,7 +1736,7 @@
                 },
                 "priorityClassName": {
                     "type": "string",
-                    "description": "Root Coordinator pods' priorityClassName",
+                    "description": "Coordinator pods' priorityClassName",
                     "default": ""
                 },
                 "schedulerName": {
@@ -1749,31 +1749,31 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Root Coordinator statefulset strategy type",
+                            "description": "Coordinator statefulset strategy type",
                             "default": "RollingUpdate"
                         },
                         "rollingUpdate": {
                             "type": "object",
-                            "description": "Root Coordinator statefulset rolling update configuration parameters",
+                            "description": "Coordinator statefulset rolling update configuration parameters",
                             "default": {}
                         }
                     }
                 },
                 "extraVolumes": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for the Root Coordinator pod(s)",
+                    "description": "Optionally specify extra list of additional volumes for the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for the Root Coordinator container(s)",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Coordinator container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
                     "type": "array",
-                    "description": "Add additional sidecar containers to the Root Coordinator pod(s)",
+                    "description": "Add additional sidecar containers to the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -1784,7 +1784,7 @@
                 },
                 "initContainers": {
                     "type": "array",
-                    "description": "Add additional init containers to the Root Coordinator pod(s)",
+                    "description": "Add additional init containers to the Coordinator pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -1793,7 +1793,7 @@
                     "properties": {
                         "create": {
                             "type": "boolean",
-                            "description": "Enable creation of ServiceAccount for Root Coordinator pods",
+                            "description": "Enable creation of ServiceAccount for Coordinator pods",
                             "default": true
                         },
                         "name": {
@@ -1909,7 +1909,7 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Root Coordinator service type",
+                            "description": "Coordinator service type",
                             "default": "ClusterIP"
                         },
                         "ports": {
@@ -1917,12 +1917,12 @@
                             "properties": {
                                 "grpc": {
                                     "type": "number",
-                                    "description": "Root Coordinator GRPC service port",
+                                    "description": "Coordinator GRPC service port",
                                     "default": 19530
                                 },
                                 "metrics": {
                                     "type": "number",
-                                    "description": "Root Coordinator Metrics service port",
+                                    "description": "Coordinator Metrics service port",
                                     "default": 9091
                                 }
                             }
@@ -1954,1531 +1954,33 @@
                         },
                         "clusterIP": {
                             "type": "string",
-                            "description": "Root Coordinator service Cluster IP",
+                            "description": "Coordinator service Cluster IP",
                             "default": ""
                         },
                         "loadBalancerIP": {
                             "type": "string",
-                            "description": "Root Coordinator service Load Balancer IP",
+                            "description": "Coordinator service Load Balancer IP",
                             "default": ""
                         },
                         "loadBalancerSourceRanges": {
                             "type": "array",
-                            "description": "Root Coordinator service Load Balancer sources",
+                            "description": "Coordinator service Load Balancer sources",
                             "default": [],
                             "items": {}
                         },
                         "externalTrafficPolicy": {
                             "type": "string",
-                            "description": "Root Coordinator service external traffic policy",
+                            "description": "Coordinator service external traffic policy",
                             "default": "Cluster"
                         },
                         "annotations": {
                             "type": "object",
-                            "description": "Additional custom annotations for Root Coordinator service",
+                            "description": "Additional custom annotations for Coordinator service",
                             "default": {}
                         },
                         "extraPorts": {
                             "type": "array",
-                            "description": "Extra ports to expose in the Root Coordinator service",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "networkPolicy": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable creation of NetworkPolicy resources",
-                            "default": true
-                        },
-                        "allowExternal": {
-                            "type": "boolean",
-                            "description": "The Policy model to apply",
-                            "default": true
-                        },
-                        "allowExternalEgress": {
-                            "type": "boolean",
-                            "description": "Allow the pod to access any range of port and all destinations.",
-                            "default": true
-                        },
-                        "extraIngress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "extraEgress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "metrics": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable metrics",
-                            "default": false
-                        },
-                        "serviceMonitor": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Create ServiceMonitor Resource for scraping metrics using Prometheus Operator",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "string",
-                                    "description": "Annotations for the ServiceMonitor Resource",
-                                    "default": ""
-                                },
-                                "namespace": {
-                                    "type": "string",
-                                    "description": "Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)",
-                                    "default": ""
-                                },
-                                "interval": {
-                                    "type": "string",
-                                    "description": "Interval at which metrics should be scraped.",
-                                    "default": ""
-                                },
-                                "scrapeTimeout": {
-                                    "type": "string",
-                                    "description": "Timeout after which the scrape is ended",
-                                    "default": ""
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "description": "Additional labels that can be used so ServiceMonitor will be discovered by Prometheus",
-                                    "default": {}
-                                },
-                                "selector": {
-                                    "type": "object",
-                                    "description": "Prometheus instance selector labels",
-                                    "default": {}
-                                },
-                                "relabelings": {
-                                    "type": "array",
-                                    "description": "RelabelConfigs to apply to samples before scraping",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "metricRelabelings": {
-                                    "type": "array",
-                                    "description": "MetricRelabelConfigs to apply to samples before ingestion",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "honorLabels": {
-                                    "type": "boolean",
-                                    "description": "Specify honorLabels parameter to add the scrape endpoint",
-                                    "default": false
-                                },
-                                "jobLabel": {
-                                    "type": "string",
-                                    "description": "The name of the label on the target service to use as the job name in prometheus.",
-                                    "default": ""
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "queryCoord": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable Query Coordinator deployment",
-                    "default": true
-                },
-                "extraEnvVars": {
-                    "type": "array",
-                    "description": "Array with extra environment variables to add to data coordinator nodes",
-                    "default": [],
-                    "items": {}
-                },
-                "extraEnvVarsCM": {
-                    "type": "string",
-                    "description": "Name of existing ConfigMap containing extra env vars for data coordinator nodes",
-                    "default": ""
-                },
-                "extraEnvVarsSecret": {
-                    "type": "string",
-                    "description": "Name of existing Secret containing extra env vars for data coordinator nodes",
-                    "default": ""
-                },
-                "defaultConfig": {
-                    "type": "string",
-                    "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "\"\""
-                },
-                "existingConfigMap": {
-                    "type": "string",
-                    "description": "name of a ConfigMap with existing configuration for the default configuration",
-                    "default": ""
-                },
-                "extraConfig": {
-                    "type": "object",
-                    "description": "Override configuration",
-                    "default": {}
-                },
-                "extraConfigExistingConfigMap": {
-                    "type": "string",
-                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
-                    "default": ""
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Override default container command (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Override default container args (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "replicaCount": {
-                    "type": "number",
-                    "description": "Number of Query Coordinator replicas to deploy",
-                    "default": 1
-                },
-                "containerPorts": {
-                    "type": "object",
-                    "properties": {
-                        "grpc": {
-                            "type": "number",
-                            "description": "GRPC port for Query Coordinator",
-                            "default": 19530
-                        },
-                        "metrics": {
-                            "type": "number",
-                            "description": "Metrics port for Query Coordinator",
-                            "default": 9091
-                        }
-                    }
-                },
-                "livenessProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable livenessProbe on Query Coordinator nodes",
-                            "default": true
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for livenessProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for livenessProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for livenessProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for livenessProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for livenessProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "readinessProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable readinessProbe on Query Coordinator nodes",
-                            "default": true
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for readinessProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for readinessProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for readinessProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for readinessProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for readinessProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "startupProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable startupProbe on Query Coordinator containers",
-                            "default": false
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for startupProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for startupProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for startupProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for startupProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for startupProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "customLivenessProbe": {
-                    "type": "object",
-                    "description": "Custom livenessProbe that overrides the default one",
-                    "default": {}
-                },
-                "customReadinessProbe": {
-                    "type": "object",
-                    "description": "Custom readinessProbe that overrides the default one",
-                    "default": {}
-                },
-                "customStartupProbe": {
-                    "type": "object",
-                    "description": "Custom startupProbe that overrides the default one",
-                    "default": {}
-                },
-                "resourcesPreset": {
-                    "type": "string",
-                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).",
-                    "default": "micro"
-                },
-                "resources": {
-                    "type": "object",
-                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
-                    "default": {}
-                },
-                "podSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled Query Coordinator pods' Security Context",
-                            "default": true
-                        },
-                        "fsGroupChangePolicy": {
-                            "type": "string",
-                            "description": "Set filesystem group change policy",
-                            "default": "Always"
-                        },
-                        "sysctls": {
-                            "type": "array",
-                            "description": "Set kernel settings using the sysctl interface",
-                            "default": [],
-                            "items": {}
-                        },
-                        "supplementalGroups": {
-                            "type": "array",
-                            "description": "Set filesystem extra groups",
-                            "default": [],
-                            "items": {}
-                        },
-                        "fsGroup": {
-                            "type": "number",
-                            "description": "Set Query Coordinator pod's Security Context fsGroup",
-                            "default": 1001
-                        }
-                    }
-                },
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled containers' Security Context",
-                            "default": true
-                        },
-                        "runAsUser": {
-                            "type": "number",
-                            "description": "Set containers' Security Context runAsUser",
-                            "default": 1001
-                        },
-                        "runAsGroup": {
-                            "type": "number",
-                            "description": "Set containers' Security Context runAsGroup",
-                            "default": 1001
-                        },
-                        "runAsNonRoot": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context runAsNonRoot",
-                            "default": true
-                        },
-                        "privileged": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context privileged",
-                            "default": false
-                        },
-                        "readOnlyRootFilesystem": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context readOnlyRootFilesystem",
-                            "default": true
-                        },
-                        "allowPrivilegeEscalation": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context allowPrivilegeEscalation",
-                            "default": false
-                        },
-                        "capabilities": {
-                            "type": "object",
-                            "properties": {
-                                "drop": {
-                                    "type": "array",
-                                    "description": "List of capabilities to be dropped",
-                                    "default": [
-                                        "ALL"
-                                    ],
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
-                        }
-                    }
-                },
-                "lifecycleHooks": {
-                    "type": "object",
-                    "description": "for the data coordinator container(s) to automate configuration before or after startup",
-                    "default": {}
-                },
-                "runtimeClassName": {
-                    "type": "string",
-                    "description": "Name of the runtime class to be used by pod(s)",
-                    "default": ""
-                },
-                "automountServiceAccountToken": {
-                    "type": "boolean",
-                    "description": "Mount Service Account token in pod",
-                    "default": false
-                },
-                "hostAliases": {
-                    "type": "array",
-                    "description": "data coordinator pods host aliases",
-                    "default": [],
-                    "items": {}
-                },
-                "podLabels": {
-                    "type": "object",
-                    "description": "Extra labels for data coordinator pods",
-                    "default": {}
-                },
-                "podAnnotations": {
-                    "type": "object",
-                    "description": "Annotations for data coordinator pods",
-                    "default": {}
-                },
-                "podAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "podAntiAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": "soft"
-                },
-                "nodeAffinityPreset": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                            "default": ""
-                        },
-                        "key": {
-                            "type": "string",
-                            "description": "Node label key to match. Ignored if `data coordinator.affinity` is set",
-                            "default": ""
-                        },
-                        "values": {
-                            "type": "array",
-                            "description": "Node label values to match. Ignored if `data coordinator.affinity` is set",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "affinity": {
-                    "type": "object",
-                    "description": "Affinity for Query Coordinator pods assignment",
-                    "default": {}
-                },
-                "nodeSelector": {
-                    "type": "object",
-                    "description": "Node labels for Query Coordinator pods assignment",
-                    "default": {}
-                },
-                "tolerations": {
-                    "type": "array",
-                    "description": "Tolerations for Query Coordinator pods assignment",
-                    "default": [],
-                    "items": {}
-                },
-                "topologySpreadConstraints": {
-                    "type": "array",
-                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains",
-                    "default": [],
-                    "items": {}
-                },
-                "priorityClassName": {
-                    "type": "string",
-                    "description": "Query Coordinator pods' priorityClassName",
-                    "default": ""
-                },
-                "schedulerName": {
-                    "type": "string",
-                    "description": "Kubernetes pod scheduler registry",
-                    "default": ""
-                },
-                "updateStrategy": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Query Coordinator statefulset strategy type",
-                            "default": "RollingUpdate"
-                        },
-                        "rollingUpdate": {
-                            "type": "object",
-                            "description": "Query Coordinator statefulset rolling update configuration parameters",
-                            "default": {}
-                        }
-                    }
-                },
-                "extraVolumes": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for the Query Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "extraVolumeMounts": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for the Query Coordinator container(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "sidecars": {
-                    "type": "array",
-                    "description": "Add additional sidecar containers to the Query Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "enableDefaultInitContainers": {
-                    "type": "boolean",
-                    "description": "Deploy default init containers",
-                    "default": true
-                },
-                "initContainers": {
-                    "type": "array",
-                    "description": "Add additional init containers to the Query Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "serviceAccount": {
-                    "type": "object",
-                    "properties": {
-                        "create": {
-                            "type": "boolean",
-                            "description": "Enable creation of ServiceAccount for Query Coordinator pods",
-                            "default": true
-                        },
-                        "name": {
-                            "type": "string",
-                            "description": "The name of the ServiceAccount to use",
-                            "default": ""
-                        },
-                        "automountServiceAccountToken": {
-                            "type": "boolean",
-                            "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
-                            "default": false
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "description": "Additional custom annotations for the ServiceAccount",
-                            "default": {}
-                        }
-                    }
-                },
-                "pdb": {
-                    "type": "object",
-                    "properties": {
-                        "create": {
-                            "type": "boolean",
-                            "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": true
-                        }
-                    }
-                },
-                "autoscaling": {
-                    "type": "object",
-                    "properties": {
-                        "vpa": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable VPA",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "description": "Annotations for VPA resource",
-                                    "default": {}
-                                },
-                                "controlledResources": {
-                                    "type": "array",
-                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "maxAllowed": {
-                                    "type": "object",
-                                    "description": "VPA Max allowed resources for the pod",
-                                    "default": {}
-                                },
-                                "minAllowed": {
-                                    "type": "object",
-                                    "description": "VPA Min allowed resources for the pod",
-                                    "default": {}
-                                },
-                                "updatePolicy": {
-                                    "type": "object",
-                                    "properties": {
-                                        "updateMode": {
-                                            "type": "string",
-                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
-                                            "default": "Auto"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "hpa": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable HPA for Milvus Data Plane",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "description": "Annotations for HPA resource",
-                                    "default": {}
-                                },
-                                "minReplicas": {
-                                    "type": "string",
-                                    "description": "Minimum number of Milvus Data Plane replicas",
-                                    "default": ""
-                                },
-                                "maxReplicas": {
-                                    "type": "string",
-                                    "description": "Maximum number of Milvus Data Plane replicas",
-                                    "default": ""
-                                },
-                                "targetCPU": {
-                                    "type": "string",
-                                    "description": "Target CPU utilization percentage",
-                                    "default": ""
-                                },
-                                "targetMemory": {
-                                    "type": "string",
-                                    "description": "Target Memory utilization percentage",
-                                    "default": ""
-                                }
-                            }
-                        }
-                    }
-                },
-                "service": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Query Coordinator service type",
-                            "default": "ClusterIP"
-                        },
-                        "ports": {
-                            "type": "object",
-                            "properties": {
-                                "grpc": {
-                                    "type": "number",
-                                    "description": "Query Coordinator GRPC service port",
-                                    "default": 19530
-                                },
-                                "metrics": {
-                                    "type": "number",
-                                    "description": "Query Coordinator Metrics service port",
-                                    "default": 9091
-                                }
-                            }
-                        },
-                        "nodePorts": {
-                            "type": "object",
-                            "properties": {
-                                "grpc": {
-                                    "type": "string",
-                                    "description": "Node port for GRPC",
-                                    "default": ""
-                                },
-                                "metrics": {
-                                    "type": "string",
-                                    "description": "Node port for Metrics",
-                                    "default": ""
-                                }
-                            }
-                        },
-                        "sessionAffinityConfig": {
-                            "type": "object",
-                            "description": "Additional settings for the sessionAffinity",
-                            "default": {}
-                        },
-                        "sessionAffinity": {
-                            "type": "string",
-                            "description": "Control where client requests go, to the same pod or round-robin",
-                            "default": "None"
-                        },
-                        "clusterIP": {
-                            "type": "string",
-                            "description": "Query Coordinator service Cluster IP",
-                            "default": ""
-                        },
-                        "loadBalancerIP": {
-                            "type": "string",
-                            "description": "Query Coordinator service Load Balancer IP",
-                            "default": ""
-                        },
-                        "loadBalancerSourceRanges": {
-                            "type": "array",
-                            "description": "Query Coordinator service Load Balancer sources",
-                            "default": [],
-                            "items": {}
-                        },
-                        "externalTrafficPolicy": {
-                            "type": "string",
-                            "description": "Query Coordinator service external traffic policy",
-                            "default": "Cluster"
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "description": "Additional custom annotations for Query Coordinator service",
-                            "default": {}
-                        },
-                        "extraPorts": {
-                            "type": "array",
-                            "description": "Extra ports to expose in the Query Coordinator service",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "networkPolicy": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable creation of NetworkPolicy resources",
-                            "default": true
-                        },
-                        "allowExternal": {
-                            "type": "boolean",
-                            "description": "The Policy model to apply",
-                            "default": true
-                        },
-                        "allowExternalEgress": {
-                            "type": "boolean",
-                            "description": "Allow the pod to access any range of port and all destinations.",
-                            "default": true
-                        },
-                        "extraIngress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "extraEgress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "metrics": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable metrics",
-                            "default": false
-                        },
-                        "serviceMonitor": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Create ServiceMonitor Resource for scraping metrics using Prometheus Operator",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "string",
-                                    "description": "Annotations for the ServiceMonitor Resource",
-                                    "default": ""
-                                },
-                                "namespace": {
-                                    "type": "string",
-                                    "description": "Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)",
-                                    "default": ""
-                                },
-                                "interval": {
-                                    "type": "string",
-                                    "description": "Interval at which metrics should be scraped.",
-                                    "default": ""
-                                },
-                                "scrapeTimeout": {
-                                    "type": "string",
-                                    "description": "Timeout after which the scrape is ended",
-                                    "default": ""
-                                },
-                                "labels": {
-                                    "type": "object",
-                                    "description": "Additional labels that can be used so ServiceMonitor will be discovered by Prometheus",
-                                    "default": {}
-                                },
-                                "selector": {
-                                    "type": "object",
-                                    "description": "Prometheus instance selector labels",
-                                    "default": {}
-                                },
-                                "relabelings": {
-                                    "type": "array",
-                                    "description": "RelabelConfigs to apply to samples before scraping",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "metricRelabelings": {
-                                    "type": "array",
-                                    "description": "MetricRelabelConfigs to apply to samples before ingestion",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "honorLabels": {
-                                    "type": "boolean",
-                                    "description": "Specify honorLabels parameter to add the scrape endpoint",
-                                    "default": false
-                                },
-                                "jobLabel": {
-                                    "type": "string",
-                                    "description": "The name of the label on the target service to use as the job name in prometheus.",
-                                    "default": ""
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "indexCoord": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable Index Coordinator deployment",
-                    "default": true
-                },
-                "extraEnvVars": {
-                    "type": "array",
-                    "description": "Array with extra environment variables to add to data coordinator nodes",
-                    "default": [],
-                    "items": {}
-                },
-                "extraEnvVarsCM": {
-                    "type": "string",
-                    "description": "Name of existing ConfigMap containing extra env vars for data coordinator nodes",
-                    "default": ""
-                },
-                "extraEnvVarsSecret": {
-                    "type": "string",
-                    "description": "Name of existing Secret containing extra env vars for data coordinator nodes",
-                    "default": ""
-                },
-                "defaultConfig": {
-                    "type": "string",
-                    "description": "Default override configuration from the common set in milvus.defaultConfig",
-                    "default": "\"\""
-                },
-                "existingConfigMap": {
-                    "type": "string",
-                    "description": "name of a ConfigMap with existing configuration for the default configuration",
-                    "default": ""
-                },
-                "extraConfig": {
-                    "type": "object",
-                    "description": "Override configuration",
-                    "default": {}
-                },
-                "extraConfigExistingConfigMap": {
-                    "type": "string",
-                    "description": "name of a ConfigMap with existing configuration for the Dashboard",
-                    "default": ""
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Override default container command (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Override default container args (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "replicaCount": {
-                    "type": "number",
-                    "description": "Number of Index Coordinator replicas to deploy",
-                    "default": 1
-                },
-                "containerPorts": {
-                    "type": "object",
-                    "properties": {
-                        "grpc": {
-                            "type": "number",
-                            "description": "GRPC port for Index Coordinator",
-                            "default": 19530
-                        },
-                        "metrics": {
-                            "type": "number",
-                            "description": "Metrics port for Index Coordinator",
-                            "default": 9091
-                        }
-                    }
-                },
-                "livenessProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable livenessProbe on Index Coordinator nodes",
-                            "default": true
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for livenessProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for livenessProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for livenessProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for livenessProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for livenessProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "readinessProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable readinessProbe on Index Coordinator nodes",
-                            "default": true
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for readinessProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for readinessProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for readinessProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for readinessProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for readinessProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "startupProbe": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable startupProbe on Index Coordinator containers",
-                            "default": false
-                        },
-                        "initialDelaySeconds": {
-                            "type": "number",
-                            "description": "Initial delay seconds for startupProbe",
-                            "default": 5
-                        },
-                        "periodSeconds": {
-                            "type": "number",
-                            "description": "Period seconds for startupProbe",
-                            "default": 10
-                        },
-                        "timeoutSeconds": {
-                            "type": "number",
-                            "description": "Timeout seconds for startupProbe",
-                            "default": 5
-                        },
-                        "failureThreshold": {
-                            "type": "number",
-                            "description": "Failure threshold for startupProbe",
-                            "default": 5
-                        },
-                        "successThreshold": {
-                            "type": "number",
-                            "description": "Success threshold for startupProbe",
-                            "default": 1
-                        }
-                    }
-                },
-                "customLivenessProbe": {
-                    "type": "object",
-                    "description": "Custom livenessProbe that overrides the default one",
-                    "default": {}
-                },
-                "customReadinessProbe": {
-                    "type": "object",
-                    "description": "Custom readinessProbe that overrides the default one",
-                    "default": {}
-                },
-                "customStartupProbe": {
-                    "type": "object",
-                    "description": "Custom startupProbe that overrides the default one",
-                    "default": {}
-                },
-                "resourcesPreset": {
-                    "type": "string",
-                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).",
-                    "default": "micro"
-                },
-                "resources": {
-                    "type": "object",
-                    "description": "Set container requests and limits for different resources like CPU or memory (essential for production workloads)",
-                    "default": {}
-                },
-                "podSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled Index Coordinator pods' Security Context",
-                            "default": true
-                        },
-                        "fsGroupChangePolicy": {
-                            "type": "string",
-                            "description": "Set filesystem group change policy",
-                            "default": "Always"
-                        },
-                        "sysctls": {
-                            "type": "array",
-                            "description": "Set kernel settings using the sysctl interface",
-                            "default": [],
-                            "items": {}
-                        },
-                        "supplementalGroups": {
-                            "type": "array",
-                            "description": "Set filesystem extra groups",
-                            "default": [],
-                            "items": {}
-                        },
-                        "fsGroup": {
-                            "type": "number",
-                            "description": "Set Index Coordinator pod's Security Context fsGroup",
-                            "default": 1001
-                        }
-                    }
-                },
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled containers' Security Context",
-                            "default": true
-                        },
-                        "runAsUser": {
-                            "type": "number",
-                            "description": "Set containers' Security Context runAsUser",
-                            "default": 1001
-                        },
-                        "runAsGroup": {
-                            "type": "number",
-                            "description": "Set containers' Security Context runAsGroup",
-                            "default": 1001
-                        },
-                        "runAsNonRoot": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context runAsNonRoot",
-                            "default": true
-                        },
-                        "privileged": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context privileged",
-                            "default": false
-                        },
-                        "readOnlyRootFilesystem": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context readOnlyRootFilesystem",
-                            "default": true
-                        },
-                        "allowPrivilegeEscalation": {
-                            "type": "boolean",
-                            "description": "Set container's Security Context allowPrivilegeEscalation",
-                            "default": false
-                        },
-                        "capabilities": {
-                            "type": "object",
-                            "properties": {
-                                "drop": {
-                                    "type": "array",
-                                    "description": "List of capabilities to be dropped",
-                                    "default": [
-                                        "ALL"
-                                    ],
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
-                        }
-                    }
-                },
-                "lifecycleHooks": {
-                    "type": "object",
-                    "description": "for the data coordinator container(s) to automate configuration before or after startup",
-                    "default": {}
-                },
-                "runtimeClassName": {
-                    "type": "string",
-                    "description": "Name of the runtime class to be used by pod(s)",
-                    "default": ""
-                },
-                "automountServiceAccountToken": {
-                    "type": "boolean",
-                    "description": "Mount Service Account token in pod",
-                    "default": false
-                },
-                "hostAliases": {
-                    "type": "array",
-                    "description": "data coordinator pods host aliases",
-                    "default": [],
-                    "items": {}
-                },
-                "podLabels": {
-                    "type": "object",
-                    "description": "Extra labels for data coordinator pods",
-                    "default": {}
-                },
-                "podAnnotations": {
-                    "type": "object",
-                    "description": "Annotations for data coordinator pods",
-                    "default": {}
-                },
-                "podAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "podAntiAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": "soft"
-                },
-                "nodeAffinityPreset": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`",
-                            "default": ""
-                        },
-                        "key": {
-                            "type": "string",
-                            "description": "Node label key to match. Ignored if `data coordinator.affinity` is set",
-                            "default": ""
-                        },
-                        "values": {
-                            "type": "array",
-                            "description": "Node label values to match. Ignored if `data coordinator.affinity` is set",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "affinity": {
-                    "type": "object",
-                    "description": "Affinity for Index Coordinator pods assignment",
-                    "default": {}
-                },
-                "nodeSelector": {
-                    "type": "object",
-                    "description": "Node labels for Index Coordinator pods assignment",
-                    "default": {}
-                },
-                "tolerations": {
-                    "type": "array",
-                    "description": "Tolerations for Index Coordinator pods assignment",
-                    "default": [],
-                    "items": {}
-                },
-                "topologySpreadConstraints": {
-                    "type": "array",
-                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains",
-                    "default": [],
-                    "items": {}
-                },
-                "priorityClassName": {
-                    "type": "string",
-                    "description": "Index Coordinator pods' priorityClassName",
-                    "default": ""
-                },
-                "schedulerName": {
-                    "type": "string",
-                    "description": "Kubernetes pod scheduler registry",
-                    "default": ""
-                },
-                "updateStrategy": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Index Coordinator statefulset strategy type",
-                            "default": "RollingUpdate"
-                        },
-                        "rollingUpdate": {
-                            "type": "object",
-                            "description": "Index Coordinator statefulset rolling update configuration parameters",
-                            "default": {}
-                        }
-                    }
-                },
-                "extraVolumes": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for the Index Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "extraVolumeMounts": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for the Index Coordinator container(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "sidecars": {
-                    "type": "array",
-                    "description": "Add additional sidecar containers to the Index Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "enableDefaultInitContainers": {
-                    "type": "boolean",
-                    "description": "Deploy default init containers",
-                    "default": true
-                },
-                "initContainers": {
-                    "type": "array",
-                    "description": "Add additional init containers to the Index Coordinator pod(s)",
-                    "default": [],
-                    "items": {}
-                },
-                "serviceAccount": {
-                    "type": "object",
-                    "properties": {
-                        "create": {
-                            "type": "boolean",
-                            "description": "Enable creation of ServiceAccount for Index Coordinator pods",
-                            "default": true
-                        },
-                        "name": {
-                            "type": "string",
-                            "description": "The name of the ServiceAccount to use",
-                            "default": ""
-                        },
-                        "automountServiceAccountToken": {
-                            "type": "boolean",
-                            "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
-                            "default": false
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "description": "Additional custom annotations for the ServiceAccount",
-                            "default": {}
-                        }
-                    }
-                },
-                "pdb": {
-                    "type": "object",
-                    "properties": {
-                        "create": {
-                            "type": "boolean",
-                            "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": true
-                        }
-                    }
-                },
-                "autoscaling": {
-                    "type": "object",
-                    "properties": {
-                        "vpa": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable VPA",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "description": "Annotations for VPA resource",
-                                    "default": {}
-                                },
-                                "controlledResources": {
-                                    "type": "array",
-                                    "description": "VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory",
-                                    "default": [],
-                                    "items": {}
-                                },
-                                "maxAllowed": {
-                                    "type": "object",
-                                    "description": "VPA Max allowed resources for the pod",
-                                    "default": {}
-                                },
-                                "minAllowed": {
-                                    "type": "object",
-                                    "description": "VPA Min allowed resources for the pod",
-                                    "default": {}
-                                },
-                                "updatePolicy": {
-                                    "type": "object",
-                                    "properties": {
-                                        "updateMode": {
-                                            "type": "string",
-                                            "description": "Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod",
-                                            "default": "Auto"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "hpa": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable HPA for Milvus Data Plane",
-                                    "default": false
-                                },
-                                "annotations": {
-                                    "type": "object",
-                                    "description": "Annotations for HPA resource",
-                                    "default": {}
-                                },
-                                "minReplicas": {
-                                    "type": "string",
-                                    "description": "Minimum number of Milvus Data Plane replicas",
-                                    "default": ""
-                                },
-                                "maxReplicas": {
-                                    "type": "string",
-                                    "description": "Maximum number of Milvus Data Plane replicas",
-                                    "default": ""
-                                },
-                                "targetCPU": {
-                                    "type": "string",
-                                    "description": "Target CPU utilization percentage",
-                                    "default": ""
-                                },
-                                "targetMemory": {
-                                    "type": "string",
-                                    "description": "Target Memory utilization percentage",
-                                    "default": ""
-                                }
-                            }
-                        }
-                    }
-                },
-                "service": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Index Coordinator service type",
-                            "default": "ClusterIP"
-                        },
-                        "ports": {
-                            "type": "object",
-                            "properties": {
-                                "grpc": {
-                                    "type": "number",
-                                    "description": "Index Coordinator GRPC service port",
-                                    "default": 19530
-                                },
-                                "metrics": {
-                                    "type": "number",
-                                    "description": "Index Coordinator Metrics service port",
-                                    "default": 9091
-                                }
-                            }
-                        },
-                        "nodePorts": {
-                            "type": "object",
-                            "properties": {
-                                "grpc": {
-                                    "type": "string",
-                                    "description": "Node port for GRPC",
-                                    "default": ""
-                                },
-                                "metrics": {
-                                    "type": "string",
-                                    "description": "Node port for Metrics",
-                                    "default": ""
-                                }
-                            }
-                        },
-                        "sessionAffinityConfig": {
-                            "type": "object",
-                            "description": "Additional settings for the sessionAffinity",
-                            "default": {}
-                        },
-                        "sessionAffinity": {
-                            "type": "string",
-                            "description": "Control where client requests go, to the same pod or round-robin",
-                            "default": "None"
-                        },
-                        "clusterIP": {
-                            "type": "string",
-                            "description": "Index Coordinator service Cluster IP",
-                            "default": ""
-                        },
-                        "loadBalancerIP": {
-                            "type": "string",
-                            "description": "Index Coordinator service Load Balancer IP",
-                            "default": ""
-                        },
-                        "loadBalancerSourceRanges": {
-                            "type": "array",
-                            "description": "Index Coordinator service Load Balancer sources",
-                            "default": [],
-                            "items": {}
-                        },
-                        "externalTrafficPolicy": {
-                            "type": "string",
-                            "description": "Index Coordinator service external traffic policy",
-                            "default": "Cluster"
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "description": "Additional custom annotations for Index Coordinator service",
-                            "default": {}
-                        },
-                        "extraPorts": {
-                            "type": "array",
-                            "description": "Extra ports to expose in the Index Coordinator service",
+                            "description": "Extra ports to expose in the Coordinator service",
                             "default": [],
                             "items": {}
                         }
@@ -5092,12 +3594,12 @@
                 }
             }
         },
-        "indexNode": {
+        "streamingNode": {
             "type": "object",
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": "Enable Index Node deployment",
+                    "description": "Enable Streaming Node deployment",
                     "default": true
                 },
                 "extraEnvVars": {
@@ -5150,7 +3652,7 @@
                 },
                 "replicaCount": {
                     "type": "number",
-                    "description": "Number of Index Node replicas to deploy",
+                    "description": "Number of Streaming Node replicas to deploy",
                     "default": 1
                 },
                 "containerPorts": {
@@ -5158,12 +3660,12 @@
                     "properties": {
                         "grpc": {
                             "type": "number",
-                            "description": "GRPC port for Index Node",
+                            "description": "GRPC port for Streaming Node",
                             "default": 19530
                         },
                         "metrics": {
                             "type": "number",
-                            "description": "Metrics port for Index Node",
+                            "description": "Metrics port for Streaming Node",
                             "default": 9091
                         }
                     }
@@ -5173,7 +3675,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable livenessProbe on Index Node nodes",
+                            "description": "Enable livenessProbe on Streaming Node nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -5208,7 +3710,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable readinessProbe on Index Node nodes",
+                            "description": "Enable readinessProbe on Streaming Node nodes",
                             "default": true
                         },
                         "initialDelaySeconds": {
@@ -5243,7 +3745,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enable startupProbe on Index Node containers",
+                            "description": "Enable startupProbe on Streaming Node containers",
                             "default": false
                         },
                         "initialDelaySeconds": {
@@ -5290,7 +3792,7 @@
                 },
                 "resourcesPreset": {
                     "type": "string",
-                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).",
+                    "description": "Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if streamingNode.resources is set (streamingNode.resources is recommended for production).",
                     "default": "micro"
                 },
                 "resources": {
@@ -5303,7 +3805,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "Enabled Index Node pods' Security Context",
+                            "description": "Enabled Streaming Node pods' Security Context",
                             "default": true
                         },
                         "fsGroupChangePolicy": {
@@ -5325,7 +3827,7 @@
                         },
                         "fsGroup": {
                             "type": "number",
-                            "description": "Set Index Node pod's Security Context fsGroup",
+                            "description": "Set Streaming Node pod's Security Context fsGroup",
                             "default": 1001
                         }
                     }
@@ -5459,17 +3961,17 @@
                 },
                 "affinity": {
                     "type": "object",
-                    "description": "Affinity for Index Node pods assignment",
+                    "description": "Affinity for Streaming Node pods assignment",
                     "default": {}
                 },
                 "nodeSelector": {
                     "type": "object",
-                    "description": "Node labels for Index Node pods assignment",
+                    "description": "Node labels for Streaming Node pods assignment",
                     "default": {}
                 },
                 "tolerations": {
                     "type": "array",
-                    "description": "Tolerations for Index Node pods assignment",
+                    "description": "Tolerations for Streaming Node pods assignment",
                     "default": [],
                     "items": {}
                 },
@@ -5481,7 +3983,7 @@
                 },
                 "priorityClassName": {
                     "type": "string",
-                    "description": "Index Node pods' priorityClassName",
+                    "description": "Streaming Node pods' priorityClassName",
                     "default": ""
                 },
                 "schedulerName": {
@@ -5494,31 +3996,31 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Index Node statefulset strategy type",
+                            "description": "Streaming Node statefulset strategy type",
                             "default": "RollingUpdate"
                         },
                         "rollingUpdate": {
                             "type": "object",
-                            "description": "Index Node statefulset rolling update configuration parameters",
+                            "description": "Streaming Node statefulset rolling update configuration parameters",
                             "default": {}
                         }
                     }
                 },
                 "extraVolumes": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for the Index Node pod(s)",
+                    "description": "Optionally specify extra list of additional volumes for the Streaming Node pod(s)",
                     "default": [],
                     "items": {}
                 },
                 "extraVolumeMounts": {
                     "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for the Index Node container(s)",
+                    "description": "Optionally specify extra list of additional volumeMounts for the Streaming Node container(s)",
                     "default": [],
                     "items": {}
                 },
                 "sidecars": {
                     "type": "array",
-                    "description": "Add additional sidecar containers to the Index Node pod(s)",
+                    "description": "Add additional sidecar containers to the Streaming Node pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -5529,7 +4031,7 @@
                 },
                 "initContainers": {
                     "type": "array",
-                    "description": "Add additional init containers to the Index Node pod(s)",
+                    "description": "Add additional init containers to the Streaming Node pod(s)",
                     "default": [],
                     "items": {}
                 },
@@ -5538,7 +4040,7 @@
                     "properties": {
                         "create": {
                             "type": "boolean",
-                            "description": "Enable creation of ServiceAccount for Index Node pods",
+                            "description": "Enable creation of ServiceAccount for Streaming Node pods",
                             "default": true
                         },
                         "name": {
@@ -5654,7 +4156,7 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Index Node service type",
+                            "description": "Streaming Node service type",
                             "default": "ClusterIP"
                         },
                         "ports": {
@@ -5662,12 +4164,12 @@
                             "properties": {
                                 "grpc": {
                                     "type": "number",
-                                    "description": "Index Node GRPC service port",
+                                    "description": "Streaming Node GRPC service port",
                                     "default": 19530
                                 },
                                 "metrics": {
                                     "type": "number",
-                                    "description": "Index Node Metrics service port",
+                                    "description": "Streaming Node Metrics service port",
                                     "default": 9091
                                 }
                             }
@@ -5699,33 +4201,33 @@
                         },
                         "clusterIP": {
                             "type": "string",
-                            "description": "Index Node service Cluster IP",
+                            "description": "Streaming Node service Cluster IP",
                             "default": ""
                         },
                         "loadBalancerIP": {
                             "type": "string",
-                            "description": "Index Node service Load Balancer IP",
+                            "description": "Streaming Node service Load Balancer IP",
                             "default": ""
                         },
                         "loadBalancerSourceRanges": {
                             "type": "array",
-                            "description": "Index Node service Load Balancer sources",
+                            "description": "Streaming Node service Load Balancer sources",
                             "default": [],
                             "items": {}
                         },
                         "externalTrafficPolicy": {
                             "type": "string",
-                            "description": "Index Node service external traffic policy",
+                            "description": "Streaming Node service external traffic policy",
                             "default": "Cluster"
                         },
                         "annotations": {
                             "type": "object",
-                            "description": "Additional custom annotations for Index Node service",
+                            "description": "Additional custom annotations for Streaming Node service",
                             "default": {}
                         },
                         "extraPorts": {
                             "type": "array",
-                            "description": "Extra ports to expose in the Index Node service",
+                            "description": "Extra ports to expose in the Streaming Node service",
                             "default": [],
                             "items": {}
                         }

@@ -462,9 +462,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 23.0.0
+
+This major release bumps the MariaDB version to 12.0. Follow the [upstream instructions](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/upgrading) for upgrading from MariaDB 11.8 to 12.0. No major issues are expected during the upgrade.
+
 ### To 22.0.4
 
-This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [this page](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
 
 ### To 22.0.0
 

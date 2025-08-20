@@ -95,7 +95,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.20.2-debian-12-r1
+    tag: 1.20.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -682,6 +682,86 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+
+    ## @param server.rbac.createClusterRoleBinding Specifies whether a ClusterRoleBinding should be created
+    ##
+    createClusterRoleBinding: true
+
+    leaderElection:
+      ## @param server.rbac.leaderElection.rules [array] Specifies the leader election role rules
+      ## Example:
+      ## rules:
+      ##   - apiGroups:
+      ##       - ""
+      ##     resources:
+      ##       - pods
+      ##     verbs:
+      ##       - get
+      ##       - list
+      ##
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+        - apiGroups:
+            - ""
+          resources:
+            - configmaps/status
+          verbs:
+            - get
+            - update
+            - patch
+        - apiGroups:
+            - ""
+          resources:
+            - events
+          verbs:
+            - create
+        - apiGroups:
+            - "coordination.k8s.io"
+          resources:
+            - leases
+          verbs:
+            - get
+            - list
+            - watch
+            - create
+            - update
+            - patch
+            - delete
+
+    discovery:
+      ## @param server.rbac.discovery.rules [array] Specifies the discovery role rules
+      ## Example:
+      ## rules:
+      ##   - apiGroups:
+      ##       - ""
+      ##     resources:
+      ##       - pods
+      ##     verbs:
+      ##       - get
+      ##       - list
+      ##
+      rules:
+        - apiGroups:
+            - ""
+          resources:
+            - pods
+          verbs:
+            - get
+            - watch
+            - list
+            - update
+            - patch
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -829,7 +909,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.5.1-debian-12-r3
+    tag: 1.5.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1333,7 +1413,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.7.0-debian-12-r3
+    tag: 1.7.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -1,8 +1,16 @@
 # Changelog
 
+## 8.0.2 (2025-08-19)
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#36132](https://github.com/bitnami/charts/pull/36132))
+
+## <small>8.0.1 (2025-08-14)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35890) ([75e9466](https://github.com/bitnami/charts/commit/75e9466d156d5c71efb022a1c86cff2fac75c3c1)), closes [#35890](https://github.com/bitnami/charts/issues/35890)
+
 ## 8.0.0 (2025-08-11)
 
-* [bitnami/oauth2-proxy] Upgrade to Redis subchart 22 ([#35720](https://github.com/bitnami/charts/pull/35720))
+* [bitnami/oauth2-proxy] Upgrade to Redis subchart 22 (#35720) ([c422957](https://github.com/bitnami/charts/commit/c422957ecf903b22dc5fd5d01e4e43bfa94674e0)), closes [#35720](https://github.com/bitnami/charts/issues/35720)
 
 ## <small>7.0.7 (2025-08-07)</small>
 

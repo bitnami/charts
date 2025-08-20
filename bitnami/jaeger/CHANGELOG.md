@@ -3,6 +3,10 @@
 ## 6.1.0 (2025-08-12)
 
 * [bitnami/jaeger] Add optional Ingress support for Jaeger UI ([#35744](https://github.com/bitnami/charts/pull/35744))
+=======
+## <small>6.0.5 (2025-08-13)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#35815](https://github.com/bitnami/charts/pull/35815))
 
 ## <small>6.0.4 (2025-08-11)</small>
 

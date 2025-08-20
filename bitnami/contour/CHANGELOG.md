@@ -1,8 +1,24 @@
 # Changelog
 
+## 21.1.4 (2025-08-19)
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references ([#36144](https://github.com/bitnami/charts/pull/36144))
+
+## <small>21.1.3 (2025-08-15)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#36080) ([6fb86e6](https://github.com/bitnami/charts/commit/6fb86e6391a48c077bf89b5c54d0975e5a39cc2c)), closes [#36080](https://github.com/bitnami/charts/issues/36080)
+
+## <small>21.1.2 (2025-08-13)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35845) ([e8c7fe9](https://github.com/bitnami/charts/commit/e8c7fe904f6006b2cc9ca4ba17f4322cb690d8f5)), closes [#35845](https://github.com/bitnami/charts/issues/35845)
+
+## <small>21.1.1 (2025-08-13)</small>
+
+* [bitnami/contour] :zap: :arrow_up: Update dependency references (#35795) ([f2c715a](https://github.com/bitnami/charts/commit/f2c715ad307f93eb8d736df93baee9cb9d2ac703)), closes [#35795](https://github.com/bitnami/charts/issues/35795)
+
 ## 21.1.0 (2025-08-12)
 
-* [bitnami/contour] feat: Standardize default Envoy init-config init-container ([#35760](https://github.com/bitnami/charts/pull/35760))
+* [bitnami/contour] feat: Standardize default Envoy init-config init-container (#35760) ([0ea2102](https://github.com/bitnami/charts/commit/0ea2102e9e66fbeba562bafb0ce16cc36de91160)), closes [#35760](https://github.com/bitnami/charts/issues/35760)
 
 ## <small>21.0.14 (2025-08-11)</small>
 
