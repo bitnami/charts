@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.0.9 (2025-08-19)
+## 2.0.10 (2025-08-20)
 
-* [bitnami/opensearch] add docs to clarify parameter behavior. ([#36134](https://github.com/bitnami/charts/pull/36134))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#36148](https://github.com/bitnami/charts/pull/36148))
+
+## <small>2.0.9 (2025-08-19)</small>
+
+* [bitnami/opensearch] add docs to clarify parameter behavior. (#36134) ([4f5a86f](https://github.com/bitnami/charts/commit/4f5a86f73f9c2de971b1d2d712e6f2c3bfa027f1)), closes [#36134](https://github.com/bitnami/charts/issues/36134)
 
 ## <small>2.0.8 (2025-08-12)</small>
 
