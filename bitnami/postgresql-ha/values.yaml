@@ -351,7 +351,7 @@ postgresql:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 15
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -694,6 +694,7 @@ postgresql:
   ## This mode also enables enriched readiness probe implementation which delays first switch of POD to READY state
   ## after start/restart of container. It gives Pgpool-II time switch node back from DOWN to UP state during rolling
   ## upgrade.
+  ##
   headlessWithNotReadyAddresses: false
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
