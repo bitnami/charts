@@ -21,7 +21,7 @@ Cypress.Commands.add(
   'login',
   (token = Cypress.env('token')) => {
     cy.visit('/ui');
-    cy.get('label').contains('Admin key');
+    cy.get('label').contains('Admin Key');
     cy.get('input').should('be.enabled').type(token);
     cy.visit('/ui');
   }
