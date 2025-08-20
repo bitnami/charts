@@ -1,11 +1,11 @@
 module.exports = {
   env: {
-    username: 'vib-user',
-    password: 'ComplicatedPassword123!4',
+    token: 'deadbeefdeadbeefdeadbeef',
   },
   defaultCommandTimeout: 30000,
   e2e: {
     setupNodeEvents(on, config) {},
-    baseUrl: 'http://localhost',
+    baseUrl: 'https://localhost',
   },
+  retries: 5
 }
