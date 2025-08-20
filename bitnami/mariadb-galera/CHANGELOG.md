@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.0.1 (2025-08-20)
+
+* [bitnami/mariadb-galera] Only require mariadb-password key in secret when creating a user on first run ([#36141](https://github.com/bitnami/charts/pull/36141))
+
 ## 16.0.0 (2025-08-18)
 
-* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references ([#36107](https://github.com/bitnami/charts/pull/36107))
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#36107) ([22c1bd5](https://github.com/bitnami/charts/commit/22c1bd543ed0f9503eba127d5cf904a369d0cdb8)), closes [#36107](https://github.com/bitnami/charts/issues/36107)
 
 ## <small>15.0.6 (2025-08-14)</small>
 
