@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.0 (2025-08-19)
+## 6.0.0 (2025-08-20)
 
 * [bitnami/apisix] major: Integrate apisix-dashboard into apisix ([#36136](https://github.com/bitnami/charts/pull/36136))
 
