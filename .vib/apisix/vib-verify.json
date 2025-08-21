@@ -60,8 +60,8 @@
             "resources": {
               "path": "/.vib/apisix/cypress"
             },
-            "endpoint": "lb-apisix-dashboard-http",
-            "app_protocol": "HTTP",
+            "endpoint": "lb-apisix-control-plane-https-admin-api",
+            "app_protocol": "HTTPS",
             "env": {
               "username": "vib-user",
               "password": "ComplicatedPassword123!4"

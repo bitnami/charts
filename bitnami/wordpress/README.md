@@ -494,7 +494,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                                                                                                                                                     | `true`                     |
 | `persistence.storageClass`                                  | Persistent Volume storage class                                                                                                                                                                                                                       | `""`                       |
 | `persistence.accessModes`                                   | Persistent Volume access modes                                                                                                                                                                                                                        | `[]`                       |
-| `persistence.accessMode`                                    | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                                                                                                                                     | `ReadWriteOnce`            |
 | `persistence.size`                                          | Persistent Volume size                                                                                                                                                                                                                                | `10Gi`                     |
 | `persistence.dataSource`                                    | Custom PVC data source                                                                                                                                                                                                                                | `{}`                       |
 | `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                                                                                                                                                    | `""`                       |
@@ -679,9 +678,13 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 26.0.0
+
+This major release bumps the MariaDB version to 12.0. Follow the [upstream instructions](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/upgrading) for upgrading from MariaDB 11.8 to 12.0. No major issues are expected during the upgrade.
+
 ### To 25.0.4
 
-This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [this page](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
 
 ### To 25.0.0
 

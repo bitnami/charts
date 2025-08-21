@@ -1,8 +1,32 @@
 # Changelog
 
-## 22.0.25 (2025-08-15)
+## 23.0.0 (2025-08-18)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#36042](https://github.com/bitnami/charts/pull/36042))
+* [bitnami/drupal] Upgrade to MariaDB 12.0 ([#36113](https://github.com/bitnami/charts/pull/36113))
+
+## <small>22.0.30 (2025-08-18)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36099) ([c52657b](https://github.com/bitnami/charts/commit/c52657b0cb05263fd23d5b1c4b4996085eeba625)), closes [#36099](https://github.com/bitnami/charts/issues/36099)
+
+## <small>22.0.29 (2025-08-16)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36086) ([3f9057a](https://github.com/bitnami/charts/commit/3f9057abd31d5d592cc85de88b907f32b77a23d6)), closes [#36086](https://github.com/bitnami/charts/issues/36086)
+
+## <small>22.0.28 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36069) ([a7839d1](https://github.com/bitnami/charts/commit/a7839d11266ef62b1d6e8fc02f52c944fdcd560e)), closes [#36069](https://github.com/bitnami/charts/issues/36069)
+
+## <small>22.0.27 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36059) ([c8fd13d](https://github.com/bitnami/charts/commit/c8fd13d209e0d7c12aaf67999517ab402a224f2d)), closes [#36059](https://github.com/bitnami/charts/issues/36059)
+
+## <small>22.0.26 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36049) ([d18ca31](https://github.com/bitnami/charts/commit/d18ca31b1c10832943908641c20a33d0ec322285)), closes [#36049](https://github.com/bitnami/charts/issues/36049)
+
+## <small>22.0.25 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36042) ([4cc81ea](https://github.com/bitnami/charts/commit/4cc81ea13f8c3bbcc6af68a8650d5a8ce398408f)), closes [#36042](https://github.com/bitnami/charts/issues/36042)
 
 ## <small>22.0.24 (2025-08-15)</small>
 

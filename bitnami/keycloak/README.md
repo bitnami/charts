@@ -247,7 +247,7 @@ It is also possible to rely on the chart certificate auto-generation capabilitie
 
 #### Use with ingress offloading SSL
 
-If your ingress controller has the SSL Termination, you should set `proxy` to `edge`.
+If your ingress controller has the TLS/SSL Termination, you might need to properly configure the reverse proxy headers via the `proxyHeaders` parameter. Find more information in the [upstream documentation](https://www.keycloak.org/server/reverseproxy).
 
 ### Update credentials
 

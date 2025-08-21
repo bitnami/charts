@@ -10,17 +10,34 @@ import {
 
 it('allows to create a service in the dashboard', () => {
   cy.login();
-  cy.visit('/service/list');
   // Go to the services page
-  cy.get('button').contains('Create').click();
+  cy.get('span').contains('Services').click();
   // Create a service
   cy.fixture('service').then((svc) => {
-    cy.get('#name').type(`${svc.service.name}${random}`);
-    cy.get('[placeholder*="Hostname"]').type(`${random}-${svc.service.host}`)
-    cy.get('button').contains('Next').click();
-    cy.contains('After customizing the plugin');
-    cy.get('button').contains('Next').click();
-    cy.get('button').contains('Submit').click();
+    cy.get('button').contains('Add Service').click();
+    cy.get('[name="name"]').type(`${svc.service.name}${random}`);
+    cy.get('button').contains('Add a Node').click();
+    cy.get('input[placeholder*="Please enter"]').should('have.length', 4).then((elements) => {
+      cy.wrap(elements.eq(0)).type(`${svc.service.host}`)
+      cy.wrap(elements.eq(1)).clear().type(80);
+    })
+    // Submission randomly fails with network error
+    let retries = 5;
+    do {
+      try {
+        cy.get('button[type="submit"]').click();
+        retries = 0;
+      } catch (e) {
+        if (retries === 0) {
+          throw new Error('Service submit failed.');
+        } else {
+          cy.wait(2000);
+        }
+      }
+    } while (--retries >= 0);
+
+    cy.contains('Service Detail');
+    cy.get('span').contains('Services').click();
     cy.get('tr').contains(`${svc.service.name}${random}`);
   });
 });
