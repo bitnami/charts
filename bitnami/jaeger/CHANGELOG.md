@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.0.3 (2025-08-07)
+## 6.0.5 (2025-08-13)
 
-* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#35546](https://github.com/bitnami/charts/pull/35546))
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#35815](https://github.com/bitnami/charts/pull/35815))
+
+## <small>6.0.4 (2025-08-11)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35734) ([96c65e8](https://github.com/bitnami/charts/commit/96c65e8a37a1f720600c5c5eaae5bb94a76f3e87)), closes [#35734](https://github.com/bitnami/charts/issues/35734)
+
+## <small>6.0.3 (2025-08-07)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35546) ([2485551](https://github.com/bitnami/charts/commit/2485551d172c8fbf15cd83309451341877801733)), closes [#35546](https://github.com/bitnami/charts/issues/35546)
 
 ## <small>6.0.2 (2025-08-07)</small>
 

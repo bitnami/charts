@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.0.4 (2025-08-10)
+## 1.0.7 (2025-08-10)
 
 * [bitnami/grafana-alloy] fix quote prometheus.io/port annotation to avoid decoding error ([#35289](https://github.com/bitnami/charts/pull/35289))
+
+## <small>1.0.6 (2025-08-20)</small>
+
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references ([#36149](https://github.com/bitnami/charts/pull/36149))
+
+## <small>1.0.5 (2025-08-13)</small>
+
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references (#35805) ([f30c9ef](https://github.com/bitnami/charts/commit/f30c9efc0789fd0002ca0b821aeedd6e81806d8e)), closes [#35805](https://github.com/bitnami/charts/issues/35805)
+
+## <small>1.0.4 (2025-08-13)</small>
+
+* [bitnami/grafana-alloy] :zap: :arrow_up: Update dependency references (#35794) ([4453a4a](https://github.com/bitnami/charts/commit/4453a4a83a936ed98f20617cc29130dcf164a51f)), closes [#35794](https://github.com/bitnami/charts/issues/35794)
 
 ## <small>1.0.3 (2025-08-07)</small>
 

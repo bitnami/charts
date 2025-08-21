@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.0.7 (2025-08-07)
+## 2.0.10 (2025-08-20)
 
-* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#35646](https://github.com/bitnami/charts/pull/35646))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#36148](https://github.com/bitnami/charts/pull/36148))
+
+## <small>2.0.9 (2025-08-19)</small>
+
+* [bitnami/opensearch] add docs to clarify parameter behavior. (#36134) ([4f5a86f](https://github.com/bitnami/charts/commit/4f5a86f73f9c2de971b1d2d712e6f2c3bfa027f1)), closes [#36134](https://github.com/bitnami/charts/issues/36134)
+
+## <small>2.0.8 (2025-08-12)</small>
+
+* [bitnami/opensearch] Add ability to unset OPENSEARCH_SECURITY_ADMIN_DN variable to fix issue/35666 ( ([a7b9ee7](https://github.com/bitnami/charts/commit/a7b9ee7071ce33ca4a6fd9a72e54a4037399382b)), closes [#35746](https://github.com/bitnami/charts/issues/35746)
+
+## <small>2.0.7 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#35646) ([1d0fcf1](https://github.com/bitnami/charts/commit/1d0fcf1266c912c57ab121f5899d6958dac531c3)), closes [#35646](https://github.com/bitnami/charts/issues/35646)
 
 ## <small>2.0.6 (2025-07-15)</small>
 

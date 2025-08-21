@@ -93,7 +93,7 @@ usePasswordFiles: true
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 26.3.2-debian-12-r2
+  tag: 26.3.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -194,6 +194,9 @@ proxyHeaders: ""
 ## If enabled, the ingress.hostname option needs to be specified.
 ##
 hostnameStrict: false
+## @param httpEnabled Force enabling HTTP endpoint (by default is only enabled if TLS is disabled)
+##
+httpEnabled: false
 ## @param httpRelativePath Set the path relative to '/' for serving resources
 ##
 httpRelativePath: "/"
@@ -1222,13 +1225,13 @@ defaultInitContainers:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## MariaDB "prepare-write-dirs" init container resource requests and limits
+    ## Keycloak "prepare-write-dirs" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param defaultInitContainers.prepareWriteDirs.resourcesPreset Set MariaDB "prepare-write-dirs" init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareWriteDirs.resources is set (defaultInitContainers.prepareWriteDirs.resources is recommended for production).
+    ## @param defaultInitContainers.prepareWriteDirs.resourcesPreset Set Keycloak "prepare-write-dirs" init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareWriteDirs.resources is set (defaultInitContainers.prepareWriteDirs.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
-    ## @param defaultInitContainers.prepareWriteDirs.resources Set MariaDB "prepare-write-dirs" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param defaultInitContainers.prepareWriteDirs.resources Set Keycloak "prepare-write-dirs" init container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## E.g:
     ## resources:
     ##   requests:
@@ -1276,6 +1279,7 @@ postgresql:
 ## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ## @param externalDatabase.annotations Additional custom annotations for external database secret object
+## @param externalDatabase.extraParams Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).
 ##
 externalDatabase:
   host: ""
@@ -1288,3 +1292,4 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretPasswordKey: ""
   annotations: {}
+  extraParams: ""

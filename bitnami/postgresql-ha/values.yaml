@@ -120,7 +120,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 17.5.0-debian-12-r17
+    tag: 17.6.0-debian-12-r1
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -351,7 +351,7 @@ postgresql:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 15
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -694,6 +694,7 @@ postgresql:
   ## This mode also enables enriched readiness probe implementation which delays first switch of POD to READY state
   ## after start/restart of container. It gives Pgpool-II time switch node back from DOWN to UP state during rolling
   ## upgrade.
+  ##
   headlessWithNotReadyAddresses: false
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
@@ -1132,7 +1133,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.6.2-debian-12-r7
+    tag: 4.6.3-debian-12-r0
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1736,7 +1737,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.17.1-debian-12-r14
+    tag: 0.17.1-debian-12-r16
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1986,7 +1987,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r50
+    tag: 12-debian-12-r51
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -2240,6 +2241,34 @@ backup:
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
+    ## @param backup.cronjob.podAffinityPreset PostgreSQL backup pod affinity preset. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+    ##
+    podAffinityPreset: ""
+    ## PostgreSQL backup node affinity preset
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+    ##
+    nodeAffinityPreset:
+      ## @param backup.cronjob.nodeAffinityPreset.type PostgreSQL backup node affinity preset type. Ignored if `backup.cronjob.affinity` is set. Allowed values: `soft` or `hard`
+      ##
+      type: ""
+      ## @param backup.cronjob.nodeAffinityPreset.key PostgreSQL backup node label key to match Ignored if `backup.cronjob.affinity` is set.
+      ## E.g.
+      ## key: "kubernetes.io/e2e-az-name"
+      ##
+      key: ""
+      ## @param backup.cronjob.nodeAffinityPreset.values PostgreSQL backup node label values to match. Ignored if `backup.cronjob.affinity` is set.
+      ## E.g.
+      ## values:
+      ##   - e2e-az1
+      ##   - e2e-az2
+      ##
+      values: []
+    ## @param backup.cronjob.affinity Affinity for PostgreSQL backup pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+    ## Note: backup.cronjob.podAffinityPreset and backup.cronjob.nodeAffinityPreset will be ignored when it's set
+    ##
+    affinity: {}
     ## backup cronjob container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if backup.cronjob.resources is set (backup.cronjob.resources is recommended for production).

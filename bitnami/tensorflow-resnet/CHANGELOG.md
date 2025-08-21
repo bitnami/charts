@@ -1,8 +1,24 @@
 # Changelog
 
-## 4.3.11 (2025-07-12)
+## 4.3.14 (2025-08-20)
 
-* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#35028](https://github.com/bitnami/charts/pull/35028))
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#36147](https://github.com/bitnami/charts/pull/36147))
+
+## <small>4.3.13 (2025-08-14)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#35679) ([ec8ac72](https://github.com/bitnami/charts/commit/ec8ac723533d1306ac520eb1bf66e2d10781368a)), closes [#35679](https://github.com/bitnami/charts/issues/35679)
+
+## <small>4.3.12 (2025-08-11)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/tensorflow-resnet] bugfix: update model download url (#35733) ([361b1e9](https://github.com/bitnami/charts/commit/361b1e9d2f7eba438151c48640884858fc14e90f)), closes [#35733](https://github.com/bitnami/charts/issues/35733)
+
+## <small>4.3.11 (2025-07-12)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#35028) ([d63dca4](https://github.com/bitnami/charts/commit/d63dca42f20a209abb1f8dfcad81381aba296752)), closes [#35028](https://github.com/bitnami/charts/issues/35028)
 
 ## <small>4.3.10 (2025-06-12)</small>
 

@@ -1,8 +1,33 @@
 # Changelog
 
+## 25.2.0 (2025-08-21)
+
+* [bitnami/keycloak] Add externalDatabase.extraParams for custom JDBC connection parameters ([#35770](https://github.com/bitnami/charts/pull/35770))
+
+## <small>25.1.2 (2025-08-20)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#36151) ([be87b21](https://github.com/bitnami/charts/commit/be87b21456910bc3a0c8731be470b48fb5ed32d3)), closes [#36151](https://github.com/bitnami/charts/issues/36151)
+
+## <small>25.1.1 (2025-08-19)</small>
+
+* [bitnami/keycloak] docs: remove reference to deprecated parameter on README (#36095) ([88de5cf](https://github.com/bitnami/charts/commit/88de5cfe0cda1f49d53b1ba8cda84b0baada6676)), closes [#36095](https://github.com/bitnami/charts/issues/36095)
+* [bitnami/keycloak] Fix trailing dash in Config CLI Job (#35784) ([aff4631](https://github.com/bitnami/charts/commit/aff46317d0a8a86a4e5eb1d91bc384ff4ea2c42b)), closes [#35784](https://github.com/bitnami/charts/issues/35784)
+
+## 25.1.0 (2025-08-15)
+
+* [bitnami/keycloak] feat: add parameter to enable HTTP endpoint (#35881) ([90b385c](https://github.com/bitnami/charts/commit/90b385cfee09574633fe229881a000a088ef986c)), closes [#35881](https://github.com/bitnami/charts/issues/35881)
+
+## <small>25.0.2 (2025-08-12)</small>
+
+* [bitnami/keycloak] bugfix: validation when production is enabled (#35757) ([14e2c8a](https://github.com/bitnami/charts/commit/14e2c8a3030bd82ac7ba9d843cfa4f09a5645dc2)), closes [#35757](https://github.com/bitnami/charts/issues/35757)
+
+## <small>25.0.1 (2025-08-11)</small>
+
+* [bitnami/keycloak] bugfix: wrong number of arguments passed to tpl (#35726) ([25b6602](https://github.com/bitnami/charts/commit/25b6602175afaed1c1becce833463d4005e24598)), closes [#35726](https://github.com/bitnami/charts/issues/35726)
+
 ## 25.0.0 (2025-08-08)
 
-* [bitnami/keycloak] feat: native metrics & refactor ([#35568](https://github.com/bitnami/charts/pull/35568))
+* [bitnami/keycloak] feat: native metrics & refactor (#35568) ([0941bbc](https://github.com/bitnami/charts/commit/0941bbcbeca0b8b8d487e710701628e1f22e9f61)), closes [#35568](https://github.com/bitnami/charts/issues/35568)
 
 ## <small>24.9.1 (2025-08-07)</small>
 

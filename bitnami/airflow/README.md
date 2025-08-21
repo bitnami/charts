@@ -1040,11 +1040,6 @@ The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means
 | `worker.pdb.create`                                        | Deploy a pdb object for the Airflow worker pods                                                                                                                                                                                 | `true`           |
 | `worker.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Airflow worker replicas                                                                                                                                                                | `""`             |
 | `worker.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Airflow worker replicas                                                                                                                                                                | `""`             |
-| `worker.autoscaling.enabled`                               | DEPRECATED: use worker.autoscaling.hpa.enabled instead                                                                                                                                                                          | `false`          |
-| `worker.autoscaling.minReplicas`                           | DEPRECATED: use worker.autoscaling.hpa.minReplicas instead                                                                                                                                                                      | `""`             |
-| `worker.autoscaling.maxReplicas`                           | DEPRECATED: use worker.autoscaling.hpa.maxReplicas instead                                                                                                                                                                      | `""`             |
-| `worker.autoscaling.targetMemory`                          | DEPRECATED: use worker.autoscaling.hpa.targetMemory instead                                                                                                                                                                     | `""`             |
-| `worker.autoscaling.targetCPU`                             | DEPRECATED: use worker.autoscaling.hpa.targetCPU instead                                                                                                                                                                        | `""`             |
 | `worker.autoscaling.vpa.enabled`                           | Enable VPA for Airflow Worker                                                                                                                                                                                                   | `false`          |
 | `worker.autoscaling.vpa.annotations`                       | Annotations for VPA resource                                                                                                                                                                                                    | `{}`             |
 | `worker.autoscaling.vpa.controlledResources`               | List of resources that the VPA can control. Defaults to cpu and memory                                                                                                                                                          | `[]`             |
@@ -1343,6 +1338,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 25.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 22.0.0, which updates Redis&reg; from 8.0 to 8.2. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
 
 ### To 24.0.0
 

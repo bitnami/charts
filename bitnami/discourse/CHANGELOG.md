@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.7 (2025-08-07)
+## 17.0.0 (2025-08-11)
 
-* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#35599](https://github.com/bitnami/charts/pull/35599))
+* [bitnami/discourse] Upgrade to Redis subchart 22 ([#35725](https://github.com/bitnami/charts/pull/35725))
+
+## <small>16.0.7 (2025-08-07)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#35599) ([7ddb4bd](https://github.com/bitnami/charts/commit/7ddb4bde8e30ed19aa9efb97538c3103787f0113)), closes [#35599](https://github.com/bitnami/charts/issues/35599)
 
 ## <small>16.0.6 (2025-08-07)</small>
 
