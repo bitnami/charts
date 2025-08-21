@@ -1,8 +1,57 @@
 # Changelog
 
-## 21.2.13 (2025-07-16)
+## 22.0.4 (2025-08-18)
 
-* [bitnami/redis] Bugfix/script prestop redis external access ([#34806](https://github.com/bitnami/charts/pull/34806))
+* [bitnami/redis] :zap: :arrow_up: Update dependency references ([#36131](https://github.com/bitnami/charts/pull/36131))
+
+## <small>22.0.3 (2025-08-13)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35858) ([5fd6c21](https://github.com/bitnami/charts/commit/5fd6c21f5750492705b52647c81095641d2bfa18)), closes [#35858](https://github.com/bitnami/charts/issues/35858)
+
+## <small>22.0.2 (2025-08-13)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35829) ([993353c](https://github.com/bitnami/charts/commit/993353c61b2c5a8629bc365d75512d7df79b50ef)), closes [#35829](https://github.com/bitnami/charts/issues/35829)
+
+## <small>22.0.1 (2025-08-09)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35711) ([baff0a5](https://github.com/bitnami/charts/commit/baff0a51020b81b1c71675f3704d362ebb63baa6)), closes [#35711](https://github.com/bitnami/charts/issues/35711)
+
+## 22.0.0 (2025-08-08)
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35700) ([56f58c8](https://github.com/bitnami/charts/commit/56f58c8b039794c7c77efae60a41b8016ff83396)), closes [#35700](https://github.com/bitnami/charts/issues/35700)
+
+## <small>21.2.19 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35672) ([c5aade5](https://github.com/bitnami/charts/commit/c5aade59be9707c7b0f8d25ed34d42b18daa05b9)), closes [#35672](https://github.com/bitnami/charts/issues/35672)
+
+## <small>21.2.18 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35653) ([1341963](https://github.com/bitnami/charts/commit/134196378d6baf5fe2760bbb09ff1efd8a98b6d9)), closes [#35653](https://github.com/bitnami/charts/issues/35653)
+
+## <small>21.2.17 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35586) ([0bbb45e](https://github.com/bitnami/charts/commit/0bbb45e41eaef24ab5db0943f0bbc6a193436409)), closes [#35586](https://github.com/bitnami/charts/issues/35586)
+
+## <small>21.2.16 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35523) ([f967ba4](https://github.com/bitnami/charts/commit/f967ba4360f0c206b19a1d3e42f18b0fedc7cce7)), closes [#35523](https://github.com/bitnami/charts/issues/35523)
+
+## <small>21.2.15 (2025-08-07)</small>
+
+* [bitnami/redis] :zap: :arrow_up: Update dependency references (#35499) ([df36d53](https://github.com/bitnami/charts/commit/df36d53f924c581b428fe8d9a835191c90e1f037)), closes [#35499](https://github.com/bitnami/charts/issues/35499)
+
+## <small>21.2.14 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/redis] fix(redis): add support for script prestop prestart with external access (#35364) ([f60124c](https://github.com/bitnami/charts/commit/f60124c791fffd6f55f1eaaa7bfc85a81fd4c40a)), closes [#35364](https://github.com/bitnami/charts/issues/35364)
+
+## <small>21.2.13 (2025-07-23)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/redis] Add Redis Open Source 8 Load Modules Docs (#35171) ([ce07616](https://github.com/bitnami/charts/commit/ce07616d4a41f96bad7d50b1e58a46f0022a2a8f)), closes [#35171](https://github.com/bitnami/charts/issues/35171)
+* [bitnami/redis] Bugfix/script prestop redis external access (#34806) ([65f4f25](https://github.com/bitnami/charts/commit/65f4f25fa648d8ac8ca633728498961ad0bd0c1e)), closes [#34806](https://github.com/bitnami/charts/issues/34806)
 
 ## <small>21.2.12 (2025-07-16)</small>
 

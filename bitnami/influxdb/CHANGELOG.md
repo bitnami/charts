@@ -1,8 +1,37 @@
 # Changelog
 
-## 7.1.11 (2025-07-29)
+## 7.1.18 (2025-08-13)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#35336](https://github.com/bitnami/charts/pull/35336))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#35855](https://github.com/bitnami/charts/pull/35855))
+
+## <small>7.1.17 (2025-08-13)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35825) ([e2348d8](https://github.com/bitnami/charts/commit/e2348d8143e17f2d4613343a2488687a0859a303)), closes [#35825](https://github.com/bitnami/charts/issues/35825)
+
+## <small>7.1.16 (2025-08-12)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35758) ([bae9e47](https://github.com/bitnami/charts/commit/bae9e4719ec8ff2848d02235673a4b4336cc4ee2)), closes [#35758](https://github.com/bitnami/charts/issues/35758)
+
+## <small>7.1.15 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35643) ([eb48a51](https://github.com/bitnami/charts/commit/eb48a51b5756ccaccd4165ffeaeae71ad44910da)), closes [#35643](https://github.com/bitnami/charts/issues/35643)
+
+## <small>7.1.14 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35583) ([f8ca46b](https://github.com/bitnami/charts/commit/f8ca46b87ec45237d10c60a00d87b8619c344157)), closes [#35583](https://github.com/bitnami/charts/issues/35583)
+
+## <small>7.1.13 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35493) ([08e89e5](https://github.com/bitnami/charts/commit/08e89e5add5fab7a7daa4a7fbe942b1f9a4b4a33)), closes [#35493](https://github.com/bitnami/charts/issues/35493)
+
+## <small>7.1.12 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/influxdb] fix typo in namespace inclusion (ingress-tls-secret) (#34984) ([cb0ad0a](https://github.com/bitnami/charts/commit/cb0ad0a93825f54ab9fc0516a46e991785184943)), closes [#34984](https://github.com/bitnami/charts/issues/34984)
+
+## <small>7.1.11 (2025-07-29)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35336) ([c94d0d6](https://github.com/bitnami/charts/commit/c94d0d60b0875038177cc149e4a4d91a9f461cec)), closes [#35336](https://github.com/bitnami/charts/issues/35336)
 
 ## <small>7.1.10 (2025-07-18)</small>
 

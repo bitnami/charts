@@ -1,8 +1,24 @@
 # Changelog
 
-## 3.0.9 (2025-07-17)
+## 3.0.12 (2025-08-07)
 
-* [bitnami/dremio] bugfix: conditions to disable S3 storage ([#35169](https://github.com/bitnami/charts/pull/35169))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#35601](https://github.com/bitnami/charts/pull/35601))
+
+## <small>3.0.11 (2025-08-07)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35570) ([60e4c6c](https://github.com/bitnami/charts/commit/60e4c6c4f2868aef197c137186a07da41462cb55)), closes [#35570](https://github.com/bitnami/charts/issues/35570)
+
+## <small>3.0.10 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35558) ([adea33b](https://github.com/bitnami/charts/commit/adea33b906db0237ec6bc4f81ebb7868fd1dbd7e)), closes [#35558](https://github.com/bitnami/charts/issues/35558)
+
+## <small>3.0.9 (2025-07-17)</small>
+
+* [bitnami/dremio] bugfix: conditions to disable S3 storage (#35169) ([ab98ea5](https://github.com/bitnami/charts/commit/ab98ea57170079d0f6709441c20a2a1f221ee614)), closes [#35169](https://github.com/bitnami/charts/issues/35169)
 
 ## <small>3.0.8 (2025-07-15)</small>
 

@@ -8,11 +8,12 @@ kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
+    app.kubernetes.io/part-of: keycloak
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
@@ -32,15 +33,15 @@ spec:
   sessionAffinity: {{ .Values.service.sessionAffinity }}
   {{- end }}
   {{- if .Values.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.service.sessionAffinityConfig "context" .) | nindent 4 }}
   {{- end }}
   ports:
     {{- if .Values.service.http.enabled }}
     - name: http
-      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
+      port: {{ .Values.service.ports.http }}
       protocol: TCP
       targetPort: http
-      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http))) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.http)) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
@@ -48,18 +49,19 @@ spec:
     {{- end }}
     {{- if .Values.tls.enabled }}
     - name: https
-      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
+      port: {{ .Values.service.ports.https}}
       protocol: TCP
       targetPort: https
-      {{- if (and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https))) }}
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.https)) }}
       nodePort: {{ .Values.service.nodePorts.https }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
     {{- end }}
     {{- if .Values.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" .) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
-  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) }}
+  selector: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
+    app.kubernetes.io/part-of: keycloak

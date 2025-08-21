@@ -1,8 +1,17 @@
 # Changelog
 
-## 12.1.8 (2025-07-31)
+## 12.1.10 (2025-07-31)
 
 * [bitnami/kibana] add revisionHistoryLimit for deployments ([#35298](https://github.com/bitnami/charts/pull/35298))
+
+## <small>12.1.9 (2025-08-13)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#35779](https://github.com/bitnami/charts/pull/35779))
+
+## <small>12.1.8 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35597) ([475cfb4](https://github.com/bitnami/charts/commit/475cfb43836025e3d9009ad32eff06d43ee3642a)), closes [#35597](https://github.com/bitnami/charts/issues/35597)
 
 ## <small>12.1.7 (2025-07-29)</small>
 

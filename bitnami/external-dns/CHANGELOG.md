@@ -1,8 +1,24 @@
 # Changelog
 
-## 9.0.0 (2025-07-17)
+## 9.0.3 (2025-08-13)
 
-* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers ([#35175](https://github.com/bitnami/charts/pull/35175))
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#35803](https://github.com/bitnami/charts/pull/35803))
+
+## <small>9.0.2 (2025-08-08)</small>
+
+* [bitnami/external-dns] Remove hardcoded references to image repository (#35692) ([c92dc69](https://github.com/bitnami/charts/commit/c92dc6938a794fd26dbb409d137b6d6b9afa6512)), closes [#35692](https://github.com/bitnami/charts/issues/35692)
+
+## <small>9.0.1 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#35469) ([9bbf214](https://github.com/bitnami/charts/commit/9bbf2141cf0c3613741785474f0ed931d6213ca7)), closes [#35469](https://github.com/bitnami/charts/issues/35469)
+
+## 9.0.0 (2025-07-18)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/external-dns] chore(providers): Remove unsupported in-tree providers (#35175) ([1ff8041](https://github.com/bitnami/charts/commit/1ff8041dbe8f72fa019234b86c082cc66a04d81a)), closes [#35175](https://github.com/bitnami/charts/issues/35175)
 
 ## <small>8.9.2 (2025-07-08)</small>
 

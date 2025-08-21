@@ -78,7 +78,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.84.0-debian-12-r1
+    tag: 0.84.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -638,7 +638,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 3.5.0-debian-12-r1
+    tag: 3.5.0-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1440,7 +1440,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.39.2-debian-12-r0
+      tag: 0.39.2-debian-12-r2
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1898,7 +1898,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.28.1-debian-12-r13
+    tag: 0.28.1-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2587,7 +2587,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.27.0-debian-12-r2
+    tag: 0.27.0-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3332,10 +3332,27 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
-##
 rbac:
   create: true
   pspEnabled: true
+  ## @param rbac.rules.operator Custom RBAC rules to set on Prometheus Operator ClusterRole
+  ## @param rbac.rules.prometheus Custom RBAC rules to set on Prometheus ClusterRole
+  ## e.g:
+  ## rbac:
+  ##   rules:
+  ##     operator: []
+  ##     prometheus:
+  ##       - apiGroups:
+  ##           - ""
+  ##         resources:
+  ##           - pods
+  ##         verbs:
+  ##           - get
+  ##           - list
+  ##
+  rules:
+    operator: []
+    prometheus: []
 
 ## @section Thanos Ruler Parameters
 ##
@@ -3355,7 +3372,7 @@ thanosRuler:
   image:
     registry: docker.io
     repository: bitnami/thanos
-    tag: 0.39.2-debian-12-r0
+    tag: 0.39.2-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     pullSecrets: []

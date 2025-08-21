@@ -1,8 +1,24 @@
 # Changelog
 
-## 1.5.11 (2025-07-10)
+## 1.5.14 (2025-08-14)
 
-* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#34996](https://github.com/bitnami/charts/pull/34996))
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references ([#35867](https://github.com/bitnami/charts/pull/35867))
+
+## <small>1.5.13 (2025-08-06)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#35456) ([8782d0f](https://github.com/bitnami/charts/commit/8782d0f33209b49ddb20ea1f6f99f4b81924054a)), closes [#35456](https://github.com/bitnami/charts/issues/35456)
+
+## <small>1.5.12 (2025-08-06)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#35443) ([17b6af8](https://github.com/bitnami/charts/commit/17b6af8aff0a6f2e50e4018a0964299fbcf7bcbf)), closes [#35443](https://github.com/bitnami/charts/issues/35443)
+
+## <small>1.5.11 (2025-07-10)</small>
+
+* [bitnami/cert-manager] :zap: :arrow_up: Update dependency references (#34996) ([f4a6a3e](https://github.com/bitnami/charts/commit/f4a6a3e3cbeddd401a06ce0616a7f652da9a5cd2)), closes [#34996](https://github.com/bitnami/charts/issues/34996)
 
 ## <small>1.5.10 (2025-07-10)</small>
 

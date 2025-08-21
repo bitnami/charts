@@ -10,7 +10,7 @@ metadata:
   name: {{ template "kafka.controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: controller
+    app.kubernetes.io/component: controller-eligible
     app.kubernetes.io/part-of: kafka
   {{- if or .Values.controller.autoscaling.vpa.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}

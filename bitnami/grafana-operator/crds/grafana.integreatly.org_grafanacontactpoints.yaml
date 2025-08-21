@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanacontactpoints.yaml
-# Version: 5.18.0
+# Version: 5.19.4
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: grafanacontactpoints.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
@@ -118,6 +118,10 @@ spec:
                 type: string
               settings:
                 x-kubernetes-preserve-unknown-fields: true
+              suspend:
+                description: Suspend pauses synchronizing attempts and tells the operator
+                  to ignore changes
+                type: boolean
               type:
                 minLength: 1
                 type: string

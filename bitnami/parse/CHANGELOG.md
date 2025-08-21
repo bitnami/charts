@@ -1,8 +1,32 @@
 # Changelog
 
-## 25.1.10 (2025-07-15)
+## 25.1.15 (2025-08-07)
 
-* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#35120](https://github.com/bitnami/charts/pull/35120))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#35647](https://github.com/bitnami/charts/pull/35647))
+
+## <small>25.1.14 (2025-08-05)</small>
+
+* [bitnami/parse] Update MongoDB subchart (#35414) ([b5b8e7c](https://github.com/bitnami/charts/commit/b5b8e7c819430b5d14980cf49c4ba4b97247af1f)), closes [#35414](https://github.com/bitnami/charts/issues/35414)
+
+## <small>25.1.13 (2025-08-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35378) ([bd0d399](https://github.com/bitnami/charts/commit/bd0d3997ad32c046961141107f70015f3963b302)), closes [#35378](https://github.com/bitnami/charts/issues/35378)
+
+## <small>25.1.12 (2025-08-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35377) ([ffd3f99](https://github.com/bitnami/charts/commit/ffd3f99eb1bcbb1923de61bbffc8a4d17fb9f8b4)), closes [#35377](https://github.com/bitnami/charts/issues/35377)
+
+## <small>25.1.11 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35375) ([9f437d0](https://github.com/bitnami/charts/commit/9f437d0f19b1b03d09842507ca0e484ec1d663e9)), closes [#35375](https://github.com/bitnami/charts/issues/35375)
+
+## <small>25.1.10 (2025-07-15)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35120) ([14e6638](https://github.com/bitnami/charts/commit/14e66387e93575f063d2dcf740e7d235de5f9d0d)), closes [#35120](https://github.com/bitnami/charts/issues/35120)
 
 ## <small>25.1.9 (2025-07-10)</small>
 

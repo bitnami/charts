@@ -1,8 +1,24 @@
 # Changelog
 
-## 28.2.7 (2025-07-05)
+## 28.2.10 (2025-08-07)
 
-* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#34811](https://github.com/bitnami/charts/pull/34811))
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references ([#35663](https://github.com/bitnami/charts/pull/35663))
+
+## <small>28.2.9 (2025-08-05)</small>
+
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#35408) ([066df06](https://github.com/bitnami/charts/commit/066df0687f33ebda9fbd4d94c8ad834df2cad031)), closes [#35408](https://github.com/bitnami/charts/issues/35408)
+
+## <small>28.2.8 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#35400) ([8dc2d60](https://github.com/bitnami/charts/commit/8dc2d607a9b8908acb08a94cc160c5935040d286)), closes [#35400](https://github.com/bitnami/charts/issues/35400)
+
+## <small>28.2.7 (2025-07-05)</small>
+
+* [bitnami/odoo] :zap: :arrow_up: Update dependency references (#34811) ([7989904](https://github.com/bitnami/charts/commit/7989904459bece3e8a2a03e3dfd72d789bdda24d)), closes [#34811](https://github.com/bitnami/charts/issues/34811)
 
 ## <small>28.2.6 (2025-06-10)</small>
 

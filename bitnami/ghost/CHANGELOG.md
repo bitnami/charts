@@ -1,8 +1,33 @@
 # Changelog
 
-## 24.0.1 (2025-07-31)
+## 25.0.3 (2025-08-18)
 
-* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#35369](https://github.com/bitnami/charts/pull/35369))
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references ([#36111](https://github.com/bitnami/charts/pull/36111))
+
+## <small>25.0.2 (2025-08-15)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#36082) ([a1def39](https://github.com/bitnami/charts/commit/a1def39f8d87bb081aea927a788372eaa5a6e22d)), closes [#36082](https://github.com/bitnami/charts/issues/36082)
+
+## <small>25.0.1 (2025-08-13)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35816) ([29ef74c](https://github.com/bitnami/charts/commit/29ef74c624c29e2182915cdec1208f123c2cb319)), closes [#35816](https://github.com/bitnami/charts/issues/35816)
+
+## 25.0.0 (2025-08-12)
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35745) ([14824f4](https://github.com/bitnami/charts/commit/14824f48762ce992a2a854007062a625cffc80ce)), closes [#35745](https://github.com/bitnami/charts/issues/35745)
+
+## <small>24.0.3 (2025-08-07)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35607) ([ef19e43](https://github.com/bitnami/charts/commit/ef19e439e8b39634955396f4cbdd5d3ab8f77d88)), closes [#35607](https://github.com/bitnami/charts/issues/35607)
+
+## <small>24.0.2 (2025-08-07)</small>
+
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35561) ([3bb56d0](https://github.com/bitnami/charts/commit/3bb56d07a55c3f3990106570ebe43c362a448d33)), closes [#35561](https://github.com/bitnami/charts/issues/35561)
+
+## <small>24.0.1 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/ghost] :zap: :arrow_up: Update dependency references (#35369) ([2edaf4b](https://github.com/bitnami/charts/commit/2edaf4b2bf522db5824caca01687bd5a55b5491e)), closes [#35369](https://github.com/bitnami/charts/issues/35369)
 
 ## 24.0.0 (2025-07-23)
 

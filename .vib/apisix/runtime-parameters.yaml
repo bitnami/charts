@@ -33,19 +33,12 @@ controlPlane:
   metrics:
     enabled: true
   service:
+    type: LoadBalancer
     ports:
-      adminAPI: 9181
+      adminAPI: 443
       configServer: 8888
       https: 9282
       metrics: 8004
-dashboard:
-  username: vib-user
-  password: "ComplicatedPassword123!4"
-  service:
-    type: LoadBalancer
-    ports:
-      http: 80
-      https: 443
 ingressController:
   extraConfig:
     kubernetes:

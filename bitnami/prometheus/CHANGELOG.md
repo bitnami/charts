@@ -1,8 +1,40 @@
 # Changelog
 
-## 2.1.16 (2025-07-21)
+## 2.1.23 (2025-08-14)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#35225](https://github.com/bitnami/charts/pull/35225))
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#35906](https://github.com/bitnami/charts/pull/35906))
+
+## <small>2.1.22 (2025-08-14)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35869) ([f9af14d](https://github.com/bitnami/charts/commit/f9af14de5dbc262093d0a5786c697c036062093c)), closes [#35869](https://github.com/bitnami/charts/issues/35869)
+
+## <small>2.1.21 (2025-08-13)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35835) ([eab8b44](https://github.com/bitnami/charts/commit/eab8b44ed08baa24662a9b3a26133d327121da3f)), closes [#35835](https://github.com/bitnami/charts/issues/35835)
+
+## <small>2.1.20 (2025-08-07)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35633) ([eb68c8c](https://github.com/bitnami/charts/commit/eb68c8ccbb324862f01c03917d6f93f7d35a1b76)), closes [#35633](https://github.com/bitnami/charts/issues/35633)
+
+## <small>2.1.19 (2025-08-07)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35532) ([b2fb8cb](https://github.com/bitnami/charts/commit/b2fb8cba31b746367b04136a53f9ceb851b71dfb)), closes [#35532](https://github.com/bitnami/charts/issues/35532)
+
+## <small>2.1.18 (2025-08-07)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35520) ([0773251](https://github.com/bitnami/charts/commit/077325143ffb259822daa4b51adb7e308b122c44)), closes [#35520](https://github.com/bitnami/charts/issues/35520)
+
+## <small>2.1.17 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35444) ([00f989e](https://github.com/bitnami/charts/commit/00f989e7915fe5a7b68b76f3f90db320239c11b9)), closes [#35444](https://github.com/bitnami/charts/issues/35444)
+
+## <small>2.1.16 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35225) ([c4472d2](https://github.com/bitnami/charts/commit/c4472d23e7bd22fb9d7b5655c0a7979784357668)), closes [#35225](https://github.com/bitnami/charts/issues/35225)
 
 ## <small>2.1.15 (2025-07-15)</small>
 

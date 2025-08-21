@@ -123,11 +123,23 @@ spec:
             {{- if .Values.dagProcessor.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.dagProcessor.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.dagProcessor.extraEnvVarsCM .Values.dagProcessor.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          {{- if or .Values.dagProcessor.extraEnvVarsCM .Values.dagProcessor.extraEnvVarsCMs .Values.dagProcessor.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsCMs .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsCMs }}
+            {{- range .Values.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.dagProcessor.extraEnvVarsCMs }}
+            {{- range .Values.dagProcessor.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:

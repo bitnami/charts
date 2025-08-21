@@ -1,8 +1,37 @@
 # Changelog
 
-## 26.8.1 (2025-07-31)
+## 27.0.2 (2025-08-13)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35362](https://github.com/bitnami/charts/pull/35362))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35850](https://github.com/bitnami/charts/pull/35850))
+
+## <small>27.0.1 (2025-08-13)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35814) ([6297f42](https://github.com/bitnami/charts/commit/6297f424fb03ab1f0e7e3819db9099de6f7bc6ac)), closes [#35814](https://github.com/bitnami/charts/issues/35814)
+
+## 27.0.0 (2025-08-11)
+
+* [bitnami/harbor] Upgrade to Redis subchart 22 (#35722) ([067ae66](https://github.com/bitnami/charts/commit/067ae669d288ecb63bfc964993cd4941fdc6e9f1)), closes [#35722](https://github.com/bitnami/charts/issues/35722)
+
+## <small>26.8.5 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35611) ([1cf61c0](https://github.com/bitnami/charts/commit/1cf61c01dc4786859742bec313826234db93ca00)), closes [#35611](https://github.com/bitnami/charts/issues/35611)
+
+## <small>26.8.4 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35563) ([73135fd](https://github.com/bitnami/charts/commit/73135fd65fca6b1fb5ca2e933f1855070266844c)), closes [#35563](https://github.com/bitnami/charts/issues/35563)
+
+## <small>26.8.3 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35485) ([2bd9036](https://github.com/bitnami/charts/commit/2bd9036afab16d32f91aac07ee54ac0e749123dc)), closes [#35485](https://github.com/bitnami/charts/issues/35485)
+
+## <small>26.8.2 (2025-08-01)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35379) ([d724887](https://github.com/bitnami/charts/commit/d72488719a9554d504080f102269c03c129245c0)), closes [#35379](https://github.com/bitnami/charts/issues/35379)
+
+## <small>26.8.1 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35362) ([ec4be93](https://github.com/bitnami/charts/commit/ec4be93cd57ad58cdd26391b6e752a325917ed30)), closes [#35362](https://github.com/bitnami/charts/issues/35362)
 
 ## 26.8.0 (2025-07-21)
 

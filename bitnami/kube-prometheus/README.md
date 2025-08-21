@@ -922,10 +922,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### RBAC parameters
 
-| Name              | Description                                                                                                                                                        | Value  |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
-| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| Name                    | Description                                                                                                                                                        | Value  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `rbac.create`           | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
+| `rbac.pspEnabled`       | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| `rbac.rules.operator`   | Custom RBAC rules to set on Prometheus Operator ClusterRole                                                                                                        | `[]`   |
+| `rbac.rules.prometheus` | Custom RBAC rules to set on Prometheus ClusterRole                                                                                                                 | `[]`   |
 
 ### Thanos Ruler Parameters
 

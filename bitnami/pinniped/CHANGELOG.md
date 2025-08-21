@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.4.20 (2025-07-09)
+## 2.4.23 (2025-08-13)
 
-* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#34934](https://github.com/bitnami/charts/pull/34934))
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#35822](https://github.com/bitnami/charts/pull/35822))
+
+## <small>2.4.22 (2025-08-07)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#35515) ([f47a177](https://github.com/bitnami/charts/commit/f47a177b6eb5f990192069fa4bf706ac70cbb726)), closes [#35515](https://github.com/bitnami/charts/issues/35515)
+
+## <small>2.4.21 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#35403) ([af2a18f](https://github.com/bitnami/charts/commit/af2a18fde8aa76a843a55cc63ccc683cc13867da)), closes [#35403](https://github.com/bitnami/charts/issues/35403)
+
+## <small>2.4.20 (2025-07-09)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#34934) ([e887bcc](https://github.com/bitnami/charts/commit/e887bcc79728767e7df24f998b461d641f54a40a)), closes [#34934](https://github.com/bitnami/charts/issues/34934)
 
 ## <small>2.4.19 (2025-06-13)</small>
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 2.0.27 (2025-07-21)
+## 2.0.30 (2025-08-18)
 
-* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#35232](https://github.com/bitnami/charts/pull/35232))
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references ([#36115](https://github.com/bitnami/charts/pull/36115))
+
+## <small>2.0.29 (2025-08-14)</small>
+
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35920) ([cbb9c75](https://github.com/bitnami/charts/commit/cbb9c754bd7307e440a54bb0fd249bce5d22d49b)), closes [#35920](https://github.com/bitnami/charts/issues/35920)
+
+## <small>2.0.28 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35627) ([f99bfe3](https://github.com/bitnami/charts/commit/f99bfe39a396f1a27dbbf133da3c080f2763f42a)), closes [#35627](https://github.com/bitnami/charts/issues/35627)
+
+## <small>2.0.27 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/nessie] :zap: :arrow_up: Update dependency references (#35232) ([b06f239](https://github.com/bitnami/charts/commit/b06f2398b863f6de59cb7ba4011e9a6eae392ca1)), closes [#35232](https://github.com/bitnami/charts/issues/35232)
 
 ## <small>2.0.26 (2025-07-16)</small>
 

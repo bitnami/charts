@@ -1,8 +1,45 @@
 # Changelog
 
-## 24.2.4 (2025-07-24)
+## 25.0.2 (2025-08-21)
 
-* [bitnami/airflow] Fix/add extra env vars secrets to triggerer ([#35047](https://github.com/bitnami/charts/pull/35047))
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#36158](https://github.com/bitnami/charts/pull/36158))
+
+## <small>25.0.1 (2025-08-14)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35898) ([f28b6e5](https://github.com/bitnami/charts/commit/f28b6e56eeca818d26da8752a4de9041b39eae9c)), closes [#35898](https://github.com/bitnami/charts/issues/35898)
+
+## 25.0.0 (2025-08-11)
+
+* [bitnami/airflow] Upgrade to Redis subchart 22 (#35728) ([5c3c29b](https://github.com/bitnami/charts/commit/5c3c29b1243b314b38a943934a9f5129dfc221ac)), closes [#35728](https://github.com/bitnami/charts/issues/35728)
+
+## <small>24.3.4 (2025-08-09)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35716) ([5db3a45](https://github.com/bitnami/charts/commit/5db3a45590b6e39074f2aede8c991a8df0cd50de)), closes [#35716](https://github.com/bitnami/charts/issues/35716)
+
+## <small>24.3.3 (2025-08-07)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35537) ([3190d1e](https://github.com/bitnami/charts/commit/3190d1efa18cc5a0c68f5ece12306da9a6c843be)), closes [#35537](https://github.com/bitnami/charts/issues/35537)
+
+## <small>24.3.2 (2025-08-07)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35528) ([41ee2d3](https://github.com/bitnami/charts/commit/41ee2d3ce869a4affb50f1ee3751481cb81c37c8)), closes [#35528](https://github.com/bitnami/charts/issues/35528)
+
+## <small>24.3.1 (2025-08-06)</small>
+
+* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key (#35385) ([29e0a98](https://github.com/bitnami/charts/commit/29e0a98d10905a2b7caf070ccbbe83f68ad15e08)), closes [#35385](https://github.com/bitnami/charts/issues/35385)
+
+## 24.3.0 (2025-08-06)
+
+* [bitnami/airflow] [Feature request] Support multiple configmaps in Airflow chart (#35386) ([d404f90](https://github.com/bitnami/charts/commit/d404f9071f2a15a80b4f2031e3a9b753423b64aa)), closes [#35386](https://github.com/bitnami/charts/issues/35386)
+
+## <small>24.2.5 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET (#35355) ([7e87866](https://github.com/bitnami/charts/commit/7e87866f2b50d2494f760ef075c91f31e6986ea3)), closes [#35355](https://github.com/bitnami/charts/issues/35355)
+
+## <small>24.2.4 (2025-07-25)</small>
+
+* [bitnami/airflow] Fix/add extra env vars secrets to triggerer (#35047) ([f91d7dc](https://github.com/bitnami/charts/commit/f91d7dc52e9892c9de8cc5eb9a3d3abf14336d9b)), closes [#35047](https://github.com/bitnami/charts/issues/35047)
 
 ## <small>24.2.3 (2025-07-21)</small>
 

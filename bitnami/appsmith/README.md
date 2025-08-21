@@ -85,11 +85,11 @@ You may want to have appsmith connect to an external database rather than instal
 
 ```console
 mongodb.enabled=false
-externalDatabase.host=myexternalhost
+externalDatabase.hosts=[]
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
-externalDatabase.port=3306
+externalDatabase.port=27017
 ```
 
 ### External redis support
@@ -98,11 +98,9 @@ You may want to have appsmith connect to an external redis rather than installin
 
 ```console
 redis.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.redis=myredis
-externalDatabase.port=3306
+externalRedis.host=myexternalhost
+externalRedis.password=mypassword
+externalRedis.port=6379
 ```
 
 ### Ingress
@@ -766,9 +764,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 7.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 22.0.0, which updates Redis&reg; from 8.0 to 8.2. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
 ### To 6.0.19
 
-This version addresses CVE-2025-41240. For more details, please refer to the advisory at https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w.
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
 
 ### To 6.0.0
 
