@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.1.9 (2025-08-13)
+## 12.1.10 (2025-08-21)
 
-* [bitnami/kibana] :zap: :arrow_up: Update dependency references ([#35779](https://github.com/bitnami/charts/pull/35779))
+* [bitnami/kibana] add revisionHistoryLimit for deployments ([#35298](https://github.com/bitnami/charts/pull/35298))
+
+## <small>12.1.9 (2025-08-13)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35779) ([b3130ee](https://github.com/bitnami/charts/commit/b3130ee8577511a79b8f6457d3a2076fe7d47fdb)), closes [#35779](https://github.com/bitnami/charts/issues/35779)
 
 ## <small>12.1.8 (2025-08-07)</small>
 
