@@ -38,6 +38,7 @@ tracking:
 run:
   enabled: true
   useJob: true
+  resourcesPreset: "medium"
   source:
     launchCommand: "python vib_test.py"
     configMap:
