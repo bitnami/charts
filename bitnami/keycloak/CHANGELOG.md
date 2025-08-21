@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.1.2 (2025-08-20)
+## 25.2.0 (2025-08-21)
 
-* [bitnami/keycloak] :zap: :arrow_up: Update dependency references ([#36151](https://github.com/bitnami/charts/pull/36151))
+* [bitnami/keycloak] Add externalDatabase.extraParams for custom JDBC connection parameters ([#35770](https://github.com/bitnami/charts/pull/35770))
+
+## <small>25.1.2 (2025-08-20)</small>
+
+* [bitnami/keycloak] :zap: :arrow_up: Update dependency references (#36151) ([be87b21](https://github.com/bitnami/charts/commit/be87b21456910bc3a0c8731be470b48fb5ed32d3)), closes [#36151](https://github.com/bitnami/charts/issues/36151)
 
 ## <small>25.1.1 (2025-08-19)</small>
 
