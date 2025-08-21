@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.3.1 (2025-08-21)
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#36159](https://github.com/bitnami/charts/pull/36159))
+
 ## 16.3.0 (2025-08-20)
 
-* [bitnami/postgresql-ha] feat: improve backend probes ([#36139](https://github.com/bitnami/charts/pull/36139))
+* [bitnami/postgresql-ha] feat: improve backend probes (#36139) ([f2def11](https://github.com/bitnami/charts/commit/f2def111fad4ab2689735ef0411e000df2016483)), closes [#36139](https://github.com/bitnami/charts/issues/36139)
 
 ## <small>16.2.3 (2025-08-19)</small>
 
