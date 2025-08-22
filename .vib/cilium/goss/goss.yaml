@@ -69,7 +69,7 @@ file:
   /host/etc/cni/net.d/05-cilium.conflist:
     exists: true
     filetype: file
-    mode: '0644'
+    mode: '0600'
   # BPF fs should be mounted
   /sys/fs/bpf:
     exists: true

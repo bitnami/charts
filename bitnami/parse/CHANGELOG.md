@@ -1,8 +1,20 @@
 # Changelog
 
-## 25.1.12 (2025-08-01)
+## 25.1.15 (2025-08-07)
 
-* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#35377](https://github.com/bitnami/charts/pull/35377))
+* [bitnami/parse] :zap: :arrow_up: Update dependency references ([#35647](https://github.com/bitnami/charts/pull/35647))
+
+## <small>25.1.14 (2025-08-05)</small>
+
+* [bitnami/parse] Update MongoDB subchart (#35414) ([b5b8e7c](https://github.com/bitnami/charts/commit/b5b8e7c819430b5d14980cf49c4ba4b97247af1f)), closes [#35414](https://github.com/bitnami/charts/issues/35414)
+
+## <small>25.1.13 (2025-08-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35378) ([bd0d399](https://github.com/bitnami/charts/commit/bd0d3997ad32c046961141107f70015f3963b302)), closes [#35378](https://github.com/bitnami/charts/issues/35378)
+
+## <small>25.1.12 (2025-08-01)</small>
+
+* [bitnami/parse] :zap: :arrow_up: Update dependency references (#35377) ([ffd3f99](https://github.com/bitnami/charts/commit/ffd3f99eb1bcbb1923de61bbffc8a4d17fb9f8b4)), closes [#35377](https://github.com/bitnami/charts/issues/35377)
 
 ## <small>25.1.11 (2025-08-01)</small>
 

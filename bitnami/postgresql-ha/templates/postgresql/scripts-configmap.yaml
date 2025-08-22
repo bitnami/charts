@@ -1,0 +1,159 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-scripts" (include "postgresql-ha.postgresql" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
+  {{- end }}
+data:
+  pre-stop.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Debug section
+    exec 3>&1
+    exec 4>&2
+
+    # Process input parameters
+    MIN_DELAY_AFTER_PG_STOP_SECONDS=$1
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Auxiliary functions
+    is_new_primary_ready() {
+        local -a current_primary_node
+        readarray -t current_primary_node < <(repmgr_get_primary_node)
+        local current_primary_host="${current_primary_node[0]}"
+
+        if [[ -n "$current_primary_host" ]] && [[ "$current_primary_host" != "$REPMGR_NODE_NETWORK_NAME" ]]; then
+            info "New primary detected, leaving the cluster..."
+            return 0
+        fi
+
+        info "Waiting for a new primary to be available..."
+        return 1
+    }
+
+    export MODULE="pre-stop-hook"
+    if ! is_boolean_yes "$BITNAMI_DEBUG"; then
+        exec 1>/dev/null
+        exec 2>/dev/null
+    fi
+
+    postgresql_enable_nss_wrapper
+
+    # Prepare env vars for managing roles
+    readarray -t primary_node < <(repmgr_get_upstream_node)
+    primary_host="${primary_node[0]}"
+
+    # Stop postgresql for graceful exit.
+    PG_STOP_INIT=$EPOCHSECONDS
+    postgresql_stop
+
+    if [[ -z "$primary_host" ]] || [[ "$primary_host" = "$REPMGR_NODE_NETWORK_NAME" ]]; then
+        info "Primary node need to wait for a new primary node before leaving the cluster"
+        retry_while is_new_primary_ready 10 5
+    else
+        info "Standby node doesn't need to wait for a new primary switchover. Leaving the cluster"
+    fi
+
+    # Make sure pre-stop hook waits at least 25 seconds after stop of PG to make sure Pgpool-II detects node is down.
+    # default terminationGracePeriodSeconds=30 seconds
+    PG_STOP_DURATION=$((EPOCHSECONDS - PG_STOP_INIT))
+    if (( PG_STOP_DURATION < MIN_DELAY_AFTER_PG_STOP_SECONDS )); then
+        WAIT_TO_PG_POOL_TIME=$((MIN_DELAY_AFTER_PG_STOP_SECONDS - PG_STOP_DURATION))
+        info "Waiting additional $WAIT_TO_PG_POOL_TIME seconds for Pgpool-II to detect node is down"
+        sleep $WAIT_TO_PG_POOL_TIME
+    fi
+  liveness-probe.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # Check if PG is ready
+    pg_isready_args=("-U" "postgres" "-p" "$POSTGRESQL_PORT_NUMBER" "-h" "127.0.0.1")
+    is_boolean_yes "$POSTGRESQL_ENABLE_TLS" && pg_isready_args+=("-d" "sslcert=$POSTGRESQL_TLS_CERT_FILE sslkey=$POSTGRESQL_TLS_KEY_FILE")
+    debug_execute pg_isready "${pg_isready_args[@]}"
+
+    # Check if repmgr has split-brain issues
+    postgresql_enable_nss_wrapper
+    repmgr_check_status
+  readiness-probe.sh: |-
+    #!/bin/bash
+
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Load Libraries
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Load PostgreSQL & repmgr environment variables
+    . /opt/bitnami/scripts/postgresql-env.sh
+
+    # We should not proceed if a standby clone is in progress
+    if ps waux | grep "data standby clone" | grep -qv grep; then
+        echo "standby clone in progress"
+        exit 1
+    fi
+
+    # Then, let's check if PG is responding to queries
+{{- if .Values.postgresql.headlessWithNotReadyAddresses }}
+    MIN_DELAY_AFTER_POD_READY_FIRST_TIME={{ add .Values.pgpool.livenessProbe.periodSeconds .Values.pgpool.livenessProbe.timeoutSeconds }}
+    FIRST_READY_TS_FILE="/tmp/.first-ready.epoch"
+    DELAY_SEMAPHORE="/tmp/.delay"
+{{- end }}
+    if [[ $(PGPASSWORD="$POSTGRESQL_PASSWORD" psql -w -U "$POSTGRESQL_USERNAME" -d $POSTGRESQL_DATABASE -h 127.0.0.1 -p "$POSTGRESQL_PORT_NUMBER" -tA -c "SELECT 1" 2> /dev/null || true) = 1 ]]; then
+{{- if .Values.postgresql.headlessWithNotReadyAddresses }}
+        # DB up, but initial readiness delay not applied
+        if [[ ! -f "$DELAY_SEMAPHORE" ]] && [[ -f "$FIRST_READY_TS_FILE" ]]; then
+            # calculate delay from the first readiness success
+            FIRST_READY_TS=$(cat $FIRST_READY_TS_FILE)
+            CURRENT_DELAY_SECONDS=$((EPOCHSECONDS - FIRST_READY_TS))
+            # Wait for the minimal delay after the first readiness state
+            if (( CURRENT_DELAY_SECONDS > MIN_DELAY_AFTER_POD_READY_FIRST_TIME )); then
+                # mark delay as applied
+                touch "$DELAY_APPLIED_FILE"
+            else
+                echo "minimal delay not met"
+                exit 1
+            fi
+        # first ever readiness test success - store timestamp and report failure
+        elif [[ ! -f "$DELAY_SEMAPHORE" ]]; then
+            echo $EPOCHSECONDS > $FIRST_READY_TS_FILE
+            exit 1
+        fi
+{{- end }}
+        # Finally, check if repmgr has split-brain issues
+        postgresql_enable_nss_wrapper
+        repmgr_check_status
+    else
+        echo "connection to database failed"
+        exit 1
+    fi

@@ -1,8 +1,32 @@
 # Changelog
 
-## 9.0.23 (2025-07-09)
+## 9.0.28 (2025-08-14)
 
-* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#34940](https://github.com/bitnami/charts/pull/34940))
+* [bitnami/nats] :zap: :arrow_up: Update dependency references ([#35918](https://github.com/bitnami/charts/pull/35918))
+
+## <small>9.0.27 (2025-08-14)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#35888) ([d796339](https://github.com/bitnami/charts/commit/d79633922e8a3d152bfd25c4b3f180fdac7b441b)), closes [#35888](https://github.com/bitnami/charts/issues/35888)
+
+## <small>9.0.26 (2025-08-13)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#35831) ([b323308](https://github.com/bitnami/charts/commit/b32330836d451060c23e8f4c230d8c325aafbd04)), closes [#35831](https://github.com/bitnami/charts/issues/35831)
+
+## <small>9.0.25 (2025-08-07)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#35510) ([df91087](https://github.com/bitnami/charts/commit/df91087b2d8ca8c401b37107f79bef6dba7d1c80)), closes [#35510](https://github.com/bitnami/charts/issues/35510)
+
+## <small>9.0.24 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#35381) ([b181a07](https://github.com/bitnami/charts/commit/b181a078af0c130f68b9c593207df1abdda458d9)), closes [#35381](https://github.com/bitnami/charts/issues/35381)
+
+## <small>9.0.23 (2025-07-09)</small>
+
+* [bitnami/nats] :zap: :arrow_up: Update dependency references (#34940) ([fe778a4](https://github.com/bitnami/charts/commit/fe778a4e1f68618658174bb06d105f63d809cb79)), closes [#34940](https://github.com/bitnami/charts/issues/34940)
 
 ## <small>9.0.22 (2025-07-01)</small>
 

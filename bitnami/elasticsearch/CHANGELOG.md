@@ -1,8 +1,37 @@
 # Changelog
 
-## 22.0.15 (2025-07-29)
+## 22.1.6 (2025-08-14)
 
-* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35331](https://github.com/bitnami/charts/pull/35331))
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references ([#35863](https://github.com/bitnami/charts/pull/35863))
+
+## <small>22.1.5 (2025-08-13)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35777) ([d3942fe](https://github.com/bitnami/charts/commit/d3942fe4eb8ba67b5b3f6949ac43abda0105110b)), closes [#35777](https://github.com/bitnami/charts/issues/35777)
+
+## <small>22.1.4 (2025-08-07)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35602) ([fe44c59](https://github.com/bitnami/charts/commit/fe44c59ad37f880bcaf5d8780d4c38b7d33b0d6f)), closes [#35602](https://github.com/bitnami/charts/issues/35602)
+
+## <small>22.1.3 (2025-08-07)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35567) ([70dfa48](https://github.com/bitnami/charts/commit/70dfa488b6b8a02f832bb0499ea4697fe7237e41)), closes [#35567](https://github.com/bitnami/charts/issues/35567)
+
+## <small>22.1.2 (2025-08-07)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35559) ([c1abe85](https://github.com/bitnami/charts/commit/c1abe853fe20b07698f89a42b7c287bf01397cf5)), closes [#35559](https://github.com/bitnami/charts/issues/35559)
+
+## <small>22.1.1 (2025-08-07)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35466) ([767a29d](https://github.com/bitnami/charts/commit/767a29d7e050cceb004518f6e53784aa123e7596)), closes [#35466](https://github.com/bitnami/charts/issues/35466)
+
+## 22.1.0 (2025-08-01)
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/elasticsearch] Service name (#33775) ([d9ff024](https://github.com/bitnami/charts/commit/d9ff02400977a855e9e3b4e000849225fe1d8af0)), closes [#33775](https://github.com/bitnami/charts/issues/33775)
+
+## <small>22.0.15 (2025-07-29)</small>
+
+* [bitnami/elasticsearch] :zap: :arrow_up: Update dependency references (#35331) ([fe59151](https://github.com/bitnami/charts/commit/fe5915144d9606c8843e6d779d804b0de3cff874)), closes [#35331](https://github.com/bitnami/charts/issues/35331)
 
 ## <small>22.0.14 (2025-07-22)</small>
 

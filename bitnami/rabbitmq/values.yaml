@@ -49,7 +49,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 4.1.2-debian-12-r0
+  tag: 4.1.3-debian-12-r1
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -262,9 +262,12 @@ memoryHighWatermark:
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 
-## @param queue_master_locator Changes the queue_master_locator setting in the rabbitmq config file
+## @param queue_leader_locator Changes the queue_leader_locator setting in the rabbitmq config file
 ##
-queue_master_locator: min-masters
+queue_leader_locator: balanced
+## @param queue_master_locator DEPRECATED.  Use queue_leader_locator instead
+##
+queue_master_locator: ""
 
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
@@ -447,8 +450,8 @@ configuration: |-
   {{- if .Values.loadDefinition.enabled }}
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}
-  # queue master locator
-  queue_master_locator = {{ .Values.queue_master_locator }}
+  # queue leader locator
+  queue_leader_locator = {{ include "rabbitmq.queueLocator" . }}
   # enable loopback user
   {{- if not (empty .Values.auth.username) }}
   loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
@@ -1594,7 +1597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r48
+    tag: 12-debian-12-r50
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

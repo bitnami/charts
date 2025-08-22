@@ -1,8 +1,21 @@
 # Changelog
 
-## 13.6.14 (2025-07-28)
+## 13.6.17 (2025-08-20)
 
-* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#35317](https://github.com/bitnami/charts/pull/35317))
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references ([#36155](https://github.com/bitnami/charts/pull/36155))
+
+## <small>13.6.16 (2025-08-07)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#35613) ([c33665f](https://github.com/bitnami/charts/commit/c33665fdb2b66fea06c2852814c8fb681b71b3f5)), closes [#35613](https://github.com/bitnami/charts/issues/35613)
+
+## <small>13.6.15 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#35571) ([2431b7d](https://github.com/bitnami/charts/commit/2431b7dc7d93e9ed1237960803892862a21af598)), closes [#35571](https://github.com/bitnami/charts/issues/35571)
+
+## <small>13.6.14 (2025-07-28)</small>
+
+* [bitnami/jenkins] :zap: :arrow_up: Update dependency references (#35317) ([2aea959](https://github.com/bitnami/charts/commit/2aea959eb1d771003a8ebf75650c9394bb7290d8)), closes [#35317](https://github.com/bitnami/charts/issues/35317)
 
 ## <small>13.6.13 (2025-07-25)</small>
 

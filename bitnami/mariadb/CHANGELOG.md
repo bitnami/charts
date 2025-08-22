@@ -1,8 +1,36 @@
 # Changelog
 
-## 21.0.3 (2025-07-15)
+## 22.0.0 (2025-08-18)
 
-* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#35111](https://github.com/bitnami/charts/pull/35111))
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#36108](https://github.com/bitnami/charts/pull/36108))
+
+## <small>21.0.8 (2025-08-14)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35891) ([0ba150f](https://github.com/bitnami/charts/commit/0ba150f330d4acb2db0f428f545d6ab863f29b28)), closes [#35891](https://github.com/bitnami/charts/issues/35891)
+
+## <small>21.0.7 (2025-08-08)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35702) ([cf7d2af](https://github.com/bitnami/charts/commit/cf7d2afa32e8ecf15b879fc181c74a5a98903cbc)), closes [#35702](https://github.com/bitnami/charts/issues/35702)
+
+## <small>21.0.6 (2025-08-07)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35618) ([4f3de22](https://github.com/bitnami/charts/commit/4f3de22b9031e27242cfa01cd6d7eb9834a717bd)), closes [#35618](https://github.com/bitnami/charts/issues/35618)
+
+## <small>21.0.5 (2025-08-07)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35590) ([32840ee](https://github.com/bitnami/charts/commit/32840eeaba9fd268f5290039c3ba3bf7b153a840)), closes [#35590](https://github.com/bitnami/charts/issues/35590)
+
+## <small>21.0.4 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35506) ([6f4f2cb](https://github.com/bitnami/charts/commit/6f4f2cbc4dc1c14ed857a153649f5378d6a0e013)), closes [#35506](https://github.com/bitnami/charts/issues/35506)
+
+## <small>21.0.3 (2025-07-15)</small>
+
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#35111) ([26f6a88](https://github.com/bitnami/charts/commit/26f6a88c961f4e0dbb53f458972a4ba94d849a48)), closes [#35111](https://github.com/bitnami/charts/issues/35111)
 
 ## <small>21.0.2 (2025-07-09)</small>
 

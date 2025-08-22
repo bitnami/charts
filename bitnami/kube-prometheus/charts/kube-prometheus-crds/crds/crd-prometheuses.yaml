@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-# Version: 0.84.0
+# Version: 0.85.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.18.0
-    operator.prometheus.io/version: 0.84.0
+    operator.prometheus.io/version: 0.85.0
   name: prometheuses.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -4002,6 +4002,15 @@ spec:
                   `ClusterFirstWithHostNet` automatically (unless `.spec.DNSPolicy` is set
                   to a different value).
                 type: boolean
+              hostUsers:
+                description: |-
+                  HostUsers supports the user space in Kubernetes.
+
+                  More info: https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
+
+                  The feature requires at least Kubernetes 1.28 with the `UserNamespacesSupport` feature gate enabled.
+                  Starting Kubernetes 1.33, the feature is enabled by default.
+                type: boolean
               ignoreNamespaceSelectors:
                 description: |-
                   When true, `spec.namespaceSelector` from all PodMonitor, ServiceMonitor
@@ -5568,11 +5577,10 @@ spec:
                 description: |-
                   Minimum number of seconds for which a newly created Pod should be ready
                   without any of its container crashing for it to be considered available.
-                  Defaults to 0 (pod will be considered available as soon as it is ready)
 
-                  This is an alpha field from kubernetes 1.22 until 1.24 which requires
-                  enabling the StatefulSetMinReadySeconds feature gate.
+                  If unset, pods will be considered available as soon as they are ready.
                 format: int32
+                minimum: 0
                 type: integer
               nameEscapingScheme:
                 description: |-
@@ -5611,6 +5619,18 @@ spec:
                       Configures optional translation of OTLP explicit bucket histograms into native histograms with custom buckets.
                       It requires Prometheus >= v3.4.0.
                     type: boolean
+                  ignoreResourceAttributes:
+                    description: |-
+                      List of OpenTelemetry resource attributes to ignore when `promoteAllResourceAttributes` is true.
+
+                      It requires `promoteAllResourceAttributes` to be true.
+                      It requires Prometheus >= v3.5.0.
+                    items:
+                      minLength: 1
+                      type: string
+                    minItems: 1
+                    type: array
+                    x-kubernetes-list-type: set
                   keepIdentifyingResourceAttributes:
                     description: |-
                       Enables adding `service.name`, `service.namespace` and `service.instance.id`
@@ -5618,9 +5638,17 @@ spec:
 
                       It requires Prometheus >= v3.1.0.
                     type: boolean
+                  promoteAllResourceAttributes:
+                    description: |-
+                      Promote all resource attributes to metric labels except the ones defined in `ignoreResourceAttributes`.
+
+                      Cannot be true when `promoteResourceAttributes` is defined.
+                      It requires Prometheus >= v3.5.0.
+                    type: boolean
                   promoteResourceAttributes:
-                    description: List of OpenTelemetry Attributes that should be promoted
-                      to metric labels, defaults to none.
+                    description: |-
+                      List of OpenTelemetry Attributes that should be promoted to metric labels, defaults to none.
+                      Cannot be defined when `promoteAllResourceAttributes` is true.
                     items:
                       minLength: 1
                       type: string
@@ -8588,6 +8616,9 @@ spec:
               scrapeClassicHistograms:
                 description: |-
                   Whether to scrape a classic histogram that is also exposed as a native histogram.
+
+                  Notice: `scrapeClassicHistograms` corresponds to the `always_scrape_classic_histograms` field in the Prometheus configuration.
+
                   It requires Prometheus >= v3.5.0.
                 type: boolean
               scrapeConfigNamespaceSelector:

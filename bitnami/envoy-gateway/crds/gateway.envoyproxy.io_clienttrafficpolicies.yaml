@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_clienttrafficpolicies.yaml
-# Version: 1.4.2
+# Version: 1.5.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -154,6 +154,15 @@ spec:
                     required:
                     - value
                     type: object
+                  maxAcceptPerSocketEvent:
+                    default: 1
+                    description: |-
+                      MaxAcceptPerSocketEvent provides configuration for the maximum number of connections to accept from the kernel
+                      per socket event. If there are more than MaxAcceptPerSocketEvent connections pending accept, connections over
+                      this threshold will be accepted in later event loop iterations.
+                      Defaults to 1 and can be disabled by setting to 0 for allowing unlimited accepted connections.
+                    format: int32
+                    type: integer
                   socketBufferLimit:
                     allOf:
                     - pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
@@ -174,6 +183,8 @@ spec:
                   Client Address into the X-Forwarded-For header.
                   Note Proxy Protocol must be present when this field is set, else the connection
                   is closed.
+
+                  Deprecated: Use ProxyProtocol instead.
                 type: boolean
               headers:
                 description: HeaderSettings provides configuration for header management.
@@ -234,7 +245,7 @@ spec:
                           - name
                           - value
                           type: object
-                        maxItems: 16
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-map-keys:
                         - name
@@ -260,7 +271,7 @@ spec:
                             my-header2: bar
                         items:
                           type: string
-                        maxItems: 16
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-type: set
                       set:
@@ -308,7 +319,7 @@ spec:
                           - name
                           - value
                           type: object
-                        maxItems: 16
+                        maxItems: 64
                         type: array
                         x-kubernetes-list-map-keys:
                         - name
@@ -505,6 +516,24 @@ spec:
                     - UnescapeAndForward
                     - UnescapeAndRedirect
                     type: string
+                type: object
+              proxyProtocol:
+                description: |-
+                  ProxyProtocol configures the Proxy Protocol settings. When configured,
+                  the Proxy Protocol header will be interpreted and the Client Address
+                  will be added into the X-Forwarded-For header.
+                  If both EnableProxyProtocol and ProxyProtocol are set, ProxyProtocol takes precedence.
+                minProperties: 0
+                properties:
+                  optional:
+                    description: |-
+                      Optional allows requests without a Proxy Protocol header to be proxied.
+                      If set to true, the listener will accept requests without a Proxy Protocol header.
+                      If set to false, the listener will reject requests without a Proxy Protocol header.
+                      If not set, the default behavior is to reject requests without a Proxy Protocol header.
+                      Warning: Optional breaks conformance with the specification. Only enable if ALL traffic to the listener comes from a trusted source.
+                      For more information on security implications, see haproxy.org/download/2.1/doc/proxy-protocol.txt
+                    type: boolean
                 type: object
               targetRef:
                 description: |-
@@ -718,6 +747,12 @@ spec:
                           initiation and stops when either the last byte of the request is sent upstream or when the response begins.
                         pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
+                      streamIdleTimeout:
+                        description: |2-
+                           The stream idle timeout defines the amount of time a stream can exist without any upstream or downstream activity.
+                           Default: 5 minutes.
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
+                        type: string
                     type: object
                   tcp:
                     description: Timeout settings for TCP.
@@ -845,11 +880,174 @@ spec:
                           type: object
                         maxItems: 8
                         type: array
+                      certificateHashes:
+                        description: |-
+                          An optional list of hex-encoded SHA-256 hashes. If specified, Envoy will
+                          verify that the SHA-256 of the DER-encoded presented certificate matches
+                          one of the specified values.
+                        items:
+                          type: string
+                        type: array
                       optional:
                         description: |-
                           Optional set to true accepts connections even when a client doesn't present a certificate.
                           Defaults to false, which rejects connections without a valid client certificate.
                         type: boolean
+                      spkiHashes:
+                        description: |-
+                          An optional list of base64-encoded SHA-256 hashes. If specified, Envoy will
+                          verify that the SHA-256 of the DER-encoded Subject Public Key Information
+                          (SPKI) of the presented certificate matches one of the specified values.
+                        items:
+                          type: string
+                        type: array
+                      subjectAltNames:
+                        description: |-
+                          An optional list of Subject Alternative name matchers. If specified, Envoy
+                          will verify that the Subject Alternative Name of the presented certificate
+                          matches one of the specified matchers
+                        properties:
+                          dnsNames:
+                            description: DNS names matchers
+                            items:
+                              description: |-
+                                StringMatch defines how to match any strings.
+                                This is a general purpose match condition that can be used by other EG APIs
+                                that need to match against a string.
+                              properties:
+                                type:
+                                  default: Exact
+                                  description: Type specifies how to match against
+                                    a string.
+                                  enum:
+                                  - Exact
+                                  - Prefix
+                                  - Suffix
+                                  - RegularExpression
+                                  type: string
+                                value:
+                                  description: Value specifies the string value that
+                                    the match must have.
+                                  maxLength: 1024
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - value
+                              type: object
+                            type: array
+                          emailAddresses:
+                            description: Email addresses matchers
+                            items:
+                              description: |-
+                                StringMatch defines how to match any strings.
+                                This is a general purpose match condition that can be used by other EG APIs
+                                that need to match against a string.
+                              properties:
+                                type:
+                                  default: Exact
+                                  description: Type specifies how to match against
+                                    a string.
+                                  enum:
+                                  - Exact
+                                  - Prefix
+                                  - Suffix
+                                  - RegularExpression
+                                  type: string
+                                value:
+                                  description: Value specifies the string value that
+                                    the match must have.
+                                  maxLength: 1024
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - value
+                              type: object
+                            type: array
+                          ipAddresses:
+                            description: IP addresses matchers
+                            items:
+                              description: |-
+                                StringMatch defines how to match any strings.
+                                This is a general purpose match condition that can be used by other EG APIs
+                                that need to match against a string.
+                              properties:
+                                type:
+                                  default: Exact
+                                  description: Type specifies how to match against
+                                    a string.
+                                  enum:
+                                  - Exact
+                                  - Prefix
+                                  - Suffix
+                                  - RegularExpression
+                                  type: string
+                                value:
+                                  description: Value specifies the string value that
+                                    the match must have.
+                                  maxLength: 1024
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - value
+                              type: object
+                            type: array
+                          otherNames:
+                            description: Other names matchers
+                            items:
+                              properties:
+                                oid:
+                                  description: OID Value
+                                  type: string
+                                type:
+                                  default: Exact
+                                  description: Type specifies how to match against
+                                    a string.
+                                  enum:
+                                  - Exact
+                                  - Prefix
+                                  - Suffix
+                                  - RegularExpression
+                                  type: string
+                                value:
+                                  description: Value specifies the string value that
+                                    the match must have.
+                                  maxLength: 1024
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - oid
+                              - value
+                              type: object
+                            type: array
+                          uris:
+                            description: URIs matchers
+                            items:
+                              description: |-
+                                StringMatch defines how to match any strings.
+                                This is a general purpose match condition that can be used by other EG APIs
+                                that need to match against a string.
+                              properties:
+                                type:
+                                  default: Exact
+                                  description: Type specifies how to match against
+                                    a string.
+                                  enum:
+                                  - Exact
+                                  - Prefix
+                                  - Suffix
+                                  - RegularExpression
+                                  type: string
+                                value:
+                                  description: Value specifies the string value that
+                                    the match must have.
+                                  maxLength: 1024
+                                  minLength: 1
+                                  type: string
+                              required:
+                              - value
+                              type: object
+                            type: array
+                        type: object
                     type: object
                   ecdhCurves:
                     description: |-

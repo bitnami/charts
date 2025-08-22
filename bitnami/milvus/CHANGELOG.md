@@ -1,8 +1,21 @@
 # Changelog
 
-## 15.0.15 (2025-07-21)
+## 16.0.1 (2025-08-13)
 
-* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#35231](https://github.com/bitnami/charts/pull/35231))
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references ([#35787](https://github.com/bitnami/charts/pull/35787))
+
+## 16.0.0 (2025-08-13)
+
+* [bitnami/milvus] :arrow_up: Major release: Milvus 2.6.0 architecture update (#35416) ([add3279](https://github.com/bitnami/charts/commit/add327965d7501d876cd851562e6eb6dca386a45)), closes [#35416](https://github.com/bitnami/charts/issues/35416)
+
+## <small>15.0.16 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#35405) ([4b59236](https://github.com/bitnami/charts/commit/4b59236cdf9c27d3c46f4ebd505e2e2d09a3d2ea)), closes [#35405](https://github.com/bitnami/charts/issues/35405)
+
+## <small>15.0.15 (2025-07-21)</small>
+
+* [bitnami/milvus] :zap: :arrow_up: Update dependency references (#35231) ([7df8965](https://github.com/bitnami/charts/commit/7df896578c9837f78f2ee3044ebf5f55a4786952)), closes [#35231](https://github.com/bitnami/charts/issues/35231)
 
 ## <small>15.0.14 (2025-07-18)</small>
 

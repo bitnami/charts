@@ -1,8 +1,17 @@
 # Changelog
 
-## 0.2.6 (2025-07-23)
+## 0.2.8 (2025-08-07)
 
-* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#35270](https://github.com/bitnami/charts/pull/35270))
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#35622](https://github.com/bitnami/charts/pull/35622))
+
+## <small>0.2.7 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#35504) ([1edf433](https://github.com/bitnami/charts/commit/1edf433c02cdcadde35dd7e3bf51f4aab6c96015)), closes [#35504](https://github.com/bitnami/charts/issues/35504)
+
+## <small>0.2.6 (2025-07-23)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#35270) ([9421836](https://github.com/bitnami/charts/commit/9421836f332038b127afaad90a4468c0b33f414c)), closes [#35270](https://github.com/bitnami/charts/issues/35270)
 
 ## <small>0.2.5 (2025-07-19)</small>
 

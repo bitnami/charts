@@ -18,7 +18,7 @@ metadata:
   annotations: {{ include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.thanosRuler.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if .Values.thanosRuler.ingress.ingressClassName }}
   ingressClassName: {{ .Values.thanosRuler.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -27,9 +27,7 @@ spec:
       http:
         paths:
           - path: {{ .Values.thanosRuler.ingress.path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.thanosRuler.ingress.pathType }}
-            {{- end }}
             backend: {{ include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanosRuler.fullname" .) "servicePort" "http" "context" .) | nindent 14 }}
     {{- end }}
     {{- range .Values.thanosRuler.ingress.extraHosts }}
@@ -37,9 +35,7 @@ spec:
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
-            {{- end }}
             backend: {{ include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.thanosRuler.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.thanosRuler.ingress.extraRules }}
