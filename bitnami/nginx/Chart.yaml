@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: git
-      image: docker.io/bitnami/git:2.50.1-debian-12-r0
+      image: docker.io/bitnamilegacy/git:2.50.1-debian-12-r0
     - name: nginx
-      image: docker.io/bitnami/nginx:1.29.0-debian-12-r2
+      image: docker.io/bitnamilegacy/nginx:1.29.0-debian-12-r2
     - name: nginx-exporter
-      image: docker.io/bitnami/nginx-exporter:1.4.2-debian-12-r6
+      image: docker.io/bitnamilegacy/nginx-exporter:1.4.2-debian-12-r6
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
