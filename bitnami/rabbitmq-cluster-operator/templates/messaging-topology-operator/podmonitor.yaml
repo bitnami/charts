@@ -34,7 +34,7 @@ spec:
     matchNames:
       - {{ include "common.names.namespace" . | quote }}
   podMetricsEndpoints:
-    - port: http
+    - port: http-metrics
       {{- if .Values.msgTopologyOperator.metrics.podMonitor.interval }}
       interval: {{ .Values.msgTopologyOperator.metrics.podMonitor.interval }}
       {{- end }}

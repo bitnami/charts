@@ -97,7 +97,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 4.0.0-debian-12-r8
+  tag: 4.0.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -488,7 +488,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r47
+      tag: 12-debian-12-r50
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -609,7 +609,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.33.2-debian-12-r3
+      tag: 1.33.4-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -707,9 +707,9 @@ controller:
   ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
-  ## @param controller.heapOpts Kafka Java Heap size for controller-eligible nodes
+  ## @param controller.heapOpts Kafka Java Heap configuration for controller-eligible nodes
   ##
-  heapOpts: -Xmx1024m -Xms1024m
+  heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
   ## @param controller.command Override Kafka container command
   ##
   command: []
@@ -1168,9 +1168,9 @@ broker:
   ## NOTE: This will override secretConfig value
   ##
   existingSecretConfig: ""
-  ## @param broker.heapOpts Kafka Java Heap size for broker-only nodes
+  ## @param broker.heapOpts Kafka Java Heap configuration for broker-only nodes
   ##
-  heapOpts: -Xmx1024m -Xms1024m
+  heapOpts: -XX:InitialRAMPercentage=75 -XX:MaxRAMPercentage=75
   ## @param broker.command Override Kafka container command
   ##
   command: []
@@ -2001,7 +2001,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.3.0-debian-12-r3
+      tag: 1.3.0-debian-12-r6
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

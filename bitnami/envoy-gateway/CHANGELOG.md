@@ -1,8 +1,60 @@
 # Changelog
 
-## 1.1.3 (2025-07-10)
+## 2.0.4 (2025-08-19)
 
-* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#35001](https://github.com/bitnami/charts/pull/35001))
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references ([#36146](https://github.com/bitnami/charts/pull/36146))
+
+## <small>2.0.3 (2025-08-15)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#36081) ([23331d3](https://github.com/bitnami/charts/commit/23331d3844a8a81d3b51e791d80fd3ccc49a22e1)), closes [#36081](https://github.com/bitnami/charts/issues/36081)
+
+## <small>2.0.2 (2025-08-14)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35865) ([56d4cb6](https://github.com/bitnami/charts/commit/56d4cb6682dd17b9158d071e3d6a3ca1481f3e7d)), closes [#35865](https://github.com/bitnami/charts/issues/35865)
+
+## <small>2.0.1 (2025-08-13)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35797) ([832cfce](https://github.com/bitnami/charts/commit/832cfce3f3ee698ef0711c5623fb70738736612f)), closes [#35797](https://github.com/bitnami/charts/issues/35797)
+
+## 2.0.0 (2025-08-12)
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35743) ([7270160](https://github.com/bitnami/charts/commit/7270160dbe7b55fe1c6893938d7d8c357618cc76)), closes [#35743](https://github.com/bitnami/charts/issues/35743)
+
+## <small>1.1.10 (2025-08-11)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35724) ([ccf46ba](https://github.com/bitnami/charts/commit/ccf46baed623598456b9310844428c2641ffc25b)), closes [#35724](https://github.com/bitnami/charts/issues/35724)
+
+## <small>1.1.9 (2025-08-07)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35467) ([9c32b5b](https://github.com/bitnami/charts/commit/9c32b5b5cc5556e87cde1c525b90be9052796c5f)), closes [#35467](https://github.com/bitnami/charts/issues/35467)
+
+## <small>1.1.8 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35427) ([cd7e44e](https://github.com/bitnami/charts/commit/cd7e44e4399c3f841d9dfd9146598da4b32c70c0)), closes [#35427](https://github.com/bitnami/charts/issues/35427)
+
+## <small>1.1.7 (2025-07-24)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35288) ([006c79c](https://github.com/bitnami/charts/commit/006c79c411506811d57e7c612d2d8ec40eac4c97)), closes [#35288](https://github.com/bitnami/charts/issues/35288)
+
+## <small>1.1.6 (2025-07-19)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35213) ([d162a4a](https://github.com/bitnami/charts/commit/d162a4af7205bb23064fb7b2c477fbbdb384566c)), closes [#35213](https://github.com/bitnami/charts/issues/35213)
+
+## <small>1.1.5 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35189) ([eca7375](https://github.com/bitnami/charts/commit/eca73755cdd1d01c32460c9f43c2ff4ca4da0c24)), closes [#35189](https://github.com/bitnami/charts/issues/35189)
+
+## <small>1.1.4 (2025-07-15)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35147) ([15b1b5f](https://github.com/bitnami/charts/commit/15b1b5f3dc9520fe914cc0e0a74563ca6abf0c51)), closes [#35147](https://github.com/bitnami/charts/issues/35147)
+
+## <small>1.1.3 (2025-07-10)</small>
+
+* [bitnami/envoy-gateway] :zap: :arrow_up: Update dependency references (#35001) ([ba254ab](https://github.com/bitnami/charts/commit/ba254abfa1377b093b2014bb3cc93e5af312c339)), closes [#35001](https://github.com/bitnami/charts/issues/35001)
 
 ## <small>1.1.2 (2025-07-08)</small>
 

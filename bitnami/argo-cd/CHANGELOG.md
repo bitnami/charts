@@ -1,8 +1,68 @@
 # Changelog
 
-## 9.0.29 (2025-07-10)
+## 10.0.3 (2025-08-18)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#34993](https://github.com/bitnami/charts/pull/34993))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#36130](https://github.com/bitnami/charts/pull/36130))
+
+## <small>10.0.2 (2025-08-13)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35798) ([6a1c34b](https://github.com/bitnami/charts/commit/6a1c34bbf0f441b5642905e16fb9ce0f1e41ba7d)), closes [#35798](https://github.com/bitnami/charts/issues/35798)
+
+## <small>10.0.1 (2025-08-13)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35792) ([5298baa](https://github.com/bitnami/charts/commit/5298baa73c61b7d41c766fda78d126afd0de0902)), closes [#35792](https://github.com/bitnami/charts/issues/35792)
+
+## 10.0.0 (2025-08-11)
+
+* [bitnami/argo-cd] Upgrade to Redis subchart 22 (#35727) ([2275937](https://github.com/bitnami/charts/commit/227593706189bbdb56c06a8615d05977929e9784)), closes [#35727](https://github.com/bitnami/charts/issues/35727)
+
+## <small>9.0.39 (2025-08-08)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35701) ([f5de559](https://github.com/bitnami/charts/commit/f5de5597eda831d60f77bf7c1d879c0b8fd50ba9)), closes [#35701](https://github.com/bitnami/charts/issues/35701)
+
+## <small>9.0.38 (2025-08-07)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35671) ([1e61465](https://github.com/bitnami/charts/commit/1e614652266eb47286db3b8294071ccbc9020b17)), closes [#35671](https://github.com/bitnami/charts/issues/35671)
+
+## <small>9.0.37 (2025-08-07)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35638) ([5602459](https://github.com/bitnami/charts/commit/56024596e95ccf3bb09da962e3d6f3bdb302e3dd)), closes [#35638](https://github.com/bitnami/charts/issues/35638)
+
+## <small>9.0.36 (2025-08-07)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35541) ([0141dce](https://github.com/bitnami/charts/commit/0141dce1eafcb941c6d97fd74d8776545c927383)), closes [#35541](https://github.com/bitnami/charts/issues/35541)
+
+## <small>9.0.35 (2025-08-07)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35464) ([35609aa](https://github.com/bitnami/charts/commit/35609aa010255463bc6637582adb190d49cb82c2)), closes [#35464](https://github.com/bitnami/charts/issues/35464)
+
+## <small>9.0.34 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35453) ([4f31154](https://github.com/bitnami/charts/commit/4f31154d3e045bc63be0f7065d78204159371f7f)), closes [#35453](https://github.com/bitnami/charts/issues/35453)
+
+## <small>9.0.33 (2025-07-25)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35302) ([0ea2210](https://github.com/bitnami/charts/commit/0ea2210a304ed3f8ca8f614f5db78b3527f26315)), closes [#35302](https://github.com/bitnami/charts/issues/35302)
+
+## <small>9.0.32 (2025-07-23)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35264) ([62ff532](https://github.com/bitnami/charts/commit/62ff5324436c6fce6a8423f3eed49dc8c9fd43cf)), closes [#35264](https://github.com/bitnami/charts/issues/35264)
+
+## <small>9.0.31 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/argo-cd] Remove duplicate `matchLabels` from applicationset `ServiceMonitor` (#35221) ([8a5b631](https://github.com/bitnami/charts/commit/8a5b631db38db4c9b9fd411c205746549759491e)), closes [#35221](https://github.com/bitnami/charts/issues/35221)
+
+## <small>9.0.30 (2025-07-15)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#35083) ([c0e11e9](https://github.com/bitnami/charts/commit/c0e11e996e67659b2bb335a051fd8c525cbcbf01)), closes [#35083](https://github.com/bitnami/charts/issues/35083)
+
+## <small>9.0.29 (2025-07-10)</small>
+
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#34993) ([e40a5c2](https://github.com/bitnami/charts/commit/e40a5c2288a2472c8a4a8b7e4979414b817fe563)), closes [#34993](https://github.com/bitnami/charts/issues/34993)
 
 ## <small>9.0.28 (2025-07-08)</small>
 

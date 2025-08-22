@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/airflow
-  tag: 3.0.2-debian-12-r3
+  tag: 3.0.5-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -501,6 +501,9 @@ extraEnvVars: []
 ## @param extraEnvVarsCM ConfigMap with extra environment variables for all the Airflow pods
 ##
 extraEnvVarsCM: ""
+## @param extraEnvVarsCMs List of ConfigMaps with extra environment variables for all the Airflow pods
+##
+extraEnvVarsCMs: []
 ## @param extraEnvVarsSecret Secret with extra environment variables for all the Airflow pods
 ##
 extraEnvVarsSecret: ""
@@ -593,6 +596,9 @@ web:
   ## @param web.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow webserver pods
   ##
   extraEnvVarsCM: ""
+  ## @param web.extraEnvVarsCMs List of ConfigMaps with extra environment variables for Airflow webserver pods
+  ##
+  extraEnvVarsCMs: []
   ## @param web.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow webserver pods
   ##
   extraEnvVarsSecret: ""
@@ -944,6 +950,9 @@ scheduler:
   ## @param scheduler.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM: ""
+  ## @param scheduler.extraEnvVarsCMs List of ConfigMaps with extra environment variables for Airflow scheduler pods
+  ##
+  extraEnvVarsCMs: []
   ## @param scheduler.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
@@ -1292,6 +1301,9 @@ dagProcessor:
   ## @param dagProcessor.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM: ""
+  ## @param dagProcessor.extraEnvVarsCMs List of ConfigMaps with extra environment variables for Airflow dagProcessor pods 
+  ##
+  extraEnvVarsCMs: []
   ## @param dagProcessor.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
@@ -1640,6 +1652,9 @@ triggerer:
   ## @param triggerer.extraEnvVarsCM ConfigMap with extra environment variables
   ##
   extraEnvVarsCM: ""
+  ## @param triggerer.extraEnvVarsCMs List of ConfigMaps with extra environment variables for Airflow triggerer pods
+  ##
+  extraEnvVarsCMs: []
   ## @param triggerer.extraEnvVarsSecret Secret with extra environment variables
   ##
   extraEnvVarsSecret: ""
@@ -2088,6 +2103,9 @@ worker:
   ## @param worker.extraEnvVarsCM ConfigMap containing extra environment variables for Airflow worker pods
   ##
   extraEnvVarsCM: ""
+  ## @param worker.extraEnvVarsCMs List of ConfigMaps with extra environment variables for Airflow worker pods
+  ##
+  extraEnvVarsCMs: []
   ## @param worker.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Airflow worker pods
   ##
   extraEnvVarsSecret: ""
@@ -2345,16 +2363,6 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param worker.autoscaling.enabled DEPRECATED: use worker.autoscaling.hpa.enabled instead
-    ## @param worker.autoscaling.minReplicas DEPRECATED: use worker.autoscaling.hpa.minReplicas instead
-    ## @param worker.autoscaling.maxReplicas DEPRECATED: use worker.autoscaling.hpa.maxReplicas instead
-    ## @param worker.autoscaling.targetMemory DEPRECATED: use worker.autoscaling.hpa.targetMemory instead
-    ## @param worker.autoscaling.targetCPU DEPRECATED: use worker.autoscaling.hpa.targetCPU instead
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
     ## @param worker.autoscaling.vpa.enabled Enable VPA for Airflow Worker
     ## @param worker.autoscaling.vpa.annotations Annotations for VPA resource
     ## @param worker.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
@@ -2882,7 +2890,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/statsd-exporter
-    tag: 0.28.0-debian-12-r21
+    tag: 0.28.0-debian-12-r24
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

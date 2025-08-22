@@ -1,8 +1,28 @@
 # Changelog
 
-## 0.2.4 (2025-07-09)
+## 0.2.8 (2025-08-07)
 
-* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#34935](https://github.com/bitnami/charts/pull/34935))
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references ([#35622](https://github.com/bitnami/charts/pull/35622))
+
+## <small>0.2.7 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#35504) ([1edf433](https://github.com/bitnami/charts/commit/1edf433c02cdcadde35dd7e3bf51f4aab6c96015)), closes [#35504](https://github.com/bitnami/charts/issues/35504)
+
+## <small>0.2.6 (2025-07-23)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#35270) ([9421836](https://github.com/bitnami/charts/commit/9421836f332038b127afaad90a4468c0b33f414c)), closes [#35270](https://github.com/bitnami/charts/issues/35270)
+
+## <small>0.2.5 (2025-07-19)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#35216) ([9555f91](https://github.com/bitnami/charts/commit/9555f916489dff42bc82b26c56e7a6c225dc3b37)), closes [#35216](https://github.com/bitnami/charts/issues/35216)
+
+## <small>0.2.4 (2025-07-09)</small>
+
+* [bitnami/minio-operator] :zap: :arrow_up: Update dependency references (#34935) ([5eae54a](https://github.com/bitnami/charts/commit/5eae54a87664d5010f70d6a841cf94600755ea7e)), closes [#34935](https://github.com/bitnami/charts/issues/34935)
 
 ## <small>0.2.3 (2025-07-09)</small>
 

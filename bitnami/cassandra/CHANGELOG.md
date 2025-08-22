@@ -1,8 +1,24 @@
 # Changelog
 
-## 12.3.8 (2025-06-20)
+## 12.3.11 (2025-08-13)
 
-* [bitnami/cassandra] :zap: :arrow_up: Update dependency references ([#34571](https://github.com/bitnami/charts/pull/34571))
+* [bitnami/cassandra] Authentication failures when connecting to Cassandra from non-seed (secondary) nodes in multi-replica deployments.   ([#35768](https://github.com/bitnami/charts/pull/35768))
+
+## <small>12.3.10 (2025-08-11)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#35419) ([2fdbfa9](https://github.com/bitnami/charts/commit/2fdbfa905386c977f5c2e46a9a9998fc31666815)), closes [#35419](https://github.com/bitnami/charts/issues/35419)
+
+## <small>12.3.9 (2025-07-15)</small>
+
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#35078) ([ac45268](https://github.com/bitnami/charts/commit/ac45268232d39c92ead078e20bab50d14a890680)), closes [#35078](https://github.com/bitnami/charts/issues/35078)
+
+## <small>12.3.8 (2025-06-20)</small>
+
+* [bitnami/cassandra] :zap: :arrow_up: Update dependency references (#34571) ([454ac28](https://github.com/bitnami/charts/commit/454ac2884d43d617581665487eef8423312b9d7d)), closes [#34571](https://github.com/bitnami/charts/issues/34571)
 
 ## <small>12.3.7 (2025-05-21)</small>
 

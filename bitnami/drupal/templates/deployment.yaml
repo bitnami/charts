@@ -205,7 +205,7 @@ spec:
               value: {{ include "drupal.databaseUser" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: DRUPAL_DATABASE_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/drupal/secrets/%s" (include "drupal.databasePasswordKey" .) }}
+              value: {{ printf "/secrets/%s" (include "drupal.databasePasswordKey" .) }}
             {{- else }}
             - name: DRUPAL_DATABASE_PASSWORD
               valueFrom:
@@ -221,7 +221,7 @@ spec:
               value: {{ .Values.drupalUsername | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: DRUPAL_PASSWORD_FILE
-              value: "/opt/bitnami/drupal/secrets/drupal-password"
+              value: "/secrets/drupal-password"
             {{- else }}
             - name: DRUPAL_PASSWORD
               valueFrom:
@@ -246,7 +246,7 @@ spec:
             {{- if .Values.smtpPassword }}
             {{- if .Values.usePasswordFiles }}
             - name: SMTP_PASSWORD_FILE
-              value: "/opt/bitnami/drupal/secrets/smtp-password"
+              value: "/secrets/smtp-password"
             {{- else }}
             - name: SMTP_PASSWORD
               valueFrom:
@@ -354,7 +354,7 @@ spec:
               mountPath: /bitnami/drupal
             {{- if .Values.usePasswordFiles }}
             - name: drupal-secrets
-              mountPath: /opt/bitnami/drupal/secrets
+              mountPath: /secrets
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}

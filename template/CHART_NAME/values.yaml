@@ -236,7 +236,7 @@ diagnosticMode:
 
   ## @param %%MAIN_OBJECT_BLOCK%%.existingConfigmap The name of an existing ConfigMap with your custom configuration for %%MAIN_CONTAINER_NAME%%
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param %%MAIN_OBJECT_BLOCK%%.command Override default %%MAIN_CONTAINER_NAME%% container command (useful when using custom images)
   ##
   command: []

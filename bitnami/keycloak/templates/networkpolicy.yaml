@@ -9,16 +9,18 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak
+    app.kubernetes.io/part-of: keycloak
   {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" $podLabels "context" .) | nindent 6 }}
       app.kubernetes.io/component: keycloak
+      app.kubernetes.io/part-of: keycloak
   policyTypes:
     - Ingress
     - Egress
@@ -38,7 +40,7 @@ spec:
         {{- end }}
     # Allow connection to PostgreSQL
     - ports:
-        - port: {{ include "keycloak.databasePort" . | trimAll "\"" | int }}
+        - port: {{ include "keycloak.database.port" . | int }}
       {{- if .Values.postgresql.enabled }}
       to:
         - podSelector:
@@ -46,7 +48,7 @@ spec:
               app.kubernetes.io/name: postgresql
               app.kubernetes.io/instance: {{ .Release.Name }}              
       {{- end }}
-    # Allow connection to other keycloak nodes
+    # Allow connection to other Keycloak nodes
     - ports:
         {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
         - port: 7800
@@ -56,30 +58,37 @@ spec:
         {{- end }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" .Values.commonLabels "context" .) | nindent 14 }}
               app.kubernetes.io/component: keycloak
+              app.kubernetes.io/part-of: keycloak
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.extraEgress "context" .) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     - ports:
-        {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
-        - port: 7800
-        {{- if and (.Values.metrics.enabled) (not (eq (.Values.containerPorts.http | int) (.Values.containerPorts.metrics | int) )) }}
-        - port: {{ .Values.containerPorts.metrics }} # metrics and health
-        {{- end }}
         - port: {{ .Values.containerPorts.http }}
         {{- if .Values.tls.enabled }}
         - port: {{ .Values.containerPorts.https }}
         {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.containerPorts.management }}
+        {{- end }}
+        {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
+        - port: 7800
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" (dict "customLabels" .Values.commonLabels "context" .) | nindent 14 }}
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" .) | nindent 14 }}
+        {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -95,8 +104,7 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- $extraIngress := coalesce .Values.networkPolicy.additionalRules .Values.networkPolicy.extraIngress }}
-    {{- if $extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" $extraIngress "context" $ ) | nindent 4 }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.extraIngress "context" .) | nindent 4 }}
     {{- end }}
 {{- end }}

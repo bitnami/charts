@@ -61,7 +61,7 @@ spec:
               done
               {{- end }}
               escaped_password="${DREMIO_PASSWORD//\"/\\\"}"
-              url="{{ ternary "https" "http" .Values.dremio.tls.enabled }}://{{ include "dremio.master-coordinator.fullname" . }}-0.{{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}:{{ .Values.dremio.containerPorts.web }}/apiv2/bootstrap/firstuser"
+              url="{{ ternary "https" "http" .Values.dremio.tls.enabled }}://{{ include "dremio.master-coordinator.fullname" . }}-0.{{ include "dremio.headlessServiceName" . }}:{{ .Values.dremio.containerPorts.web }}/apiv2/bootstrap/firstuser"
               echo "Bootstapping user {{ .Values.dremio.auth.username }} in endpoint $url"
               curl -k "$url" -X PUT \
                     -H 'Authorization: _dremionull' -H 'Content-Type: application/json' \

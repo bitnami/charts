@@ -29,6 +29,9 @@ useHelmHooks: false
 createAdminTokenJob:
   enabled: true
   cleanup: false
+  waitForS3:
+    retryAttempts: 30
+    retryInterval: 5
 extraDeploy:
 - apiVersion: v1
   kind: Secret
@@ -151,6 +154,49 @@ extraDeploy:
             name: empty-dir
             subPath: s3-dir
             readOnly: true
+        - name: bucket-creator
+          image: bitnami/aws-cli:latest
+          securityContext:
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: "RuntimeDefault"
+          command:
+          - bash
+          args:
+          - -ec
+          - |
+            retry_while() {
+                local cmd="${1:?cmd is missing}"
+                local return_value=1
+
+                read -r -a command <<<"$cmd"
+                for ((i = 1; i <= 12; i += 1)); do
+                    "${command[@]}" && return_value=0 && break
+                    sleep 5
+                done
+                return $return_value
+            }
+            if ! retry_while "aws --endpoint-url http://127.0.0.1:8333 s3 ls"; then
+                error "Error connecting to S3"
+                exit 1
+            fi
+            aws --endpoint-url http://127.0.0.1:8333 s3 mb s3://{{ .Values.bucket }}
+            sleep infinity
+          env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: seaweedfs
+                key: s3-access-key-id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: seaweedfs
+                key: s3-secret-access-key
         volumes:
         - name: empty-dir
           emptyDir: {}

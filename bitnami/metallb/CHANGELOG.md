@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.4.19 (2025-07-09)
+## 6.4.22 (2025-08-14)
 
-* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#34923](https://github.com/bitnami/charts/pull/34923))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#35880](https://github.com/bitnami/charts/pull/35880))
+
+## <small>6.4.21 (2025-08-07)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#35501) ([78b0cb6](https://github.com/bitnami/charts/commit/78b0cb6d25233a443f4b36de1a1d5b614764377f)), closes [#35501](https://github.com/bitnami/charts/issues/35501)
+
+## <small>6.4.20 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#35373) ([a2c75d5](https://github.com/bitnami/charts/commit/a2c75d55350dfee3c3a9ecfa8edb9b9f301ed16c)), closes [#35373](https://github.com/bitnami/charts/issues/35373)
+
+## <small>6.4.19 (2025-07-09)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34923) ([d8f3db4](https://github.com/bitnami/charts/commit/d8f3db4c59de5594f1e5d763c23fc011717d3c87)), closes [#34923](https://github.com/bitnami/charts/issues/34923)
 
 ## <small>6.4.18 (2025-06-16)</small>
 

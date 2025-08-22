@@ -55,6 +55,58 @@
       "title": "Custom stream server block",
       "description": "Custom stream server block to be added to NGINX configuration"
     },
+    "contextIncludes": {
+      "type": "object",
+      "form": true,
+      "title": "Context-based configuration includes",
+      "properties": {
+        "main": {
+          "type": "string",
+          "form": true,
+          "title": "Main context configuration",
+          "description": "Custom configuration for the main context"
+        },
+        "events": {
+          "type": "string",
+          "form": true,
+          "title": "Events context configuration",
+          "description": "Custom configuration for the events context"
+        },
+        "http": {
+          "type": "string",
+          "form": true,
+          "title": "HTTP context configuration",
+          "description": "Custom configuration for the http context"
+        }
+      }
+    },
+    "existingContextMainConfigmaps": {
+      "type": "array",
+      "form": true,
+      "title": "Existing main context ConfigMaps",
+      "description": "List of existing ConfigMaps with custom main context configuration",
+      "items": {
+        "type": "string"
+      }
+    },
+    "existingContextEventsConfigmaps": {
+      "type": "array",
+      "form": true,
+      "title": "Existing events context ConfigMaps",
+      "description": "List of existing ConfigMaps with custom events context configuration",
+      "items": {
+        "type": "string"
+      }
+    },
+    "existingContextHttpConfigmaps": {
+      "type": "array",
+      "form": true,
+      "title": "Existing HTTP context ConfigMaps",
+      "description": "List of existing ConfigMaps with custom http context configuration",
+      "items": {
+        "type": "string"
+      }
+    },
     "containerSecurityContext": {
       "type": "object",
       "form": true,

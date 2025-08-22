@@ -1,8 +1,36 @@
 # Changelog
 
-## 5.1.24 (2025-07-09)
+## 6.0.5 (2025-08-13)
 
-* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#34908](https://github.com/bitnami/charts/pull/34908))
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references ([#35815](https://github.com/bitnami/charts/pull/35815))
+
+## <small>6.0.4 (2025-08-11)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35734) ([96c65e8](https://github.com/bitnami/charts/commit/96c65e8a37a1f720600c5c5eaae5bb94a76f3e87)), closes [#35734](https://github.com/bitnami/charts/issues/35734)
+
+## <small>6.0.3 (2025-08-07)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35546) ([2485551](https://github.com/bitnami/charts/commit/2485551d172c8fbf15cd83309451341877801733)), closes [#35546](https://github.com/bitnami/charts/issues/35546)
+
+## <small>6.0.2 (2025-08-07)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35488) ([f0448ca](https://github.com/bitnami/charts/commit/f0448ca7ee24b56b62c3adec298dc49aea66a4d2)), closes [#35488](https://github.com/bitnami/charts/issues/35488)
+
+## <small>6.0.1 (2025-08-05)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#35420) ([ca8ea7b](https://github.com/bitnami/charts/commit/ca8ea7b4dd18f69c1ccb0aa989129d219b225791)), closes [#35420](https://github.com/bitnami/charts/issues/35420)
+
+## 6.0.0 (2025-08-01)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/jaeger] Major release: Jaeger v2  (#35352) ([60e46ac](https://github.com/bitnami/charts/commit/60e46accccdd07e81070f8cf30d2ad7b92f72e4b)), closes [#35352](https://github.com/bitnami/charts/issues/35352)
+
+## <small>5.1.24 (2025-07-09)</small>
+
+* [bitnami/jaeger] :zap: :arrow_up: Update dependency references (#34908) ([d016eb3](https://github.com/bitnami/charts/commit/d016eb3d2d5f905a778ed57e4557569abc649e2f)), closes [#34908](https://github.com/bitnami/charts/issues/34908)
 
 ## <small>5.1.23 (2025-07-05)</small>
 

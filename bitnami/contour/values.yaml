@@ -108,7 +108,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.32.0-debian-12-r5
+    tag: 1.32.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -668,7 +668,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.34.2-debian-12-r0
+    tag: 1.34.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -834,33 +834,6 @@ envoy:
     ## @param envoy.shutdownManager.customStartupProbe Override default startup probe
     ##
     customStartupProbe: {}
-  ## Envoy Initconfig initcontainer security context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
-  ## @param envoy.initConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param envoy.initConfig.containerSecurityContext.runAsUser Set envoy initConfig containers' Security Context runAsUser
-  ## @param envoy.initConfig.containerSecurityContext.runAsGroup Set envoy initConfig containers' Security Context runAsUser
-  ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Set envoy initConfig containers' Security Context runAsNonRoot
-  ## @param envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
-  ## @param envoy.initConfig.containerSecurityContext.privileged Set contraller container's Security Context privileged
-  ## @param envoy.initConfig.containerSecurityContext.allowPrivilegeEscalation Set contraller container's Security Context allowPrivilegeEscalation
-  ## @param envoy.initConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param envoy.initConfig.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  initConfig:
-    containerSecurityContext:
-      enabled: true
-      seLinuxOptions: {}
-      runAsUser: 1001
-      runAsGroup: 1001
-      runAsNonRoot: true
-      privileged: false
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop: ["ALL"]
-      seccompProfile:
-        type: "RuntimeDefault"
-      readOnlyRootFilesystem: true
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset
@@ -1320,6 +1293,56 @@ envoy:
     create: true
     minAvailable: ""
     maxUnavailable: ""
+  ## Default init Containers
+  ##
+  defaultInitContainers:
+    ## 'init-config' init container
+    ## Bootstrap Envoy configuration so it's ready to be consumed by Envoy "main" container
+    ##
+    initConfig:
+      ## Configure "init-config" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.enabled Enabled "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in "init-config" init-containers
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.runAsUser Set runAsUser in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.runAsGroup Set runAsGroup in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.privileged Set privileged in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in "init-config" init-containers' Security Context
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in "init-config" init-containers
+      ## @param envoy.defaultInitContainers.initConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in "init-config" init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions: {}
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        privileged: false
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Envoy "init-config" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param envoy.defaultInitContainers.initConfig.resourcesPreset Set Envoy "init-config" init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.defaultInitContainers.initConfig.resources is set (envoy.defaultInitContainers.initConfig.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param envoy.defaultInitContainers.initConfig.resources Set Envoy "init-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## E.g:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
 
 ## @section Gateway API parameters
 ##
@@ -1350,7 +1373,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.29.0-debian-12-r2
+    tag: 1.29.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

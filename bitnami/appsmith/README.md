@@ -16,6 +16,17 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
 
 Looking to use Appsmith in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
@@ -74,11 +85,11 @@ You may want to have appsmith connect to an external database rather than instal
 
 ```console
 mongodb.enabled=false
-externalDatabase.host=myexternalhost
+externalDatabase.hosts=[]
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
-externalDatabase.port=3306
+externalDatabase.port=27017
 ```
 
 ### External redis support
@@ -87,11 +98,9 @@ You may want to have appsmith connect to an external redis rather than installin
 
 ```console
 redis.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.redis=myredis
-externalDatabase.port=3306
+externalRedis.host=myexternalhost
+externalRedis.password=mypassword
+externalRedis.port=6379
 ```
 
 ### Ingress
@@ -754,6 +763,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/appsm
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 22.0.0, which updates Redis&reg; from 8.0 to 8.2. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 6.0.19
+
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
 
 ### To 6.0.0
 

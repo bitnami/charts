@@ -1,8 +1,33 @@
 # Changelog
 
-## 13.0.3 (2025-07-09)
+## 14.0.3 (2025-08-14)
 
-* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#34931](https://github.com/bitnami/charts/pull/34931))
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#35892](https://github.com/bitnami/charts/pull/35892))
+
+## <small>14.0.2 (2025-08-07)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35629) ([cc4c357](https://github.com/bitnami/charts/commit/cc4c3571291fc7e2e769b7222e3daffe5b342d23)), closes [#35629](https://github.com/bitnami/charts/issues/35629)
+
+## <small>14.0.1 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35509) ([e64bb2a](https://github.com/bitnami/charts/commit/e64bb2a9925055949a44c15e4738a3e4c6c0b1e5)), closes [#35509](https://github.com/bitnami/charts/issues/35509)
+* [bitnami/mysql] Add upgrade notes (#35253) ([62b2d4b](https://github.com/bitnami/charts/commit/62b2d4b4af4aa47e3d78c960968a061ef8388490)), closes [#35253](https://github.com/bitnami/charts/issues/35253)
+
+## 14.0.0 (2025-07-22)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35247) ([ced0c0c](https://github.com/bitnami/charts/commit/ced0c0c7135866609f10f8362c3e82208c478023)), closes [#35247](https://github.com/bitnami/charts/issues/35247)
+
+## <small>13.0.4 (2025-07-15)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35107) ([96ecfce](https://github.com/bitnami/charts/commit/96ecfce7c2fea20642cfc02c2bc661697022bf9e)), closes [#35107](https://github.com/bitnami/charts/issues/35107)
+
+## <small>13.0.3 (2025-07-09)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34931) ([78fdcbd](https://github.com/bitnami/charts/commit/78fdcbdc1d6ce5282b70db59e9ff3248269370a3)), closes [#34931](https://github.com/bitnami/charts/issues/34931)
 
 ## <small>13.0.2 (2025-06-13)</small>
 

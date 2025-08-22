@@ -37,13 +37,9 @@ spec:
           protocol: TCP
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.queryCoord.containerPorts.grpc }}
-        - port: {{ .Values.dataCoord.containerPorts.grpc }}
-        - port: {{ .Values.indexCoord.containerPorts.grpc }}
-        - port: {{ .Values.rootCoord.containerPorts.grpc }}
         - port: {{ .Values.queryNode.containerPorts.grpc }}
         - port: {{ .Values.dataNode.containerPorts.grpc }}
-        - port: {{ .Values.indexNode.containerPorts.grpc }}
+        - port: {{ .Values.streamingNode.containerPorts.grpc }}
         - port: {{ .Values.proxy.containerPorts.grpc }}
         - port: {{ .Values.proxy.containerPorts.grpcInternal }}
       to:
@@ -54,7 +50,7 @@ spec:
         - port: {{ include "milvus.s3.port" . }}
       {{- if .Values.minio.enabled }}
         - port: {{ .Values.minio.containerPorts.api }}
-      to: 
+      to:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: minio
@@ -63,7 +59,7 @@ spec:
     # Allow outbound connections to etcd
     - ports:
         - port: {{ include "milvus.etcd.port" . }}
-      to: 
+      to:
         {{- if .Values.etcd.enabled }}
         - podSelector:
             matchLabels:
@@ -73,7 +69,7 @@ spec:
     # Allow outbound connections to kafka
     - ports:
         - port: {{ include "milvus.kafka.port" . }}
-      to: 
+      to:
         {{- if .Values.kafka.enabled }}
         - podSelector:
             matchLabels:

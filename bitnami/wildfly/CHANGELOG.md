@@ -1,8 +1,32 @@
 # Changelog
 
-## 24.0.9 (2025-07-01)
+## 25.0.0 (2025-08-11)
 
-* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#34758](https://github.com/bitnami/charts/pull/34758))
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references ([#35732](https://github.com/bitnami/charts/pull/35732))
+
+## <small>24.0.13 (2025-08-08)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#35709) ([7d685c7](https://github.com/bitnami/charts/commit/7d685c73251e561080f70281d919b87377ebd99c)), closes [#35709](https://github.com/bitnami/charts/issues/35709)
+
+## <small>24.0.12 (2025-08-07)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#35686) ([08c0fbf](https://github.com/bitnami/charts/commit/08c0fbf9fac046990ea070608f7ab5434e6d63dc)), closes [#35686](https://github.com/bitnami/charts/issues/35686)
+
+## <small>24.0.11 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#35660) ([837774c](https://github.com/bitnami/charts/commit/837774cb616d3dd77c97daaeeb4c768c0765a8ac)), closes [#35660](https://github.com/bitnami/charts/issues/35660)
+
+## <small>24.0.10 (2025-07-15)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#35136) ([d3ab13a](https://github.com/bitnami/charts/commit/d3ab13aa5767b840d58b22143778262c14866f7a)), closes [#35136](https://github.com/bitnami/charts/issues/35136)
+
+## <small>24.0.9 (2025-07-01)</small>
+
+* [bitnami/wildfly] :zap: :arrow_up: Update dependency references (#34758) ([a37ac12](https://github.com/bitnami/charts/commit/a37ac12dd61297e2312113e46cabf175ee8ee8cc)), closes [#34758](https://github.com/bitnami/charts/issues/34758)
 
 ## <small>24.0.8 (2025-06-11)</small>
 

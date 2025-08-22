@@ -2,3 +2,5 @@ aggregator:
   enabled: true
 forwarder:
   enabled: true
+varlog:
+  readonly: false

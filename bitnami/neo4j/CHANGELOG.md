@@ -1,8 +1,24 @@
 # Changelog
 
-## 0.4.10 (2025-07-10)
+## 0.4.13 (2025-08-07)
 
-* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#34998](https://github.com/bitnami/charts/pull/34998))
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references ([#35628](https://github.com/bitnami/charts/pull/35628))
+
+## <small>0.4.12 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#35398) ([78d540e](https://github.com/bitnami/charts/commit/78d540e1ed8bc432c71f455ec6f0bd284f06710c)), closes [#35398](https://github.com/bitnami/charts/issues/35398)
+
+## <small>0.4.11 (2025-07-15)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#35106) ([a5d5cf9](https://github.com/bitnami/charts/commit/a5d5cf9739327966714059e8fd6bcbee7a40deca)), closes [#35106](https://github.com/bitnami/charts/issues/35106)
+
+## <small>0.4.10 (2025-07-10)</small>
+
+* [bitnami/neo4j] :zap: :arrow_up: Update dependency references (#34998) ([5446cc9](https://github.com/bitnami/charts/commit/5446cc918862d6ca7c0eb27e7b2ab38b82764e8a)), closes [#34998](https://github.com/bitnami/charts/issues/34998)
 
 ## <small>0.4.9 (2025-07-09)</small>
 

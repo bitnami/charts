@@ -1,8 +1,36 @@
 # Changelog
 
-## 12.1.4 (2025-06-26)
+## 12.1.10 (2025-08-21)
 
-* [bitnami/kibana] Support TLS and Authentication in Kibana dashboard import script ([#34562](https://github.com/bitnami/charts/pull/34562))
+* [bitnami/kibana] add revisionHistoryLimit for deployments ([#35298](https://github.com/bitnami/charts/pull/35298))
+
+## <small>12.1.9 (2025-08-13)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35779) ([b3130ee](https://github.com/bitnami/charts/commit/b3130ee8577511a79b8f6457d3a2076fe7d47fdb)), closes [#35779](https://github.com/bitnami/charts/issues/35779)
+
+## <small>12.1.8 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35597) ([475cfb4](https://github.com/bitnami/charts/commit/475cfb43836025e3d9009ad32eff06d43ee3642a)), closes [#35597](https://github.com/bitnami/charts/issues/35597)
+
+## <small>12.1.7 (2025-07-29)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35333) ([749bd2b](https://github.com/bitnami/charts/commit/749bd2b13559206239b51320f06067e7687156f3)), closes [#35333](https://github.com/bitnami/charts/issues/35333)
+
+## <small>12.1.6 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35246) ([9f9b925](https://github.com/bitnami/charts/commit/9f9b925fe66a5297f8d4048df0edf7059eacb625)), closes [#35246](https://github.com/bitnami/charts/issues/35246)
+
+## <small>12.1.5 (2025-07-15)</small>
+
+* [bitnami/kibana] :zap: :arrow_up: Update dependency references (#35100) ([5d3dbde](https://github.com/bitnami/charts/commit/5d3dbdebecc4fa822cb4bdb03a3033347df19cd7)), closes [#35100](https://github.com/bitnami/charts/issues/35100)
+
+## <small>12.1.4 (2025-06-27)</small>
+
+* [bitnami/kibana] Support TLS and Authentication in Kibana dashboard import script (#34562) ([8a397a1](https://github.com/bitnami/charts/commit/8a397a1d43268b028ecc9fcd7064083fe682aa50)), closes [#34562](https://github.com/bitnami/charts/issues/34562)
 
 ## <small>12.1.3 (2025-06-24)</small>
 

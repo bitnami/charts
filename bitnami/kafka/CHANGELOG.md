@@ -1,8 +1,68 @@
 # Changelog
 
-## 32.3.3 (2025-07-09)
+## 32.4.2 (2025-08-13)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34916](https://github.com/bitnami/charts/pull/34916))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#35856](https://github.com/bitnami/charts/pull/35856))
+
+## <small>32.4.1 (2025-08-13)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35827) ([be99d39](https://github.com/bitnami/charts/commit/be99d3966db67abc30e3f0048176c2d0ac873043)), closes [#35827](https://github.com/bitnami/charts/issues/35827)
+
+## 32.4.0 (2025-08-13)
+
+* [bitnami/kafka] feat: conditional implementation of network policy (#35771) ([dbd60d4](https://github.com/bitnami/charts/commit/dbd60d4b0d56b26c37860443fb18d0125949f9fc)), closes [#35771](https://github.com/bitnami/charts/issues/35771)
+
+## <small>32.3.14 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35615) ([057b964](https://github.com/bitnami/charts/commit/057b9642d17ae3cf6f5be25cdfdefdcc335c3357)), closes [#35615](https://github.com/bitnami/charts/issues/35615)
+
+## <small>32.3.13 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35577) ([936d2fe](https://github.com/bitnami/charts/commit/936d2fe023cce7dcb1a5c9db8ca213b5002d81bd)), closes [#35577](https://github.com/bitnami/charts/issues/35577)
+
+## <small>32.3.12 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35572) ([9cf57dc](https://github.com/bitnami/charts/commit/9cf57dcfd95f6b0f957b8cda845c25a95df31f4b)), closes [#35572](https://github.com/bitnami/charts/issues/35572)
+
+## <small>32.3.11 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35494) ([06795b8](https://github.com/bitnami/charts/commit/06795b8d5d3e9be7e09b398e65c402898b1fcea1)), closes [#35494](https://github.com/bitnami/charts/issues/35494)
+
+## <small>32.3.10 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' (#35200) ([6cda3bc](https://github.com/bitnami/charts/commit/6cda3bc40d5acac356caf8a8b9a7f145ddca6018)), closes [#35200](https://github.com/bitnami/charts/issues/35200)
+
+## <small>32.3.9 (2025-07-29)</small>
+
+* [bitnami/kafka] Fix provisioning postScript (#35310) ([c5b2cd2](https://github.com/bitnami/charts/commit/c5b2cd2d2ebf0bb50d944e79303438252be34c7a)), closes [#35310](https://github.com/bitnami/charts/issues/35310)
+
+## <small>32.3.8 (2025-07-25)</small>
+
+* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling (#35190) ([47af963](https://github.com/bitnami/charts/commit/47af96309b90d5259c2c09b073bbac1a18480db5)), closes [#35190](https://github.com/bitnami/charts/issues/35190) [PKCS#8](https://github.com/PKCS/issues/8)
+
+## <small>32.3.7 (2025-07-23)</small>
+
+* [bitnami/kafka]fix(provisioning): Fix typo in initContainers (#35255) ([51523ee](https://github.com/bitnami/charts/commit/51523eef4e2601d0df89b6d9a26dd7e8d1dd5304)), closes [#35255](https://github.com/bitnami/charts/issues/35255)
+
+## <small>32.3.6 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit (#34796) ([eb6830e](https://github.com/bitnami/charts/commit/eb6830efb87aa905ff874ba93e75b82f5303a6fb)), closes [#34796](https://github.com/bitnami/charts/issues/34796)
+
+## <small>32.3.5 (2025-07-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35150) ([6202afd](https://github.com/bitnami/charts/commit/6202afd718713f3ca6db813c06fe88587854a90f)), closes [#35150](https://github.com/bitnami/charts/issues/35150)
+
+## <small>32.3.4 (2025-07-15)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35101) ([658029a](https://github.com/bitnami/charts/commit/658029ab8ae79262dae3ed0d594165820872a218)), closes [#35101](https://github.com/bitnami/charts/issues/35101)
+
+## <small>32.3.3 (2025-07-09)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34916) ([1aab977](https://github.com/bitnami/charts/commit/1aab9779aad9db559e9c37e62ce47cdc5740f9e4)), closes [#34916](https://github.com/bitnami/charts/issues/34916)
 
 ## <small>32.3.2 (2025-07-03)</small>
 

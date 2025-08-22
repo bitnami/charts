@@ -1,0 +1,89 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the Jaeger collector configuration.
+*/}}
+{{- define "jaeger.collector.configuration" -}}
+{{- if .Values.collector.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.collector.configuration "context" .) }}
+{{- else }}
+service:
+  extensions: [jaeger_storage, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: {{ include "common.tplvalues.render" (dict "value" .Values.collector.receivers "context" .) | nindent 12 }}
+      processors: [batch]
+      exporters: [jaeger_storage_exporter]
+  telemetry:
+    resource:
+      service.name: jaeger-collector
+    metrics:
+      level: detailed
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: "${env:COLLECTOR_METRICS_PORT}"
+    logs:
+      level: info
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http:
+      endpoint: "${env:COLLECTOR_HEALTHCHECK_HOST_PORT}"
+  jaeger_storage:
+    backends:
+      jaeger_storage: {{ include "jaeger.cassandra.storage" . | nindent 8 }}
+receivers:
+  {{- if has "otlp" .Values.collector.receivers }}
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "${env:COLLECTOR_OTLP_GRPC_HOST_PORT}"
+      http:
+        endpoint: "${env:COLLECTOR_OTLP_HTTP_HOST_PORT}"
+  {{- end }}
+  {{- if has "jaeger" .Values.collector.receivers }}
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: "${env:COLLECTOR_JAEGER_GRPC_SERVER_HOST_PORT}"
+      thrift_http:
+        endpoint: "${env:COLLECTOR_JAEGER_THRIFT_HTTP_HOST_PORT}"
+  {{- end }}
+  {{- if has "zipkin" .Values.collector.receivers }}
+  zipkin:
+    endpoint: "${env:COLLECTOR_ZIPKIN_HOST_PORT}"
+  {{- end }}
+processors:
+  batch:
+exporters:
+  jaeger_storage_exporter:
+    trace_storage: jaeger_storage
+{{- end -}}
+{{- end -}}
+
+{{- if not .Values.collector.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "jaeger.collector.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: collector
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+  {{- $configuration := include "jaeger.collector.configuration" . | fromYaml -}}
+  {{- if .Values.collector.overrideConfiguration }}
+  {{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.collector.overrideConfiguration "context" .) | fromYaml }}
+  {{- $configuration = mustMergeOverwrite $configuration $overrideConfiguration }}
+  {{- end }}
+data:
+  collector-config.yaml: |-
+    {{- toYaml $configuration | nindent 4 }}
+{{- end }}

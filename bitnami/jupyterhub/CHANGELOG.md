@@ -1,8 +1,32 @@
 # Changelog
 
+## 10.0.5 (2025-08-07)
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references ([#35614](https://github.com/bitnami/charts/pull/35614))
+
+## <small>10.0.4 (2025-08-07)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#35575) ([2b2e686](https://github.com/bitnami/charts/commit/2b2e6865117080f9e9834b41a42943545f5585a9)), closes [#35575](https://github.com/bitnami/charts/issues/35575)
+
+## <small>10.0.3 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#35550) ([77b3509](https://github.com/bitnami/charts/commit/77b3509b914ca969064cadb1d15e2880b4869105)), closes [#35550](https://github.com/bitnami/charts/issues/35550)
+
+## <small>10.0.2 (2025-07-15)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#35098) ([00ff1eb](https://github.com/bitnami/charts/commit/00ff1eb66cc72e6c7ed4b5a6e36d97f14325fb71)), closes [#35098](https://github.com/bitnami/charts/issues/35098)
+
+## <small>10.0.1 (2025-07-13)</small>
+
+* [bitnami/jupyterhub] :zap: :arrow_up: Update dependency references (#35034) ([8d62526](https://github.com/bitnami/charts/commit/8d62526a3d95724a0fe4c50d6f8e801336415ef2)), closes [#35034](https://github.com/bitnami/charts/issues/35034)
+
 ## 10.0.0 (2025-07-02)
 
-* [bitnami/jupyterhub] feat!: :boom: :wrench: Update default Authenticator ([#34649](https://github.com/bitnami/charts/pull/34649))
+* [bitnami/jupyterhub] feat!: :boom: :wrench: Update default Authenticator (#34649) ([f23e83c](https://github.com/bitnami/charts/commit/f23e83cda437d32c66c43dd83d30eb4bed265c54)), closes [#34649](https://github.com/bitnami/charts/issues/34649) [#34646](https://github.com/bitnami/charts/issues/34646)
 
 ## <small>9.0.16 (2025-06-13)</small>
 

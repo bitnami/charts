@@ -1,8 +1,129 @@
 # Changelog
 
-## 22.0.2 (2025-07-08)
+## 23.0.0 (2025-08-18)
 
-* [bitnami/drupal] :zap: :arrow_up: Update dependency references ([#34864](https://github.com/bitnami/charts/pull/34864))
+* [bitnami/drupal] Upgrade to MariaDB 12.0 ([#36113](https://github.com/bitnami/charts/pull/36113))
+
+## <small>22.0.30 (2025-08-18)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36099) ([c52657b](https://github.com/bitnami/charts/commit/c52657b0cb05263fd23d5b1c4b4996085eeba625)), closes [#36099](https://github.com/bitnami/charts/issues/36099)
+
+## <small>22.0.29 (2025-08-16)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36086) ([3f9057a](https://github.com/bitnami/charts/commit/3f9057abd31d5d592cc85de88b907f32b77a23d6)), closes [#36086](https://github.com/bitnami/charts/issues/36086)
+
+## <small>22.0.28 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36069) ([a7839d1](https://github.com/bitnami/charts/commit/a7839d11266ef62b1d6e8fc02f52c944fdcd560e)), closes [#36069](https://github.com/bitnami/charts/issues/36069)
+
+## <small>22.0.27 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36059) ([c8fd13d](https://github.com/bitnami/charts/commit/c8fd13d209e0d7c12aaf67999517ab402a224f2d)), closes [#36059](https://github.com/bitnami/charts/issues/36059)
+
+## <small>22.0.26 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36049) ([d18ca31](https://github.com/bitnami/charts/commit/d18ca31b1c10832943908641c20a33d0ec322285)), closes [#36049](https://github.com/bitnami/charts/issues/36049)
+
+## <small>22.0.25 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36042) ([4cc81ea](https://github.com/bitnami/charts/commit/4cc81ea13f8c3bbcc6af68a8650d5a8ce398408f)), closes [#36042](https://github.com/bitnami/charts/issues/36042)
+
+## <small>22.0.24 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36034) ([3ed787a](https://github.com/bitnami/charts/commit/3ed787a5cb4ac19063130e4de22a7330973d7f64)), closes [#36034](https://github.com/bitnami/charts/issues/36034)
+
+## <small>22.0.23 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36024) ([40f5205](https://github.com/bitnami/charts/commit/40f52050e84f695d478811ff36fe075444a5f9a9)), closes [#36024](https://github.com/bitnami/charts/issues/36024)
+
+## <small>22.0.22 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36019) ([d6fd9cb](https://github.com/bitnami/charts/commit/d6fd9cb1f9857cd36300b23d9e783a73c3bf6b74)), closes [#36019](https://github.com/bitnami/charts/issues/36019)
+
+## <small>22.0.21 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#36000) ([66c01c7](https://github.com/bitnami/charts/commit/66c01c770d6977fa1b84c95c1b7ab163f2d1c8dd)), closes [#36000](https://github.com/bitnami/charts/issues/36000)
+
+## <small>22.0.20 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35993) ([ddcbcf1](https://github.com/bitnami/charts/commit/ddcbcf1042bda79b8e67507b5fc967d4e4225aad)), closes [#35993](https://github.com/bitnami/charts/issues/35993)
+
+## <small>22.0.19 (2025-08-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35977) ([d10b2d4](https://github.com/bitnami/charts/commit/d10b2d4d28e6d9759a7c6a4bbb7bffaab8ddc177)), closes [#35977](https://github.com/bitnami/charts/issues/35977)
+
+## <small>22.0.18 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35967) ([6d8550e](https://github.com/bitnami/charts/commit/6d8550e7c9ef772f6b0aafdb16497ba0e84fb4b1)), closes [#35967](https://github.com/bitnami/charts/issues/35967)
+
+## <small>22.0.17 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35959) ([c7bd376](https://github.com/bitnami/charts/commit/c7bd376106059df40411c6b20c482000c56f2416)), closes [#35959](https://github.com/bitnami/charts/issues/35959)
+
+## <small>22.0.16 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35952) ([846a74b](https://github.com/bitnami/charts/commit/846a74bb2d722aa9983985d962d37bbffeb06a14)), closes [#35952](https://github.com/bitnami/charts/issues/35952)
+
+## <small>22.0.15 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35944) ([af98514](https://github.com/bitnami/charts/commit/af985145e6f6955e472a55681222429e2ef5d767)), closes [#35944](https://github.com/bitnami/charts/issues/35944)
+
+## <small>22.0.14 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35925) ([3c657fc](https://github.com/bitnami/charts/commit/3c657fcfea98667d3ee73957942a418151b62cd1)), closes [#35925](https://github.com/bitnami/charts/issues/35925)
+
+## <small>22.0.13 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35915) ([9693a9c](https://github.com/bitnami/charts/commit/9693a9cc9bd9af4416da683a24a950225b3ee9e7)), closes [#35915](https://github.com/bitnami/charts/issues/35915)
+
+## <small>22.0.12 (2025-08-14)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35899) ([33d985f](https://github.com/bitnami/charts/commit/33d985f5b17084b974fed8e408e83e4ae7e51d5e)), closes [#35899](https://github.com/bitnami/charts/issues/35899)
+
+## <small>22.0.11 (2025-08-07)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35603) ([be08b15](https://github.com/bitnami/charts/commit/be08b15a1c2e9dd01c8782a3ca3aa5dbde31493e)), closes [#35603](https://github.com/bitnami/charts/issues/35603)
+
+## <small>22.0.10 (2025-08-07)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35564) ([2e55a30](https://github.com/bitnami/charts/commit/2e55a301ac6df43f603868153cfd705bbb2f7413)), closes [#35564](https://github.com/bitnami/charts/issues/35564)
+
+## <small>22.0.9 (2025-08-07)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35551) ([908971b](https://github.com/bitnami/charts/commit/908971b85a9a60e363d574637f24a4d40d935a87)), closes [#35551](https://github.com/bitnami/charts/issues/35551)
+
+## <small>22.0.8 (2025-08-06)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35451) ([7c1f22d](https://github.com/bitnami/charts/commit/7c1f22d86c39559271353bec245706e5be36050e)), closes [#35451](https://github.com/bitnami/charts/issues/35451)
+
+## <small>22.0.7 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35417) ([b2d335b](https://github.com/bitnami/charts/commit/b2d335bb7f72886c94b3d956cea4c4a26a905737)), closes [#35417](https://github.com/bitnami/charts/issues/35417)
+
+## <small>22.0.6 (2025-07-26)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35305) ([0cedc0b](https://github.com/bitnami/charts/commit/0cedc0b79f915b7a740136cefa4539d0294461e1)), closes [#35305](https://github.com/bitnami/charts/issues/35305)
+* Add CVE-2025-41240 to upgrading notes and changelog ([fcfc031](https://github.com/bitnami/charts/commit/fcfc031f38bb74bdd43e559a271b7debf4f3a8c7))
+
+## <small>22.0.5 (2025-07-23)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35263) ([c61fc1d](https://github.com/bitnami/charts/commit/c61fc1de731cc1d40089a1bfc025f225f084989e)), closes [#35263](https://github.com/bitnami/charts/issues/35263)
+
+## <small>22.0.4 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/drupal] Update passwordFile secret mountPath (#35224) ([c0b69a8](https://github.com/bitnami/charts/commit/c0b69a83e15d6ae3ed1bf8edaafcd852eb2ee1d8)), closes [#35224](https://github.com/bitnami/charts/issues/35224)
+
+## <small>22.0.3 (2025-07-15)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#35076) ([d7f12ab](https://github.com/bitnami/charts/commit/d7f12ab976196f777375247662b49c4982b8dabe)), closes [#35076](https://github.com/bitnami/charts/issues/35076)
+
+## <small>22.0.2 (2025-07-08)</small>
+
+* [bitnami/drupal] :zap: :arrow_up: Update dependency references (#34864) ([2a1712d](https://github.com/bitnami/charts/commit/2a1712de992cd5c0e711c3bec5d29560ac46ea70)), closes [#34864](https://github.com/bitnami/charts/issues/34864)
 
 ## <small>22.0.1 (2025-06-26)</small>
 

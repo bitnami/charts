@@ -1,8 +1,28 @@
 # Changelog
 
-## 2.4.31 (2025-07-08)
+## 2.4.35 (2025-08-07)
 
-* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#34889](https://github.com/bitnami/charts/pull/34889))
+* [bitnami/flux] :zap: :arrow_up: Update dependency references ([#35606](https://github.com/bitnami/charts/pull/35606))
+
+## <small>2.4.34 (2025-08-07)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#35470) ([6195f63](https://github.com/bitnami/charts/commit/6195f631e48f4e896433dedf6db56054b2fb4b84)), closes [#35470](https://github.com/bitnami/charts/issues/35470)
+
+## <small>2.4.33 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#35376) ([7bc2221](https://github.com/bitnami/charts/commit/7bc2221ad2c65ba5268257bb5c0cf1746e400a02)), closes [#35376](https://github.com/bitnami/charts/issues/35376)
+
+## <small>2.4.32 (2025-07-15)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#35088) ([f9e9ec3](https://github.com/bitnami/charts/commit/f9e9ec30545673e97762c20066c75e8e4d53561a)), closes [#35088](https://github.com/bitnami/charts/issues/35088)
+
+## <small>2.4.31 (2025-07-08)</small>
+
+* [bitnami/flux] :zap: :arrow_up: Update dependency references (#34889) ([697f9c9](https://github.com/bitnami/charts/commit/697f9c9551f53bf8d2a19ddeb4cbf898b4152237)), closes [#34889](https://github.com/bitnami/charts/issues/34889)
 
 ## <small>2.4.30 (2025-07-08)</small>
 

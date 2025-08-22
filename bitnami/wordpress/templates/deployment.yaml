@@ -200,7 +200,7 @@ spec:
               value: {{ include "wordpress.databaseUser" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: WORDPRESS_DATABASE_PASSWORD_FILE
-              value: "/opt/bitnami/wordpress/secrets/mariadb-password"
+              value: "/secrets/mariadb-password"
             {{- else }}
             - name: WORDPRESS_DATABASE_PASSWORD
               valueFrom:
@@ -212,7 +212,7 @@ spec:
               value: {{ .Values.wordpressUsername | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: WORDPRESS_PASSWORD_FILE
-              value: "/opt/bitnami/wordpress/secrets/wordpress-password"
+              value: "/secrets/wordpress-password"
             {{- else }}
             - name: WORDPRESS_PASSWORD
               valueFrom:
@@ -272,7 +272,7 @@ spec:
             {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             {{- if .Values.usePasswordFiles }}
             - name: SMTP_PASSWORD_FILE
-              value: "/opt/bitnami/wordpress/secrets/smtp-password"
+              value: "/secrets/smtp-password"
             {{- else }}
             - name: SMTP_PASSWORD
               valueFrom:
@@ -372,7 +372,7 @@ spec:
               subPath: wordpress
             {{- if  .Values.usePasswordFiles }}
             - name: wordpress-secrets
-              mountPath: /opt/bitnami/wordpress/secrets
+              mountPath: /secrets
             {{- end }}
             {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
             - name: wordpress-config

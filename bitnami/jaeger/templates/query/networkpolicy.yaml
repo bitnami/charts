@@ -33,24 +33,6 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to other collector pods
-    - ports:
-        - port: {{ .Values.collector.containerPorts.binary }}
-        - port: {{ .Values.collector.containerPorts.zipkin }}
-        - port: {{ .Values.collector.containerPorts.grpc }}
-        - port: {{ .Values.collector.containerPorts.admin }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: collector
-    # Allow outbound connections to other query pods
-    - ports:
-        - port: {{ .Values.query.containerPorts.admin }}
-        - port: {{ .Values.query.containerPorts.ui }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: query
     # Allow outbound connections to Cassandra
     - ports:
         - port: {{ include "jaeger.cassandra.port" . | trimAll "\"" | int }}
@@ -67,8 +49,9 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.query.containerPorts.admin }}
-        - port: {{ .Values.query.containerPorts.ui }}
+        - port: {{ .Values.query.containerPorts.http }}
+        - port: {{ .Values.query.containerPorts.grpc }}
+        - port: {{ .Values.query.containerPorts.metrics }}
       {{- if not .Values.collector.networkPolicy.allowExternal }}
       from:
         - podSelector:

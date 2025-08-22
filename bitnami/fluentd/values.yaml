@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.18.0-debian-12-r21
+  tag: 1.19.0-debian-12-r1
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
@@ -100,6 +100,13 @@ image:
   ## Enable debug mode
   ##
   debug: false
+
+## /var/log readonly
+## @param varlog.readonly Set /var/log volume mount readOnly
+##
+varlog:
+  readonly: true
+
 ## Forwarder parameters
 ##
 forwarder:
@@ -382,6 +389,12 @@ forwarder:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## @param forwarder.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param forwarder.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -958,6 +971,12 @@ aggregator:
       ## @param aggregator.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
+    ## @param aggregator.service.ipFamilyPolicy Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).
+    ##
+    ipFamilyPolicy: ""
+    ## @param aggregator.service.ipFamilies A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".
+    ##
+    ipFamilies: []
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##

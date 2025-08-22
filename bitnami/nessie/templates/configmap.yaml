@@ -14,9 +14,10 @@ quarkus.management.port: {{ .Values.containerPorts.management }}
 nessie.version.store.type: "ROCKSDB"
 nessie.version.store.persist.rocks.database-path: {{ .Values.persistence.mountPath }}
 {{- else if eq .Values.versionStoreType "JDBC_POSTGRESQL" }}
-nessie.version.store.type: "JDBC"
-quarkus.datasource.jdbc.url: {{ include "nessie.database.url" . }}
-quarkus.datasource.username: {{ include "nessie.database.user" . }}
+nessie.version_store.type: "JDBC"
+nessie.version_store.persist.jdbc.datasource: "postgresql"
+quarkus.datasource.postgresql.jdbc.url: {{ include "nessie.database.url" . }}
+quarkus.datasource.postgresql.username: {{ include "nessie.database.user" . }}
 {{- else }}
 nessie.version.store.type: {{ .Values.versionStoreType }}
 {{- end }}

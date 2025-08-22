@@ -33,19 +33,11 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "cloudflare") (or .Values.cloudflare.apiToken .Values.cloudflare.apiKey) (not .Values.cloudflare.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "designate") (or .Values.designate.username .Values.designate.password) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "designate") (or .Values.designate.applicationCredentialId .Values.designate.applicationCredentialSecret) -}}
-    {{- true -}}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.apiToken (not .Values.digitalocean.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "exoscale") .Values.exoscale.apiKey (not .Values.exoscale.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.token (not .Values.hetzner.secretName) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "infoblox") (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "linode") .Values.linode.apiToken (not .Values.linode.secretName) -}}
     {{- true -}}
@@ -60,8 +52,6 @@ Return true if a secret object should be created
 {{- else if and (eq .Values.provider "ovh") .Values.ovh.consumerKey (not .Values.ovh.secretName) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "scaleway") .Values.scaleway.scwAccessKey (not .Values.scaleway.secretName) -}}
-    {{- true -}}
-{{- else if and (eq .Values.provider "vinyldns") (or .Values.vinyldns.secretKey .Values.vinyldns.accessKey) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
     {{- true -}}
@@ -78,9 +68,7 @@ Return true if a secret object should be created
 Return true if a configmap object should be created
 */}}
 {{- define "external-dns.createConfigMap" -}}
-{{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
-    {{- true -}}
-{{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
+{{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -106,8 +94,6 @@ Return the name of the Secret used to store the passwords
 {{- .Values.exoscale.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
-{{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName }}
-{{- .Values.hetzner.secretName }}
 {{- else if and (eq .Values.provider "linode") .Values.linode.secretName }}
 {{- .Values.linode.secretName }}
 {{- else if and (eq .Values.provider "oci") .Values.oci.secretName }}
@@ -116,8 +102,6 @@ Return the name of the Secret used to store the passwords
 {{- .Values.ovh.secretName }}
 {{- else if and (eq .Values.provider "pdns") .Values.pdns.secretName }}
 {{- .Values.pdns.secretName }}
-{{- else if and (eq .Values.provider "infoblox") .Values.infoblox.secretName }}
-{{- .Values.infoblox.secretName }}
 {{- else if and (eq .Values.provider "rfc2136") .Values.rfc2136.secretName }}
 {{- .Values.rfc2136.secretName }}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.secretName }}
@@ -230,8 +214,6 @@ Compile all warnings into a single message, and call fail if the validation is e
 {{- $messages := append $messages (include "external-dns.validateValues.akamai.clientToken" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.akamai.clientSecret" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.aws" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.infoblox.gridHost" .) -}}
-{{- $messages := append $messages (include "external-dns.validateValues.infoblox.wapiPassword" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.pdns.apiUrl" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.pdns.apiKey" .) -}}
 {{- $messages := append $messages (include "external-dns.validateValues.azure.resourceGroupWithoutTenantId" .) -}}
@@ -361,31 +343,6 @@ external-dns: aws.assumeRoleArn
 
 {{/*
 Validate values of External DNS:
-- must provide the Grid Manager host when provider is "infoblox"
-*/}}
-{{- define "external-dns.validateValues.infoblox.gridHost" -}}
-{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.gridHost) -}}
-external-dns: infoblox.gridHost
-    You must provide the Grid Manager host when provider="infoblox".
-    Please set the gridHost parameter (--set infoblox.gridHost="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of External DNS:
-- must provide a WAPI password when provider is "infoblox"
-*/}}
-{{- define "external-dns.validateValues.infoblox.wapiPassword" -}}
-{{- if and (eq .Values.provider "infoblox") (not .Values.infoblox.wapiPassword) (not .Values.infoblox.secretName) -}}
-external-dns: infoblox.wapiPassword
-    You must provide a WAPI password when provider="infoblox".
-    Please set the wapiPassword parameter (--set infoblox.wapiPassword="xxxx")
-    or you can provide an existing secret name via infoblox.secretName
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of External DNS:
 - must provide the PowerDNS API URL when provider is "pdns"
 */}}
 {{- define "external-dns.validateValues.pdns.apiUrl" -}}
@@ -410,10 +367,7 @@ external-dns: pdns.apiKey
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "external-dns.checkRollingTags" -}}
-{{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
-WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html
-{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
 {{- end -}}
 
 {{/*
@@ -630,19 +584,6 @@ Validate values of TransIP DNS:
 external-dns: transip.account
     You must provide the TransIP account name when provider="transip".
     Please set the account parameter (--set transip.account="xxxx")
-{{- end -}}
-{{- end -}}
-
-{{/*
-Validate values of External DNS:
-- must provide an API token when provider is "hetzner"
-*/}}
-{{- define "external-dns.validateValues.hetzner" -}}
-{{- if and (eq .Values.provider "hetzner") (or (not .Values.hetzner.token) (not .Values.hetzner.secretName)) -}}
-external-dns: hetzner.token
-    You must provide the a Hetzner API Token when provider="hetzner".
-    Please set the token parameter (--set hetzner.token="xxxx")
-    or specify a secret that contains an API token. (--set hetzner.secretName="xxxx")
 {{- end -}}
 {{- end -}}
 

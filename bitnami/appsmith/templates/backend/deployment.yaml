@@ -147,11 +147,11 @@ spec:
               value: {{ .Values.backend.adminEmail | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: APPSMITH_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.password.secretKey" .) }}
+              value: {{ printf "/secrets/%s" (include "appsmith.backend.password.secretKey" .) }}
             - name: APPSMITH_ENCRYPTION_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.encryptionPassword.secretKey" .) }}
+              value: {{ printf "/secrets/%s" (include "appsmith.backend.encryptionPassword.secretKey" .) }}
             - name: APPSMITH_ENCRYPTION_SALT_FILE
-              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.backend.encryptionSalt.secretKey" .) }}
+              value: {{ printf "/secrets/%s" (include "appsmith.backend.encryptionSalt.secretKey" .) }}
             {{- else }}
             - name: APPSMITH_PASSWORD
               valueFrom:
@@ -175,7 +175,7 @@ spec:
               value: {{ include "appsmith.mongodb.port" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: APPSMITH_DATABASE_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
+              value: {{ printf "/secrets/%s" (include "appsmith.mongodb.secretKey" .) }}
             {{- else }}
             - name: APPSMITH_DATABASE_PASSWORD
               valueFrom:
@@ -195,7 +195,7 @@ spec:
               value: {{ include "appsmith.redis.port" . | quote }}
             {{- if .Values.usePasswordFiles }}
             - name: APPSMITH_REDIS_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/appsmith/secrets/%s" (include "appsmith.redis.secretKey" .) }}
+              value: {{ printf "/secrets/%s" (include "appsmith.redis.secretKey" .) }}
             {{- else }}
             - name: APPSMITH_REDIS_PASSWORD
               valueFrom:
@@ -284,7 +284,7 @@ spec:
               subPath: tmp-dir
             {{- if .Values.usePasswordFiles }}
             - name: appsmith-secrets
-              mountPath: /opt/bitnami/appsmith/secrets
+              mountPath: /secrets
             {{- end }}
             - name: data
               mountPath: {{ .Values.backend.persistence.mountPath }}

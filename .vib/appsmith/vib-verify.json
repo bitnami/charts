@@ -64,7 +64,7 @@
             "app_protocol": "HTTP",
             "env": {
               "email": "user@example.com",
-              "password": "bitnami!1234"
+              "password": "bitnami!1234567"
             }
           }
         },

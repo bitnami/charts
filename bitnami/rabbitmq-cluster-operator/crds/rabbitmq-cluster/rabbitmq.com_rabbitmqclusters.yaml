@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/cluster-operator/v{version}/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml
-# Version: 2.15.0
+# Version: 2.16.1
 # RabbitMQ Cluster Operator
 #
 # Copyright 2020 VMware, Inc. All Rights Reserved.

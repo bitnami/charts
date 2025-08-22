@@ -1,8 +1,44 @@
 # Changelog
 
+## 17.3.1 (2025-08-13)
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35837](https://github.com/bitnami/charts/pull/35837))
+
+## 17.3.0 (2025-08-13)
+
+* [bitnami/thanos] Add hpa behavior (#35753) ([3f96f2e](https://github.com/bitnami/charts/commit/3f96f2e5ffcb34e08ec6cdeb9e5b5141722a76d8)), closes [#35753](https://github.com/bitnami/charts/issues/35753)
+
+## <small>17.2.6 (2025-08-08)</small>
+
+* [bitnami/thanos]: correct labelSelector with shard key for storegateway affinity (#35440) ([fd5ce7a](https://github.com/bitnami/charts/commit/fd5ce7a7568e423e1659946aa4e2febaf67044a8)), closes [#35440](https://github.com/bitnami/charts/issues/35440)
+
+## <small>17.2.5 (2025-08-07)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35635) ([3356744](https://github.com/bitnami/charts/commit/3356744640e3af8a7d3db823f15ce442e157abeb)), closes [#35635](https://github.com/bitnami/charts/issues/35635)
+
+## <small>17.2.4 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35533) ([9c6effd](https://github.com/bitnami/charts/commit/9c6effd63b2073ef38cf8e2a82729f07a2b01d8c)), closes [#35533](https://github.com/bitnami/charts/issues/35533)
+
+## <small>17.2.3 (2025-07-23)</small>
+
+* [bitnami/thanos] Fix commonLabels on sharded storegateway (#35238) ([c72feda](https://github.com/bitnami/charts/commit/c72feda3e1ee6850375c93657af2c81f9cd9bddf)), closes [#35238](https://github.com/bitnami/charts/issues/35238)
+
+## <small>17.2.2 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35226) ([efbbe03](https://github.com/bitnami/charts/commit/efbbe03289f99a78de4ac4c8eeb66d64d4b79bcd)), closes [#35226](https://github.com/bitnami/charts/issues/35226)
+
+## <small>17.2.1 (2025-07-15)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35131) ([b84a27d](https://github.com/bitnami/charts/commit/b84a27db4a60d92308cf7d61122f6cebeeff75ab)), closes [#35131](https://github.com/bitnami/charts/issues/35131)
+
 ## 17.2.0 (2025-07-09)
 
-* [bitnami/thanos] addition of parameter to configure statefulset annotations ([#33988](https://github.com/bitnami/charts/pull/33988))
+* [bitnami/thanos] addition of parameter to configure statefulset annotations (#33988) ([4232306](https://github.com/bitnami/charts/commit/42323062d64cb6f071615e93c0bc8e0542425c20)), closes [#33988](https://github.com/bitnami/charts/issues/33988) [#34825](https://github.com/bitnami/charts/issues/34825)
 
 ## 17.1.0 (2025-07-09)
 

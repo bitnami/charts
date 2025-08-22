@@ -18,6 +18,17 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 
 Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
 
+## ⚠️ Important Notice: Upcoming changes to the Bitnami Catalog
+
+Beginning August 28th, 2025, Bitnami will evolve its public catalog to offer a curated set of hardened, security-focused images under the new [Bitnami Secure Images initiative](https://news.broadcom.com/app-dev/broadcom-introduces-bitnami-secure-images-for-production-ready-containerized-applications). As part of this transition:
+
+- Granting community users access for the first time to security-optimized versions of popular container images.
+- Bitnami will begin deprecating support for non-hardened, Debian-based software images in its free tier and will gradually remove non-latest tags from the public catalog. As a result, community users will have access to a reduced number of hardened images. These images are published only under the “latest” tag and are intended for development purposes
+- Starting August 28th, over two weeks, all existing container images, including older or versioned tags (e.g., 2.50.0, 10.6), will be migrated from the public catalog (docker.io/bitnami) to the “Bitnami Legacy” repository (docker.io/bitnamilegacy), where they will no longer receive updates.
+- For production workloads and long-term support, users are encouraged to adopt Bitnami Secure Images, which include hardened containers, smaller attack surfaces, CVE transparency (via VEX/KEV), SBOMs, and enterprise support.
+
+These changes aim to improve the security posture of all Bitnami users by promoting best practices for software supply chain integrity and up-to-date deployments. For more details, visit the [Bitnami Secure Images announcement](https://github.com/bitnami/containers/issues/83267).
+
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
@@ -125,6 +136,80 @@ serverBlock: |-
 > Warning: The above example is not compatible with enabling Prometheus metrics since it affects the `/status` endpoint.
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
+
+### Adding custom configuration by context
+
+The NGINX chart supports context-based configuration includes, allowing you to add custom directives to specific NGINX contexts. You can provide configuration for three contexts:
+
+- **Main context**: For global directives like module loading and worker processes
+- **Events context**: For event-related directives
+- **HTTP context**: For HTTP-related directives
+
+#### Inline Context Configuration
+
+You can provide inline configuration using the `contextIncludes` values:
+
+```yaml
+contextIncludes:
+  main: |
+    # Load additional modules
+    load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+
+    # Set worker processes
+    worker_processes auto;
+
+  events: |
+    # Increase worker connections
+    worker_connections 2048;
+
+    # Use epoll for better performance
+    use epoll;
+
+  http: |
+    # Enable gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_types text/plain application/json text/css;
+
+    # Security headers
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+```
+
+#### External ConfigMaps for Context Configuration
+
+You can also reference external ConfigMaps for each context using lists:
+
+```yaml
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+  - "nginx-main-directives"
+
+existingContextEventsConfigmaps:
+  - "nginx-events-tuning"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-headers"
+  - "nginx-compression-config"
+```
+
+#### Mixed Configuration
+
+You can combine inline configuration with external ConfigMaps:
+
+```yaml
+contextIncludes:
+  main: |
+    worker_processes auto;
+
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-config"
+```
+
+All configuration files are mounted to the appropriate directories (`/opt/bitnami/nginx/conf/context.d/{main,events,http}/`) and included using wildcards in the nginx.conf.
 
 ### Adding extra environment variables
 
@@ -330,6 +415,12 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `streamServerBlock`                              | Custom stream server block to be added to NGINX configuration                                                                                                                                                                                                                   | `""`                  |
 | `existingServerBlockConfigmap`                   | ConfigMap with custom server block to be added to NGINX configuration                                                                                                                                                                                                           | `""`                  |
 | `existingStreamServerBlockConfigmap`             | ConfigMap with custom stream server block to be added to NGINX configuration                                                                                                                                                                                                    | `""`                  |
+| `contextIncludes.main`                           | Custom configuration for the main context                                                                                                                                                                                                                                       | `""`                  |
+| `contextIncludes.events`                         | Custom configuration for the events context                                                                                                                                                                                                                                     | `""`                  |
+| `contextIncludes.http`                           | Custom configuration for the http context                                                                                                                                                                                                                                       | `""`                  |
+| `existingContextMainConfigmaps`                  | List of existing ConfigMaps with custom main context configuration                                                                                                                                                                                                              | `[]`                  |
+| `existingContextEventsConfigmaps`                | List of existing ConfigMaps with custom events context configuration                                                                                                                                                                                                            | `[]`                  |
+| `existingContextHttpConfigmaps`                  | List of existing ConfigMaps with custom http context configuration                                                                                                                                                                                                              | `[]`                  |
 | `staticSiteConfigmap`                            | Name of existing ConfigMap with the server static site content                                                                                                                                                                                                                  | `""`                  |
 | `staticSitePVC`                                  | Name of existing PVC with the server static site content                                                                                                                                                                                                                        | `""`                  |
 

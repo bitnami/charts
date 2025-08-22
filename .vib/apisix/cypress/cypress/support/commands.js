@@ -19,12 +19,11 @@ for (const command of ['click']) {
 
 Cypress.Commands.add(
   'login',
-  (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/');
-    cy.get('[id$="username"]').should('be.enabled').type(username);
-    cy.get('[type="password"]').should('be.enabled').type(password);
-    cy.contains('button', 'Login').click();
-    cy.contains('Upstream').should('be.visible');
+  (token = Cypress.env('token')) => {
+    cy.visit('/ui/');
+    cy.get('label').contains('Admin Key');
+    cy.get('input').should('be.enabled').type(token);
+    cy.visit('/ui/');
   }
 );
 

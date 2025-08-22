@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanaalertrulegroups.yaml
-# Version: 5.18.0
+# Version: 5.19.4
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.3
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: grafanaalertrulegroups.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
@@ -67,11 +67,17 @@ spec:
               folderRef:
                 description: Match GrafanaFolders CRs to infer the uid
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               folderUID:
                 description: |-
                   UID of the folder containing this rule group
                   Overrides the FolderSelector
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               instanceSelector:
                 description: Selects Grafana instances for import
                 properties:
@@ -189,15 +195,25 @@ spec:
                       - KeepLast
                       type: string
                     for:
+                      default: 0s
                       format: duration
                       pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
                       type: string
                     isPaused:
                       type: boolean
+                    keepFiringFor:
+                      format: duration
+                      pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
+                      type: string
                     labels:
                       additionalProperties:
                         type: string
                       type: object
+                    missingSeriesEvalsToResolve:
+                      description: The number of missing series evaluations that must
+                        occur before the rule is considered to be resolved.
+                      format: int64
+                      type: integer
                     noDataState:
                       enum:
                       - Alerting
@@ -257,19 +273,31 @@ spec:
                   - title
                   - uid
                   type: object
+                minItems: 1
                 type: array
+              suspend:
+                description: Suspend pauses synchronizing attempts and tells the operator
+                  to ignore changes
+                type: boolean
             required:
             - instanceSelector
             - interval
             - rules
             type: object
             x-kubernetes-validations:
-            - message: Only one of FolderUID or FolderRef can be set
+            - message: Only one of FolderUID or FolderRef can be set and one must
+                be defined
               rule: (has(self.folderUID) && !(has(self.folderRef))) || (has(self.folderRef)
                 && !(has(self.folderUID)))
             - message: spec.editable is immutable
               rule: ((!has(oldSelf.editable) && !has(self.editable)) || (has(oldSelf.editable)
                 && has(self.editable)))
+            - message: spec.folderUID is immutable
+              rule: ((!has(oldSelf.folderUID) && !has(self.folderUID)) || (has(oldSelf.folderUID)
+                && has(self.folderUID)))
+            - message: spec.folderRef is immutable
+              rule: ((!has(oldSelf.folderRef) && !has(self.folderRef)) || (has(oldSelf.folderRef)
+                && has(self.folderRef)))
             - message: disabling spec.allowCrossNamespaceImport requires a recreate
                 to ensure desired state
               rule: '!oldSelf.allowCrossNamespaceImport || (oldSelf.allowCrossNamespaceImport

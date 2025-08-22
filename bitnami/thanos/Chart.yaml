@@ -11,7 +11,7 @@ annotations:
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 0.39.1
+appVersion: 0.39.2
 dependencies:
 - condition: minio.enabled
   name: minio
@@ -38,4 +38,4 @@ maintainers:
 name: thanos
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/thanos
-version: 17.2.0
+version: 17.3.1

@@ -1,8 +1,32 @@
 # Changelog
 
-## 8.1.11 (2025-07-11)
+## 8.1.16 (2025-08-07)
 
-* [bitnami/sonarqube] Substitute SONAR_CE_JAVAADDITIONALOPTS by SONARQUBE_CE_JAVA_ADD_OPTS ([#34665](https://github.com/bitnami/charts/pull/34665))
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references ([#35678](https://github.com/bitnami/charts/pull/35678))
+
+## <small>8.1.15 (2025-08-07)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#35656) ([92bcf00](https://github.com/bitnami/charts/commit/92bcf00662620ce16a968480cbd3bb690ccae667)), closes [#35656](https://github.com/bitnami/charts/issues/35656)
+
+## <small>8.1.14 (2025-08-07)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#35573) ([d9cc053](https://github.com/bitnami/charts/commit/d9cc053b4904c2587f64a5d28024ceaec59460bb)), closes [#35573](https://github.com/bitnami/charts/issues/35573)
+
+## <small>8.1.13 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#35401) ([2c8f25c](https://github.com/bitnami/charts/commit/2c8f25c37feaa8514f58d9c8f00f59f6468dfe34)), closes [#35401](https://github.com/bitnami/charts/issues/35401)
+
+## <small>8.1.12 (2025-07-15)</small>
+
+* [bitnami/sonarqube] :zap: :arrow_up: Update dependency references (#35126) ([9411e04](https://github.com/bitnami/charts/commit/9411e045459b4a4fafb18ec18e2db5d32947c2ca)), closes [#35126](https://github.com/bitnami/charts/issues/35126)
+
+## <small>8.1.11 (2025-07-11)</small>
+
+* [bitnami/sonarqube] Substitute SONAR_CE_JAVAADDITIONALOPTS by SONARQUBE_CE_JAVA_ADD_OPTS (#34665) ([147a875](https://github.com/bitnami/charts/commit/147a875b8cd5fa676903532b4eb3d03d9e22b013)), closes [#34665](https://github.com/bitnami/charts/issues/34665)
 
 ## <small>8.1.10 (2025-07-10)</small>
 

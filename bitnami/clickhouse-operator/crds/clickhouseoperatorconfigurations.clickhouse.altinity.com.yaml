@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/Altinity/clickhouse-operator/refs/heads/{version}/deploy/helm/clickhouse-operator/crds/CustomResourceDefinition-clickhouseoperatorconfigurations.clickhouse.altinity.com.yaml
-# Version: 0.25.1
+# Version: 0.25.3
 # Template Parameters:
 #
 # NONE
@@ -9,7 +9,7 @@ kind: CustomResourceDefinition
 metadata:
   name: clickhouseoperatorconfigurations.clickhouse.altinity.com
   labels:
-    clickhouse.altinity.com/chop: 0.25.1
+    clickhouse.altinity.com/chop: 0.25.3
 spec:
   group: clickhouse.altinity.com
   scope: Namespaced

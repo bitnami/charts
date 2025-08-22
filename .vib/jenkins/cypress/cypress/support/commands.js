@@ -24,6 +24,6 @@ Cypress.Commands.add(
     cy.get('#j_username').type(username);
     cy.get('#j_password').type(password);
     cy.get('[name=Submit]').click();
-    cy.get('#jenkins-home-link').should('be.visible');
+    cy.get('a[href*="/manage"]').should('be.visible');
   }
 );

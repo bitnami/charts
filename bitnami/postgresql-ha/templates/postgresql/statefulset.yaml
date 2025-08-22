@@ -416,25 +416,15 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - bash
-                - -ec
-                - 'ps waux | grep "data standby clone" | grep -v grep || {{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
+                - /liveness-probe.sh
           {{- end }}
           {{- if .Values.postgresql.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.postgresql.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-            {{- if .Values.postgresql.headlessWithNotReadyAddresses }}
               command:
                 - /readiness-probe.sh
-                - {{ add .Values.pgpool.livenessProbe.periodSeconds .Values.pgpool.livenessProbe.timeoutSeconds | quote }}
-            {{- else }}
-              command:
-                - bash
-                - -ec
-                {{- include "postgresql-ha.readinessProbeCommand" (dict "component" "postgresql" "context" $) | nindent 16 }}
-            {{- end }}
           {{- end }}
           {{- if .Values.postgresql.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customStartupProbe "context" $) | nindent 12 }}
@@ -509,10 +499,13 @@ spec:
             {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            - name: hooks-scripts
+            - name: scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
-            - name: hooks-scripts
+            - name: scripts
+              mountPath: /liveness-probe.sh
+              subPath: liveness-probe.sh
+            - name: scripts
               mountPath: /readiness-probe.sh
               subPath: readiness-probe.sh
             {{- if .Values.postgresql.extraVolumeMounts }}
@@ -628,9 +621,9 @@ spec:
           configMap:
             name: {{ include "postgresql.metricsCM" . }}
         {{- end }}
-        - name: hooks-scripts
+        - name: scripts
           configMap:
-            name: {{ printf "%s-hooks-scripts" (include "postgresql-ha.postgresql" .) }}
+            name: {{ printf "%s-scripts" (include "postgresql-ha.postgresql" .) }}
             defaultMode: 0755
         {{- if or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
         - name: postgresql-config

@@ -90,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.6.2-debian-12-r0
+  tag: 3.6.4-debian-12-r3
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -674,7 +674,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r47
+    tag: 12-debian-12-r50
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -1110,6 +1110,9 @@ preUpgradeJob:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## etcd "pre-upgrade" job's optional delay
+  ## @param preUpgradeJob.startDelay Optional delay before starting the pre-upgrade hook (in seconds).
+  startDelay: ""
 
 ## @section Defragmentation parameters
 ##

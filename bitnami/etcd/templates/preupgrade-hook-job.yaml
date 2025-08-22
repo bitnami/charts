@@ -125,6 +125,10 @@ spec:
               value: "--insecure-skip-tls-verify"
             {{- end }}
             {{- end }}
+            {{- if .Values.preUpgradeJob.startDelay }}
+            - name: ETCD_PREUPGRADE_START_DELAY
+              value: {{ .Values.preUpgradeJob.startDelay | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

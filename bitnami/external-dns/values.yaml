@@ -75,7 +75,7 @@ kubeVersion: ""
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.18.0-debian-12-r1
+  tag: 0.18.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -118,7 +118,7 @@ sources:
   # - contour-httpproxy
 ## @param provider DNS provider where the DNS records will be created.
 ## Available providers are:
-## - akamai, alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip, oci
+## - akamai, alibabacloud, aws, azure, azure-private-dns, civo, cloudflare, coredns, digitalocean, exoscale, google, linode, ns1, oci, ovh, pdns, pihole, rfc2136, scaleway, transip
 ##
 provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
@@ -414,52 +414,6 @@ coredns:
     ## Will be used by external-dns to authenticate against etcd
     ##
     keyFilename: "key.pem"
-## OpenStack Designate provider configuration to be set via arguments/env. variables
-##
-designate:
-  ## Set Openstack environment variables (optional). Username and password will be saved in a kubernetes secret
-  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument
-  ## @param designate.username When using the Designate provider, specify the OpenStack authentication username. (optional)
-  ## @param designate.password When using the Designate provider, specify the OpenStack authentication password. (optional)
-  ## @param designate.applicationCredentialId When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.username`. (optional)
-  ## @param designate.applicationCredentialSecret When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.password`. (optional)
-  ## @param designate.authUrl When using the Designate provider, specify the OpenStack authentication Url. (optional)
-  ## @param designate.regionName When using the Designate provider, specify the OpenStack region name. (optional)
-  ## @param designate.userDomainName When using the Designate provider, specify the OpenStack user domain name. (optional)
-  ## @param designate.projectName When using the Designate provider, specify the OpenStack project name. (optional)
-  ## @param designate.authType When using the Designate provider, specify the OpenStack auth type. (optional)
-  ## e.g:
-  ##   username: "someuser"
-  ##   password: "p@55w0rd"
-  ##   authUrl: "https://mykeystone.example.net:5000/v3/"
-  ##   regionName: "dev"
-  ##   userDomainName: "development"
-  ##   projectName: "myteamname"
-  ##
-  username: ""
-  password: ""
-  applicationCredentialId: ""
-  applicationCredentialSecret: ""
-  authUrl: ""
-  regionName: ""
-  userDomainName: ""
-  projectName: ""
-  authType: ""
-  ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
-  ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
-  ##
-  customCAHostPath: ""
-  ## Use a custom CA (optional)
-  ## @param designate.customCA.enabled When using the Designate provider, enable a custom CA (optional)
-  ## @param designate.customCA.content When using the Designate provider, set the content of the custom CA
-  ## @param designate.customCA.mountPath When using the Designate provider, set the mountPath in which to mount the custom CA configuration
-  ## @param designate.customCA.filename When using the Designate provider, set the custom CA configuration filename
-  ##
-  customCA:
-    enabled: false
-    content: ""
-    mountPath: "/config/designate"
-    filename: "designate-ca.pem"
 ## Exoscale configuration to be set via arguments/env. variables
 ##
 exoscale:
@@ -506,68 +460,6 @@ google:
   ## @param google.zoneVisibility When using the Google provider, fiter for zones of a specific visibility (private or public)
   ##
   zoneVisibility: ""
-## Hetzner configuration to be set via arguments/env. variables
-##
-hetzner:
-  ## @param hetzner.token When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.)
-  ## Mutually exclusive with `hetzner.secretName`.
-  ##
-  token: ""
-  ## @param hetzner.secretName When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)
-  ##
-  secretName: ""
-  ## @param hetzner.secretKey When using the Hetzner provider with an existing secret, specify the key name (optional)
-  ##
-  secretKey: "hetzner_token"
-## Infoblox configuration to be set via arguments/env. variables
-##
-infoblox:
-  ## @param infoblox.wapiUsername When using the Infoblox provider, specify the Infoblox WAPI username
-  ##
-  wapiUsername: "admin"
-  ## @param infoblox.wapiPassword When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)
-  ##
-  wapiPassword: ""
-  ## @param infoblox.gridHost When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)
-  ##
-  gridHost: ""
-  ## @param infoblox.view Infoblox view
-  ##
-  view: ""
-  ## Optional keys
-  ##
-  ## @param infoblox.secretName Existing secret name, when in place wapiUsername and wapiPassword are not required
-  ##
-  secretName: ""
-  ##
-  ## @param infoblox.domainFilter When using the Infoblox provider, specify the domain (optional)
-  ##
-  domainFilter: ""
-  ##
-  ## @param infoblox.nameRegex When using the Infoblox provider, specify the name regex filter (optional)
-  ##
-  nameRegex: ""
-  ## @param infoblox.noSslVerify When using the Infoblox provider, disable SSL verification (optional)
-  ##
-  noSslVerify: false
-  ## @param infoblox.wapiPort When using the Infoblox provider, specify the Infoblox WAPI port (optional)
-  ##
-  wapiPort: ""
-  ## @param infoblox.wapiVersion When using the Infoblox provider, specify the Infoblox WAPI version (optional)
-  ##
-  wapiVersion: ""
-  ## @param infoblox.wapiConnectionPoolSize When using the Infoblox provider, specify the Infoblox WAPI request connection pool size (optional)
-  ##
-  wapiConnectionPoolSize: ""
-  ## @param infoblox.wapiHttpTimeout When using the Infoblox provider, specify the Infoblox WAPI request timeout in seconds (optional)
-  ##
-  wapiHttpTimeout: ""
-  ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
-  ##
-  maxResults: ""
-  ## @param infoblox.createPtr When using the Infoblox provider, specify the Infoblox create PTR flag (optional)
-  ##
-  createPtr: false
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
@@ -757,18 +649,6 @@ transip:
   ## @param transip.apiKey When using the TransIP provider, specify the API key to use.
   ##
   apiKey: ""
-## VinylDNS configuration to be set via arguments/env. variables
-##
-vinyldns:
-  ## @param vinyldns.host When using the VinylDNS provider, specify the VinylDNS API host.
-  ##
-  host: ""
-  ## @param vinyldns.accessKey When using the VinylDNS provider, specify the Access Key to use.
-  ##
-  accessKey: ""
-  ## @param vinyldns.secretKey When using the VinylDNS provider, specify the Secret key to use.
-  ##
-  secretKey: ""
 ## @param domainFilters Limit possible target zones by domain suffixes (optional)
 ##
 domainFilters: []

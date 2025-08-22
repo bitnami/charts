@@ -98,7 +98,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.5.14-debian-12-r1
+    tag: 2.6.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -199,33 +199,13 @@ milvus:
       saslPassword: {{ print "{{ MILVUS_KAFKA_PASSWORD }}" | quote }}
       {{- end }}
 
-    # Data coordinator
-    dataCoord:
-      address: {{ include "milvus.data-coordinator.fullname" . }}
-      port: {{ .Values.dataCoord.service.ports.grpc }}
-
-    # Root coordinator
-    rootCoord:
-      address: {{ include "milvus.root-coordinator.fullname" . }}
-      port: {{ .Values.rootCoord.service.ports.grpc }}
-
-    # Index coordinator
-    indexCoord:
-      address: {{ include "milvus.index-coordinator.fullname" . }}
-      port: {{ .Values.indexCoord.service.ports.grpc }}
-
-    # Query coordinator
-    queryCoord:
-      address: {{ include "milvus.query-coordinator.fullname" . }}
-      port: {{ .Values.queryCoord.service.ports.grpc }}
-
     # Data node
     dataNode:
       port: {{ .Values.dataNode.service.ports.grpc }}
 
-    # Index node
-    indexNode:
-      port: {{ .Values.indexNode.service.ports.grpc }}
+    # Streaming node
+    streamingNode:
+      port: {{ .Values.streamingNode.service.ports.grpc }}
 
     # Query node
     queryNode:
@@ -246,7 +226,7 @@ milvus:
 
     # Common configuration
     common:
-      storageType: minio
+      storageType: remote
       security:
         authorizationEnabled: {{ .Values.milvus.auth.enabled }}
         {{- if .Values.milvus.auth.enabled }}
@@ -259,7 +239,7 @@ milvus:
   ## @param milvus.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
-  ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
 initJob:
@@ -278,7 +258,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.5.12-debian-12-r0
+    tag: 2.6.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -399,7 +379,7 @@ initJob:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
+  ## Configure extra options for init job containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param initJob.livenessProbe.enabled Enable livenessProbe on init job
   ## @param initJob.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
@@ -429,7 +409,7 @@ initJob:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param initJob.startupProbe.enabled Enable startupProbe on Data Coordinator containers
+  ## @param initJob.startupProbe.enabled Enable startupProbe on init job
   ## @param initJob.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
   ## @param initJob.startupProbe.periodSeconds Period seconds for startupProbe
   ## @param initJob.startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -523,63 +503,59 @@ initJob:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-## @section Data Coordinator Deployment Parameters
+## @section Coordinator Deployment Parameters
 ##
-dataCoord:
-  ## @param dataCoord.enabled Enable Data Coordinator deployment
+coordinator:
+  ## @param coordinator.enabled Enable Coordinator deployment
   ##
   enabled: true
-  ## @param dataCoord.extraEnvVars Array with extra environment variables to add to data coordinator nodes
+  ## @param coordinator.extraEnvVars Array with extra environment variables to add to coordinator nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param dataCoord.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data coordinator nodes
+  ## @param coordinator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for coordinator nodes
   ##
   extraEnvVarsCM: ""
-  ## @param dataCoord.extraEnvVarsSecret Name of existing Secret containing extra env vars for data coordinator nodes
+  ## @param coordinator.extraEnvVarsSecret Name of existing Secret containing extra env vars for coordinator nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param dataCoord.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
+  ## @param coordinator.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
   ##
   defaultConfig: |
-    # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
-    dataCoord:
-      port: {{ .Values.dataCoord.containerPorts.grpc }}
+    mixCoord:
       enableActiveStandby: true
-  ## @param dataCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
+  ## @param coordinator.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
-  ## @param dataCoord.extraConfig Override configuration
+  ## @param coordinator.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param dataCoord.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param coordinator.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
-  ## @param dataCoord.command Override default container command (useful when using custom images)
+  ## @param coordinator.command Override default container command (useful when using custom images)
   ##
   command: []
-  ## @param dataCoord.args Override default container args (useful when using custom images)
+  ## @param coordinator.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param dataCoord.replicaCount Number of Data Coordinator replicas to deploy
+  ## @param coordinator.replicaCount Number of Coordinator replicas to deploy
   ##
   replicaCount: 1
-  ## @param dataCoord.containerPorts.grpc GRPC port for Data Coordinator
-  ## @param dataCoord.containerPorts.metrics Metrics port for Data Coordinator
+  ## @param coordinator.containerPorts.metrics Metrics port for Coordinator
   containerPorts:
-    grpc: 19530
     metrics: 9091
-  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
+  ## Configure extra options for Coordinator containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param dataCoord.livenessProbe.enabled Enable livenessProbe on Data Coordinator nodes
-  ## @param dataCoord.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param dataCoord.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param dataCoord.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param dataCoord.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param dataCoord.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param coordinator.livenessProbe.enabled Enable livenessProbe on Coordinator nodes
+  ## @param coordinator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param coordinator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param coordinator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param coordinator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param coordinator.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -588,12 +564,12 @@ dataCoord:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dataCoord.readinessProbe.enabled Enable readinessProbe on Data Coordinator nodes
-  ## @param dataCoord.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param dataCoord.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param dataCoord.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param dataCoord.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param dataCoord.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param coordinator.readinessProbe.enabled Enable readinessProbe on Coordinator nodes
+  ## @param coordinator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param coordinator.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param coordinator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param coordinator.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param coordinator.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: true
@@ -602,12 +578,12 @@ dataCoord:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dataCoord.startupProbe.enabled Enable startupProbe on Data Coordinator containers
-  ## @param dataCoord.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param dataCoord.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param dataCoord.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param dataCoord.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param dataCoord.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param coordinator.startupProbe.enabled Enable startupProbe on Coordinator containers
+  ## @param coordinator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param coordinator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param coordinator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param coordinator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param coordinator.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -616,22 +592,22 @@ dataCoord:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param dataCoord.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param coordinator.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param dataCoord.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param coordinator.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param dataCoord.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param coordinator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## data coordinator resource requests and limits
+  ## coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dataCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataCoord.resources is set (dataCoord.resources is recommended for production).
+  ## @param coordinator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if coordinator.resources is set (coordinator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "micro"
-  ## @param dataCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param coordinator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
   ##   requests:
@@ -644,11 +620,11 @@ dataCoord:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dataCoord.podSecurityContext.enabled Enabled Data Coordinator pods' Security Context
-  ## @param dataCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param dataCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param dataCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param dataCoord.podSecurityContext.fsGroup Set Data Coordinator pod's Security Context fsGroup
+  ## @param coordinator.podSecurityContext.enabled Enabled Coordinator pods' Security Context
+  ## @param coordinator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param coordinator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param coordinator.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param coordinator.podSecurityContext.fsGroup Set Coordinator pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -658,16 +634,16 @@ dataCoord:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dataCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param dataCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param dataCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param dataCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param dataCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param dataCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param coordinator.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param coordinator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param coordinator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param coordinator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param coordinator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param coordinator.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param coordinator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param coordinator.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param coordinator.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param coordinator.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -682,91 +658,91 @@ dataCoord:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param dataCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
+  ## @param coordinator.lifecycleHooks for the coordinator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param dataCoord.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## @param coordinator.runtimeClassName Name of the runtime class to be used by pod(s)
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
-  ## @param dataCoord.automountServiceAccountToken Mount Service Account token in pod
+  ## @param coordinator.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param dataCoord.hostAliases data coordinator pods host aliases
+  ## @param coordinator.hostAliases coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param dataCoord.podLabels Extra labels for data coordinator pods
+  ## @param coordinator.podLabels Extra labels for coordinator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param dataCoord.podAnnotations Annotations for data coordinator pods
+  ## @param coordinator.podAnnotations Annotations for coordinator pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param dataCoord.podAffinityPreset Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param coordinator.podAffinityPreset Pod affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param dataCoord.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param coordinator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Node data coordinator.affinity preset
+  ## Node coordinator.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param dataCoord.nodeAffinityPreset.type Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param coordinator.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinator.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param dataCoord.nodeAffinityPreset.key Node label key to match. Ignored if `data coordinator.affinity` is set
+    ## @param coordinator.nodeAffinityPreset.key Node label key to match. Ignored if `coordinator.affinity` is set
     ##
     key: ""
-    ## @param dataCoord.nodeAffinityPreset.values Node label values to match. Ignored if `data coordinator.affinity` is set
+    ## @param coordinator.nodeAffinityPreset.values Node label values to match. Ignored if `coordinator.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param dataCoord.affinity Affinity for Data Coordinator pods assignment
+  ## @param coordinator.affinity Affinity for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `dataCoord.podAffinityPreset`, `dataCoord.podAntiAffinityPreset`, and `dataCoord.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `coordinator.podAffinityPreset`, `coordinator.podAntiAffinityPreset`, and `coordinator.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param dataCoord.nodeSelector Node labels for Data Coordinator pods assignment
+  ## @param coordinator.nodeSelector Node labels for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param dataCoord.tolerations Tolerations for Data Coordinator pods assignment
+  ## @param coordinator.tolerations Tolerations for Coordinator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param dataCoord.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## @param coordinator.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param dataCoord.priorityClassName Data Coordinator pods' priorityClassName
+  ## @param coordinator.priorityClassName Coordinator pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param dataCoord.schedulerName Kubernetes pod scheduler registry
+  ## @param coordinator.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param dataCoord.updateStrategy.type Data Coordinator statefulset strategy type
-  ## @param dataCoord.updateStrategy.rollingUpdate Data Coordinator statefulset rolling update configuration parameters
+  ## @param coordinator.updateStrategy.type Coordinator statefulset strategy type
+  ## @param coordinator.updateStrategy.rollingUpdate Coordinator statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param dataCoord.extraVolumes Optionally specify extra list of additional volumes for the Data Coordinator pod(s)
+  ## @param coordinator.extraVolumes Optionally specify extra list of additional volumes for the Coordinator pod(s)
   ##
   extraVolumes: []
-  ## @param dataCoord.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Data Coordinator container(s)
+  ## @param coordinator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Coordinator container(s)
   ##
   extraVolumeMounts: []
-  ## @param dataCoord.sidecars Add additional sidecar containers to the Data Coordinator pod(s)
+  ## @param coordinator.sidecars Add additional sidecar containers to the Coordinator pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -777,10 +753,10 @@ dataCoord:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param dataCoord.enableDefaultInitContainers Deploy default init containers
+  ## @param coordinator.enableDefaultInitContainers Deploy default init containers
   ##
   enableDefaultInitContainers: true
-  ## @param dataCoord.initContainers Add additional init containers to the Data Coordinator pod(s)
+  ## @param coordinator.initContainers Add additional init containers to the Coordinator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -790,156 +766,152 @@ dataCoord:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Service account for Data Coordinator to use
+  ## Service account for Coordinator to use
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## @param dataCoord.serviceAccount.create Enable creation of ServiceAccount for Data Coordinator pods
+    ## @param coordinator.serviceAccount.create Enable creation of ServiceAccount for Coordinator pods
     ##
     create: true
-    ## @param dataCoord.serviceAccount.name The name of the ServiceAccount to use
+    ## @param coordinator.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param dataCoord.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param coordinator.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param dataCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param coordinator.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param dataCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param dataCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
-  ## @param dataCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dataCoord.pdb.minAvailable` and `dataCoord.pdb.maxUnavailable` are empty.
+  ## @param coordinator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param coordinator.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param coordinator.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `coordinator.pdb.minAvailable` and `coordinator.pdb.maxUnavailable` are empty.
   ##
   pdb:
     create: true
     minAvailable: ""
     maxUnavailable: ""
-  ## @section Data Coordinator Autoscaling configuration
+  ## @section Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
   autoscaling:
     vpa:
-      ## @param dataCoord.autoscaling.vpa.enabled Enable VPA
+      ## @param coordinator.autoscaling.vpa.enabled Enable VPA
       ##
       enabled: false
-      ## @param dataCoord.autoscaling.vpa.annotations Annotations for VPA resource
+      ## @param coordinator.autoscaling.vpa.annotations Annotations for VPA resource
       ##
       annotations: {}
-      ## @param dataCoord.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ## @param coordinator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
       controlledResources: []
-      ## @param dataCoord.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## @param coordinator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
       maxAllowed: {}
-      ## @param dataCoord.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## @param coordinator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
       updatePolicy:
-        ## @param dataCoord.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## @param coordinator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
         ##
         updateMode: Auto
     hpa:
-      ## @param dataCoord.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param coordinator.autoscaling.hpa.enabled Enable HPA for Milvus Coordinator
       ##
       enabled: false
-      ## @param dataCoord.autoscaling.hpa.annotations Annotations for HPA resource
+      ## @param coordinator.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param dataCoord.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param coordinator.autoscaling.hpa.minReplicas Minimum number of Milvus Coordinator replicas
       ##
       minReplicas: ""
-      ## @param dataCoord.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param coordinator.autoscaling.hpa.maxReplicas Maximum number of Milvus Coordinator replicas
       ##
       maxReplicas: ""
-      ## @param dataCoord.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ## @param coordinator.autoscaling.hpa.targetCPU Target CPU utilization percentage
       ##
       targetCPU: ""
-      ## @param dataCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ## @param coordinator.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-  ## @section Data Coordinator Traffic Exposure Parameters
+  ## @section Coordinator Traffic Exposure Parameters
   ##
 
-  ## data coordinator service parameters
+  ## coordinator service parameters
   ##
   service:
-    ## @param dataCoord.service.type Data Coordinator service type
+    ## @param coordinator.service.type Coordinator service type
     ##
     type: ClusterIP
-    ## @param dataCoord.service.ports.grpc Data Coordinator GRPC service port
-    ## @param dataCoord.service.ports.metrics Data Coordinator Metrics service port
+    ## @param coordinator.service.ports.metrics Coordinator Metrics service port
     ##
     ports:
-      grpc: 19530
       metrics: 9091
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
-    ## @param dataCoord.service.nodePorts.grpc Node port for GRPC
-    ## @param dataCoord.service.nodePorts.metrics Node port for Metrics
+    ## @param coordinator.service.nodePorts.metrics Node port for Metrics
     ##
     nodePorts:
-      grpc: ""
       metrics: ""
-    ## @param dataCoord.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param coordinator.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-    ## @param dataCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## @param coordinator.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param dataCoord.service.clusterIP Data Coordinator service Cluster IP
+    ## @param coordinator.service.clusterIP Coordinator service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param dataCoord.service.loadBalancerIP Data Coordinator service Load Balancer IP
+    ## @param coordinator.service.loadBalancerIP Coordinator service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param dataCoord.service.loadBalancerSourceRanges Data Coordinator service Load Balancer sources
+    ## @param coordinator.service.loadBalancerSourceRanges Coordinator service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param dataCoord.service.externalTrafficPolicy Data Coordinator service external traffic policy
+    ## @param coordinator.service.externalTrafficPolicy Coordinator service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param dataCoord.service.annotations Additional custom annotations for Data Coordinator service
+    ## @param coordinator.service.annotations Additional custom annotations for Coordinator service
     ##
     annotations: {}
-    ## @param dataCoord.service.extraPorts Extra ports to expose in the Data Coordinator service
+    ## @param coordinator.service.extraPorts Extra ports to expose in the Coordinator service
     ##
     extraPorts: []
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
-    ## @param dataCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ## @param coordinator.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
     enabled: true
-    ## @param dataCoord.networkPolicy.allowExternal The Policy model to apply
+    ## @param coordinator.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
     ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
-    ## @param dataCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ## @param coordinator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param dataCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param coordinator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -956,7 +928,7 @@ dataCoord:
     ##                   - frontend
     ##
     extraIngress: []
-    ## @param dataCoord.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param coordinator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
     ##   - ports:
@@ -973,1574 +945,59 @@ dataCoord:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param dataCoord.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param dataCoord.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param coordinator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param coordinator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-  ## @section Data Coordinator Metrics Parameters
+  ## @section Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
   metrics:
-    ## @param dataCoord.metrics.enabled Enable metrics
+    ## @param coordinator.metrics.enabled Enable metrics
     ##
     enabled: false
-    ## @param dataCoord.metrics.annotations [object] Annotations for the server service in order to scrape metrics
+    ## @param coordinator.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.dataCoord.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.coordinator.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
-      ## @param dataCoord.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
+      ## @param coordinator.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
       ##
       enabled: false
-      ## @param dataCoord.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
+      ## @param coordinator.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
       ##
       annotations: ""
-      ## @param dataCoord.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+      ## @param coordinator.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
       ##
       namespace: ""
-      ## @param dataCoord.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## @param coordinator.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
       interval: ""
-      ## @param dataCoord.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## @param coordinator.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
       scrapeTimeout: ""
-      ## @param dataCoord.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+      ## @param coordinator.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
       ##
       labels: {}
-      ## @param dataCoord.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## @param coordinator.metrics.serviceMonitor.selector Prometheus instance selector labels
       ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
-      ## @param dataCoord.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## @param coordinator.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
       ##
       relabelings: []
-      ## @param dataCoord.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## @param coordinator.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
       ##
       metricRelabelings: []
-      ## @param dataCoord.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ## @param coordinator.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
       ##
       honorLabels: false
-      ## @param dataCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
-      ##
-      jobLabel: ""
-## @section Root Coordinator Deployment Parameters
-##
-rootCoord:
-  ## @param rootCoord.enabled Enable Root Coordinator deployment
-  ##
-  enabled: true
-  ## @param rootCoord.extraEnvVars Array with extra environment variables to add to data coordinator nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param rootCoord.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsCM: ""
-  ## @param rootCoord.extraEnvVarsSecret Name of existing Secret containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsSecret: ""
-  ## @param rootCoord.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
-  ##
-  defaultConfig: |
-    # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
-    rootCoord:
-      port: {{ .Values.rootCoord.containerPorts.grpc }}
-      enableActiveStandby: true
-  ## @param rootCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
-  ##
-  existingConfigMap: ""
-  ## @param rootCoord.extraConfig Override configuration
-  ##
-  extraConfig: {}
-  ## @param rootCoord.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
-  ##
-  extraConfigExistingConfigMap: ""
-  ## @param rootCoord.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param rootCoord.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param rootCoord.replicaCount Number of Root Coordinator replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param rootCoord.containerPorts.grpc GRPC port for Root Coordinator
-  ## @param rootCoord.containerPorts.metrics Metrics port for Root Coordinator
-  containerPorts:
-    grpc: 19530
-    metrics: 9091
-  ## Configure extra options for Root Coordinator containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param rootCoord.livenessProbe.enabled Enable livenessProbe on Root Coordinator nodes
-  ## @param rootCoord.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param rootCoord.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param rootCoord.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param rootCoord.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param rootCoord.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param rootCoord.readinessProbe.enabled Enable readinessProbe on Root Coordinator nodes
-  ## @param rootCoord.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param rootCoord.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param rootCoord.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param rootCoord.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param rootCoord.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param rootCoord.startupProbe.enabled Enable startupProbe on Root Coordinator containers
-  ## @param rootCoord.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param rootCoord.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param rootCoord.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param rootCoord.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param rootCoord.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param rootCoord.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param rootCoord.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param rootCoord.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rootCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "micro"
-  ## @param rootCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param rootCoord.podSecurityContext.enabled Enabled Root Coordinator pods' Security Context
-  ## @param rootCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param rootCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param rootCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param rootCoord.podSecurityContext.fsGroup Set Root Coordinator pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroupChangePolicy: Always
-    sysctls: []
-    supplementalGroups: []
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param rootCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param rootCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param rootCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param rootCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param rootCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param rootCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param rootCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param rootCoord.runtimeClassName Name of the runtime class to be used by pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
-  ##
-  runtimeClassName: ""
-  ## @param rootCoord.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
-  ## @param rootCoord.hostAliases data coordinator pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param rootCoord.podLabels Extra labels for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param rootCoord.podAnnotations Annotations for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param rootCoord.podAffinityPreset Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param rootCoord.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node data coordinator.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param rootCoord.nodeAffinityPreset.type Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param rootCoord.nodeAffinityPreset.key Node label key to match. Ignored if `data coordinator.affinity` is set
-    ##
-    key: ""
-    ## @param rootCoord.nodeAffinityPreset.values Node label values to match. Ignored if `data coordinator.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param rootCoord.affinity Affinity for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `rootCoord.podAffinityPreset`, `rootCoord.podAntiAffinityPreset`, and `rootCoord.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param rootCoord.nodeSelector Node labels for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param rootCoord.tolerations Tolerations for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param rootCoord.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: []
-  ## @param rootCoord.priorityClassName Root Coordinator pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param rootCoord.schedulerName Kubernetes pod scheduler registry
-  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param rootCoord.updateStrategy.type Root Coordinator statefulset strategy type
-  ## @param rootCoord.updateStrategy.rollingUpdate Root Coordinator statefulset rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
-  ## @param rootCoord.extraVolumes Optionally specify extra list of additional volumes for the Root Coordinator pod(s)
-  ##
-  extraVolumes: []
-  ## @param rootCoord.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Root Coordinator container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param rootCoord.sidecars Add additional sidecar containers to the Root Coordinator pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param rootCoord.enableDefaultInitContainers Deploy default init containers
-  ##
-  enableDefaultInitContainers: true
-  ## @param rootCoord.initContainers Add additional init containers to the Root Coordinator pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Service account for Root Coordinator to use
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccount:
-    ## @param rootCoord.serviceAccount.create Enable creation of ServiceAccount for Root Coordinator pods
-    ##
-    create: true
-    ## @param rootCoord.serviceAccount.name The name of the ServiceAccount to use
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
-    name: ""
-    ## @param rootCoord.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
-    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
-    ##
-    automountServiceAccountToken: false
-    ## @param rootCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
-    ##
-    annotations: {}
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param rootCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param rootCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
-  ## @param rootCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rootCoord.pdb.minAvailable` and `rootCoord.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
-  ## @section Root Coordinator Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ##
-  autoscaling:
-    vpa:
-      ## @param rootCoord.autoscaling.vpa.enabled Enable VPA
-      ##
-      enabled: false
-      ## @param rootCoord.autoscaling.vpa.annotations Annotations for VPA resource
-      ##
-      annotations: {}
-      ## @param rootCoord.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-      ##
-      controlledResources: []
-      ## @param rootCoord.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      maxAllowed: {}
-      ## @param rootCoord.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      minAllowed: {}
-      updatePolicy:
-        ## @param rootCoord.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
-        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
-        ##
-        updateMode: Auto
-    hpa:
-      ## @param rootCoord.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
-      ##
-      enabled: false
-      ## @param rootCoord.autoscaling.hpa.annotations Annotations for HPA resource
-      ##
-      annotations: {}
-      ## @param rootCoord.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
-      ##
-      minReplicas: ""
-      ## @param rootCoord.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
-      ##
-      maxReplicas: ""
-      ## @param rootCoord.autoscaling.hpa.targetCPU Target CPU utilization percentage
-      ##
-      targetCPU: ""
-      ## @param rootCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
-      ##
-      targetMemory: ""
-  ## @section Root Coordinator Traffic Exposure Parameters
-  ##
-
-  ## data coordinator service parameters
-  ##
-  service:
-    ## @param rootCoord.service.type Root Coordinator service type
-    ##
-    type: ClusterIP
-    ## @param rootCoord.service.ports.grpc Root Coordinator GRPC service port
-    ## @param rootCoord.service.ports.metrics Root Coordinator Metrics service port
-    ##
-    ports:
-      grpc: 19530
-      metrics: 9091
-    ## Node ports to expose
-    ## NOTE: choose port between <30000-32767>
-    ## @param rootCoord.service.nodePorts.grpc Node port for GRPC
-    ## @param rootCoord.service.nodePorts.metrics Node port for Metrics
-    ##
-    nodePorts:
-      grpc: ""
-      metrics: ""
-    ## @param rootCoord.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param rootCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-    ##
-    sessionAffinity: None
-    ## @param rootCoord.service.clusterIP Root Coordinator service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param rootCoord.service.loadBalancerIP Root Coordinator service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param rootCoord.service.loadBalancerSourceRanges Root Coordinator service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param rootCoord.service.externalTrafficPolicy Root Coordinator service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param rootCoord.service.annotations Additional custom annotations for Root Coordinator service
-    ##
-    annotations: {}
-    ## @param rootCoord.service.extraPorts Extra ports to expose in the Root Coordinator service
-    ##
-    extraPorts: []
-  ## Network Policy configuration
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param rootCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
-    ##
-    enabled: true
-    ## @param rootCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
-    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param rootCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param rootCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraIngress: []
-    ## @param rootCoord.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param rootCoord.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param rootCoord.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
-  ## @section Root Coordinator Metrics Parameters
-  ## Prometheus Exporter / Metrics
-  ##
-  metrics:
-    ## @param rootCoord.metrics.enabled Enable metrics
-    ##
-    enabled: false
-    ## @param rootCoord.metrics.annotations [object] Annotations for the server service in order to scrape metrics
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.rootCoord.service.ports.grpc }}"
-    ## Prometheus Operator ServiceMonitor configuration
-    ##
-    serviceMonitor:
-      ## @param rootCoord.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
-      ##
-      enabled: false
-      ## @param rootCoord.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
-      ##
-      annotations: ""
-      ## @param rootCoord.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
-      ##
-      namespace: ""
-      ## @param rootCoord.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      interval: ""
-      ## @param rootCoord.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      scrapeTimeout: ""
-      ## @param rootCoord.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
-      ##
-      labels: {}
-      ## @param rootCoord.metrics.serviceMonitor.selector Prometheus instance selector labels
-      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
-      ##
-      selector: {}
-      ## @param rootCoord.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
-      ##
-      relabelings: []
-      ## @param rootCoord.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
-      ##
-      metricRelabelings: []
-      ## @param rootCoord.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
-      ##
-      honorLabels: false
-      ## @param rootCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
-      ##
-      jobLabel: ""
-## @section Query Coordinator Deployment Parameters
-##
-queryCoord:
-  ## @param queryCoord.enabled Enable Query Coordinator deployment
-  ##
-  enabled: true
-  ## @param queryCoord.extraEnvVars Array with extra environment variables to add to data coordinator nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param queryCoord.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsCM: ""
-  ## @param queryCoord.extraEnvVarsSecret Name of existing Secret containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsSecret: ""
-  ## @param queryCoord.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
-  ##
-  defaultConfig: |
-    # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
-    queryCoord:
-      port: {{ .Values.queryCoord.containerPorts.grpc }}
-      enableActiveStandby: true
-  ## @param queryCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
-  ##
-  existingConfigMap: ""
-  ## @param queryCoord.extraConfig Override configuration
-  ##
-  extraConfig: {}
-  ## @param queryCoord.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
-  ##
-  extraConfigExistingConfigMap: ""
-  ## @param queryCoord.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param queryCoord.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param queryCoord.replicaCount Number of Query Coordinator replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param queryCoord.containerPorts.grpc GRPC port for Query Coordinator
-  ## @param queryCoord.containerPorts.metrics Metrics port for Query Coordinator
-  containerPorts:
-    grpc: 19530
-    metrics: 9091
-  ## Configure extra options for Query Coordinator containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param queryCoord.livenessProbe.enabled Enable livenessProbe on Query Coordinator nodes
-  ## @param queryCoord.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param queryCoord.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param queryCoord.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param queryCoord.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param queryCoord.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param queryCoord.readinessProbe.enabled Enable readinessProbe on Query Coordinator nodes
-  ## @param queryCoord.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param queryCoord.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param queryCoord.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param queryCoord.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param queryCoord.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param queryCoord.startupProbe.enabled Enable startupProbe on Query Coordinator containers
-  ## @param queryCoord.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param queryCoord.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param queryCoord.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param queryCoord.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param queryCoord.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param queryCoord.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param queryCoord.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param queryCoord.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "micro"
-  ## @param queryCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryCoord.podSecurityContext.enabled Enabled Query Coordinator pods' Security Context
-  ## @param queryCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param queryCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param queryCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param queryCoord.podSecurityContext.fsGroup Set Query Coordinator pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroupChangePolicy: Always
-    sysctls: []
-    supplementalGroups: []
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param queryCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param queryCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param queryCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param queryCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param queryCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param queryCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param queryCoord.runtimeClassName Name of the runtime class to be used by pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
-  ##
-  runtimeClassName: ""
-  ## @param queryCoord.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
-  ## @param queryCoord.hostAliases data coordinator pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param queryCoord.podLabels Extra labels for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param queryCoord.podAnnotations Annotations for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param queryCoord.podAffinityPreset Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param queryCoord.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node data coordinator.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param queryCoord.nodeAffinityPreset.type Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param queryCoord.nodeAffinityPreset.key Node label key to match. Ignored if `data coordinator.affinity` is set
-    ##
-    key: ""
-    ## @param queryCoord.nodeAffinityPreset.values Node label values to match. Ignored if `data coordinator.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param queryCoord.affinity Affinity for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `queryCoord.podAffinityPreset`, `queryCoord.podAntiAffinityPreset`, and `queryCoord.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param queryCoord.nodeSelector Node labels for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param queryCoord.tolerations Tolerations for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param queryCoord.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: []
-  ## @param queryCoord.priorityClassName Query Coordinator pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param queryCoord.schedulerName Kubernetes pod scheduler registry
-  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param queryCoord.updateStrategy.type Query Coordinator statefulset strategy type
-  ## @param queryCoord.updateStrategy.rollingUpdate Query Coordinator statefulset rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
-  ## @param queryCoord.extraVolumes Optionally specify extra list of additional volumes for the Query Coordinator pod(s)
-  ##
-  extraVolumes: []
-  ## @param queryCoord.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Query Coordinator container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param queryCoord.sidecars Add additional sidecar containers to the Query Coordinator pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param queryCoord.enableDefaultInitContainers Deploy default init containers
-  ##
-  enableDefaultInitContainers: true
-  ## @param queryCoord.initContainers Add additional init containers to the Query Coordinator pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Service account for Query Coordinator to use
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccount:
-    ## @param queryCoord.serviceAccount.create Enable creation of ServiceAccount for Query Coordinator pods
-    ##
-    create: true
-    ## @param queryCoord.serviceAccount.name The name of the ServiceAccount to use
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
-    name: ""
-    ## @param queryCoord.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
-    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
-    ##
-    automountServiceAccountToken: false
-    ## @param queryCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
-    ##
-    annotations: {}
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param queryCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param queryCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
-  ## @param queryCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
-  ## @section Query Coordinator Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ##
-  autoscaling:
-    vpa:
-      ## @param queryCoord.autoscaling.vpa.enabled Enable VPA
-      ##
-      enabled: false
-      ## @param queryCoord.autoscaling.vpa.annotations Annotations for VPA resource
-      ##
-      annotations: {}
-      ## @param queryCoord.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-      ##
-      controlledResources: []
-      ## @param queryCoord.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      maxAllowed: {}
-      ## @param queryCoord.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      minAllowed: {}
-      updatePolicy:
-        ## @param queryCoord.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
-        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
-        ##
-        updateMode: Auto
-    hpa:
-      ## @param queryCoord.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
-      ##
-      enabled: false
-      ## @param queryCoord.autoscaling.hpa.annotations Annotations for HPA resource
-      ##
-      annotations: {}
-      ## @param queryCoord.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
-      ##
-      minReplicas: ""
-      ## @param queryCoord.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
-      ##
-      maxReplicas: ""
-      ## @param queryCoord.autoscaling.hpa.targetCPU Target CPU utilization percentage
-      ##
-      targetCPU: ""
-      ## @param queryCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
-      ##
-      targetMemory: ""
-  ## @section Query Coordinator Traffic Exposure Parameters
-  ##
-
-  ## data coordinator service parameters
-  ##
-  service:
-    ## @param queryCoord.service.type Query Coordinator service type
-    ##
-    type: ClusterIP
-    ## @param queryCoord.service.ports.grpc Query Coordinator GRPC service port
-    ## @param queryCoord.service.ports.metrics Query Coordinator Metrics service port
-    ##
-    ports:
-      grpc: 19530
-      metrics: 9091
-    ## Node ports to expose
-    ## NOTE: choose port between <30000-32767>
-    ## @param queryCoord.service.nodePorts.grpc Node port for GRPC
-    ## @param queryCoord.service.nodePorts.metrics Node port for Metrics
-    ##
-    nodePorts:
-      grpc: ""
-      metrics: ""
-    ## @param queryCoord.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param queryCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-    ##
-    sessionAffinity: None
-    ## @param queryCoord.service.clusterIP Query Coordinator service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param queryCoord.service.loadBalancerIP Query Coordinator service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param queryCoord.service.loadBalancerSourceRanges Query Coordinator service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param queryCoord.service.externalTrafficPolicy Query Coordinator service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param queryCoord.service.annotations Additional custom annotations for Query Coordinator service
-    ##
-    annotations: {}
-    ## @param queryCoord.service.extraPorts Extra ports to expose in the Query Coordinator service
-    ##
-    extraPorts: []
-  ## Network Policy configuration
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param queryCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
-    ##
-    enabled: true
-    ## @param queryCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
-    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param queryCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param queryCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraIngress: []
-    ## @param queryCoord.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param queryCoord.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param queryCoord.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
-  ## @section Query Coordinator Metrics Parameters
-  ## Prometheus Exporter / Metrics
-  ##
-  metrics:
-    ## @param queryCoord.metrics.enabled Enable metrics
-    ##
-    enabled: false
-    ## @param queryCoord.metrics.annotations [object] Annotations for the server service in order to scrape metrics
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.queryCoord.service.ports.grpc }}"
-    ## Prometheus Operator ServiceMonitor configuration
-    ##
-    serviceMonitor:
-      ## @param queryCoord.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
-      ##
-      enabled: false
-      ## @param queryCoord.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
-      ##
-      annotations: ""
-      ## @param queryCoord.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
-      ##
-      namespace: ""
-      ## @param queryCoord.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      interval: ""
-      ## @param queryCoord.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      scrapeTimeout: ""
-      ## @param queryCoord.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
-      ##
-      labels: {}
-      ## @param queryCoord.metrics.serviceMonitor.selector Prometheus instance selector labels
-      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
-      ##
-      selector: {}
-      ## @param queryCoord.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
-      ##
-      relabelings: []
-      ## @param queryCoord.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
-      ##
-      metricRelabelings: []
-      ## @param queryCoord.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
-      ##
-      honorLabels: false
-      ## @param queryCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
-      ##
-      jobLabel: ""
-## @section Index Coordinator Deployment Parameters
-##
-indexCoord:
-  ## @param indexCoord.enabled Enable Index Coordinator deployment
-  ##
-  enabled: true
-  ## @param indexCoord.extraEnvVars Array with extra environment variables to add to data coordinator nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param indexCoord.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsCM: ""
-  ## @param indexCoord.extraEnvVarsSecret Name of existing Secret containing extra env vars for data coordinator nodes
-  ##
-  extraEnvVarsSecret: ""
-  ## @param indexCoord.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
-  ##
-  defaultConfig: |
-    # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
-    indexCoord:
-      port: {{ .Values.indexCoord.containerPorts.grpc }}
-      enableActiveStandby: true
-  ## @param indexCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
-  ##
-  existingConfigMap: ""
-  ## @param indexCoord.extraConfig Override configuration
-  ##
-  extraConfig: {}
-  ## @param indexCoord.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
-  ##
-  extraConfigExistingConfigMap: ""
-  ## @param indexCoord.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param indexCoord.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param indexCoord.replicaCount Number of Index Coordinator replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param indexCoord.containerPorts.grpc GRPC port for Index Coordinator
-  ## @param indexCoord.containerPorts.metrics Metrics port for Index Coordinator
-  containerPorts:
-    grpc: 19530
-    metrics: 9091
-  ## Configure extra options for Index Coordinator containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param indexCoord.livenessProbe.enabled Enable livenessProbe on Index Coordinator nodes
-  ## @param indexCoord.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param indexCoord.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param indexCoord.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param indexCoord.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param indexCoord.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param indexCoord.readinessProbe.enabled Enable readinessProbe on Index Coordinator nodes
-  ## @param indexCoord.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param indexCoord.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param indexCoord.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param indexCoord.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param indexCoord.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param indexCoord.startupProbe.enabled Enable startupProbe on Index Coordinator containers
-  ## @param indexCoord.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param indexCoord.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param indexCoord.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param indexCoord.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param indexCoord.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param indexCoord.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param indexCoord.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param indexCoord.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  resourcesPreset: "micro"
-  ## @param indexCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  resources: {}
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexCoord.podSecurityContext.enabled Enabled Index Coordinator pods' Security Context
-  ## @param indexCoord.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param indexCoord.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param indexCoord.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param indexCoord.podSecurityContext.fsGroup Set Index Coordinator pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroupChangePolicy: Always
-    sysctls: []
-    supplementalGroups: []
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param indexCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param indexCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param indexCoord.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param indexCoord.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param indexCoord.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param indexCoord.lifecycleHooks for the data coordinator container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param indexCoord.runtimeClassName Name of the runtime class to be used by pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
-  ##
-  runtimeClassName: ""
-  ## @param indexCoord.automountServiceAccountToken Mount Service Account token in pod
-  ##
-  automountServiceAccountToken: false
-  ## @param indexCoord.hostAliases data coordinator pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param indexCoord.podLabels Extra labels for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param indexCoord.podAnnotations Annotations for data coordinator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param indexCoord.podAffinityPreset Pod affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param indexCoord.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node data coordinator.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param indexCoord.nodeAffinityPreset.type Node affinity preset type. Ignored if `data coordinator.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param indexCoord.nodeAffinityPreset.key Node label key to match. Ignored if `data coordinator.affinity` is set
-    ##
-    key: ""
-    ## @param indexCoord.nodeAffinityPreset.values Node label values to match. Ignored if `data coordinator.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param indexCoord.affinity Affinity for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `indexCoord.podAffinityPreset`, `indexCoord.podAntiAffinityPreset`, and `indexCoord.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param indexCoord.nodeSelector Node labels for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
-  nodeSelector: {}
-  ## @param indexCoord.tolerations Tolerations for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param indexCoord.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: []
-  ## @param indexCoord.priorityClassName Index Coordinator pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param indexCoord.schedulerName Kubernetes pod scheduler registry
-  ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param indexCoord.updateStrategy.type Index Coordinator statefulset strategy type
-  ## @param indexCoord.updateStrategy.rollingUpdate Index Coordinator statefulset rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    type: RollingUpdate
-    rollingUpdate: {}
-  ## @param indexCoord.extraVolumes Optionally specify extra list of additional volumes for the Index Coordinator pod(s)
-  ##
-  extraVolumes: []
-  ## @param indexCoord.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Index Coordinator container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param indexCoord.sidecars Add additional sidecar containers to the Index Coordinator pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param indexCoord.enableDefaultInitContainers Deploy default init containers
-  ##
-  enableDefaultInitContainers: true
-  ## @param indexCoord.initContainers Add additional init containers to the Index Coordinator pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Service account for Index Coordinator to use
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ##
-  serviceAccount:
-    ## @param indexCoord.serviceAccount.create Enable creation of ServiceAccount for Index Coordinator pods
-    ##
-    create: true
-    ## @param indexCoord.serviceAccount.name The name of the ServiceAccount to use
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
-    name: ""
-    ## @param indexCoord.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
-    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
-    ##
-    automountServiceAccountToken: false
-    ## @param indexCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
-    ##
-    annotations: {}
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param indexCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param indexCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
-  ## @param indexCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
-  ## @section Index Coordinator Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ##
-  autoscaling:
-    vpa:
-      ## @param indexCoord.autoscaling.vpa.enabled Enable VPA
-      ##
-      enabled: false
-      ## @param indexCoord.autoscaling.vpa.annotations Annotations for VPA resource
-      ##
-      annotations: {}
-      ## @param indexCoord.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-      ##
-      controlledResources: []
-      ## @param indexCoord.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      maxAllowed: {}
-      ## @param indexCoord.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
-      minAllowed: {}
-      updatePolicy:
-        ## @param indexCoord.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
-        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
-        ##
-        updateMode: Auto
-    hpa:
-      ## @param indexCoord.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
-      ##
-      enabled: false
-      ## @param indexCoord.autoscaling.hpa.annotations Annotations for HPA resource
-      ##
-      annotations: {}
-      ## @param indexCoord.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
-      ##
-      minReplicas: ""
-      ## @param indexCoord.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
-      ##
-      maxReplicas: ""
-      ## @param indexCoord.autoscaling.hpa.targetCPU Target CPU utilization percentage
-      ##
-      targetCPU: ""
-      ## @param indexCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
-      ##
-      targetMemory: ""
-  ## @section Index Coordinator Traffic Exposure Parameters
-  ##
-
-  ## data coordinator service parameters
-  ##
-  service:
-    ## @param indexCoord.service.type Index Coordinator service type
-    ##
-    type: ClusterIP
-    ## @param indexCoord.service.ports.grpc Index Coordinator GRPC service port
-    ## @param indexCoord.service.ports.metrics Index Coordinator Metrics service port
-    ##
-    ports:
-      grpc: 19530
-      metrics: 9091
-    ## Node ports to expose
-    ## NOTE: choose port between <30000-32767>
-    ## @param indexCoord.service.nodePorts.grpc Node port for GRPC
-    ## @param indexCoord.service.nodePorts.metrics Node port for Metrics
-    ##
-    nodePorts:
-      grpc: ""
-      metrics: ""
-    ## @param indexCoord.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
-    ## @param indexCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-    ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-    ##
-    sessionAffinity: None
-    ## @param indexCoord.service.clusterIP Index Coordinator service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param indexCoord.service.loadBalancerIP Index Coordinator service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param indexCoord.service.loadBalancerSourceRanges Index Coordinator service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param indexCoord.service.externalTrafficPolicy Index Coordinator service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param indexCoord.service.annotations Additional custom annotations for Index Coordinator service
-    ##
-    annotations: {}
-    ## @param indexCoord.service.extraPorts Extra ports to expose in the Index Coordinator service
-    ##
-    extraPorts: []
-  ## Network Policy configuration
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
-  ##
-  networkPolicy:
-    ## @param indexCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
-    ##
-    enabled: true
-    ## @param indexCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
-    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param indexCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
-    ##
-    allowExternalEgress: true
-    ## @param indexCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraIngress: []
-    ## @param indexCoord.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param indexCoord.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param indexCoord.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
-  ## @section Index Coordinator Metrics Parameters
-  ## Prometheus Exporter / Metrics
-  ##
-  metrics:
-    ## @param indexCoord.metrics.enabled Enable metrics
-    ##
-    enabled: false
-    ## @param indexCoord.metrics.annotations [object] Annotations for the server service in order to scrape metrics
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.indexCoord.service.ports.grpc }}"
-    ## Prometheus Operator ServiceMonitor configuration
-    ##
-    serviceMonitor:
-      ## @param indexCoord.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
-      ##
-      enabled: false
-      ## @param indexCoord.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
-      ##
-      annotations: ""
-      ## @param indexCoord.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
-      ##
-      namespace: ""
-      ## @param indexCoord.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      interval: ""
-      ## @param indexCoord.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
-      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-      ##
-      scrapeTimeout: ""
-      ## @param indexCoord.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
-      ##
-      labels: {}
-      ## @param indexCoord.metrics.serviceMonitor.selector Prometheus instance selector labels
-      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
-      ##
-      selector: {}
-      ## @param indexCoord.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
-      ##
-      relabelings: []
-      ## @param indexCoord.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
-      ##
-      metricRelabelings: []
-      ## @param indexCoord.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
-      ##
-      honorLabels: false
-      ## @param indexCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ## @param coordinator.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
 ## @section Data Node Deployment Parameters
@@ -2575,7 +1032,7 @@ dataNode:
   ## @param dataNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param dataNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param dataNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param dataNode.command Override default container command (useful when using custom images)
@@ -2866,16 +1323,16 @@ dataNode:
         ##
         updateMode: Auto
     hpa:
-      ## @param dataNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param dataNode.autoscaling.hpa.enabled Enable HPA for Milvus Data node
       ##
       enabled: false
       ## @param dataNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param dataNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param dataNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data node replicas
       ##
       minReplicas: ""
-      ## @param dataNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param dataNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data node replicas
       ##
       maxReplicas: ""
       ## @param dataNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -3008,7 +1465,7 @@ dataNode:
     ## @param dataNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.dataNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.dataNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -3080,7 +1537,7 @@ queryNode:
   ## @param queryNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param queryNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param queryNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
   ## @param queryNode.command Override default container command (useful when using custom images)
@@ -3371,16 +1828,16 @@ queryNode:
         ##
         updateMode: Auto
     hpa:
-      ## @param queryNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param queryNode.autoscaling.hpa.enabled Enable HPA for Milvus Query node
       ##
       enabled: false
       ## @param queryNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param queryNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param queryNode.autoscaling.hpa.minReplicas Minimum number of Milvus Query node replicas
       ##
       minReplicas: ""
-      ## @param queryNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param queryNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Query node replicas
       ##
       maxReplicas: ""
       ## @param queryNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -3513,7 +1970,7 @@ queryNode:
     ## @param queryNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.queryNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.queryNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -3553,63 +2010,62 @@ queryNode:
       ## @param queryNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-## @section Index Node Deployment Parameters
+## @section Streaming Node Deployment Parameters
 ##
-indexNode:
-  ## @param indexNode.enabled Enable Index Node deployment
+streamingNode:
+  ## @param streamingNode.enabled Enable Streaming Node deployment
   ##
   enabled: true
-  ## @param indexNode.extraEnvVars Array with extra environment variables to add to data node nodes
+  ## @param streamingNode.extraEnvVars Array with extra environment variables to add to data node nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param indexNode.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data node nodes
+  ## @param streamingNode.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data node nodes
   ##
   extraEnvVarsCM: ""
-  ## @param indexNode.extraEnvVarsSecret Name of existing Secret containing extra env vars for data node nodes
+  ## @param streamingNode.extraEnvVarsSecret Name of existing Secret containing extra env vars for data node nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param indexNode.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
+  ## @param streamingNode.defaultConfig [string] Default override configuration from the common set in milvus.defaultConfig
   ##
   defaultConfig: |
     # Override the port for internal binding (the external components will use the service port defined in milvus.defaultConfig)
-    indexNode:
-      port: {{ .Values.indexNode.containerPorts.grpc }}
-      enableDisk: true
-  ## @param indexNode.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
+    streamingNode:
+      port: {{ .Values.streamingNode.containerPorts.grpc }}
+  ## @param streamingNode.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
-  ## @param indexNode.extraConfig Override configuration
+  ## @param streamingNode.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param indexNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param streamingNode.extraConfigExistingConfigMap name of a ConfigMap with existing configuration
   ##
   extraConfigExistingConfigMap: ""
-  ## @param indexNode.command Override default container command (useful when using custom images)
+  ## @param streamingNode.command Override default container command (useful when using custom images)
   ##
   command: []
-  ## @param indexNode.args Override default container args (useful when using custom images)
+  ## @param streamingNode.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param indexNode.replicaCount Number of Index Node replicas to deploy
+  ## @param streamingNode.replicaCount Number of Streaming Node replicas to deploy
   ##
   replicaCount: 1
-  ## @param indexNode.containerPorts.grpc GRPC port for Index Node
-  ## @param indexNode.containerPorts.metrics Metrics port for Index Node
+  ## @param streamingNode.containerPorts.grpc GRPC port for Streaming Node
+  ## @param streamingNode.containerPorts.metrics Metrics port for Streaming Node
   containerPorts:
     grpc: 19530
     metrics: 9091
-  ## Configure extra options for Index Node containers' liveness, readiness and startup probes
+  ## Configure extra options for Streaming Node containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param indexNode.livenessProbe.enabled Enable livenessProbe on Index Node nodes
-  ## @param indexNode.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param indexNode.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param indexNode.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param indexNode.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param indexNode.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param streamingNode.livenessProbe.enabled Enable livenessProbe on Streaming Node nodes
+  ## @param streamingNode.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param streamingNode.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param streamingNode.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param streamingNode.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param streamingNode.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
     enabled: true
@@ -3618,12 +2074,12 @@ indexNode:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param indexNode.readinessProbe.enabled Enable readinessProbe on Index Node nodes
-  ## @param indexNode.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param indexNode.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param indexNode.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param indexNode.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param indexNode.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param streamingNode.readinessProbe.enabled Enable readinessProbe on Streaming Node nodes
+  ## @param streamingNode.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param streamingNode.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param streamingNode.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param streamingNode.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param streamingNode.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: true
@@ -3632,12 +2088,12 @@ indexNode:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param indexNode.startupProbe.enabled Enable startupProbe on Index Node containers
-  ## @param indexNode.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param indexNode.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param indexNode.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param indexNode.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param indexNode.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param streamingNode.startupProbe.enabled Enable startupProbe on Streaming Node containers
+  ## @param streamingNode.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param streamingNode.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param streamingNode.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param streamingNode.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param streamingNode.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -3646,22 +2102,22 @@ indexNode:
     timeoutSeconds: 5
     failureThreshold: 5
     successThreshold: 1
-  ## @param indexNode.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param streamingNode.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param indexNode.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param streamingNode.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param indexNode.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param streamingNode.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).
+  ## @param streamingNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if streamingNode.resources is set (streamingNode.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "micro"
-  ## @param indexNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param streamingNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
   ##   requests:
@@ -3674,11 +2130,11 @@ indexNode:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexNode.podSecurityContext.enabled Enabled Index Node pods' Security Context
-  ## @param indexNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-  ## @param indexNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-  ## @param indexNode.podSecurityContext.supplementalGroups Set filesystem extra groups
-  ## @param indexNode.podSecurityContext.fsGroup Set Index Node pod's Security Context fsGroup
+  ## @param streamingNode.podSecurityContext.enabled Enabled Streaming Node pods' Security Context
+  ## @param streamingNode.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param streamingNode.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param streamingNode.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param streamingNode.podSecurityContext.fsGroup Set Streaming Node pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -3688,16 +2144,16 @@ indexNode:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param indexNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param indexNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param indexNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param indexNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param indexNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param streamingNode.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param streamingNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param streamingNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param streamingNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param streamingNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param streamingNode.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param streamingNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param streamingNode.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param streamingNode.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param streamingNode.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -3712,33 +2168,33 @@ indexNode:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-  ## @param indexNode.lifecycleHooks for the data node container(s) to automate configuration before or after startup
+  ## @param streamingNode.lifecycleHooks for the data node container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param indexNode.runtimeClassName Name of the runtime class to be used by pod(s)
+  ## @param streamingNode.runtimeClassName Name of the runtime class to be used by pod(s)
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
-  ## @param indexNode.automountServiceAccountToken Mount Service Account token in pod
+  ## @param streamingNode.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
-  ## @param indexNode.hostAliases data node pods host aliases
+  ## @param streamingNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param indexNode.podLabels Extra labels for data node pods
+  ## @param streamingNode.podLabels Extra labels for data node pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param indexNode.podAnnotations Annotations for data node pods
+  ## @param streamingNode.podAnnotations Annotations for data node pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-  ## @param indexNode.podAffinityPreset Pod affinity preset. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param streamingNode.podAffinityPreset Pod affinity preset. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param indexNode.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param streamingNode.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
@@ -3746,57 +2202,57 @@ indexNode:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param indexNode.nodeAffinityPreset.type Node affinity preset type. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param streamingNode.nodeAffinityPreset.type Node affinity preset type. Ignored if `data node.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param indexNode.nodeAffinityPreset.key Node label key to match. Ignored if `data node.affinity` is set
+    ## @param streamingNode.nodeAffinityPreset.key Node label key to match. Ignored if `data node.affinity` is set
     ##
     key: ""
-    ## @param indexNode.nodeAffinityPreset.values Node label values to match. Ignored if `data node.affinity` is set
+    ## @param streamingNode.nodeAffinityPreset.values Node label values to match. Ignored if `data node.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param indexNode.affinity Affinity for Index Node pods assignment
+  ## @param streamingNode.affinity Affinity for Streaming Node pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `indexNode.podAffinityPreset`, `indexNode.podAntiAffinityPreset`, and `indexNode.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `streamingNode.podAffinityPreset`, `streamingNode.podAntiAffinityPreset`, and `streamingNode.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param indexNode.nodeSelector Node labels for Index Node pods assignment
+  ## @param streamingNode.nodeSelector Node labels for Streaming Node pods assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
-  ## @param indexNode.tolerations Tolerations for Index Node pods assignment
+  ## @param streamingNode.tolerations Tolerations for Streaming Node pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param indexNode.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  ## @param streamingNode.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param indexNode.priorityClassName Index Node pods' priorityClassName
+  ## @param streamingNode.priorityClassName Streaming Node pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param indexNode.schedulerName Kubernetes pod scheduler registry
+  ## @param streamingNode.schedulerName Kubernetes pod scheduler registry
   ## https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param indexNode.updateStrategy.type Index Node statefulset strategy type
-  ## @param indexNode.updateStrategy.rollingUpdate Index Node statefulset rolling update configuration parameters
+  ## @param streamingNode.updateStrategy.type Streaming Node statefulset strategy type
+  ## @param streamingNode.updateStrategy.rollingUpdate Streaming Node statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param indexNode.extraVolumes Optionally specify extra list of additional volumes for the Index Node pod(s)
+  ## @param streamingNode.extraVolumes Optionally specify extra list of additional volumes for the Streaming Node pod(s)
   ##
   extraVolumes: []
-  ## @param indexNode.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Index Node container(s)
+  ## @param streamingNode.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Streaming Node container(s)
   ##
   extraVolumeMounts: []
-  ## @param indexNode.sidecars Add additional sidecar containers to the Index Node pod(s)
+  ## @param streamingNode.sidecars Add additional sidecar containers to the Streaming Node pod(s)
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -3807,10 +2263,10 @@ indexNode:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param indexNode.enableDefaultInitContainers Deploy default init containers
+  ## @param streamingNode.enableDefaultInitContainers Deploy default init containers
   ##
   enableDefaultInitContainers: true
-  ## @param indexNode.initContainers Add additional init containers to the Index Node pod(s)
+  ## @param streamingNode.initContainers Add additional init containers to the Streaming Node pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -3820,156 +2276,156 @@ indexNode:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Service account for Index Node to use
+  ## Service account for Streaming Node to use
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ##
   serviceAccount:
-    ## @param indexNode.serviceAccount.create Enable creation of ServiceAccount for Index Node pods
+    ## @param streamingNode.serviceAccount.create Enable creation of ServiceAccount for Streaming Node pods
     ##
     create: true
-    ## @param indexNode.serviceAccount.name The name of the ServiceAccount to use
+    ## @param streamingNode.serviceAccount.name The name of the ServiceAccount to use
     ## If not set and create is true, a name is generated using the common.names.fullname template
     ##
     name: ""
-    ## @param indexNode.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## @param streamingNode.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
     automountServiceAccountToken: false
-    ## @param indexNode.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ## @param streamingNode.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param indexNode.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param indexNode.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
-  ## @param indexNode.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexNode.pdb.minAvailable` and `indexNode.pdb.maxUnavailable` are empty.
+  ## @param streamingNode.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param streamingNode.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param streamingNode.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `streamingNode.pdb.minAvailable` and `streamingNode.pdb.maxUnavailable` are empty.
   ##
   pdb:
     create: true
     minAvailable: ""
     maxUnavailable: ""
-  ## @section Index Node Autoscaling configuration
+  ## @section Streaming Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
   autoscaling:
     vpa:
-      ## @param indexNode.autoscaling.vpa.enabled Enable VPA
+      ## @param streamingNode.autoscaling.vpa.enabled Enable VPA
       ##
       enabled: false
-      ## @param indexNode.autoscaling.vpa.annotations Annotations for VPA resource
+      ## @param streamingNode.autoscaling.vpa.annotations Annotations for VPA resource
       ##
       annotations: {}
-      ## @param indexNode.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ## @param streamingNode.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
       ##
       controlledResources: []
-      ## @param indexNode.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## @param streamingNode.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
       maxAllowed: {}
-      ## @param indexNode.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## @param streamingNode.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
       updatePolicy:
-        ## @param indexNode.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## @param streamingNode.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
         ##
         updateMode: Auto
     hpa:
-      ## @param indexNode.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param streamingNode.autoscaling.hpa.enabled Enable HPA for Milvus Streaming node
       ##
       enabled: false
-      ## @param indexNode.autoscaling.hpa.annotations Annotations for HPA resource
+      ## @param streamingNode.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param indexNode.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param streamingNode.autoscaling.hpa.minReplicas Minimum number of Milvus Streaming node replicas
       ##
       minReplicas: ""
-      ## @param indexNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param streamingNode.autoscaling.hpa.maxReplicas Maximum number of Milvus Streaming node replicas
       ##
       maxReplicas: ""
-      ## @param indexNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ## @param streamingNode.autoscaling.hpa.targetCPU Target CPU utilization percentage
       ##
       targetCPU: ""
-      ## @param indexNode.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ## @param streamingNode.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-  ## @section Index Node Traffic Exposure Parameters
+  ## @section Streaming Node Traffic Exposure Parameters
   ##
 
   ## data node service parameters
   ##
   service:
-    ## @param indexNode.service.type Index Node service type
+    ## @param streamingNode.service.type Streaming Node service type
     ##
     type: ClusterIP
-    ## @param indexNode.service.ports.grpc Index Node GRPC service port
-    ## @param indexNode.service.ports.metrics Index Node Metrics service port
+    ## @param streamingNode.service.ports.grpc Streaming Node GRPC service port
+    ## @param streamingNode.service.ports.metrics Streaming Node Metrics service port
     ##
     ports:
       grpc: 19530
       metrics: 9091
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
-    ## @param indexNode.service.nodePorts.grpc Node port for GRPC
-    ## @param indexNode.service.nodePorts.metrics Node port for Metrics
+    ## @param streamingNode.service.nodePorts.grpc Node port for GRPC
+    ## @param streamingNode.service.nodePorts.metrics Node port for Metrics
     ##
     nodePorts:
       grpc: ""
       metrics: ""
-    ## @param indexNode.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## @param streamingNode.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-    ## @param indexNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## @param streamingNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
-    ## @param indexNode.service.clusterIP Index Node service Cluster IP
+    ## @param streamingNode.service.clusterIP Streaming Node service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param indexNode.service.loadBalancerIP Index Node service Load Balancer IP
+    ## @param streamingNode.service.loadBalancerIP Streaming Node service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param indexNode.service.loadBalancerSourceRanges Index Node service Load Balancer sources
+    ## @param streamingNode.service.loadBalancerSourceRanges Streaming Node service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param indexNode.service.externalTrafficPolicy Index Node service external traffic policy
+    ## @param streamingNode.service.externalTrafficPolicy Streaming Node service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param indexNode.service.annotations Additional custom annotations for Index Node service
+    ## @param streamingNode.service.annotations Additional custom annotations for Streaming Node service
     ##
     annotations: {}
-    ## @param indexNode.service.extraPorts Extra ports to expose in the Index Node service
+    ## @param streamingNode.service.extraPorts Extra ports to expose in the Streaming Node service
     ##
     extraPorts: []
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
-    ## @param indexNode.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ## @param streamingNode.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
     enabled: true
-    ## @param indexNode.networkPolicy.allowExternal The Policy model to apply
+    ## @param streamingNode.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
     ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
-    ## @param indexNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ## @param streamingNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param indexNode.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param streamingNode.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3986,7 +2442,7 @@ indexNode:
     ##                   - frontend
     ##
     extraIngress: []
-    ## @param indexNode.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## @param streamingNode.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
     ##   - ports:
@@ -4003,59 +2459,59 @@ indexNode:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param indexNode.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param indexNode.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param streamingNode.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param streamingNode.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-  ## @section Index Node Metrics Parameters
+  ## @section Streaming Node Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
   metrics:
-    ## @param indexNode.metrics.enabled Enable metrics
+    ## @param streamingNode.metrics.enabled Enable metrics
     ##
     enabled: false
-    ## @param indexNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
+    ## @param streamingNode.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.indexNode.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.streamingNode.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
-      ## @param indexNode.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
+      ## @param streamingNode.metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using Prometheus Operator
       ##
       enabled: false
-      ## @param indexNode.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
+      ## @param streamingNode.metrics.serviceMonitor.annotations Annotations for the ServiceMonitor Resource
       ##
       annotations: ""
-      ## @param indexNode.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
+      ## @param streamingNode.metrics.serviceMonitor.namespace Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)
       ##
       namespace: ""
-      ## @param indexNode.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## @param streamingNode.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
       interval: ""
-      ## @param indexNode.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## @param streamingNode.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
       scrapeTimeout: ""
-      ## @param indexNode.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
+      ## @param streamingNode.metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
       ##
       labels: {}
-      ## @param indexNode.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## @param streamingNode.metrics.serviceMonitor.selector Prometheus instance selector labels
       ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       ##
       selector: {}
-      ## @param indexNode.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+      ## @param streamingNode.metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
       ##
       relabelings: []
-      ## @param indexNode.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
+      ## @param streamingNode.metrics.serviceMonitor.metricRelabelings MetricRelabelConfigs to apply to samples before ingestion
       ##
       metricRelabelings: []
-      ## @param indexNode.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+      ## @param streamingNode.metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
       ##
       honorLabels: false
-      ## @param indexNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ## @param streamingNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
 ## @section Proxy Deployment Parameters
@@ -4116,7 +2572,7 @@ proxy:
   ## @param proxy.extraConfig Override configuration
   ##
   extraConfig: {}
-  ## @param proxy.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
+  ## @param proxy.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the proxy nodes
   ##
   extraConfigExistingConfigMap: ""
   ## @param proxy.command Override default container command (useful when using custom images)
@@ -4409,16 +2865,16 @@ proxy:
         ##
         updateMode: Auto
     hpa:
-      ## @param proxy.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param proxy.autoscaling.hpa.enabled Enable HPA for Milvus proxy
       ##
       enabled: false
       ## @param proxy.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param proxy.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param proxy.autoscaling.hpa.minReplicas Minimum number of Milvus proxy replicas
       ##
       minReplicas: ""
-      ## @param proxy.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param proxy.autoscaling.hpa.maxReplicas Maximum number of Milvus proxy replicas
       ##
       maxReplicas: ""
       ## @param proxy.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -4551,7 +3007,7 @@ proxy:
     ## @param proxy.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.proxy.service.ports.grpc }}"
+      prometheus.io/port: "{{ .Values.proxy.service.ports.metrics }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -4926,16 +3382,16 @@ attu:
         ##
         updateMode: Auto
     hpa:
-      ## @param attu.autoscaling.hpa.enabled Enable HPA for Milvus Data Plane
+      ## @param attu.autoscaling.hpa.enabled Enable HPA for Milvus attu
       ##
       enabled: false
       ## @param attu.autoscaling.hpa.annotations Annotations for HPA resource
       ##
       annotations: {}
-      ## @param attu.autoscaling.hpa.minReplicas Minimum number of Milvus Data Plane replicas
+      ## @param attu.autoscaling.hpa.minReplicas Minimum number of Milvus attu replicas
       ##
       minReplicas: ""
-      ## @param attu.autoscaling.hpa.maxReplicas Maximum number of Milvus Data Plane replicas
+      ## @param attu.autoscaling.hpa.maxReplicas Maximum number of Milvus attu replicas
       ##
       maxReplicas: ""
       ## @param attu.autoscaling.hpa.targetCPU Target CPU utilization percentage
@@ -5168,7 +3624,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r47
+    tag: 12-debian-12-r50
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

@@ -1,8 +1,36 @@
 # Changelog
 
-## 4.0.10 (2025-06-18)
+## 4.0.16 (2025-08-07)
 
-* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#34542](https://github.com/bitnami/charts/pull/34542))
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references ([#35610](https://github.com/bitnami/charts/pull/35610))
+
+## <small>4.0.15 (2025-08-07)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#35484) ([5793553](https://github.com/bitnami/charts/commit/57935535c7153b80df30cedd6870167a86b9bf11)), closes [#35484](https://github.com/bitnami/charts/issues/35484)
+
+## <small>4.0.14 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#35372) ([82b39f4](https://github.com/bitnami/charts/commit/82b39f40c2fa09f63d9c642dc881d27bede70b79)), closes [#35372](https://github.com/bitnami/charts/issues/35372)
+
+## <small>4.0.13 (2025-07-15)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#35097) ([0f154d2](https://github.com/bitnami/charts/commit/0f154d201bd9e4e118dbb5c092176ee210bcf078)), closes [#35097](https://github.com/bitnami/charts/issues/35097)
+
+## <small>4.0.12 (2025-07-15)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#35066) ([80da6ce](https://github.com/bitnami/charts/commit/80da6ce79d1159214177605dcc0bfec3eb06e437)), closes [#35066](https://github.com/bitnami/charts/issues/35066)
+
+## <small>4.0.11 (2025-07-09)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#34901) ([f985847](https://github.com/bitnami/charts/commit/f9858476de25af5cc5190a9d27a07e67f0a340b0)), closes [#34901](https://github.com/bitnami/charts/issues/34901)
+
+## <small>4.0.10 (2025-06-18)</small>
+
+* [bitnami/grafana-tempo] :zap: :arrow_up: Update dependency references (#34542) ([1e0f2f8](https://github.com/bitnami/charts/commit/1e0f2f81ba0ee9903ab1570bbac66c4d86d03f70)), closes [#34542](https://github.com/bitnami/charts/issues/34542)
 
 ## <small>4.0.9 (2025-06-13)</small>
 

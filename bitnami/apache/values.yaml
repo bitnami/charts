@@ -71,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.64-debian-12-r0
+  tag: 2.4.65-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -100,7 +100,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.50.1-debian-12-r0
+  tag: 2.51.0-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -691,7 +691,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.10-debian-12-r12
+    tag: 1.0.10-debian-12-r55
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -705,6 +705,9 @@ metrics:
     ## Enable debug mode
     ##
     debug: false
+  ## @param metrics.scrapeUri Apache Prometheus Exporter scrape_uri
+  ## Default scrape_uri is 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' if this variable is empty.
+  scrapeUri: ""
   ## @param metrics.podAnnotations [object] Additional custom annotations for Apache exporter service
   ##
   podAnnotations:

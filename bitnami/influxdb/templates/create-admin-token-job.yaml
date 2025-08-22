@@ -91,14 +91,14 @@ spec:
 
               {{- if eq .Values.objectStore "s3" }}
               check_s3() {
-                  if curl --max-time 5 -k "$AWS_ENDPOINT" | grep "RequestId"; then
+                  if curl --max-time {{ sub (int .Values.createAdminTokenJob.waitForS3.retryInterval) 1 }} -k "$AWS_ENDPOINT" | grep "RequestId"; then
                       return 0
                   else
                       return 1
                   fi
               }
               info "Waiting for S3 to be ready..."
-              if ! retry_while check_s3; then
+              if ! retry_while check_s3 {{ int .Values.createAdminTokenJob.waitForS3.retryAttempts }} {{ int .Values.createAdminTokenJob.waitForS3.retryInterval }}; then
                   error "Error connecting to S3"
                   exit 1
               fi

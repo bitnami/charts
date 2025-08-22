@@ -1,8 +1,40 @@
 # Changelog
 
-## 3.2.15 (2025-07-11)
+## 3.2.22 (2025-08-13)
 
-* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35014](https://github.com/bitnami/charts/pull/35014))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35846](https://github.com/bitnami/charts/pull/35846))
+
+## <small>3.2.21 (2025-08-07)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35605) ([7c2b42d](https://github.com/bitnami/charts/commit/7c2b42db0682fecb2bc51e6c77ba7635344d5b88)), closes [#35605](https://github.com/bitnami/charts/issues/35605)
+
+## <small>3.2.20 (2025-08-07)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35562) ([8cbacb0](https://github.com/bitnami/charts/commit/8cbacb009582b449b2384bd8c5b31f7fb5759cc3)), closes [#35562](https://github.com/bitnami/charts/issues/35562)
+
+## <small>3.2.19 (2025-08-07)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35474) ([fe0ba8f](https://github.com/bitnami/charts/commit/fe0ba8f263a0373a90a050e05dd0932c9e4e7f00)), closes [#35474](https://github.com/bitnami/charts/issues/35474)
+
+## <small>3.2.18 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35402) ([9493f30](https://github.com/bitnami/charts/commit/9493f30c02727dfe7f0931738d4c173b02e1a41e)), closes [#35402](https://github.com/bitnami/charts/issues/35402)
+
+## <small>3.2.17 (2025-07-15)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35091) ([a4651e1](https://github.com/bitnami/charts/commit/a4651e181d60473947db38e5d391b1bc99c069ec)), closes [#35091](https://github.com/bitnami/charts/issues/35091)
+
+## <small>3.2.16 (2025-07-15)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35054) ([5e81d2a](https://github.com/bitnami/charts/commit/5e81d2a7c665780c8f5147d6e9e56236a32bd9e5)), closes [#35054](https://github.com/bitnami/charts/issues/35054)
+
+## <small>3.2.15 (2025-07-11)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35014) ([2f60133](https://github.com/bitnami/charts/commit/2f6013303813b98083d8297ec98e1ebfc5656009)), closes [#35014](https://github.com/bitnami/charts/issues/35014)
 
 ## <small>3.2.14 (2025-07-11)</small>
 

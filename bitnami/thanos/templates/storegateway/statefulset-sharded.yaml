@@ -23,12 +23,13 @@ SPDX-License-Identifier: APACHE-2.0
 {{- range $hashIndex, $_ := until $hashShards }}
 {{- range $timeIndex, $_ := until $timeShards }}
 {{- $index := add (mul $hashIndex $timeShards) $timeIndex }}
+{{- $shardSelector := dict "shard" $index }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
   name: {{ printf "%s-%s" (include "thanos.storegateway.fullname" $) (toString $index) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" $ }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}
     {{- if $.Values.storegateway.statefulsetLabels }}
@@ -90,8 +91,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" (set $ "shardLoopId" $index)) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAntiAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "extraMatchLabels" $shardSelector "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAntiAffinityPreset "component" "storegateway" "customLabels" $podLabels "extraMatchLabels" $shardSelector "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.storegateway.nodeAffinityPreset.type "key" $.Values.storegateway.nodeAffinityPreset.key "values" $.Values.storegateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.storegateway.dnsConfig }}

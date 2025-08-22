@@ -1,8 +1,40 @@
 # Changelog
 
-## 12.0.7 (2025-07-08)
+## 13.0.6 (2025-08-13)
 
-* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#34872](https://github.com/bitnami/charts/pull/34872))
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references ([#35824](https://github.com/bitnami/charts/pull/35824))
+
+## <small>13.0.5 (2025-08-13)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35788) ([bdd8728](https://github.com/bitnami/charts/commit/bdd8728f0e40457dc96cdd62447fafc508c34a73)), closes [#35788](https://github.com/bitnami/charts/issues/35788)
+
+## <small>13.0.4 (2025-08-12)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35755) ([b2d0ffc](https://github.com/bitnami/charts/commit/b2d0ffc22544d9bedb52253cb91607a1ff58a09c)), closes [#35755](https://github.com/bitnami/charts/issues/35755)
+
+## <small>13.0.3 (2025-08-07)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35538) ([cd3484b](https://github.com/bitnami/charts/commit/cd3484b6bbb6480b1d984b4706c86aaef5cc6d65)), closes [#35538](https://github.com/bitnami/charts/issues/35538)
+
+## <small>13.0.2 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35454) ([53fdd77](https://github.com/bitnami/charts/commit/53fdd774886e44b9c222b378d0b0cd1e850e3e80)), closes [#35454](https://github.com/bitnami/charts/issues/35454)
+
+## <small>13.0.1 (2025-07-25)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#35261) ([737af5f](https://github.com/bitnami/charts/commit/737af5f780ebc544781f9bf9bdcd615c885519d7)), closes [#35261](https://github.com/bitnami/charts/issues/35261)
+
+## 13.0.0 (2025-07-23)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/argo-workflows] Upgrade MySQL subchart to 14 (#35254) ([06cb090](https://github.com/bitnami/charts/commit/06cb0900f83b402447250875b832ce05b1dc73fd)), closes [#35254](https://github.com/bitnami/charts/issues/35254)
+
+## <small>12.0.7 (2025-07-08)</small>
+
+* [bitnami/argo-workflows] :zap: :arrow_up: Update dependency references (#34872) ([875728e](https://github.com/bitnami/charts/commit/875728e9a757fa1b50dcc6667342f54abcffc969)), closes [#34872](https://github.com/bitnami/charts/issues/34872)
 
 ## <small>12.0.6 (2025-06-13)</small>
 

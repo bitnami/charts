@@ -2,16 +2,18 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://jaeger-collector:{{ .Vars.collector.service.ports.admin }}/:
+  http://jaeger-collector:{{ .Vars.collector.service.ports.otlp.http }}/v1/traces:
+    status: 405
+    body:
+      - method not allowed
+  http://jaeger-query:{{ .Vars.query.service.ports.http }}/:
     status: 200
     body:
-      - Server available
-  http://jaeger-query:{{ .Vars.query.service.ports.admin }}/:
-    status: 200
+      - Jaeger UI
+  http://localhost:{{ .Vars.collector.containerPorts.otlp.http }}/v1/traces:
+    status: 405
     body:
-      - Server available
-  http://localhost:{{ .Vars.collector.containerPorts.admin }}/:
-    status: 200
+      - method not allowed
 command:
   check-cassandra-auth:
     exec: \[ $CASSANDRA_USERNAME = {{ .Vars.cassandra.dbUser.user }} ] && [ $CASSANDRA_PASSWORD = {{ .Vars.cassandra.dbUser.password }} ] && [ $CASSANDRA_KEYSPACE = {{ .Vars.cassandra.keyspace }} ];

@@ -41,7 +41,7 @@ spec:
         - port: {{ .Values.containerPorts.https }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPorts.metrics }}
+        - port: {{ .Values.metrics.containerPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

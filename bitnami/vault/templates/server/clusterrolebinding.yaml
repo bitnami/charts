@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.server.enabled .Values.server.rbac.create }}
+{{- if and .Values.server.enabled .Values.server.rbac.create .Values.server.rbac.createClusterRoleBinding }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:

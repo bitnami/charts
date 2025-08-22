@@ -24,6 +24,13 @@ Return the proper gitlab-runner image name
 {{- end -}}
 
 {{/*
+Return the proper gitlab-runner-helper image name
+*/}}
+{{- define "gitlab-runner.helper.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.helperImage "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper gitlab-runner image name
 */}}
 {{- define "gitlab-runner.session-server.fullname" -}}
@@ -34,7 +41,34 @@ Return the proper gitlab-runner image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "gitlab-runner.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image ) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.helperImage) "context" .) -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names as a raw comma-separated string
+*/}}
+{{- define "gitlab-runner.imagePullSecretsRaw" -}}
+{{- $context := . }}
+{{- $pullSecrets := list }}
+{{- range ((.Values.global).imagePullSecrets) -}}
+  {{- if kindIs "map" . -}}
+    {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context) | quote) -}}
+  {{- else -}}
+    {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context) | quote) -}}
+  {{- end -}}
+{{- end -}}
+{{- range (list .Values.image .Values.helperImage) -}}
+  {{- range .pullSecrets -}}
+    {{- if kindIs "map" . -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context) | quote) -}}
+    {{- else -}}
+      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context) | quote) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if (not (empty $pullSecrets)) -}}
+  {{- $pullSecrets | join ", " -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

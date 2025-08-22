@@ -1,15 +1,15 @@
 dependencies:
 - name: node-exporter
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 4.5.11
+  version: 4.5.19
 - name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 5.0.6
+  version: 5.1.0
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.31.0
+  version: 2.31.4
 - name: kube-prometheus-crds
   repository: file://./charts/kube-prometheus-crds
   version: 0.1.0
-digest: sha256:de42c1e1526b829d9d076246ddf42552463a72055feb50e89cc99646f94763d7
-generated: "2025-05-06T10:29:37.160030815+02:00"
+digest: sha256:650c1e438dc38996f2debc3ce8ce7f92f6a78ea6ed0484b48cdebfdb60c26a21
+generated: "2025-08-21T14:11:54.800608936Z"

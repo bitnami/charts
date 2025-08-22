@@ -1,8 +1,32 @@
 # Changelog
 
-## 5.0.12 (2025-07-09)
+## 5.1.0 (2025-08-14)
 
-* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references ([#34914](https://github.com/bitnami/charts/pull/34914))
+* [bitnami/kube-state-metrics] fix: OOM Killed ([#35785](https://github.com/bitnami/charts/pull/35785))
+
+## <small>5.0.16 (2025-08-13)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35843) ([77cd410](https://github.com/bitnami/charts/commit/77cd4100bb87ecebf2e675ecd8e4dcaa87b8245b)), closes [#35843](https://github.com/bitnami/charts/issues/35843)
+
+## <small>5.0.15 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35492) ([82a6251](https://github.com/bitnami/charts/commit/82a62515ead8d6ff94ff67f8b80f641fcdbd92aa)), closes [#35492](https://github.com/bitnami/charts/issues/35492)
+
+## <small>5.0.14 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35064) ([ddb5f3a](https://github.com/bitnami/charts/commit/ddb5f3a4758e5d9eb7859d0159fe0c84c289d218)), closes [#35064](https://github.com/bitnami/charts/issues/35064)
+
+## <small>5.0.13 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] ci: VIB verify (#35059) ([510c479](https://github.com/bitnami/charts/commit/510c4795f26cd2c7e6f19691fc1d1edb28df22da)), closes [#35059](https://github.com/bitnami/charts/issues/35059)
+
+## <small>5.0.12 (2025-07-09)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34914) ([855aade](https://github.com/bitnami/charts/commit/855aade37218f200274e7d71e4ecaf53062b31bf)), closes [#34914](https://github.com/bitnami/charts/issues/34914)
 
 ## <small>5.0.11 (2025-06-25)</small>
 

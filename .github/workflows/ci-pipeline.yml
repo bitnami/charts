@@ -97,7 +97,7 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
@@ -174,14 +174,14 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -386,7 +386,7 @@ jobs:
         if: github.event.pull_request.user.login == 'bitnami-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
-          
+
           # This function returns the chart parameter name based on the rule name
           rule_parameter_from_rule_name() {
             local -r rule_name="${1:-missing rule_name}"
@@ -483,7 +483,7 @@ jobs:
       threshold: ${{ steps.set-output.outputs.threshold }}
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         name: Checkout 'main' branch
         with:
           path: charts-main
@@ -520,11 +520,11 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         with:
-          image: bitnami/kubescape:3.0.3
+          image: bitnami/kubescape:3.0.37
           options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
           run: |
             if [ -d "/charts/bitnami/${CHART}" ]; then
-              kubescape scan framework MITRE,NSA,SOC2,cis-v1.23-t1.0.1 /charts/bitnami/${CHART} --format json -o /out/report.json
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.10.0 /charts/bitnami/${CHART} --format json -o /out/report.json
               # Truncate score to 2 decimals
               printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
             else
@@ -559,7 +559,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}

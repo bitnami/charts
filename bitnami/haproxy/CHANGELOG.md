@@ -1,8 +1,32 @@
 # Changelog
 
-## 2.2.29 (2025-07-09)
+## 2.2.34 (2025-08-13)
 
-* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#34964](https://github.com/bitnami/charts/pull/34964))
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#35817](https://github.com/bitnami/charts/pull/35817))
+
+## <small>2.2.33 (2025-08-13)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#35813) ([a8aeecd](https://github.com/bitnami/charts/commit/a8aeecd3bdf80ce0fdc3254f53ee26562b694899)), closes [#35813](https://github.com/bitnami/charts/issues/35813)
+
+## <small>2.2.32 (2025-08-07)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#35596) ([32fc4e7](https://github.com/bitnami/charts/commit/32fc4e752d76236b792899d48e08104b49576ffa)), closes [#35596](https://github.com/bitnami/charts/issues/35596)
+
+## <small>2.2.31 (2025-08-07)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#35585) ([8225480](https://github.com/bitnami/charts/commit/8225480b9f475fba1231520bb655511a5de67e14)), closes [#35585](https://github.com/bitnami/charts/issues/35585)
+
+## <small>2.2.30 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#35486) ([e2ddc20](https://github.com/bitnami/charts/commit/e2ddc20b9ffe030c1987d88acb71d33e0b2b53ce)), closes [#35486](https://github.com/bitnami/charts/issues/35486)
+
+## <small>2.2.29 (2025-07-09)</small>
+
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#34964) ([602ab75](https://github.com/bitnami/charts/commit/602ab753f059e29810880aa756c700bec85834c9)), closes [#34964](https://github.com/bitnami/charts/issues/34964)
 
 ## <small>2.2.28 (2025-07-09)</small>
 
