@@ -155,7 +155,11 @@ data:
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"
 
     # check if there is a master
+    {{- if and .Values.sentinel.externalAccess.enabled .Values.sentinel.externalAccess.service.loadBalancerIP }}
     master_in_persisted_conf="$(get_service_ip "$SVC_NAME")"
+    {{- else }}
+    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+    {{- end }}
     master_port_in_persisted_conf="$REDIS_MASTER_PORT_NUMBER"
     master_in_sentinel="$(get_sentinel_master_info)"
     redisRetVal=$?
