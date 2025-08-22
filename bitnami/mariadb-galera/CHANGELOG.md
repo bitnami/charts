@@ -1,6 +1,6 @@
 # Changelog
 
-## 16.0.1 (2025-08-20)
+## 16.0.1 (2025-08-22)
 
 * [bitnami/mariadb-galera] Only require mariadb-password key in secret when creating a user on first run ([#36141](https://github.com/bitnami/charts/pull/36141))
 
