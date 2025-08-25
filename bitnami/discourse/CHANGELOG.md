@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.1 (2025-08-20)
+## 17.0.1 (2025-08-25)
 
 * [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#36154](https://github.com/bitnami/charts/pull/36154))
 
