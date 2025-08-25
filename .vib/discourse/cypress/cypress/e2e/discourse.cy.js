@@ -24,7 +24,7 @@ it('allows to create a topic', () => {
   cy.contains('button', 'New Topic').click();
   cy.fixture('topics').then((topic) => {
     cy.get('#reply-title').type(`${topic.newTopic.title}-${random}`);
-    cy.get('textarea').type(`${topic.newTopic.content} ${random}`);
+    cy.get('div[contenteditable="true"]').type(`${topic.newTopic.content} ${random}`);
     cy.contains('button', 'Create Topic').click();
     cy.contains('Saving').should('not.exist');
     cy.visit('/latest');
