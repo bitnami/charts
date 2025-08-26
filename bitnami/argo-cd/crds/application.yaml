@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/argoproj/argo-cd/v{version}/manifests/crds/application-crd.yaml
-# Version: 3.0.13
+# Version: 3.1.1
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -1884,6 +1884,10 @@ spec:
                         description: 'AllowEmpty allows apps have zero live resources
                           (default: false)'
                         type: boolean
+                      enabled:
+                        description: Enable allows apps to explicitly control automated
+                          sync
+                        type: boolean
                       prune:
                         description: 'Prune specifies whether to delete resources
                           from the cluster that are not found in the sources anymore
@@ -1987,12 +1991,13 @@ spec:
                     format: date-time
                     type: string
                   message:
-                    description: Message is a human-readable informational message
-                      describing the health status
+                    description: |-
+                      Message is a human-readable informational message describing the health status
+
+                      Deprecated: this field is not used and will be removed in a future release.
                     type: string
                   status:
-                    description: Status holds the status code of the application or
-                      resource
+                    description: Status holds the status code of the application
                     type: string
                 type: object
               history:
@@ -3861,6 +3866,12 @@ spec:
                               description: HookType specifies the type of the hook.
                                 Empty for non-hook resources
                               type: string
+                            images:
+                              description: Images contains the images related to the
+                                ResourceResult
+                              items:
+                                type: string
+                              type: array
                             kind:
                               description: Kind specifies the API kind of the resource
                               type: string
@@ -4738,8 +4749,10 @@ spec:
                         (e.g., Healthy, Degraded, Progressing).
                       properties:
                         lastTransitionTime:
-                          description: LastTransitionTime is the time the HealthStatus
-                            was set or updated
+                          description: |-
+                            LastTransitionTime is the time the HealthStatus was set or updated
+
+                            Deprecated: this field is not used and will be removed in a future release.
                           format: date-time
                           type: string
                         message:
@@ -4747,8 +4760,7 @@ spec:
                             describing the health status
                           type: string
                         status:
-                          description: Status holds the status code of the application
-                            or resource
+                          description: Status holds the status code of the resource
                           type: string
                       type: object
                     hook:
