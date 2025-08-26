@@ -11,7 +11,7 @@ annotations:
     - name: plugin-barman-cloud-sidecar
       image: docker.io/bitnami/plugin-barman-cloud-sidecar:0.6.0-debian-12-r0
     - name: postgresql
-      image: docker.io/bitnami/postgresql:17.6.0-debian-12-r3
+      image: docker.io/bitnami/postgresql:17.6.0-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

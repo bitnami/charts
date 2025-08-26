@@ -106,7 +106,7 @@ operator:
   postgresqlImage:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.6.0-debian-12-r3
+    tag: 17.6.0-debian-12-r4
     digest: ""
   ## @param operator.replicaCount Number of cloudnative-pg Operator replicas to deploy
   ##
