@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.6 (2025-08-26)
+## 22.0.7 (2025-08-27)
 
-* [bitnami/charts/issues/35435] Fix Redis configuration when using sentinel and 1 replica ([#36170](https://github.com/bitnami/charts/pull/36170))
+* [bitnami/redis] Fix Redis sentinel initialization with single replica ([#35667](https://github.com/bitnami/charts/pull/35667))
+
+## <small>22.0.6 (2025-08-26)</small>
+
+* [bitnami/charts/issues/35435] Fix Redis configuration when using sentinel and 1 replica (#36170) ([7bc9738](https://github.com/bitnami/charts/commit/7bc9738651c99dc1a9d960da83f4502d9c2d352e)), closes [#36170](https://github.com/bitnami/charts/issues/36170)
 
 ## <small>22.0.5 (2025-08-23)</small>
 
