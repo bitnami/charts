@@ -1131,6 +1131,15 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 5.0.0
+
+`grafana-tempo-query` is now a gRPC standalone service, it doesn't work anymore as Jaeger storage plugin. This means that Jaeger is not distributed wihtin the `grafana-tempo-query` image. Main changes are:
+
+- Ports exposed by Jaeger have been removed.
+- GRPC port exposed by `tempo-query` has been included in the services and network policies to allow the intregration with Jaeger.
+
+More details at [Github issue](https://github.com/bitnami/charts/pull/36205).
+
 ### To 4.0.0
 
 The `metrics-generator` component kind has switched from a 'Deployment' to a 'Statefulset'. More details at [Github issue](https://github.com/bitnami/charts/pull/31495).
