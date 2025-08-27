@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.1.8 (2025-08-23)
+## 3.1.10 (2025-08-27)
 
-* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#36177](https://github.com/bitnami/charts/pull/36177))
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references ([#36210](https://github.com/bitnami/charts/pull/36210))
+
+## <small>3.1.9 (2025-08-25)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#36183) ([c477a47](https://github.com/bitnami/charts/commit/c477a47e7efbd95e1298e7c864491b56de28be7e)), closes [#36183](https://github.com/bitnami/charts/issues/36183)
+
+## <small>3.1.8 (2025-08-25)</small>
+
+* [bitnami/cilium] :zap: :arrow_up: Update dependency references (#36177) ([e38c44c](https://github.com/bitnami/charts/commit/e38c44cdb846e07e920cf55a91e516ffdcf9e47d)), closes [#36177](https://github.com/bitnami/charts/issues/36177)
 
 ## <small>3.1.7 (2025-08-16)</small>
 
