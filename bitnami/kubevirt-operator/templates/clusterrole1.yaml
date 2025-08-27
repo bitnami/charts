@@ -1,0 +1,36 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if .Values.rbac.clusterrole.create }}
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+kind: ClusterRole
+metadata:
+  name: kubevirt.io:operator
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: operator
+    operator.kubevirt.io: ""
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+      - kubevirt.io
+    resources:
+      - kubevirts
+    verbs:
+      - get
+      - delete
+      - create
+      - update
+      - patch
+      - list
+      - watch
+      - deletecollection
+  {{- if .Values.rbac.clusterrole.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.clusterrole.rules "context" $ ) | nindent 2 }}
+  {{- end }}
+{{- end }}
+
