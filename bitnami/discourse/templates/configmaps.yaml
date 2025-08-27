@@ -47,5 +47,5 @@ data:
   POSTGRESQL_CLIENT_CREATE_DATABASE_USERNAME: {{ .Values.externalDatabase.user | quote }}
   {{- end }}
   POSTGRESQL_CLIENT_CREATE_DATABASE_NAME: {{ include "discourse.database.name" . }}
-  POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm"
+  POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS: "hstore,pg_trgm,vector"
   {{- end }}

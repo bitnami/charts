@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.12 (2025-08-07)
+## 3.0.13 (2025-08-26)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#35601](https://github.com/bitnami/charts/pull/35601))
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#36188](https://github.com/bitnami/charts/pull/36188))
+
+## <small>3.0.12 (2025-08-07)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35601) ([d76fac4](https://github.com/bitnami/charts/commit/d76fac43e9bf86a492813af7aa9bd24ce910367a)), closes [#35601](https://github.com/bitnami/charts/issues/35601)
 
 ## <small>3.0.11 (2025-08-07)</small>
 
