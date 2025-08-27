@@ -2506,14 +2506,11 @@ queryFrontend:
     ##
     configuration: |
       backend: 127.0.0.1:{{ .Values.tempo.containerPorts.web }}
-    ## @param queryFrontend.query.containerPorts.jaegerMetrics queryFrontend query sidecar Jaeger metrics container port
-    ## @param queryFrontend.query.containerPorts.jaegerUI queryFrontend query sidecar Jaeger UI container port
-    ## @param queryFrontend.query.containerPorts.jaegerGRPC queryFrontend query sidecar Jaeger UI container port
+      address: 0.0.0.0:{{ .Values.queryFrontend.query.containerPorts.grpcJaeger }}
+    ## @param queryFrontend.query.containerPorts.grpcJaeger GRPC port to be used from Jaeger query
     ##
     containerPorts:
-      jaegerMetrics: 16687
-      jaegerUI: 16686
-      jaegerGRPC: 16685
+      grpcJaeger: 7777
     ## @param queryFrontend.query.existingConfigmap Name of a configmap with the query configuration
     ##
     existingConfigmap: ""
@@ -2650,18 +2647,22 @@ queryFrontend:
     type: ClusterIP
     ## @param queryFrontend.service.ports.http queryFrontend HTTP service port
     ## @param queryFrontend.service.ports.grpc queryFrontend GRPC service port
+    ## @param queryFrontend.service.ports.grpcJaeger queryFrontend GRPC service port for Jaeger query
     ##
     ports:
       http: 3200
       grpc: 9095
+      grpcJaeger: 7777
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param queryFrontend.service.nodePorts.http Node port for HTTP
     ## @param queryFrontend.service.nodePorts.grpc Node port for GRPC
+    ## @param queryFrontend.service.nodePorts.grpcJaeger Node port for Jaeger query
     ##
     nodePorts:
       http: ""
       grpc: ""
+      grpcJaeger: ""
     ## @param queryFrontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
