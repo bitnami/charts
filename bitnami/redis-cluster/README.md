@@ -621,6 +621,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `cluster.init`                                            | Enable the initialization of the Redis(R) Cluster                                                          | `true`         |
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail                     | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                                         | `1`            |
+| `cluster.redisShutdownWaitFailover`                       | Whether the Redis(R) master container waits for the failover at shutdown.                                  | `true`         |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                                 | `false`        |
 | `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                                            | `false`        |
 | `cluster.externalAccess.service.disableLoadBalancerIP`    | Disable use of `Service.spec.loadBalancerIP`                                                               | `false`        |

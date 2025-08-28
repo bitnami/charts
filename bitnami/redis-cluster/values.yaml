@@ -873,6 +873,10 @@ cluster:
   replicas: 1
   ## Configuration to access the Redis(R) Cluster from outside the Kubernetes cluster
   ##
+  ## @param cluster.redisShutdownWaitFailover Whether the Redis(R) master container waits for the failover at shutdown.
+  ##
+  redisShutdownWaitFailover: true
+
   externalAccess:
     ## @param cluster.externalAccess.enabled Enable access to the Redis
     ##
