@@ -3,10 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if and .Values.queryFrontend.query.enabled (empty .Values.queryFrontend.query.existingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "grafana-tempo.query-frontend.fullname" . }}
+  name: {{ template "grafana-tempo.queryConfigmapName" . }}
   namespace: {{ .Release.Namespace | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.queryFrontend.query.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
@@ -18,3 +19,4 @@ metadata:
 data:
   tempo-query.yaml: |-
     {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.configuration "context" $) | nindent 4 }}
+{{- end }}
