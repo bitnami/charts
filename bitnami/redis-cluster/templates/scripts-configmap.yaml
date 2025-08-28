@@ -105,3 +105,64 @@ data:
       echo "$response"
       exit 1
     fi
+  prestop-redis-cluster.sh: |-
+    #!/bin/bash
+    set -e
+
+    # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
+    [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
+    [[ -f "$REDIS_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${REDIS_PASSWORD_FILE}")"
+
+    run_redis_command() {
+        local args=("-h" "$1")
+        shift
+    {{- if .Values.tls.enabled }}
+        args+=("--tls" "--cert" "{{ template "redis-cluster.tlsCert" . }}" "--key" "{{ template "redis-cluster.tlsCertKey" . }}" "--cacert" "{{ template "redis-cluster.tlsCACert" . }}" "-p" $REDIS_TLS_PORT_NUMBER)
+    {{- else }}
+        args+=("-p" $REDIS_PORT_NUMBER)
+    {{- end }}
+        redis-cli "${args[@]}" "$@"
+    }
+
+    is_master() {
+        REDIS_ROLE=$(run_redis_command 127.0.0.1 ROLE | head -1)
+        [[ "$REDIS_ROLE" == "master" ]]
+    }
+
+    get_cluster_node_id() {
+        CLUSTER_ID=$(run_redis_command 127.0.0.1 CLUSTER MYID | head -1)
+        echo $CLUSTER_ID
+    }
+
+    get_replica_ips() {
+      CLUSTER_NODE_ID=$(get_cluster_node_id)
+
+      # Get a list of replica IP addresses that could be promoted
+      # Use shuf to randomize the order
+      REPLICAS="$(run_redis_command 127.0.0.1 CLUSTER REPLICAS $CLUSTER_NODE_ID | grep -Ev "(disconnected|nofailover|noaddr|handshake)" | cut -d " " -f 2 | cut -d ":" -f 1 | shuf)"
+      echo "$REPLICAS" | sed '/^[[:space:]]*$/d'
+    }
+
+    if is_master; then
+      # Get list of replicas of the current master
+      mapfile -t REPLICA_IPS < <( get_replica_ips )
+
+      NUM_REPLICAS=${#REPLICA_IPS[@]}
+      echo "Found $NUM_REPLICAS available replicas"
+
+      # Iterate over replicas, attempting to promote one
+      for REPLICA_IP in "${REPLICA_IPS[@]}"; do
+        echo "Going to fail over to replica at $REPLICA_IP"
+        result=$(run_redis_command $REPLICA_IP CLUSTER FAILOVER)
+
+        if [[ "$result" == "OK" ]]; then
+          {{- if .Values.cluster.redisShutdownWaitFailover }}
+          # Wait for clients to update their topology
+          sleep 10
+          {{- end }}
+          break
+        fi
+      done
+    else
+      exit 0
+    fi
