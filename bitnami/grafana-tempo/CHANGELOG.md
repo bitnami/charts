@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.0 (2025-08-27)
+## 5.0.0 (2025-08-28)
 
 * [bitnami/grafana-tempo] Adapt chart to changes included in the latest grafana-tempo-query images ([#36205](https://github.com/bitnami/charts/pull/36205))
 
