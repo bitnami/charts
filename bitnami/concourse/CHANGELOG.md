@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.46 (2025-08-27)
+## 5.1.46 (2025-08-28)
 
 * [bitnami/concourse] :zap: :arrow_up: Update dependency references ([#35780](https://github.com/bitnami/charts/pull/35780))
 
