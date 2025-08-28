@@ -268,6 +268,14 @@ spec:
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -ec
+                  - /opt/bitnami/scripts/start-scripts/prestop-redis-cluster.sh
           {{- end }}
           {{- end }}
           {{- if .Values.redis.resources }}
