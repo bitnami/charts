@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+{{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -117,7 +117,7 @@ spec:
               value: {{ include "airflow.worker.executor" . }}
             - name: PYTHONPYCACHEPREFIX
               value: "/opt/bitnami/airflow/venv/tmp"
-            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
             - name: REDIS_PORT_NUMBER
@@ -300,7 +300,7 @@ spec:
               - secret:
                   name: {{ include "airflow.ldap.secretName" . }}
               {{- end }}
-              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
               - secret:
                   name: {{ include "airflow.redis.secretName" . }}
               {{- end }}
