@@ -5,23 +5,23 @@ annotations:
   category: Infrastructure
   images: |
     - name: harbor-adapter-trivy
-      image: ghcr.io/bitmoa/harbor-adapter-trivy:2.13.2-debian-12-r2
+      image: ghcr.io/bitmoa/harbor-adapter-trivy:2.13.2-debian-12-r0
     - name: harbor-core
-      image: ghcr.io/bitmoa/harbor-core:2.13.2-debian-12-r3
+      image: ghcr.io/bitmoa/harbor-core:2.13.2-debian-12-r0
     - name: harbor-exporter
-      image: ghcr.io/bitmoa/harbor-exporter:2.13.2-debian-12-r2
+      image: ghcr.io/bitmoa/harbor-exporter:2.13.2-debian-12-r0
     - name: harbor-jobservice
-      image: ghcr.io/bitmoa/harbor-jobservice:2.13.2-debian-12-r3
+      image: ghcr.io/bitmoa/harbor-jobservice:2.13.2-debian-12-r0
     - name: harbor-portal
-      image: ghcr.io/bitmoa/harbor-portal:2.13.2-debian-12-r1
+      image: ghcr.io/bitmoa/harbor-portal:2.13.2-debian-12-r0
     - name: harbor-registry
-      image: ghcr.io/bitmoa/harbor-registry:2.13.2-debian-12-r2
+      image: ghcr.io/bitmoa/harbor-registry:2.13.2-debian-12-r0
     - name: harbor-registryctl
-      image: ghcr.io/bitmoa/harbor-registryctl:2.13.2-debian-12-r3
+      image: ghcr.io/bitmoa/harbor-registryctl:2.13.2-debian-12-r0
     - name: nginx
       image: ghcr.io/bitmoa/nginx:1.29.1-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

@@ -1327,7 +1327,7 @@ volumePermissions:
   image:
     registry: ghcr.io
     repository: bitmoa/os-shell
-    tag: 12-debian-12-r50
+    tag: 12-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1371,7 +1371,7 @@ metrics:
   image:
     registry: ghcr.io
     repository: bitmoa/mysqld-exporter
-    tag: 0.17.2-debian-12-r16
+    tag: 0.17.2-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

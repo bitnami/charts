@@ -7,9 +7,9 @@ annotations:
     - name: jenkins
       image: ghcr.io/bitmoa/jenkins:2.516.2-debian-12-r0
     - name: jenkins-agent
-      image: ghcr.io/bitmoa/jenkins-agent:0.3327.0-debian-12-r1
+      image: ghcr.io/bitmoa/jenkins-agent:0.3327.0-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

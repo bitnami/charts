@@ -751,7 +751,7 @@ metrics:
   image:
     registry: ghcr.io
     repository: bitmoa/nats-exporter
-    tag: 0.17.3-debian-12-r8
+    tag: 0.17.3-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

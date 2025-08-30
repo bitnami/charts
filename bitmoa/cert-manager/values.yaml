@@ -86,7 +86,7 @@ controller:
   image:
     registry: ghcr.io
     repository: bitmoa/cert-manager
-    tag: 1.18.2-debian-12-r5
+    tag: 1.18.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -116,7 +116,7 @@ controller:
     image:
       registry: ghcr.io
       repository: bitmoa/acmesolver
-      tag: 1.18.2-debian-12-r5
+      tag: 1.18.2-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -497,7 +497,7 @@ webhook:
   image:
     registry: ghcr.io
     repository: bitmoa/cert-manager-webhook
-    tag: 1.18.2-debian-12-r5
+    tag: 1.18.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -869,7 +869,7 @@ cainjector:
   image:
     registry: ghcr.io
     repository: bitmoa/cainjector
-    tag: 1.18.2-debian-12-r5
+    tag: 1.18.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

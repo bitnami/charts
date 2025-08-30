@@ -567,7 +567,7 @@ This version introduces image verification for security purposes. To disable it,
 
 ### To 9.0.3
 
-This version uses solr container image version `9.5.0-debian-12-r7` which removes `HDFS` module due to CVEs found in it.
+This version uses solr container image version `9.5.0-debian-12-r0` which removes `HDFS` module due to CVEs found in it.
 
 ### To 9.0.0
 

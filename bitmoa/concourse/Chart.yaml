@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: concourse
-      image: ghcr.io/bitmoa/concourse:7.13.2-debian-12-r12
+      image: ghcr.io/bitmoa/concourse:7.13.2-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

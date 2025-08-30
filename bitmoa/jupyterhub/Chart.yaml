@@ -5,13 +5,13 @@ annotations:
   category: MachineLearning
   images: |
     - name: configurable-http-proxy
-      image: ghcr.io/bitmoa/configurable-http-proxy:5.0.1-debian-12-r21
+      image: ghcr.io/bitmoa/configurable-http-proxy:5.0.1-debian-12-r0
     - name: jupyter-base-notebook
-      image: ghcr.io/bitmoa/jupyter-base-notebook:5.3.0-debian-12-r10
+      image: ghcr.io/bitmoa/jupyter-base-notebook:5.3.0-debian-12-r0
     - name: jupyterhub
-      image: ghcr.io/bitmoa/jupyterhub:5.3.0-debian-12-r15
+      image: ghcr.io/bitmoa/jupyterhub:5.3.0-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

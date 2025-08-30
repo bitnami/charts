@@ -5,11 +5,11 @@ annotations:
   category: CMS
   images: |
     - name: apache-exporter
-      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r55
+      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r0
     - name: drupal
-      image: ghcr.io/bitmoa/drupal:11.2.3-debian-12-r1
+      image: ghcr.io/bitmoa/drupal:11.2.3-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

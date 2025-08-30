@@ -5,13 +5,13 @@ annotations:
   category: Analytics
   images: |
     - name: alertmanager
-      image: ghcr.io/bitmoa/alertmanager:0.28.1-debian-12-r15
+      image: ghcr.io/bitmoa/alertmanager:0.28.1-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: prometheus
-      image: ghcr.io/bitmoa/prometheus:3.5.0-debian-12-r3
+      image: ghcr.io/bitmoa/prometheus:3.5.0-debian-12-r0
     - name: thanos
-      image: ghcr.io/bitmoa/thanos:0.39.2-debian-12-r2
+      image: ghcr.io/bitmoa/thanos:0.39.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

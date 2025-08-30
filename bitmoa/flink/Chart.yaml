@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: flink
-      image: ghcr.io/bitmoa/flink:2.1.0-debian-12-r1
+      image: ghcr.io/bitmoa/flink:2.1.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

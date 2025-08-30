@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: minio
-      image: ghcr.io/bitmoa/minio:2025.7.23-debian-12-r3
+      image: ghcr.io/bitmoa/minio:2025.7.23-debian-12-r0
     - name: minio-client
-      image: ghcr.io/bitmoa/minio-client:2025.7.21-debian-12-r2
+      image: ghcr.io/bitmoa/minio-client:2025.7.21-debian-12-r0
     - name: minio-object-browser
-      image: ghcr.io/bitmoa/minio-object-browser:2.0.2-debian-12-r3
+      image: ghcr.io/bitmoa/minio-object-browser:2.0.2-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

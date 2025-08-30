@@ -5,9 +5,9 @@ annotations:
   category: Database
   images: |
     - name: cassandra
-      image: ghcr.io/bitmoa/cassandra:5.0.5-debian-12-r7
+      image: ghcr.io/bitmoa/cassandra:5.0.5-debian-12-r0
     - name: zipkin
-      image: ghcr.io/bitmoa/zipkin:3.5.1-debian-12-r5
+      image: ghcr.io/bitmoa/zipkin:3.5.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

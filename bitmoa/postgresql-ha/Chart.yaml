@@ -5,13 +5,13 @@ annotations:
   category: Database
   images: |
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: pgpool
       image: ghcr.io/bitmoa/pgpool:4.6.3-debian-12-r0
     - name: postgres-exporter
-      image: ghcr.io/bitmoa/postgres-exporter:0.17.1-debian-12-r16
+      image: ghcr.io/bitmoa/postgres-exporter:0.17.1-debian-12-r0
     - name: postgresql-repmgr
-      image: ghcr.io/bitmoa/postgresql-repmgr:17.6.0-debian-12-r2
+      image: ghcr.io/bitmoa/postgresql-repmgr:17.6.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

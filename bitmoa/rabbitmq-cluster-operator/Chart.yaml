@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: rabbitmq
-      image: ghcr.io/bitmoa/rabbitmq:4.1.3-debian-12-r1
+      image: ghcr.io/bitmoa/rabbitmq:4.1.3-debian-12-r0
     - name: rabbitmq-cluster-operator
       image: ghcr.io/bitmoa/rabbitmq-cluster-operator:2.16.1-debian-12-r0
     - name: rmq-default-credential-updater

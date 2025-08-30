@@ -5,9 +5,9 @@ annotations:
   category: Analytics
   images: |
     - name: grafana
-      image: ghcr.io/bitmoa/grafana:12.1.1-debian-12-r1
+      image: ghcr.io/bitmoa/grafana:12.1.1-debian-12-r0
     - name: grafana-operator
-      image: ghcr.io/bitmoa/grafana-operator:5.19.4-debian-12-r2
+      image: ghcr.io/bitmoa/grafana-operator:5.19.4-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

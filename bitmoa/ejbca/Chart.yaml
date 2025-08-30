@@ -5,7 +5,7 @@ annotations:
   category: CertificateAuthority
   images: |
     - name: ejbca
-      image: ghcr.io/bitmoa/ejbca:9.1.1-debian-12-r12
+      image: ghcr.io/bitmoa/ejbca:9.1.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

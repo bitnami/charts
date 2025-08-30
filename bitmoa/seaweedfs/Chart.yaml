@@ -7,11 +7,11 @@ annotations:
     - name: mariadb
       image: ghcr.io/bitmoa/mariadb:12.0.2-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: postgresql
-      image: ghcr.io/bitmoa/postgresql:17.6.0-debian-12-r4
+      image: ghcr.io/bitmoa/postgresql:17.6.0-debian-12-r0
     - name: seaweedfs
-      image: ghcr.io/bitmoa/seaweedfs:3.96.0-debian-12-r2
+      image: ghcr.io/bitmoa/seaweedfs:3.96.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

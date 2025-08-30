@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   images: |
     - name: configmap-reload
-      image: ghcr.io/bitmoa/configmap-reload:0.15.0-debian-12-r12
+      image: ghcr.io/bitmoa/configmap-reload:0.15.0-debian-12-r0
     - name: grafana-alloy
       image: ghcr.io/bitmoa/grafana-alloy:1.10.2-debian-12-r0
   licenses: Apache-2.0

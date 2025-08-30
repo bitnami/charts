@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: cassandra
-      image: ghcr.io/bitmoa/cassandra:5.0.5-debian-12-r7
+      image: ghcr.io/bitmoa/cassandra:5.0.5-debian-12-r0
     - name: jaeger
-      image: ghcr.io/bitmoa/jaeger:2.9.0-debian-12-r1
+      image: ghcr.io/bitmoa/jaeger:2.9.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

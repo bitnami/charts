@@ -79,7 +79,7 @@ operator:
   image:
     registry: ghcr.io
     repository: bitmoa/cloudnative-pg
-    tag: 1.27.0-debian-12-r1
+    tag: 1.27.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -106,7 +106,7 @@ operator:
   postgresqlImage:
     registry: ghcr.io
     repository: bitmoa/postgresql
-    tag: 17.6.0-debian-12-r4
+    tag: 17.6.0-debian-12-r0
     digest: ""
   ## @param operator.replicaCount Number of cloudnative-pg Operator replicas to deploy
   ##

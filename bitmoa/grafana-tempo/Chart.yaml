@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: grafana-tempo
-      image: ghcr.io/bitmoa/grafana-tempo:2.8.2-debian-12-r1
+      image: ghcr.io/bitmoa/grafana-tempo:2.8.2-debian-12-r0
     - name: grafana-tempo-query
-      image: ghcr.io/bitmoa/grafana-tempo-query:2.8.2-debian-12-r1
+      image: ghcr.io/bitmoa/grafana-tempo-query:2.8.2-debian-12-r0
     - name: grafana-tempo-vulture
-      image: ghcr.io/bitmoa/grafana-tempo-vulture:2.8.2-debian-12-r1
+      image: ghcr.io/bitmoa/grafana-tempo-vulture:2.8.2-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

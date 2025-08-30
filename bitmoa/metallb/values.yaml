@@ -160,7 +160,7 @@ controller:
   image:
     registry: ghcr.io
     repository: bitmoa/metallb-controller
-    tag: 0.15.2-debian-12-r7
+    tag: 0.15.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -568,7 +568,7 @@ speaker:
   image:
     registry: ghcr.io
     repository: bitmoa/metallb-speaker
-    tag: 0.15.2-debian-12-r6
+    tag: 0.15.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -944,7 +944,7 @@ speaker:
       ##
       registry: ghcr.io
       repository: bitmoa/metallb-speaker
-      tag: 0.15.2-debian-12-r6
+      tag: 0.15.2-debian-12-r0
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []

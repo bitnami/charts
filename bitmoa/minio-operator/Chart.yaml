@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: minio
-      image: ghcr.io/bitmoa/minio:2025.7.23-debian-12-r3
+      image: ghcr.io/bitmoa/minio:2025.7.23-debian-12-r0
     - name: minio-operator
-      image: ghcr.io/bitmoa/minio-operator:7.1.1-debian-12-r7
+      image: ghcr.io/bitmoa/minio-operator:7.1.1-debian-12-r0
     - name: minio-operator-sidecar
-      image: ghcr.io/bitmoa/minio-operator-sidecar:7.1.1-debian-12-r7
+      image: ghcr.io/bitmoa/minio-operator-sidecar:7.1.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

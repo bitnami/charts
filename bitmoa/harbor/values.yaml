@@ -815,7 +815,7 @@ volumePermissions:
   image:
     registry: ghcr.io
     repository: bitmoa/os-shell
-    tag: 12-debian-12-r50
+    tag: 12-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1245,7 +1245,7 @@ portal:
   image:
     registry: ghcr.io
     repository: bitmoa/harbor-portal
-    tag: 2.13.2-debian-12-r1
+    tag: 2.13.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1614,7 +1614,7 @@ core:
   image:
     registry: ghcr.io
     repository: bitmoa/harbor-core
-    tag: 2.13.2-debian-12-r3
+    tag: 2.13.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2048,7 +2048,7 @@ jobservice:
   image:
     registry: ghcr.io
     repository: bitmoa/harbor-jobservice
-    tag: 2.13.2-debian-12-r3
+    tag: 2.13.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2724,7 +2724,7 @@ registry:
     image:
       registry: ghcr.io
       repository: bitmoa/harbor-registry
-      tag: 2.13.2-debian-12-r2
+      tag: 2.13.2-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2895,7 +2895,7 @@ registry:
     image:
       registry: ghcr.io
       repository: bitmoa/harbor-registryctl
-      tag: 2.13.2-debian-12-r3
+      tag: 2.13.2-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3060,7 +3060,7 @@ trivy:
   image:
     registry: ghcr.io
     repository: bitmoa/harbor-adapter-trivy
-    tag: 2.13.2-debian-12-r2
+    tag: 2.13.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -3492,7 +3492,7 @@ exporter:
   image:
     registry: ghcr.io
     repository: bitmoa/harbor-exporter
-    tag: 2.13.2-debian-12-r2
+    tag: 2.13.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

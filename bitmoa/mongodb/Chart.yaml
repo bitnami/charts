@@ -9,11 +9,11 @@ annotations:
     - name: mongodb
       image: ghcr.io/bitmoa/mongodb:8.0.13-debian-12-r0
     - name: mongodb-exporter
-      image: ghcr.io/bitmoa/mongodb-exporter:0.47.0-debian-12-r1
+      image: ghcr.io/bitmoa/mongodb-exporter:0.47.0-debian-12-r0
     - name: nginx
       image: ghcr.io/bitmoa/nginx:1.29.1-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

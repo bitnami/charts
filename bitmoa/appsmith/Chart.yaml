@@ -9,7 +9,7 @@ annotations:
     - name: haproxy
       image: ghcr.io/bitmoa/haproxy:3.2.4-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

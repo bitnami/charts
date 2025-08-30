@@ -5,9 +5,9 @@ annotations:
   category: Database
   images: |
     - name: keydb
-      image: ghcr.io/bitmoa/keydb:6.3.4-debian-12-r24
+      image: ghcr.io/bitmoa/keydb:6.3.4-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: redis-exporter
       image: ghcr.io/bitmoa/redis-exporter:1.76.0-debian-12-r0
   licenses: Apache-2.0

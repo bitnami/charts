@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: argo-workflow-cli
-      image: ghcr.io/bitmoa/argo-workflow-cli:3.7.1-debian-12-r1
+      image: ghcr.io/bitmoa/argo-workflow-cli:3.7.1-debian-12-r0
     - name: argo-workflow-controller
-      image: ghcr.io/bitmoa/argo-workflow-controller:3.7.1-debian-12-r1
+      image: ghcr.io/bitmoa/argo-workflow-controller:3.7.1-debian-12-r0
     - name: argo-workflow-exec
-      image: ghcr.io/bitmoa/argo-workflow-exec:3.7.1-debian-12-r1
+      image: ghcr.io/bitmoa/argo-workflow-exec:3.7.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

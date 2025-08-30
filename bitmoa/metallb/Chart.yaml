@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: metallb-controller
-      image: ghcr.io/bitmoa/metallb-controller:0.15.2-debian-12-r7
+      image: ghcr.io/bitmoa/metallb-controller:0.15.2-debian-12-r0
     - name: metallb-speaker
-      image: ghcr.io/bitmoa/metallb-speaker:0.15.2-debian-12-r6
+      image: ghcr.io/bitmoa/metallb-speaker:0.15.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

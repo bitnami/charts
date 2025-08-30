@@ -5,11 +5,11 @@ annotations:
   category: Database
   images: |
     - name: mysql
-      image: ghcr.io/bitmoa/mysql:9.4.0-debian-12-r1
+      image: ghcr.io/bitmoa/mysql:9.4.0-debian-12-r0
     - name: mysqld-exporter
-      image: ghcr.io/bitmoa/mysqld-exporter:0.17.2-debian-12-r16
+      image: ghcr.io/bitmoa/mysqld-exporter:0.17.2-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

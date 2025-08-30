@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: kong
-      image: ghcr.io/bitmoa/kong:3.9.1-debian-12-r10
+      image: ghcr.io/bitmoa/kong:3.9.1-debian-12-r0
     - name: kong-ingress-controller
-      image: ghcr.io/bitmoa/kong-ingress-controller:3.5.1-debian-12-r3
+      image: ghcr.io/bitmoa/kong-ingress-controller:3.5.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

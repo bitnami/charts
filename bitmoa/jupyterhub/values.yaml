@@ -84,7 +84,7 @@ hub:
   image:
     registry: ghcr.io
     repository: bitmoa/jupyterhub
-    tag: 5.3.0-debian-12-r15
+    tag: 5.3.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -712,7 +712,7 @@ proxy:
   image:
     registry: ghcr.io
     repository: bitmoa/configurable-http-proxy
-    tag: 5.0.1-debian-12-r21
+    tag: 5.0.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1589,7 +1589,7 @@ singleuser:
   image:
     registry: ghcr.io
     repository: bitmoa/jupyter-base-notebook
-    tag: 5.3.0-debian-12-r10
+    tag: 5.3.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1828,7 +1828,7 @@ singleuser:
 auxiliaryImage:
   registry: ghcr.io
   repository: bitmoa/os-shell
-  tag: 12-debian-12-r50
+  tag: 12-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

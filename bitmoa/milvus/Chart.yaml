@@ -7,11 +7,11 @@ annotations:
     - name: attu
       image: ghcr.io/bitmoa/attu:2.5.12-debian-12-r0
     - name: milvus
-      image: ghcr.io/bitmoa/milvus:2.6.0-debian-12-r1
+      image: ghcr.io/bitmoa/milvus:2.6.0-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: pymilvus
-      image: ghcr.io/bitmoa/pymilvus:2.6.0-debian-12-r5
+      image: ghcr.io/bitmoa/pymilvus:2.6.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

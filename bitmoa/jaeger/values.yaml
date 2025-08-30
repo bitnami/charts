@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: bitmoa/jaeger
-  tag: 2.9.0-debian-12-r1
+  tag: 2.9.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1152,7 +1152,7 @@ migration:
 cqlshImage:
   registry: ghcr.io
   repository: bitmoa/cassandra
-  tag: 5.0.5-debian-12-r7
+  tag: 5.0.5-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -120,7 +120,7 @@ postgresql:
   image:
     registry: ghcr.io
     repository: bitmoa/postgresql-repmgr
-    tag: 17.6.0-debian-12-r2
+    tag: 17.6.0-debian-12-r0
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1737,7 +1737,7 @@ metrics:
   image:
     registry: ghcr.io
     repository: bitmoa/postgres-exporter
-    tag: 0.17.1-debian-12-r16
+    tag: 0.17.1-debian-12-r0
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
@@ -1987,7 +1987,7 @@ volumePermissions:
   image:
     registry: ghcr.io
     repository: bitmoa/os-shell
-    tag: 12-debian-12-r51
+    tag: 12-debian-12-r0
     digest: ""
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##

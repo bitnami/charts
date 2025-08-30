@@ -173,7 +173,7 @@ operator:
   image:
     registry: ghcr.io
     repository: bitmoa/grafana-operator
-    tag: 5.19.4-debian-12-r2
+    tag: 5.19.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -522,7 +522,7 @@ grafana:
   image:
     registry: ghcr.io
     repository: bitmoa/grafana
-    tag: 12.1.1-debian-12-r1
+    tag: 12.1.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

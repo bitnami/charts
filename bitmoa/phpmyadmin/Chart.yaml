@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: apache-exporter
-      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r55
+      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r0
     - name: phpmyadmin
-      image: ghcr.io/bitmoa/phpmyadmin:5.2.2-debian-12-r22
+      image: ghcr.io/bitmoa/phpmyadmin:5.2.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

@@ -5,13 +5,13 @@ annotations:
   category: CertificateAuthority
   images: |
     - name: acmesolver
-      image: ghcr.io/bitmoa/acmesolver:1.18.2-debian-12-r5
+      image: ghcr.io/bitmoa/acmesolver:1.18.2-debian-12-r0
     - name: cainjector
-      image: ghcr.io/bitmoa/cainjector:1.18.2-debian-12-r5
+      image: ghcr.io/bitmoa/cainjector:1.18.2-debian-12-r0
     - name: cert-manager
-      image: ghcr.io/bitmoa/cert-manager:1.18.2-debian-12-r5
+      image: ghcr.io/bitmoa/cert-manager:1.18.2-debian-12-r0
     - name: cert-manager-webhook
-      image: ghcr.io/bitmoa/cert-manager-webhook:1.18.2-debian-12-r5
+      image: ghcr.io/bitmoa/cert-manager-webhook:1.18.2-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

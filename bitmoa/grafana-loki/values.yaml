@@ -87,7 +87,7 @@ loki:
   image:
     registry: ghcr.io
     repository: bitmoa/grafana-loki
-    tag: 3.5.3-debian-12-r2
+    tag: 3.5.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4542,7 +4542,7 @@ volumePermissions:
   image:
     registry: ghcr.io
     repository: bitmoa/os-shell
-    tag: 12-debian-12-r50
+    tag: 12-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

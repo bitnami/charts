@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   images: |
     - name: spark
-      image: ghcr.io/bitmoa/spark:4.0.0-debian-12-r20
+      image: ghcr.io/bitmoa/spark:4.0.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

@@ -5,7 +5,7 @@ annotations:
   category: DeveloperTools
   images: |
     - name: external-dns
-      image: ghcr.io/bitmoa/external-dns:0.18.0-debian-12-r4
+      image: ghcr.io/bitmoa/external-dns:0.18.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

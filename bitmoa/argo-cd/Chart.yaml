@@ -7,9 +7,9 @@ annotations:
     - name: argo-cd
       image: ghcr.io/bitmoa/argo-cd:3.1.1-debian-12-r0
     - name: dex
-      image: ghcr.io/bitmoa/dex:2.43.1-debian-12-r8
+      image: ghcr.io/bitmoa/dex:2.43.1-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: redis
       image: ghcr.io/bitmoa/redis:8.2.1-debian-12-r0
   licenses: Apache-2.0

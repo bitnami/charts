@@ -7,11 +7,11 @@ annotations:
     - name: jmx-exporter
       image: ghcr.io/bitmoa/jmx-exporter:1.4.0-debian-12-r0
     - name: kafka
-      image: ghcr.io/bitmoa/kafka:4.0.0-debian-12-r10
+      image: ghcr.io/bitmoa/kafka:4.0.0-debian-12-r0
     - name: kubectl
       image: ghcr.io/bitmoa/kubectl:1.33.4-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2

@@ -155,7 +155,7 @@ extraDeploy:
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.podSecurityContext "context" $) | nindent 8 }}
           containers:
             - name: postgresql
-              image: docker.io/bitnami/postgresql:16.3.0-debian-12-r14
+              image: docker.io/bitnami/postgresql:16.3.0-debian-12-r0
               imagePullPolicy: "IfNotPresent"
               # Using the same security context as the master-coordinator to avoid issues with Openshift
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.masterCoordinator.containerSecurityContext "context" $) | nindent 12 }}

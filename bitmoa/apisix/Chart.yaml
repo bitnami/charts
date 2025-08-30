@@ -5,11 +5,11 @@ annotations:
   category: Infrastructure
   images: |
     - name: apisix
-      image: ghcr.io/bitmoa/apisix:3.13.0-debian-12-r4
+      image: ghcr.io/bitmoa/apisix:3.13.0-debian-12-r0
     - name: apisix-ingress-controller
-      image: ghcr.io/bitmoa/apisix-ingress-controller:1.8.4-debian-12-r14
+      image: ghcr.io/bitmoa/apisix-ingress-controller:1.8.4-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

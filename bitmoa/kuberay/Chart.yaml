@@ -5,9 +5,9 @@ annotations:
   category: Infrastructure
   images: |
     - name: kuberay-apiserver
-      image: ghcr.io/bitmoa/kuberay-apiserver:1.4.2-debian-12-r2
+      image: ghcr.io/bitmoa/kuberay-apiserver:1.4.2-debian-12-r0
     - name: kuberay-operator
-      image: ghcr.io/bitmoa/kuberay-operator:1.4.2-debian-12-r2
+      image: ghcr.io/bitmoa/kuberay-operator:1.4.2-debian-12-r0
     - name: ray
       image: ghcr.io/bitmoa/ray:2.49.0-debian-12-r0
   licenses: Apache-2.0

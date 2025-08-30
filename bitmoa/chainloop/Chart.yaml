@@ -11,7 +11,7 @@ annotations:
     - name: chainloop-control-plane-migrations
       image: ghcr.io/bitmoa/chainloop-control-plane-migrations:1.43.1-debian-12-r0
     - name: dex
-      image: ghcr.io/bitmoa/dex:2.43.1-debian-12-r8
+      image: ghcr.io/bitmoa/dex:2.43.1-debian-12-r0
   license: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

@@ -5,13 +5,13 @@ annotations:
   category: Infrastructure
   images: |
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: vault
-      image: ghcr.io/bitmoa/vault:1.20.2-debian-12-r2
+      image: ghcr.io/bitmoa/vault:1.20.2-debian-12-r0
     - name: vault-csi-provider
-      image: ghcr.io/bitmoa/vault-csi-provider:1.5.1-debian-12-r4
+      image: ghcr.io/bitmoa/vault-csi-provider:1.5.1-debian-12-r0
     - name: vault-k8s
-      image: ghcr.io/bitmoa/vault-k8s:1.7.0-debian-12-r4
+      image: ghcr.io/bitmoa/vault-k8s:1.7.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2

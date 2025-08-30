@@ -93,7 +93,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: bitmoa/apisix
-  tag: 3.13.0-debian-12-r4
+  tag: 3.13.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1700,7 +1700,7 @@ ingressController:
   image:
     registry: ghcr.io
     repository: bitmoa/apisix-ingress-controller
-    tag: 1.8.4-debian-12-r14
+    tag: 1.8.4-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2419,7 +2419,7 @@ waitContainer:
   image:
     registry: ghcr.io
     repository: bitmoa/os-shell
-    tag: 12-debian-12-r50
+    tag: 12-debian-12-r0
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

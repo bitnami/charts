@@ -7,9 +7,9 @@ annotations:
     - name: jmx-exporter
       image: ghcr.io/bitmoa/jmx-exporter:1.4.0-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: sonarqube
-      image: ghcr.io/bitmoa/sonarqube:25.8.0-debian-12-r2
+      image: ghcr.io/bitmoa/sonarqube:25.8.0-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

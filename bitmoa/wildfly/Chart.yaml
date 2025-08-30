@@ -5,7 +5,7 @@ annotations:
   category: ApplicationServer
   images: |
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
     - name: wildfly
       image: ghcr.io/bitmoa/wildfly:37.0.0-debian-12-r0
   licenses: Apache-2.0

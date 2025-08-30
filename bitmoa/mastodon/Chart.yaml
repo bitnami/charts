@@ -5,9 +5,9 @@ annotations:
   category: CMS
   images: |
     - name: mastodon
-      image: ghcr.io/bitmoa/mastodon:4.4.3-debian-12-r8
+      image: ghcr.io/bitmoa/mastodon:4.4.3-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2

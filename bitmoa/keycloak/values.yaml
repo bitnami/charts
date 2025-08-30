@@ -1003,7 +1003,7 @@ keycloakConfigCli:
   image:
     registry: ghcr.io
     repository: bitmoa/keycloak-config-cli
-    tag: 6.4.0-debian-12-r11
+    tag: 6.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

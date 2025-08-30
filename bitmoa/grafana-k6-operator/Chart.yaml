@@ -7,9 +7,9 @@ annotations:
     - name: grafana-k6
       image: ghcr.io/bitmoa/grafana-k6:1.2.3-debian-12-r0
     - name: grafana-k6-operator
-      image: ghcr.io/bitmoa/grafana-k6-operator:0.0.23-debian-12-r1
+      image: ghcr.io/bitmoa/grafana-k6-operator:0.0.23-debian-12-r0
     - name: os-shell
-      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
