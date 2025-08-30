@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: pinniped
+      image: ghcr.io/bitmoa/pinniped:0.40.0-debian-12-r2
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 0.40.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Pinniped is an identity service provider for Kubernetes. It supplies
+  a consistent and unified login experience across all your clusters. Pinniped is
+  securely integrated with enterprise IDP protocols.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/pinniped/img/pinniped-stack-220x234.png
+keywords:
+- identity
+- infrastructure
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: pinniped
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/pinniped
+version: 2.4.23

@@ -1,0 +1,54 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: attu
+      image: ghcr.io/bitmoa/attu:2.5.12-debian-12-r0
+    - name: milvus
+      image: ghcr.io/bitmoa/milvus:2.6.0-debian-12-r1
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: pymilvus
+      image: ghcr.io/bitmoa/pymilvus:2.6.0-debian-12-r5
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 2.6.0
+dependencies:
+- condition: etcd.enabled
+  name: etcd
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 12.x.x
+- condition: kafka.enabled
+  name: kafka
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 32.x.x
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 17.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Milvus is a cloud-native, open-source vector database solution for AI
+  applications and similarity search. Features high scalability, hibrid search and
+  unified lambda structure.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/milvus/img/milvus-stack-220x234.png
+keywords:
+- milvus
+- ai
+- database
+- infrastructure
+- attu
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: milvus
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/milvus
+version: 16.0.1

@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: influxdb
+      image: ghcr.io/bitmoa/influxdb:3.4.1-debian-12-r0
+    - name: kubectl
+      image: ghcr.io/bitmoa/kubectl:1.33.4-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 3.4.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: InfluxDB(TM) Core is an open source time-series database. It is a core
+  component of the FDAP (Apache Flight, DataFusion, Arrow, and Parquet) stack.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/influxdb/img/influxdb-stack-220x234.png
+keywords:
+- influxdb
+- fdap
+- database
+- timeseries
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: influxdb
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/influxdb
+version: 7.1.20

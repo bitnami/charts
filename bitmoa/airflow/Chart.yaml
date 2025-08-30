@@ -1,0 +1,45 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: WorkFlow
+  images: |
+    - name: airflow
+      image: ghcr.io/bitmoa/airflow:3.0.5-debian-12-r0
+    - name: statsd-exporter
+      image: ghcr.io/bitmoa/statsd-exporter:0.28.0-debian-12-r24
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 3.0.5
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 22.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Apache Airflow is a tool to express and execute workflows as directed
+  acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress
+  and handle task dependencies.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/airflow/img/airflow-stack-220x234.png
+keywords:
+- apache
+- airflow
+- workflow
+- dag
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: airflow
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/airflow
+version: 25.0.2

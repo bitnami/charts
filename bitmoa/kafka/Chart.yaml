@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: jmx-exporter
+      image: ghcr.io/bitmoa/jmx-exporter:1.4.0-debian-12-r0
+    - name: kafka
+      image: ghcr.io/bitmoa/kafka:4.0.0-debian-12-r10
+    - name: kubectl
+      image: ghcr.io/bitmoa/kubectl:1.33.4-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 4.0.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Apache Kafka is a distributed streaming platform designed to build real-time
+  pipelines and can be used as a message broker or as a replacement for a log aggregation
+  solution for big data applications.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kafka/img/kafka-stack-220x234.png
+keywords:
+- kafka
+- streaming
+- producer
+- consumer
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: kafka
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/kafka
+version: 32.4.3

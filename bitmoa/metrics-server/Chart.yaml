@@ -1,0 +1,34 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: metrics-server
+      image: ghcr.io/bitmoa/metrics-server:0.8.0-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 0.8.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Metrics Server aggregates resource usage data, such as container CPU
+  and memory usage, in a Kubernetes cluster and makes it available via the Metrics
+  API.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/metrics-server/img/metrics-server-stack-220x234.png
+keywords:
+- metrics-server
+- cluster
+- metrics
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: metrics-server
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/metrics-server
+version: 7.4.12

@@ -1,0 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: mysql
+      image: ghcr.io/bitmoa/mysql:9.4.0-debian-12-r1
+    - name: mysqld-exporter
+      image: ghcr.io/bitmoa/mysqld-exporter:0.17.2-debian-12-r16
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 9.4.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: MySQL is a fast, reliable, scalable, and easy to use open source relational
+  database system. Designed to handle mission-critical, heavy-load production applications.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mysql/img/mysql-stack-220x234.png
+keywords:
+- mysql
+- database
+- sql
+- cluster
+- high availability
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: mysql
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/mysql
+version: 14.0.3

@@ -1,0 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: apache-exporter
+      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r55
+    - name: phpmyadmin
+      image: ghcr.io/bitmoa/phpmyadmin:5.2.2-debian-12-r22
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 5.2.2
+dependencies:
+- condition: db.bundleTestDB
+  name: mariadb
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - phpmyadmin-database
+  version: 22.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: phpMyAdmin is a free software tool written in PHP, intended to handle
+  the administration of MySQL over the Web. phpMyAdmin supports a wide range of operations
+  on MySQL and MariaDB.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
+keywords:
+- mariadb
+- mysql
+- phpmyadmin
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: phpmyadmin
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/phpmyadmin
+version: 20.0.0

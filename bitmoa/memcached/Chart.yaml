@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: memcached
+      image: ghcr.io/bitmoa/memcached:1.6.39-debian-12-r0
+    - name: memcached-exporter
+      image: ghcr.io/bitmoa/memcached-exporter:0.15.3-debian-12-r5
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 1.6.39
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Memcached is an high-performance, distributed memory object caching system,
+  generic in nature, but intended for use in speeding up dynamic web applications
+  by alleviating database load.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/memcached/img/memcached-stack-220x234.png
+keywords:
+- memcached
+- cache
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: memcached
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/memcached
+version: 7.9.7

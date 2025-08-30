@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: oauth2-proxy
+      image: ghcr.io/bitmoa/oauth2-proxy:7.12.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 7.12.0
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 22.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: A reverse proxy and static file server that provides authentication using
+  Providers (Google, GitHub, and others) to validate accounts by email, domain or
+  group.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
+keywords:
+- kubernetes
+- oauth
+- oauth2
+- authentication
+- google
+- github
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: oauth2-proxy
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/oauth2-proxy
+version: 8.0.2

@@ -1,0 +1,44 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: janusgraph
+      image: ghcr.io/bitmoa/janusgraph:1.1.0-debian-12-r21
+    - name: jmx-exporter
+      image: ghcr.io/bitmoa/jmx-exporter:1.4.0-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 1.1.0
+dependencies:
+- condition: storageBackend.cassandra.enabled
+  name: cassandra
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 12.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: JanusGraph is a scalable graph database optimized for storing and querying
+  graphs containing hundreds of billions of vertices and edges distributed across
+  a multi-machine cluster.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/janusgraph/img/janusgraph-stack-220x234.png
+keywords:
+- janusgraph
+- graph
+- database
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: janusgraph
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/janusgraph
+- https://github.com/bitmoa/containers/tree/main/bitmoa/janusgraph
+- https://github.com/janusgraph/janusgraph
+version: 1.4.10

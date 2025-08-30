@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: kibana
+      image: ghcr.io/bitmoa/kibana:9.1.2-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 9.1.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Kibana is an open source, browser based analytics and search dashboard
+  for Elasticsearch. Kibana strives to be easy to get started with, while also being
+  flexible and powerful.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kibana/img/kibana-stack-220x234.png
+keywords:
+- kibana
+- analytics
+- monitoring
+- metrics
+- logs
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: kibana
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/kibana
+version: 12.1.10

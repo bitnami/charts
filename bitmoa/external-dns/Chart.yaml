@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: DeveloperTools
+  images: |
+    - name: external-dns
+      image: ghcr.io/bitmoa/external-dns:0.18.0-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 0.18.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: ExternalDNS is a Kubernetes addon that configures public DNS servers
+  with information about exposed Kubernetes services to make them discoverable.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/external-dns/img/external-dns-stack-220x234.png
+keywords:
+- external-dns
+- network
+- dns
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: external-dns
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/external-dns
+version: 9.0.3

@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: kuberay-apiserver
+      image: ghcr.io/bitmoa/kuberay-apiserver:1.4.2-debian-12-r2
+    - name: kuberay-operator
+      image: ghcr.io/bitmoa/kuberay-operator:1.4.2-debian-12-r2
+    - name: ray
+      image: ghcr.io/bitmoa/ray:2.49.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 1.4.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: KubeRay is a Kubernetes operator for deploying and management of Ray
+  applications on Kubernetes using CustomResourceDefinitions.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kuberay/img/kuberay-stack-220x234.png
+keywords:
+- ray
+- machine-learning
+- kuberay
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: kuberay
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/kuberay
+version: 1.4.29

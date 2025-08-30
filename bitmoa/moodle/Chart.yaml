@@ -1,0 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: E-Learning
+  images: |
+    - name: apache-exporter
+      image: ghcr.io/bitmoa/apache-exporter:1.0.10-debian-12-r55
+    - name: moodle
+      image: ghcr.io/bitmoa/moodle:5.0.2-debian-12-r1
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 5.0.2
+dependencies:
+- condition: mariadb.enabled
+  name: mariadb
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 22.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Moodle(TM) LMS is an open source online Learning Management System widely
+  used at universities, schools, and corporations. It is modular and highly adaptable
+  to any type of online learning.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/moodle/img/moodle-stack-220x234.png
+keywords:
+- moodle
+- learning
+- php
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: moodle
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/moodle
+version: 28.0.0

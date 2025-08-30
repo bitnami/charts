@@ -1,7 +1,9 @@
 <!-- markdownlint-disable MD041 -->
 <p align="center">
-    <img width="400px" height=auto src="https://dyltqmyl993wv.cloudfront.net/bitnami/bitnami-by-vmware.png" />
+  <img width="400px" height="auto" src="./bitmoa.png" />
 </p>
+
+bitmoa comes from two Korean words: “빛” (bit, meaning light) and “모아” (moa, meaning to gather). The name symbolizes the idea of gathering individual lights together to create a brighter, shared future. At its core, bitmoa represents a community-driven spirit, where collaboration and collective growth shine more brightly than any effort alone.
 
 <p align="center">
     <a href="https://twitter.com/bitnami"><img src="https://badgen.net/badge/twitter/@bitnami/1DA1F2?icon&label" /></a>
@@ -11,9 +13,9 @@
     <a href="https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml"><img src="https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml/badge.svg" /></a>
 </p>
 
-# The Bitnami Library for Kubernetes
+# The Bitmoa Library for Kubernetes
 
-Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
+Popular applications, provided by [Bitmoa](https://bitmoa.net), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
 ## TL;DR
 

@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: cadvisor
+      image: ghcr.io/bitmoa/cadvisor:0.53.0-debian-12-r9
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 0.53.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: cAdvisor (Container Advisor) is an open-source tool by Google for monitoring
+  containers, collecting metrics like CPU, memory, and network usage.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cadvisor/img/cadvisor-stack-220x234.png
+keywords:
+- cadvisor
+- monitoring
+- kubernetes
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: cadvisor
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/cadvisor
+version: 0.1.13

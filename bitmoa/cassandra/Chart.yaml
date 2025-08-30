@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: cassandra
+      image: ghcr.io/bitmoa/cassandra:5.0.5-debian-12-r7
+    - name: cassandra-exporter
+      image: ghcr.io/bitmoa/cassandra-exporter:2.3.8-debian-12-r51
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 5.0.5
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Apache Cassandra is an open source distributed database management system
+  designed to handle large amounts of data across many servers, providing high availability
+  with no single point of failure.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/cassandra/img/cassandra-stack-220x234.png
+keywords:
+- cassandra
+- database
+- nosql
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: cassandra
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/cassandra
+version: 12.3.11

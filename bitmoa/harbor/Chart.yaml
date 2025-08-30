@@ -1,0 +1,59 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: harbor-adapter-trivy
+      image: ghcr.io/bitmoa/harbor-adapter-trivy:2.13.2-debian-12-r2
+    - name: harbor-core
+      image: ghcr.io/bitmoa/harbor-core:2.13.2-debian-12-r3
+    - name: harbor-exporter
+      image: ghcr.io/bitmoa/harbor-exporter:2.13.2-debian-12-r2
+    - name: harbor-jobservice
+      image: ghcr.io/bitmoa/harbor-jobservice:2.13.2-debian-12-r3
+    - name: harbor-portal
+      image: ghcr.io/bitmoa/harbor-portal:2.13.2-debian-12-r1
+    - name: harbor-registry
+      image: ghcr.io/bitmoa/harbor-registry:2.13.2-debian-12-r2
+    - name: harbor-registryctl
+      image: ghcr.io/bitmoa/harbor-registryctl:2.13.2-debian-12-r3
+    - name: nginx
+      image: ghcr.io/bitmoa/nginx:1.29.1-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 2.13.2
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 22.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Harbor is an open source trusted cloud-native registry to store, sign,
+  and scan content. It adds functionalities like security, identity, and management
+  to the open source Docker distribution.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/harbor-core/img/harbor-core-stack-220x234.png
+keywords:
+- docker
+- registry
+- vulnerability
+- scan
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: harbor
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/harbor
+version: 27.0.3

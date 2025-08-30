@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: grafana-k6
+      image: ghcr.io/bitmoa/grafana-k6:1.2.3-debian-12-r0
+    - name: grafana-k6-operator
+      image: ghcr.io/bitmoa/grafana-k6-operator:0.0.23-debian-12-r1
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 0.0.23
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Grafana k6 Operator is a Kubernetes operator that enables running distributed
+  k6 load tests in a cluster, automating test execution and scaling for performance
+  validation.
+home: https://bitmoa.net
+icon: https://bitmoa.net/assets/stacks/grafana-k6-operator/img/grafana-k6-operator-stack-220x234.png
+keywords:
+- grafana-k6-operator
+- operator
+- tests
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: grafana-k6-operator
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/grafana-k6-operator
+version: 1.0.11

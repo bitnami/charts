@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: jenkins
+      image: ghcr.io/bitmoa/jenkins:2.516.2-debian-12-r0
+    - name: jenkins-agent
+      image: ghcr.io/bitmoa/jenkins-agent:0.3327.0-debian-12-r1
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 2.516.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Jenkins is an open source Continuous Integration and Continuous Delivery
+  (CI/CD) server designed to automate the building, testing, and deploying of any
+  software project.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/jenkins/img/jenkins-stack-220x234.png
+keywords:
+- jenkins
+- ci
+- cd
+- http
+- web
+- application
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: jenkins
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/jenkins
+version: 13.6.17

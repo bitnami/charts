@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: zookeeper
+      image: ghcr.io/bitmoa/zookeeper:3.9.3-debian-12-r21
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 3.9.3
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Apache ZooKeeper provides a reliable, centralized register of configuration
+  data and services for distributed applications.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/zookeeper/img/zookeeper-stack-220x234.png
+keywords:
+- zookeeper
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: zookeeper
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/zookeeper
+version: 13.8.7

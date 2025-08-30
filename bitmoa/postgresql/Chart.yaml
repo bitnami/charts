@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+    - name: postgres-exporter
+      image: ghcr.io/bitmoa/postgres-exporter:0.17.1-debian-12-r16
+    - name: postgresql
+      image: ghcr.io/bitmoa/postgresql:17.6.0-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 17.6.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: PostgreSQL (Postgres) is an open source object-relational database known
+  for reliability and data integrity. ACID-compliant, it supports foreign keys, joins,
+  views, triggers and stored procedures.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+keywords:
+- postgresql
+- postgres
+- database
+- sql
+- replication
+- cluster
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: postgresql
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/postgresql
+version: 16.7.27

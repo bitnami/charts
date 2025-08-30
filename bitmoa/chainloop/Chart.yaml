@@ -1,0 +1,68 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: DeveloperTools
+  images: |
+    - name: chainloop-artifact-cas
+      image: ghcr.io/bitmoa/chainloop-artifact-cas:1.43.1-debian-12-r0
+    - name: chainloop-control-plane
+      image: ghcr.io/bitmoa/chainloop-control-plane:1.43.1-debian-12-r0
+    - name: chainloop-control-plane-migrations
+      image: ghcr.io/bitmoa/chainloop-control-plane-migrations:1.43.1-debian-12-r0
+    - name: dex
+      image: ghcr.io/bitmoa/dex:2.43.1-debian-12-r8
+  license: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 1.43.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- condition: development
+  name: vault
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 1.x.x
+description: Chainloop is an open-source Software Supply Chain control plane, a single
+  source of truth for metadata and artifacts, plus a declarative attestation process.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/chainloop/img/chainloop-stack-220x234.png
+keywords:
+- chainloop
+- evidence-store
+- supply-chain-security
+- devops
+- devsecops
+- security
+- compliance
+- cyclonedx
+- spdx
+- sbom
+- attestation
+- oss-compliance
+- in-toto
+- slsa
+- sbom-distribution
+- open-source-licensing
+- slsa-provenance
+- metadata-platform
+- sbom-discovery
+- regulated-industry
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: chainloop
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/chainloop
+- https://github.com/bitmoa/containers/tree/main/bitmoa/chainloop-control-plane
+- https://github.com/bitmoa/containers/tree/main/bitmoa/chainloop-control-plane-migrations
+- https://github.com/bitmoa/containers/tree/main/bitmoa/chainloop-artifact-cas
+- https://github.com/chainloop-dev/chainloop
+version: 4.0.75

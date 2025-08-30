@@ -1,0 +1,64 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: grafana-mimir
+      image: ghcr.io/bitmoa/grafana-mimir:2.17.0-debian-12-r0
+    - name: memcached
+      image: ghcr.io/bitmoa/memcached:1.6.39-debian-12-r0
+    - name: nginx
+      image: ghcr.io/bitmoa/nginx:1.29.1-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 2.17.0
+dependencies:
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 17.x.x
+- alias: memcachedmetadata
+  condition: memcachedmetadata.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 7.x.x
+- alias: memcachedindex
+  condition: memcachedindex.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 7.x.x
+- alias: memcachedfrontend
+  condition: memcachedfrontend.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 7.x.x
+- alias: memcachedchunks
+  condition: memcachedchunks.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 7.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Grafana Mimir is an open source, horizontally scalable, highly available,
+  multi-tenant, long-term storage for Prometheus.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
+keywords:
+- grafana
+- tracing
+- metrics
+- infrastructure
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: grafana-mimir
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/grafana-mimir
+version: 3.0.18

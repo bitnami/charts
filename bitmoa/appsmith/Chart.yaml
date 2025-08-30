@@ -1,0 +1,44 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: CMS
+  images: |
+    - name: appsmith
+      image: ghcr.io/bitmoa/appsmith:1.85.0-debian-12-r0
+    - name: haproxy
+      image: ghcr.io/bitmoa/haproxy:3.2.4-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 1.85.0
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 22.x.x
+- condition: mongodb.enabled
+  name: mongodb
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Appsmith is an open source platform for building and maintaining internal
+  tools, such as custom dashboards, admin panels or CRUD apps.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/appsmith/img/appsmith-stack-220x234.png
+keywords:
+- development
+- dashboards
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: appsmith
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/appsmith
+version: 7.0.3

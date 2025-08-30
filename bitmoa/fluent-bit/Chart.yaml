@@ -1,0 +1,34 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: fluent-bit
+      image: ghcr.io/bitmoa/fluent-bit:4.0.8-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 4.0.8
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It
+  has been made with a strong focus on performance to allow the collection of events
+  from different sources without complexity.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/fluent-bit/img/fluent-bit-stack-220x234.png
+keywords:
+- fluent-bit
+- logging
+- monitoring
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: fluent-bit
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/fluent-bit
+version: 3.1.13

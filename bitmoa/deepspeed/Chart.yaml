@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: MachineLearning
+  images: |
+    - name: deepspeed
+      image: ghcr.io/bitmoa/deepspeed:0.17.5-debian-12-r0
+    - name: git
+      image: ghcr.io/bitmoa/git:2.51.0-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 0.17.5
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: DeepSpeed is deep learning software suite for empowering ChatGPT-like
+  model training. Features dense or sparse model inference, high throughput and high
+  compression.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/deepspeed/img/deepspeed-stack-220x234.png
+keywords:
+- deepspeed
+- pytorch
+- python
+- machine
+- learning
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: deepspeed
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/deepspeed
+- https://github.com/bitmoa/charts/tree/main/bitmoa/pytorch
+version: 2.3.50

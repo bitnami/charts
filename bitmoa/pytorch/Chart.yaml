@@ -1,0 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: MachineLearning
+  images: |
+    - name: git
+      image: ghcr.io/bitmoa/git:2.51.0-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: pytorch
+      image: ghcr.io/bitmoa/pytorch:2.8.0-debian-12-r2
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 2.8.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: PyTorch is a deep learning platform that accelerates the transition from
+  research prototyping to production deployment. Bitnami image includes Torchvision
+  for specific computer vision support.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/pytorch/img/pytorch-stack-220x234.png
+keywords:
+- pytorch
+- python
+- machine
+- learning
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: pytorch
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/pytorch
+version: 4.3.31

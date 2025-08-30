@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: DeveloperTools
+  images: |
+    - name: consul
+      image: ghcr.io/bitmoa/consul:1.21.4-debian-12-r1
+    - name: consul-exporter
+      image: ghcr.io/bitmoa/consul-exporter:0.13.0-debian-12-r29
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 1.21.4
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: HashiCorp Consul is a tool for discovering and configuring services in
+  your infrastructure.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/consul/img/consul-stack-220x234.png
+keywords:
+- discovering
+- configuring
+- services
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: consul
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/consul
+version: 11.4.32

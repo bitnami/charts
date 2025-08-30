@@ -1,0 +1,46 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: dremio
+      image: ghcr.io/bitmoa/dremio:26.0.0-debian-12-r5
+    - name: jmx-exporter
+      image: ghcr.io/bitmoa/jmx-exporter:1.4.0-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 26.0.0
+dependencies:
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 17.x.x
+- condition: zookeeper.enabled
+  name: zookeeper
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 13.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Dremio is an open-source self-service data access tool that provides
+  high-performance queries for interactive analytics on data lakes.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/dremio/img/dremio-stack-220x234.png
+keywords:
+- dremio
+- data-lake
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: dremio
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/dremio
+- https://github.com/bitmoa/containers/tree/main/bitmoa/dremio
+- https://github.com/dremio/dremio-oss
+version: 3.0.13

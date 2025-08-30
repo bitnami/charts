@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: opensearch
+      image: ghcr.io/bitmoa/opensearch:3.2.0-debian-12-r0
+    - name: opensearch-dashboards
+      image: ghcr.io/bitmoa/opensearch-dashboards:3.2.0-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 3.2.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: OpenSearch is a scalable open-source solution for search, analytics,
+  and observability. Features full-text queries, natural language processing, custom
+  dictionaries, amongst others.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/opensearch/img/opensearch-stack-220x234.png
+keywords:
+- opensearch
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: opensearch
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/opensearch
+version: 2.0.10

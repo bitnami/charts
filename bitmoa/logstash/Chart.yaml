@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: LogManagement
+  images: |
+    - name: logstash
+      image: ghcr.io/bitmoa/logstash:9.1.2-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 9.1.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Logstash is an open source data processing engine. It ingests data from
+  multiple sources, processes it, and sends the output to final destination in real-time.
+  It is a core component of the ELK stack.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/logstash/img/logstash-stack-220x234.png
+keywords:
+- logstash
+- logging
+- elk
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: logstash
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/logstash
+version: 7.0.11

@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: clickhouse
+      image: ghcr.io/bitmoa/clickhouse:25.7.5-debian-12-r0
+    - name: clickhouse-keeper
+      image: ghcr.io/bitmoa/clickhouse-keeper:25.7.5-debian-12-r0
+    - name: clickhouse-operator
+      image: ghcr.io/bitmoa/clickhouse-operator:0.25.3-debian-12-r1
+    - name: clickhouse-operator-metrics-exporter
+      image: ghcr.io/bitmoa/clickhouse-operator-metrics-exporter:0.25.3-debian-12-r1
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 0.25.3
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: ClickHouse Operator is a production-ready operator that manages ClickHouse
+  databases delivering robust features required for cost-efficient, real-time analytic
+  applications.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/clickhouse-operator/img/clickhouse-operator-stack-220x234.png
+keywords:
+- database
+- sharding
+- clickhouse
+- operator
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: clickhouse-operator
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/clickhouse-operator
+- https://github.com/bitmoa/containers/tree/main/bitmoa/clickhouse-operator
+version: 0.2.33

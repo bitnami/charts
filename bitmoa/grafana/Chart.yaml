@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: grafana
+      image: ghcr.io/bitmoa/grafana:12.1.1-debian-12-r1
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 12.1.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Grafana is an open source metric analytics and visualization suite for
+  visualizing time series data that supports various types of data sources.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/grafana/img/grafana-stack-220x234.png
+keywords:
+- analytics
+- monitoring
+- metrics
+- logs
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: grafana
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/grafana
+version: 12.1.8

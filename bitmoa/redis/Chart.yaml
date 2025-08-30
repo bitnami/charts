@@ -1,0 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: kubectl
+      image: ghcr.io/bitmoa/kubectl:1.33.4-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+    - name: redis
+      image: ghcr.io/bitmoa/redis:8.2.1-debian-12-r0
+    - name: redis-exporter
+      image: ghcr.io/bitmoa/redis-exporter:1.76.0-debian-12-r0
+    - name: redis-sentinel
+      image: ghcr.io/bitmoa/redis-sentinel:8.2.1-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 8.2.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Redis(R) is an open source, advanced key-value store. It is often referred
+  to as a data structure server since keys can contain strings, hashes, lists, sets
+  and sorted sets.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
+keywords:
+- redis
+- keyvalue
+- database
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: redis
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/redis
+version: 22.0.7

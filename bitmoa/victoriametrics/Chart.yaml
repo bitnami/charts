@@ -1,0 +1,43 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: victoriametrics-vmagent
+      image: ghcr.io/bitmoa/victoriametrics-vmagent:1.124.0-debian-12-r0
+    - name: victoriametrics-vmalert
+      image: ghcr.io/bitmoa/victoriametrics-vmalert:1.124.0-debian-12-r0
+    - name: victoriametrics-vmauth
+      image: ghcr.io/bitmoa/victoriametrics-vmauth:1.124.0-debian-12-r0
+    - name: victoriametrics-vminsert
+      image: ghcr.io/bitmoa/victoriametrics-vminsert:1.124.0-debian-12-r0
+    - name: victoriametrics-vmselect
+      image: ghcr.io/bitmoa/victoriametrics-vmselect:1.124.0-debian-12-r0
+    - name: victoriametrics-vmstorage
+      image: ghcr.io/bitmoa/victoriametrics-vmstorage:1.124.0-debian-12-r0
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 1.124.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: VictoriaMetrics is a fast, cost-effective, and scalable monitoring solution
+  and time series database, compatible with Prometheus and Graphite
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/victoriametrics/img/victoriametrics-stack-220x234.png
+keywords:
+- monitoring
+- metrics
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: victoriametrics
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/victoriametrics
+version: 0.1.31

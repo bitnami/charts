@@ -1,0 +1,35 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: gitlab-runner
+      image: ghcr.io/bitmoa/gitlab-runner:18.3.0-debian-12-r0
+    - name: gitlab-runner-helper
+      image: ghcr.io/bitmoa/gitlab-runner-helper:18.3.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 18.3.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Gitlab Runner is an auxiliary application for Gitlab installations. Written
+  in Go, it allows to run CI/CD jobs and send the results back to Gitlab.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/gitlab-runner/img/gitlab-runner-stack-220x234.png
+keywords:
+- git
+- ci
+- deploy
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: gitlab-runner
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/gitlab-runner
+version: 1.1.8

@@ -1,0 +1,39 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: keydb
+      image: ghcr.io/bitmoa/keydb:6.3.4-debian-12-r24
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+    - name: redis-exporter
+      image: ghcr.io/bitmoa/redis-exporter:1.76.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 6.3.4
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: KeyDB is a high performance fork of Redis with a focus on multithreading,
+  memory efficiency, and high throughput.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/keydb/img/keydb-stack-220x234.png
+keywords:
+- keydb
+- keyvalue
+- database
+- cache
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: keydb
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/keydb
+- https://github.com/bitmoa/containers/tree/main/bitmoa/keydb
+version: 0.5.22

@@ -1,0 +1,44 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: DeveloperTools
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: parse
+      image: ghcr.io/bitmoa/parse:8.2.3-debian-12-r13
+    - name: parse-dashboard
+      image: ghcr.io/bitmoa/parse-dashboard:7.3.0-debian-12-r15
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 8.2.3
+dependencies:
+- name: mongodb
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Parse is a platform that enables users to add a scalable and powerful
+  backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity,
+  and more.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/parse/img/parse-stack-220x234.png
+keywords:
+- parse
+- backend
+- serverless
+- platform
+- mbaas
+- mobile
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: parse
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/parse
+version: 25.1.15

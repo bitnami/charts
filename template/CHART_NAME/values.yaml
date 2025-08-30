@@ -79,7 +79,7 @@ diagnosticMode:
 ##
 %%MAIN_OBJECT_BLOCK%%:
   ## Bitnami %%MAIN_CONTAINER%% image
-  ## ref: https://hub.docker.com/r/bitnami/%%IMAGE_NAME%%/tags/
+  ## ref: https://hub.docker.com/r/bitmoa/%%IMAGE_NAME%%/tags/
   ## @param %%MAIN_OBJECT_BLOCK%%.image.registry [default: REGISTRY_NAME] %%MAIN_CONTAINER%% image registry
   ## @param %%MAIN_OBJECT_BLOCK%%.image.repository [default: REPOSITORY_NAME/%%IMAGE_NAME%%] %%MAIN_CONTAINER%% image repository
   ## @skip %%MAIN_OBJECT_BLOCK%%.image.tag %%MAIN_CONTAINER%% image tag (immutable tags are recommended)
@@ -89,8 +89,8 @@ diagnosticMode:
   ## @param %%MAIN_OBJECT_BLOCK%%.image.debug Enable %%MAIN_CONTAINER%% image debug mode
   ##
   image:
-    registry: docker.io
-    repository: bitnami/%%IMAGE_NAME%%
+    registry: ghcr.io
+    repository: bitmoa/%%IMAGE_NAME%%
     tag: %%IMAGE_TAG%%
     digest: ""
     ## Specify a imagePullPolicy
@@ -177,7 +177,7 @@ diagnosticMode:
   ## %%MAIN_CONTAINER_NAME%% resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param %%MAIN_OBJECT_BLOCK%%.resourcesPreset Set %%MAIN_CONTAINER_NAME%% container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if %%MAIN_OBJECT_BLOCK%%.resources is set (%%MAIN_OBJECT_BLOCK%%.resources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ## More information: https://github.com/bitmoa/charts/blob/main/bitmoa/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
   ## @param %%MAIN_OBJECT_BLOCK%%.resources Set %%MAIN_CONTAINER_NAME%% container requests and limits for different resources like CPU or memory (essential for production workloads)
@@ -681,7 +681,7 @@ persistence:
   enabled: true
   ## @param persistence.mountPath Path to mount the volume at.
   ##
-  mountPath: /bitnami/%%MAIN_OBJECT_BLOCK%%/data
+  mountPath: /bitmoa/%%MAIN_OBJECT_BLOCK%%/data
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
   ##
   subPath: ""
@@ -730,7 +730,7 @@ defaultInitContainers:
     ##
     enabled: false
     ## OS Shell + Utility image
-    ## ref: https://hub.docker.com/r/bitnami/os-shell
+    ## ref: https://hub.docker.com/r/bitmoa/os-shell
     ## @param defaultInitContainers.volumePermissions.image.registry [default: REGISTRY_NAME] "volume-permissions" init-containers' image registry
     ## @param defaultInitContainers.volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] "volume-permissions" init-containers' image repository
     ## @skip defaultInitContainers.volumePermissions.image.tag "volume-permissions" init-containers' image tag (immutable tags are recommended)
@@ -740,7 +740,7 @@ defaultInitContainers:
     ##
     image:
       registry: docker.io
-      repository: bitnami/os-shell
+      repository: bitmoa/os-shell
       tag: 12-debian-12-r46
       digest: ""
       pullPolicy: IfNotPresent
@@ -780,7 +780,7 @@ defaultInitContainers:
     ## "volume-permissions" init container resource requests and limits
     ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param defaultInitContainers.volumePermissions.resourcesPreset Set "volume-permissions" init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.volumePermissions.resources is set (defaultInitContainers.volumePermissions.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ## More information: https://github.com/bitmoa/charts/blob/main/bitmoa/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "nano"
     ## @param defaultInitContainers.volumePermissions.resources Set "volume-permissions" init container requests and limits for different resources like CPU or memory (essential for production workloads)
@@ -884,7 +884,7 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitmoa/charts/tree/main/bitmoa/prometheus-operator#prometheus-configuration
     ## selector:
     ##   prometheus: my-prometheus
     ##

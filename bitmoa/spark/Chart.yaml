@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: spark
+      image: ghcr.io/bitmoa/spark:4.0.0-debian-12-r20
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 4.0.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Apache Spark is a high-performance engine for large-scale computing tasks,
+  such as data processing, machine learning and real-time data streaming. It includes
+  APIs for Java, Python, Scala and R.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/spark/img/spark-stack-220x234.png
+keywords:
+- apache
+- spark
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: spark
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/spark
+version: 10.0.3

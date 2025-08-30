@@ -1,0 +1,47 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: argo-workflow-cli
+      image: ghcr.io/bitmoa/argo-workflow-cli:3.7.1-debian-12-r1
+    - name: argo-workflow-controller
+      image: ghcr.io/bitmoa/argo-workflow-controller:3.7.1-debian-12-r1
+    - name: argo-workflow-exec
+      image: ghcr.io/bitmoa/argo-workflow-exec:3.7.1-debian-12-r1
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 3.7.1
+dependencies:
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 16.x.x
+- condition: mysql.enabled
+  name: mysql
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 14.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It
+  uses DAG and step-based workflows
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/argo-workflows/img/argo-workflows-stack-220x234.png
+keywords:
+- Devops
+- Kubernetes
+- Jobs
+- Continuous delivery
+- Continous deployment
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: argo-workflows
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/argo-workflows
+version: 13.0.6

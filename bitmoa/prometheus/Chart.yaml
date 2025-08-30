@@ -1,0 +1,42 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: alertmanager
+      image: ghcr.io/bitmoa/alertmanager:0.28.1-debian-12-r15
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: prometheus
+      image: ghcr.io/bitmoa/prometheus:3.5.0-debian-12-r3
+    - name: thanos
+      image: ghcr.io/bitmoa/thanos:0.39.2-debian-12-r2
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 3.5.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Prometheus is an open source monitoring and alerting system. It enables
+  sysadmins to monitor their infrastructures by collecting metrics from configured
+  targets at given intervals.
+home: https://github.com/prometheus/prometheus
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/prometheus/img/prometheus-stack-220x234.png
+keywords:
+- prometheus
+- monitoring
+maintainers:
+- name: Bitnami
+  url: https://github.com/bitmoa/charts
+name: prometheus
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/prometheus
+- https://github.com/bitmoa/containers/tree/main/bitmoa/prometheus
+- https://github.com/prometheus/prometheus
+- https://github.com/prometheus-community/helm-charts
+version: 2.1.23

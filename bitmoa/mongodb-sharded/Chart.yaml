@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: mongodb-exporter
+      image: ghcr.io/bitmoa/mongodb-exporter:0.47.0-debian-12-r1
+    - name: mongodb-sharded
+      image: ghcr.io/bitmoa/mongodb-sharded:8.0.13-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 8.0.13
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: MongoDB(R) is an open source NoSQL database that uses JSON for data storage.
+  MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing
+  data across multiple machines.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/mongodb/img/mongodb-stack-220x234.png
+keywords:
+- mongodb
+- database
+- nosql
+- cluster
+- replicaset
+- replication
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: mongodb-sharded
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/mongodb-sharded
+version: 9.4.12

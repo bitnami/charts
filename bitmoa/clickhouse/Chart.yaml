@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: clickhouse
+      image: ghcr.io/bitmoa/clickhouse:25.7.5-debian-12-r0
+    - name: clickhouse-keeper
+      image: ghcr.io/bitmoa/clickhouse-keeper:25.7.5-debian-12-r0
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 25.7.5
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: ClickHouse is an open-source column-oriented OLAP database management
+  system. Use it to boost your database performance while providing linear scalability
+  and hardware efficiency.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
+keywords:
+- database
+- sharding
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: clickhouse
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/clickhouse
+version: 9.4.4

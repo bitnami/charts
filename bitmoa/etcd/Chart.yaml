@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: etcd
+      image: ghcr.io/bitmoa/etcd:3.6.4-debian-12-r3
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 3.6.4
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: etcd is a distributed key-value store designed to securely store data
+  across a cluster. etcd is widely used in production on account of its reliability,
+  fault-tolerance and ease of use.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/etcd/img/etcd-stack-220x234.png
+keywords:
+- etcd
+- cluster
+- database
+- cache
+- key-value
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: etcd
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/etcd
+version: 12.0.18

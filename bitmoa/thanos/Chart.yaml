@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Analytics
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: thanos
+      image: ghcr.io/bitmoa/thanos:0.39.2-debian-12-r2
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 0.39.2
+dependencies:
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitmoacharts
+  version: 17.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Thanos is a highly available metrics system that can be added on top
+  of existing Prometheus deployments, providing a global query view across all Prometheus
+  installations.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/thanos/img/thanos-stack-220x234.png
+keywords:
+- analytics
+- monitoring
+- prometheus
+- thanos
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: thanos
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/thanos
+version: 17.3.1

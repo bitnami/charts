@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: ApplicationServer
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r50
+    - name: wildfly
+      image: ghcr.io/bitmoa/wildfly:37.0.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: application
+apiVersion: v2
+appVersion: 37.0.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Wildfly is a lightweight, open source application server, formerly known
+  as JBoss, that implements the latest enterprise Java standards.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/wildfly/img/wildfly-stack-220x234.png
+keywords:
+- wildfly
+- java
+- http
+- web
+- application server
+- jsp
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: wildfly
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/wildfly
+version: 25.0.0

@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: kubernetes-event-exporter
+      image: ghcr.io/bitmoa/kubernetes-event-exporter:1.7.0-debian-12-r46
+  licenses: Apache-2.0
+  tanzuCategory: clusterUtility
+apiVersion: v2
+appVersion: 1.7.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Kubernetes Event Exporter makes it easy to export Kubernetes events to
+  other tools, thereby enabling better event observability, custom alerts and aggregation.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/kubernetes-event-exporter/img/kubernetes-event-exporter-stack-220x234.png
+keywords:
+- alerting
+- event exporting
+- events
+- kubernetes events
+- monitoring
+- observability
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: kubernetes-event-exporter
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/kubernetes-event-exporter
+version: 3.6.3

@@ -1,0 +1,37 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: minio
+      image: ghcr.io/bitmoa/minio:2025.7.23-debian-12-r3
+    - name: minio-operator
+      image: ghcr.io/bitmoa/minio-operator:7.1.1-debian-12-r7
+    - name: minio-operator-sidecar
+      image: ghcr.io/bitmoa/minio-operator-sidecar:7.1.1-debian-12-r7
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 7.1.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: MinIO(R) Operator is a Kubernetes-native tool for deploying and managing
+  high-performance, S3-compatible MinIO(R) object storage across hybrid cloud infrastructures.
+home: https://bitmoa.net
+icon: https://bitmoa.net/assets/stacks/minio-operator/img/minio-operator-stack-220x234.png
+keywords:
+- minio-operator
+- operator
+- postgresql
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: minio-operator
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/minio-operator
+version: 0.2.9

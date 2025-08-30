@@ -1,0 +1,36 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  images: |
+    - name: arangodb
+      image: ghcr.io/bitmoa/arangodb:3.11.14-debian-12-r3
+    - name: kube-arangodb
+      image: ghcr.io/bitmoa/kube-arangodb:1.3.0-debian-12-r4
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 1.3.0
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: kube-arangodb is a Kubernetes Operator that manages ArangoDB clusters,
+  ensuring automatic deployment, scaling, and healing of database instances.
+home: https://bitmoa.net
+icon: https://bitmoa.net/assets/stacks/kube-arangodb/img/kube-arangodb-stack-220x234.png
+keywords:
+- kube-arangodb
+- operator
+- arangodb
+- database
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: kube-arangodb
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/kube-arangodb
+version: 0.1.23

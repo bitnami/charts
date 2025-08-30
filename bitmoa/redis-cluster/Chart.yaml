@@ -1,0 +1,38 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  images: |
+    - name: os-shell
+      image: ghcr.io/bitmoa/os-shell:12-debian-12-r51
+    - name: redis-cluster
+      image: ghcr.io/bitmoa/redis-cluster:8.2.1-debian-12-r0
+    - name: redis-exporter
+      image: ghcr.io/bitmoa/redis-exporter:1.76.0-debian-12-r0
+  licenses: Apache-2.0
+  tanzuCategory: service
+apiVersion: v2
+appVersion: 8.2.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitmoacharts
+  tags:
+  - bitmoa-common
+  version: 2.x.x
+description: Redis(R) is an open source, scalable, distributed in-memory cache for
+  applications. It can be used to store and serve data in the form of strings, hashes,
+  lists, sets and sorted sets.
+home: https://bitmoa.net
+icon: https://dyltqmyl993wv.cloudfront.net/assets/stacks/redis/img/redis-stack-220x234.png
+keywords:
+- redis
+- keyvalue
+- database
+maintainers:
+- name: Bitmoa
+  url: https://github.com/bitmoa/charts
+name: redis-cluster
+sources:
+- https://github.com/bitmoa/charts/tree/main/bitmoa/redis-cluster
+version: 13.0.4
