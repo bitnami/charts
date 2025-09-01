@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: pinniped
       image: docker.io/bitnami/pinniped:0.40.0-debian-12-r2
@@ -30,4 +29,4 @@ maintainers:
 name: pinniped
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pinniped
-version: 2.4.23
+version: 2.4.24

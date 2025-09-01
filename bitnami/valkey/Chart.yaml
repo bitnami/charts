@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Database
   images: |
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.33.4-debian-12-r0
@@ -39,4 +38,4 @@ maintainers:
 name: valkey
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/valkey
-version: 3.0.31
+version: 4.0.0
