@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
   licenses: Apache-2.0
 apiVersion: v2
 appVersion: %%UPSTREAM_PROJECT_VERSION%%

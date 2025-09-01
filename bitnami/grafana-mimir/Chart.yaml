@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: grafana-mimir
       image: docker.io/bitnami/grafana-mimir:2.17.0-debian-12-r0
@@ -61,4 +60,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 3.0.18
+version: 3.0.19

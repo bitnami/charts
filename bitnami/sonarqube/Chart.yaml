@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: DeveloperTools
   images: |
     - name: jmx-exporter
       image: docker.io/bitnami/jmx-exporter:1.4.0-debian-12-r0
@@ -40,4 +39,4 @@ maintainers:
 name: sonarqube
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 8.1.17
+version: 8.1.18

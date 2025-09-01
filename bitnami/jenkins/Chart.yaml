@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: jenkins
       image: docker.io/bitnami/jenkins:2.516.2-debian-12-r0
@@ -38,4 +37,4 @@ maintainers:
 name: jenkins
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 13.6.17
+version: 13.6.18
