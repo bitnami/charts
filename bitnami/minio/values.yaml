@@ -1648,7 +1648,7 @@ provisioning:
   ##       key1: value1
   buckets: []
   ## @param provisioning.config MinIO&reg; config provisioning
-  ## https://docs.min.io/enterprise/aistor-object-store/reference/aistor-server/settings/
+  ## https://docs.min.io/community/minio-object-store/reference/minio-mc-admin/mc-admin-config.html
   ## e.g.
   ## config:
   ##   - name: region
