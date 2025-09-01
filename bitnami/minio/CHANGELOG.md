@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.22 (2025-08-29)
+## 17.0.22 (2025-09-01)
 
 * [bitnami/minio]: fix broken provisioning config link ([#36222](https://github.com/bitnami/charts/pull/36222))
 
