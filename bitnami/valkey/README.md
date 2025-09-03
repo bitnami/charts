@@ -2,7 +2,7 @@
 
 # Bitnami package for Valkey
 
-Valkey is an open source (BSD) high-performance key/value datastore that supports a variety workloads such as caching, message queues, and can act as a primary database.
+Valkey is an open source (BSD) high-performance key/value datastore that supports a variety of workloads such as caching, message queues, and can act as a primary database.
 
 [Overview of Valkey](https://valkey.io/)
 
@@ -55,7 +55,7 @@ The command deploys Valkey on the Kubernetes cluster in the default configuratio
 
 ### Resource requests and limits
 
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads, and these should be adapted to your specific use case.
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
@@ -160,7 +160,7 @@ When installing the chart with `architecture=standalone`, it will deploy a stand
 
 When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a single Valkey StatefulSet. In this case, the pods will contain an extra container with Valkey Sentinel. This container will form a cluster of Valkey Sentinel nodes, which will promote a new primary in case the actual one fails.
 
-On graceful termination of the Valkey primary pod, a failover of the primary is initiated to promote a new primary. The Valkey Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.valkeyShutdownWaitFailover=true` is set (the default), the Valkey container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new primary.
+On graceful termination of the Valkey primary pod, failover of the primary is initiated to promote a new primary. The Valkey Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.valkeyShutdownWaitFailover=true` is set (the default), the Valkey container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new primary.
 
 In addition to this, only one service is exposed:
 
@@ -169,7 +169,7 @@ In addition to this, only one service is exposed:
 For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Valkey Sentinel cluster and query the current primary using the command below (using valkey-cli or similar):
 
 ```console
-SENTINEL get-primary-addr-by-name <name of your PrimarySet. e.g: myprimary>
+SENTINEL get-primary-addr-by-name <name of your PrimarySet (e.g., myprimary)>
 ```
 
 This command will return the address of the current primary, which can be accessed from inside the cluster.
@@ -194,7 +194,7 @@ It's recommended to only change `primary.replicaCount` if you know what you are 
 
 ### Using a password file
 
-To use a password file for Valkey you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
+To use a password file for Valkey, you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
 
 - Create the secret with the password. It is important that the file with the password must be called `valkey-password`.
 
@@ -224,7 +224,7 @@ TLS support can be enabled in the chart by specifying the `tls.` parameters whil
 
 For example:
 
-First, create the secret with the certificates files:
+First, create the secret with the certificate files:
 
 ```console
 kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
@@ -242,7 +242,7 @@ tls.certCAFilename="ca.pem"
 
 ### Metrics
 
-The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
+The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be used to access the endpoint.
 
 If you have enabled TLS by specifying `tls.enabled=true` you also need to specify TLS option to the metrics exporter. You can do that via `metrics.extraArgs`. You can find the metrics exporter CLI flags for TLS [here](https://github.com/oliver006/valkey_exporter#command-line-flags). For example:
 
@@ -301,9 +301,9 @@ Note that this will not disable transparent huge tables.
 
 ### Backup and restore
 
-To backup and restore Valkey deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
+To back up and restore Valkey deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
 
-#### Step 1: Backup the deployment
+#### Step 1: Back up the deployment
 
 - Connect to one of the nodes and start the Valkey CLI tool. Then, run the commands below:
 
@@ -338,15 +338,15 @@ Follow the following steps:
        save ""
     ```
 
-    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be necessary for the temporal cluster you're creating to upload the dump.*
 
 - Start the new cluster to create the PVCs. Use the command below as an example:
 
     ```console
-    helm install new-valkey  -f values.yaml .  --set cluster.enabled=true  --set cluster.replicaCount=3
+    helm install new-valkey -f values.yaml . --set cluster.enabled=true --set cluster.replicaCount=3
     ```
 
-- Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
+- Now that the PVC is created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
 
     ```text
     $ helm delete new-valkey
