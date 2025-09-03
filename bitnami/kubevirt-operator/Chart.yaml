@@ -1,0 +1,30 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 1.5.2
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: KubeVirt is an open source project enabling Kubernetes to orchestrate
+  virtual machines
+home: https://bitnami.com
+icon: https://github.com/kubevirt/community/blob/77864f3ab046cb62b8df2f9a7f59ba3e19aaa948/logo/KubeVirt_icon.png
+keywords:
+- kubevirt
+- kubernetes
+- infrastructure
+- virtualization
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: kubevirt
+sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/kubevirt
+version: 0.1.0
