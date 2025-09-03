@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.0.4 (2025-09-02)
+## 14.0.4 (2025-09-03)
 
 * [bitnami/mysql]: Add a possibility to disable default initContainers ([#36228](https://github.com/bitnami/charts/pull/36228))
 
