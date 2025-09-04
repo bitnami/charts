@@ -1,5 +1,9 @@
 # Changelog
 
+## 23.0.1 (2025-09-03)
+
+* [bitnami/redis-cluster] :zap: :arrow_up: Fix service binding password mismatch ([#36231](https://github.com/bitnami/charts/pull/36231)), closes [#15626](https://github.com/bitnami/charts/issues/15626)
+
 ## 22.0.7 (2025-08-27)
 
 * [bitnami/redis] Fix Redis sentinel initialization with single replica ([#35667](https://github.com/bitnami/charts/pull/35667))
