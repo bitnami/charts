@@ -237,6 +237,7 @@ As an alternative, you can use any of the preset configurations for pod affinity
 | `minServerId`                 | Minimal SERVER_ID value, nodes increment their IDs respectively                                                            | `1`                         |
 | `listenOnAllIPs`              | Allow ZooKeeper to listen for connections from its peers on all available IP addresses                                     | `false`                     |
 | `zooServers`                  | ZooKeeper space separated servers list. Leave empty to use the default ZooKeeper server names.                             | `""`                        |
+| `fipsMode`                    | Enable FIPS compatibility mode in ZooKeeper.                                                                               | `true`                      |
 | `autopurge.snapRetainCount`   | The most recent snapshots amount (and corresponding transaction logs) to retain                                            | `10`                        |
 | `autopurge.purgeInterval`     | The time interval (in hours) for which the purge task has to be triggered                                                  | `1`                         |
 | `logLevel`                    | Log level for the ZooKeeper server. ERROR by default                                                                       | `ERROR`                     |
