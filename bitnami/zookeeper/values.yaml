@@ -198,6 +198,9 @@ listenOnAllIPs: false
 ## @param zooServers ZooKeeper space separated servers list. Leave empty to use the default ZooKeeper server names.
 ##
 zooServers: ""
+## @param fipsMode Enable FIPS compatibility mode in ZooKeeper.
+##
+fipsMode: true
 ## Ongoing data directory cleanup configuration
 ##
 autopurge:
