@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.8.7 (2025-08-07)
+## 13.9.0 (2025-09-04)
 
-* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references ([#35687](https://github.com/bitnami/charts/pull/35687))
+* [bitnami/zookeeper] Allow configuring fips-mode in Zookeeper ([#36236](https://github.com/bitnami/charts/pull/36236))
+
+## <small>13.8.7 (2025-08-07)</small>
+
+* [bitnami/zookeeper] :zap: :arrow_up: Update dependency references (#35687) ([3d774de](https://github.com/bitnami/charts/commit/3d774dece09376a094d4f214c2834bc942760771)), closes [#35687](https://github.com/bitnami/charts/issues/35687)
 
 ## <small>13.8.6 (2025-08-07)</small>
 
