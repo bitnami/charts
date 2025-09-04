@@ -1,12 +1,12 @@
 # Changelog
 
-## 13.0.6 (2025-09-03)
+## 13.0.6 (2025-09-04)
 
-* [bitnami/redis-cluster] :zap: :arrow_up: Fix service binding password mismatch ([#36230](https://github.com/bitnami/charts/pull/36230)), closes [#15626](https://github.com/bitnami/charts/issues/15626)
+* [bitnami/redis-cluster] Fix service binding password mismatch (#15626) ([#36230](https://github.com/bitnami/charts/pull/36230))
 
-## 13.0.4 (2025-08-23)
+## <small>13.0.4 (2025-08-23)</small>
 
-* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references ([#36172](https://github.com/bitnami/charts/pull/36172))
+* [bitnami/redis-cluster] :zap: :arrow_up: Update dependency references (#36172) ([2060aa9](https://github.com/bitnami/charts/commit/2060aa94b82bd7e0b030a310acf5c45f3b3dceda)), closes [#36172](https://github.com/bitnami/charts/issues/36172)
 
 ## <small>13.0.3 (2025-08-18)</small>
 
