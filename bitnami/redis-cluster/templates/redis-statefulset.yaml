@@ -275,7 +275,7 @@ spec:
                 command:
                   - /bin/bash
                   - -ec
-                  - /opt/bitnami/scripts/start-scripts/prestop-redis-cluster.sh
+                  - /scripts/prestop-redis-cluster.sh
           {{- end }}
           {{- end }}
           {{- if .Values.redis.resources }}
