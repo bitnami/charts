@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Database
   images: |
     - name: cassandra
       image: docker.io/bitnami/cassandra:5.0.5-debian-12-r7
@@ -35,4 +34,4 @@ maintainers:
 name: cassandra
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cassandra
-version: 12.3.11
+version: 12.3.12

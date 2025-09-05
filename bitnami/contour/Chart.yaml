@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: contour
       image: docker.io/bitnami/contour:1.32.1-debian-12-r0
@@ -34,4 +33,4 @@ maintainers:
 name: contour
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/contour
-version: 21.1.4
+version: 21.1.5

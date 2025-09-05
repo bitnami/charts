@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.0.21 (2025-08-14)
+## 17.0.22 (2025-09-01)
 
-* [bitnami/minio] :zap: :arrow_up: Update dependency references ([#35907](https://github.com/bitnami/charts/pull/35907))
+* [bitnami/minio]: fix broken provisioning config link ([#36222](https://github.com/bitnami/charts/pull/36222))
+
+## <small>17.0.21 (2025-08-14)</small>
+
+* [bitnami/minio] :zap: :arrow_up: Update dependency references (#35907) ([b0009f1](https://github.com/bitnami/charts/commit/b0009f197122278bdb15514ac2c879b9b7fd9ae1)), closes [#35907](https://github.com/bitnami/charts/issues/35907)
 
 ## <small>17.0.20 (2025-08-14)</small>
 

@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/cloudnative-pg/plugin-barman-cloud/refs/tags/v{version}/config/crd/bases/barmancloud.cnpg.io_objectstores.yaml
-# Version: 0.5.0
+# Version: 0.6.0
 # VersionOf: plugin-barman-cloud
 ---
 apiVersion: apiextensions.k8s.io/v1
@@ -612,7 +612,11 @@ spec:
                         restored.
                       format: date-time
                       type: string
-                    lastSuccussfulBackupTime:
+                    lastFailedBackupTime:
+                      description: The last failed backup time
+                      format: date-time
+                      type: string
+                    lastSuccessfulBackupTime:
                       description: The last successful backup time
                       format: date-time
                       type: string

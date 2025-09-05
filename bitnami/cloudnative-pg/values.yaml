@@ -79,7 +79,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/cloudnative-pg
-    tag: 1.26.1-debian-12-r1
+    tag: 1.27.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -106,7 +106,7 @@ operator:
   postgresqlImage:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 17.5.0-debian-12-r20
+    tag: 17.6.0-debian-12-r4
     digest: ""
   ## @param operator.replicaCount Number of cloudnative-pg Operator replicas to deploy
   ##
@@ -710,7 +710,7 @@ pluginBarmanCloud:
   image:
     registry: docker.io
     repository: bitnami/plugin-barman-cloud
-    tag: 0.5.0-debian-12-r3
+    tag: 0.6.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -737,7 +737,7 @@ pluginBarmanCloud:
   sidecarImage:
     registry: docker.io
     repository: bitnami/plugin-barman-cloud-sidecar
-    tag: 0.5.0-debian-12-r22
+    tag: 0.6.0-debian-12-r0
     digest: ""
   ## @param pluginBarmanCloud.replicaCount Number of plugin-barman-cloud replicas to deploy
   ##
