@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.0.8 (2025-08-28)
+## 23.0.1 (2025-09-05)
 
 * [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  ([#36207](https://github.com/bitnami/charts/pull/36207))
 
