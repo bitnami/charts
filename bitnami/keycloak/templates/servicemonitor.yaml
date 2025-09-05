@@ -21,7 +21,7 @@ spec:
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel | quote }}
   endpoints:
     - port: tcp-metrics
-      path: "/metrics"
+      path: "{{ trimSuffix "/" .Values.httpRelativePath }}/metrics"
       {{- if .Values.tls.enabled }}
       scheme: https
       {{- if .Values.metrics.serviceMonitor.tlsConfig }}
