@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.0.7 (2025-08-27)
+## 23.0.1 (2025-09-05)
 
-* [bitnami/redis] Fix Redis sentinel initialization with single replica ([#35667](https://github.com/bitnami/charts/pull/35667))
+* [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  ([#36207](https://github.com/bitnami/charts/pull/36207))
+
+## <small>22.0.7 (2025-08-27)</small>
+
+* [bitnami/redis] Fix Redis sentinel initialization with single replica (#35667) ([07a0857](https://github.com/bitnami/charts/commit/07a0857a60f5ccf850e1298a131f83005480ab80)), closes [#35667](https://github.com/bitnami/charts/issues/35667)
 
 ## <small>22.0.6 (2025-08-26)</small>
 
