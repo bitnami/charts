@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.1.0 (2025-08-28)
+## 13.1.0 (2025-09-05)
 
 * [bitnami/redis-cluster]: add preStop hook that gracefully fails over master nodes on pod termination ([#36221](https://github.com/bitnami/charts/pull/36221))
 
