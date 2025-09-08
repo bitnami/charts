@@ -145,7 +145,7 @@ Return Redis&reg; password
 {{- else if not (empty .Values.password) -}}
     {{- .Values.password -}}
 {{- else -}}
-    {{- $password_tmp := default .Values.password (randAlphaNum 10) -}}
+    {{- $password_tmp := randAlphaNum 10 -}}
     {{- $_ := set .Values "password" $password_tmp -}}
     {{- .Values.password -}}
 {{- end -}}
