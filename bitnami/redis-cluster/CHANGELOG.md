@@ -1,6 +1,6 @@
 # Changelog
 
-## 13.0.6 (2025-09-04)
+## 13.0.6 (2025-09-08)
 
 * [bitnami/redis-cluster] Fix service binding password mismatch (#15626) ([#36230](https://github.com/bitnami/charts/pull/36230))
 
