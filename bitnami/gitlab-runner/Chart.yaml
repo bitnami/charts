@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: gitlab-runner
       image: docker.io/bitnami/gitlab-runner:18.3.0-debian-12-r0
@@ -32,4 +31,4 @@ maintainers:
 name: gitlab-runner
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/gitlab-runner
-version: 1.1.8
+version: 1.1.9

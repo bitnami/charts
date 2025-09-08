@@ -30,6 +30,12 @@ spec:
       port: {{ .Values.queryFrontend.service.ports.grpc }}
       targetPort: grpc
       protocol: TCP
+    {{- if .Values.queryFrontend.query.enabled }}
+    - name: grpc-jaeger
+      port: {{ .Values.queryFrontend.service.ports.grpcJaeger }}
+      targetPort: grpc-jaeger
+      protocol: TCP
+    {{- end }}
     {{- if .Values.queryFrontend.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

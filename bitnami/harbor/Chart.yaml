@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: harbor-adapter-trivy
       image: docker.io/bitnami/harbor-adapter-trivy:2.13.2-debian-12-r2
@@ -56,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 27.0.3
+version: 27.0.4
