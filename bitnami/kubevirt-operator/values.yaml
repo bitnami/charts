@@ -1,0 +1,756 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+    ## @param global.compatibility.omitEmptySeLinuxOptions If set to true, removes the seLinuxOptions from the securityContexts when it is set to an empty object
+    ##
+    omitEmptySeLinuxOptions: false
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+
+## @section operator Parameters
+##
+
+## %%MAIN_CONTAINER/POD_DESCRIPTION%%
+##
+operator:
+  ## Bitnami operator image
+  ## ref: https://hub.docker.com/r/bitnami/%%IMAGE_NAME%%/tags/
+  ## @param operator.image.registry [default: REGISTRY_NAME] operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/%%IMAGE_NAME%%] operator image repository
+  ## @skip operator.image.tag operator image tag (immutable tags are recommended)
+  ## @param operator.image.digest operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param operator.image.pullPolicy operator image pull policy
+  ## @param operator.image.pullSecrets operator image pull secrets
+  ## @param operator.image.debug Enable operator image debug mode
+  ##
+  image:
+    registry: quay.io
+    repository: kubevirt/virt-operator
+    tag: v1.5.2
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    debug: false
+  ## @param operator.replicaCount Number of operator replicas to deploy
+  ##
+  replicaCount: 2
+  ## @param operator.containerPorts.metrics operator metrics container port
+  ## @param operator.containerPorts.webhooks operator webhooks container port
+  ##
+  containerPorts:
+    metrics: 8443
+    webhooks: 8444
+  ## @param operator.extraContainerPorts Optionally specify extra list of additional ports for operator containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for operator containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param operator.livenessProbe.enabled Enable livenessProbe on operator containers
+  ## @param operator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param operator.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param operator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param operator.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param operator.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 1
+    successThreshold: 5
+  ## @param operator.readinessProbe.enabled Enable readinessProbe on operator containers
+  ## @param operator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param operator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 10
+
+  ## @param operator.startupProbe.enabled Enable startupProbe on operator containers
+  ## @param operator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param operator.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param operator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param operator.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param operator.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 1
+    successThreshold: 5
+  ## @param operator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param operator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param operator.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## operator resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param operator.resourcesPreset Set operator container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param operator.resources.requests.cpu CPU resource request for the container 
+  ## @param operator.resources.requests.memory Memory resource request for the container
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+
+  resources: 
+    requests:
+      cpu: 10m
+      memory: 450Mi
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param operator.podSecurityContext.enabled Enable operator pods' Security Context
+  ## @param operator.podSecurityContext.runAsNonRoot Set runAsNonRoot in operator container' Security Context
+  ## @param operator.podSecurityContext.seccompProfile.type Set seccomp profile in operator container
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param operator.containerSecurityContext.enabled Enabled operator container' Security Context
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in operator container
+  ## @param operator.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in operator container' Security Context
+  ## @param operator.containerSecurityContext.capabilities.drop List of capabilities to be dropped in operator container
+  ## @param operator.containerSecurityContext.seccompProfile.type Set seccomp profile in operator container
+  ##
+  containerSecurityContext:
+    enabled: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    seccompProfile:
+      type: RuntimeDefault  
+
+  #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
+
+  ## @param operator.existingConfigmap The name of an existing ConfigMap with your custom configuration for operator
+  ##
+  existingConfigmap: ""
+  ## @param operator.command Override default operator container command (useful when using custom images)
+  ##
+  command: 
+   - virt-operator
+  ## @param operator.args Override default operator container args (useful when using custom images)
+  ##
+  args: 
+    - --port
+    - "8443"
+    - -v
+    - "2"
+  ## @param operator.automountServiceAccountToken Mount Service Account token in operator pods
+  ##
+  automountServiceAccountToken: true
+  ## @param operator.hostAliases operator pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param operator.daemonsetAnnotations Annotations for operator daemonset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  daemonsetAnnotations: {}
+  ## @param operator.deploymentAnnotations Annotations for operator deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  deploymentAnnotations: {}
+  ## @param operator.statefulsetAnnotations Annotations for operator statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param operator.podLabels Extra labels for operator pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param operator.podAnnotations.openshift.io/required-scc Security context constraint required for OpenShift
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: 
+    openshift.io/required-scc: restricted-v2
+  ## @param operator.podAffinityPreset Pod affinity preset. Ignored if `operator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `operator.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  
+  podAntiAffinityPreset: ""
+  ## Node operator.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param operator.nodeAffinityPreset.type Node affinity preset type. Ignored if `operator.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param operator.nodeAffinityPreset.key Node label key to match. Ignored if `operator.affinity` is set
+    ##
+    key: ""
+    ## @param operator.nodeAffinityPreset.values Node label values to match. Ignored if `operator.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param operator.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].key Label key for pod affinity
+  ## @param operator.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].operator Label operator for pod affinity
+  ## @param operator.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].values Label values for pod affinity
+  ## @param operator.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.topologyKey Topology key for pod affinity
+  ## @param operator.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight Weight for pod affinity preference
+
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `operator.podAffinityPreset`, `operator.podAntiAffinityPreset`, and `operator.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: 
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: kubevirt.io
+                  operator: In
+                  values:
+                  - virt-operator
+            topologyKey: kubernetes.io/hostname
+          weight: 1
+  ##  @param operator.nodeSelector.kubernetes.io/os The operating system label to select nodes (e.g., linux)
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector:
+    kubernetes.io/os: linux 
+  ## @param operator.tolerations[0].key The taint key that the toleration applies to
+  ## @param operator.tolerations[0].operator The operator for the toleration (e.g., Exists, Equal)
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+  ## ONLY FOR DEPLOYMENTS:
+  ## @param operator.updateStrategy.type operator deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## ONLY FOR STATEFULSETS:
+  ## @param operator.updateStrategy.type operator statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## ONLY FOR DEPLOYMENTS:
+    ## Can be set to RollingUpdate or Recreate
+    ## ONLY FOR STATEFULSETS:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## ONLY FOR STATEFULSETS:
+  ## @param operator.podManagementPolicy Pod management policy for operator statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
+  ## @param operator.priorityClassName operator pods' priorityClassName
+  ##
+  priorityClassName: "kubevirt-cluster-critical"
+  ## @param operator.topologySpreadConstraints Topology Spread Constraints for operator pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param operator.schedulerName Name of the k8s scheduler (other than default) for operator pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param operator.terminationGracePeriodSeconds Seconds operator pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param operator.lifecycleHooks for operator containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param operator.extraEnvVars Array with extra environment variables to add to operator containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param operator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for operator containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for operator containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param operator.extraVolumes Optionally specify extra list of additional volumes for the operator pods
+  ##
+  extraVolumes: []
+  ## @param operator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the operator containers
+  ##
+  extraVolumeMounts: []
+  ## @param operator.sidecars Add additional sidecar containers to the operator pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param operator.initContainers Add additional init containers to the operator pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param operator.autoscaling.vpa.enabled Enable VPA for operator pods
+    ## @param operator.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param operator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param operator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## @param operator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param operator.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+    ## @param operator.autoscaling.hpa.enabled Enable HPA for operator pods
+    ## @param operator.autoscaling.hpa.minReplicas Minimum number of replicas
+    ## @param operator.autoscaling.hpa.maxReplicas Maximum number of replicas
+    ## @param operator.autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ## @param operator.autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    hpa:
+      enabled: false
+      minReplicas: ""
+      maxReplicas: ""
+      targetCPU: ""
+      targetMemory: ""
+
+
+## @section Persistence Parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ##
+  enabled: true
+  ## @param persistence.mountPath Path to mount the volume at.
+  ##
+  mountPath: /etc/virt-operator/certificates
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r47
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enabled init container' Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in init container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 0
+
+## @section Other Parameters
+##
+
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.role.create Specifies whether a Role should be created 
+  role:
+    create: true
+    ## @param rbac.role.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+  ## @param rbac.clusterrole.create Specifies whether a ClusterRole should be created 
+  clusterrole:
+    create: true
+    ## @param rbac.clusterrole.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+
+## PriorityClass configuration
+##
+priorityClass:
+  ## @param priorityClass.enabled Enable a PriorityClass to control the scheduling priority of operator pods
+  ##
+  enabled: true
+  ## @param priorityClass.name The name of the PriorityClass to use
+  ##
+  name: kubevirt-cluster-critical
+  ## @param priorityClass.value The value of the PriorityClass to use
+  ## This value determines the priority. Higher values mean higher priority.
+  ## For example, 1000000 is higher priority than 1000.
+  ##
+  value: "1000000000"
+  ## @param priorityClass.globalDefault Specifies whether this PriorityClass should be the global default for Pods that
+  ## do not specify a `priorityClassName`
+  ## If true, Pods without a `priorityClassName` will be assigned this priority.
+  ##
+  globalDefault: false
+  ## @param priorityClass.description The description of the PriorityClass to use
+  ##
+  description: This priority class should be used for core kubevirt components only.
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: "kubevirt-operator"
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## kubevirt
+##
+kubevirt:
+  ## @param kubevirt.imagePullPolicy cdi image pull policy
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  imagePullPolicy: IfNotPresent
+
+  ## @param kubevirt.certificateRotateStrategy certificate Rotate Strategy
+  certificateRotateStrategy: {}
+
+  ## List of available featureGates : https://github.com/kubevirt/kubevirt/blob/main/pkg/virt-config/featuregate/active.go
+  ## @param kubevirt.featureGates.AlignCPUs Set kubevirt featureGates AlignCPUs (disable by default)
+  ## @param kubevirt.featureGates.CPUManager Set kubevirt featureGates CPUManager (disable by default)
+  ## @param kubevirt.featureGates.DisableMDEVConfiguration Set kubevirt featureGates DisableMDEVConfiguration (disable by default)
+  ## @param kubevirt.featureGates.DownwardMetrics Set kubevirt featureGates DownwardMetrics (disable by default)
+  ## @param kubevirt.featureGates.ExpandDisks Set kubevirt featureGates ExpandDisks (disable by default)
+  ## @param kubevirt.featureGates.ExperimentalIgnitionSupport Set kubevirt featureGates ExperimentalIgnitionSupport (disable by default)
+  ## @param kubevirt.featureGates.HostDevices Set kubevirt featureGates HostDevices (disable by default)
+  ## @param kubevirt.featureGates.HostDisk Set kubevirt featureGates HostDisk (disable by default)
+  ## @param kubevirt.featureGates.HotplugVolumes Set kubevirt featureGates HotplugVolumes (disable by default)
+  ## @param kubevirt.featureGates.HypervStrictCheck Set kubevirt featureGates HypervStrictCheck (disable by default)
+  ## @param kubevirt.featureGates.KubevirtSeccompProfile Set kubevirt featureGates KubevirtSeccompProfile (disable by default)
+  ## @param kubevirt.featureGates.MultiArchitecture Set kubevirt featureGates MultiArchitecture (disable by default)
+  ## @param kubevirt.featureGates.PersistentReservation Set kubevirt featureGates PersistentReservation (disable by default)
+  ## @param kubevirt.featureGates.Root Set kubevirt featureGates Root (disable by default)
+  ## @param kubevirt.featureGates.Sidecar Set kubevirt featureGates Sidecar (disable by default)
+  ## @param kubevirt.featureGates.Snapshot Set kubevirt featureGates Snapshot (disable by default)
+  ## @param kubevirt.featureGates.VMExport Set kubevirt featureGates VMExport (disable by default)
+  ## @param kubevirt.featureGates.VSOCK Set kubevirt featureGates VSOCK (disable by default)
+  ## @param kubevirt.featureGates.WorkloadEncryptionSEV Set kubevirt featureGates WorkloadEncryptionSEV (disable by default)
+  ## @param kubevirt.extraFeatureGates Add kubevirt FeatureGates (not available on helm)
+  featureGates:
+    AlignCPUs: false
+    CPUManager: false
+    DisableMDEVConfiguration: false
+    DownwardMetrics: false
+    ExpandDisks: false
+    ExperimentalIgnitionSupport: false
+    HostDevices: false
+    HostDisk: false
+    HotplugVolumes: false
+    HypervStrictCheck: false
+    KubevirtSeccompProfile: false
+    MultiArchitecture: false
+    PersistentReservation: false
+    Root: false
+    Sidecar: false
+    Snapshot: false
+    VMExport: false
+    VSOCK: false
+    WorkloadEncryptionSEV: false
+
+  extraFeatureGates: []
+
+  ## List of available Customize components : https://kubevirt.io/user-guide/cluster_admin/customize_components/
+  ## @param kubevirt.customizeComponents Set kubevirt Customize Components
+  customizeComponents: {}
+
+  ## @param kubevirt.workloadUpdateStrategy Set kubevirt Workload Update Strategy
+  workloadUpdateStrategy: {}
+
+## job
+##
+job:
+  ## @param job.image job image (kubectl))
+  image: bitnami/kubectl
