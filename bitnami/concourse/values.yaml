@@ -1496,6 +1496,7 @@ postgresql:
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
+## @param externalDatabase.port Whether or not to use SSL. Defaults to `disable` other valid values are `require`, `verify-ca`, and `verify-full`
 ## @param externalDatabase.user Non-root username for Concourse
 ## @param externalDatabase.password Password for the non-root username for Concourse
 ## @param externalDatabase.database Concourse database name
@@ -1505,6 +1506,7 @@ postgresql:
 externalDatabase:
   host: localhost
   port: 5432
+  sslmode: disable
   user: bn_concourse
   password: ""
   database: bitnami_concourse
