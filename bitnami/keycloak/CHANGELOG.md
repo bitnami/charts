@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.2 (2025-09-10)
+## 25.2.2 (2025-09-11)
 
 * [bitnami/keycloak]: fix sidecars in keycloak-config-cli-job ([#36247](https://github.com/bitnami/charts/pull/36247))
 
