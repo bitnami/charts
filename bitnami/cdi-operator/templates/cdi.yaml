@@ -1,0 +1,34 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: CDI
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+spec:
+  config:
+    {{- if .Values.cdi.config.podResource }}
+    podResourceRequirements: {{- toYaml .Values.cdi.config.podResource | nindent 6 }}
+    {{- else if ne .Values.cdi.config.podResourcePreset "none" }}
+    podResourceRequirements: {{- include "common.resources.preset" (dict "type" .Values.cdi.config.podResourcePreset) | nindent 6 }}
+    {{- end }}
+    featureGates:
+    {{- range $key, $enabled := .Values.cdi.config.featureGates }}
+    {{- if $enabled }}
+    - {{ $key }}
+    {{- end }}
+    {{- end }}
+    {{- with .Values.cdi.config.extraFeatureGates }}
+    {{- range . }}
+    - {{ . }}
+    {{- end }}
+    {{- end }}
+  imagePullPolicy: {{ .Values.cdi.pullPolicy }}
+  infra:
+    nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.cdi.infra.nodeSelector "context" $) | nindent 6 }}
+    tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cdi.infra.tolerations "context" .) | nindent 4 }}
+  workload:
+    nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.cdi.workload.nodeSelector "context" $) | nindent 6 }}
