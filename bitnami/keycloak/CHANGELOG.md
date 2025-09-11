@@ -1,8 +1,8 @@
 # Changelog
 
-## 25.2.2 (2025-09-11)
+## 25.2.2 (2025-09-08)
 
-* [bitnami/keycloak]: fix sidecars in keycloak-config-cli-job ([#36247](https://github.com/bitnami/charts/pull/36247))
+* [bitnami/keycloak] fix: consider httpRelativePath for metrics ([#36219](https://github.com/bitnami/charts/pull/36219))
 
 ## 25.2.0 (2025-08-21)
 
