@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.1.47 (2025-09-10)
+## 5.1.47 (2025-09-11)
 
 * [bitnami/concourse] Add in SSL Mode for external databases. ([#36249](https://github.com/bitnami/charts/pull/36249))
 
