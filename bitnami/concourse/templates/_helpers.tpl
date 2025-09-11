@@ -94,6 +94,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote -}}
 {{- end -}}
 
+{{- define "concourse.database.sslmode" -}}
+{{- ternary "disable" .Values.externalDatabase.sslmode .Values.postgresql.enabled | quote -}}
+{{- end -}}
+
 {{/*
 Add environment variables to configure database values
 */}}
