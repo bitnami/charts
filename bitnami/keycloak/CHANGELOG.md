@@ -1,8 +1,13 @@
 # Changelog
 
-## 25.2.2 (2025-09-08)
+## 25.2.3 (2025-09-11)
 
-* [bitnami/keycloak] fix: consider httpRelativePath for metrics ([#36219](https://github.com/bitnami/charts/pull/36219))
+* [bitnami/keycloak]: fix sidecars in keycloak-config-cli-job ([#36247](https://github.com/bitnami/charts/pull/36247))
+
+## <small>25.2.2 (2025-09-11)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/keycloak] fix: consider httpRelativePath for metrics (#36219) ([43577c3](https://github.com/bitnami/charts/commit/43577c3f2b0c13dbcd815ef5ea610c7a0ced0f86)), closes [#36219](https://github.com/bitnami/charts/issues/36219)
 
 ## 25.2.0 (2025-08-21)
 
