@@ -100,6 +100,11 @@ containerPorts:
   profiler: 10245
   status: 10246
   stream: 10247
+## @param extraContainerPorts Optionally specify extra list of additional ports for Controller container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
