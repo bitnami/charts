@@ -1140,17 +1140,17 @@ server:
     objectStorageConfig:
       secretName: ""
       secretKey: thanos.yaml
-    ## @param server.thanos.extraEnvVars Array with extra environment variables to add to server.thanos nodes
+    ## @param server.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
     ## e.g:
     ## extraEnvVars:
     ##   - name: FOO
     ##     value: "bar"
     ##
     extraEnvVars: []
-    ## @param server.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for server.thanos nodes
+    ## @param server.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
     ##
     extraEnvVarsCM: ""
-    ## @param server.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for server.thanos nodes
+    ## @param server.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
     ##
     extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md

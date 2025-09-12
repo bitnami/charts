@@ -1576,18 +1576,18 @@
                         },
                         "extraEnvVars": {
                             "type": ["array", "string"],
-                            "description": "Array with extra environment variables to add to server.thanos nodes",
+                            "description": "Array with extra environment variables to add to the thanos sidecar container",
                             "default": [],
                             "items": {}
                         },
                         "extraEnvVarsCM": {
                             "type": "string",
-                            "description": "Name of existing ConfigMap containing extra env vars for server.thanos nodes",
+                            "description": "Name of existing ConfigMap containing extra env vars for the thanos sidecar container",
                             "default": ""
                         },
                         "extraEnvVarsSecret": {
                             "type": "string",
-                            "description": "Name of existing Secret containing extra env vars for server.thanos nodes",
+                            "description": "Name of existing Secret containing extra env vars for the thanos sidecar container",
                             "default": ""
                         },
                         "extraVolumeMounts": {
