@@ -1,0 +1,91 @@
+global:
+  redis:
+    password: "xxx"
+architecture: replication
+auth:
+  enabled: true
+  sentinel: false  # https://github.com/goharbor/harbor/issues/14757
+commonConfiguration: |-
+  protected-mode no
+  maxmemory 1gb
+  maxmemory-policy allkeys-lru
+  tcp-backlog 511
+  timeout 0
+  tcp-keepalive 300
+  daemonize no
+  supervised no
+
+  loglevel notice
+  databases 16
+  save 900 1
+  save 300 10
+  save 60 10000
+  stop-writes-on-bgsave-error yes
+  rdbcompression yes
+  rdbchecksum yes
+  dbfilename dump.rdb
+
+  slave-serve-stale-data yes
+  slave-read-only yes
+  repl-diskless-sync no
+  repl-diskless-sync-delay 5
+  repl-disable-tcp-nodelay no
+  slave-priority 100
+  appendonly no
+  appendfilename "appendonly.aof"
+  appendfsync everysec
+  no-appendfsync-on-rewrite no
+  auto-aof-rewrite-percentage 100
+  auto-aof-rewrite-min-size 64mb
+  aof-load-truncated yes
+  lua-time-limit 5000
+  slowlog-log-slower-than 10000
+  slowlog-max-len 128
+  latency-monitor-threshold 0
+  notify-keyspace-events ""
+  hash-max-ziplist-entries 512
+  hash-max-ziplist-value 64
+  list-max-ziplist-size -2
+  list-compress-depth 0
+  set-max-intset-entries 512
+  zset-max-ziplist-entries 128
+  zset-max-ziplist-value 64
+  hll-sparse-max-bytes 3000
+  activerehashing yes
+  client-output-buffer-limit normal 0 0 0
+  client-output-buffer-limit slave 256mb 64mb 60
+  client-output-buffer-limit pubsub 32mb 8mb 60
+  hz 10
+  aof-rewrite-incremental-fsync yes
+
+replica:
+  replicaCount: 3
+  configuration: ""
+  tolerations: null
+  nodeSelector: null
+sentinel:
+  enabled: true
+  masterSet: mymaster
+  quorum: 2
+  #resourcesPreset: "small" # 0.5c,0.5g
+  persistence: # sentinel-data
+    enabled: true
+    size: 100Mi
+  service:
+    type: NodePort
+    nodePorts:
+      sentinel: "30074"
+  masterService:
+    enabled: &master_service false
+    type: NodePort
+    nodePorts:
+      redis: "30077"
+rbac:
+  create: *master_service
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  prometheusRule:
+    enabled: false
+    rules: []

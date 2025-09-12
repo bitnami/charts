@@ -1,8 +1,8 @@
 # Changelog
 
-## 23.0.1 (2025-09-04)
+## 23.0.1 (2025-09-05)
 
-* [bitnami/redis] Fix service binding password mismatch (#15626) ([#36231](https://github.com/bitnami/charts/pull/36231))
+* [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  ([#36207](https://github.com/bitnami/charts/pull/36207))
 
 ## <small>22.0.7 (2025-08-27)</small>
 

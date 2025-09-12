@@ -218,7 +218,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ .Values.httpRelativePath }}realms/{{ .Values.adminRealm | default "master" }}
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/realms/{{ .Values.adminRealm | default "master" }}
               port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
               scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}

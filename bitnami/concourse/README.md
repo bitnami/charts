@@ -579,15 +579,16 @@ The [Bitnami Concourse](https://github.com/bitnami/containers/tree/main/bitnami/
 
 ### External PostgreSQL configuration
 
-| Name                                         | Description                                                             | Value               |
-| -------------------------------------------- | ----------------------------------------------------------------------- | ------------------- |
-| `externalDatabase.host`                      | Database host                                                           | `localhost`         |
-| `externalDatabase.port`                      | Database port number                                                    | `5432`              |
-| `externalDatabase.user`                      | Non-root username for Concourse                                         | `bn_concourse`      |
-| `externalDatabase.password`                  | Password for the non-root username for Concourse                        | `""`                |
-| `externalDatabase.database`                  | Concourse database name                                                 | `bitnami_concourse` |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
+| Name                                         | Description                                                                                                       | Value               |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `externalDatabase.host`                      | Database host                                                                                                     | `localhost`         |
+| `externalDatabase.port`                      | Database port number                                                                                              | `5432`              |
+| `externalDatabase.sslmode`                   | Whether or not to use SSL. Defaults to `disable` other valid values are `require`, `verify-ca`, and `verify-full` | `disable`           |
+| `externalDatabase.user`                      | Non-root username for Concourse                                                                                   | `bn_concourse`      |
+| `externalDatabase.password`                  | Password for the non-root username for Concourse                                                                  | `""`                |
+| `externalDatabase.database`                  | Concourse database name                                                                                           | `bitnami_concourse` |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`                |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`                |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
