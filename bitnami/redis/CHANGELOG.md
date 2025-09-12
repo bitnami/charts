@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.0.1 (2025-09-05)
+## 23.0.2 (2025-09-12)
 
-* [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  ([#36207](https://github.com/bitnami/charts/pull/36207))
+* [bitnami/redis] Fix service binding password mismatch (#15626) ([#36231](https://github.com/bitnami/charts/pull/36231))
+
+## <small>23.0.1 (2025-09-05)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  (#36207) ([b46e3d4](https://github.com/bitnami/charts/commit/b46e3d4f306a3f5a5c0a23888e8df9eeccd2ed22)), closes [#36207](https://github.com/bitnami/charts/issues/36207)
 
 ## <small>22.0.7 (2025-08-27)</small>
 
