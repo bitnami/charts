@@ -1,0 +1,94 @@
+name: Release Helm Charts
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'bitnami/**'
+      - '.github/workflows/chart-release.yml'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        run: |
+          HELM_VER="v3.14.4"
+          HELM_TGZ="helm-${HELM_VER}-linux-amd64.tar.gz"
+          curl -sSL -o ${HELM_TGZ} https://get.helm.sh/${HELM_TGZ}
+          sudo tar -C /usr/local/bin -xzf ${HELM_TGZ} --strip-components=1 linux-amd64/helm
+          helm version
+
+      - name: Vendor dependencies (common, kibana) into charts/
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHARTS_DIR="bitnami"
+          # Ensure common is available as a local chart
+          if [ ! -d "${CHARTS_DIR}/common" ]; then
+            echo "Expected ${CHARTS_DIR}/common to exist" >&2
+            exit 1
+          fi
+          for chart in ${CHARTS_DIR}/*; do
+            [ -d "$chart" ] || continue
+            name=$(basename "$chart")
+            # Skip library chart itself
+            if [ "$name" = "common" ]; then
+              continue
+            fi
+            chart_yaml="$chart/Chart.yaml"
+            [ -f "$chart_yaml" ] || continue
+
+            # If chart depends on common, rewrite dependency repo to local file ref
+            if grep -q "^- name: common" "$chart_yaml"; then
+              # Replace following 'repository:' line for the 'common' dep with file:// reference
+              awk 'BEGIN{in_dep=0} \
+                /^dependencies:/ {print; next} \
+                { \
+                  if ($0 ~ /^- name: common/) {in_dep=1; print; next} \
+                  if (in_dep==1 && $0 ~ /^\s*repository:/) { \
+                    sub(/repository:.*/, "repository: file:\/\/..\/common"); in_dep=0; print; next \
+                  } \
+                  print \
+                }' "$chart_yaml" > "$chart_yaml.tmp" && mv "$chart_yaml.tmp" "$chart_yaml"
+            fi
+
+            # If chart (like elasticsearch) lists kibana as a conditional dep, rewrite to local as well
+            if grep -q "^- name: kibana" "$chart_yaml"; then
+              awk 'BEGIN{in_dep=0} \
+                /^dependencies:/ {print; next} \
+                { \
+                  if ($0 ~ /^- name: kibana/) {in_dep=1; print; next} \
+                  if (in_dep==1 && $0 ~ /^\s*repository:/) { \
+                    sub(/repository:.*/, "repository: file:\/\/..\/kibana"); in_dep=0; print; next \
+                  } \
+                  print \
+                }' "$chart_yaml" > "$chart_yaml.tmp" && mv "$chart_yaml.tmp" "$chart_yaml"
+            fi
+
+            # Build dependencies to vendor them under charts/
+            echo "Vendoring deps for $chart"
+            helm dependency build "$chart"
+          done
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_dir: bitnami
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

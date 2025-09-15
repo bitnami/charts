@@ -34,7 +34,9 @@ keywords:
 maintainers:
 - name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
+- name: Mobiel.nl
+  url: https://github.com/websend/charts
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 17.0.0
+version: 17.0.1
