@@ -76,6 +76,28 @@ Useful Helm Client Commands:
 - Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 - Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 
+## Using this Helm chart repository
+
+- Add the Helm repo:
+  - `helm repo add mobielnl https://websend.github.io/charts`
+  - `helm repo update`
+- Install a chart (example):
+  - `helm install my-redis mobielnl/redis`
+
+## Publishing workflow
+
+Releases are automated via GitHub Actions in `.github/workflows/chart-release.yml`:
+
+- On push to `main`/`master` that changes a chart `Chart.yaml` version, the workflow:
+  - Vendors dependencies for each chart
+  - Packages charts and publishes them to the `gh-pages` branch
+  - Updates the Helm index served at `https://websend.github.io/charts`
+
+### First-time or full rebuild
+
+- You can manually trigger the workflow from the Actions tab using “Run workflow” and enable the `full_rebuild` input to package and publish all charts regardless of detected changes.
+- Ensure repository settings enable GitHub Pages from the `gh-pages` branch (root).
+
 ## License
 
 Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.

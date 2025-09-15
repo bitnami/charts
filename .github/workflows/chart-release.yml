@@ -4,8 +4,14 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'bitnami/**'
+      - 'bitnami/**/Chart.yaml'
       - '.github/workflows/chart-release.yml'
+  workflow_dispatch:
+    inputs:
+      full_rebuild:
+        description: 'Rebuild and publish all charts (first-time or forced)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -19,6 +25,48 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Detect chart version changes
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.before }}"
+          if [ -z "${BASE}" ]; then
+            BASE="$(git rev-parse HEAD^ || echo '')"
+          fi
+          echo "Base ref: ${BASE:-<none>} -> ${GITHUB_SHA}"
+          changed_dirs=()
+          if [ -n "${BASE}" ]; then
+            while IFS= read -r f; do
+              [ -n "$f" ] || continue
+              old_v=$(git show "${BASE}:${f}" 2>/dev/null | awk -F': ' '/^version:/{print $2; exit}')
+              new_v=$(git show "${GITHUB_SHA}:${f}" 2>/dev/null | awk -F': ' '/^version:/{print $2; exit}')
+              if [ -n "${old_v}" ] && [ -n "${new_v}" ] && [ "${old_v}" != "${new_v}" ]; then
+                echo "Version changed in ${f}: ${old_v} -> ${new_v}"
+                changed_dirs+=("$(dirname "$f")")
+              fi
+            done < <(git diff --name-only "${BASE}" "${GITHUB_SHA}" -- 'bitnami/**/Chart.yaml')
+          fi
+
+          # For manual dispatch with full rebuild, mark as changed
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.full_rebuild }}" = "true" ]; then
+            echo "Manual full rebuild requested"
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "changed_charts=ALL" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ ${#changed_dirs[@]} -gt 0 ]; then
+            printf '%s\n' "Changed charts:" "${changed_dirs[@]}"
+            # space-separated for readability
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "changed_charts=${changed_dirs[*]}" >> "$GITHUB_OUTPUT"
+          else
+            echo "No chart version changes detected; skipping release steps."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "changed_charts=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Configure Git
         run: |
@@ -34,6 +82,7 @@ jobs:
           helm version
 
       - name: Vendor dependencies (common, kibana) into charts/
+        if: steps.detect.outputs.should_release == 'true' || (github.event_name == 'workflow_dispatch' && inputs.full_rebuild == 'true')
         shell: bash
         run: |
           set -euo pipefail
@@ -86,9 +135,9 @@ jobs:
           done
 
       - name: Run chart-releaser
+        if: steps.detect.outputs.should_release == 'true' || (github.event_name == 'workflow_dispatch' && inputs.full_rebuild == 'true')
         uses: helm/chart-releaser-action@v1.7.0
         with:
           charts_dir: bitnami
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
