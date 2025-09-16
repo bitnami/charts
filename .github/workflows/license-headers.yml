@@ -9,7 +9,7 @@ on:
       - synchronize
     branches:
       - main
-      - bitnami:main
+      - bitmoa:main
 # Remove all permissions by default
 permissions: {}
 jobs:
@@ -55,7 +55,7 @@ jobs:
                 regular_files+=("${file_changed}")
               fi
             fi
-          done <<< "$(echo "$files_changed" | grep -oE "^bitnami/.*\.ya?ml$" | sort | uniq || true)"
+          done <<< "$(echo "$files_changed" | grep -oE "^bitmoa/.*\.ya?ml$" | sort | uniq || true)"
           if [[ ${#templates[@]} -gt 0 ]] || [[ ${#regular_files[@]} -gt 0 ]]; then
             if [[ ${#templates[@]} -gt 0 ]]; then
               # There are modifications over yaml templates

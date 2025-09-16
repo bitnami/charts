@@ -19,30 +19,30 @@ appVersion: 2.17.0
 dependencies:
 - condition: minio.enabled
   name: minio
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 17.x.x
 - alias: memcachedmetadata
   condition: memcachedmetadata.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedindex
   condition: memcachedindex.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedfrontend
   condition: memcachedfrontend.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

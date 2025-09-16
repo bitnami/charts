@@ -16,10 +16,10 @@ apiVersion: v2
 appVersion: 8.2.3
 dependencies:
 - name: mongodb
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 16.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

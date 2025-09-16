@@ -9,10 +9,10 @@ appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
   - condition: SUBCHART_NAME.enabled
     name: SUBCHART_NAME
-    repository: oci://registry-1.docker.io/bitmoacharts
+    repository: https://charts-dev.bitmoa.net/bitmoa/
     version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
   - name: common
-    repository: oci://registry-1.docker.io/bitmoacharts
+    repository: https://charts-dev.bitmoa.net/bitmoa/
     tags:
       - bitmoa-common
     version: 2.x.x

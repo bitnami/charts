@@ -18,30 +18,30 @@ dependencies:
 - alias: grafanaalloy
   condition: grafanaalloy.enabled
   name: grafana-alloy
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 1.x.x
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedfrontend
   condition: memcachedfrontend.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedindexqueries
   condition: memcachedindexqueries.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - alias: memcachedindexwrites
   condition: memcachedindexwrites.enabled
   name: memcached
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 7.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

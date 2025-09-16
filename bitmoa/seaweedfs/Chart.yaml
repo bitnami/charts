@@ -19,18 +19,18 @@ appVersion: 3.96.0
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - seaweedfs-database
   version: 22.x.x
 - condition: postgresql.enabled
   name: postgresql
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - seaweedfs-database
   version: 16.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

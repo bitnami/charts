@@ -13,10 +13,10 @@ appVersion: 7.12.0
 dependencies:
 - condition: redis.enabled
   name: redis
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 22.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

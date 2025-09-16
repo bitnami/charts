@@ -16,7 +16,7 @@ jobs:
       contents: read
     outputs:
       result: ${{ steps.integrity-check.outputs.result }}
-    if: ${{ github.repository_owner == 'bitnami' }}
+    if: ${{ github.repository_owner == 'bitmoa' }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
@@ -31,8 +31,8 @@ jobs:
           # A single success is enough to pass
           while [[ "${status}" != "ok" && $attempts -lt 3 ]]; do
             # Check the index.yaml integrity
-            REMOTE_MD5=($(curl -Ls https://charts.bitnami.com/bitnami/index.yaml | md5sum))
-            REPOSITORY_MD5=($(md5sum bitnami/index.yaml))
+            REMOTE_MD5=($(curl -Ls https://charts.bitmoa.com/bitmoa/index.yaml | md5sum))
+            REPOSITORY_MD5=($(md5sum bitmoa/index.yaml))
             # Compare the index.yaml checksums remote and locally
             if [[ "${REPOSITORY_MD5[0]}" == "${REMOTE_MD5[0]}" ]]; then
               status='ok'
@@ -63,7 +63,7 @@ jobs:
       contents: read
     outputs:
       result: ${{ steps.validation-check.outputs.result }}
-    if: ${{ github.repository_owner == 'bitnami' }}
+    if: ${{ github.repository_owner == 'bitmoa' }}
     steps:
       - name: Install helm
         run: |
@@ -106,7 +106,7 @@ jobs:
   upload:
     name: Re-upload index.yaml
     needs: [validation-check, integrity-check]
-    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
     uses: bitnami/charts/.github/workflows/sync-chart-cloudflare-index.yml@index
     secrets: inherit
     permissions:
@@ -114,8 +114,8 @@ jobs:
   notify:
     name: Send notification
     needs: [validation-check, integrity-check]
-    if: ${{ always() && github.repository_owner == 'bitnami' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
-    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+    uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
     with:
       workflow: ${{ github.workflow }}
       job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

@@ -11,7 +11,7 @@ on: # rebuild any PRs and main branch changes
       - labeled
     branches:
       - main
-      - bitnami:main
+      - bitmoa:main
 # Remove all permissions by default
 permissions: {}
 # Avoid concurrency over the same PR
@@ -39,10 +39,10 @@ jobs:
           files_changed_data="$(gh api --paginate "/repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER}/files")"
           files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
           # Adding || true to avoid "Process exited with code 1" errors
-          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+          charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitmoa/[^/]*" | sort | uniq || true)"
           # Using grep -c as a better alternative to wc -l when dealing with empty strings."
-          num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
-          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|match("bitnami/[^/]+/Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+          num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitmoa" || true)"
+          num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|match("bitmoa/[^/]+/Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
           if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
@@ -60,15 +60,15 @@ jobs:
             # Changes done in only one chart -> OK
             echo "result=ok" >> "$GITHUB_OUTPUT"
             # Extra output: chart name
-            chart_name="${charts_dirs_changed//bitnami\/}"
+            chart_name="${charts_dirs_changed//bitmoa\/}"
             echo "chart=${chart_name}" >> "$GITHUB_OUTPUT"
             # Extra output: values-updated
             # shellcheck disable=SC2076
-            if [[ "${files_changed[*]}" =~ "bitnami/${chart_name}/values.yaml" ]]; then
+            if [[ "${files_changed[*]}" =~ "bitmoa/${chart_name}/values.yaml" ]]; then
               echo "values-updated=true" >> "$GITHUB_OUTPUT"
             fi
           elif [[ "$num_charts_changed" -le "0" ]]; then
-            # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
+            # Changes done in the bitmoa/ folder but not inside a chart subfolder -> SKIP
             echo "error=No changes detected in charts. The rest of the tests will be skipped." >> "$GITHUB_OUTPUT"
             echo "result=skip" >> "$GITHUB_OUTPUT"
           else
@@ -96,7 +96,7 @@ jobs:
     name: Look for hardcoded images
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - name: Checkout bitnami/charts
+      - name: Checkout bitmoa/charts
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{github.event.pull_request.head.ref}}
@@ -114,7 +114,7 @@ jobs:
             if [[ -n "$image" && $image != {{*}} ]]; then
               hardcoded_images+=("${image}")
             fi
-          done <<< "$(grep --exclude "NOTES.txt" -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "bitnami/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
+          done <<< "$(grep --exclude "NOTES.txt" -REoh "\s*image:\s+[\"']*.+[\"']*\s*$" "bitmoa/${CHART}/templates" | sed "s/image: [\"']*//" | sed "s/[\"']*$//")"
           echo "${hardcoded_images[@]}"
           if [[ ${#hardcoded_images[@]} -gt 0 ]] ; then
             echo "error=Found hardcoded images in the chart templates: ${hardcoded_images[*]}"
@@ -128,8 +128,8 @@ jobs:
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
 
           if [[ "$CHART" != "common" && "$CHART" != "fluentd" ]]; then
-            readarray -t tag_paths < <(yq e '.. | (path | join("."))' "bitnami/${CHART}/values.yaml" | grep -E '\.tag$' | sed 's/.tag$//g' | sort -u)
-            readarray -t registry_paths < <(yq e '.. | (path | join("."))' "bitnami/${CHART}/values.yaml" | grep '\.registry$' | sed 's/.registry$//g' | sort -u)
+            readarray -t tag_paths < <(yq e '.. | (path | join("."))' "bitmoa/${CHART}/values.yaml" | grep -E '\.tag$' | sed 's/.tag$//g' | sort -u)
+            readarray -t registry_paths < <(yq e '.. | (path | join("."))' "bitmoa/${CHART}/values.yaml" | grep '\.registry$' | sed 's/.registry$//g' | sort -u)
 
             # We assume that image objects are those that contain both keys 'tag' and 'registry'
             images_paths=()
@@ -140,7 +140,7 @@ jobs:
             done
 
             # Get the images defined in the image warning helper
-            readarray -d ' ' -t images_list_tmp < <(grep -E 'common.warnings.modifiedImages' "bitnami/${CHART}/templates/NOTES.txt" | sed -E 's/.*\(list (.+)\) "context".*/\1/' | sed 's/.Values.//g')
+            readarray -d ' ' -t images_list_tmp < <(grep -E 'common.warnings.modifiedImages' "bitmoa/${CHART}/templates/NOTES.txt" | sed -E 's/.*\(list (.+)\) "context".*/\1/' | sed 's/.Values.//g')
 
             # Remove any empty element from the array
             images_list=()
@@ -173,22 +173,22 @@ jobs:
       result: ${{ steps.update-pr.outputs.result }}
     if: needs.get-chart.outputs.result == 'ok'
     steps:
-      - name: Checkout bitnami/charts
+      - name: Checkout bitmoa/charts
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          token: ${{ secrets.bitmoa_BOT_TOKEN }}
           path: charts
-      - name: Clone upstream bitnami/charts repository
+      - name: Clone upstream bitmoa/charts repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           path: upstream-charts
       - name: Setup git configuration
         run: |
           cd $GITHUB_WORKSPACE/charts
-          git config user.name "Bitnami Bot"
-          git config user.email "bitnami.bot@broadcom.com"
+          git config user.name "bitmoa Bot"
+          git config user.email "bitmoa.bot@bitmoa.net"
       # In order to avoid doing a full clone (which would fetch the index branch), we
       # unshallow the clone only using the main branch. We need to get the tags to
       # regenerate the changelog too
@@ -212,11 +212,11 @@ jobs:
           # Get PR title using the API to avoid malicious string substitutions
           pr_title="$(gh api "/repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER}" | jq -r '.title')"
           # The generator needs the file to exist
-          chart_version="$(yq e '.version' "${GITHUB_WORKSPACE}/charts/bitnami/${CHART}/Chart.yaml")"
-          changelog_file="${GITHUB_WORKSPACE}/charts/bitnami/${CHART}/CHANGELOG.md"
-          changelog_tmp="${GITHUB_WORKSPACE}/charts/bitnami/${CHART}/CHANGELOG.md.tmp"
+          chart_version="$(yq e '.version' "${GITHUB_WORKSPACE}/charts/bitmoa/${CHART}/Chart.yaml")"
+          changelog_file="${GITHUB_WORKSPACE}/charts/bitmoa/${CHART}/CHANGELOG.md"
+          changelog_tmp="${GITHUB_WORKSPACE}/charts/bitmoa/${CHART}/CHANGELOG.md.tmp"
           touch "$changelog_file"
-          npx conventional-changelog-cli -i "$changelog_file" -s -t "${CHART}/" -r 0 --commit-path "bitnami/${CHART}"
+          npx conventional-changelog-cli -i "$changelog_file" -s -t "${CHART}/" -r 0 --commit-path "bitmoa/${CHART}"
           # The tool uses short sha to generate commit links. Sometimes, Github does not offer links with the short sha, so we change all commit links to use the full sha instead
           for short_sha in $(grep -Eo "/commit/[a-z0-9]+" "$changelog_file" | awk -F/ '{print $3}'); do
             long_sha="$(git rev-list @ | grep "^$short_sha" | head -n 1)";
@@ -238,13 +238,13 @@ jobs:
           rm "$changelog_tmp"
 
           # Commit all changes, if any
-          if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
-            git add "bitnami/${CHART}/CHANGELOG.md"
+          if git status -s | grep "bitmoa/${CHART}/CHANGELOG.md"; then
+            git add "bitmoa/${CHART}/CHANGELOG.md"
             git commit -m "Update CHANGELOG.md" --signoff
           fi
       - name: Install readme-generator-for-helm
         if: needs.get-chart.outputs.values-updated == 'true'
-        run: npm install -g @bitnami/readme-generator-for-helm
+        run: npm install -g @bitmoa/readme-generator-for-helm
       - id: update-readme
         name: 'Update README'
         if: needs.get-chart.outputs.values-updated == 'true'
@@ -254,14 +254,14 @@ jobs:
           exit_code=0
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
 
-          echo "Validating README.md for bitnami/${CHART}"
+          echo "Validating README.md for bitmoa/${CHART}"
 
           # Validating *.registry parameters
           while read -r line; do
             echo "$line" | grep --quiet "\[default: \(REGISTRY_NAME\|\"\"\)\]" || exit_code=$?
-          done < <(grep "@param\s\+[A-Za-z\.]\+\.registry\s\+" "bitnami/${CHART}/values.yaml")
+          done < <(grep "@param\s\+[A-Za-z\.]\+\.registry\s\+" "bitmoa/${CHART}/values.yaml")
           if [[ $exit_code -ne 0 ]]; then
-            echo "error=Please ensure all *.registry params include the [default: REGISTRY_NAME] modifier in the chart bitnami/${CHART}/values.yaml file"
+            echo "error=Please ensure all *.registry params include the [default: REGISTRY_NAME] modifier in the chart bitmoa/${CHART}/values.yaml file"
             exit "$exit_code"
           fi
 
@@ -270,38 +270,38 @@ jobs:
             param=$(echo "$line" | awk '{print $3}')
             # Checking if it's a image's registry-related param
             registry_param="${param//.repository/.registry}"
-            grep --quiet "@param\s\+${registry_param}" "bitnami/${CHART}/values.yaml" && ( echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$? )
-          done < <(grep "@param\s\+[A-Za-z\.]\+\.repository\s\+" "bitnami/${CHART}/values.yaml")
+            grep --quiet "@param\s\+${registry_param}" "bitmoa/${CHART}/values.yaml" && ( echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$? )
+          done < <(grep "@param\s\+[A-Za-z\.]\+\.repository\s\+" "bitmoa/${CHART}/values.yaml")
           if [[ $exit_code -ne 0 ]]; then
-            echo "error=Please ensure all *.repository params include the [default: REPOSITORY_NAME] modifier the in the chart bitnami/${CHART}/values.yaml file"
+            echo "error=Please ensure all *.repository params include the [default: REPOSITORY_NAME] modifier the in the chart bitmoa/${CHART}/values.yaml file"
             exit "$exit_code"
           fi
 
           # Validating *.tag parameters
-          grep -v --quiet "@param\s\+[A-Za-z\.]\+\.tag\s\+" "bitnami/${CHART}/values.yaml" || exit_code=$?
+          grep -v --quiet "@param\s\+[A-Za-z\.]\+\.tag\s\+" "bitmoa/${CHART}/values.yaml" || exit_code=$?
           if [[ $exit_code -ne 0 ]]; then
-            echo "error=Please ensure all *.tag params are skipped (@skip) in the bitnami/${CHART}/values.yaml file"
+            echo "error=Please ensure all *.tag params are skipped (@skip) in the bitmoa/${CHART}/values.yaml file"
             exit "$exit_code"
           fi
-          echo "Updating README.md for bitnami/${CHART}"
-          readme-generator --values "bitnami/${CHART}/values.yaml" --readme "bitnami/${CHART}/README.md" --schema "/tmp/schema.json"
+          echo "Updating README.md for bitmoa/${CHART}"
+          readme-generator --values "bitmoa/${CHART}/values.yaml" --readme "bitmoa/${CHART}/README.md" --schema "/tmp/schema.json"
 
           # Commit all changes, if any
-          if git status -s | grep "bitnami/${CHART}"; then
-            git add "bitnami/${CHART}"
+          if git status -s | grep "bitmoa/${CHART}"; then
+            git add "bitmoa/${CHART}"
             git commit -m "Update README.md with readme-generator-for-helm" --signoff
           fi
       - id: update-crds
         name: 'Update CRDs'
-        # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
-        if: github.event.pull_request.user.login == 'bitnami-bot'
+        # To avoid malicious executions, only PRs performed by the bitmoa-bot will perform the CRDs update
+        if: github.event.pull_request.user.login == 'bitmoa-bot'
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
 
-          # Updating CRDs stored at 'bitnami/$CHART/crds', 'bitnami/$CHART/templates/crds', and "bitnami/${CHART}/charts/${CHART}-crds/crds"
-          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" "bitnami/${CHART}/charts/${CHART}-crds/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
+          # Updating CRDs stored at 'bitmoa/$CHART/crds', 'bitmoa/$CHART/templates/crds', and "bitmoa/${CHART}/charts/${CHART}-crds/crds"
+          mapfile -t crd_files < <(find "bitmoa/${CHART}/crds" "bitmoa/${CHART}/templates/crds" "bitmoa/${CHART}/charts/${CHART}-crds/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
             # Automatically update CRDs that use the '# Source' header
             source_url_tpl="$(head -n 1 "$file" | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
@@ -348,9 +348,9 @@ jobs:
               done
               # Obtain the version of the subcomponent if provided, otherwise use the main component version
               if [[ -n "$SUBCOMPONENT" ]]; then
-                APP_VERSION="$(cat bitnami/${CHART}/Chart.yaml | grep -E "image: \S+${SUBCOMPONENT}:" | sed -E "s|.*${SUBCOMPONENT}:([0-9\.]+)-.*|\1|")"
+                APP_VERSION="$(cat bitmoa/${CHART}/Chart.yaml | grep -E "image: \S+${SUBCOMPONENT}:" | sed -E "s|.*${SUBCOMPONENT}:([0-9\.]+)-.*|\1|")"
               else
-                APP_VERSION="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
+                APP_VERSION="$(yq e '.appVersion' bitmoa/${CHART}/Chart.yaml)"
               fi
               # Replace version placeholder, if present
               source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
@@ -376,14 +376,14 @@ jobs:
           done
 
           # Commit all changes, if any
-          if git status -s | grep "bitnami/${CHART}"; then
-            git add "bitnami/${CHART}"
+          if git status -s | grep "bitmoa/${CHART}"; then
+            git add "bitmoa/${CHART}"
             git commit -m "Update CRDs automatically" --signoff
           fi
       - id: update-prometheus-rules
         name: Update Prometheus rules on kube-prometheus based on upstream
-        # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
-        if: github.event.pull_request.user.login == 'bitnami-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
+        # To avoid malicious executions, only PRs performed by the bitmoa-bot will perform the CRDs update
+        if: github.event.pull_request.user.login == 'bitmoa-bot' && needs.get-chart.outputs.chart == 'kube-prometheus'
         run: |
           cd "${GITHUB_WORKSPACE}/charts" || exit 1
 
@@ -419,8 +419,8 @@ jobs:
             esac
           }
 
-          mkdir -p "bitnami/kube-prometheus/templates/prometheus/rules"
-          cd "bitnami/kube-prometheus/templates/prometheus/rules"
+          mkdir -p "bitmoa/kube-prometheus/templates/prometheus/rules"
+          cd "bitmoa/kube-prometheus/templates/prometheus/rules"
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 2>&1 >/dev/null 2>&1
           helm repo update >/dev/null 2>&1
           helm template prometheus-community/kube-prometheus-stack \
@@ -432,7 +432,7 @@ jobs:
             rule_name="${m%.yaml}"
             rule_parameter="$(rule_parameter_from_rule_name "$rule_name")"
             # We're just interested in the .spec given we build apiVersion, kind and metadata
-            # based in Bitnami standards
+            # based in bitmoa standards
             spec="$(yq '{"spec": .spec}' "$m")"
             # We need to escape curly braces to avoid issues with Go templates
             spec=$(echo "$spec" | sed -E 's/\{\{/__OPEN__/g' | sed -E 's/\}\}/__CLOSE__/g' | sed -E 's/__OPEN__/{{\`{{\`}}/g' | sed -E 's/__CLOSE__/{{\`}}\`}}/g')
@@ -458,8 +458,8 @@ jobs:
           done
 
           cd "${GITHUB_WORKSPACE}/charts"
-          if git status -s | grep "bitnami/kube-prometheus/templates/prometheus/rules"; then
-            git add "bitnami/kube-prometheus/templates/prometheus/rules"
+          if git status -s | grep "bitmoa/kube-prometheus/templates/prometheus/rules"; then
+            git add "bitmoa/kube-prometheus/templates/prometheus/rules"
             git commit -m "Update Prometheus rules" --signoff
           fi
       - id: update-pr
@@ -487,7 +487,7 @@ jobs:
         name: Checkout 'main' branch
         with:
           path: charts-main
-          repository: bitnami/charts
+          repository: bitmoa/charts
           fetch-depth: 1
       - name: Install helm
         run: |
@@ -497,10 +497,10 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
-          if [ -d "charts-main/bitnami/${CHART}" ]; then
-            helm dep build charts-main/bitnami/${CHART}
-            if [ -d "charts-main/bitnami/${CHART}/charts" ]; then
-              cd charts-main/bitnami/${CHART}/charts
+          if [ -d "charts-main/bitmoa/${CHART}" ]; then
+            helm dep build charts-main/bitmoa/${CHART}
+            if [ -d "charts-main/bitmoa/${CHART}/charts" ]; then
+              cd charts-main/bitmoa/${CHART}/charts
               for filename in *.tgz; do
                 tar -xf "$filename"
                 rm -f "$filename"
@@ -510,25 +510,25 @@ jobs:
       - id: get-chart-score
         uses: addnab/docker-run-action@4f65fabd2431ebc8d299f8e5a018d79a769ae185
         name: Get main branch kubescape score
-        # Skip step when user is bitnami-bot or 'skip-score' label is used
+        # Skip step when user is bitmoa-bot or 'skip-score' label is used
         if: |
           !(
-            github.event.pull_request.user.login == 'bitnami-bot' ||
+            github.event.pull_request.user.login == 'bitmoa-bot' ||
             contains(github.event.pull_request.labels.*.name, 'skip-score') ||
             (github.event.action == 'labeled' && github.event.label.name == 'skip-score')
           )
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         with:
-          image: bitnami/kubescape:3.0.37
+          image: bitmoa/kubescape:3.0.37
           options: -v  /home/runner/work/charts/charts/charts-main:/charts -v /tmp:/out -e CHART
           run: |
-            if [ -d "/charts/bitnami/${CHART}" ]; then
-              kubescape scan framework MITRE,NSA,SOC2,cis-v1.10.0 /charts/bitnami/${CHART} --format json -o /out/report.json
+            if [ -d "/charts/bitmoa/${CHART}" ]; then
+              kubescape scan framework MITRE,NSA,SOC2,cis-v1.10.0 /charts/bitmoa/${CHART} --format json -o /out/report.json
               # Truncate score to 2 decimals
               printf "%s.%.2s" $(echo "$(jq .summaryDetails.complianceScore /out/report.json)" | tr '.' ' ') | sed 's/\.$//' > /out/score
             else
-              echo "Chart not found at /charts/bitnami/${CHART}. It will be assumed that the upstream chart does not exist."
+              echo "Chart not found at /charts/bitmoa/${CHART}. It will be assumed that the upstream chart does not exist."
             fi
       - id: set-output
         name: Set threshold score
@@ -570,8 +570,8 @@ jobs:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           # Log chart info
-          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
-          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
+          chart_version="$(yq e '.version' bitmoa/${CHART}/Chart.yaml)"
+          app_version="$(yq e '.appVersion' bitmoa/${CHART}/Chart.yaml)"
           echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
       - id: get-asset-vib-config
         name: Get asset-specific configuration for VIB action
@@ -608,7 +608,7 @@ jobs:
           # Set kubescape score threshold
           VIB_ENV_KUBESCAPE_SCORE_THRESHOLD: ${{ needs.chart-score.outputs.threshold }}
           # Set docker credentials
-          VIB_ENV_CHARTS_REGISTRY: oci://registry-1.docker.io/bitnamicharts
+          VIB_ENV_CHARTS_REGISTRY: https://charts.bitmoa.net/bitmoa/
           VIB_ENV_CHARTS_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           VIB_ENV_CHARTS_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
   auto-pr-review:
@@ -622,7 +622,7 @@ jobs:
     if: |
       always() &&
       contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
-      github.event.pull_request.user.login == 'bitnami-bot'
+      github.event.pull_request.user.login == 'bitmoa-bot'
     steps:
       # Approve the CI's PR if the 'VIB Verify' job succeeded
       # Approved by the 'github-actions' user; a PR can't be approved by its author
@@ -646,7 +646,7 @@ jobs:
         with:
           result-encoding: string
           retries: 3
-          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          github-token: ${{ secrets.bitmoa_BOT_TOKEN }}
           script: |
             github.rest.pulls.merge({
               pull_number: context.issue.number,
@@ -666,7 +666,7 @@ jobs:
         with:
           retries: 3
           # Necessary to trigger support workflows
-          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          github-token: ${{ secrets.bitmoa_BOT_TOKEN }}
           script: |
             const {BODY} = process.env
             github.rest.issues.createComment({

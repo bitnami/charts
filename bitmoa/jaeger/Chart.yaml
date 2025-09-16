@@ -14,13 +14,13 @@ apiVersion: v2
 appVersion: 2.9.0
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x
 - condition: cassandra.enabled
   name: cassandra
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 12.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and
   troubleshooting microservices-based distributed systems.

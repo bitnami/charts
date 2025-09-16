@@ -15,12 +15,12 @@ appVersion: 5.2.2
 dependencies:
 - condition: db.bundleTestDB
   name: mariadb
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - phpmyadmin-database
   version: 22.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

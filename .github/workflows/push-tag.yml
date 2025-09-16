@@ -20,7 +20,7 @@ jobs:
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
-    if: ${{ github.repository_owner == 'bitnami' }}
+    if: ${{ github.repository_owner == 'bitmoa' }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
@@ -92,7 +92,7 @@ jobs:
     needs:
       - push-tag
     if: ${{ always() && (needs.push-tag.result == 'failure') }}
-    uses: bitnami/support/.github/workflows/gchat-notification.yml@main
+    uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
     with:
       workflow: ${{ github.workflow }}
       job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

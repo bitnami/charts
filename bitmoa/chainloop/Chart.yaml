@@ -18,17 +18,17 @@ apiVersion: v2
 appVersion: 1.43.1
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x
 - condition: postgresql.enabled
   name: postgresql
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 16.x.x
 - condition: development
   name: vault
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   version: 1.x.x
 description: Chainloop is an open-source Software Supply Chain control plane, a single
   source of truth for metadata and artifacts, plus a declarative attestation process.

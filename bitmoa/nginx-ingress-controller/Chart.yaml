@@ -14,7 +14,7 @@ apiVersion: v2
 appVersion: 1.13.1
 dependencies:
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

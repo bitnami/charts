@@ -15,12 +15,12 @@ appVersion: 6.0.5
 dependencies:
 - condition: mysql.enabled
   name: mysql
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - ghost-database
   version: 14.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitmoacharts
+  repository: https://charts-dev.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x
