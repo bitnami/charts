@@ -1,0 +1,12 @@
+dependencies:
+- name: minio
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 17.0.21
+- name: zookeeper
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 13.8.7
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:a9c2a5e2236ce2b29d84a9e2a868f4bd57b7a3edba1f306985eade288dfad528
+generated: "2025-09-16T17:10:43.625657345+09:00"

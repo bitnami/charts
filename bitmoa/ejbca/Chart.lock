@@ -1,0 +1,9 @@
+dependencies:
+- name: mariadb
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 22.0.0
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:6b84cde1cb877df187055d9556e75eb8716c39d452248fd837028b49f8d3b823
+generated: "2025-09-16T17:10:45.340653509+09:00"

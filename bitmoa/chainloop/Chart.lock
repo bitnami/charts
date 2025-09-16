@@ -1,0 +1,12 @@
+dependencies:
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+- name: postgresql
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 16.7.27
+- name: vault
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 1.9.0
+digest: sha256:ab7a818546e2c7eb1cfed4bf3b3d551ef41aae82024dc0540392c65b40ff51bd
+generated: "2025-09-16T17:10:40.919215578+09:00"

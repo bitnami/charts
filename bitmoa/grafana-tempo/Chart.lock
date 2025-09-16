@@ -1,0 +1,9 @@
+dependencies:
+- name: memcached
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 7.9.7
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:8c6aaea5d7b46f95127709a962f296199d1ad2f3386b9b9a5400407a916fde2a
+generated: "2025-09-16T17:10:50.225824787+09:00"

@@ -1,0 +1,21 @@
+dependencies:
+- name: grafana-alloy
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 1.0.7
+- name: memcached
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 7.9.7
+- name: memcached
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 7.9.7
+- name: memcached
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 7.9.7
+- name: memcached
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 7.9.7
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:be67f7ebf12cf65997db07bb3783cac525e94f82a2d6dd719cf824a4b0b7c183
+generated: "2025-09-16T17:10:48.060810813+09:00"

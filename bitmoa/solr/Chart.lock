@@ -1,0 +1,9 @@
+dependencies:
+- name: zookeeper
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 13.8.7
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:43e8fc63d44cc21489edd977b4f5eb27e851c68ec435e54d2c4e1d9442078ab6
+generated: "2025-09-16T17:13:56.976862282+09:00"

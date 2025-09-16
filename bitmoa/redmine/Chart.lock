@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 16.7.27
+- name: mariadb
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 22.0.0
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:6ccc2a25c5018a7d77b50152358a0e5ac2e1be05b345ebc928edeab65e8a43c2
+generated: "2025-09-16T17:13:55.036338777+09:00"

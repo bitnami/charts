@@ -1,0 +1,15 @@
+dependencies:
+- name: node-exporter
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 4.5.19
+- name: kube-state-metrics
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 5.1.0
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+- name: kube-prometheus-crds
+  repository: file://./charts/kube-prometheus-crds
+  version: 0.1.0
+digest: sha256:a8d41c8436b32ab30240de8e5de8d4bb2577e681892d4d41717412548665440e
+generated: "2025-09-16T17:10:55.484959017+09:00"

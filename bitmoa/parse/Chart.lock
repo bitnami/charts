@@ -1,0 +1,9 @@
+dependencies:
+- name: mongodb
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 16.5.45
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:3ef7102868a245ea74f2f116e9e0b4730c4ff596fd555b21c782a2ebdd7d4c9a
+generated: "2025-09-16T17:13:54.025857662+09:00"

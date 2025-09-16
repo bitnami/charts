@@ -1,0 +1,9 @@
+dependencies:
+- name: kibana
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 12.1.10
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:91bfb4549840e963bb2525cded2010ee0179cd0e15ab38b39506ebaf5d29ebdd
+generated: "2025-09-16T17:10:46.045779314+09:00"

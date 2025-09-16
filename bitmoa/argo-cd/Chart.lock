@@ -1,0 +1,9 @@
+dependencies:
+- name: redis
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 22.0.7
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:860139c7a22e8f91a69e369411d96ffaa138d47fb6cccd0bc93944b283511c6e
+generated: "2025-09-16T17:10:39.23756462+09:00"

@@ -1,0 +1,12 @@
+dependencies:
+- name: redis
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 22.0.7
+- name: postgresql
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 16.7.27
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:72b2f5be5b9aad08d2e149c12f4152fd5c103f45ed4e7f23d3f9bad54730ffcb
+generated: "2025-09-16T17:10:51.059190147+09:00"

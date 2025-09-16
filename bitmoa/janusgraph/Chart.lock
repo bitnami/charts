@@ -1,0 +1,9 @@
+dependencies:
+- name: cassandra
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 12.3.11
+- name: common
+  repository: https://charts-dev.bitmoa.net/bitmoa/
+  version: 2.31.4
+digest: sha256:147adb6234dc3c8f283e8c963f70d84a88a933464e432ebf0452376376b23668
+generated: "2025-09-16T17:10:52.388987052+09:00"
