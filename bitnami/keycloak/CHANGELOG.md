@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.4 (2025-09-15)
+## 25.2.4 (2025-09-16)
 
 * [bitnami/keycloak] Fix: Rename duplicated secret labels ([#36254](https://github.com/bitnami/charts/pull/36254))
 
