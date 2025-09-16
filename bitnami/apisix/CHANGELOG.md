@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.2 (2025-09-12)
+## 6.0.2 (2025-09-16)
 
 * [bitnami/apisix] Fixed bug caused by inconsistent usage of context with dataPlane.extraEnvVars ([#36252](https://github.com/bitnami/charts/pull/36252))
 
