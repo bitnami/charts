@@ -21,14 +21,14 @@ appVersion: 0.85.0
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 4.x.x
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 5.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

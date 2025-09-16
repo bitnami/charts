@@ -15,14 +15,14 @@ appVersion: 3.5.0
 dependencies:
 - condition: redis.enabled
   name: redis
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 22.X.X
 - condition: postgresql.enabled
   name: postgresql
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.X.X
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

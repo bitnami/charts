@@ -17,14 +17,14 @@ appVersion: 1.85.0
 dependencies:
 - condition: redis.enabled
   name: redis
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 22.x.x
 - condition: mongodb.enabled
   name: mongodb
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

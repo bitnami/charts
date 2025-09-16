@@ -15,14 +15,14 @@ appVersion: 6.0.6
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.x.x
 - condition: mariadb.enabled
   name: mariadb
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 22.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

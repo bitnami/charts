@@ -1,9 +1,9 @@
 dependencies:
 - name: postgresql
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.7.27
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 2.31.4
-digest: sha256:c2d99b3782a78b5992bc42542dfb93d5b566f3f12c67bc74847ea2b6d6141c3d
-generated: "2025-09-16T17:10:42.429596601+09:00"
+digest: sha256:3e70c9ef1fb11875ac33ec171a5e2a5d4654e0c935bef003e4a44f2ef5f01cff
+generated: "2025-09-16T18:10:58.77013534+09:00"

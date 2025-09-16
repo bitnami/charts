@@ -16,10 +16,10 @@ apiVersion: v2
 appVersion: 8.2.3
 dependencies:
 - name: mongodb
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

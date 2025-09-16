@@ -1,12 +1,12 @@
 dependencies:
 - name: minio
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 17.0.21
 - name: postgresql
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.7.27
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 2.31.4
-digest: sha256:2666ae734f9d71be5e8d040e3fe383cba459ffd3947b9bfdea437809ea64f5dd
-generated: "2025-09-16T17:13:51.548387112+09:00"
+digest: sha256:54e17aa7da7fb9c4449a196b6ef648a2507e292e53f60ed15c8e9391769c148e
+generated: "2025-09-16T18:11:37.415872364+09:00"

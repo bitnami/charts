@@ -15,16 +15,16 @@ appVersion: 3.9.1
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 16.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x
 - condition: cassandra.enabled
   name: cassandra
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 12.x.x
 description: Kong is an open source Microservice API gateway and platform designed
   for managing microservices requests of high-availability, fault-tolerance, and distributed

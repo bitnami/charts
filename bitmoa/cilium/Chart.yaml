@@ -23,12 +23,12 @@ appVersion: 1.18.1
 dependencies:
 - condition: etcd.enabled
   name: etcd
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - cilium-database
   version: 12.x.x
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

@@ -1,9 +1,9 @@
 dependencies:
 - name: etcd
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 12.0.18
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 2.31.4
-digest: sha256:a0d534ea875f383378d425d6774631b5b3b215baaa7e059c83f178cb5c2a3216
-generated: "2025-09-16T17:10:37.245563915+09:00"
+digest: sha256:c545c169820943aabccda8df427ad1d58268b9d219e9b440d84493e99d6edf0f
+generated: "2025-09-16T18:10:49.021390885+09:00"

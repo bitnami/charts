@@ -14,7 +14,7 @@ apiVersion: v2
 appVersion: 2025.2.2
 dependencies:
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   tags:
   - bitmoa-common
   version: 2.x.x

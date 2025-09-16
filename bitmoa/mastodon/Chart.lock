@@ -1,21 +1,21 @@
 dependencies:
+- name: redis
+  repository: https://charts.bitmoa.net/bitmoa/
+  version: 22.0.7
+- name: postgresql
+  repository: https://charts.bitmoa.net/bitmoa/
+  version: 16.7.27
+- name: elasticsearch
+  repository: https://charts.bitmoa.net/bitmoa/
+  version: 22.1.6
 - name: minio
   repository: https://charts.bitmoa.net/bitmoa/
   version: 17.0.21
-- name: memcached
+- name: apache
   repository: https://charts.bitmoa.net/bitmoa/
-  version: 7.9.7
-- name: memcached
-  repository: https://charts.bitmoa.net/bitmoa/
-  version: 7.9.7
-- name: memcached
-  repository: https://charts.bitmoa.net/bitmoa/
-  version: 7.9.7
-- name: memcached
-  repository: https://charts.bitmoa.net/bitmoa/
-  version: 7.9.7
+  version: 11.4.29
 - name: common
   repository: https://charts.bitmoa.net/bitmoa/
   version: 2.31.4
-digest: sha256:dfe297329a6687e32ae2815e476008632c73db99aa125731a44887216706ea01
-generated: "2025-09-16T18:11:14.415060305+09:00"
+digest: sha256:2df92d8c48bc7c0a2f124e9449bd325ce13a0ba1fd86d96f524956359d90a2f6
+generated: "2025-09-16T18:11:31.133014084+09:00"

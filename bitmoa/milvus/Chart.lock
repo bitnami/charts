@@ -1,15 +1,15 @@
 dependencies:
 - name: etcd
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 12.0.18
 - name: kafka
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 32.4.3
 - name: minio
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 17.0.21
 - name: common
-  repository: https://charts-dev.bitmoa.net/bitmoa/
+  repository: https://charts.bitmoa.net/bitmoa/
   version: 2.31.4
-digest: sha256:854a91c9c6b810ae3a8c273d996bdf130ee3167b646ae99485865683ef589c4f
-generated: "2025-09-16T17:13:50.656627419+09:00"
+digest: sha256:d64fba16718f082f8dc430eafb6cbe7dfcfecbdd2d8f38ab70294651ddcb36d9
+generated: "2025-09-16T18:11:35.28383101+09:00"
