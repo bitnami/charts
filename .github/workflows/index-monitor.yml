@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
-          ref: 'index'
+          ref: 'publish'
       - name: Check index integrity
         id: integrity-check
         run: |
@@ -31,7 +31,7 @@ jobs:
           # A single success is enough to pass
           while [[ "${status}" != "ok" && $attempts -lt 3 ]]; do
             # Check the index.yaml integrity
-            REMOTE_MD5=($(curl -Ls https://charts.bitmoa.com/bitmoa/index.yaml | md5sum))
+            REMOTE_MD5=($(curl -Ls https://charts.bitmoa.net/bitmoa/index.yaml | md5sum))
             REPOSITORY_MD5=($(md5sum bitmoa/index.yaml))
             # Compare the index.yaml checksums remote and locally
             if [[ "${REPOSITORY_MD5[0]}" == "${REMOTE_MD5[0]}" ]]; then
@@ -39,9 +39,9 @@ jobs:
             else
               attempts=$((attempts+1))
               echo "Integrity check failed. Remote checksum '${REMOTE_MD5[0]}' does not match expected '${REPOSITORY_MD5[0]}'";
-              # Refresh the 'index' branch in case it was updated
-              git fetch origin index
-              git reset --hard origin/index
+              # Refresh the 'publish' branch in case it was updated
+              git fetch origin publish
+              git reset --hard origin/publish
               # Wait 30 seconds
               sleep 30
             fi
@@ -72,7 +72,7 @@ jobs:
       - name: Validate helm repository
         id: validation-check
         run: |
-          repo="https://charts.bitnami.com/bitnami"
+          repo="https://charts.bitmoa.net/bitmoa"
           status="fail"
           attempts=0
           # We want to check for consistent failures
@@ -80,14 +80,14 @@ jobs:
           # A single success is enough to pass
           while [[ "${status}" != "ok" && $attempts -lt 3 ]]; do
             # Validates the helm repository can be added and updated
-            if helm repo add bitnami "${repo}" && helm repo update bitnami; then
+            if helm repo add bitmoa "${repo}" && helm repo update bitmoa; then
               status="ok"
             else
               attempts=$((attempts+1))
               echo "Failed to pull charts from helm repository '${repo}'"
               # If present, remove repository to allow retries
-              if helm repo list | grep -q bitnami; then
-                helm repo remove bitnami
+              if helm repo list | grep -q bitmoa; then
+                helm repo remove bitmoa
               fi
               # Wait 30 seconds
               sleep 30
@@ -103,21 +103,20 @@ jobs:
             } else {
               core.info("Validation check succeeded")
             }
-  upload:
-    name: Re-upload index.yaml
-    needs: [validation-check, integrity-check]
-    if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
-    uses: bitnami/charts/.github/workflows/sync-chart-cloudflare-index.yml@index
-    secrets: inherit
-    permissions:
-      contents: read
-  notify:
-    name: Send notification
-    needs: [validation-check, integrity-check]
-    if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
-    uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
-    with:
-      workflow: ${{ github.workflow }}
-      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-    secrets:
-      webhook-url: ${{ secrets.GCHAT_WEBHOOK_URL }}
+#   upload:
+#     name: Re-upload index.yaml
+#     needs: [validation-check, integrity-check]
+#     if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+#     secrets: inherit
+#     permissions:
+#       contents: read
+#   notify:
+#     name: Send notification
+#     needs: [validation-check, integrity-check]
+#     if: ${{ always() && github.repository_owner == 'bitmoa' && (needs.validation-check.outputs.result != 'ok' || needs.integrity-check.outputs.result != 'ok') }}
+#     uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
+#     with:
+#       workflow: ${{ github.workflow }}
+#       job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#     secrets:
+#       webhook-url: ${{ secrets.GCHAT_WEBHOOK_URL }}

@@ -18,18 +18,12 @@ jobs:
         name: Checkout repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
-          ref: index
-          path: index
-      - uses: oras-project/setup-oras@8d34698a59f5ffe24821f0b48ab62a3de8b64b20
-      - id: get-oci-index
-        name: Get OCI index
-        run: |
-          oras pull registry-1.docker.io/bitnamicharts/charts-index:latest
-          cat charts-index.json | yq -P | yq eval '. | .entries[] |= .versions' > ./oci_index.yaml
+          ref: publish
+          path: publish
       - id: get-charts-index
         name: Get Charts index
         run: |
-          cp index/bitnami/index.yaml ./charts_index.yaml
+          cp publish/bitnami/index.yaml ./charts_index.yaml
       - id: merge
         name: Generate merged index
         run: |
@@ -47,7 +41,7 @@ jobs:
               echo "No new releases detected"
           fi
           echo "new-releases=$new_releases" >> $GITHUB_OUTPUT
-  update-index:
+  update-publish:
     runs-on: ubuntu-latest
     needs:
       - find-new-releases
@@ -62,19 +56,17 @@ jobs:
           helm plugin add https://github.com/zoobab/helm_file_repo
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
-          ref: 'index'
-          path: index
-          # The token is persisted in the local git config and enables scripts to run authenticated git commands.
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-      - id: update-index
-        name: Pull charts and update index
+          ref: 'publish'
+          path: publish
+      - id: update-publish
+        name: Pull charts and update publish
         env:
           NEW_RELEASES: ${{ needs.find-new-releases.outputs.new-releases }}
         run: |
-          cd index
+          cd publish
           # Configure git
-          git config user.name "Bitnami Bot"
-          git config user.email "bitnami.bot@broadcom.com"
+          git config user.name "Bitmoa Bot"
+          git config user.email "bitmoa.bot@bitmoa.net"
 
           read -r -a new_releases_arr <<< $NEW_RELEASES
           for release in "${new_releases_arr[@]}"; do
@@ -85,11 +77,9 @@ jobs:
             ## Update index
             # Download published asset
             mkdir ../download
-            helm pull "oci://registry-1.docker.io/bitnamicharts/${chart_name}" --version "${chart_version}" --destination ../download
+            helm pull "https://charts.bitmoa.net/bitmoa/${chart_name}" --version "${chart_version}" --destination ../download
             # Rebuild index
-            helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
-            # Replace .tgz in URL with OCI tag
-            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$chart_name-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$chart_name:$chart_version|" ../download/index.yaml
+            helm repo index --url https://charts.bitmoa.net/bitmoa --merge bitnami/index.yaml ../download
 
             # Check index integrity
             if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
@@ -110,20 +100,20 @@ jobs:
             rm -rf ../download
           done
 
-          # Avoid overriding index branch when remote commit does not match our checkout commit
-          current_commit_id=$(git rev-parse index)
+          # Avoid overriding publish branch when remote commit does not match our checkout commit
+          current_commit_id=$(git rev-parse publish)
 
           # Push changes
           git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-          git push origin index --force-with-lease=index:${current_commit_id}
-  notify:
-    name: Send notification
-    needs:
-      - update-index
-    if: ${{ always() && (needs.update-index.result == 'failure') }}
-    uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
-    with:
-      workflow: ${{ github.workflow }}
-      job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-    secrets:
-      webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}
+          git push origin publish --force-with-lease=publish:${current_commit_id}
+#   notify:
+#     name: Send notification
+#     needs:
+#       - update-publish
+#     if: ${{ always() && (needs.update-index.result == 'failure') }}
+#     uses: bitmoa/support/.github/workflows/gchat-notification.yml@main
+#     with:
+#       workflow: ${{ github.workflow }}
+#       job-url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#     secrets:
+#       webhook-url: ${{ secrets.GCHAT_CONTENT_ALERTS_WEBHOOK_URL }}
