@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.0.3 (2025-08-14)
+## 14.0.4 (2025-09-03)
 
-* [bitnami/mysql] :zap: :arrow_up: Update dependency references ([#35892](https://github.com/bitnami/charts/pull/35892))
+* [bitnami/mysql]: Add a possibility to disable default initContainers ([#36228](https://github.com/bitnami/charts/pull/36228))
+
+## <small>14.0.3 (2025-08-14)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35892) ([79196dc](https://github.com/bitnami/charts/commit/79196dc5824d51adce926b809c6f7ecb7f9f0a43)), closes [#35892](https://github.com/bitnami/charts/issues/35892)
 
 ## <small>14.0.2 (2025-08-07)</small>
 

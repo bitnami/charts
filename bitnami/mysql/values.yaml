@@ -578,6 +578,9 @@ primary:
   ## @param primary.initContainers Add additional init containers for the MySQL Primary pod(s)
   ##
   initContainers: []
+  ## @param primary.enableDefaultInitContainers enables (or disables if false) the default init containers (logs-symlinks, volume permissions)
+  ##
+  enableDefaultInitContainers: true
   ## @param primary.sidecars Add additional sidecar containers for the MySQL Primary pod(s)
   ##
   sidecars: []
@@ -1018,6 +1021,9 @@ secondary:
   ## @param secondary.initContainers Add additional init containers for the MySQL secondary pod(s)
   ##
   initContainers: []
+  ## @param secondary.enableDefaultInitContainers enables (or disables if false) the default init containers (logs-symlinks, volume permissions)
+  ##
+  enableDefaultInitContainers: true
   ## @param secondary.sidecars Add additional sidecar containers for the MySQL secondary pod(s)
   ##
   sidecars: []
