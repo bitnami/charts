@@ -60,7 +60,7 @@ spec:
     {{- end }}
   {{- end }}
   ingress:
-    {{- if .Values.clusterOperator.metrics.enabled }}
+    {{- if .Values.clusterOperator.metrics.service.enabled }}
     - ports:
         - port: {{ .Values.clusterOperator.containerPorts.metrics }}
       {{- if not .Values.clusterOperator.networkPolicy.allowExternal }}
