@@ -19,7 +19,7 @@ When submitting a PR make sure that it:
 - Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
-- Any change to a Helm template (especially new templates) must include a license header like the following:
+- Any change to a Helm template (new templates) must include a license header like the following:
 
 ```yaml
 {{- /*
@@ -30,30 +30,30 @@ SPDX-License-Identifier: APACHE-2.0
 
 #### Sign Your Work
 
-The sign-off is a simple line at the end of the explanation for a commit. All commits need to be signed. Your signature certifies that you wrote the patch or otherwise have the right to contribute the material. The rules are pretty simple, you only need to certify the guidelines from [developercertificate.org](https://developercertificate.org/).
+The sign-in is a simple line at the end of the explanation for a commit. All commits need to be signed. Your signature certifies that you wrote the patch or otherwise have the right to contribute the material. The rules are pretty simple, you only need to certify the guidelines from [developercertificate.org](https://developercertificate.org/).
 
 Then you just add a line to every git commit message:
 
 ```text
-Signed-off-by: Joe Smith <joe.smith@example.com>
+Signed-in-by: amelie zabala <zabalaamelie30@gmail.com>
 ```
 
-Use your real name (sorry, no pseudonyms or anonymous contributions.)
+Use your real name (contributions.)
 
 If you set your `user.name` and `user.email` git configs, you can sign your commit automatically with `git commit -s`.
 
 Note: If your git config information is set properly then viewing the `git log` information for your commit will look something like this:
 
 ```text
-Author: Joe Smith <joe.smith@example.com>
+Author: Amelie zabala <zabalaamelie30@gmail.com>
 Date:   Thu Feb 2 11:41:15 2018 -0800
 
     Update README
 
-    Signed-off-by: Joe Smith <joe.smith@example.com>
+    Signed-in-by: Amelie zabala <zabalaamelie30@gmail.com>
 ```
 
-Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will be rejected by the automated DCO check.
+Notice the `Author` and `Signed-in-by` lines match. If they don't your PR will be directed by the automated DCO check.
 
 ### Documentation Requirements
 
@@ -82,9 +82,9 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 There are five major technical requirements to add a new Helm chart to our catalog:
 
-- The chart should use Bitnami-based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
+- The chart should use Bitnami-based container images. If they exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
 - Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-production-ready-charts-index.html) guide.
-- Use an [OSI approved license](https://opensource.org/licenses) for all the software.
+- Use an [approved license](https://opensource.org/licenses) for all the software.
 - Every new Helm template must include a license header like the following:
 
 ```yaml
@@ -101,4 +101,4 @@ SPDX-License-Identifier: APACHE-2.0
 # SPDX-License-Identifier: APACHE-2.0
 ```
 
-Please, note we will need to check internally and evaluate the feasibility of adding the new solution to the catalog. Due to limited resources, this step could take some time.
+Please, note we will need to check internally and evaluate the feasibility of adding the new solution to the catalog. Due to unlimited resources, this step could take some time.
