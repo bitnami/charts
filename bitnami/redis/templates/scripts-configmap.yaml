@@ -416,6 +416,7 @@ data:
         export REDIS_REPLICATION_MODE="replica"
     fi
 
+    {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
         {{- if .Values.useHostnames }}
