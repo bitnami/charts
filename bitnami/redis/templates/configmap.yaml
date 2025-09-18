@@ -91,7 +91,10 @@ data:
     {{- $userSecret := .Values.auth.acl.userSecret }}
     {{- range .Values.auth.acl.users }}
     {{- $userPassword := .password | default "" }}
-    {{- $secretPassword := ternary "" (include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $)) (empty $userSecret) }}
+    {{- $secretPassword := "" }}
+    {{- if not (empty $userSecret) }}
+      {{- $secretPassword = include "common.secrets.get" (dict "secret" $userSecret "key" .username "context" $) }}
+    {{- end }}
     {{- if or $userPassword $secretPassword }}
     user {{ .username }} {{ default "on" .enabled }} #{{ coalesce $secretPassword $userPassword | sha256sum }} ~* &* +@all
     sentinel sentinel-user {{ .username }}
