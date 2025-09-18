@@ -1026,12 +1026,13 @@ data:
 
             if [ -f "/etc/shared/current" ]; then
                 current_master=$(< /etc/shared/current)
-                [ -f /etc/shared/previous ] && previous_master=$(< /etc/shared/previous) || previous_master=""
-
+                previous_master=""
+                [ -f /etc/shared/previous ] && previous_master=$(< /etc/shared/previous)
+                
                 echo "Current master: $current_master"
 
-                if [ -n "$previous_master" ] && [ "$current_master" = "$previous_master" ]; then
-                    echo "Master ($current_master = $previous_master) has not changed, skipping label update and cleaning state"
+                if [ "$current_master" = "$previous_master" ]; then
+                    echo "Master has not changed, skipping label update and cleaning state"
                     rm -f /etc/shared/current /etc/shared/previous
                     continue
                 fi
