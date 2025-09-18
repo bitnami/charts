@@ -1,8 +1,21 @@
 # Changelog
 
-## 1.4.26 (2025-08-07)
+## 1.4.29 (2025-08-26)
 
-* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#35496](https://github.com/bitnami/charts/pull/35496))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#36203](https://github.com/bitnami/charts/pull/36203))
+
+## <small>1.4.28 (2025-08-13)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35818) ([03dcca4](https://github.com/bitnami/charts/commit/03dcca4cbcf4f95af6777eba5f161fab0cea79e7)), closes [#35818](https://github.com/bitnami/charts/issues/35818)
+
+## <small>1.4.27 (2025-08-07)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35670) ([2c54644](https://github.com/bitnami/charts/commit/2c5464427b3e1968b527c478607a9c5ea4809f15)), closes [#35670](https://github.com/bitnami/charts/issues/35670)
+
+## <small>1.4.26 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35496) ([608b54b](https://github.com/bitnami/charts/commit/608b54b4641c251a80853d36ee5d10235895e1db)), closes [#35496](https://github.com/bitnami/charts/issues/35496)
 
 ## <small>1.4.25 (2025-07-19)</small>
 

@@ -1,8 +1,28 @@
 # Changelog
 
-## 5.1.2 (2025-08-07)
+## 6.0.0 (2025-08-20)
 
-* [bitnami/apisix] :zap: :arrow_up: Update dependency references ([#35540](https://github.com/bitnami/charts/pull/35540))
+* [bitnami/apisix] major: Integrate apisix-dashboard into apisix ([#36136](https://github.com/bitnami/charts/pull/36136))
+
+## <small>5.1.6 (2025-08-18)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#36122) ([9ad91f7](https://github.com/bitnami/charts/commit/9ad91f789a864aaf7edde54e10a17118882b0e0b)), closes [#36122](https://github.com/bitnami/charts/issues/36122)
+
+## <small>5.1.5 (2025-08-14)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35868) ([3964047](https://github.com/bitnami/charts/commit/3964047593f995eb28692cdd6badc2d6cd0bc4e2)), closes [#35868](https://github.com/bitnami/charts/issues/35868)
+
+## <small>5.1.4 (2025-08-08)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35710) ([f90b579](https://github.com/bitnami/charts/commit/f90b57966df7d244891b4dba45ce23f65800fccd)), closes [#35710](https://github.com/bitnami/charts/issues/35710)
+
+## <small>5.1.3 (2025-08-07)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35639) ([3bf169f](https://github.com/bitnami/charts/commit/3bf169f4e8d47a924ba27fba164a81ea7aadbccd)), closes [#35639](https://github.com/bitnami/charts/issues/35639)
+
+## <small>5.1.2 (2025-08-07)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35540) ([3e3ba54](https://github.com/bitnami/charts/commit/3e3ba54845df9e372d80e7e24fa76b8882f7bd8b)), closes [#35540](https://github.com/bitnami/charts/issues/35540)
 
 ## <small>5.1.1 (2025-08-06)</small>
 

@@ -1,8 +1,32 @@
 # Changelog
 
-## 0.5.17 (2025-08-07)
+## 0.5.22 (2025-08-23)
 
-* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#35521](https://github.com/bitnami/charts/pull/35521))
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references ([#36176](https://github.com/bitnami/charts/pull/36176))
+
+## <small>0.5.21 (2025-08-13)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35832) ([7d2dd44](https://github.com/bitnami/charts/commit/7d2dd447f18e3c4776a90f6efc4a16d7918b0e64)), closes [#35832](https://github.com/bitnami/charts/issues/35832)
+
+## <small>0.5.20 (2025-08-09)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35712) ([201f64f](https://github.com/bitnami/charts/commit/201f64fe5aa7411a320169d550527c52089a681e)), closes [#35712](https://github.com/bitnami/charts/issues/35712)
+
+## <small>0.5.19 (2025-08-07)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35617) ([d6de187](https://github.com/bitnami/charts/commit/d6de187c57d83ba02b797c90bbc7e779b144c7d3)), closes [#35617](https://github.com/bitnami/charts/issues/35617)
+
+## <small>0.5.18 (2025-08-07)</small>
+
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35579) ([1355f5e](https://github.com/bitnami/charts/commit/1355f5e18e2b9cfe2846abe1b6293d2ddd4cd6bc)), closes [#35579](https://github.com/bitnami/charts/issues/35579)
+
+## <small>0.5.17 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/keydb] :zap: :arrow_up: Update dependency references (#35521) ([3d1b053](https://github.com/bitnami/charts/commit/3d1b053c21eb21accaa3c2461ac2ceb4f6a9f24c)), closes [#35521](https://github.com/bitnami/charts/issues/35521)
 
 ## <small>0.5.16 (2025-07-15)</small>
 

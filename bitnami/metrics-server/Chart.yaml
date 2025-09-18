@@ -2,10 +2,9 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Analytics
   images: |
     - name: metrics-server
-      image: docker.io/bitnami/metrics-server:0.8.0-debian-12-r3
+      image: docker.io/bitnami/metrics-server:0.8.0-debian-12-r4
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
@@ -31,4 +30,4 @@ maintainers:
 name: metrics-server
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
-version: 7.4.11
+version: 7.4.13

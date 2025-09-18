@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.2.20 (2025-08-07)
+## 3.2.22 (2025-08-13)
 
-* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35562](https://github.com/bitnami/charts/pull/35562))
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references ([#35846](https://github.com/bitnami/charts/pull/35846))
+
+## <small>3.2.21 (2025-08-07)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35605) ([7c2b42d](https://github.com/bitnami/charts/commit/7c2b42db0682fecb2bc51e6c77ba7635344d5b88)), closes [#35605](https://github.com/bitnami/charts/issues/35605)
+
+## <small>3.2.20 (2025-08-07)</small>
+
+* [bitnami/gitea] :zap: :arrow_up: Update dependency references (#35562) ([8cbacb0](https://github.com/bitnami/charts/commit/8cbacb009582b449b2384bd8c5b31f7fb5759cc3)), closes [#35562](https://github.com/bitnami/charts/issues/35562)
 
 ## <small>3.2.19 (2025-08-07)</small>
 

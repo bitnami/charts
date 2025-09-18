@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.4.22 (2025-08-07)
+## 2.4.23 (2025-08-13)
 
-* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#35515](https://github.com/bitnami/charts/pull/35515))
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references ([#35822](https://github.com/bitnami/charts/pull/35822))
+
+## <small>2.4.22 (2025-08-07)</small>
+
+* [bitnami/pinniped] :zap: :arrow_up: Update dependency references (#35515) ([f47a177](https://github.com/bitnami/charts/commit/f47a177b6eb5f990192069fa4bf706ac70cbb726)), closes [#35515](https://github.com/bitnami/charts/issues/35515)
 
 ## <small>2.4.21 (2025-08-04)</small>
 

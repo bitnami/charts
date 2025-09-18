@@ -1,8 +1,37 @@
 # Changelog
 
-## 0.2.26 (2025-08-06)
+## 0.2.33 (2025-08-26)
 
-* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#35459](https://github.com/bitnami/charts/pull/35459))
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references ([#36202](https://github.com/bitnami/charts/pull/36202))
+
+## <small>0.2.32 (2025-08-26)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#36200) ([9a1b432](https://github.com/bitnami/charts/commit/9a1b4327e0aac68c6394db09daae5b5538ec9d95)), closes [#36200](https://github.com/bitnami/charts/issues/36200)
+
+## <small>0.2.31 (2025-08-14)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35882) ([0e45cdc](https://github.com/bitnami/charts/commit/0e45cdcce399b7955efcda26ba55249a8bb5b8ee)), closes [#35882](https://github.com/bitnami/charts/issues/35882)
+
+## <small>0.2.30 (2025-08-14)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35862) ([1d92745](https://github.com/bitnami/charts/commit/1d927454e291bb8abb9597bfca5b908fa2e41598)), closes [#35862](https://github.com/bitnami/charts/issues/35862)
+
+## <small>0.2.29 (2025-08-12)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35762) ([7351bd6](https://github.com/bitnami/charts/commit/7351bd621f6c3affd2a7b479c09901c71c2010b6)), closes [#35762](https://github.com/bitnami/charts/issues/35762)
+
+## <small>0.2.28 (2025-08-08)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35697) ([ac1ffd8](https://github.com/bitnami/charts/commit/ac1ffd81d40020d81a8965c75083a11ce7aaaa70)), closes [#35697](https://github.com/bitnami/charts/issues/35697)
+
+## <small>0.2.27 (2025-08-07)</small>
+
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35576) ([3d27e6e](https://github.com/bitnami/charts/commit/3d27e6e5048082d5e6f5b8726fed4dae9a9d00d2)), closes [#35576](https://github.com/bitnami/charts/issues/35576)
+
+## <small>0.2.26 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/clickhouse-operator] :zap: :arrow_up: Update dependency references (#35459) ([d8e3d72](https://github.com/bitnami/charts/commit/d8e3d728f02359b46032bf6cf25434d9d60b5559)), closes [#35459](https://github.com/bitnami/charts/issues/35459)
 
 ## <small>0.2.25 (2025-07-29)</small>
 

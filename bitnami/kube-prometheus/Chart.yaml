@@ -2,22 +2,21 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Analytics
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r14
+      image: docker.io/bitnami/alertmanager:0.28.1-debian-12-r15
     - name: blackbox-exporter
-      image: docker.io/bitnami/blackbox-exporter:0.27.0-debian-12-r3
+      image: docker.io/bitnami/blackbox-exporter:0.27.0-debian-12-r4
     - name: prometheus
-      image: docker.io/bitnami/prometheus:3.5.0-debian-12-r2
+      image: docker.io/bitnami/prometheus:3.5.0-debian-12-r3
     - name: prometheus-operator
-      image: docker.io/bitnami/prometheus-operator:0.84.1-debian-12-r1
+      image: docker.io/bitnami/prometheus-operator:0.85.0-debian-12-r0
     - name: thanos
-      image: docker.io/bitnami/thanos:0.39.2-debian-12-r1
+      image: docker.io/bitnami/thanos:0.39.2-debian-12-r2
   licenses: Apache-2.0
   tanzuCategory: clusterUtility
 apiVersion: v2
-appVersion: 0.84.1
+appVersion: 0.85.0
 dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
@@ -51,4 +50,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 11.3.5
+version: 11.3.11

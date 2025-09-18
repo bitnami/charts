@@ -1,8 +1,36 @@
 # Changelog
 
-## 7.1.13 (2025-08-07)
+## 7.1.20 (2025-08-28)
 
-* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#35493](https://github.com/bitnami/charts/pull/35493))
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references ([#36217](https://github.com/bitnami/charts/pull/36217))
+
+## <small>7.1.19 (2025-08-27)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#36211) ([c42b277](https://github.com/bitnami/charts/commit/c42b277e4ca5af593c0c3389624f35f09795ca89)), closes [#36211](https://github.com/bitnami/charts/issues/36211)
+
+## <small>7.1.18 (2025-08-13)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35855) ([8443e64](https://github.com/bitnami/charts/commit/8443e64d7e014d4b1afc045e89be2e075902d676)), closes [#35855](https://github.com/bitnami/charts/issues/35855)
+
+## <small>7.1.17 (2025-08-13)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35825) ([e2348d8](https://github.com/bitnami/charts/commit/e2348d8143e17f2d4613343a2488687a0859a303)), closes [#35825](https://github.com/bitnami/charts/issues/35825)
+
+## <small>7.1.16 (2025-08-12)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35758) ([bae9e47](https://github.com/bitnami/charts/commit/bae9e4719ec8ff2848d02235673a4b4336cc4ee2)), closes [#35758](https://github.com/bitnami/charts/issues/35758)
+
+## <small>7.1.15 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35643) ([eb48a51](https://github.com/bitnami/charts/commit/eb48a51b5756ccaccd4165ffeaeae71ad44910da)), closes [#35643](https://github.com/bitnami/charts/issues/35643)
+
+## <small>7.1.14 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35583) ([f8ca46b](https://github.com/bitnami/charts/commit/f8ca46b87ec45237d10c60a00d87b8619c344157)), closes [#35583](https://github.com/bitnami/charts/issues/35583)
+
+## <small>7.1.13 (2025-08-07)</small>
+
+* [bitnami/influxdb] :zap: :arrow_up: Update dependency references (#35493) ([08e89e5](https://github.com/bitnami/charts/commit/08e89e5add5fab7a7daa4a7fbe942b1f9a4b4a33)), closes [#35493](https://github.com/bitnami/charts/issues/35493)
 
 ## <small>7.1.12 (2025-08-01)</small>
 

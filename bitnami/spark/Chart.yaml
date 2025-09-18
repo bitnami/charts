@@ -2,10 +2,9 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: Infrastructure
   images: |
     - name: spark
-      image: docker.io/bitnami/spark:4.0.0-debian-12-r2
+      image: docker.io/bitnami/spark:4.0.0-debian-12-r20
   licenses: Apache-2.0
   tanzuCategory: service
 apiVersion: v2
@@ -30,4 +29,4 @@ maintainers:
 name: spark
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spark
-version: 10.0.2
+version: 10.0.4

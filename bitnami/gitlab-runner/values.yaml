@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/gitlab-runner
-  tag: 18.2.1-debian-12-r1
+  tag: 18.3.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -113,7 +113,7 @@ image:
 helperImage:
   registry: docker.io
   repository: bitnami/gitlab-runner-helper
-  tag: 18.2.1-debian-12-r1
+  tag: 18.3.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

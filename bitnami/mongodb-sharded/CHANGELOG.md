@@ -1,8 +1,32 @@
 # Changelog
 
-## 9.4.6 (2025-08-07)
+## 9.4.12 (2025-08-21)
 
-* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#35507](https://github.com/bitnami/charts/pull/35507))
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#36167](https://github.com/bitnami/charts/pull/36167))
+
+## <small>9.4.11 (2025-08-15)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35990) ([9142685](https://github.com/bitnami/charts/commit/91426851b498a46bf6b1aa120479d689043077fd)), closes [#35990](https://github.com/bitnami/charts/issues/35990)
+
+## <small>9.4.10 (2025-08-13)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35819) ([45b0ce5](https://github.com/bitnami/charts/commit/45b0ce5ded33857ec0e09238be9fb00ae25eb489)), closes [#35819](https://github.com/bitnami/charts/issues/35819)
+
+## <small>9.4.9 (2025-08-08)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35704) ([471d0c7](https://github.com/bitnami/charts/commit/471d0c79dfc6841dcbd02ba3328b4d057cbe4848)), closes [#35704](https://github.com/bitnami/charts/issues/35704)
+
+## <small>9.4.8 (2025-08-07)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35623) ([e9ea8d6](https://github.com/bitnami/charts/commit/e9ea8d61cf462837749fce2c9451af44d257df32)), closes [#35623](https://github.com/bitnami/charts/issues/35623)
+
+## <small>9.4.7 (2025-08-07)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35595) ([3ea04e8](https://github.com/bitnami/charts/commit/3ea04e8e9baa055d386366aed6529d67b1770f2e)), closes [#35595](https://github.com/bitnami/charts/issues/35595)
+
+## <small>9.4.6 (2025-08-07)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#35507) ([82aeffb](https://github.com/bitnami/charts/commit/82aeffb315ba75da60f5fb800d0b2c1b5bbb63a3)), closes [#35507](https://github.com/bitnami/charts/issues/35507)
 
 ## <small>9.4.5 (2025-07-31)</small>
 

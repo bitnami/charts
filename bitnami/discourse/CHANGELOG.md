@@ -1,8 +1,21 @@
 # Changelog
 
-## 16.0.6 (2025-08-07)
+## 17.0.1 (2025-08-25)
 
-* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#35557](https://github.com/bitnami/charts/pull/35557))
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references ([#36154](https://github.com/bitnami/charts/pull/36154))
+
+## 17.0.0 (2025-08-11)
+
+* [bitnami/discourse] Upgrade to Redis subchart 22 (#35725) ([00cbef9](https://github.com/bitnami/charts/commit/00cbef9d42be4b48ae58e287e738e67e964f5977)), closes [#35725](https://github.com/bitnami/charts/issues/35725)
+
+## <small>16.0.7 (2025-08-07)</small>
+
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#35599) ([7ddb4bd](https://github.com/bitnami/charts/commit/7ddb4bde8e30ed19aa9efb97538c3103787f0113)), closes [#35599](https://github.com/bitnami/charts/issues/35599)
+
+## <small>16.0.6 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/discourse] :zap: :arrow_up: Update dependency references (#35557) ([0d83443](https://github.com/bitnami/charts/commit/0d834434a2a589860b5441065083bd22546b6783)), closes [#35557](https://github.com/bitnami/charts/issues/35557)
 
 ## <small>16.0.5 (2025-07-30)</small>
 

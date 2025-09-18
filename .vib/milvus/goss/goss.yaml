@@ -2,15 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  http://milvus-data-coordinator:{{ .Vars.dataCoord.service.ports.metrics }}/metrics:
-    status: 200
-    body:
-      - milvus_num_node
-  http://milvus-query-coordinator:{{ .Vars.queryCoord.service.ports.metrics }}/metrics:
-    status: 200
-    body:
-      - milvus_num_node
-  http://milvus-root-coordinator:{{ .Vars.rootCoord.service.ports.metrics }}/metrics:
+  http://milvus-coordinator:{{ .Vars.coordinator.service.ports.metrics }}/metrics:
     status: 200
     body:
       - milvus_num_node
@@ -22,7 +14,7 @@ http:
     status: 200
     body:
       - milvus_num_node
-  http://milvus-index-node:{{ .Vars.indexNode.service.ports.metrics }}/metrics:
+  http://milvus-streaming-node:{{ .Vars.streamingNode.service.ports.metrics }}/metrics:
     status: 200
     body:
       - milvus_num_node
@@ -37,22 +29,13 @@ http:
     body:
       - milvus_num_node
 addr:
-  tcp://milvus-data-coordinator:{{ .Vars.dataCoord.service.ports.grpc }}:
-    reachable: true
-    timeout: 500
-  tcp://milvus-query-coordinator:{{ .Vars.queryCoord.service.ports.grpc }}:
-    reachable: true
-    timeout: 500
-  tcp://milvus-root-coordinator:{{ .Vars.rootCoord.service.ports.grpc }}:
-    reachable: true
-    timeout: 500
   tcp://milvus-data-node:{{ .Vars.dataNode.service.ports.grpc }}:
     reachable: true
     timeout: 500
   tcp://milvus-query-node:{{ .Vars.queryNode.service.ports.grpc }}:
     reachable: true
     timeout: 500
-  tcp://milvus-index-node:{{ .Vars.indexNode.service.ports.grpc }}:
+  tcp://milvus-streaming-node:{{ .Vars.streamingNode.service.ports.grpc }}:
     reachable: true
     timeout: 500
   tcp://milvus-proxy:{{ .Vars.proxy.service.ports.grpc }}:

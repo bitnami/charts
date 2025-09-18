@@ -1,8 +1,32 @@
 # Changelog
 
-## 3.0.19 (2025-08-07)
+## 3.0.24 (2025-08-23)
 
-* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#35525](https://github.com/bitnami/charts/pull/35525))
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references ([#36175](https://github.com/bitnami/charts/pull/36175))
+
+## <small>3.0.23 (2025-08-13)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35838) ([2cb9432](https://github.com/bitnami/charts/commit/2cb9432669ca09e7cf037ad8ba5103cdd6f5630a)), closes [#35838](https://github.com/bitnami/charts/issues/35838)
+
+## <small>3.0.22 (2025-08-09)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35715) ([447d817](https://github.com/bitnami/charts/commit/447d8173548a37a9715e45c899976f988e87d6c6)), closes [#35715](https://github.com/bitnami/charts/issues/35715)
+
+## <small>3.0.21 (2025-08-07)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35682) ([aaa19b2](https://github.com/bitnami/charts/commit/aaa19b243f636f44749edfbc5f43185a6f6f2247)), closes [#35682](https://github.com/bitnami/charts/issues/35682)
+
+## <small>3.0.20 (2025-08-07)</small>
+
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35659) ([2621d41](https://github.com/bitnami/charts/commit/2621d4169dc615816b1f18e21a1f629096f4c05b)), closes [#35659](https://github.com/bitnami/charts/issues/35659)
+
+## <small>3.0.19 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/valkey-cluster] :zap: :arrow_up: Update dependency references (#35525) ([669d628](https://github.com/bitnami/charts/commit/669d6282c00afaa5508081a1c2259cdb5fa20fff)), closes [#35525](https://github.com/bitnami/charts/issues/35525)
 
 ## <small>3.0.18 (2025-07-15)</small>
 

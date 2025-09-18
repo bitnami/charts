@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.31.3 (2025-06-12)
+## 2.31.4 (2025-08-12)
 
-* [bitnami/common] bugfix: common.capabilities.vpa.apiVersion context ([#34372](https://github.com/bitnami/charts/pull/34372))
+* [bitnami/common] feat: adapt common.errors.insecureImages for BSI ([#35751](https://github.com/bitnami/charts/pull/35751))
+
+## <small>2.31.3 (2025-06-12)</small>
+
+* [bitnami/common] bugfix: common.capabilities.vpa.apiVersion context (#34372) ([440d610](https://github.com/bitnami/charts/commit/440d6101d0be6e4a37b5f04c6c1ced414d632bfb)), closes [#34372](https://github.com/bitnami/charts/issues/34372)
 
 ## <small>2.31.2 (2025-05-20)</small>
 

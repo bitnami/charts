@@ -141,6 +141,8 @@ spec:
               value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
               value: {{ include "concourse.database.port" . }}
+            - name: CONCOURSE_POSTGRES_SSLMODE
+              value: {{ include "concourse.database.sslmode" . }}
             - name: CONCOURSE_POSTGRES_USER
               value: {{ include "concourse.database.user" . }}
         {{- if .Values.web.initContainers }}
@@ -295,6 +297,8 @@ spec:
               value: {{ include "concourse.database.host" . }}
             - name: CONCOURSE_POSTGRES_PORT
               value: {{ include "concourse.database.port" . }}
+            - name: CONCOURSE_POSTGRES_SSLMODE
+              value: {{ include "concourse.database.sslmode" . }}
             - name: CONCOURSE_POSTGRES_USER
               value: {{ include "concourse.database.user" . }}
             {{- if .Values.web.conjur.enabled }}

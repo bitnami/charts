@@ -22,7 +22,7 @@ jobs:
       result: ${{ steps.get-chart.outputs.result }}
     if: ${{ github.repository_owner == 'bitnami' }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -56,7 +56,7 @@ jobs:
       - id: show-error
         name: 'Show error'
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')
@@ -72,7 +72,7 @@ jobs:
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: ${{ vars.VIB_PUBLIC_URL }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         name: Checkout Repository
         with:
           path: charts
@@ -97,11 +97,11 @@ jobs:
       - vib-publish
     name: Update branch deprecated-index
     steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           ref: 'deprecated-index'
           path: 'deprecated-index'

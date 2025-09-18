@@ -9,12 +9,12 @@ kind: Job
 metadata:
   name: {{ printf "%s-keycloak-config-cli" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
     app.kubernetes.io/component: keycloak-config-cli
-  {{- if or .Values.keycloakConfigCli.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.keycloakConfigCli.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
-  {{- end }}
+    app.kubernetes.io/part-of: keycloak
+  {{- $defaultAnnotations := ternary (dict "helm.sh/hook" "post-install,post-upgrade,post-rollback" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" "helm.sh/hook-weight" "5") (dict) .Values.useHelmHooks }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.keycloakConfigCli.annotations .Values.commonAnnotations $defaultAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
 spec:
   backoffLimit: {{ .Values.keycloakConfigCli.backoffLimit }}
   {{- if .Values.keycloakConfigCli.cleanupAfterFinished.enabled }}
@@ -22,58 +22,61 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.keycloakConfigCli.podLabels .Values.commonLabels ) "context" . ) }}
-      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+      {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.keycloakConfigCli.podLabels .Values.commonLabels) "context" .) }}
+      labels: {{- include "common.labels.standard" (dict "customLabels" $podLabels "context" .) | nindent 8 }}
         app.kubernetes.io/component: keycloak-config-cli
+        app.kubernetes.io/part-of: keycloak
       annotations:
-        {{- if (include "keycloak.keycloakConfigCli.createConfigmap" .) }}
+        {{- if and .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/keycloak-config-cli-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.keycloakConfigCli.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podAnnotations "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podAnnotations "context" .) | nindent 8 }}
         {{- end }}
     spec:
+      restartPolicy: Never
       serviceAccountName: {{ template "keycloak.serviceAccountName" . }}
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
-      restartPolicy: Never
       {{- if .Values.keycloakConfigCli.podSecurityContext.enabled }}
-      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.podSecurityContext "context" $) | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.podSecurityContext "context" .) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.keycloakConfigCli.automountServiceAccountToken }}
       {{- if .Values.keycloakConfigCli.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" $) | nindent 8 }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.keycloakConfigCli.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.nodeSelector "context" $) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.nodeSelector "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.keycloakConfigCli.podTolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podTolerations "context" .) | nindent 8 }}
+      {{- if .Values.keycloakConfigCli.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.keycloakConfigCli.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.initContainers "context" $) | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.initContainers "context" .) | nindent 8 }}
       {{- end }}
       containers:
         - name: keycloak-config-cli
           image: {{ template "keycloak.keycloakConfigCli.image" . }}
           imagePullPolicy: {{ .Values.keycloakConfigCli.image.pullPolicy }}
-          {{- if .Values.keycloakConfigCli.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.command "context" $) | nindent 12 }}
-          {{- else }}
           command:
+          {{- if .Values.keycloakConfigCli.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.command "context" .) | nindent 12 }}
+          {{- else }}
             - java
+          {{- end }}
+          args:
+          {{- if .Values.keycloakConfigCli.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" .) | nindent 12 }}
+          {{- else }}
             - -jar
             - /opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar
           {{- end }}
-          {{- if .Values.keycloakConfigCli.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
-          {{- end }}
           {{- if .Values.keycloakConfigCli.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.containerSecurityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.containerSecurityContext "context" .) | nindent 12 }}
           {{- end }}
           env:
+            # ref: https://github.com/adorsys/keycloak-config-cli?tab=readme-ov-file#configuration
             - name: KEYCLOAK_URL
-              value: {{ printf "http://%s-headless:%d%s" (include "common.names.fullname" .) (.Values.containerPorts.http | int) (.Values.httpRelativePath) }}
+              value: {{ printf "http://%s:%d%s" (include "keycloak.headless.serviceName" .) (.Values.containerPorts.http | int) (.Values.httpRelativePath) }}
             - name: KEYCLOAK_USER
               value: {{ .Values.auth.adminUser | quote }}
             - name: KEYCLOAK_PASSWORD
@@ -92,17 +95,17 @@ spec:
               value: {{ .Values.keycloakConfigCli.availabilityCheck.timeout }}
             {{- end }}
             {{- if .Values.keycloakConfigCli.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVars "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVars "context" .) | nindent 12 }}
             {{- end }}
           {{- if or .Values.keycloakConfigCli.extraEnvVarsCM .Values.keycloakConfigCli.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.keycloakConfigCli.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVarsCM "context" $) }}
+                name: {{ tpl .Values.keycloakConfigCli.extraEnvVarsCM . }}
             {{- end }}
             {{- if .Values.keycloakConfigCli.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVarsSecret "context" $) }}
+                name: {{ tpl .Values.keycloakConfigCli.extraEnvVarsSecret . }}
             {{- end }}
           {{- end }}
           {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
@@ -115,7 +118,7 @@ spec:
               mountPath: /config
             {{- end }}
             {{- if .Values.keycloakConfigCli.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumeMounts "context" .) | nindent 12 }}
             {{- end }}
           {{- end }}
           {{- if .Values.keycloakConfigCli.resources }}
@@ -124,9 +127,8 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.keycloakConfigCli.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.keycloakConfigCli.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.keycloakConfigCli.sidecars "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.sidecars "context" .) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumes }}
       volumes:
         - name: empty-dir
           emptyDir: {}
@@ -136,7 +138,6 @@ spec:
             name: {{ include "keycloak.keycloakConfigCli.configmapName" . }}
         {{- end }}
         {{- if .Values.keycloakConfigCli.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraVolumes "context" .) | nindent 8 }}
         {{- end }}
-      {{- end }}
 {{- end }}

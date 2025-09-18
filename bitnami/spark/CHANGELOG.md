@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.0.2 (2025-07-11)
+## 10.0.3 (2025-08-07)
 
-* [bitnami/spark] :zap: :arrow_up: Update dependency references ([#35005](https://github.com/bitnami/charts/pull/35005))
+* [bitnami/spark] :zap: :arrow_up: Update dependency references ([#35680](https://github.com/bitnami/charts/pull/35680))
+
+## <small>10.0.2 (2025-07-11)</small>
+
+* [bitnami/spark] :zap: :arrow_up: Update dependency references (#35005) ([adebd64](https://github.com/bitnami/charts/commit/adebd643b527e7d961075f429c676ffbb4c96872)), closes [#35005](https://github.com/bitnami/charts/issues/35005)
 
 ## <small>10.0.1 (2025-07-06)</small>
 

@@ -84,7 +84,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 5.3.0-debian-12-r14
+    tag: 5.3.0-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1589,7 +1589,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 5.3.0-debian-12-r9
+    tag: 5.3.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1828,7 +1828,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r49
+  tag: 12-debian-12-r50
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

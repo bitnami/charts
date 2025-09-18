@@ -1,19 +1,19 @@
 # Source: https://raw.githubusercontent.com/Altinity/clickhouse-operator/refs/heads/{version}/deploy/helm/clickhouse-operator/crds/CustomResourceDefinition-clickhouseinstallations.clickhouse.altinity.com.yaml
-# Version: 0.25.2
+# Version: 0.25.3
 # Template Parameters:
 #
 # KIND=ClickHouseInstallation
 # SINGULAR=clickhouseinstallation
 # PLURAL=clickhouseinstallations
 # SHORT=chi
-# OPERATOR_VERSION=0.25.2
+# OPERATOR_VERSION=0.25.3
 #
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: clickhouseinstallations.clickhouse.altinity.com
   labels:
-    clickhouse.altinity.com/chop: 0.25.2
+    clickhouse.altinity.com/chop: 0.25.3
 spec:
   group: clickhouse.altinity.com
   scope: Namespaced
@@ -798,6 +798,15 @@ spec:
                                     required:
                                       - name
                                       - key
+                          pdbManaged:
+                            !!merge <<: *TypeStringBool
+                            description: |
+                              Specifies whether the Pod Disruption Budget (PDB) should be managed.
+                              During the next installation, if PDB management is enabled, the operator will
+                              attempt to retrieve any existing PDB. If none is found, it will create a new one
+                              and initiate a reconciliation loop. If PDB management is disabled, the existing PDB
+                              will remain intact, and the reconciliation loop will not be executed. By default,
+                              PDB management is enabled.
                           pdbMaxUnavailable:
                             type: integer
                             description: |

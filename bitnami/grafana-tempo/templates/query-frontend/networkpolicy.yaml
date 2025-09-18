@@ -68,14 +68,6 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-    # Allow outbound connections to query-frontend query ports
-    - ports:
-        - port: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
-        - port: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
-      to:
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: query-frontend
     {{- if .Values.vulture.enabled }}
     # Allow outbound connections to vulture
     - ports:
@@ -106,8 +98,9 @@ spec:
         - port: {{ .Values.tempo.containerPorts.web }}
         - port: {{ .Values.tempo.containerPorts.gossipRing }}
         - port: {{ .Values.tempo.containerPorts.grpc }}
-        - port: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
-        - port: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
+        {{- if .Values.queryFrontend.query.enabled }}
+        - port: {{ .Values.queryFrontend.query.containerPorts.grpcJaeger }}
+        {{- end }}
       {{- if not .Values.queryFrontend.networkPolicy.allowExternal }}
       from:
         {{- if .Values.queryFrontend.networkPolicy.addExternalClientAccess }}
