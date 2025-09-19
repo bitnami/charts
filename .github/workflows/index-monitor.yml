@@ -48,7 +48,7 @@ jobs:
           done
           echo "result=${status}" >> $GITHUB_OUTPUT
       - name: Show messages
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
             if ("${{ steps.integrity-check.outputs.result }}" != "ok" ) {
@@ -95,7 +95,7 @@ jobs:
           done
           echo "result=${status}" >> $GITHUB_OUTPUT
       - name: Show messages
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
             if ("${{ steps.validation-check.outputs.result }}" != "ok" ) {

@@ -1,8 +1,16 @@
 # Changelog
 
-## 25.0.1 (2025-08-14)
+## 25.0.4 (2025-09-01)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#35898](https://github.com/bitnami/charts/pull/35898))
+* [bitnami/airflow] Allow multiple executors with CeleryExecutor ([#35423](https://github.com/bitnami/charts/pull/35423))
+
+## <small>25.0.2 (2025-08-21)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#36158) ([4a155c7](https://github.com/bitnami/charts/commit/4a155c719f5cb4802a30100b883351620d72f8c7)), closes [#36158](https://github.com/bitnami/charts/issues/36158)
+
+## <small>25.0.1 (2025-08-14)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35898) ([f28b6e5](https://github.com/bitnami/charts/commit/f28b6e56eeca818d26da8752a4de9041b39eae9c)), closes [#35898](https://github.com/bitnami/charts/issues/35898)
 
 ## 25.0.0 (2025-08-11)
 

@@ -56,7 +56,7 @@ jobs:
       - id: show-error
         name: 'Show error'
         if: ${{ steps.get-chart.outputs.result == 'fail' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         with:
           script: |
               core.setFailed('${{ steps.get-chart.outputs.error }}')

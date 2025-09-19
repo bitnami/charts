@@ -14,7 +14,7 @@ metadata:
   {{- if or .Values.service.annotations .Values.commonAnnotations .Values.metrics.enabled .Values.metrics.annotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.service.annotations .Values.commonAnnotations .Values.metrics.annotations) "context" .) }}
   {{- if .Values.metrics.enabled }}
-  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" .Values.service.ports.http "prometheus.io/path" "/metrics" }}
+  {{- $defaultMetricsAnnotations := dict "prometheus.io/scrape" "true" "prometheus.io/port" (.Values.service.ports.http | toString) "prometheus.io/path" "/metrics" }}
   {{- $annotations = include "common.tplvalues.merge" (dict "values" (list $annotations $defaultMetricsAnnotations) "context" .) }}
   {{- end }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
