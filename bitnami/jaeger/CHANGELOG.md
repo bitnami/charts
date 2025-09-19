@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.1.0 (2025-09-03)
+## 6.1.0 (2025-09-19)
 
 * [bitnami/jaeger] Add optional Ingress support for Jaeger UI ([#35744](https://github.com/bitnami/charts/pull/35744))
 
