@@ -1,8 +1,14 @@
 # Changelog
 
-## 2.31.4 (2025-08-12)
+## 2.31.6 (2025-09-19)
 
-* [bitnami/common] feat: adapt common.errors.insecureImages for BSI ([#35751](https://github.com/bitnami/charts/pull/35751))
+* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version… ([#36272](https://github.com/bitnami/charts/pull/36272))
+
+## <small>2.31.4 (2025-08-12)</small>
+
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/common] docs: remove references to deprecated helpers on README (#35412) ([6239867](https://github.com/bitnami/charts/commit/623986710e3b80f11076d3ded1dc1681d8df62c5)), closes [#35412](https://github.com/bitnami/charts/issues/35412)
+* [bitnami/common] feat: adapt common.errors.insecureImages for BSI (#35751) ([c6bc598](https://github.com/bitnami/charts/commit/c6bc59845497f84f740e47075f8af840f150536e)), closes [#35751](https://github.com/bitnami/charts/issues/35751)
 
 ## <small>2.31.3 (2025-06-12)</small>
 
