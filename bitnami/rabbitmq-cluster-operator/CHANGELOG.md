@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.36 (2025-09-18)
+## 4.4.36 (2025-09-19)
 
 * [bitnami/rabbitmq-cluster-operator] Set network policy properly for metrics ([#36270](https://github.com/bitnami/charts/pull/36270))
 
