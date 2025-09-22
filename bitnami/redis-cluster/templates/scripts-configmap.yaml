@@ -157,8 +157,10 @@ data:
 
         if [[ "$result" == "OK" ]]; then
           {{- if .Values.cluster.redisShutdownWaitFailover }}
+          echo "Waiting for node to complete failover for up to {{ sub .Values.redis.terminationGracePeriodSeconds 10 }}s"
+
           # Wait for clients to update their topology
-          sleep 10
+          sleep {{ sub .Values.redis.terminationGracePeriodSeconds 10 }}
           {{- end }}
           break
         fi
