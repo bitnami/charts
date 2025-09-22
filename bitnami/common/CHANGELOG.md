@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.31.6 (2025-09-19)
+## 2.31.6 (2025-09-22)
 
 * [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version… ([#36272](https://github.com/bitnami/charts/pull/36272))
 
