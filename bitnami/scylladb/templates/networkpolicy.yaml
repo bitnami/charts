@@ -43,7 +43,7 @@ spec:
         - port: {{ .Values.containerPorts.tls }}
         - port: {{ .Values.containerPorts.intra }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
       to:
         - podSelector:
