@@ -298,6 +298,13 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 | `tracking.persistence.selector`      | Selector to match an existing Persistent Volume for MLflow data PVC                                     | `{}`                |
 | `tracking.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
+### MLflow Tracking Generic Ephemeral Volume Parameters
+
+| Name                                               | Description                                                      | Value   |
+| -------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `tracking.tmpVolume.ephemeral.enabled`             | Use a generic ephemeral volume for `/tmp` instead of `emptyDir`  | `false` |
+| `tracking.tmpVolume.ephemeral.volumeClaimTemplate` | Custom `volumeClaimTemplate` for the ephemeral volume (YAML map) | `{}`    |
+
 ### MLflow Tracking Other Parameters
 
 | Name                                                   | Description                                                      | Value   |
