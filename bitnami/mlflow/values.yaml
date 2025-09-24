@@ -766,9 +766,9 @@ tracking:
   ##
   tmpVolume:
     ephemeral:
-      ## @param tracking.tmpVolume.ephemeral Use a generic ephemeral volume for `/tmp` instead of `emptyDir`
+      ## @param tracking.tmpVolume.ephemeral.enabled Use a generic ephemeral volume for `/tmp` instead of `emptyDir`
       enabled: false
-      ## @param tracking.tmpVolume.volumeClaimTemplate Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)
+      ## @param tracking.tmpVolume.ephemeral.volumeClaimTemplate Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)
       volumeClaimTemplate: {}
 
   ## @section MLflow Tracking Other Parameters
