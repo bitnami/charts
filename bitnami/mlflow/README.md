@@ -284,26 +284,21 @@ To back up and restore Helm chart deployments on Kubernetes, you need to back up
 
 ### MLflow Tracking Persistence Parameters
 
-| Name                                 | Description                                                                                             | Value               |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `tracking.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
-| `tracking.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/mlflow`   |
-| `tracking.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
-| `tracking.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
-| `tracking.persistence.labels`        | Persistent Volume labels                                                                                | `{}`                |
-| `tracking.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
-| `tracking.persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
-| `tracking.persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
-| `tracking.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
-| `tracking.persistence.selector`      | Selector to match an existing Persistent Volume for MLflow data PVC                                     | `{}`                |
-| `tracking.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
-
-### MLflow Tracking Generic Ephemeral Volume Parameters
-
-| Name                                               | Description                                                      | Value   |
-| -------------------------------------------------- | ---------------------------------------------------------------- | ------- |
-| `tracking.tmpVolume.ephemeral.enabled`             | Use a generic ephemeral volume for `/tmp` instead of `emptyDir`  | `false` |
-| `tracking.tmpVolume.ephemeral.volumeClaimTemplate` | Custom `volumeClaimTemplate` for the ephemeral volume (YAML map) | `{}`    |
+| Name                                               | Description                                                                                             | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `tracking.persistence.enabled`                     | Enable persistence using Persistent Volume Claims                                                       | `true`              |
+| `tracking.persistence.mountPath`                   | Path to mount the volume at.                                                                            | `/bitnami/mlflow`   |
+| `tracking.persistence.subPath`                     | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `tracking.persistence.storageClass`                | Storage class of backing PVC                                                                            | `""`                |
+| `tracking.persistence.labels`                      | Persistent Volume labels                                                                                | `{}`                |
+| `tracking.persistence.annotations`                 | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `tracking.persistence.accessModes`                 | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
+| `tracking.persistence.size`                        | Size of data volume                                                                                     | `8Gi`               |
+| `tracking.persistence.existingClaim`               | The name of an existing PVC to use for persistence                                                      | `""`                |
+| `tracking.persistence.selector`                    | Selector to match an existing Persistent Volume for MLflow data PVC                                     | `{}`                |
+| `tracking.persistence.dataSource`                  | Custom PVC data source                                                                                  | `{}`                |
+| `tracking.tmpVolume.ephemeral.enabled`             | Use a generic ephemeral volume for `/tmp` instead of `emptyDir`                                         | `false`             |
+| `tracking.tmpVolume.ephemeral.volumeClaimTemplate` | Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)                                        | `{}`                |
 
 ### MLflow Tracking Other Parameters
 
