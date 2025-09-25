@@ -1,11 +1,12 @@
 # Changelog
 
-## 22.0.0 (2025-09-08)
+## 24.0.0 (2025-09-25)
 
 * [bitnami/redis] Ensure that Redis resources are less than 63 chars ([#34803](https://github.com/bitnami/charts/pull/34803))
-## 23.0.2 (2025-09-12)
 
-* [bitnami/redis] Fix service binding password mismatch (#15626) ([#36231](https://github.com/bitnami/charts/pull/36231))
+## <small>23.0.2 (2025-09-12)</small>
+
+* [bitnami/redis] Fix service binding password mismatch (#15626) (#36231) ([c4820e3](https://github.com/bitnami/charts/commit/c4820e37f271c1bd1b14580749a85c4234ba25aa)), closes [#15626](https://github.com/bitnami/charts/issues/15626) [#36231](https://github.com/bitnami/charts/issues/36231) [bitnami#15626](https://github.com/bitnami/issues/15626)
 
 ## <small>23.0.1 (2025-09-05)</small>
 
