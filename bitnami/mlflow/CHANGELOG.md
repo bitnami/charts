@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.0 (2025-09-24)
+## 5.2.0 (2025-09-25)
 
 * [bitnami/mlflow] Add support for generic ephemeral volume ([#36291](https://github.com/bitnami/charts/pull/36291))
 
