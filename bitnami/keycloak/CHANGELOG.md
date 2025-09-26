@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.2.3 (2025-09-11)
+## 25.2.4 (2025-09-23)
 
-* [bitnami/keycloak]: fix sidecars in keycloak-config-cli-job ([#36247](https://github.com/bitnami/charts/pull/36247))
+* [bitnami/keycloak] Fix indentation in ingress TLS secret template ([#36282](https://github.com/bitnami/charts/pull/36282))
+
+## <small>25.2.3 (2025-09-11)</small>
+
+* [bitnami/keycloak]: fix sidecars in keycloak-config-cli-job (#36247) ([478a81c](https://github.com/bitnami/charts/commit/478a81c9e91d2c2cf867e70aeea81e10cbcab9ce)), closes [#36247](https://github.com/bitnami/charts/issues/36247)
 
 ## <small>25.2.2 (2025-09-11)</small>
 
