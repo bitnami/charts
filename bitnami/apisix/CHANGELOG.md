@@ -1,8 +1,12 @@
 # Changelog
 
+## 6.0.2 (2025-09-16)
+
+* [bitnami/apisix] Fixed bug caused by inconsistent usage of context with dataPlane.extraEnvVars ([#36252](https://github.com/bitnami/charts/pull/36252))
+
 ## 6.0.0 (2025-08-20)
 
-* [bitnami/apisix] major: Integrate apisix-dashboard into apisix ([#36136](https://github.com/bitnami/charts/pull/36136))
+* [bitnami/apisix] major: Integrate apisix-dashboard into apisix (#36136) ([5a872ff](https://github.com/bitnami/charts/commit/5a872ffa25422b04ab276236293b8179268050ed)), closes [#36136](https://github.com/bitnami/charts/issues/36136)
 
 ## <small>5.1.6 (2025-08-18)</small>
 
