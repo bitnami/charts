@@ -1,8 +1,13 @@
 # Changelog
 
-## 5.2.0 (2025-09-25)
+## 5.3.0 (2025-09-27)
 
-* [bitnami/mlflow] Add support for generic ephemeral volume ([#36291](https://github.com/bitnami/charts/pull/36291))
+* [bitnami/mlflow] Apply tpl to ingress hostname, external S3 and DB host ([#36302](https://github.com/bitnami/charts/pull/36302))
+
+## 5.2.0 (2025-09-26)
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/mlflow] Add support for generic ephemeral volume (#36291) ([bf43666](https://github.com/bitnami/charts/commit/bf43666619d60297e22479b22966a3cd9546d8f9)), closes [#36291](https://github.com/bitnami/charts/issues/36291)
 
 ## <small>5.1.17 (2025-08-27)</small>
 
