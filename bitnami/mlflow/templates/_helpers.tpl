@@ -39,6 +39,13 @@ Fullname of the tracking service
 {{- end -}}
 
 {{/*
+Render and return the MLflow tracking ingress hostname.
+*/}}
+{{- define "mlflow.v0.tracking.hostname" -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.tracking.ingress.hostname "context" $) -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "mlflow.v0.tracking.serviceAccountName" -}}
@@ -446,7 +453,7 @@ Return the PostgreSQL Hostname
         {{- print (include "mlflow.v0.postgresql.fullname" .) -}}
     {{- end -}}
 {{- else -}}
-    {{- print .Values.externalDatabase.host -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.externalDatabase.host "context" $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -632,7 +639,7 @@ Return the S3 bucket
     {{- if .Values.minio.enabled -}}
         {{- print .Values.minio.defaultBuckets -}}
     {{- else -}}
-        {{- print .Values.externalS3.bucket -}}
+        {{- include "common.tplvalues.render" (dict "value" .Values.externalS3.bucket "context" $) -}}
     {{- end -}}
 {{- end -}}
 

@@ -4,6 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.tracking.enabled .Values.tracking.ingress.enabled }}
+{{- $renderedHostname := include "mlflow.v0.tracking.hostname" . }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
@@ -21,8 +22,8 @@ spec:
   ingressClassName: {{ .Values.tracking.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.tracking.ingress.hostname }}
-    - host: {{ .Values.tracking.ingress.hostname }}
+    {{- if $renderedHostname }}
+    - host: {{ $renderedHostname }}
       http:
         paths:
           {{- if .Values.tracking.ingress.extraPaths }}
@@ -47,8 +48,8 @@ spec:
   tls:
     {{- if and .Values.tracking.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.tracking.ingress.annotations )) .Values.tracking.ingress.selfSigned) }}
     - hosts:
-        - {{ .Values.tracking.ingress.hostname | quote }}
-      secretName: {{ printf "%s-tls" .Values.tracking.ingress.hostname }}
+        - {{ $renderedHostname | quote }}
+      secretName: {{ printf "%s-tls" $renderedHostname }}
     {{- end }}
     {{- if .Values.tracking.ingress.extraTls }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.ingress.extraTls "context" $) | nindent 4 }}
