@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.3.0 (2025-09-27)
+## 5.3.0 (2025-09-28)
 
 * [bitnami/mlflow] Apply tpl to ingress hostname, external S3 and DB host ([#36302](https://github.com/bitnami/charts/pull/36302))
 
