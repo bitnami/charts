@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.0.3 (2025-08-13)
+## 9.0.5 (2025-09-29)
 
-* [bitnami/external-dns] :zap: :arrow_up: Update dependency references ([#35803](https://github.com/bitnami/charts/pull/35803))
+* [bitnami/external-dns] Use bitnami legacy docker image ([#36307](https://github.com/bitnami/charts/pull/36307))
+
+## <small>9.0.3 (2025-08-13)</small>
+
+* [bitnami/external-dns] :zap: :arrow_up: Update dependency references (#35803) ([3260dbc](https://github.com/bitnami/charts/commit/3260dbca771ef1979e4e950a9abbf5ce8f4e2ba2)), closes [#35803](https://github.com/bitnami/charts/issues/35803)
 
 ## <small>9.0.2 (2025-08-08)</small>
 
