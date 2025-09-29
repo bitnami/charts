@@ -74,7 +74,7 @@ kubeVersion: ""
 ##
 image:
   registry: docker.io
-  repository: bitnami/external-dns
+  repository: bitnamilegacy/external-dns
   tag: 0.18.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
