@@ -1,8 +1,8 @@
 # Changelog
 
-## 22.1.0 (2025-09-25)
+## 22.1.0 (2025-09-29)
 
-* [bitnami/nginx] allow to change livenessProbe and readinessProbe for metrics container ([#36296](https://github.com/bitnami/charts/pull/36296))
+* [bitnami/nginx] allow to change probes for metrics container ([#36296](https://github.com/bitnami/charts/pull/36296))
 
 ## <small>21.1.23 (2025-08-18)</small>
 
