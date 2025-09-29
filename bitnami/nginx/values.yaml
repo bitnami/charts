@@ -1156,3 +1156,16 @@ metrics:
     enabled: true
     initialDelaySeconds: 5
     timeoutSeconds: 3
+  ## @param metrics.customStartupProbe Override default metrics startup probe
+  ##
+  customStartupProbe: {}
+  ## NGINX metrics containers' startup probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
