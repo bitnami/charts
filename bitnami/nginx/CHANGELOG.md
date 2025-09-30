@@ -1,6 +1,6 @@
 # Changelog
 
-## 22.1.0 (2025-09-29)
+## 22.1.0 (2025-09-30)
 
 * [bitnami/nginx] allow to change probes for metrics container ([#36296](https://github.com/bitnami/charts/pull/36296))
 
