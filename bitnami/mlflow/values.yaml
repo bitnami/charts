@@ -760,6 +760,17 @@ tracking:
     ## @param tracking.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+
+  ## MLflow Tracking Generic Ephemeral Volume Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  tmpVolume:
+    ephemeral:
+      ## @param tracking.tmpVolume.ephemeral.enabled Use a generic ephemeral volume for `/tmp` instead of `emptyDir`
+      enabled: false
+      ## @param tracking.tmpVolume.ephemeral.volumeClaimTemplate Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)
+      volumeClaimTemplate: {}
+
   ## @section MLflow Tracking Other Parameters
   ##
   serviceAccount:
@@ -776,6 +787,7 @@ tracking:
     ## @param tracking.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
+
   ## @section MLflow Tracking Metrics Parameters
   ##
   metrics:
