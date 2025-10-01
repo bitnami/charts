@@ -1023,6 +1023,26 @@
                         }
                     }
                 },
+                "tmpVolume": {
+                    "type": "object",
+                    "properties": {
+                        "ephemeral": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "default": false,
+                                    "description": "Use a generic ephemeral volume for `/tmp` instead of `emptyDir`"
+                                },
+                                "volumeClaimTemplate": {
+                                    "type": "object",
+                                    "default": {},
+                                    "description": "Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)"
+                                }
+                            }
+                        }
+                    }
+                },
                 "serviceAccount": {
                     "type": "object",
                     "properties": {
