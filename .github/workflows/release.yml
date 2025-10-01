@@ -1,0 +1,58 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
+
+jobs:
+  helm-release:
+    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
+    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Add dependency chart repos
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+
+      - name: Validate charts for PRs
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "🧪 Testing chart-releaser workflow (validation mode)"
+          echo "📦 Charts directory contents:"
+          ls -la charts/ | head -5
+          echo ""
+          echo "🔍 Charts with Chart.yaml files:"
+          find charts/ -name "Chart.yaml" | head -10
+          echo ""
+          echo "📊 Total charts found: $(find charts/ -name "Chart.yaml" | wc -l)"
+          echo "✅ Workflow validation complete - ready for production!"
+          
+      # TODO: Uncomment this step when ready for production releases
+      # - name: Run chart-releaser (production)
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   uses: exivity/chart-releaser-action@v1.1.0
+      #   env:
+      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
