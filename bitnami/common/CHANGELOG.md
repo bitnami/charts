@@ -1,8 +1,13 @@
 # Changelog
 
-## 2.31.6 (2025-09-22)
+## 2.31.7 (2025-10-03)
 
-* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version… ([#36272](https://github.com/bitnami/charts/pull/36272))
+* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version ([#36324](https://github.com/bitnami/charts/pull/36324))
+
+## <small>2.31.6 (2025-09-22)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version… (#36272) ([f25c8f4](https://github.com/bitnami/charts/commit/f25c8f4fbabdf66fa9094311cb94304a16fb698d)), closes [#36272](https://github.com/bitnami/charts/issues/36272)
 
 ## <small>2.31.4 (2025-08-12)</small>
 
