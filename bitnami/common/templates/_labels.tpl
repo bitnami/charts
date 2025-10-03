@@ -22,7 +22,7 @@ helm.sh/chart: {{ include "common.names.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- with .Chart.AppVersion }}
-app.kubernetes.io/version: {{ . | replace "+" "-" | quote }}
+app.kubernetes.io/version: {{ . | replace "+" "_" | quote }}
 {{- end -}}
 {{- end -}}
 {{- end -}}
