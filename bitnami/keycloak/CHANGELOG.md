@@ -1,6 +1,10 @@
 # Changelog
 
-## 25.2.4 (2025-09-23)
+## 25.2.5 (2025-10-09)
+
+* [bitnami/keycloak] Fix: Rename duplicated secret labels ([#36254](https://github.com/bitnami/charts/pull/36254))
+
+## <small>25.2.4 (2025-09-23)</small>
 
 * [bitnami/keycloak] Fix indentation in ingress TLS secret template ([#36282](https://github.com/bitnami/charts/pull/36282))
 
