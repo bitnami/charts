@@ -16,10 +16,25 @@
                     "default": [],
                     "items": {}
                 },
+                "defaultStorageClass": {
+                    "type": "string",
+                    "description": "Global default StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
                 "storageClass": {
                     "type": "string",
-                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "description": "DEPRECATED: use global.defaultStorageClass instead",
                     "default": ""
+                },
+                "security": {
+                    "type": "object",
+                    "properties": {
+                        "allowInsecureImages": {
+                            "type": "boolean",
+                            "description": "Allows skipping image verification",
+                            "default": false
+                        }
+                    }
                 },
                 "compatibility": {
                     "type": "object",
@@ -715,6 +730,11 @@
                             "description": "Allow the pod to access any range of port and all destinations.",
                             "default": true
                         },
+                        "addExternalClientAccess": {
+                            "type": "boolean",
+                            "description": "Allow access from pods with client label set to \"true\". Ignored if `alertmanager.networkPolicy.allowExternal` is true.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
@@ -900,6 +920,16 @@
                             "items": {}
                         }
                     }
+                },
+                "scrapePrometheusHost": {
+                    "type": "boolean",
+                    "description": "Specifies whether to include prometheus host scraping job",
+                    "default": true
+                },
+                "scrapeAlertmanagerHost": {
+                    "type": "boolean",
+                    "description": "Specifies whether to include alertmanager host scraping job",
+                    "default": true
                 },
                 "configuration": {
                     "type": "string",
@@ -1544,6 +1574,22 @@
                                 }
                             }
                         },
+                        "extraEnvVars": {
+                            "type": ["array", "string"],
+                            "description": "Array with extra environment variables to add to the thanos sidecar container",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraEnvVarsCM": {
+                            "type": "string",
+                            "description": "Name of existing ConfigMap containing extra env vars for the thanos sidecar container",
+                            "default": ""
+                        },
+                        "extraEnvVarsSecret": {
+                            "type": "string",
+                            "description": "Name of existing Secret containing extra env vars for the thanos sidecar container",
+                            "default": ""
+                        },
                         "extraVolumeMounts": {
                             "type": "array",
                             "description": "Additional volumeMounts from `server.volumes` for thanos sidecar container",
@@ -1912,6 +1958,11 @@
                             "description": "Allow the pod to access any range of port and all destinations.",
                             "default": true
                         },
+                        "addExternalClientAccess": {
+                            "type": "boolean",
+                            "description": "Allow access from pods with client label set to \"true\". Ignored if `server.networkPolicy.allowExternal` is true.",
+                            "default": true
+                        },
                         "extraIngress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
@@ -2073,6 +2124,11 @@
                         "create": {
                             "type": "boolean",
                             "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "includeDefaultRules": {
+                            "type": "boolean",
+                            "description": "Specifies whether to include default rules from official prometheus helm chart",
                             "default": true
                         },
                         "rules": {
