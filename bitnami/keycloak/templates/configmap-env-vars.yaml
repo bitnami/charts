@@ -31,7 +31,7 @@ data:
   {{- end }}
   {{- if .Values.ingress.enabled }}
   KC_HOSTNAME_STRICT: {{ ternary "true" "false" .Values.hostnameStrict | quote }}
-{{- if .Values.ingress.hostname }}
+{{- if and .Values.ingress.hostname (eq .Values.hostnameStrict true) }}
   {{- $path := tpl .Values.ingress.path . }}
   {{- if and (eq .Values.ingress.controller "gce") (hasSuffix "*" $path) }}
     {{- $path = trimSuffix "*" $path }}
