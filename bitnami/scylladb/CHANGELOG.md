@@ -1,8 +1,16 @@
 # Changelog
 
-## 5.0.5 (2025-08-19)
+## 5.0.8 (2025-10-10)
 
-* [bitnami/scylladb] :zap: :arrow_up: Update dependency references ([#36145](https://github.com/bitnami/charts/pull/36145))
+* [bitnami/scylladb] Fix networkpolicy when use extraContainerPorts ([#36285](https://github.com/bitnami/charts/pull/36285))
+
+## <small>5.0.6 (2025-08-23)</small>
+
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#36178) ([2c9b257](https://github.com/bitnami/charts/commit/2c9b257ae089c7d7a67379b8462f1627400c2071)), closes [#36178](https://github.com/bitnami/charts/issues/36178)
+
+## <small>5.0.5 (2025-08-19)</small>
+
+* [bitnami/scylladb] :zap: :arrow_up: Update dependency references (#36145) ([cc1902e](https://github.com/bitnami/charts/commit/cc1902ee5e81b234afd842e7ecb32433955cc648)), closes [#36145](https://github.com/bitnami/charts/issues/36145)
 
 ## <small>5.0.4 (2025-08-08)</small>
 
