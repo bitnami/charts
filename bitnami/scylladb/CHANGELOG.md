@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.8 (2025-10-03)
+## 5.0.8 (2025-10-10)
 
 * [bitnami/scylladb] Fix networkpolicy when use extraContainerPorts ([#36285](https://github.com/bitnami/charts/pull/36285))
 
