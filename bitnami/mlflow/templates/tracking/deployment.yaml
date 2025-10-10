@@ -364,7 +364,13 @@ spec:
         {{- end }}
       volumes:
         - name: tmp
+        {{- if .Values.tracking.tmpVolume.ephemeral.enabled }}
+          ephemeral:
+            volumeClaimTemplate:
+              {{- include "common.tplvalues.render" (dict "value" .Values.tracking.tmpVolume.ephemeral.volumeClaimTemplate "context" $) | nindent 14 }}
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         - name: mlruns
           emptyDir: {}
         - name: mlartifacts

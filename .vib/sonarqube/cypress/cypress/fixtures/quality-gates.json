@@ -1,7 +1,0 @@
-{
-  "newQualityGate": {
-    "name": "max_code_lines",
-    "condition": "Lines",
-    "threshold": 100
-  }
-}

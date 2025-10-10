@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.1.17 (2025-08-27)
+## 5.2.0 (2025-09-25)
 
-* [bitnami/mlflow] :zap: :arrow_up: Update dependency references ([#36208](https://github.com/bitnami/charts/pull/36208))
+* [bitnami/mlflow] Add support for generic ephemeral volume ([#36291](https://github.com/bitnami/charts/pull/36291))
+
+## <small>5.1.17 (2025-08-27)</small>
+
+* [bitnami/mlflow] :zap: :arrow_up: Update dependency references (#36208) ([f8162a6](https://github.com/bitnami/charts/commit/f8162a6f72e04a852ac8cdf87fb3534e5868f13c)), closes [#36208](https://github.com/bitnami/charts/issues/36208)
 
 ## <small>5.1.16 (2025-08-22)</small>
 
