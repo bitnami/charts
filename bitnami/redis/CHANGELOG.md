@@ -1,6 +1,6 @@
 # Changelog
 
-## 24.0.0 (2025-09-25)
+## 24.0.0 (2025-10-14)
 
 * [bitnami/redis] Ensure that Redis resources are less than 63 chars ([#34803](https://github.com/bitnami/charts/pull/34803))
 
