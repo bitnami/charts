@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.0.3 (2025-09-18)
+## 23.0.3 (2025-10-14)
 
 * [bitnami/redis] Avoid eager evaluation of ternary when resolving user secrets ([#36265](https://github.com/bitnami/charts/pull/36265))
 
