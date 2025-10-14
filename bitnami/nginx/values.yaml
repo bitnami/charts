@@ -1130,3 +1130,62 @@ metrics:
     ##       summary: Tomcat instance is down.
     ##
     rules: []
+  ## @param metrics.customLivenessProbe Override default metrics liveness probe
+  ##
+  customLivenessProbe: {}
+  ## NGINX metrics containers' liveness probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    periodSeconds: 10
+    failureThreshold: 2
+    successThreshold: 1
+  ## @param metrics.customReadinessProbe Override default metrics readiness probe
+  ##
+  customReadinessProbe: {}
+  ## NGINX metrics containers' readiness probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 3
+    periodSeconds: 30
+    failureThreshold: 2
+    successThreshold: 1
+  ## @param metrics.customStartupProbe Override default metrics startup probe
+  ##
+  customStartupProbe: {}
+  ## NGINX metrics containers' startup probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    timeoutSeconds: 3
+    periodSeconds: 5
+    failureThreshold: 10
+    successThreshold: 1

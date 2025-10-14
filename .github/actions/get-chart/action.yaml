@@ -1,0 +1,89 @@
+name: 'Get Chart'
+description: 'Composite action to discover the modified chart'
+
+inputs:
+  pr-number:
+    required: true
+    description: Pull request number.
+  pr-url:
+    required: true
+    description: Pull request URL.
+  token:
+    required: true
+    default: "${{ github.token }}"
+outputs:
+  chart:
+    description: Path to the modified chart
+    value: ${{ steps.get-chart.outputs.chart }}
+  result:
+    description: '"ok", "fail" if more than one chart is modified or "skip" if not charts are changed' 
+    value: ${{ steps.get-chart.outputs.result }}
+  values-updated:
+    description: '"true" if the values.yaml file has been modified'
+    value: ${{ steps.get-chart.outputs.values-updated }}
+runs:
+  using: 'composite'
+  steps:
+    - id: get-chart
+      name: Get modified charts
+      env:
+        PULL_REQUEST_NUMBER: "${{ inputs.pr-number }}"
+        PULL_REQUEST_URL: "${{ inputs.pr-url }}"
+        GITHUB_TOKEN: "${{ inputs.token }}"
+      shell: bash
+      run: |
+        # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+        files_changed_data="$(gh api --paginate "/repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER}/files")"
+        files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
+        # Adding || true to avoid "Process exited with code 1" errors
+        charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
+        # Using grep -c as a better alternative to wc -l when dealing with empty strings."
+        num_charts_changed="$(echo "$charts_dirs_changed" | grep -c "bitnami" || true)"
+        num_version_bumps="$(echo "$files_changed_data" | jq -r '[.[] | select(.filename|match("bitnami/[^/]+/Chart.yaml")) | select(.patch|contains("+version")) ] | length' )"
+        non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
+
+        if [[ $(curl -Lks "${PULL_REQUEST_URL}" | jq '.state | index("closed")') != *null* ]]; then
+          # The PR for which this workflow run was launched is now closed -> SKIP
+          echo "error=The PR for which this workflow run was launched is now closed. The tests will be skipped." >> "$GITHUB_OUTPUT"
+          echo "result=skip" >> "$GITHUB_OUTPUT"
+        elif [[ "$non_readme_files" -le "0" ]]; then
+          # The only changes are .md files -> SKIP
+          echo "result=skip" >> "$GITHUB_OUTPUT"
+        elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
+          # Changes done in charts but version not bumped -> ERROR
+          echo "error=Detected changes in charts without version bump in Chart.yaml. Charts changed: ${num_charts_changed}. Version bumps detected: ${num_version_bumps}" >> "$GITHUB_OUTPUT"
+          echo "result=fail" >> "$GITHUB_OUTPUT"
+        elif [[ "$num_charts_changed" -eq "1" ]]; then
+          # Changes done in only one chart -> OK
+          echo "result=ok" >> "$GITHUB_OUTPUT"
+          # Extra output: chart name
+          chart_name="${charts_dirs_changed//bitnami\/}"
+          echo "chart=${chart_name}" >> "$GITHUB_OUTPUT"
+          # Extra output: values-updated
+          # shellcheck disable=SC2076
+          if [[ "${files_changed[*]}" =~ "bitnami/${chart_name}/values.yaml" ]]; then
+            echo "values-updated=true" >> "$GITHUB_OUTPUT"
+          fi
+        elif [[ "$num_charts_changed" -le "0" ]]; then
+          # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
+          echo "error=No changes detected in charts. The rest of the tests will be skipped." >> "$GITHUB_OUTPUT"
+          echo "result=skip" >> "$GITHUB_OUTPUT"
+        else
+          # Changes done in more than chart -> SKIP
+          echo "error=Changes detected in more than one chart directory. It is strongly advised to change only one chart in a PR. The rest of the tests will be skipped." >> "$GITHUB_OUTPUT"
+          echo "result=skip" >> "$GITHUB_OUTPUT"
+        fi
+    # Using actions/github-scripts because using exit 1 in the script above would not provide any output
+    # Source: https://github.community/t/no-output-on-process-completed-with-exit-code-1/123821/3
+    - id: show-error
+      name: Show error
+      if: ${{ steps.get-chart.outputs.result != 'ok' }}
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
+      with:
+        script: |
+          let message='${{ steps.get-chart.outputs.error }}';
+          if ('${{ steps.get-chart.outputs.result }}' === 'fail' ) {
+            core.setFailed(message);
+          } else {
+            core.warning(message);
+          }

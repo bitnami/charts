@@ -137,7 +137,7 @@ Bitnami charts, with its default settings, configure credentials at first boot. 
 - Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and POSTGRES_PASSWORD placeholders)
 
 ```shell
-kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=postgres-password=POSTGRES_PASSWORD --dry-run -o yaml | kubectl apply -f -
+kubectl create secret generic SECRET_NAME --from-literal=password=PASSWORD --from-literal=postgres-password=POSTGRES_PASSWORD --dry-run=client -o yaml | kubectl apply -f -
 ```
 
 ### Automated update using a password update job

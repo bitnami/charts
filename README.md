@@ -8,7 +8,6 @@
     <a href="https://github.com/bitnami/charts"><img src="https://badgen.net/github/stars/bitnami/charts?icon=github" /></a>
     <a href="https://github.com/bitnami/charts"><img src="https://badgen.net/github/forks/bitnami/charts?icon=github" /></a>
     <a href="https://artifacthub.io/packages/search?repo=bitnami"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami" /></a>
-    <a href="https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml"><img src="https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml/badge.svg" /></a>
 </p>
 
 # The Bitnami Library for Kubernetes
