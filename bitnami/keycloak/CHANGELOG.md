@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.6 (2025-10-15)
+## 25.2.6 (2025-10-16)
 
 * change hostname settings ([#36340](https://github.com/bitnami/charts/pull/36340))
 
