@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.6 (2025-08-13)
+## 6.0.8 (2025-10-18)
 
-* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references ([#35847](https://github.com/bitnami/charts/pull/35847))
+* [bitnami/grafana-loki] Support alloy extraConfig ([#36342](https://github.com/bitnami/charts/pull/36342))
+
+## <small>6.0.6 (2025-08-13)</small>
+
+* [bitnami/grafana-loki] :zap: :arrow_up: Update dependency references (#35847) ([72956c9](https://github.com/bitnami/charts/commit/72956c92cd969055035272eaef1fbba04f65ff73)), closes [#35847](https://github.com/bitnami/charts/issues/35847)
 
 ## <small>6.0.5 (2025-08-13)</small>
 
