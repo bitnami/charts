@@ -139,7 +139,7 @@ data:
             # Wait for the minimal delay after the first readiness state
             if (( CURRENT_DELAY_SECONDS > MIN_DELAY_AFTER_POD_READY_FIRST_TIME )); then
                 # mark delay as applied
-                touch "$DELAY_APPLIED_FILE"
+                touch "$DELAY_SEMAPHORE"
             else
                 echo "minimal delay not met"
                 exit 1

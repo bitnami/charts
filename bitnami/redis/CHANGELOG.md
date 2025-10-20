@@ -1,8 +1,21 @@
 # Changelog
 
-## 22.0.7 (2025-08-27)
+## 23.0.3 (2025-10-14)
 
-* [bitnami/redis] Fix Redis sentinel initialization with single replica ([#35667](https://github.com/bitnami/charts/pull/35667))
+* [bitnami/redis] Avoid eager evaluation of ternary when resolving user secrets ([#36265](https://github.com/bitnami/charts/pull/36265))
+
+## <small>23.0.2 (2025-09-12)</small>
+
+* [bitnami/redis] Fix service binding password mismatch (#15626) (#36231) ([c4820e3](https://github.com/bitnami/charts/commit/c4820e37f271c1bd1b14580749a85c4234ba25aa)), closes [#15626](https://github.com/bitnami/charts/issues/15626) [#36231](https://github.com/bitnami/charts/issues/36231) [bitnami#15626](https://github.com/bitnami/issues/15626)
+
+## <small>23.0.1 (2025-09-05)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/redis] Fix: Add conditional check for adding default sentinel auth-pass  (#36207) ([b46e3d4](https://github.com/bitnami/charts/commit/b46e3d4f306a3f5a5c0a23888e8df9eeccd2ed22)), closes [#36207](https://github.com/bitnami/charts/issues/36207)
+
+## <small>22.0.7 (2025-08-27)</small>
+
+* [bitnami/redis] Fix Redis sentinel initialization with single replica (#35667) ([07a0857](https://github.com/bitnami/charts/commit/07a0857a60f5ccf850e1298a131f83005480ab80)), closes [#35667](https://github.com/bitnami/charts/issues/35667)
 
 ## <small>22.0.6 (2025-08-26)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.3.2 (2025-08-26)
+## 16.3.4 (2025-09-02)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#36198](https://github.com/bitnami/charts/pull/36198))
+* [bitnami/postgresql-ha] bugfix: unbound variable ([#36226](https://github.com/bitnami/charts/pull/36226))
+
+## <small>16.3.2 (2025-08-26)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#36198) ([42783e4](https://github.com/bitnami/charts/commit/42783e4501ab35c11af09e029923ecc3bc6585a3)), closes [#36198](https://github.com/bitnami/charts/issues/36198)
 
 ## <small>16.3.1 (2025-08-21)</small>
 

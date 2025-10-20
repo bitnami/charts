@@ -47,7 +47,7 @@ Returns an init-container that prepares the Airflow configuration files for main
       db_password="$(airflow_encode_url "$AIRFLOW_DATABASE_PASSWORD")"
       airflow_conf_set "database" "sql_alchemy_conn" "postgresql+psycopg2://${db_user}:${db_password}@${AIRFLOW_DATABASE_HOST}:${AIRFLOW_DATABASE_PORT_NUMBER}/${AIRFLOW_DATABASE_NAME}"
     {{- end }}
-    {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+    {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
       {{- if and .Values.usePasswordFiles }}
       export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
       {{- end }}
@@ -107,7 +107,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: AIRFLOW_DATABASE_PORT_NUMBER
       value: {{ include "airflow.database.port" . }}
     {{- end }}
-    {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+    {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
     - name: REDIS_HOST
       value: {{ include "airflow.redis.host" . | quote }}
     - name: REDIS_PORT_NUMBER

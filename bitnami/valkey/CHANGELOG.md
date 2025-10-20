@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.31 (2025-08-23)
+## 4.0.1 (2025-09-03)
 
-* [bitnami/valkey] :zap: :arrow_up: Update dependency references ([#36174](https://github.com/bitnami/charts/pull/36174))
+* [bitnami/valkey] doc: fix default value in README ([#35741](https://github.com/bitnami/charts/pull/35741))
+
+## <small>3.0.31 (2025-08-23)</small>
+
+* [bitnami/valkey] :zap: :arrow_up: Update dependency references (#36174) ([bfa74fb](https://github.com/bitnami/charts/commit/bfa74fb5cb43be45e0238a6fc4db88ae4dad4f78)), closes [#36174](https://github.com/bitnami/charts/issues/36174)
 
 ## <small>3.0.30 (2025-08-14)</small>
 

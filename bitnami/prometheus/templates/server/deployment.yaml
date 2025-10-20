@@ -225,8 +225,20 @@ spec:
             - name: OBJSTORE_CONFIG
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.server.thanos.objectStorageConfig.secretName }}
+                  name: {{ include "common.tplvalues.render" (dict "value" .Values.server.thanos.objectStorageConfig.secretName "context" .) }}
                   key: {{ .Values.server.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
+            {{- if .Values.server.thanos.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.server.thanos.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.server.thanos.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraEnvVarsSecret "context" $) }}
+            {{- end }}
           {{- end }}
           {{- if .Values.server.thanos.resources }}
           resources: {{- toYaml .Values.server.thanos.resources | nindent 12 }}

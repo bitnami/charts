@@ -552,7 +552,7 @@ Render configuration for the APISIX components
     {{- end }}
     {{- end }}
     {{- if $block.extraEnvVars }}
-    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" .context) | nindent 4 }}
     {{- end }}
   envFrom:
     {{- if $block.extraEnvVarsCM }}
@@ -561,7 +561,7 @@ Render configuration for the APISIX components
     {{- end }}
     {{- if $block.extraEnvVarsSecret }}
     - secretRef:
-        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
+        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" .context) }}
     {{- end }}
   volumeMounts:
     - name: empty-dir

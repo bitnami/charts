@@ -109,7 +109,7 @@ spec:
               value: "dag-processor"
             - name: AIRFLOW_EXECUTOR
               value: {{ .Values.executor }}
-            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
             - name: REDIS_PORT_NUMBER
@@ -268,7 +268,7 @@ spec:
                   name:  {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
-              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
               - secret:
                   name: {{ include "airflow.redis.secretName" . }}
               {{- end }}

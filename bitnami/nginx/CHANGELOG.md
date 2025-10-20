@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.23 (2025-08-18)
+## 22.1.0 (2025-10-01)
 
-* [bitnami/nginx] :zap: :arrow_up: Update dependency references ([#36127](https://github.com/bitnami/charts/pull/36127))
+* [bitnami/nginx] allow to change probes for metrics container ([#36296](https://github.com/bitnami/charts/pull/36296))
+
+## <small>21.1.23 (2025-08-18)</small>
+
+* [bitnami/nginx] :zap: :arrow_up: Update dependency references (#36127) ([772a6ff](https://github.com/bitnami/charts/commit/772a6ff4437f41f54b9e0b98cfb9322d896403d6)), closes [#36127](https://github.com/bitnami/charts/issues/36127)
 
 ## <small>21.1.22 (2025-08-16)</small>
 

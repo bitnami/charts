@@ -15,7 +15,7 @@
 ##
 global:
   imageRegistry: ""
-  ## E.g.
+  ## Example:
   ## imagePullSecrets:
   ##   - myRegistryKeySecretName
   ##
@@ -102,7 +102,7 @@ diagnosticMode:
 ## @param image.registry [default: REGISTRY_NAME] Valkey image registry
 ## @param image.repository [default: REPOSITORY_NAME/valkey] Valkey image repository
 ## @skip image.tag Valkey image tag (immutable tags are recommended)
-## @param image.digest Valkey image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.digest Valkey image digest in the way sha256:aa... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Valkey image pull policy
 ## @param image.pullSecrets Valkey image pull secrets
 ## @param image.debug Enable image debug mode
@@ -116,10 +116,10 @@ image:
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
+  ## Optionally, specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## e.g:
+  ## Example:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   ##
@@ -203,14 +203,14 @@ primary:
   ##
   preExecCmds: []
   ## @param primary.extraFlags Array with additional command line flags for Valkey primary
-  ## e.g:
+  ## Example:
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
   extraFlags: []
   ## @param primary.extraEnvVars Array with extra environment variables to add to Valkey primary nodes
-  ## e.g:
+  ## Example:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
@@ -298,7 +298,7 @@ primary:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param primary.podSecurityContext.enabled Enabled Valkey primary pods' Security Context
+  ## @param primary.podSecurityContext.enabled Enable Valkey primary pods' Security Context
   ## @param primary.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param primary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param primary.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -312,7 +312,7 @@ primary:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param primary.containerSecurityContext.enabled Enabled Valkey primary containers' Security Context
+  ## @param primary.containerSecurityContext.enabled Enable Valkey primary containers' Security Context
   ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser Set Valkey primary containers' Security Context runAsUser
   ## @param primary.containerSecurityContext.runAsGroup Set Valkey primary containers' Security Context runAsGroup
@@ -395,7 +395,7 @@ primary:
     ##
     key: ""
     ## @param primary.nodeAffinityPreset.values Node label values to match. Ignored if `primary.affinity` is set
-    ## E.g.
+    ## Example:
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
@@ -416,7 +416,7 @@ primary:
   tolerations: []
   ## @param primary.topologySpreadConstraints Spread Constraints for Valkey primary pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## E.g.
+  ## Example:
   ## topologySpreadConstraints:
   ##   - maxSkew: 1
   ##     topologyKey: node
@@ -425,13 +425,13 @@ primary:
   topologySpreadConstraints: []
   ## @param primary.dnsPolicy DNS Policy for Valkey primary pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-  ## E.g.
+  ## Example:
   ## dnsPolicy: ClusterFirst
   ##
   dnsPolicy: ""
   ## @param primary.dnsConfig DNS Configuration for Valkey primary pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-  ## E.g.
+  ## Example:
   ## dnsConfig:
   ##   options:
   ##   - name: ndots
@@ -442,14 +442,14 @@ primary:
   ## @param primary.lifecycleHooks for the Valkey primary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param primary.extraVolumes Optionally specify extra list of additional volumes for the Valkey primary pod(s)
+  ## @param primary.extraVolumes Optionally, specify extra list of additional volumes for the Valkey primary pod(s)
   ##
   extraVolumes: []
-  ## @param primary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey primary container(s)
+  ## @param primary.extraVolumeMounts Optionally, specify extra list of additional volumeMounts for the Valkey primary container(s)
   ##
   extraVolumeMounts: []
   ## @param primary.sidecars Add additional sidecar containers to the Valkey primary pod(s)
-  ## e.g:
+  ## Example:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
@@ -461,7 +461,7 @@ primary:
   sidecars: []
   ## @param primary.initContainers Add additional init containers to the Valkey primary pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
+  ## Example:
   ## initContainers:
   ##  - name: your-image-name
   ##    image: your-image
@@ -513,7 +513,7 @@ primary:
     ##
     labels: {}
     ## @param primary.persistence.selector Additional labels to match for the PVC
-    ## e.g:
+    ## Example:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
@@ -522,7 +522,7 @@ primary:
     ## @param primary.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
-    ## @param primary.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## @param primary.persistence.existingClaim Use an existing PVC which must be created manually before bound
     ## NOTE: requires primary.persistence.enabled: true
     ##
     existingClaim: ""
@@ -576,14 +576,14 @@ primary:
     loadBalancerClass: ""
     ## @param primary.service.loadBalancerSourceRanges Valkey primary service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g.
+    ## Example:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
     ## @param primary.service.externalIPs Valkey primary service External IPs
     ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
-    ## e.g.
+    ## Example:
     ## externalIPs:
     ##   - 10.10.10.1
     ##   - 201.22.30.1
@@ -668,14 +668,14 @@ replica:
   ##
   preExecCmds: []
   ## @param replica.extraFlags Array with additional command line flags for Valkey replicas
-  ## e.g:
+  ## Example:
   ## extraFlags:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
   extraFlags: []
   ## @param replica.extraEnvVars Array with extra environment variables to add to Valkey replicas nodes
-  ## e.g:
+  ## Example:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
@@ -771,7 +771,7 @@ replica:
   resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param replica.podSecurityContext.enabled Enabled Valkey replicas pods' Security Context
+  ## @param replica.podSecurityContext.enabled Enable Valkey replicas pods' Security Context
   ## @param replica.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param replica.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param replica.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -785,7 +785,7 @@ replica:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param replica.containerSecurityContext.enabled Enabled Valkey replicas containers' Security Context
+  ## @param replica.containerSecurityContext.enabled Enable Valkey replicas containers' Security Context
   ## @param replica.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param replica.containerSecurityContext.runAsUser Set Valkey replicas containers' Security Context runAsUser
   ## @param replica.containerSecurityContext.runAsGroup Set Valkey replicas containers' Security Context runAsGroup
@@ -868,7 +868,7 @@ replica:
     ##
     key: ""
     ## @param replica.nodeAffinityPreset.values Node label values to match. Ignored if `replica.affinity` is set
-    ## E.g.
+    ## Example:
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
@@ -889,7 +889,7 @@ replica:
   tolerations: []
   ## @param replica.topologySpreadConstraints Spread Constraints for Valkey replicas pod assignment
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## E.g.
+  ## Example:
   ## topologySpreadConstraints:
   ##   - maxSkew: 1
   ##     topologyKey: node
@@ -898,13 +898,13 @@ replica:
   topologySpreadConstraints: []
   ## @param replica.dnsPolicy DNS Policy for Valkey replica pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-  ## E.g.
+  ## Example:
   ## dnsPolicy: ClusterFirst
   ##
   dnsPolicy: ""
   ## @param replica.dnsConfig DNS Configuration for Valkey replica pods
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-  ## E.g.
+  ## Example:
   ## dnsConfig:
   ##   options:
   ##   - name: ndots
@@ -915,14 +915,14 @@ replica:
   ## @param replica.lifecycleHooks for the Valkey replica container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param replica.extraVolumes Optionally specify extra list of additional volumes for the Valkey replicas pod(s)
+  ## @param replica.extraVolumes Optionally, specify an extra list of additional volumes for the Valkey replicas pod(s)
   ##
   extraVolumes: []
-  ## @param replica.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey replicas container(s)
+  ## @param replica.extraVolumeMounts Optionally, specify extra list of additional volumeMounts for the Valkey replicas container(s)
   ##
   extraVolumeMounts: []
   ## @param replica.sidecars Add additional sidecar containers to the Valkey replicas pod(s)
-  ## e.g:
+  ## Example:
   ## sidecars:
   ##   - name: your-image-name
   ##     image: your-image
@@ -934,7 +934,7 @@ replica:
   sidecars: []
   ## @param replica.initContainers Add additional init containers to the Valkey replicas pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
+  ## Example:
   ## initContainers:
   ##  - name: your-image-name
   ##    image: your-image
@@ -986,7 +986,7 @@ replica:
     ##
     labels: {}
     ## @param replica.persistence.selector Additional labels to match for the PVC
-    ## e.g:
+    ## Example:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
@@ -995,7 +995,7 @@ replica:
     ## @param replica.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
-    ## @param replica.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## @param replica.persistence.existingClaim Use an existing PVC which must be created manually before bound
     ## NOTE: requires replica.persistence.enabled: true
     ##
     existingClaim: ""
@@ -1049,7 +1049,7 @@ replica:
     loadBalancerClass: ""
     ## @param replica.service.loadBalancerSourceRanges Valkey replicas service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g.
+    ## Example:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
@@ -1063,6 +1063,7 @@ replica:
     ##
     sessionAffinity: None
     ## @param replica.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## Example:
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1086,12 +1087,18 @@ replica:
       ##
       controlledResources: []
       ## @param replica.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
+      ## Example:
+      ## maxAllowed:
+      ##   cpu: 200m
+      ##   memory: 100Mi
+      ##
       maxAllowed: {}
       ## @param replica.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
-      ## cpu: 200m
-      ## memory: 100Mi
+      ## Example:
+      ## maxAllowed:
+      ##   cpu: 200m
+      ##   memory: 100Mi
+      ##
       minAllowed: {}
       ## @section VPA update policy
       ##
@@ -1172,10 +1179,10 @@ sentinel:
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
+    ## Optionally, specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## Example:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
@@ -1195,7 +1202,7 @@ sentinel:
   ## @param sentinel.getPrimaryTimeout Amount of time to allow before get_sentinel_primary_info() times out.
   ##
   getPrimaryTimeout: 90
-  ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
+  ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically fail over to it.
   ## This also prevents any new replica from starting until the last remaining replica is elected as primary to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
   ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
   ##
@@ -1205,11 +1212,11 @@ sentinel:
   valkeyShutdownWaitFailover: true
   ## Sentinel timing restrictions
   ## @param sentinel.downAfterMilliseconds Timeout for detecting a Valkey node is down
-  ## @param sentinel.failoverTimeout Timeout for performing a election failover
+  ## @param sentinel.failoverTimeout Timeout for performing the election failover
   ##
   downAfterMilliseconds: 60000
   failoverTimeout: 180000
-  ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new primary after a failover
+  ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new primary after the failover
   ##
   parallelSyncs: 1
   ## @param sentinel.configuration Configuration for Valkey Sentinel nodes
@@ -1229,7 +1236,7 @@ sentinel:
   ##
   preExecCmds: []
   ## @param sentinel.extraEnvVars Array with extra environment variables to add to Valkey Sentinel nodes
-  ## e.g:
+  ## Example:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
@@ -1333,7 +1340,7 @@ sentinel:
     ##
     labels: {}
     ## @param sentinel.persistence.selector Additional labels to match for the PVC
-    ## e.g:
+    ## Example:
     ## selector:
     ##   matchLabels:
     ##     app: my-app
@@ -1377,7 +1384,7 @@ sentinel:
   resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param sentinel.containerSecurityContext.enabled Enabled Valkey Sentinel containers' Security Context
+  ## @param sentinel.containerSecurityContext.enabled Enable Valkey Sentinel containers' Security Context
   ## @param sentinel.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sentinel.containerSecurityContext.runAsUser Set Valkey Sentinel containers' Security Context runAsUser
   ## @param sentinel.containerSecurityContext.runAsGroup Set Valkey Sentinel containers' Security Context runAsGroup
@@ -1402,10 +1409,10 @@ sentinel:
   ## @param sentinel.lifecycleHooks for the Valkey sentinel container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param sentinel.extraVolumes Optionally specify extra list of additional volumes for the Valkey Sentinel
+  ## @param sentinel.extraVolumes Optionally, specify extra list of additional volumes for the Valkey Sentinel
   ##
   extraVolumes: []
-  ## @param sentinel.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey Sentinel container(s)
+  ## @param sentinel.extraVolumeMounts Optionally, specify extra list of additional volumeMounts for the Valkey Sentinel container(s)
   ##
   extraVolumeMounts: []
   ## Valkey Sentinel service parameters
@@ -1456,7 +1463,7 @@ sentinel:
     loadBalancerClass: ""
     ## @param sentinel.service.loadBalancerSourceRanges Valkey Sentinel service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g.
+    ## Example:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
@@ -1470,6 +1477,7 @@ sentinel:
     ##
     sessionAffinity: None
     ## @param sentinel.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## Example:
     ## sessionAffinityConfig:
     ##   clientIP:
     ##     timeoutSeconds: 300
@@ -1509,7 +1517,7 @@ networkPolicy:
   ##
   allowExternalEgress: true
   ## @param networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
-  ## e.g:
+  ## Example:
   ## extraIngress:
   ##   - ports:
   ##       - port: 1234
@@ -1526,7 +1534,7 @@ networkPolicy:
   ##
   extraIngress: []
   ## @param networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
-  ## e.g:
+  ## Example:
   ## extraEgress:
   ##   - ports:
   ##       - port: 1234
@@ -1574,7 +1582,7 @@ rbac:
   ##
   create: false
   ## @param rbac.rules Custom RBAC rules to set
-  ## e.g:
+  ## Example:
   ## rules:
   ##   - apiGroups:
   ##       - ""
@@ -1631,23 +1639,23 @@ tls:
   ## @param tls.certCAFilename CA Certificate filename
   ##
   certCAFilename: ""
-  ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
+  ## @param tls.dhParamsFilename File containing DH params (to support DH-based ciphers)
   ##
   dhParamsFilename: ""
 ## @section Metrics Parameters
 ##
 metrics:
-  ## @param metrics.enabled Start a sidecar prometheus exporter to expose Valkey metrics
+  ## @param metrics.enabled Start a sidecar Prometheus Exporter to expose Valkey metrics
   ##
   enabled: false
-  ## Bitnami Valkey Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/valkey-exporter/tags/
-  ## @param metrics.image.registry [default: REGISTRY_NAME] Valkey Exporter image registry
-  ## @param metrics.image.repository [default: REPOSITORY_NAME/valkey-exporter] Valkey Exporter image repository
-  ## @skip metrics.image.tag Valkey Exporter image tag (immutable tags are recommended)
-  ## @param metrics.image.digest Valkey Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param metrics.image.pullPolicy Valkey Exporter image pull policy
-  ## @param metrics.image.pullSecrets Valkey Exporter image pull secrets
+  ## Bitnami Redis(R) Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/redis-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Redis(R) Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/redis-exporter] Redis(R) Exporter image repository
+  ## @skip metrics.image.tag Redis(R) Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Redis(R) Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Redis(R) Exporter image pull policy
+  ## @param metrics.image.pullSecrets Redis(R) Exporter image pull secrets
   ##
   image:
     registry: docker.io
@@ -1655,10 +1663,10 @@ metrics:
     tag: 1.76.0-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
+    ## Optionally, specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## Example:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
@@ -1727,14 +1735,14 @@ metrics:
   ## Useful for certificate CN/SAN matching
   ##
   valkeyTargetHost: "localhost"
-  ## @param metrics.extraArgs Extra arguments for Valkey exporter, for example:
-  ## e.g.:
+  ## @param metrics.extraArgs Extra arguments for Redis(R) Exporter
+  ## Example:
   ## extraArgs:
   ##   check-keys: myKey,myOtherKey
   ##
   extraArgs: {}
-  ## @param metrics.extraEnvVars Array with extra environment variables to add to Valkey exporter
-  ## e.g:
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Redis(R) Exporter
+  ## Example:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
@@ -1742,15 +1750,15 @@ metrics:
   extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled Valkey exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Enable Redis(R) Exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Valkey exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsGroup Set Valkey exporter containers' Security Context runAsGroup
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Valkey exporter containers' Security Context runAsNonRoot
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Valkey exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.runAsUser Set Redis(R) Exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Redis(R) Exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Redis(R) Exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Redis(R) Exporter containers' Security Context allowPrivilegeEscalation
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
-  ## @param metrics.containerSecurityContext.seccompProfile.type Set Valkey exporter containers' Security Context seccompProfile
-  ## @param metrics.containerSecurityContext.capabilities.drop Set Valkey exporter containers' Security Context capabilities to drop
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Redis(R) Exporter containers' Security Context seccompProfile
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Redis(R) Exporter containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
@@ -1764,13 +1772,13 @@ metrics:
       type: RuntimeDefault
     capabilities:
       drop: ["ALL"]
-  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Valkey metrics sidecar
+  ## @param metrics.extraVolumes Optionally, specify extra list of additional volumes for the Valkey metrics sidecar
   ##
   extraVolumes: []
-  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey metrics sidecar
+  ## @param metrics.extraVolumeMounts Optionally, specify extra list of additional volumeMounts for the Valkey metrics sidecar
   ##
   extraVolumeMounts: []
-  ## Valkey exporter resource requests and limits
+  ## Redis(R) Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
@@ -1787,55 +1795,55 @@ metrics:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## @param metrics.podLabels Extra labels for Valkey exporter pods
+  ## @param metrics.podLabels Extra labels for Redis(R) Exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param metrics.podAnnotations [object] Annotations for Valkey exporter pods
+  ## @param metrics.podAnnotations [object] Annotations for Redis(R) Exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9121"
-  ## Valkey exporter service parameters
+  ## Redis(R) Exporter service parameters
   ##
   service:
     ## @param metrics.service.enabled Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor
     ##
     enabled: true
-    ## @param metrics.service.type Valkey exporter service type
+    ## @param metrics.service.type Redis(R) Exporter service type
     ##
     type: ClusterIP
-    ## @param metrics.service.ports.http Valkey exporter service port
+    ## @param metrics.service.ports.http Redis(R) Exporter service port
     ##
     ports:
       http: 9121
-    ## @param metrics.service.externalTrafficPolicy Valkey exporter service external traffic policy
+    ## @param metrics.service.externalTrafficPolicy Redis(R) Exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
     ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param metrics.service.loadBalancerIP Valkey exporter service Load Balancer IP
+    ## @param metrics.service.loadBalancerIP Redis(R) Exporter service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
-    ## @param metrics.service.loadBalancerClass exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## @param metrics.service.loadBalancerClass Exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerClass: ""
-    ## @param metrics.service.loadBalancerSourceRanges Valkey exporter service Load Balancer sources
+    ## @param metrics.service.loadBalancerSourceRanges Redis(R) Exporter service Load Balancer sources
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g.
+    ## Example:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param metrics.service.annotations Additional custom annotations for Valkey exporter service
+    ## @param metrics.service.annotations Additional custom annotations for Redis(R) Exporter service
     ##
     annotations: {}
-    ## @param metrics.service.clusterIP Valkey exporter service Cluster IP
+    ## @param metrics.service.clusterIP Redis(R) Exporter service Cluster IP
     ##
     clusterIP: ""
   ## Prometheus Service Monitor
@@ -1879,19 +1887,20 @@ metrics:
     ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
-    ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g., sentinel)
+    ## Example to scrape sentinel metrics, also to in order distinguish between Sentinel and Valkey container metrics
+    ## add metricRelabelings with label like app=valkey to main valkey pod-monitor port:
+    ## additionalEndpoints:
+    ##   - interval: "30s"
+    ##     path: "/scrape"
+    ##     port: "metrics"
+    ##     params:
+    ##       target: ["localhost:26379"]
+    ##     metricRelabelings:
+    ##       - targetLabel: "app"
+    ##         replacement: "sentinel"
     ##
     additionalEndpoints: []
-    # uncomment in order to scrape sentinel metrics, also to in order distinguish between Sentinel and Valkey container metrics
-    # add metricRelabelings with label like app=valkey to main valkey pod-monitor port
-    # - interval: "30s"
-    #   path: "/scrape"
-    #   port: "metrics"
-    #   params:
-    #     target: ["localhost:26379"]
-    #   metricRelabelings:
-    #     - targetLabel: "app"
-    #       replacement: "sentinel"
   ## Prometheus Pod Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
@@ -1916,10 +1925,12 @@ metrics:
     ##
     relabelings: []
     ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
+    ## Example:
+    ## metricRelabelings:
+    ##   - targetLabel: "app"
+    ##     replacement: "valkey"
     ##
     metricRelabelings: []
-    # - targetLabel: "app"
-    #   replacement: "valkey"
     ## @param metrics.podMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
@@ -1935,17 +1946,19 @@ metrics:
     ## @param metrics.podMonitor.targetLimit Limit of how many targets should be scraped
     ##
     targetLimit: false
-    ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ## @param metrics.podMonitor.additionalEndpoints Additional endpoints to scrape (e.g., sentinel)
+    ## Example:
+    ## additionalEndpoints:
+    ##   - interval: "30s"
+    ##     path: "/scrape"
+    ##     port: "metrics"
+    ##     params:
+    ##       target: ["localhost:26379"]
+    ##     metricRelabelings:
+    ##       - targetLabel: "app"
+    ##         replacement: "sentinel"
     ##
     additionalEndpoints: []
-    # - interval: "30s"
-    #   path: "/scrape"
-    #   port: "metrics"
-    #   params:
-    #     target: ["localhost:26379"]
-    #   metricRelabelings:
-    #     - targetLabel: "app"
-    #       replacement: "sentinel"
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
@@ -1960,7 +1973,7 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Custom Prometheus rules
-    ## e.g:
+    ## Example:
     ## rules:
     ##   - alert: ValkeyDown
     ##     expr: valkey_up{service="{{ template "common.names.fullname" . }}-metrics"} == 0
@@ -2021,10 +2034,10 @@ volumePermissions:
     tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
+    ## Optionally, specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## Example:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
@@ -2046,7 +2059,7 @@ volumePermissions:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Init container Container Security Context
+  ## Init container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
@@ -2080,10 +2093,10 @@ kubectl:
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
+    ## Optionally, specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
+    ## Example:
     ## pullSecrets:
     ##   - myRegistryKeySecretName
     ##
@@ -2093,7 +2106,7 @@ kubectl:
   command: ["/opt/bitnami/scripts/kubectl-scripts/update-primary-label.sh"]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param kubectl.containerSecurityContext.enabled Enabled kubectl containers' Security Context
+  ## @param kubectl.containerSecurityContext.enabled Enable kubectl containers' Security Context
   ## @param kubectl.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param kubectl.containerSecurityContext.runAsUser Set kubectl containers' Security Context runAsUser
   ## @param kubectl.containerSecurityContext.runAsGroup Set kubectl containers' Security Context runAsGroup
