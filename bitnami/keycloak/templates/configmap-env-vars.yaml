@@ -74,11 +74,11 @@ data:
   {{- if .Values.cache.configFile }}
   KC_CACHE_CONFIG_FILE: {{ .Values.cache.configFile | quote }}
   {{- end }}
+  {{- $javaOptsAppend := printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain -}}
   {{- if .Values.cache.javaOptsAppendExtra }}
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s %s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain .Values.cache.javaOptsAppendExtra | quote }}
-  {{- else }}
-  JAVA_OPTS_APPEND: {{ printf "-Djgroups.dns.query=%s-headless.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain | quote }}
+  {{- $javaOptsAppend = printf "%s %s" $javaOptsAppend .Values.cache.javaOptsAppendExtra -}}
   {{- end }}
+  JAVA_OPTS_APPEND: {{ quote $javaOptsAppend }}
 {{- end }}
   KC_HTTP_RELATIVE_PATH: {{ .Values.httpRelativePath | quote }}
   {{- if .Values.adminRealm }}
