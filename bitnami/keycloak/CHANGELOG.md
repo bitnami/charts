@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.6 (2025-10-15)
+## 25.2.6 (2025-10-20)
 
 * [bitnami/keycloak] New param javaOptsAppendExtra to append additional java opts  ([#36350](https://github.com/bitnami/charts/pull/36350))
 
