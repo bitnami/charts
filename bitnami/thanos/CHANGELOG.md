@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.3.1 (2025-08-13)
+## 17.3.3 (2025-10-20)
 
-* [bitnami/thanos] :zap: :arrow_up: Update dependency references ([#35837](https://github.com/bitnami/charts/pull/35837))
+* bitnami/thanos template extraFlags in sharded statefulset storegateway like the template for non-sharded statefulset storegateway ([#36360](https://github.com/bitnami/charts/pull/36360))
+
+## <small>17.3.1 (2025-08-13)</small>
+
+* [bitnami/thanos] :zap: :arrow_up: Update dependency references (#35837) ([45fdbef](https://github.com/bitnami/charts/commit/45fdbef14937e342e0af545ca3c9fade84de8346)), closes [#35837](https://github.com/bitnami/charts/issues/35837)
 
 ## 17.3.0 (2025-08-13)
 
