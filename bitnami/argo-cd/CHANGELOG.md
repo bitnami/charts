@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.0.2 (2025-10-21)
+
+* [bitnami/argo-cd] Use http port of service in ingress when insecure flag is set on server ([#36361](https://github.com/bitnami/charts/pull/36361))
+
 ## 11.0.0 (2025-08-26)
 
-* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references ([#36194](https://github.com/bitnami/charts/pull/36194))
+* [bitnami/argo-cd] :zap: :arrow_up: Update dependency references (#36194) ([fadecb6](https://github.com/bitnami/charts/commit/fadecb6be452fe2abf2e0b57df4bd40d4961521d)), closes [#36194](https://github.com/bitnami/charts/issues/36194)
 
 ## <small>10.0.4 (2025-08-25)</small>
 
