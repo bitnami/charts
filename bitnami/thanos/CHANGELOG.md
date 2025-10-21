@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.3.3 (2025-10-20)
+## 17.3.3 (2025-10-21)
 
 * bitnami/thanos template extraFlags in sharded statefulset storegateway like the template for non-sharded statefulset storegateway ([#36360](https://github.com/bitnami/charts/pull/36360))
 
@@ -1530,7 +1530,7 @@
 
 ## <small>3.8.6 (2021-02-15)</small>
 
-* [bitnami/thanos] fix query TLS client in a modular way (#5437) (#5457) ([bbbf490](https://github.com/bitnami/charts/commit/bbbf490439643e885529c1c4f25aeb7c9c29dc93)), closes [#5437](https://github.com/bitnami/charts/issues/5437) [#5457](https://github.com/bitnami/charts/issues/5457) [#5437](https://github.com/bitnami/charts/issues/5437) [#3988](https://github.com/bitnami/charts/issues/3988)
+* [bitnami/thanos] fix query TLS client in a modular way (#5437) (#5457) ([bbbf490](https://github.com/bitnami/charts/commit/bbbf490439643e885529c1c4f25aeb7c9c29dc93)), closes [#5437](https://github.com/bitnami/charts/issues/5437) [#5457](https://github.com/bitnami/charts/issues/5457) [#5437](https://github.com/bitnami/charts/issues/5437)
 
 ## <small>3.8.5 (2021-02-12)</small>
 
