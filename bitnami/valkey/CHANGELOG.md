@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.2 (2025-10-21)
+## 4.0.2 (2025-10-22)
 
 * [bitnami/valkey] fix: adjust statefullset valkey container port to the headless service port ([#36363](https://github.com/bitnami/charts/pull/36363))
 
