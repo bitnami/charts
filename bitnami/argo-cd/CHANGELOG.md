@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.0.2 (2025-10-21)
+## 11.0.3 (2025-10-21)
 
 * [bitnami/argo-cd] Use http port of service in ingress when insecure flag is set on server ([#36361](https://github.com/bitnami/charts/pull/36361))
+
+## 11.0.2 (2025-10-22)
+
+* [bitnami/argo-cd] Fix check for ArgoCD controller replica count ([#36347](https://github.com/bitnami/charts/pull/36347))
 
 ## 11.0.0 (2025-08-26)
 
