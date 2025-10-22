@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.0.13 (2025-08-26)
+## 3.1.0 (2025-10-22)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#36188](https://github.com/bitnami/charts/pull/36188))
+* [bitnami/dremio] Make Dremio work with AWS S3 storage ([#36365](https://github.com/bitnami/charts/pull/36365))
+
+## <small>3.0.13 (2025-08-26)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#36188) ([c543356](https://github.com/bitnami/charts/commit/c54335638371cf2c3a259a9ab43f0fc017b085bb)), closes [#36188](https://github.com/bitnami/charts/issues/36188)
 
 ## <small>3.0.12 (2025-08-07)</small>
 
