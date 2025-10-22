@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.0.2 (2025-10-14)
+## 11.0.2 (2025-10-22)
 
-* Fix check for ArgoCD controller replica count ([#36347](https://github.com/bitnami/charts/pull/36347))
+* [bitnami/argo-cd] Fix check for ArgoCD controller replica count ([#36347](https://github.com/bitnami/charts/pull/36347))
 
 ## 11.0.0 (2025-08-26)
 
