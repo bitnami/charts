@@ -326,6 +326,44 @@ Init container definition for waiting for the database to be ready
 {{- end -}}
 
 {{/*
+Returns an init-container that prepares CA for accessing MinIO
+*/}}
+{{- define "dremio.init-containers.importMinIOCert" -}}
+- name: import-minio-cert
+  image: {{ include "dremio.image" . }}
+  imagePullPolicy: {{ .Values.dremio.image.pullPolicy }}
+  {{- if .Values.defaultInitContainers.importMinIOCert.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.importMinIOCert.containerSecurityContext "context" .) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.importMinIOCert.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.importMinIOCert.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.importMinIOCert.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.importMinIOCert.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        echo "Importing MinIO public certificate"
+        # Copy original cacerts
+        cp /opt/bitnami/java/lib/security/cacerts /bitnami/java/cacerts/
+        keytool -importcert -file /certs/public.crt -keystore /bitnami/java/cacerts/cacerts -alias "minio" -noprompt
+        echo "Public certificate imported"
+  env:
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /bitnami/java/cacerts
+      subPath: java-cacerts-dir
+    - name: minio-public-cert
+      mountPath: /certs
+      readOnly: true
+{{- end -}}
+
+{{/*
 Init container definition for waiting for the database to be ready
 */}}
 {{- define "dremio.init-containers.upgrade-keystore" -}}
@@ -415,7 +453,7 @@ Init container definition for waiting for the database to be ready
 
       check_s3() {
           local -r s3_host="${1:-?missing s3}"
-          if curl -k --max-time 5 "${s3_host}" | grep "RequestId"; then
+          if curl -Ik --silent --max-time 5 "${s3_host}" | grep 'Server: \(MinIO\|AmazonS3\)'; then
               return 0
           else
               return 1
