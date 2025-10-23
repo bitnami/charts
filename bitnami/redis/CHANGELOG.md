@@ -1,8 +1,8 @@
 # Changelog
 
-## 23.0.4 (2025-10-21)
+## 23.0.4 (2025-10-23)
 
-* [bitnami/redis] Fix automatic sentinel failover not triggering ([#36362](https://github.com/bitnami/charts/pull/36362))
+* [bitnami/redis] Fix automatic sentinel failover not triggering on graceful shutdown ([#36362](https://github.com/bitnami/charts/pull/36362))
 
 ## <small>23.0.3 (2025-10-20)</small>
 
