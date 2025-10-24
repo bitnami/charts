@@ -719,6 +719,8 @@ data:
     {{- else }}
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     {{- end }}
+    {{- else }}
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
     {{- end }}
 
 

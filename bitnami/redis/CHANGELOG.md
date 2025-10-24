@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.0.3 (2025-10-14)
+## 23.0.4 (2025-10-23)
 
-* [bitnami/redis] Avoid eager evaluation of ternary when resolving user secrets ([#36265](https://github.com/bitnami/charts/pull/36265))
+* [bitnami/redis] Fix automatic sentinel failover not triggering on graceful shutdown ([#36362](https://github.com/bitnami/charts/pull/36362))
+
+## <small>23.0.3 (2025-10-20)</small>
+
+* [bitnami/redis] Avoid eager evaluation of ternary when resolving user secrets (#36265) ([97647e3](https://github.com/bitnami/charts/commit/97647e31c313cc48917358e06aa147c965908147)), closes [#36265](https://github.com/bitnami/charts/issues/36265)
+* [redis] Fix typo in README.md (#36288) ([da7242c](https://github.com/bitnami/charts/commit/da7242c2a0b35e2430e2c079df65dd23f5b57517)), closes [#36288](https://github.com/bitnami/charts/issues/36288)
 
 ## <small>23.0.2 (2025-09-12)</small>
 
@@ -928,7 +933,7 @@
 ## <small>17.8.4 (2023-03-10)</small>
 
 * [bitnami/charts] Apply linter to README files (#15357) ([0e29e60](https://github.com/bitnami/charts/commit/0e29e600d3adc8b1b46e506eccb3decfab3b4e63)), closes [#15357](https://github.com/bitnami/charts/issues/15357)
-* [bitnami/redis] minReadySeconds feature only requires k8s >=1.23 (#15417) ([a748281](https://github.com/bitnami/charts/commit/a748281fbc3dbc71f1d3645892e6fcc8cc4aa25e)), closes [#15417](https://github.com/bitnami/charts/issues/15417) [#13783](https://github.com/bitnami/charts/issues/13783)
+* [bitnami/redis] minReadySeconds feature only requires k8s >=1.23 (#15417) ([a748281](https://github.com/bitnami/charts/commit/a748281fbc3dbc71f1d3645892e6fcc8cc4aa25e)), closes [#15417](https://github.com/bitnami/charts/issues/15417)
 
 ## <small>17.8.3 (2023-03-07)</small>
 
@@ -1234,7 +1239,7 @@
 ## 16.10.0 (2022-05-26)
 
 * [bitnami/redis] Add missing service parameter (#10433) ([cb6b590](https://github.com/bitnami/charts/commit/cb6b590e5da1dbb862de39ec92fab2da2320f712)), closes [#10433](https://github.com/bitnami/charts/issues/10433)
-* [bitnami/redis] Fix #10314: don't use sentinel auth in sentinel prestop hook when sentinel auth is d ([2110b26](https://github.com/bitnami/charts/commit/2110b26847d7534b8585198d0ec69e137b857a8c)), closes [#10314](https://github.com/bitnami/charts/issues/10314) [#10368](https://github.com/bitnami/charts/issues/10368) [#10314](https://github.com/bitnami/charts/issues/10314)
+* [bitnami/redis] Fix #10314: don't use sentinel auth in sentinel prestop hook when sentinel auth is d ([2110b26](https://github.com/bitnami/charts/commit/2110b26847d7534b8585198d0ec69e137b857a8c)), closes [#10368](https://github.com/bitnami/charts/issues/10368)
 
 ## <small>16.9.11 (2022-05-23)</small>
 
