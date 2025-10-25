@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.23 (2025-08-14)
+## 2.2.0 (2025-10-20)
 
-* [bitnami/prometheus] :zap: :arrow_up: Update dependency references ([#35906](https://github.com/bitnami/charts/pull/35906))
+* [bitnami/prometheus] Add environment variable support to the Prometheus Thanos container ([#36251](https://github.com/bitnami/charts/pull/36251))
+
+## <small>2.1.23 (2025-08-14)</small>
+
+* [bitnami/prometheus] :zap: :arrow_up: Update dependency references (#35906) ([d46a611](https://github.com/bitnami/charts/commit/d46a611f405d19df65a0007ba287d7fa12d27d2a)), closes [#35906](https://github.com/bitnami/charts/issues/35906)
 
 ## <small>2.1.22 (2025-08-14)</small>
 

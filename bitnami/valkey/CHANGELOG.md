@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.1 (2025-09-03)
+## 4.0.2 (2025-10-22)
 
-* [bitnami/valkey] doc: fix default value in README ([#35741](https://github.com/bitnami/charts/pull/35741))
+* [bitnami/valkey] fix: adjust statefullset valkey container port to the headless service port ([#36363](https://github.com/bitnami/charts/pull/36363))
+
+## <small>4.0.1 (2025-09-04)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/valkey] doc: fix default value in README (#35741) ([0b16d82](https://github.com/bitnami/charts/commit/0b16d82f0d3816c42e8490a4c4fc7c4faf8ed1d1)), closes [#35741](https://github.com/bitnami/charts/issues/35741)
 
 ## <small>3.0.31 (2025-08-23)</small>
 

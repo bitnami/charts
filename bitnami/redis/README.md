@@ -114,6 +114,7 @@ commonConfiguration: |
   loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
   loadmodule /opt/bitnami/redis/lib/redis/modules/redistimeseries.so
+```
 
 ### Bootstrapping with an External Cluster
 

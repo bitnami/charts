@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.7.26 (2025-08-14)
+## 17.0.1 (2025-10-14)
 
-* [bitnami/postgresql] :zap: :arrow_up: Update dependency references ([#35921](https://github.com/bitnami/charts/pull/35921))
+* [bitnami/postgresql] collect metrics as postgres user ([#36349](https://github.com/bitnami/charts/pull/36349))
+
+## <small>16.7.27 (2025-08-26)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#36195) ([36f8598](https://github.com/bitnami/charts/commit/36f859828f416317e845779739fc772ef1774543)), closes [#36195](https://github.com/bitnami/charts/issues/36195)
+
+## <small>16.7.26 (2025-08-14)</small>
+
+* [bitnami/postgresql] :zap: :arrow_up: Update dependency references (#35921) ([e564f07](https://github.com/bitnami/charts/commit/e564f07589caf073b8790a11e09fd827820de3bc)), closes [#35921](https://github.com/bitnami/charts/issues/35921)
 
 ## <small>16.7.25 (2025-08-14)</small>
 
