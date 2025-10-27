@@ -205,7 +205,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if $.Values.storegateway.extraFlags }}
-            {{- $.Values.storegateway.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if $.Values.storegateway.extraEnvVars }}
