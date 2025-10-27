@@ -1,6 +1,6 @@
 <!--- app-name: ASP.NET Core -->
 
-# Bitnami package for ASP.NET Core
+# Bitnami Secure Images Helm chart for ASP.NET Core
 
 ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
 

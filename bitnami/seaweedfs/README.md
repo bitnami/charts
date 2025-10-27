@@ -1,6 +1,6 @@
 <!--- app-name: SeaweedFS -->
 
-# Bitnami package for SeaweedFS
+# Bitnami Secure Images Helm chart for SeaweedFS
 
 SeaweedFS is a simple and highly scalable distributed file system.
 

@@ -1,6 +1,6 @@
 <!--- app-name: KeyDB -->
 
-# Bitnami package for KeyDB
+# Bitnami Secure Images Helm chart for KeyDB
 
 KeyDB is a high performance fork of Redis with a focus on multithreading, memory efficiency, and high throughput.
 

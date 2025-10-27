@@ -1,6 +1,6 @@
 <!--- app-name: Apache ZooKeeper -->
 
-# Bitnami package for Apache ZooKeeper
+# Bitnami Secure Images Helm chart for Apache ZooKeeper
 
 Apache ZooKeeper provides a reliable, centralized register of configuration data and services for distributed applications.
 

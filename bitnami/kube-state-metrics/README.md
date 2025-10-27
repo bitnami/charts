@@ -1,6 +1,6 @@
 <!--- app-name: Kube State Metrics -->
 
-# Bitnami package for Kube State Metrics
+# Bitnami Secure Images Helm chart for Kube State Metrics
 
 kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 

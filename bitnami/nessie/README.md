@@ -1,6 +1,6 @@
 <!--- app-name: Nessie -->
 
-# Bitnami package for Nessie
+# Bitnami Secure Images Helm chart for Nessie
 
 Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 

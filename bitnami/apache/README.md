@@ -1,6 +1,6 @@
 <!--- app-name: Apache -->
 
-# Bitnami package for Apache
+# Bitnami Secure Images Helm chart for Apache
 
 Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 

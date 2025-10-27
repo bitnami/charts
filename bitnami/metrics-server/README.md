@@ -1,6 +1,6 @@
 <!--- app-name: Metrics Server -->
 
-# Bitnami package for Metrics Server
+# Bitnami Secure Images Helm chart for Metrics Server
 
 Metrics Server aggregates resource usage data, such as container CPU and memory usage, in a Kubernetes cluster and makes it available via the Metrics API.
 

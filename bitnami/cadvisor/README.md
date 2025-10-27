@@ -1,6 +1,6 @@
 <!--- app-name: cAdvisor -->
 
-# Bitnami package for cAdvisor
+# Bitnami Secure Images Helm chart for cAdvisor
 
 cAdvisor (Container Advisor) is an open-source tool by Google for monitoring containers, collecting metrics like CPU, memory, and network usage.
 

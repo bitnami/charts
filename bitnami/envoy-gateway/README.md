@@ -1,6 +1,6 @@
 <!--- app-name: Envoy Gateway -->
 
-# Bitnami package for Envoy Gateway
+# Bitnami Secure Images Helm chart for Envoy Gateway
 
 Envoy Gateway simplifies traffic management by extending Envoy Proxy's features, offering Kubernetes Gateway API integration for secure, scalable, and observable application routing
 

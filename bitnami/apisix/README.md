@@ -1,6 +1,6 @@
 <!--- app-name: Apache APISIX -->
 
-# Bitnami package for Apache APISIX
+# Bitnami Secure Images Helm chart for Apache APISIX
 
 Apache APISIX is high-performance, real-time API Gateway. Features load balancing, dynamic upstream, canary release, circuit breaking, authentication, observability, amongst others.
 

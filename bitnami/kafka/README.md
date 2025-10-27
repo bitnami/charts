@@ -1,6 +1,6 @@
 <!--- app-name: Apache Kafka -->
 
-# Bitnami package for Apache Kafka
+# Bitnami Secure Images Helm chart for Apache Kafka
 
 Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 

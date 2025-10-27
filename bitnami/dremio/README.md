@@ -1,6 +1,6 @@
 <!--- app-name: Dremio -->
 
-# Bitnami package for Dremio
+# Bitnami Secure Images Helm chart for Dremio
 
 Dremio is an open-source self-service data access tool that provides high-performance queries for interactive analytics on data lakes.
 

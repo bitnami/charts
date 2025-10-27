@@ -1,6 +1,6 @@
 <!--- app-name: Flux -->
 
-# Bitnami package for Flux
+# Bitnami Secure Images Helm chart for Flux
 
 Source Controller is a component of Flux. Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
 

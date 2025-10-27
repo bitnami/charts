@@ -1,6 +1,6 @@
 <!--- app-name: Ghost -->
 
-# Bitnami package for Ghost
+# Bitnami Secure Images Helm chart for Ghost
 
 Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Apache Airflow -->
 
-# Bitnami package for Apache Airflow
+# Bitnami Secure Images Helm chart for Apache Airflow
 
 Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
 

@@ -1,6 +1,6 @@
 <!--- app-name: NGINX Open Source -->
 
-# Bitnami package for NGINX Open Source
+# Bitnami Secure Images Helm chart for NGINX Open Source
 
 NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 

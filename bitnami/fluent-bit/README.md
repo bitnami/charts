@@ -1,6 +1,6 @@
 <!--- app-name: Fluent Bit -->
 
-# Bitnami package for Fluent Bit
+# Bitnami Secure Images Helm chart for Fluent Bit
 
 Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It has been made with a strong focus on performance to allow the collection of events from different sources without complexity.
 

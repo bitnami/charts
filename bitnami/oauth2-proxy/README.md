@@ -1,6 +1,6 @@
 <!--- app-name: OAuth2 Proxy -->
 
-# Bitnami package for OAuth2 Proxy
+# Bitnami Secure Images Helm chart for OAuth2 Proxy
 
 A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 

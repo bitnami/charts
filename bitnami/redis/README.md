@@ -1,6 +1,6 @@
 <!--- app-name: Redis&reg; -->
 
-# Bitnami package for Redis&reg;
+# Bitnami Secure Images Helm chart for Redis&reg;
 
 Redis&reg; is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 

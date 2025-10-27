@@ -1,6 +1,6 @@
 <!--- app-name: NATS -->
 
-# Bitnami package for NATS
+# Bitnami Secure Images Helm chart for NATS
 
 NATS is an open source, lightweight and high-performance messaging system. It is ideal for distributed systems and supports modern cloud architectures and pub-sub, request-reply and queuing models.
 

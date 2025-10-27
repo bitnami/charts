@@ -1,6 +1,6 @@
 <!--- app-name: Apache Cassandra -->
 
-# Bitnami package for Apache Cassandra
+# Bitnami Secure Images Helm chart for Apache Cassandra
 
 Apache Cassandra is an open source distributed database management system designed to handle large amounts of data across many servers, providing high availability with no single point of failure.
 

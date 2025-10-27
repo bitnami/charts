@@ -1,6 +1,6 @@
 <!--- app-name: Grafana -->
 
-# Bitnami package for Grafana
+# Bitnami Secure Images Helm chart for Grafana
 
 Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 

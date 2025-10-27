@@ -1,6 +1,6 @@
 <!--- app-name: Chainloop -->
 
-# Bitnami package for Chainloop
+# Bitnami Secure Images Helm chart for Chainloop
 
 Chainloop is an open-source Software Supply Chain control plane, a single source of truth for metadata and artifacts, plus a declarative attestation process.
 

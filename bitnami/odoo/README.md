@@ -1,6 +1,6 @@
 <!--- app-name: Odoo -->
 
-# Bitnami package for Odoo
+# Bitnami Secure Images Helm chart for Odoo
 
 Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
 

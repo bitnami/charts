@@ -1,6 +1,6 @@
 <!--- app-name: HashiCorp Vault -->
 
-# Bitnami package for HashiCorp Vault
+# Bitnami Secure Images Helm chart for HashiCorp Vault
 
 Vault is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
 

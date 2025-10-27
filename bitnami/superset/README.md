@@ -1,6 +1,6 @@
 <!--- app-name: Apache Superset -->
 
-# Bitnami package for Apache Superset
+# Bitnami Secure Images Helm chart for Apache Superset
 
 Superset is a modern data exploration and data visualization platform.
 

@@ -1,6 +1,6 @@
 <!--- app-name: OpenSearch -->
 
-# Bitnami package for OpenSearch
+# Bitnami Secure Images Helm chart for OpenSearch
 
 OpenSearch is a scalable open-source solution for search, analytics, and observability. Features full-text queries, natural language processing, custom dictionaries, amongst others.
 

@@ -1,6 +1,6 @@
 <!--- app-name: PostgreSQL HA -->
 
-# Bitnami package for PostgreSQL HA
+# Bitnami Secure Images Helm chart for PostgreSQL HA
 
 This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
 

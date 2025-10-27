@@ -1,6 +1,6 @@
 <!--- app-name: Thanos -->
 
-# Bitnami package for Thanos
+# Bitnami Secure Images Helm chart for Thanos
 
 Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 

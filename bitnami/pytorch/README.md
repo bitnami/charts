@@ -1,6 +1,6 @@
 <!--- app-name: PyTorch -->
 
-# Bitnami package for PyTorch
+# Bitnami Secure Images Helm chart for PyTorch
 
 PyTorch is a deep learning platform that accelerates the transition from research prototyping to production deployment. Bitnami image includes Torchvision for specific computer vision support.
 

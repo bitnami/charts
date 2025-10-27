@@ -1,6 +1,6 @@
 <!--- app-name: TensorFlow ResNet -->
 
-# Bitnami package for TensorFlow ResNet
+# Bitnami Secure Images Helm chart for TensorFlow ResNet
 
 TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
 

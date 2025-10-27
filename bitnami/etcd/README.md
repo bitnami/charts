@@ -1,6 +1,6 @@
 <!--- app-name: Etcd -->
 
-# Bitnami package for Etcd
+# Bitnami Secure Images Helm chart for Etcd
 
 etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 

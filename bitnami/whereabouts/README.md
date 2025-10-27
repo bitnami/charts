@@ -1,6 +1,6 @@
 <!--- app-name: Whereabouts -->
 
-# Bitnami package for Whereabouts
+# Bitnami Secure Images Helm chart for Whereabouts
 
 Whereabouts is a CNI IPAM plugin for Kubernetes clusters. It dynamically assigns IP addresses cluster-wide. Features both IPv4 and IPv6 addressing.
 

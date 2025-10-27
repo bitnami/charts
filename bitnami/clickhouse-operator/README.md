@@ -1,6 +1,6 @@
 <!--- app-name: ClickHouse Operator -->
 
-# Bitnami package for ClickHouse Operator
+# Bitnami Secure Images Helm chart for ClickHouse Operator
 
 ClickHouse Operator is a production-ready operator that manages ClickHouse databases delivering robust features required for cost-efficient, real-time analytic applications.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Kong -->
 
-# Bitnami package for Kong
+# Bitnami Secure Images Helm chart for Kong
 
 Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 

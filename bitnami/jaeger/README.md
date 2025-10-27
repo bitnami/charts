@@ -1,6 +1,6 @@
 <!--- app-name: Jaeger -->
 
-# Bitnami package for Jaeger
+# Bitnami Secure Images Helm chart for Jaeger
 
 Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 

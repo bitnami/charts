@@ -1,6 +1,6 @@
 <!--- app-name: JanusGraph -->
 
-# Bitnami package for JanusGraph
+# Bitnami Secure Images Helm chart for JanusGraph
 
 JanusGraph is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
 

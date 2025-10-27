@@ -1,4 +1,4 @@
-# Bitnami package for Grafana Pyroscope
+# Bitnami Secure Images Helm chart for Grafana Pyroscope
 
 Grafana Pyroscope is a continuous profiling tool that helps visualize and analyze app performance by correlating CPU, memory, and I/O usage.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Concourse -->
 
-# Bitnami package for Concourse
+# Bitnami Secure Images Helm chart for Concourse
 
 Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 

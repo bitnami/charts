@@ -1,6 +1,6 @@
 <!--- app-name: MariaDB Galera -->
 
-# Bitnami package for MariaDB Galera
+# Bitnami Secure Images Helm chart for MariaDB Galera
 
 MariaDB Galera is a multi-primary database cluster solution for synchronous replication and high availability.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Node Exporter -->
 
-# Bitnami package for Node Exporter
+# Bitnami Secure Images Helm chart for Node Exporter
 
 Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 

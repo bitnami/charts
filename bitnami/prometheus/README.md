@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus -->
 
-# Bitnami package for Prometheus
+# Bitnami Secure Images Helm chart for Prometheus
 
 Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
 
