@@ -1,8 +1,13 @@
 # Changelog
 
-## 6.0.8 (2025-10-18)
+## 6.0.9 (2025-10-27)
 
-* [bitnami/grafana-loki] Support alloy extraConfig ([#36342](https://github.com/bitnami/charts/pull/36342))
+* [bitnami/grafana-loki] gateway now use a serviceAccount ([#36373](https://github.com/bitnami/charts/pull/36373))
+
+## <small>6.0.8 (2025-10-20)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/grafana-loki] Support alloy extraConfig (#36342) ([98c8390](https://github.com/bitnami/charts/commit/98c8390a5d0407d018aa310afb39ab14b666fa06)), closes [#36342](https://github.com/bitnami/charts/issues/36342)
 
 ## <small>6.0.6 (2025-08-13)</small>
 
