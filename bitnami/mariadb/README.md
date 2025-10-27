@@ -1,6 +1,6 @@
 <!--- app-name: MariaDB -->
 
-# Bitnami package for MariaDB
+# Bitnami Secure Images Helm chart for MariaDB
 
 MariaDB is an open source, community-developed SQL database server that is widely in use around the world due to its enterprise features, flexibility, and collaboration with leading tech firms.
 

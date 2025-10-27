@@ -1,6 +1,6 @@
 <!--- app-name: Apache Flink -->
 
-# Bitnami package for Apache Flink
+# Bitnami Secure Images Helm chart for Apache Flink
 
 Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
 

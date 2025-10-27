@@ -1,6 +1,6 @@
 <!--- app-name: Gitlab Runner -->
 
-# Bitnami package for Gitlab Runner
+# Bitnami Secure Images Helm chart for Gitlab Runner
 
 Gitlab Runner is an auxiliary application for Gitlab installations. Written in Go, it allows to run CI/CD jobs and send the results back to Gitlab.
 

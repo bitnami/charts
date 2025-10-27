@@ -1,6 +1,6 @@
 <!--- app-name: MLflow -->
 
-# Bitnami package for MLflow
+# Bitnami Secure Images Helm chart for MLflow
 
 MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It allows you to track experiments, package code into reproducible runs, and share and deploy models.
 

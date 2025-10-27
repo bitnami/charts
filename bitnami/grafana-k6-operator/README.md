@@ -1,6 +1,6 @@
 <!--- app-name: Grafana k6 Operator -->
 
-# Grafana k6 Operator
+# Bitnami Secure Images Helm chart for Grafana k6 Operator
 
 Grafana k6 Operator is a Kubernetes operator that enables running distributed k6 load tests in a cluster, automating test execution and scaling for performance validation.
 

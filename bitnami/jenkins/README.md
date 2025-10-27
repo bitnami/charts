@@ -1,6 +1,6 @@
 <!--- app-name: Jenkins -->
 
-# Bitnami package for Jenkins
+# Bitnami Secure Images Helm chart for Jenkins
 
 Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
 

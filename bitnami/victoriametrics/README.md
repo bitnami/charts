@@ -1,6 +1,6 @@
 <!--- app-name: VictoriaMetrics -->
 
-# Bitnami package for VictoriaMetrics
+# Bitnami Secure Images Helm chart for VictoriaMetrics
 
 VictoriaMetrics is a fast, cost-effective, and scalable monitoring solution and time series database, compatible with Prometheus and Graphite
 

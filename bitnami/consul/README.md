@@ -1,6 +1,6 @@
 <!--- app-name: HashiCorp Consul -->
 
-# Bitnami package for HashiCorp Consul
+# Bitnami Secure Images Helm chart for HashiCorp Consul
 
 HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
 

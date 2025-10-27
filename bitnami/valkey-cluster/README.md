@@ -1,6 +1,6 @@
 <!--- app-name: Valkey Cluster -->
 
-# Bitnami package for Valkey Cluster
+# Bitnami Secure Images Helm chart for Valkey Cluster
 
 Valkey is an open source (BSD) high-performance key/value datastore that supports a variety workloads such as caching, message queues, and can act as a primary database.
 

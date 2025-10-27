@@ -1,6 +1,6 @@
 <!--- app-name: SonarQube&trade; -->
 
-# Bitnami package for SonarQube&trade;
+# Bitnami Secure Images Helm chart for SonarQube&trade;
 
 SonarQube&trade; is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 

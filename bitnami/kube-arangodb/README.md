@@ -1,6 +1,6 @@
 <!--- app-name: ArangoDB Kubernetes Operator -->
 
-# Bitnami package for ArangoDB Kubernetes Operator
+# Bitnami Secure Images Helm chart for ArangoDB Kubernetes Operator
 
 kube-arangodb is a Kubernetes Operator that manages ArangoDB clusters, ensuring automatic deployment, scaling, and healing of database instances.
 

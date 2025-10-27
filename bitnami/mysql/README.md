@@ -1,6 +1,6 @@
 <!--- app-name: MySQL -->
 
-# Bitnami package for MySQL
+# Bitnami Secure Images Helm chart for MySQL
 
 MySQL is a fast, reliable, scalable, and easy to use open source relational database system. Designed to handle mission-critical, heavy-load production applications.
 

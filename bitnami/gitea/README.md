@@ -1,6 +1,6 @@
 <!--- app-name: Gitea -->
 
-# Bitnami package for Gitea
+# Bitnami Secure Images Helm chart for Gitea
 
 Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 

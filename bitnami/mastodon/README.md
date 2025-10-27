@@ -1,6 +1,6 @@
 <!--- app-name: Mastodon -->
 
-# Bitnami package for Mastodon
+# Bitnami Secure Images Helm chart for Mastodon
 
 Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
 

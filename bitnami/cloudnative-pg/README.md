@@ -1,6 +1,6 @@
 <!--- app-name: CloudNativePG -->
 
-# Bitnami package for CloudNativePG
+# Bitnami Secure Images Helm chart for CloudNativePG
 
 CloudNativePG is an open-source tool for managing PostgreSQL databases on Kubernetes, from setup to ongoing upkeep.
 

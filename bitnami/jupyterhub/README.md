@@ -1,6 +1,6 @@
 <!--- app-name: JupyterHub -->
 
-# Bitnami package for JupyterHub
+# Bitnami Secure Images Helm chart for JupyterHub
 
 JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 

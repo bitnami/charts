@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Mimir -->
 
-# Bitnami package for Grafana Mimir
+# Bitnami Secure Images Helm chart for Grafana Mimir
 
 Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
 

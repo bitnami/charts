@@ -1,6 +1,6 @@
 <!--- app-name: Parse Server -->
 
-# Bitnami package for Parse Server
+# Bitnami Secure Images Helm chart for Parse Server
 
 Parse is a platform that enables users to add a scalable and powerful backend to launch a full-featured app for iOS, Android, JavaScript, Windows, Unity, and more.
 

@@ -1,6 +1,6 @@
 <!--- app-name: KubeRay -->
 
-# Bitnami package for KubeRay
+# Bitnami Secure Images Helm chart for KubeRay
 
 KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 

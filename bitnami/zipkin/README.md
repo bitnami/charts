@@ -1,6 +1,6 @@
 <!--- app-name: Zipkin -->
 
-# Bitnami package for Zipkin
+# Bitnami Secure Images Helm chart for Zipkin
 
 Zipkin is a distributed tracing system that helps collect and analyze timing data to troubleshoot latency issues in service architectures, providing visibility into service call performance.
 

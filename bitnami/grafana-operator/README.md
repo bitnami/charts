@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Operator -->
 
-# Bitnami package for Grafana Operator
+# Bitnami Secure Images Helm chart for Grafana Operator
 
 Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 

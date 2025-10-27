@@ -1,6 +1,6 @@
 <!--- app-name: Neo4j -->
 
-# Bitnami package for Neo4j
+# Bitnami Secure Images Helm chart for Neo4j
 
 Neo4j is a high performance graph store with all the features expected of a mature and robust database, like a friendly query language and ACID transactions.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Matomo -->
 
-# Bitnami package for Matomo
+# Bitnami Secure Images Helm chart for Matomo
 
 Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 

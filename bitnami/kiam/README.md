@@ -1,6 +1,6 @@
 <!--- app-name: Kiam -->
 
-# Bitnami package for Kiam
+# Bitnami Secure Images Helm chart for Kiam
 
 kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
 

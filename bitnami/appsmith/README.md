@@ -1,6 +1,6 @@
 <!--- app-name: Appsmith -->
 
-# Bitnami package for Appsmith
+# Bitnami Secure Images Helm chart for Appsmith
 
 Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
 

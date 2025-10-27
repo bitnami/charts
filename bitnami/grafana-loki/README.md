@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Loki -->
 
-# Bitnami package for Grafana Loki
+# Bitnami Secure Images Helm chart for Grafana Loki
 
 Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 

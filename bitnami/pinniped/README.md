@@ -1,6 +1,6 @@
 <!--- app-name: Pinniped -->
 
-# Bitnami package for Pinniped
+# Bitnami Secure Images Helm chart for Pinniped
 
 Pinniped is an identity service provider for Kubernetes. It supplies a consistent and unified login experience across all your clusters. Pinniped is securely integrated with enterprise IDP protocols.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Argo CD -->
 
-# Bitnami package for Argo CD
+# Bitnami Secure Images Helm chart for Argo CD
 
 Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 

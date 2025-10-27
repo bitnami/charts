@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus Operator -->
 
-# Bitnami package for Prometheus Operator
+# Bitnami Secure Images Helm chart for Prometheus Operator
 
 Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 

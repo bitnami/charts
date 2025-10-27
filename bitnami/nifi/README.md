@@ -1,4 +1,4 @@
-# Bitnami package for Apache NiFi
+# Bitnami Secure Images Helm chart for Apache NiFi
 
 Apache NiFi automates and manages data flows between systems using a visual interface for routing, transformation, and system mediation.
 

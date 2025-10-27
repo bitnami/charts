@@ -1,6 +1,6 @@
 <!--- app-name: Milvus -->
 
-# Bitnami package for Milvus
+# Bitnami Secure Images Helm chart for Milvus
 
 Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 

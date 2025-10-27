@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Alloy -->
 
-# Bitnami package for Grafana Alloy
+# Bitnami Secure Images Helm chart for Grafana Alloy
 
 Grafana Alloy is an open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles.
 

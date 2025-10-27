@@ -1,6 +1,6 @@
 <!--- app-name: ExternalDNS -->
 
-# Bitnami package for ExternalDNS
+# Bitnami Secure Images Helm chart for ExternalDNS
 
 ExternalDNS is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
 

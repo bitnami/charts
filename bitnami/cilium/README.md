@@ -1,6 +1,6 @@
 <!--- app-name: Cilium -->
 
-# Bitnami package for Cilium
+# Bitnami Secure Images Helm chart for Cilium
 
 Cilium is an eBPF-based networking, observability, and security for Linux container management platforms like Docker and Kubernetes.
 

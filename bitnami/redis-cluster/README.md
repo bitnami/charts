@@ -1,6 +1,6 @@
 <!--- app-name: Redis&reg; Cluster -->
 
-# Bitnami package for Redis&reg; Cluster
+# Bitnami Secure Images Helm chart for Redis&reg; Cluster
 
 Redis&reg; is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 

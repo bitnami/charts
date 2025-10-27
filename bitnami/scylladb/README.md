@@ -1,6 +1,6 @@
 <!--- app-name: ScyllaDB -->
 
-# Bitnami package for ScyllaDB
+# Bitnami Secure Images Helm chart for ScyllaDB
 
 ScyllaDB is an open-source, distributed NoSQL wide-column data store. Written in C++, it is designed for high throughput and low latency, compatible with Apache Cassandra.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Sealed Secrets -->
 
-# Bitnami package for Sealed Secrets
+# Bitnami Secure Images Helm chart for Sealed Secrets
 
 Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone, but can only be decrypted by the controller running in the target cluster recovering the original object.
 

@@ -1,6 +1,6 @@
 <!--- app-name: Redmine -->
 
-# Bitnami package for Redmine
+# Bitnami Secure Images Helm chart for Redmine
 
 Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
 

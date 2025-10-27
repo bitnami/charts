@@ -1,6 +1,6 @@
 <!--- app-name: Fluentd -->
 
-# Bitnami package for Fluentd
+# Bitnami Secure Images Helm chart for Fluentd
 
 Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 
