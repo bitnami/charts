@@ -2,7 +2,7 @@
 
 ## 6.0.9 (2025-10-27)
 
-* [bitnami/grafana-loki] gateway now use a serviceAccount (https://github.com/bitnami/charts/issues/36352) ([#36373](https://github.com/bitnami/charts/pull/36373))
+* [bitnami/grafana-loki] gateway now use a serviceAccount ([#36373](https://github.com/bitnami/charts/pull/36373))
 
 ## <small>6.0.8 (2025-10-20)</small>
 
