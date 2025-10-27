@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.0.18 (2025-08-14)
+## 12.0.21 (2025-10-17)
 
-* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35870](https://github.com/bitnami/charts/pull/35870))
+* fix: helm template for extraEnvVars in etcd defrag cronjob ([#36353](https://github.com/bitnami/charts/pull/36353))
+
+## <small>12.0.18 (2025-08-14)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35870) ([4bbd889](https://github.com/bitnami/charts/commit/4bbd8895fd08d89fb79d44a69c59b9dec1d312a9)), closes [#35870](https://github.com/bitnami/charts/issues/35870)
 
 ## <small>12.0.17 (2025-08-07)</small>
 
