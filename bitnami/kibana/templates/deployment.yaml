@@ -298,6 +298,9 @@ spec:
               subPath: app-plugins-dir
             - name: kibana-data
               mountPath: /bitnami/kibana
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
             - name: kibana-config
               mountPath: /bitnami/kibana/conf
             {{- if and .Values.usePasswordFiles (or .Values.elasticsearch.security.auth.enabled (and .Values.tls.enabled (or .Values.tls.passwordsSecret (ternary .Values.tls.keyPassword .Values.tls.keystorePassword .Values.tls.usePemCerts)))) }}
