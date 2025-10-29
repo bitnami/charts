@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.34 (2025-08-21)
+## 4.4.36 (2025-10-29)
 
-* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references ([#36162](https://github.com/bitnami/charts/pull/36162))
+* [bitnami/rabbitmq-cluster-operator] Set network policy properly for metrics ([#36270](https://github.com/bitnami/charts/pull/36270))
+
+## <small>4.4.34 (2025-08-21)</small>
+
+* [bitnami/rabbitmq-cluster-operator] :zap: :arrow_up: Update dependency references (#36162) ([a9371f0](https://github.com/bitnami/charts/commit/a9371f09098a7742890b222642885cc7965eeb76)), closes [#36162](https://github.com/bitnami/charts/issues/36162)
 
 ## <small>4.4.33 (2025-08-21)</small>
 
