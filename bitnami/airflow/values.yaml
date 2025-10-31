@@ -826,6 +826,37 @@ web:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Specify temporary volume parameters for the Airflow webserver pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param web.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param web.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param web.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param web.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param web.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param web.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param web.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow webserver pods
   ##
   extraVolumeMounts: []
@@ -1173,6 +1204,37 @@ scheduler:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Specify temporary volume parameters for the Airflow scheduler pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param scheduler.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param scheduler.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param scheduler.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param scheduler.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param scheduler.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param scheduler.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param scheduler.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow scheduler pods
   ##
   extraVolumeMounts: []
@@ -1521,6 +1583,37 @@ dagProcessor:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Specify temporary volume parameters for the Airflow Dag Processor pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param dagProcessor.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param dagProcessor.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param dagProcessor.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param dagProcessor.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param dagProcessor.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param dagProcessor.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param dagProcessor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow Dag Processor containers
   ##
   extraVolumeMounts: []
@@ -1880,6 +1973,37 @@ triggerer:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Specify temporary volume parameters for the Airflow Triggerer pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param triggerer.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param triggerer.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param triggerer.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param triggerer.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param triggerer.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param triggerer.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param triggerer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow Triggerer containers
   ##
   extraVolumeMounts: []
@@ -2337,6 +2461,37 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Specify temporary volume parameters for the Airflow worker pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param worker.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param worker.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param worker.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param worker.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param worker.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param worker.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Airflow worker pods
   ##
   extraVolumeMounts: []
@@ -2609,6 +2764,37 @@ setupDBJob:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## Specify temporary volume parameters for the Airflow setup-db pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param setupDBJob.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param setupDBJob.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param setupDBJob.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param setupDBJob.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param setupDBJob.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param setupDBJob.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param setupDBJob.extraVolumes Optionally specify extra list of additional volumes for Airflow "setup-db" job's pods
   ##
   extraVolumes: []
@@ -3106,6 +3292,37 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
   ##
   terminationGracePeriodSeconds: ""
+  ## Specify temporary volume parameters for the StatsD exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+  ## ref: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes
+  ##
+  emptyDir:
+    ## @param metrics.emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+    ## Possible values: "Memory", ""
+    ##
+    medium: ""
+    ephemeral:
+      ## @param metrics.emptyDir.ephemeral.enabled Use a generic ephemeral volume instead of an emptyDir
+      ##
+      enabled: false
+      ## @param metrics.emptyDir.ephemeral.storageClass Storage class of backing PVC
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      storageClass: ""
+      ## @param metrics.emptyDir.ephemeral.annotations Additional Persistent Volume Claim annotations
+      ##
+      annotations: {}
+      ## @param metrics.emptyDir.ephemeral.accessModes Persistent Volume Access Modes
+      ##
+      accessModes:
+        - ReadWriteOnce
+      ## @param metrics.emptyDir.ephemeral.size Size of the generic ephemeral volume
+      ##
+      size: 8Gi
   ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the StatsD exporter pods
   ##
   extraVolumes: []
