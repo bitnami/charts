@@ -12,8 +12,6 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/harbor
 ```
 
-Looking to use Harbor in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
-
 ## Why use Bitnami Secure Images?
 
 Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
