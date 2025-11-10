@@ -1,12 +1,12 @@
 # Changelog
 
-## 3.0.1 (2025-01-10)
+## 3.0.1 (2025-11-10)
 
-* [bitnami/haproxy] Add support for ipFamilyPolicy and ipFamilies in service configuration (#36384)
+* feat(haproxy): add IPv6 dual-stack support with ipFamilyPolicy and ip… ([#36385](https://github.com/bitnami/charts/pull/36385))
 
-## 2.2.34 (2025-08-13)
+## <small>2.2.34 (2025-08-13)</small>
 
-* [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#35817](https://github.com/bitnami/charts/pull/35817))
+* [bitnami/haproxy] :zap: :arrow_up: Update dependency references (#35817) ([88590a8](https://github.com/bitnami/charts/commit/88590a857b3aa4ad3c6038053f82c337e9226505)), closes [#35817](https://github.com/bitnami/charts/issues/35817)
 
 ## <small>2.2.33 (2025-08-13)</small>
 
