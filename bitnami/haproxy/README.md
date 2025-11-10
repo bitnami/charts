@@ -234,6 +234,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `service.labels`                        | Additional custom labels for haproxy service                                                                                     | `{}`                     |
+| `service.ipFamilyPolicy`                | IP family policy for the service                                                                                                 | `""`                     |
+| `service.ipFamilies`                    | IP families for the service                                                                                                      | `[]`                     |
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |

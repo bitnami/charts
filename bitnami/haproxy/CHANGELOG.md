@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.35 (2025-01-10)
+
+* [bitnami/haproxy] Add support for ipFamilyPolicy and ipFamilies in service configuration (#36384)
+
 ## 2.2.34 (2025-08-13)
 
 * [bitnami/haproxy] :zap: :arrow_up: Update dependency references ([#35817](https://github.com/bitnami/charts/pull/35817))
