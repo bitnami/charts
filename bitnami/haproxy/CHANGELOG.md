@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.2.35 (2025-01-10)
+## 3.0.1 (2025-01-10)
 
 * [bitnami/haproxy] Add support for ipFamilyPolicy and ipFamilies in service configuration (#36384)
 
