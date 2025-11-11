@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.2.6 (2025-10-20)
+## 25.3.0 (2025-11-11)
 
 * [bitnami/keycloak] New param javaOptsAppendExtra to append additional java opts  ([#36350](https://github.com/bitnami/charts/pull/36350))
 
@@ -1339,7 +1339,7 @@
 
 ## <small>7.1.1 (2022-03-10)</small>
 
-* [bitnami/keycloak] Remove unused 'database-password' key (#9315) ([b4c79bd](https://github.com/bitnami/charts/commit/b4c79bd326d27541834a62a2cf8df209fdfbdf54)), closes [#9315](https://github.com/bitnami/charts/issues/9315) [#9274](https://github.com/bitnami/charts/issues/9274)
+* [bitnami/keycloak] Remove unused 'database-password' key (#9315) ([b4c79bd](https://github.com/bitnami/charts/commit/b4c79bd326d27541834a62a2cf8df209fdfbdf54)), closes [#9315](https://github.com/bitnami/charts/issues/9315)
 
 ## 7.1.0 (2022-03-08)
 
@@ -1379,7 +1379,7 @@
 
 ## <small>6.2.1 (2022-02-25)</small>
 
-* [bitnami/Keycloak] Improve documentation for tls ingress (#8973) ([11c0116](https://github.com/bitnami/charts/commit/11c01168577d8cb5ee61f9f890a1966c709d443e)), closes [#8973](https://github.com/bitnami/charts/issues/8973) [#7734](https://github.com/bitnami/charts/issues/7734)
+* [bitnami/Keycloak] Improve documentation for tls ingress (#8973) ([11c0116](https://github.com/bitnami/charts/commit/11c01168577d8cb5ee61f9f890a1966c709d443e)), closes [#8973](https://github.com/bitnami/charts/issues/8973)
 
 ## 6.2.0 (2022-02-23)
 
