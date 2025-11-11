@@ -1,12 +1,16 @@
 # Changelog
 
-## 25.2.5 (2025-10-09)
+## 25.3.0 (2025-11-11)
 
-* [bitnami/keycloak] Fix: Rename duplicated secret labels ([#36254](https://github.com/bitnami/charts/pull/36254))
+* [bitnami/keycloak] New param javaOptsAppendExtra to append additional java opts  ([#36350](https://github.com/bitnami/charts/pull/36350))
 
-## <small>25.2.4 (2025-09-23)</small>
+## <small>25.2.5 (2025-10-08)</small>
 
-* [bitnami/keycloak] Fix indentation in ingress TLS secret template ([#36282](https://github.com/bitnami/charts/pull/36282))
+* [bitnami/keycloak] Fix: Rename duplicated secret labels (#36254) ([9b3915b](https://github.com/bitnami/charts/commit/9b3915b649a9b08fbfad1fa82cc24e48232edd36)), closes [#36254](https://github.com/bitnami/charts/issues/36254)
+
+## <small>25.2.4 (2025-10-02)</small>
+
+* [bitnami/keycloak] Fix indentation in ingress TLS secret template (#36282) ([3f7fa45](https://github.com/bitnami/charts/commit/3f7fa45393366ca67af940efa64acfab89c05e75)), closes [#36282](https://github.com/bitnami/charts/issues/36282)
 
 ## <small>25.2.3 (2025-09-11)</small>
 
@@ -1335,7 +1339,7 @@
 
 ## <small>7.1.1 (2022-03-10)</small>
 
-* [bitnami/keycloak] Remove unused 'database-password' key (#9315) ([b4c79bd](https://github.com/bitnami/charts/commit/b4c79bd326d27541834a62a2cf8df209fdfbdf54)), closes [#9315](https://github.com/bitnami/charts/issues/9315) [#9274](https://github.com/bitnami/charts/issues/9274)
+* [bitnami/keycloak] Remove unused 'database-password' key (#9315) ([b4c79bd](https://github.com/bitnami/charts/commit/b4c79bd326d27541834a62a2cf8df209fdfbdf54)), closes [#9315](https://github.com/bitnami/charts/issues/9315)
 
 ## 7.1.0 (2022-03-08)
 
@@ -1375,7 +1379,7 @@
 
 ## <small>6.2.1 (2022-02-25)</small>
 
-* [bitnami/Keycloak] Improve documentation for tls ingress (#8973) ([11c0116](https://github.com/bitnami/charts/commit/11c01168577d8cb5ee61f9f890a1966c709d443e)), closes [#8973](https://github.com/bitnami/charts/issues/8973) [#7734](https://github.com/bitnami/charts/issues/7734)
+* [bitnami/Keycloak] Improve documentation for tls ingress (#8973) ([11c0116](https://github.com/bitnami/charts/commit/11c01168577d8cb5ee61f9f890a1966c709d443e)), closes [#8973](https://github.com/bitnami/charts/issues/8973)
 
 ## 6.2.0 (2022-02-23)
 
