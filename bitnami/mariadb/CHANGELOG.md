@@ -6,7 +6,7 @@
 
 ## 22.0.0 (2025-08-18)
 
-* [bitnami/mariadb] :zap: :arrow_up: Update dependency references ([#36108](https://github.com/bitnami/charts/pull/36108))
+* [bitnami/mariadb] :zap: :arrow_up: Update dependency references (#36108) ([e429923](https://github.com/bitnami/charts/commit/e429923d43fd6ee5171c5554ef072d1dddc4810c)), closes [#36108](https://github.com/bitnami/charts/issues/36108)
 
 ## <small>21.0.8 (2025-08-14)</small>
 
