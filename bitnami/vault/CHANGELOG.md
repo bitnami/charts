@@ -1,8 +1,72 @@
 # Changelog
 
-## 1.7.14 (2025-06-11)
+## 1.9.0 (2025-08-14)
 
-* [bitnami/vault] :zap: :arrow_up: Update dependency references ([#34341](https://github.com/bitnami/charts/pull/34341))
+* [bitnami/vault] Add ability to disable the cluster role binding for server rbac ([#35861](https://github.com/bitnami/charts/pull/35861))
+
+## <small>1.8.2 (2025-08-14)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35897) ([f2413c0](https://github.com/bitnami/charts/commit/f2413c0dc6bac15f2f333a1853b09ebe7330db1f)), closes [#35897](https://github.com/bitnami/charts/issues/35897)
+
+## <small>1.8.1 (2025-08-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35839) ([af2dba9](https://github.com/bitnami/charts/commit/af2dba9fe07af98c9c5f094d24207250e462ffb0)), closes [#35839](https://github.com/bitnami/charts/issues/35839)
+
+## 1.8.0 (2025-08-13)
+
+* [bitnami/vault] Add ability to modify or extend the vault sever RBAC roles (#35774) ([f6fa389](https://github.com/bitnami/charts/commit/f6fa389e36433f6a859b40eda3447ccab1dcc25c)), closes [#35774](https://github.com/bitnami/charts/issues/35774)
+
+## <small>1.7.25 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35636) ([ae931de](https://github.com/bitnami/charts/commit/ae931dee0f8acfd1c32a96687d257ec32b04620a)), closes [#35636](https://github.com/bitnami/charts/issues/35636)
+
+## <small>1.7.24 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35542) ([50ede49](https://github.com/bitnami/charts/commit/50ede497c022353427f9ca13c795178dc29c3523)), closes [#35542](https://github.com/bitnami/charts/issues/35542)
+
+## <small>1.7.23 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35433) ([6ae23f3](https://github.com/bitnami/charts/commit/6ae23f3b150306ca51b9e770e135087db2119ec4)), closes [#35433](https://github.com/bitnami/charts/issues/35433)
+
+## <small>1.7.22 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35292) ([a7087eb](https://github.com/bitnami/charts/commit/a7087eb59f88858844d21f442150f14bca2e97ee)), closes [#35292](https://github.com/bitnami/charts/issues/35292)
+
+## <small>1.7.21 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35137) ([e337e30](https://github.com/bitnami/charts/commit/e337e30c87d16b7c96de4608b42c7d21a69fc8bd)), closes [#35137](https://github.com/bitnami/charts/issues/35137)
+
+## <small>1.7.20 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35062) ([01a5cb5](https://github.com/bitnami/charts/commit/01a5cb5704a71acae15838521240f063c5bbc676)), closes [#35062](https://github.com/bitnami/charts/issues/35062)
+
+## <small>1.7.19 (2025-07-14)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35052) ([c96c9c8](https://github.com/bitnami/charts/commit/c96c9c8e8d11202647d162d6106d2995ed077db3)), closes [#35052](https://github.com/bitnami/charts/issues/35052)
+
+## <small>1.7.18 (2025-07-09)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34959) ([5bf409d](https://github.com/bitnami/charts/commit/5bf409d8067ab028ff4bcb81faefae343a70415d)), closes [#34959](https://github.com/bitnami/charts/issues/34959)
+
+## <small>1.7.17 (2025-07-01)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34640) ([71a3831](https://github.com/bitnami/charts/commit/71a38311640b33d4959c6d58b6566abc15a47ebe)), closes [#34640](https://github.com/bitnami/charts/issues/34640)
+
+## <small>1.7.16 (2025-06-25)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34610) ([31ad11f](https://github.com/bitnami/charts/commit/31ad11f3ac737896ec72ae5be15da214965d4f1a)), closes [#34610](https://github.com/bitnami/charts/issues/34610)
+
+## <small>1.7.15 (2025-06-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34497) ([9945dcc](https://github.com/bitnami/charts/commit/9945dcccf26e66be8b8fb31290ea2e0a23867b2e)), closes [#34497](https://github.com/bitnami/charts/issues/34497)
+
+## <small>1.7.14 (2025-06-11)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34341) ([879863e](https://github.com/bitnami/charts/commit/879863e5262a04e812cd0a6321e51e42774c7151)), closes [#34341](https://github.com/bitnami/charts/issues/34341)
 
 ## <small>1.7.13 (2025-06-06)</small>
 

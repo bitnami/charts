@@ -1,8 +1,96 @@
 # Changelog
 
-## 16.0.12 (2025-06-11)
+## 16.3.4 (2025-09-02)
 
-* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references ([#34354](https://github.com/bitnami/charts/pull/34354))
+* [bitnami/postgresql-ha] bugfix: unbound variable ([#36226](https://github.com/bitnami/charts/pull/36226))
+
+## <small>16.3.2 (2025-08-26)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#36198) ([42783e4](https://github.com/bitnami/charts/commit/42783e4501ab35c11af09e029923ecc3bc6585a3)), closes [#36198](https://github.com/bitnami/charts/issues/36198)
+
+## <small>16.3.1 (2025-08-21)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#36159) ([1db913c](https://github.com/bitnami/charts/commit/1db913c9b2feac0a0cce03c83b1855cb1be74019)), closes [#36159](https://github.com/bitnami/charts/issues/36159)
+
+## 16.3.0 (2025-08-20)
+
+* [bitnami/postgresql-ha] feat: improve backend probes (#36139) ([f2def11](https://github.com/bitnami/charts/commit/f2def111fad4ab2689735ef0411e000df2016483)), closes [#36139](https://github.com/bitnami/charts/issues/36139)
+
+## <small>16.2.3 (2025-08-19)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#36140) ([3c142bb](https://github.com/bitnami/charts/commit/3c142bbba4db4bd7b45a1ee91d66c96d49455a19)), closes [#36140](https://github.com/bitnami/charts/issues/36140)
+
+## <small>16.2.2 (2025-08-14)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35919) ([07dd2aa](https://github.com/bitnami/charts/commit/07dd2aa225887695ea86548976bc2a2cd2ac938d)), closes [#35919](https://github.com/bitnami/charts/issues/35919)
+
+## <small>16.2.1 (2025-08-14)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35894) ([a7b9eec](https://github.com/bitnami/charts/commit/a7b9eec627c3eec934aeba1a4ee51f1181a3ad00)), closes [#35894](https://github.com/bitnami/charts/issues/35894)
+
+## 16.2.0 (2025-08-13)
+
+* [bitnami:postgresql-ha] feat: add support for affinity to backup cronjob (#35773) ([57039a2](https://github.com/bitnami/charts/commit/57039a2cf5a9a7a972a120a0528ce2119fbbee85)), closes [#35773](https://github.com/bitnami/charts/issues/35773)
+
+## <small>16.1.2 (2025-08-07)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35648) ([d524d01](https://github.com/bitnami/charts/commit/d524d01b7c5293307c6a264372bd796e75296062)), closes [#35648](https://github.com/bitnami/charts/issues/35648)
+
+## <small>16.1.1 (2025-08-07)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35517) ([4167326](https://github.com/bitnami/charts/commit/4167326b7be2a3531c5e28678287ce8368fda083)), closes [#35517](https://github.com/bitnami/charts/issues/35517)
+
+## 16.1.0 (2025-08-04)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/postgresql-ha] feat: add support for disabling connection cache (#35389) ([df4bc69](https://github.com/bitnami/charts/commit/df4bc697954960a4e84b9a490e26b70194618245)), closes [#35389](https://github.com/bitnami/charts/issues/35389)
+
+## <small>16.0.22 (2025-07-15)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35117) ([4af9eba](https://github.com/bitnami/charts/commit/4af9eba088918a2a15cab61d93802716ffae1da4)), closes [#35117](https://github.com/bitnami/charts/issues/35117)
+
+## <small>16.0.21 (2025-07-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35032) ([f9a9627](https://github.com/bitnami/charts/commit/f9a9627b7ac1d944db23f827eabb249077eb665e)), closes [#35032](https://github.com/bitnami/charts/issues/35032)
+
+## <small>16.0.20 (2025-07-11)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#35008) ([28d6eb1](https://github.com/bitnami/charts/commit/28d6eb147362b6a8e60bf97fb9d12dd5c49c44db)), closes [#35008](https://github.com/bitnami/charts/issues/35008)
+
+## <small>16.0.19 (2025-07-10)</small>
+
+* [bitnami/postgresql-ha] bugfix: credentials from files on witness (#34986) ([361cf78](https://github.com/bitnami/charts/commit/361cf78943a1f6a1c5dcc654fe6d29b05090dbb3)), closes [#34986](https://github.com/bitnami/charts/issues/34986)
+
+## <small>16.0.18 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34962) ([4841599](https://github.com/bitnami/charts/commit/48415997525a3b026d04823eef458537d1e5eef2)), closes [#34962](https://github.com/bitnami/charts/issues/34962)
+
+## <small>16.0.17 (2025-07-09)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34941) ([d6d6e95](https://github.com/bitnami/charts/commit/d6d6e9504968447e7cb4fabd7a210aaeb253d090)), closes [#34941](https://github.com/bitnami/charts/issues/34941)
+
+## <small>16.0.16 (2025-07-01)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34739) ([7f74a69](https://github.com/bitnami/charts/commit/7f74a69403211af80f018ec1fd800e430311aa7d)), closes [#34739](https://github.com/bitnami/charts/issues/34739)
+
+## <small>16.0.15 (2025-06-25)</small>
+
+* [bitnami/postgresql-ha] PGPOOL_POSTGRES_PASSWORD mapping from postgres-password (#32857) ([ac50a71](https://github.com/bitnami/charts/commit/ac50a71cbf6ca351e21367082205d7ac4f46d2aa)), closes [#32857](https://github.com/bitnami/charts/issues/32857)
+
+## <small>16.0.14 (2025-06-13)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34486) ([61f65fb](https://github.com/bitnami/charts/commit/61f65fbbe03ea94d2dae41b9ef1c7279e9384a8b)), closes [#34486](https://github.com/bitnami/charts/issues/34486)
+
+## <small>16.0.13 (2025-06-12)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34375) ([3ac12a1](https://github.com/bitnami/charts/commit/3ac12a10325eba47b2e31a3db3d008e3b421f867)), closes [#34375](https://github.com/bitnami/charts/issues/34375)
+
+## <small>16.0.12 (2025-06-11)</small>
+
+* [bitnami/postgresql-ha] :zap: :arrow_up: Update dependency references (#34354) ([0f9c1d4](https://github.com/bitnami/charts/commit/0f9c1d45293599d35386603884e545e9bfed631b)), closes [#34354](https://github.com/bitnami/charts/issues/34354)
 
 ## <small>16.0.11 (2025-06-06)</small>
 

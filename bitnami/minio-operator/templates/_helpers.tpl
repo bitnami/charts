@@ -32,13 +32,6 @@ Return the proper MinIO(R) Operator Sidecar image name
 {{- end -}}
 
 {{/*
-Return the proper KES(R) image name
-*/}}
-{{- define "minio-operator.kes.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.kesImage "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "minio-operator.serviceAccountName" -}}

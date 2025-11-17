@@ -1,8 +1,37 @@
 # Changelog
 
-## 17.1.3 (2025-05-23)
+## 19.0.0 (2025-08-18)
 
-* [bitnami/ejbca] :zap: :arrow_up: Update dependency references ([#33853](https://github.com/bitnami/charts/pull/33853))
+* [bitnami/ejbca] Upgrade to MariaDB 12.0 ([#36114](https://github.com/bitnami/charts/pull/36114))
+
+## <small>18.0.3 (2025-08-18)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#36110) ([2b94f0c](https://github.com/bitnami/charts/commit/2b94f0c272bef3a7610182afd291cb6e7ede499c)), closes [#36110](https://github.com/bitnami/charts/issues/36110)
+
+## <small>18.0.2 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#35553) ([20b4762](https://github.com/bitnami/charts/commit/20b4762f45835cc223c2ac400127f63551c758a4)), closes [#35553](https://github.com/bitnami/charts/issues/35553)
+
+## <small>18.0.1 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#35239) ([692284a](https://github.com/bitnami/charts/commit/692284ae15c21e540fd3f9b3100c354a01ee684b)), closes [#35239](https://github.com/bitnami/charts/issues/35239)
+
+## 18.0.0 (2025-06-25)
+
+* [bitnami/ejbca] Upgrade MariaDB 11.8 (#34635) ([45208fa](https://github.com/bitnami/charts/commit/45208fa627f3be44599ce925f9cf49640d650582)), closes [#34635](https://github.com/bitnami/charts/issues/34635)
+
+## <small>17.1.4 (2025-06-22)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#34578) ([98f684b](https://github.com/bitnami/charts/commit/98f684bf402933a0040ef2b5c9ebb1d86441d02d)), closes [#34578](https://github.com/bitnami/charts/issues/34578)
+
+## <small>17.1.3 (2025-05-23)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#33853) ([9917e60](https://github.com/bitnami/charts/commit/9917e60fdf6e04b15a8a0b18093fa4778cc56d2c)), closes [#33853](https://github.com/bitnami/charts/issues/33853)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>17.1.2 (2025-05-07)</small>
 

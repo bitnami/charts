@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-# Version: 0.83.0
+# Version: 0.85.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.18.0
-    operator.prometheus.io/version: 0.83.0
+    operator.prometheus.io/version: 0.85.0
   name: alertmanagers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -1035,6 +1035,7 @@ spec:
                       The default value is `OnNamespace`.
                     enum:
                     - OnNamespace
+                    - OnNamespaceExceptForAlertmanagerNamespace
                     - None
                     type: string
                 type: object
@@ -1830,6 +1831,17 @@ spec:
                                 type: string
                             type: object
                         type: object
+                      jira:
+                        description: The default configuration for Jira.
+                        properties:
+                          apiURL:
+                            description: |-
+                              The default Jira API URL.
+
+                              It requires Alertmanager >= v0.28.0.
+                            pattern: ^(http|https)://.+$
+                            type: string
+                        type: object
                       opsGenieApiKey:
                         description: The default OpsGenie API Key.
                         properties:
@@ -1888,6 +1900,71 @@ spec:
                           This has no impact on alerts from Prometheus, as they always include EndsAt.
                         pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                         type: string
+                      rocketChat:
+                        description: The default configuration for Rocket Chat.
+                        properties:
+                          apiURL:
+                            description: |-
+                              The default Rocket Chat API URL.
+
+                              It requires Alertmanager >= v0.28.0.
+                            pattern: ^(http|https)://.+$
+                            type: string
+                          token:
+                            description: |-
+                              The default Rocket Chat token.
+
+                              It requires Alertmanager >= v0.28.0.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                default: ""
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          tokenID:
+                            description: |-
+                              The default Rocket Chat Token ID.
+
+                              It requires Alertmanager >= v0.28.0.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                default: ""
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                        type: object
                       slackApiUrl:
                         description: The default Slack API URL.
                         properties:
@@ -2166,6 +2243,98 @@ spec:
                                 description: Used to verify the hostname for the targets.
                                 type: string
                             type: object
+                        type: object
+                      telegram:
+                        description: The default Telegram config
+                        properties:
+                          apiURL:
+                            description: |-
+                              The default Telegram API URL.
+
+                              It requires Alertmanager >= v0.24.0.
+                            pattern: ^(http|https)://.+$
+                            type: string
+                        type: object
+                      victorops:
+                        description: The default configuration for VictorOps.
+                        properties:
+                          apiKey:
+                            description: The default VictorOps API Key.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                default: ""
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          apiURL:
+                            description: The default VictorOps API URL.
+                            pattern: ^(http|https)://.+$
+                            type: string
+                        type: object
+                      webex:
+                        description: The default configuration for Jira.
+                        properties:
+                          apiURL:
+                            description: |-
+                              The default Webex API URL.
+
+                              It requires Alertmanager >= v0.25.0.
+                            pattern: ^(http|https)://.+$
+                            type: string
+                        type: object
+                      wechat:
+                        description: The default WeChat Config
+                        properties:
+                          apiCorpID:
+                            description: The default WeChat API Corporate ID.
+                            minLength: 1
+                            type: string
+                          apiSecret:
+                            description: The default WeChat API Secret.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                default: ""
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          apiURL:
+                            description: |-
+                              The default WeChat API URL.
+                              The default value is "https://qyapi.weixin.qq.com/cgi-bin/"
+                            pattern: ^(http|https)://.+$
+                            type: string
                         type: object
                     type: object
                   name:
@@ -4210,6 +4379,15 @@ spec:
                 x-kubernetes-list-map-keys:
                 - ip
                 x-kubernetes-list-type: map
+              hostUsers:
+                description: |-
+                  HostUsers supports the user space in Kubernetes.
+
+                  More info: https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
+
+                  The feature requires at least Kubernetes 1.28 with the `UserNamespacesSupport` feature gate enabled.
+                  Starting Kubernetes 1.33, the feature is enabled by default.
+                type: boolean
               image:
                 description: |-
                   Image if specified has precedence over baseImage, tag and sha
@@ -4231,7 +4409,7 @@ spec:
                 description: |-
                   An optional list of references to secrets in the same namespace
                   to use for pulling prometheus and alertmanager images from registries
-                  see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                  see https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
                 items:
                   description: |-
                     LocalObjectReference contains enough information to let you locate the
@@ -5732,9 +5910,10 @@ spec:
                 description: |-
                   Minimum number of seconds for which a newly created pod should be ready
                   without any of its container crashing for it to be considered available.
-                  Defaults to 0 (pod will be considered available as soon as it is ready)
-                  This is an alpha field from kubernetes 1.22 until 1.24 which requires enabling the StatefulSetMinReadySeconds feature gate.
+
+                  If unset, pods will be considered available as soon as they are ready.
                 format: int32
+                minimum: 0
                 type: integer
               nodeSelector:
                 additionalProperties:
@@ -5744,7 +5923,7 @@ spec:
               paused:
                 description: |-
                   If set to true all actions on the underlying managed objects are not
-                  goint to be performed, except for delete actions.
+                  going to be performed, except for delete actions.
                 type: boolean
               persistentVolumeClaimRetentionPolicy:
                 description: |-
@@ -5788,7 +5967,7 @@ spec:
                       Annotations is an unstructured key value map stored with a resource that may be
                       set by external tools to store and retrieve arbitrary metadata. They are not
                       queryable and should be preserved when modifying objects.
-                      More info: http://kubernetes.io/docs/user-guide/annotations
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
                     type: object
                   labels:
                     additionalProperties:
@@ -5797,7 +5976,7 @@ spec:
                       Map of string keys and values that can be used to organize and categorize
                       (scope and select) objects. May match selectors of replication controllers
                       and services.
-                      More info: http://kubernetes.io/docs/user-guide/labels
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
                     type: object
                   name:
                     description: |-
@@ -5806,7 +5985,7 @@ spec:
                       automatically. Name is primarily intended for creation idempotence and configuration
                       definition.
                       Cannot be updated.
-                      More info: http://kubernetes.io/docs/user-guide/identifiers#names
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
                     type: string
                 type: object
               portName:
@@ -6477,7 +6656,7 @@ spec:
                               Annotations is an unstructured key value map stored with a resource that may be
                               set by external tools to store and retrieve arbitrary metadata. They are not
                               queryable and should be preserved when modifying objects.
-                              More info: http://kubernetes.io/docs/user-guide/annotations
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
                             type: object
                           labels:
                             additionalProperties:
@@ -6486,7 +6665,7 @@ spec:
                               Map of string keys and values that can be used to organize and categorize
                               (scope and select) objects. May match selectors of replication controllers
                               and services.
-                              More info: http://kubernetes.io/docs/user-guide/labels
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
                             type: object
                           name:
                             description: |-
@@ -6495,7 +6674,7 @@ spec:
                               automatically. Name is primarily intended for creation idempotence and configuration
                               definition.
                               Cannot be updated.
-                              More info: http://kubernetes.io/docs/user-guide/identifiers#names
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/
                             type: string
                         type: object
                       spec:

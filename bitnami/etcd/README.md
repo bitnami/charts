@@ -1,6 +1,6 @@
 <!--- app-name: Etcd -->
 
-# Bitnami package for Etcd
+# Bitnami Secure Images Helm chart for Etcd
 
 etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
 
@@ -14,7 +14,22 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
 ```
 
-Looking to use Etcd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -632,6 +647,14 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `preUpgradeJob.annotations`                                       | Add annotations to the etcd "pre-upgrade" job                                                                                                                                                                                                                   | `{}`             |
 | `preUpgradeJob.podLabels`                                         | Additional pod labels for etcd "pre-upgrade" job                                                                                                                                                                                                                | `{}`             |
 | `preUpgradeJob.podAnnotations`                                    | Additional pod annotations for etcd "pre-upgrade" job                                                                                                                                                                                                           | `{}`             |
+| `preUpgradeJob.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                             | `""`             |
+| `preUpgradeJob.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                        | `soft`           |
+| `preUpgradeJob.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                                                       | `""`             |
+| `preUpgradeJob.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                                                                                                                                                                          | `""`             |
+| `preUpgradeJob.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                                                                       | `[]`             |
+| `preUpgradeJob.affinity`                                          | Affinity for pod assignment                                                                                                                                                                                                                                     | `{}`             |
+| `preUpgradeJob.nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                                                                                  | `{}`             |
+| `preUpgradeJob.tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                                                                  | `[]`             |
 | `preUpgradeJob.containerSecurityContext.enabled`                  | Enabled "pre-upgrade" job's containers' Security Context                                                                                                                                                                                                        | `true`           |
 | `preUpgradeJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in "pre-upgrade" job's containers                                                                                                                                                                                                           | `{}`             |
 | `preUpgradeJob.containerSecurityContext.runAsUser`                | Set runAsUser in "pre-upgrade" job's containers' Security Context                                                                                                                                                                                               | `1001`           |
@@ -650,6 +673,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `preUpgradeJob.podSecurityContext.fsGroup`                        | Set fsGroup in "pre-upgrade" job's pods' Security Context                                                                                                                                                                                                       | `1001`           |
 | `preUpgradeJob.resourcesPreset`                                   | Set etcd "pre-upgrade" job's container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if preUpgradeJob.resources is set (preUpgradeJob.resources is recommended for production). | `micro`          |
 | `preUpgradeJob.resources`                                         | Set etcd "pre-upgrade" job's container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
+| `preUpgradeJob.startDelay`                                        | Optional delay before starting the pre-upgrade hook (in seconds).                                                                                                                                                                                               | `""`             |
 
 ### Defragmentation parameters
 

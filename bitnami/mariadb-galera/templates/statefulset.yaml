@@ -475,8 +475,10 @@ spec:
             items:
               - key: mariadb-root-password
                 path: mariadb-root-password
+              {{- if .Values.db.user }}
               - key: mariadb-password
                 path: mariadb-password
+              {{- end }}
               - key: mariadb-galera-mariabackup-password
                 path: mariadb-galera-mariabackup-password
         {{- end }}

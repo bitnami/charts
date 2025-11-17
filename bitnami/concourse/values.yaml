@@ -84,7 +84,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.13.2-debian-12-r5
+  tag: 7.13.2-debian-12-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1413,7 +1413,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1496,6 +1496,7 @@ postgresql:
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
+## @param externalDatabase.sslmode Whether or not to use SSL. Defaults to `disable` other valid values are `require`, `verify-ca`, and `verify-full`
 ## @param externalDatabase.user Non-root username for Concourse
 ## @param externalDatabase.password Password for the non-root username for Concourse
 ## @param externalDatabase.database Concourse database name
@@ -1505,6 +1506,7 @@ postgresql:
 externalDatabase:
   host: localhost
   port: 5432
+  sslmode: disable
   user: bn_concourse
   password: ""
   database: bitnami_concourse

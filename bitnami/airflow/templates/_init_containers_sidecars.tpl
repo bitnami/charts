@@ -47,7 +47,7 @@ Returns an init-container that prepares the Airflow configuration files for main
       db_password="$(airflow_encode_url "$AIRFLOW_DATABASE_PASSWORD")"
       airflow_conf_set "database" "sql_alchemy_conn" "postgresql+psycopg2://${db_user}:${db_password}@${AIRFLOW_DATABASE_HOST}:${AIRFLOW_DATABASE_PORT_NUMBER}/${AIRFLOW_DATABASE_NAME}"
     {{- end }}
-    {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+    {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
       {{- if and .Values.usePasswordFiles }}
       export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
       {{- end }}
@@ -107,7 +107,7 @@ Returns an init-container that prepares the Airflow configuration files for main
     - name: AIRFLOW_DATABASE_PORT_NUMBER
       value: {{ include "airflow.database.port" . }}
     {{- end }}
-    {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+    {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
     - name: REDIS_HOST
       value: {{ include "airflow.redis.host" . | quote }}
     - name: REDIS_PORT_NUMBER
@@ -272,6 +272,40 @@ create folders or volume names
 {{- define "airflow.dagsPlugins.repository.name" -}}
   {{- $defaultName := regexFind "/.*$" .repository | replace "//" "" | replace "/" "-" | replace "." "-" -}}
   {{- .name | default $defaultName | kebabcase -}}
+{{- end -}}
+
+{{/*
+Returns an init-container that prepares the venv directory
+*/}}
+{{- define "airflow.defaultInitContainers.prepareVenv" -}}
+- name: prepare-venv
+  image: {{ include "airflow.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- if .Values.defaultInitContainers.prepareVenv.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.prepareVenv.containerSecurityContext "context" .) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.prepareVenv.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.prepareVenv.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.prepareVenv.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.prepareVenv.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/libairflow.sh
+
+      # Copy the configuration files to the writable directory
+      cp -r --preserve=mode /opt/bitnami/airflow/venv /emptydir/venv-base-dir
+
+      info "Copy operation completed"
+  env:
+    - name: BITNAMI_DEBUG
+      value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /emptydir
 {{- end -}}
 
 {{/*

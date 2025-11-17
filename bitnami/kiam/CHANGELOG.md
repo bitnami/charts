@@ -1,8 +1,30 @@
 # Changelog
 
-## 2.3.12 (2025-06-06)
+## 2.3.16 (2025-08-14)
 
-* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#34179](https://github.com/bitnami/charts/pull/34179))
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references ([#35875](https://github.com/bitnami/charts/pull/35875))
+
+## <small>2.3.15 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#35489) ([b8138ba](https://github.com/bitnami/charts/commit/b8138ba918e0516ab616e9cb02a5fafc893f2d33)), closes [#35489](https://github.com/bitnami/charts/issues/35489)
+
+## <small>2.3.14 (2025-07-09)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34910) ([738da70](https://github.com/bitnami/charts/commit/738da701c3d2e3f61939f1baa617effc8683dc79)), closes [#34910](https://github.com/bitnami/charts/issues/34910)
+
+## <small>2.3.13 (2025-06-13)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34451) ([444f093](https://github.com/bitnami/charts/commit/444f0931004b312f5e0e4b3eeada7be03eda031a)), closes [#34451](https://github.com/bitnami/charts/issues/34451)
+
+## <small>2.3.12 (2025-06-06)</small>
+
+* [bitnami/kiam] :zap: :arrow_up: Update dependency references (#34179) ([96db50e](https://github.com/bitnami/charts/commit/96db50e83c23dba0d59aed8ddde69aee9c67d8ee)), closes [#34179](https://github.com/bitnami/charts/issues/34179)
+* [bitnami/kiam] Release 2.3.11 (#33531) ([49f873c](https://github.com/bitnami/charts/commit/49f873c114b8ba69df3bff7a10324b9fd74d3034)), closes [#33531](https://github.com/bitnami/charts/issues/33531)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
 
 ## <small>2.3.10 (2025-05-06)</small>
 

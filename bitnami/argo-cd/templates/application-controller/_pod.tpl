@@ -144,7 +144,7 @@ containers:
     env:
       - name: ARGOCD_APPLICATION_CONTROLLER_NAME
         value: {{ include "argocd.application-controller" . }}
-      {{- if gt (int .Values.server.replicaCount) 1 }}
+      {{- if gt (int .Values.controller.replicaCount) 1 }}
       - name: ARGOCD_CONTROLLER_REPLICAS
         value: {{ .Values.controller.replicaCount | quote }}
       {{- end }}

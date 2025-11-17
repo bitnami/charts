@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/cluster-operator/v{version}/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml
-# Version: 2.14.0
+# Version: 2.16.1
 # RabbitMQ Cluster Operator
 #
 # Copyright 2020 VMware, Inc. All Rights Reserved.
@@ -938,6 +938,11 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                   type: object
+                autoEnableAllFeatureFlags:
+                  description: |-
+                    Set to true to automatically enable all feature flags after each upgrade
+                    For more information, see https://www.rabbitmq.com/docs/feature-flags
+                  type: boolean
                 delayStartSeconds:
                   default: 30
                   description: |-

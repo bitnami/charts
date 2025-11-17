@@ -43,7 +43,7 @@ spec:
         - port: {{ .Values.containerPorts.tls }}
         - port: {{ .Values.containerPorts.intra }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
       to:
         - podSelector:
@@ -59,12 +59,12 @@ spec:
         - port: {{ .Values.containerPorts.tls }}
         - port: {{ .Values.containerPorts.intra }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
         {{- if .Values.jmxProxy.enabled }}
         - port: {{ .Values.containerPorts.jmx }}
         {{- range .Values.jmxProxy.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
         {{- end }}
       {{- if .Values.metrics.enabled }}

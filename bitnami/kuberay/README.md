@@ -1,6 +1,6 @@
 <!--- app-name: KubeRay -->
 
-# Bitnami package for KubeRay
+# Bitnami Secure Images Helm chart for KubeRay
 
 KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 
@@ -14,7 +14,22 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kuberay
 ```
 
-Looking to use KubeRay in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -211,6 +226,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `operator.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                  | `{}`                               |
 | `operator.watchAllNamespaces`                                | Watch for KubeRay resources in all namespaces                                                                                                                                                                                       | `true`                             |
 | `operator.watchNamespaces`                                   | Watch for KubeRay resources in the given namespaces                                                                                                                                                                                 | `[]`                               |
+| `operator.crNamespacedRbacEnable`                            | Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`                                                                                                                           | `true`                             |
 | `operator.enableBatchScheduler`                              | Enable batch scheduler component                                                                                                                                                                                                    | `false`                            |
 | `operator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production). | `nano`                             |
 | `operator.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                   | `{}`                               |
@@ -331,7 +347,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `operator.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
 | `operator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
 | `operator.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
-| `operator.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false` |
+| `operator.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `true`  |
 | `operator.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`    |
 | `operator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
 | `operator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |

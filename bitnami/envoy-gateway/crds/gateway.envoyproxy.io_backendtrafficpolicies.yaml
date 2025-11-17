@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_backendtrafficpolicies.yaml
-# Version: 1.4.1
+# Version: 1.5.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -178,6 +178,7 @@ spec:
                     description: |-
                       DNSRefreshRate specifies the rate at which DNS records should be refreshed.
                       Defaults to 30 seconds.
+                    pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                     type: string
                   lookupFamily:
                     description: |-
@@ -236,6 +237,7 @@ spec:
                     properties:
                       fixedDelay:
                         description: FixedDelay specifies the fixed delay duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                       percentage:
                         default: 100
@@ -324,6 +326,14 @@ spec:
                               minimum: 100
                               type: integer
                             type: array
+                          hostname:
+                            description: |-
+                              Hostname defines the HTTP host that will be requested during health checking.
+                              Default: HTTPRoute or GRPCRoute hostname.
+                            maxLength: 253
+                            minLength: 1
+                            pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                            type: string
                           method:
                             description: |-
                               Method defines the HTTP method used for health checking.
@@ -338,11 +348,17 @@ spec:
                         required:
                         - path
                         type: object
+                      initialJitter:
+                        description: |-
+                          InitialJitter defines the maximum time Envoy will wait before the first health check.
+                          Envoy will randomly select a value between 0 and the initial jitter value.
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
+                        type: string
                       interval:
                         default: 3s
                         description: Interval defines the time between active health
                           checks.
-                        format: duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                       tcp:
                         description: |-
@@ -416,7 +432,7 @@ spec:
                         default: 1s
                         description: Timeout defines the time to wait for a health
                           check response.
-                        format: duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                       type:
                         allOf:
@@ -467,7 +483,7 @@ spec:
                         default: 30s
                         description: BaseEjectionTime defines the base duration for
                           which a host will be ejected on consecutive failures.
-                        format: duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                       consecutive5XxErrors:
                         default: 5
@@ -492,7 +508,7 @@ spec:
                         default: 3s
                         description: Interval defines the time between passive health
                           checks.
-                        format: duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                       maxEjectionPercent:
                         default: 10
@@ -553,7 +569,19 @@ spec:
                   HTTPUpgrade defines the configuration for HTTP protocol upgrades.
                   If not specified, the default upgrade configuration(websocket) will be used.
                 items:
+                  description: ProtocolUpgradeConfig specifies the configuration for
+                    protocol upgrades.
                   properties:
+                    connect:
+                      description: |-
+                        Connect specifies the configuration for the CONNECT config.
+                        This is allowed only when type is CONNECT.
+                      properties:
+                        terminate:
+                          description: Terminate the CONNECT request, and forwards
+                            the payload as raw TCP data.
+                          type: boolean
+                      type: object
                     type:
                       description: |-
                         Type is the case-insensitive type of protocol upgrade.
@@ -562,6 +590,10 @@ spec:
                   required:
                   - type
                   type: object
+                  x-kubernetes-validations:
+                  - message: The connect configuration is only allowed when the type
+                      is CONNECT.
+                    rule: '!has(self.connect) || self.type == ''CONNECT'''
                 type: array
               loadBalancer:
                 description: |-
@@ -595,6 +627,7 @@ spec:
                             description: |-
                               TTL of the generated cookie if the cookie is not present. This value sets the
                               Max-Age attribute value.
+                            pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                             type: string
                         required:
                         - name
@@ -638,6 +671,34 @@ spec:
                     - message: If consistent hash type is cookie, the cookie field
                         must be set.
                       rule: 'self.type == ''Cookie'' ? has(self.cookie) : !has(self.cookie)'
+                  endpointOverride:
+                    description: |-
+                      EndpointOverride defines the configuration for endpoint override.
+                      When specified, the load balancer will attempt to route requests to endpoints
+                      based on the override information extracted from request headers or metadata.
+                       If the override endpoints are not available, the configured load balancer policy will be used as fallback.
+                    properties:
+                      extractFrom:
+                        description: ExtractFrom defines the sources to extract endpoint
+                          override information from.
+                        items:
+                          description: EndpointOverrideExtractFrom defines a source
+                            to extract endpoint override information from.
+                          properties:
+                            header:
+                              description: |-
+                                Header defines the header to get the override endpoint addresses.
+                                The header value must specify at least one endpoint in `IP:Port` format or multiple endpoints in `IP:Port,IP:Port,...` format.
+                                For example `10.0.0.5:8080` or `[2600:4040:5204::1574:24ae]:80`.
+                                The IPv6 address is enclosed in square brackets.
+                              type: string
+                          type: object
+                        maxItems: 10
+                        minItems: 1
+                        type: array
+                    required:
+                    - extractFrom
+                    type: object
                   slowStart:
                     description: |-
                       SlowStart defines the configuration related to the slow start load balancer policy.
@@ -650,6 +711,7 @@ spec:
                           During slow start window, traffic sent to the newly added hosts will gradually increase.
                           Currently only supports linear growth of traffic. For additional details,
                           see https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/cluster/v3/cluster.proto#config-cluster-v3-cluster-slowstartconfig
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                     required:
                     - window
@@ -668,6 +730,34 @@ spec:
                     - Random
                     - RoundRobin
                     type: string
+                  zoneAware:
+                    description: ZoneAware defines the configuration related to the
+                      distribution of requests between locality zones.
+                    properties:
+                      preferLocal:
+                        description: PreferLocalZone configures zone-aware routing
+                          to prefer sending traffic to the local locality zone.
+                        properties:
+                          force:
+                            description: |-
+                              ForceLocalZone defines override configuration for forcing all traffic to stay within the local zone instead of the default behavior
+                              which maintains equal distribution among upstream endpoints while sending as much traffic as possible locally.
+                            properties:
+                              minEndpointsInZoneThreshold:
+                                description: |-
+                                  MinEndpointsInZoneThreshold is the minimum number of upstream endpoints in the local zone required to honor the forceLocalZone
+                                  override. This is useful for protecting zones with fewer endpoints.
+                                format: int32
+                                type: integer
+                            type: object
+                          minEndpointsThreshold:
+                            description: MinEndpointsThreshold is the minimum number
+                              of total upstream endpoints across all zones required
+                              to enable zone-aware routing.
+                            format: int64
+                            type: integer
+                        type: object
+                    type: object
                 required:
                 - type
                 type: object
@@ -680,6 +770,10 @@ spec:
                     LeastRequest load balancers.
                   rule: 'self.type in [''Random'', ''ConsistentHash''] ? !has(self.slowStart)
                     : true '
+                - message: Currently ZoneAware is only supported for LeastRequest,
+                    Random, and RoundRobin load balancers.
+                  rule: 'self.type == ''ConsistentHash'' ? !has(self.zoneAware) :
+                    true '
               mergeType:
                 description: |-
                   MergeType determines how this configuration is merged with existing BackendTrafficPolicy
@@ -938,12 +1032,14 @@ spec:
                                 unit:
                                   description: |-
                                     RateLimitUnit specifies the intervals for setting rate limits.
-                                    Valid RateLimitUnit values are "Second", "Minute", "Hour", and "Day".
+                                    Valid RateLimitUnit values are "Second", "Minute", "Hour", "Day", "Month" and "Year".
                                   enum:
                                   - Second
                                   - Minute
                                   - Hour
                                   - Day
+                                  - Month
+                                  - Year
                                   type: string
                               required:
                               - requests
@@ -1187,12 +1283,14 @@ spec:
                                 unit:
                                   description: |-
                                     RateLimitUnit specifies the intervals for setting rate limits.
-                                    Valid RateLimitUnit values are "Second", "Minute", "Hour", and "Day".
+                                    Valid RateLimitUnit values are "Second", "Minute", "Hour", "Day", "Month" and "Year".
                                   enum:
                                   - Second
                                   - Minute
                                   - Hour
                                   - Day
+                                  - Month
+                                  - Year
                                   type: string
                               required:
                               - requests
@@ -1318,11 +1416,127 @@ spec:
                       required:
                       - statusCodes
                       type: object
+                    redirect:
+                      description: Redirect configuration
+                      properties:
+                        hostname:
+                          description: |-
+                            Hostname is the hostname to be used in the value of the `Location`
+                            header in the response.
+                            When empty, the hostname in the `Host` header of the request is used.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                          type: string
+                        path:
+                          description: |-
+                            Path defines parameters used to modify the path of the incoming request.
+                            The modified path is then used to construct the `Location` header. When
+                            empty, the request path is used as-is.
+                            Only ReplaceFullPath path modifier is supported currently.
+                          properties:
+                            replaceFullPath:
+                              description: |-
+                                ReplaceFullPath specifies the value with which to replace the full path
+                                of a request during a rewrite or redirect.
+                              maxLength: 1024
+                              type: string
+                            replacePrefixMatch:
+                              description: |-
+                                ReplacePrefixMatch specifies the value with which to replace the prefix
+                                match of a request during a rewrite or redirect. For example, a request
+                                to "/foo/bar" with a prefix match of "/foo" and a ReplacePrefixMatch
+                                of "/xyz" would be modified to "/xyz/bar".
+
+                                Note that this matches the behavior of the PathPrefix match type. This
+                                matches full path elements. A path element refers to the list of labels
+                                in the path split by the `/` separator. When specified, a trailing `/` is
+                                ignored. For example, the paths `/abc`, `/abc/`, and `/abc/def` would all
+                                match the prefix `/abc`, but the path `/abcd` would not.
+
+                                ReplacePrefixMatch is only compatible with a `PathPrefix` HTTPRouteMatch.
+                                Using any other HTTPRouteMatch type on the same HTTPRouteRule will result in
+                                the implementation setting the Accepted Condition for the Route to `status: False`.
+
+                                Request Path | Prefix Match | Replace Prefix | Modified Path
+                              maxLength: 1024
+                              type: string
+                            type:
+                              description: |-
+                                Type defines the type of path modifier. Additional types may be
+                                added in a future release of the API.
+
+                                Note that values may be added to this enum, implementations
+                                must ensure that unknown values will not cause a crash.
+
+                                Unknown values here must result in the implementation setting the
+                                Accepted Condition for the Route to `status: False`, with a
+                                Reason of `UnsupportedValue`.
+                              enum:
+                              - ReplaceFullPath
+                              - ReplacePrefixMatch
+                              type: string
+                          required:
+                          - type
+                          type: object
+                          x-kubernetes-validations:
+                          - message: only ReplaceFullPath is supported for path.type
+                            rule: self.type == 'ReplaceFullPath'
+                          - message: replaceFullPath must be specified when type is
+                              set to 'ReplaceFullPath'
+                            rule: 'self.type == ''ReplaceFullPath'' ? has(self.replaceFullPath)
+                              : true'
+                          - message: type must be 'ReplaceFullPath' when replaceFullPath
+                              is set
+                            rule: 'has(self.replaceFullPath) ? self.type == ''ReplaceFullPath''
+                              : true'
+                          - message: replacePrefixMatch must be specified when type
+                              is set to 'ReplacePrefixMatch'
+                            rule: 'self.type == ''ReplacePrefixMatch'' ? has(self.replacePrefixMatch)
+                              : true'
+                          - message: type must be 'ReplacePrefixMatch' when replacePrefixMatch
+                              is set
+                            rule: 'has(self.replacePrefixMatch) ? self.type == ''ReplacePrefixMatch''
+                              : true'
+                        port:
+                          description: |-
+                            Port is the port to be used in the value of the `Location`
+                            header in the response.
+
+                            If redirect scheme is not-empty, the well-known port associated with the redirect scheme will be used.
+                            Specifically "http" to port 80 and "https" to port 443. If the redirect scheme does not have a
+                            well-known port or redirect scheme is empty, the listener port of the Gateway will be used.
+
+                            Port will not be added in the 'Location' header if scheme is HTTP and port is 80
+                            or scheme is HTTPS and port is 443.
+                          format: int32
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        scheme:
+                          description: |-
+                            Scheme is the scheme to be used in the value of the `Location` header in
+                            the response. When empty, the scheme of the request is used.
+                          enum:
+                          - http
+                          - https
+                          type: string
+                        statusCode:
+                          default: 302
+                          description: StatusCode is the HTTP status code to be used
+                            in response.
+                          enum:
+                          - 301
+                          - 302
+                          type: integer
+                      type: object
                     response:
                       description: Response configuration.
                       properties:
                         body:
-                          description: Body of the Custom Response
+                          description: |-
+                            Body of the Custom Response
+                            Supports Envoy command operators for dynamic content (see https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#command-operators).
                           properties:
                             inline:
                               description: Inline contains the value as an inline
@@ -1399,14 +1613,24 @@ spec:
                       type: object
                   required:
                   - match
-                  - response
                   type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of response or redirect must be specified
+                    rule: (has(self.response) && !has(self.redirect)) || (!has(self.response)
+                      && has(self.redirect))
                 type: array
               retry:
                 description: |-
                   Retry provides more advanced usage, allowing users to customize the number of retries, retry fallback strategy, and retry triggering conditions.
                   If not set, retry will be disabled.
                 properties:
+                  numAttemptsPerPriority:
+                    description: |-
+                      NumAttemptsPerPriority defines the number of requests (initial attempt + retries)
+                      that should be sent to the same priority before switching to a different one.
+                      If not specified or set to 0, all requests are sent to the highest priority that is healthy.
+                    format: int32
+                    type: integer
                   numRetries:
                     default: 2
                     description: NumRetries is the number of retries to be attempted.
@@ -1427,18 +1651,18 @@ spec:
                           baseInterval:
                             description: BaseInterval is the base interval between
                               retries.
-                            format: duration
+                            pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                             type: string
                           maxInterval:
                             description: |-
                               MaxInterval is the maximum interval between retries. This parameter is optional, but must be greater than or equal to the base_interval if set.
                               The default is 10 times the base_interval
-                            format: duration
+                            pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                             type: string
                         type: object
                       timeout:
                         description: Timeout is the timeout per retry attempt.
-                        format: duration
+                        pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                         type: string
                     type: object
                   retryOn:
@@ -1467,6 +1691,7 @@ spec:
                           - 5xx
                           - gateway-error
                           - reset
+                          - reset-before-request
                           - connect-failure
                           - retriable-4xx
                           - refused-stream

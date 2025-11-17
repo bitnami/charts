@@ -19,7 +19,9 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     pod: {{ $targetPod }}
   {{- if or
-    (ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion "") }}
+    (ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion "")
+    $root.Values.sentinel.externalAccess.service.annotations
+    $root.Values.sentinel.commonAnnotations }}
   {{- $loadBalancerIPAnnotaion := "" }}
   {{- if ne $root.Values.sentinel.externalAccess.service.loadBalancerIPAnnotaion ""}}
     {{- $loadBalancerIPAnnotaion = printf

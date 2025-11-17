@@ -130,6 +130,7 @@ spec:
           {{- else }}
           args:
             - server
+            - --gunicorn-opts='--timeout=120'
             {{- if .Values.tracking.tls.enabled }}
             - --gunicorn-opts
             - --certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}
@@ -363,7 +364,13 @@ spec:
         {{- end }}
       volumes:
         - name: tmp
+        {{- if .Values.tracking.tmpVolume.ephemeral.enabled }}
+          ephemeral:
+            volumeClaimTemplate:
+              {{- include "common.tplvalues.render" (dict "value" .Values.tracking.tmpVolume.ephemeral.volumeClaimTemplate "context" $) | nindent 14 }}
+        {{- else }}
           emptyDir: {}
+        {{- end }}
         - name: mlruns
           emptyDir: {}
         - name: mlartifacts

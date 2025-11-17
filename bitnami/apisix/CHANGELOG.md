@@ -1,8 +1,76 @@
 # Changelog
 
-## 5.0.1 (2025-05-28)
+## 6.0.2 (2025-09-16)
 
-* feat: [bitnami/apisix] Add dnsPolicy parameter support ([#33926](https://github.com/bitnami/charts/pull/33926))
+* [bitnami/apisix] Fixed bug caused by inconsistent usage of context with dataPlane.extraEnvVars ([#36252](https://github.com/bitnami/charts/pull/36252))
+
+## 6.0.0 (2025-08-20)
+
+* [bitnami/apisix] major: Integrate apisix-dashboard into apisix (#36136) ([5a872ff](https://github.com/bitnami/charts/commit/5a872ffa25422b04ab276236293b8179268050ed)), closes [#36136](https://github.com/bitnami/charts/issues/36136)
+
+## <small>5.1.6 (2025-08-18)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#36122) ([9ad91f7](https://github.com/bitnami/charts/commit/9ad91f789a864aaf7edde54e10a17118882b0e0b)), closes [#36122](https://github.com/bitnami/charts/issues/36122)
+
+## <small>5.1.5 (2025-08-14)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35868) ([3964047](https://github.com/bitnami/charts/commit/3964047593f995eb28692cdd6badc2d6cd0bc4e2)), closes [#35868](https://github.com/bitnami/charts/issues/35868)
+
+## <small>5.1.4 (2025-08-08)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35710) ([f90b579](https://github.com/bitnami/charts/commit/f90b57966df7d244891b4dba45ce23f65800fccd)), closes [#35710](https://github.com/bitnami/charts/issues/35710)
+
+## <small>5.1.3 (2025-08-07)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35639) ([3bf169f](https://github.com/bitnami/charts/commit/3bf169f4e8d47a924ba27fba164a81ea7aadbccd)), closes [#35639](https://github.com/bitnami/charts/issues/35639)
+
+## <small>5.1.2 (2025-08-07)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35540) ([3e3ba54](https://github.com/bitnami/charts/commit/3e3ba54845df9e372d80e7e24fa76b8882f7bd8b)), closes [#35540](https://github.com/bitnami/charts/issues/35540)
+
+## <small>5.1.1 (2025-08-06)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35452) ([434b20c](https://github.com/bitnami/charts/commit/434b20c1c9033779e91dbfba6994d970198fa89c)), closes [#35452](https://github.com/bitnami/charts/issues/35452)
+
+## 5.1.0 (2025-08-01)
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/apisix] fix: Apisix clean uds (#34987) ([917cf05](https://github.com/bitnami/charts/commit/917cf05244decd9934919e1e6bd5b0c6e4309277)), closes [#34987](https://github.com/bitnami/charts/issues/34987)
+
+## <small>5.0.8 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/charts/issues/35218] Share context with apisix.etcd.authEnabled function (#35257) ([017722c](https://github.com/bitnami/charts/commit/017722ccd67a005d541e3aa72275d0484ba5838b)), closes [#35257](https://github.com/bitnami/charts/issues/35257)
+
+## <small>5.0.7 (2025-07-15)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#35079) ([03f66b2](https://github.com/bitnami/charts/commit/03f66b2c6caaaf14477cb720e8dff0c43407f686)), closes [#35079](https://github.com/bitnami/charts/issues/35079)
+
+## <small>5.0.6 (2025-07-08)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34865) ([5c9287c](https://github.com/bitnami/charts/commit/5c9287c28a82889e83ab6390d5327fa53a9a0a9a)), closes [#34865](https://github.com/bitnami/charts/issues/34865)
+
+## <small>5.0.5 (2025-07-07)</small>
+
+* [bitnami/apisix]: Correct values comments (#34737) ([e9bc018](https://github.com/bitnami/charts/commit/e9bc018e6802e0a2ea92e7a5a53a1e89f95b7ba6)), closes [#34737](https://github.com/bitnami/charts/issues/34737)
+
+## <small>5.0.4 (2025-06-27)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34687) ([605be56](https://github.com/bitnami/charts/commit/605be569626e31e217e61c5dc96964b8cf861201)), closes [#34687](https://github.com/bitnami/charts/issues/34687)
+
+## <small>5.0.3 (2025-06-13)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34390) ([c6638d8](https://github.com/bitnami/charts/commit/c6638d85b4251c422aba1b1819d6f7c38906a637)), closes [#34390](https://github.com/bitnami/charts/issues/34390)
+
+## <small>5.0.2 (2025-06-05)</small>
+
+* [bitnami/apisix] :zap: :arrow_up: Update dependency references (#34131) ([6c92e2b](https://github.com/bitnami/charts/commit/6c92e2b43c77189862658dce993e624ab6ecb9ab)), closes [#34131](https://github.com/bitnami/charts/issues/34131)
+
+## <small>5.0.1 (2025-05-29)</small>
+
+* feat: [bitnami/apisix] Add dnsPolicy parameter support (#33926) ([62bffa4](https://github.com/bitnami/charts/commit/62bffa41d6c4ae2eb5d1ffb986d1b3993d9122ef)), closes [#33926](https://github.com/bitnami/charts/issues/33926)
 
 ## 5.0.0 (2025-05-26)
 

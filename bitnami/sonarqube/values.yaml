@@ -92,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 25.6.0-debian-12-r1
+  tag: 25.8.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -139,7 +139,7 @@ maxHeapSize: 2048m
 ## @param jvmOpts Values to add to SONARQUBE_WEB_JAVA_ADD_OPTS
 ##
 jvmOpts: ""
-## @param jvmCeOpts Values to add to SONAR_CE_JAVAADDITIONALOPTS
+## @param jvmCeOpts Values to add to SONARQUBE_CE_JAVA_ADD_OPTS
 ##
 jvmCeOpts: ""
 ## @param startTimeout Timeout for the application to start in seconds
@@ -707,7 +707,7 @@ ingress:
 ## @section SonarQube caCerts provisioning parameters
 ##
 ## Provide a secret containing one or more certificate files in the keys that will be added to cacerts
-## The cacerts file will be set via SONARQUBE_WEB_JAVA_ADD_OPTS and SONAR_CE_JAVAADDITIONALOPTS
+## The cacerts file will be set via SONARQUBE_WEB_JAVA_ADD_OPTS and SONARQUBE_CE_JAVA_ADD_OPTS
 caCerts:
   ## @param caCerts.enabled Enable the use of caCerts
   ##
@@ -724,7 +724,7 @@ caCerts:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -813,7 +813,7 @@ plugins:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -922,7 +922,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -984,7 +984,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r51
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1084,7 +1084,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 1.3.0-debian-12-r3
+      tag: 1.4.0-debian-12-r0
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.

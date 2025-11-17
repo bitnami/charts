@@ -1,8 +1,37 @@
 # Changelog
 
-## 1.3.5 (2025-05-27)
+## 1.3.11 (2025-08-11)
 
-* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#33925](https://github.com/bitnami/charts/pull/33925))
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references ([#35735](https://github.com/bitnami/charts/pull/35735))
+
+## <small>1.3.10 (2025-08-07)</small>
+
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#35685) ([dbc1d5a](https://github.com/bitnami/charts/commit/dbc1d5ab9755b04569ee83db887b756bbe0735e5)), closes [#35685](https://github.com/bitnami/charts/issues/35685)
+
+## <small>1.3.9 (2025-08-07)</small>
+
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#35548) ([f0305bd](https://github.com/bitnami/charts/commit/f0305bd08a012fa1a8fa8684e200a0dc63ddae5d)), closes [#35548](https://github.com/bitnami/charts/issues/35548)
+
+## <small>1.3.8 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#35421) ([9ca0a96](https://github.com/bitnami/charts/commit/9ca0a9628c62595baecdd250ce2692f9b6f16e4f)), closes [#35421](https://github.com/bitnami/charts/issues/35421)
+
+## <small>1.3.7 (2025-07-26)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#35306) ([744fd96](https://github.com/bitnami/charts/commit/744fd96775a619218e75a90f7559b9f2c33df274)), closes [#35306](https://github.com/bitnami/charts/issues/35306)
+
+## <small>1.3.6 (2025-06-26)</small>
+
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#34681) ([c726346](https://github.com/bitnami/charts/commit/c726346ac0e010e5bfa5b9803476768888bda989)), closes [#34681](https://github.com/bitnami/charts/issues/34681)
+
+## <small>1.3.5 (2025-05-27)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/zipkin] :zap: :arrow_up: Update dependency references (#33925) ([bbbbaff](https://github.com/bitnami/charts/commit/bbbbaffe7096281c8d3e2a0280160d6ecb44fd05)), closes [#33925](https://github.com/bitnami/charts/issues/33925)
 
 ## <small>1.3.4 (2025-05-06)</small>
 

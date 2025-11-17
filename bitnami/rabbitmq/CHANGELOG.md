@@ -1,8 +1,40 @@
 # Changelog
 
-## 16.0.7 (2025-06-09)
+## 16.0.14 (2025-08-13)
 
-* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references ([#34276](https://github.com/bitnami/charts/pull/34276))
+* [bitnami/rabbitmq] Migrate deprecated queue_leader_locator configuration ([#35748](https://github.com/bitnami/charts/pull/35748))
+
+## <small>16.0.13 (2025-08-07)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#35650) ([29e7af1](https://github.com/bitnami/charts/commit/29e7af193d705c9d729b5fd394a0f7dabc2fe513)), closes [#35650](https://github.com/bitnami/charts/issues/35650)
+
+## <small>16.0.12 (2025-08-04)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#35396) ([f38c863](https://github.com/bitnami/charts/commit/f38c863ac5fdd722e406f73cc60b10f2879f8b88)), closes [#35396](https://github.com/bitnami/charts/issues/35396)
+
+## <small>16.0.11 (2025-07-15)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#35121) ([9a48aeb](https://github.com/bitnami/charts/commit/9a48aeb10d6ca428f8bf5f097beed774aea1f69d)), closes [#35121](https://github.com/bitnami/charts/issues/35121)
+
+## <small>16.0.10 (2025-07-03)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34789) ([06d1f4e](https://github.com/bitnami/charts/commit/06d1f4e0bd930a574081ea92149ec3f0662dd113)), closes [#34789](https://github.com/bitnami/charts/issues/34789)
+
+## <small>16.0.9 (2025-06-25)</small>
+
+* [bitnami/rabbitmq] Update dependencies (#34616) ([31f65af](https://github.com/bitnami/charts/commit/31f65af3c533a97ee52328f1a055f03e7f6d7efb)), closes [#34616](https://github.com/bitnami/charts/issues/34616)
+
+## <small>16.0.8 (2025-06-13)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34484) ([a7379b4](https://github.com/bitnami/charts/commit/a7379b406abad89931455da3354fc85eed4df300)), closes [#34484](https://github.com/bitnami/charts/issues/34484)
+
+## <small>16.0.7 (2025-06-09)</small>
+
+* [bitnami/rabbitmq] :zap: :arrow_up: Update dependency references (#34276) ([8e7d44a](https://github.com/bitnami/charts/commit/8e7d44a8fd17b6ab8c32c904fcc34c4aa5b23375)), closes [#34276](https://github.com/bitnami/charts/issues/34276)
 
 ## <small>16.0.6 (2025-06-05)</small>
 

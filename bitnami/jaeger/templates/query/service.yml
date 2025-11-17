@@ -36,19 +36,27 @@ spec:
   externalTrafficPolicy: {{ .Values.query.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
-    - name: api
-      port: {{ .Values.query.service.ports.api }}
-      targetPort: {{ .Values.query.containerPorts.api }}
-      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.api)) }}
-      nodePort: {{ .Values.query.service.nodePorts.api }}
+    - name: grpc
+      port: {{ .Values.query.service.ports.grpc }}
+      targetPort: {{ .Values.query.containerPorts.grpc }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.query.service.nodePorts.grpc }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: admin
-      port: {{ .Values.query.service.ports.admin }}
-      targetPort: {{ .Values.query.containerPorts.admin }}
-      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.admin)) }}
-      nodePort: {{ .Values.query.service.nodePorts.admin }}
+    - name: http
+      port: {{ .Values.query.service.ports.http }}
+      targetPort: {{ .Values.query.containerPorts.http }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.http)) }}
+      nodePort: {{ .Values.query.service.nodePorts.http }}
+      {{- else if eq .Values.query.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: metrics
+      port: {{ .Values.query.service.ports.metrics }}
+      targetPort: {{ .Values.query.containerPorts.metrics }}
+      {{- if and (or (eq .Values.query.service.type "NodePort") (eq .Values.query.service.type "LoadBalancer")) (not (empty .Values.query.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.query.service.nodePorts.metrics }}
       {{- else if eq .Values.query.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

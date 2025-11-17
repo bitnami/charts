@@ -1,8 +1,76 @@
 # Changelog
 
-## 26.7.5 (2025-06-11)
+## 27.0.2 (2025-08-13)
 
-* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#34264](https://github.com/bitnami/charts/pull/34264))
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references ([#35850](https://github.com/bitnami/charts/pull/35850))
+
+## <small>27.0.1 (2025-08-13)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35814) ([6297f42](https://github.com/bitnami/charts/commit/6297f424fb03ab1f0e7e3819db9099de6f7bc6ac)), closes [#35814](https://github.com/bitnami/charts/issues/35814)
+
+## 27.0.0 (2025-08-11)
+
+* [bitnami/harbor] Upgrade to Redis subchart 22 (#35722) ([067ae66](https://github.com/bitnami/charts/commit/067ae669d288ecb63bfc964993cd4941fdc6e9f1)), closes [#35722](https://github.com/bitnami/charts/issues/35722)
+
+## <small>26.8.5 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35611) ([1cf61c0](https://github.com/bitnami/charts/commit/1cf61c01dc4786859742bec313826234db93ca00)), closes [#35611](https://github.com/bitnami/charts/issues/35611)
+
+## <small>26.8.4 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35563) ([73135fd](https://github.com/bitnami/charts/commit/73135fd65fca6b1fb5ca2e933f1855070266844c)), closes [#35563](https://github.com/bitnami/charts/issues/35563)
+
+## <small>26.8.3 (2025-08-07)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35485) ([2bd9036](https://github.com/bitnami/charts/commit/2bd9036afab16d32f91aac07ee54ac0e749123dc)), closes [#35485](https://github.com/bitnami/charts/issues/35485)
+
+## <small>26.8.2 (2025-08-01)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35379) ([d724887](https://github.com/bitnami/charts/commit/d72488719a9554d504080f102269c03c129245c0)), closes [#35379](https://github.com/bitnami/charts/issues/35379)
+
+## <small>26.8.1 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35362) ([ec4be93](https://github.com/bitnami/charts/commit/ec4be93cd57ad58cdd26391b6e752a325917ed30)), closes [#35362](https://github.com/bitnami/charts/issues/35362)
+
+## 26.8.0 (2025-07-21)
+
+* [bitnami/harbor] feat: allow to disable ingress (#35194) ([c258377](https://github.com/bitnami/charts/commit/c258377102c006770689500ef22b8cf331f64563)), closes [#35194](https://github.com/bitnami/charts/issues/35194)
+
+## <small>26.7.12 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35182) ([57f9b65](https://github.com/bitnami/charts/commit/57f9b65441824aa1e4d5ed3ff0db6c0310a87556)), closes [#35182](https://github.com/bitnami/charts/issues/35182)
+
+## <small>26.7.11 (2025-07-15)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#35093) ([a4e57bc](https://github.com/bitnami/charts/commit/a4e57bc30e360ea94afaff97a84002afbc3949f4)), closes [#35093](https://github.com/bitnami/charts/issues/35093)
+
+## <small>26.7.10 (2025-07-09)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34907) ([40e97d1](https://github.com/bitnami/charts/commit/40e97d16fb5425ba1bb778b2783ef50ab96dcc5e)), closes [#34907](https://github.com/bitnami/charts/issues/34907)
+
+## <small>26.7.9 (2025-07-09)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34906) ([3ff23d1](https://github.com/bitnami/charts/commit/3ff23d1bc31c605e514ecc9610ea52aeb13e8cfe)), closes [#34906](https://github.com/bitnami/charts/issues/34906)
+
+## <small>26.7.8 (2025-06-30)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34719) ([c0a659d](https://github.com/bitnami/charts/commit/c0a659d122d1d1f2c0c5020bf19ee24cd5bb6475)), closes [#34719](https://github.com/bitnami/charts/issues/34719)
+
+## <small>26.7.7 (2025-06-26)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34659) ([456cb5f](https://github.com/bitnami/charts/commit/456cb5f4d3c8af237426beec3ab8982c344f054e)), closes [#34659](https://github.com/bitnami/charts/issues/34659)
+
+## <small>26.7.6 (2025-06-16)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34448) ([a1ed439](https://github.com/bitnami/charts/commit/a1ed439b4b064b5452e01dc2c58356f120a0e45e)), closes [#34448](https://github.com/bitnami/charts/issues/34448)
+
+## <small>26.7.5 (2025-06-11)</small>
+
+* [bitnami/harbor] :zap: :arrow_up: Update dependency references (#34264) ([76c48d3](https://github.com/bitnami/charts/commit/76c48d399fcd4c5929c68a826fbbbc6d245319ad)), closes [#34264](https://github.com/bitnami/charts/issues/34264)
 
 ## <small>26.7.4 (2025-06-09)</small>
 

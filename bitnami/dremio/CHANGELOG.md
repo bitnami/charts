@@ -1,8 +1,56 @@
 # Changelog
 
-## 3.0.3 (2025-06-10)
+## 3.1.0 (2025-10-22)
 
-* [bitnami/dremio] :zap: :arrow_up: Update dependency references ([#34303](https://github.com/bitnami/charts/pull/34303))
+* [bitnami/dremio] Make Dremio work with AWS S3 storage ([#36365](https://github.com/bitnami/charts/pull/36365))
+
+## <small>3.0.13 (2025-08-26)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#36188) ([c543356](https://github.com/bitnami/charts/commit/c54335638371cf2c3a259a9ab43f0fc017b085bb)), closes [#36188](https://github.com/bitnami/charts/issues/36188)
+
+## <small>3.0.12 (2025-08-07)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35601) ([d76fac4](https://github.com/bitnami/charts/commit/d76fac43e9bf86a492813af7aa9bd24ce910367a)), closes [#35601](https://github.com/bitnami/charts/issues/35601)
+
+## <small>3.0.11 (2025-08-07)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35570) ([60e4c6c](https://github.com/bitnami/charts/commit/60e4c6c4f2868aef197c137186a07da41462cb55)), closes [#35570](https://github.com/bitnami/charts/issues/35570)
+
+## <small>3.0.10 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35558) ([adea33b](https://github.com/bitnami/charts/commit/adea33b906db0237ec6bc4f81ebb7868fd1dbd7e)), closes [#35558](https://github.com/bitnami/charts/issues/35558)
+
+## <small>3.0.9 (2025-07-17)</small>
+
+* [bitnami/dremio] bugfix: conditions to disable S3 storage (#35169) ([ab98ea5](https://github.com/bitnami/charts/commit/ab98ea57170079d0f6709441c20a2a1f221ee614)), closes [#35169](https://github.com/bitnami/charts/issues/35169)
+
+## <small>3.0.8 (2025-07-15)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#35089) ([1d94895](https://github.com/bitnami/charts/commit/1d948958cbf9f74d336ce8f48c79daf5e0482273)), closes [#35089](https://github.com/bitnami/charts/issues/35089)
+
+## <small>3.0.7 (2025-07-14)</small>
+
+* [bitnami/dremio] chore: create helper for headless svc name (#35039) ([15b4f7d](https://github.com/bitnami/charts/commit/15b4f7da289ee386f8c14b3aa7f69bc1ec76c08d)), closes [#35039](https://github.com/bitnami/charts/issues/35039)
+
+## <small>3.0.6 (2025-07-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34988) ([a502aba](https://github.com/bitnami/charts/commit/a502aba30df023e5eb4c1b4bdea7ca908a36e570)), closes [#34988](https://github.com/bitnami/charts/issues/34988)
+
+## <small>3.0.5 (2025-07-03)</small>
+
+* [bitnami/dremio] Engine overrides are clobbered by the last value (#34725) ([cf71b71](https://github.com/bitnami/charts/commit/cf71b7189f5742392c136ffd5c49448a7f8fe8dc)), closes [#34725](https://github.com/bitnami/charts/issues/34725)
+
+## <small>3.0.4 (2025-06-13)</small>
+
+* [bitnami/dremio] bugfix: common.capabilities.vpa.apiVersion context (#34380) ([f2eeff4](https://github.com/bitnami/charts/commit/f2eeff497d27abdfa56952953a3d8069e84f247d)), closes [#34380](https://github.com/bitnami/charts/issues/34380)
+
+## <small>3.0.3 (2025-06-10)</small>
+
+* [bitnami/dremio] :zap: :arrow_up: Update dependency references (#34303) ([f5e9ccb](https://github.com/bitnami/charts/commit/f5e9ccb38d712460211fed98e05de6651c881904)), closes [#34303](https://github.com/bitnami/charts/issues/34303)
 
 ## <small>3.0.2 (2025-06-09)</small>
 

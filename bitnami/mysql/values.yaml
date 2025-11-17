@@ -97,7 +97,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 9.3.0-debian-12-r2
+  tag: 9.4.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -578,6 +578,9 @@ primary:
   ## @param primary.initContainers Add additional init containers for the MySQL Primary pod(s)
   ##
   initContainers: []
+  ## @param primary.enableDefaultInitContainers enables (or disables if false) the default init containers (logs-symlinks, volume permissions)
+  ##
+  enableDefaultInitContainers: true
   ## @param primary.sidecars Add additional sidecar containers for the MySQL Primary pod(s)
   ##
   sidecars: []
@@ -1018,6 +1021,9 @@ secondary:
   ## @param secondary.initContainers Add additional init containers for the MySQL secondary pod(s)
   ##
   initContainers: []
+  ## @param secondary.enableDefaultInitContainers enables (or disables if false) the default init containers (logs-symlinks, volume permissions)
+  ##
+  enableDefaultInitContainers: true
   ## @param secondary.sidecars Add additional sidecar containers for the MySQL secondary pod(s)
   ##
   sidecars: []
@@ -1355,7 +1361,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1400,7 +1406,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.17.2-debian-12-r11
+    tag: 0.17.2-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

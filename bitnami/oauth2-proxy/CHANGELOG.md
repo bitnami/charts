@@ -1,8 +1,44 @@
 # Changelog
 
-## 7.0.2 (2025-06-10)
+## 8.0.2 (2025-08-19)
 
-* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#34327](https://github.com/bitnami/charts/pull/34327))
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references ([#36132](https://github.com/bitnami/charts/pull/36132))
+
+## <small>8.0.1 (2025-08-14)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35890) ([75e9466](https://github.com/bitnami/charts/commit/75e9466d156d5c71efb022a1c86cff2fac75c3c1)), closes [#35890](https://github.com/bitnami/charts/issues/35890)
+
+## 8.0.0 (2025-08-11)
+
+* [bitnami/oauth2-proxy] Upgrade to Redis subchart 22 (#35720) ([c422957](https://github.com/bitnami/charts/commit/c422957ecf903b22dc5fd5d01e4e43bfa94674e0)), closes [#35720](https://github.com/bitnami/charts/issues/35720)
+
+## <small>7.0.7 (2025-08-07)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35514) ([bf2797e](https://github.com/bitnami/charts/commit/bf2797eac44c770388187f3f9a709316c47a3946)), closes [#35514](https://github.com/bitnami/charts/issues/35514)
+
+## <small>7.0.6 (2025-07-31)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35368) ([5410eab](https://github.com/bitnami/charts/commit/5410eabff83d9084b3258b3b66b3b6aba9496a68)), closes [#35368](https://github.com/bitnami/charts/issues/35368)
+
+## <small>7.0.5 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#35184) ([54db0d0](https://github.com/bitnami/charts/commit/54db0d0077b93b9d329c6fbc6be243af793bc3b6)), closes [#35184](https://github.com/bitnami/charts/issues/35184)
+
+## <small>7.0.4 (2025-07-09)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34933) ([e9f2b41](https://github.com/bitnami/charts/commit/e9f2b41862f83adf6232724789bb5baba9f8df0f)), closes [#34933](https://github.com/bitnami/charts/issues/34933)
+
+## <small>7.0.3 (2025-06-13)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34480) ([8b65b45](https://github.com/bitnami/charts/commit/8b65b453ddea50837f860d0b5d6eb9df78617ed1)), closes [#34480](https://github.com/bitnami/charts/issues/34480)
+
+## <small>7.0.2 (2025-06-10)</small>
+
+* [bitnami/oauth2-proxy] :zap: :arrow_up: Update dependency references (#34327) ([0d0415b](https://github.com/bitnami/charts/commit/0d0415b7f5dbe5c1adde5ad2b01a431b349f3095)), closes [#34327](https://github.com/bitnami/charts/issues/34327)
 
 ## <small>7.0.1 (2025-06-06)</small>
 

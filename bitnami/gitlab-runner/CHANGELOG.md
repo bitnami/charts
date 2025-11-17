@@ -1,8 +1,68 @@
 # Changelog
 
-## 1.0.2 (2025-06-11)
+## 1.1.8 (2025-08-21)
 
-* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#34357](https://github.com/bitnami/charts/pull/34357))
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references ([#36163](https://github.com/bitnami/charts/pull/36163))
+
+## <small>1.1.7 (2025-08-20)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#36153) ([a484d2b](https://github.com/bitnami/charts/commit/a484d2b420bcb31afb452d1664f409487a28e154)), closes [#36153](https://github.com/bitnami/charts/issues/36153)
+
+## <small>1.1.6 (2025-08-14)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35871) ([f2ec484](https://github.com/bitnami/charts/commit/f2ec48441135126aaa3eb0a19aafd09e6acc2643)), closes [#35871](https://github.com/bitnami/charts/issues/35871)
+
+## <small>1.1.5 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35478) ([1289ee3](https://github.com/bitnami/charts/commit/1289ee381f97ef5a68be658466f4899e92fb4575)), closes [#35478](https://github.com/bitnami/charts/issues/35478)
+
+## <small>1.1.4 (2025-07-28)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35312) ([131a054](https://github.com/bitnami/charts/commit/131a054622302c9a02fd1526d1b114be035ea17a)), closes [#35312](https://github.com/bitnami/charts/issues/35312)
+
+## <small>1.1.3 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35188) ([0b16631](https://github.com/bitnami/charts/commit/0b166314aa21c0a869037538493d7e0a550ec3a4)), closes [#35188](https://github.com/bitnami/charts/issues/35188)
+
+## <small>1.1.2 (2025-07-15)</small>
+
+* [bitnami/gitlab-runner] feat: add support for custom image_pull_secrets (#35057) ([9bd3b6d](https://github.com/bitnami/charts/commit/9bd3b6dd43f4592803bb09521311cef324e8d230)), closes [#35057](https://github.com/bitnami/charts/issues/35057)
+
+## <small>1.1.1 (2025-07-14)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#35044) ([aefd1d3](https://github.com/bitnami/charts/commit/aefd1d325ab30175d292ef24b86b04715a6fab28)), closes [#35044](https://github.com/bitnami/charts/issues/35044)
+
+## 1.1.0 (2025-07-14)
+
+* [bitnami/gitlab-runner] feat: add paramters to customize Gitlab Runner Helper image (#35042) ([ae24482](https://github.com/bitnami/charts/commit/ae244829471a787b754f6ab75f2d3355d7288c88)), closes [#35042](https://github.com/bitnami/charts/issues/35042)
+
+## <small>1.0.7 (2025-07-08)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34895) ([3bfa7b8](https://github.com/bitnami/charts/commit/3bfa7b8876c1948f78f4a72958d4790a6c4cf29a)), closes [#34895](https://github.com/bitnami/charts/issues/34895)
+
+## <small>1.0.6 (2025-07-03)</small>
+
+* [bitnami/gitlab-runner] Wrong input expected by the helper function (#34780) ([e3292f7](https://github.com/bitnami/charts/commit/e3292f7012ac086a8a3a66075e57b6bb5480ea96)), closes [#34780](https://github.com/bitnami/charts/issues/34780)
+
+## <small>1.0.5 (2025-06-26)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34668) ([2d86401](https://github.com/bitnami/charts/commit/2d8640184cfaf9e3d3ab34ef7230c1f2ad425d3b)), closes [#34668](https://github.com/bitnami/charts/issues/34668)
+
+## <small>1.0.4 (2025-06-20)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34569) ([663f05f](https://github.com/bitnami/charts/commit/663f05f4b508adda31123edf41dd734e41c889ba)), closes [#34569](https://github.com/bitnami/charts/issues/34569)
+
+## <small>1.0.3 (2025-06-13)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34440) ([e4e72db](https://github.com/bitnami/charts/commit/e4e72db9ffb2330098769406157516511361e7fe)), closes [#34440](https://github.com/bitnami/charts/issues/34440)
+
+## <small>1.0.2 (2025-06-11)</small>
+
+* [bitnami/gitlab-runner] :zap: :arrow_up: Update dependency references (#34357) ([202bb82](https://github.com/bitnami/charts/commit/202bb8290d257139b2ec0bd3332d7837b2c6027d)), closes [#34357](https://github.com/bitnami/charts/issues/34357)
 
 ## <small>1.0.1 (2025-06-05)</small>
 

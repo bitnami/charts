@@ -1,8 +1,37 @@
 # Changelog
 
-## 2.5.13 (2025-06-06)
+## 2.5.19 (2025-08-18)
 
-* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#34219](https://github.com/bitnami/charts/pull/34219))
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references ([#36096](https://github.com/bitnami/charts/pull/36096))
+
+## <small>2.5.18 (2025-08-14)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#35896) ([f269113](https://github.com/bitnami/charts/commit/f269113197fa91193d31c79b8a0a4ed0c1788acf)), closes [#35896](https://github.com/bitnami/charts/issues/35896)
+
+## <small>2.5.17 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#35530) ([1f36f5c](https://github.com/bitnami/charts/commit/1f36f5cd890ec68a2dd16024a3b87ae3b39a6ab4)), closes [#35530](https://github.com/bitnami/charts/issues/35530)
+
+## <small>2.5.16 (2025-07-09)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34950) ([678cca4](https://github.com/bitnami/charts/commit/678cca46c9de4a209c73491408adf32576861ba8)), closes [#34950](https://github.com/bitnami/charts/issues/34950)
+
+## <small>2.5.15 (2025-06-16)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34492) ([1f70b72](https://github.com/bitnami/charts/commit/1f70b72a29dd8def0175b89a61e00dc14057ddc3)), closes [#34492](https://github.com/bitnami/charts/issues/34492)
+
+## <small>2.5.14 (2025-06-12)</small>
+
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34371) ([7d0511c](https://github.com/bitnami/charts/commit/7d0511c51b70560ad670e0db56b636c406c2a052)), closes [#34371](https://github.com/bitnami/charts/issues/34371)
+
+## <small>2.5.13 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/sealed-secrets] :zap: :arrow_up: Update dependency references (#34219) ([22645d3](https://github.com/bitnami/charts/commit/22645d3c72b846fc78e75e3376157f3a25e40abd)), closes [#34219](https://github.com/bitnami/charts/issues/34219)
 
 ## <small>2.5.12 (2025-05-07)</small>
 

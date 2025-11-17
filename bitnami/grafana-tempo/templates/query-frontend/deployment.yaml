@@ -170,6 +170,9 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - tempo-query
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -177,9 +180,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --query.base-path=/
-            - --grpc-storage-plugin.configuration-file=/bitnami/grafana-tempo/conf/tempo-query.yaml
-            - --query.bearer-token-propagation=true
+            - -config=/bitnami/grafana-tempo/conf/tempo-query.yaml
           {{- end }}
           {{- if .Values.queryFrontend.query.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraEnvVars "context" $) | nindent 12 }}
@@ -194,12 +195,8 @@ spec:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.extraEnvVarsSecret "context" $) }}
             {{- end }}
           ports:
-            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerUI }}
-              name: jaeger-ui
-            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
-              name: jaeger-metrics
-            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerGRPC }}
-              name: jaeger-grpc
+            - containerPort: {{ .Values.queryFrontend.query.containerPorts.grpcJaeger }}
+              name: grpc-jaeger
           {{- if .Values.queryFrontend.query.resources }}
           resources: {{- toYaml .Values.queryFrontend.query.resources | nindent 12 }}
           {{- else if ne .Values.queryFrontend.query.resourcesPreset "none" }}
@@ -210,23 +207,24 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: jaeger-ui
+            exec:
+              command:
+                - pgrep
+                - tempo-query
           {{- end }}
           {{- if .Values.queryFrontend.query.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              port: jaeger-ui
+            tcpSocket:
+              port: grpc-jaeger
           {{- end }}
           {{- if .Values.queryFrontend.query.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: jaeger-ui
+              port: grpc-jaeger
           {{- end }}
           {{- end }}
           {{- if .Values.queryFrontend.query.lifecycleHooks }}

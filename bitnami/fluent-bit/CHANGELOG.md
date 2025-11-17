@@ -1,8 +1,44 @@
 # Changelog
 
-## 3.1.5 (2025-06-03)
+## 3.1.13 (2025-08-15)
 
-* [bitnami/fluent-bit] Fix HPA  target type ([#34052](https://github.com/bitnami/charts/pull/34052))
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references ([#36031](https://github.com/bitnami/charts/pull/36031))
+
+## <small>3.1.12 (2025-08-14)</small>
+
+* [bitnami/fluent-bit] fix: add extraContainerPorts value(s) to container configuration for fluent-bit ([c445c14](https://github.com/bitnami/charts/commit/c445c14826478cd9bb27b4569e3da3ffe608ca9f)), closes [#35806](https://github.com/bitnami/charts/issues/35806)
+
+## <small>3.1.11 (2025-08-07)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#35534) ([06c5301](https://github.com/bitnami/charts/commit/06c5301163a515c698b45a6a26adeaeacbba4ab8)), closes [#35534](https://github.com/bitnami/charts/issues/35534)
+
+## <small>3.1.10 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#35393) ([e9c0b8d](https://github.com/bitnami/charts/commit/e9c0b8dfa35c66f03290ba97265b12efeb7c226b)), closes [#35393](https://github.com/bitnami/charts/issues/35393)
+
+## <small>3.1.9 (2025-07-23)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#35250) ([da8a832](https://github.com/bitnami/charts/commit/da8a8322cdbbdb12c5cdf573d4833f57069aee3b)), closes [#35250](https://github.com/bitnami/charts/issues/35250)
+
+## <small>3.1.8 (2025-07-09)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#34976) ([15a4e75](https://github.com/bitnami/charts/commit/15a4e755979a53e4a447110b513caf0dbc9e4ef4)), closes [#34976](https://github.com/bitnami/charts/issues/34976)
+
+## <small>3.1.7 (2025-07-07)</small>
+
+* [bitnami/fluent-bit] Remove healthcheck VIB test (#34829) ([86395d4](https://github.com/bitnami/charts/commit/86395d4011a3b031f5f37f867b0a4ccba3d676e1)), closes [#34829](https://github.com/bitnami/charts/issues/34829)
+
+## <small>3.1.6 (2025-06-29)</small>
+
+* [bitnami/fluent-bit] :zap: :arrow_up: Update dependency references (#34704) ([4a29a32](https://github.com/bitnami/charts/commit/4a29a322d558718ff9e3a582e38faef1c5c49026)), closes [#34704](https://github.com/bitnami/charts/issues/34704)
+
+## <small>3.1.5 (2025-06-03)</small>
+
+* [bitnami/fluent-bit] Fix HPA  target type (#34052) ([b38ed91](https://github.com/bitnami/charts/commit/b38ed9161d728c576666940106b27a669abf3e7d)), closes [#34052](https://github.com/bitnami/charts/issues/34052)
 
 ## <small>3.1.4 (2025-05-30)</small>
 

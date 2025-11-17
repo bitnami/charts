@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana-k6-operator.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list  .Values.image .Values.runnerImage .Values.starterImage .Values.metrics.authProxy.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list  .Values.image .Values.runnerImage .Values.starterImage ) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -29,13 +29,6 @@ Return the proper Grafana k6 Operator Sidecar image name
 */}}
 {{- define "grafana-k6-operator.starter.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.starterImage "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper kube-auth-proxy image name
-*/}}
-{{- define "grafana-k6-operator.authProxy.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.authProxy.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*

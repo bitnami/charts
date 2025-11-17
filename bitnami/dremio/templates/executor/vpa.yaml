@@ -12,11 +12,12 @@ SPDX-License-Identifier: APACHE-2.0
   https://docs.dremio.com/cloud/sonar/workloads/engines/
  */}}
 {{- range $engine := .Values.executor.engines }}
-{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+{{- $executorValues := deepCopy $.Values.executor.common }}
+{{- $executorValues = mustMergeOverwrite $executorValues $engine.overrides }}
 
 {{- if and (include "common.capabilities.apiVersions.has" ( dict "version" "autoscaling.k8s.io/v1/VerticalPodAutoscaler" "context" $ )) $executorValues.autoscaling.vpa.enabled }}
 ---
-apiVersion: {{ include "common.capabilities.vpa.apiVersion" (dict "context" $) }}
+apiVersion: {{ include "common.capabilities.vpa.apiVersion" $ }}
 kind: VerticalPodAutoscaler
 metadata:
   name: {{ include "dremio.executor.fullname" (dict "context" $ "engine" $engine.name) }}

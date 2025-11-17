@@ -1,8 +1,32 @@
 # Changelog
 
-## 1.4.5 (2025-06-10)
+## 1.4.10 (2025-08-26)
 
-* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#34300](https://github.com/bitnami/charts/pull/34300))
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#36187](https://github.com/bitnami/charts/pull/36187))
+
+## <small>1.4.9 (2025-08-07)</small>
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#35612) ([360004a](https://github.com/bitnami/charts/commit/360004a74a99d50f270cab7eea3a0ae3652b4e58)), closes [#35612](https://github.com/bitnami/charts/issues/35612)
+
+## <small>1.4.8 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#35569) ([f3ed528](https://github.com/bitnami/charts/commit/f3ed528c58bf942c7d83772158cd20926d550bb6)), closes [#35569](https://github.com/bitnami/charts/issues/35569)
+
+## <small>1.4.7 (2025-07-15)</small>
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#35103) ([211d286](https://github.com/bitnami/charts/commit/211d28600f80cf612bcf234165234bfeef76660a)), closes [#35103](https://github.com/bitnami/charts/issues/35103)
+
+## <small>1.4.6 (2025-07-10)</small>
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#34989) ([d442055](https://github.com/bitnami/charts/commit/d4420557692d06816f1d31f3909407d4c4df5274)), closes [#34989](https://github.com/bitnami/charts/issues/34989)
+
+## <small>1.4.5 (2025-06-10)</small>
+
+* [bitnami/janusgraph] :zap: :arrow_up: Update dependency references (#34300) ([088d90c](https://github.com/bitnami/charts/commit/088d90c278da6ea1e9a13be30f379f8a63bb8220)), closes [#34300](https://github.com/bitnami/charts/issues/34300)
 
 ## <small>1.4.4 (2025-05-16)</small>
 

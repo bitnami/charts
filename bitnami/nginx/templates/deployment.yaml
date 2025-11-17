@@ -39,6 +39,9 @@ spec:
         {{- if and .Values.streamServerBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/stream-server-block-configuration: {{ include (print $.Template.BasePath "/stream-server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if or .Values.contextIncludes.main .Values.contextIncludes.events .Values.contextIncludes.http }}
+        checksum/context-includes-configuration: {{ include (print $.Template.BasePath "/context-includes-configmap.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       {{- include "nginx.imagePullSecrets" . | nindent 6 }}
       shareProcessNamespace: {{ .Values.sidecarSingleProcessNamespace }}
@@ -330,6 +333,30 @@ spec:
             - name: nginx-stream-server-block
               mountPath: /opt/bitnami/nginx/conf/stream_server_blocks
             {{- end }}
+            {{- if .Values.contextIncludes.main }}
+            - name: nginx-context-main
+              mountPath: /opt/bitnami/nginx/conf/context.d/main
+            {{- end }}
+            {{- range $index, $configMap := .Values.existingContextMainConfigmaps }}
+            - name: nginx-context-main-{{ $index }}
+              mountPath: /opt/bitnami/nginx/conf/context.d/main
+            {{- end }}
+            {{- if .Values.contextIncludes.events }}
+            - name: nginx-context-events
+              mountPath: /opt/bitnami/nginx/conf/context.d/events
+            {{- end }}
+            {{- range $index, $configMap := .Values.existingContextEventsConfigmaps }}
+            - name: nginx-context-events-{{ $index }}
+              mountPath: /opt/bitnami/nginx/conf/context.d/events
+            {{- end }}
+            {{- if .Values.contextIncludes.http }}
+            - name: nginx-context-http
+              mountPath: /opt/bitnami/nginx/conf/context.d/http
+            {{- end }}
+            {{- range $index, $configMap := .Values.existingContextHttpConfigmaps }}
+            - name: nginx-context-http-{{ $index }}
+              mountPath: /opt/bitnami/nginx/conf/context.d/http
+            {{- end }}
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
               mountPath: /app
@@ -365,18 +392,29 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
-          livenessProbe:
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:
+          {{- end }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
+          {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
@@ -398,9 +436,9 @@ spec:
             secretName: {{ printf "%s-tls" (include "common.names.fullname" .) }}
             items:
               - key: tls.crt
-                path: server.crt
+                path: tls.crt
               - key: tls.key
-                path: server.key
+                path: tls.key
             {{- end }}
         {{- end }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
@@ -412,6 +450,36 @@ spec:
         - name: nginx-stream-server-block
           configMap:
             name: {{ include "nginx.streamServerBlockConfigmapName" . }}
+        {{- end }}
+        {{- if .Values.contextIncludes.main }}
+        - name: nginx-context-main
+          configMap:
+            name: {{ printf "%s-context-main" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- range $index, $configMap := .Values.existingContextMainConfigmaps }}
+        - name: nginx-context-main-{{ $index }}
+          configMap:
+            name: {{ printf "%s" (tpl $configMap $) }}
+        {{- end }}
+        {{- if .Values.contextIncludes.events }}
+        - name: nginx-context-events
+          configMap:
+            name: {{ printf "%s-context-events" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- range $index, $configMap := .Values.existingContextEventsConfigmaps }}
+        - name: nginx-context-events-{{ $index }}
+          configMap:
+            name: {{ printf "%s" (tpl $configMap $) }}
+        {{- end }}
+        {{- if .Values.contextIncludes.http }}
+        - name: nginx-context-http
+          configMap:
+            name: {{ printf "%s-context-http" (include "common.names.fullname" .) }}
+        {{- end }}
+        {{- range $index, $configMap := .Values.existingContextHttpConfigmaps }}
+        - name: nginx-context-http-{{ $index }}
+          configMap:
+            name: {{ printf "%s" (tpl $configMap $) }}
         {{- end }}
         {{- if (include "nginx.useStaticSite" .) }}
         - name: staticsite

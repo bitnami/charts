@@ -1,5 +1,5 @@
 # Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
-# Version: 3.4.6
+# Version: 3.5.1
 # VersionOf: kong-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
@@ -7,7 +7,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: ingressclassparameterses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -65,7 +65,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongclusterplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -373,7 +373,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongconsumergroups.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -430,6 +430,7 @@ spec:
                     description: |-
                       KonnectID is the schema for the KonnectID type.
                       This field is required when the Type is konnectID.
+                    pattern: ^[0-9a-f]{8}(?:\-[0-9a-f]{4}){3}-[0-9a-f]{12}$
                     type: string
                   konnectNamespacedRef:
                     description: |-
@@ -624,7 +625,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongconsumers.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -706,6 +707,7 @@ spec:
                     description: |-
                       KonnectID is the schema for the KonnectID type.
                       This field is required when the Type is konnectID.
+                    pattern: ^[0-9a-f]{8}(?:\-[0-9a-f]{4}){3}-[0-9a-f]{12}$
                     type: string
                   konnectNamespacedRef:
                     description: |-
@@ -902,7 +904,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongcustomentities.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1094,7 +1096,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1109,10 +1111,14 @@ spec:
     singular: kongingress
   scope: Namespaced
   versions:
-  - name: v1
+  - deprecated: true
+    deprecationWarning: configuration.konghq.com/v1 KongIngress is deprecated
+    name: v1
     schema:
       openAPIV3Schema:
-        description: KongIngress is the Schema for the kongingresses API.
+        description: |-
+          KongIngress is the Schema for the kongingresses API.
+          Deprecated: Use annotations and KongUpstreamPolicy instead. See https://developer.konghq.com/kubernetes-ingress-controller/migrate/kongingress/
         properties:
           apiVersion:
             description: |-
@@ -1486,7 +1492,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: konglicenses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1686,7 +1692,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongplugins.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -1988,7 +1994,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   labels:
     gateway.networking.k8s.io/policy: direct
   name: kongupstreampolicies.configuration.konghq.com
@@ -2052,17 +2058,18 @@ spec:
               algorithm:
                 description: |-
                   Algorithm is the load balancing algorithm to use.
-                  Accepted values are: "round-robin", "consistent-hashing", "least-connections", "latency".
+                  Accepted values are: "round-robin", "consistent-hashing", "least-connections", "latency", "sticky-sessions"
                 enum:
                 - round-robin
                 - consistent-hashing
                 - least-connections
                 - latency
+                - sticky-sessions
                 type: string
               hashOn:
                 description: |-
-                  HashOn defines how to calculate hash for consistent-hashing load balancing algorithm.
-                  Algorithm must be set to "consistent-hashing" for this field to have effect.
+                  HashOn defines how to calculate hash for consistent-hashing or sticky-sessions load balancing algorithm.
+                  Algorithm must be set to "consistent-hashing" or "sticky-sessions" for this field to have effect.
                 properties:
                   cookie:
                     description: Cookie is the name of the cookie to use as hash input.
@@ -2076,12 +2083,14 @@ spec:
                     type: string
                   input:
                     description: |-
-                      Input allows using one of the predefined inputs (ip, consumer, path).
-                      For other parametrized inputs, use one of the fields below.
+                      Input allows using one of the predefined inputs (ip, consumer, path, none).
+                      Set this to `none` if you want to use sticky sessions.
+                      For other parameterized inputs, use one of the fields below.
                     enum:
                     - ip
                     - consumer
                     - path
+                    - none
                     type: string
                   queryArg:
                     description: QueryArg is the name of the query argument to use
@@ -2110,12 +2119,14 @@ spec:
                     type: string
                   input:
                     description: |-
-                      Input allows using one of the predefined inputs (ip, consumer, path).
-                      For other parametrized inputs, use one of the fields below.
+                      Input allows using one of the predefined inputs (ip, consumer, path, none).
+                      Set this to `none` if you want to use sticky sessions.
+                      For other parameterized inputs, use one of the fields below.
                     enum:
                     - ip
                     - consumer
                     - path
+                    - none
                     type: string
                   queryArg:
                     description: QueryArg is the name of the query argument to use
@@ -2324,6 +2335,25 @@ spec:
                 maximum: 65536
                 minimum: 10
                 type: integer
+              stickySessions:
+                description: |-
+                  StickySessions defines the sticky session configuration for the upstream.
+                  When enabled, clients will be routed to the same backend target based on a cookie.
+                  This requires Kong Enterprise Gateway and setting `hash_on` to `none`.
+                properties:
+                  cookie:
+                    description: |-
+                      Cookie is the name of the cookie to use for sticky sessions.
+                      Kong will generate this cookie if it doesn't exist in the request.
+                    minLength: 1
+                    type: string
+                  cookiePath:
+                    default: /
+                    description: CookiePath is the path to set in the cookie.
+                    type: string
+                required:
+                - cookie
+                type: object
             type: object
           status:
             description: Status defines the current state of KongUpstreamPolicy
@@ -2634,10 +2664,11 @@ spec:
         - message: When spec.hashOn.cookiePath is set, spec.hashOn.cookie is required.
           rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookiePath) ? has(self.spec.hashOn.cookie)
             : true'
-        - message: spec.algorithm must be set to "consistent-hashing" when spec.hashOn
-            is set.
-          rule: 'has(self.spec.hashOn) ? has(self.spec.algorithm) && self.spec.algorithm
-            == "consistent-hashing" : true'
+        - message: spec.algorithm must be set to either 'consistent-hashing' or 'sticky-sessions'
+            when spec.hashOn is set.
+          rule: 'has(self.spec.hashOn) ? has(self.spec.algorithm) && (self.spec.algorithm
+            == "consistent-hashing" || self.spec.algorithm == "sticky-sessions") :
+            true'
         - message: Only one of spec.hashOnFallback.(input|header|uriCapture|queryArg)
             can be set.
           rule: 'has(self.spec.hashOnFallback) ? [has(self.spec.hashOnFallback.input),
@@ -2648,11 +2679,9 @@ spec:
             is set.
           rule: 'has(self.spec.hashOnFallback) ? has(self.spec.algorithm) && self.spec.algorithm
             == "consistent-hashing" : true'
-        - message: spec.hashOnFallback.cookie must not be set.
-          rule: 'has(self.spec.hashOnFallback) ? !has(self.spec.hashOnFallback.cookie)
-            : true'
-        - message: spec.hashOnFallback.cookiePath must not be set.
-          rule: 'has(self.spec.hashOnFallback) ? !has(self.spec.hashOnFallback.cookiePath)
+        - message: spec.hashOnFallback must not be set when spec.hashOn.cookie is
+            set.
+          rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookie) ? !has(self.spec.hashOnFallback)
             : true'
         - message: spec.healthchecks.passive.healthy.interval must not be set.
           rule: 'has(self.spec.healthchecks) && has(self.spec.healthchecks.passive)
@@ -2662,10 +2691,21 @@ spec:
           rule: 'has(self.spec.healthchecks) && has(self.spec.healthchecks.passive)
             && has(self.spec.healthchecks.passive.unhealthy) ? !has(self.spec.healthchecks.passive.unhealthy.interval)
             : true'
-        - message: spec.hashOnFallback must not be set when spec.hashOn.cookie is
-            set.
-          rule: 'has(self.spec.hashOn) && has(self.spec.hashOn.cookie) ? !has(self.spec.hashOnFallback)
+        - message: When spec.stickySessions is set, spec.hashOn.input must be set
+            to 'none' (no other hash_on fields allowed).
+          rule: 'has(self.spec.stickySessions) ? (has(self.spec.hashOn) && has(self.spec.hashOn.input)
+            && self.spec.hashOn.input == ''none'' && !has(self.spec.hashOn.cookie)
+            && !has(self.spec.hashOn.cookiePath) && !has(self.spec.hashOn.header)
+            && !has(self.spec.hashOn.uriCapture) && !has(self.spec.hashOn.queryArg))
             : true'
+        - message: spec.stickySessions.cookie is required when spec.stickySessions
+            is set.
+          rule: 'has(self.spec.stickySessions) ? has(self.spec.stickySessions.cookie)
+            : true'
+        - message: spec.algorithm must be set to 'sticky-sessions' when spec.stickySessions
+            is set.
+          rule: 'has(self.spec.stickySessions) ? (has(self.spec.algorithm) && self.spec.algorithm
+            == "sticky-sessions") : true'
     served: true
     storage: true
     subresources:
@@ -2676,7 +2716,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller,gateway-operator
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: kongvaults.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2760,6 +2800,7 @@ spec:
                     description: |-
                       KonnectID is the schema for the KonnectID type.
                       This field is required when the Type is konnectID.
+                    pattern: ^[0-9a-f]{8}(?:\-[0-9a-f]{4}){3}-[0-9a-f]{12}$
                     type: string
                   konnectNamespacedRef:
                     description: |-
@@ -2966,7 +3007,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: tcpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -2989,10 +3030,14 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: configuration.konghq.com/v1beta1 TCPIngress is deprecated
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: TCPIngress is the Schema for the tcpingresses API.
+        description: |-
+          TCPIngress is the Schema for the tcpingresses API.
+          Deprecated: Use Gateway API instead. See https://developer.konghq.com/kubernetes-ingress-controller/migrate/ingress-to-gateway/
         properties:
           apiVersion:
             description: |-
@@ -3177,7 +3222,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     kubernetes-configuration.konghq.com/channels: ingress-controller
-    kubernetes-configuration.konghq.com/version: v1.3.1
+    kubernetes-configuration.konghq.com/version: v1.5.2
   name: udpingresses.configuration.konghq.com
 spec:
   group: configuration.konghq.com
@@ -3200,10 +3245,14 @@ spec:
       jsonPath: .metadata.creationTimestamp
       name: Age
       type: date
+    deprecated: true
+    deprecationWarning: configuration.konghq.com/v1beta1 UDPIngress is deprecated
     name: v1beta1
     schema:
       openAPIV3Schema:
-        description: UDPIngress is the Schema for the udpingresses API.
+        description: |-
+          UDPIngress is the Schema for the udpingresses API.
+          Deprecated: Use Gateway API instead. See https://developer.konghq.com/kubernetes-ingress-controller/migrate/ingress-to-gateway/
         properties:
           apiVersion:
             description: |-

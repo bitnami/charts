@@ -95,7 +95,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 3.1.0-debian-12-r1
+  tag: 3.4.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -843,7 +843,7 @@ defaultInitContainers:
     image:
       registry: docker.io
       repository: bitnami/os-shell
-      tag: 12-debian-12-r46
+      tag: 12-debian-12-r51
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.
@@ -935,7 +935,7 @@ createAdminTokenJob:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.33.1-debian-12-r5
+    tag: 1.33.4-debian-12-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -946,6 +946,12 @@ createAdminTokenJob:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param createAdminTokenJob.waitForS3.retryAttempts Number of attempts to retry waiting for S3 backend to be ready
+  ## @param createAdminTokenJob.waitForS3.retryInterval Seconds to wait between attempts to retry waiting for S3 backend to be ready
+  ##
+  waitForS3:
+    retryAttempts: 12
+    retryInterval: 5
   ## @param createAdminTokenJob.backoffLimit set backoff limit of the job
   ##
   backoffLimit: 10

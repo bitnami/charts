@@ -84,7 +84,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 5.3.0-debian-12-r12
+    tag: 5.3.0-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -133,16 +133,19 @@ hub:
       config:
         JupyterHub:
           admin_access: true
-          authenticator_class: dummy
-          DummyAuthenticator:
+          authenticator_class: shared-password
+          SharedPasswordAuthenticator:
+            admin_users:
+              - {{ .Values.hub.adminUser }}
           {{- if .Values.hub.password }}
-            password: {{ .Values.hub.password | quote }}
+            admin_password: {{ .Values.hub.password | quote }}
           {{- else }}
-            password: {{ randAlphaNum 10 | quote }}
+            admin_password: {{ randAlphaNum 32 | quote }}
           {{- end }}
           Authenticator:
             admin_users:
               - {{ .Values.hub.adminUser }}
+            allow_all: true
       cookieSecret:
       concurrentSpawnLimit: 64
       consecutiveFailureLimit: 5
@@ -709,7 +712,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 5.0.1-debian-12-r0
+    tag: 5.0.1-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1586,7 +1589,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 5.3.0-debian-12-r7
+    tag: 5.3.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1825,7 +1828,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r46
+  tag: 12-debian-12-r50
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

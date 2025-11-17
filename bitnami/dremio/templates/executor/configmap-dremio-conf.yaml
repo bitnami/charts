@@ -23,7 +23,8 @@ services.executor.enabled: true
   https://docs.dremio.com/cloud/sonar/workloads/engines/
  */}}
 {{- range $engine := .Values.executor.engines }}
-{{- $executorValues := mustMergeOverwrite $.Values.executor.common $engine.overrides }}
+{{- $executorValues := deepCopy $.Values.executor.common }}
+{{- $executorValues = mustMergeOverwrite $executorValues $engine.overrides }}
 {{- if not $executorValues.dremioConf.existingConfigmap }}
 ---
 apiVersion: v1

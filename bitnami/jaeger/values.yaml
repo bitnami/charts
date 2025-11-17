@@ -81,7 +81,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 2.7.0-debian-12-r0
+  tag: 2.9.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -213,18 +213,30 @@ query:
   ## @param query.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
+  ## @param query.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
+  ##
+  configuration: {}
+  ## @param query.overrideConfiguration Jaeger query common configuration override. Values defined here takes precedence over the ones defined at `query.configuration`
+  ##
+  overrideConfiguration: {}
+  ## @param query.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
+  ##
+  existingConfigmap: ""
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   containerPorts:
-    ## @param query.containerPorts.grpc Port for GRPC
+    ## @param query.containerPorts.grpc Port for GRPC API
     ##
     grpc: 16685
-    ## @param query.containerPorts.api Port for API
+    ## @param query.containerPorts.http Port for HTTP API
     ##
-    api: 16686
-    ## @param query.containerPorts.admin Port for admin
+    http: 16686
+    ## @param query.containerPorts.metrics Jaeger query prometheus metrics port
     ##
-    admin: 16687
+    metrics: 8888
+    ## @param query.containerPorts.healthcheck Jaeger query healthcheck port
+    ##
+    healthcheck: 13133
   ## Jaeger query.service parameters
   ##
   service:
@@ -234,21 +246,27 @@ query:
     ## Ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ports:
-      ## @param query.service.ports.api Port for API
+      ## @param query.service.ports.grpc Port for gRPC API
       ##
-      api: 16686
-      ## @param query.service.ports.admin Port for admin
+      grpc: 16685
+      ## @param query.service.ports.http Port for API
       ##
-      admin: 16687
+      http: 16686
+      ## @param query.service.ports.metrics Jaeger query prometheus metrics port
+      ##
+      metrics: 8888
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
-      ## @param query.service.nodePorts.api Node port for API
+      ## @param query.service.nodePorts.grpc Port for gRPC API
       ##
-      api: ""
-      ## @param query.service.nodePorts.admin Node port for admin
+      grpc: ""
+      ## @param query.service.nodePorts.http Node port for API
       ##
-      admin: ""
+      http: ""
+      ## @param query.service.nodePorts.metrics Jaeger query prometheus metrics port
+      ##
+      metrics: ""
     ## @param query.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -292,7 +310,7 @@ query:
     metrics:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.query.service.ports.admin }}"
+        prometheus.io/port: "{{ .Values.query.service.ports.metrics }}"
         prometheus.io/path: "/metrics"
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -604,21 +622,24 @@ collector:
   ## @param collector.extraVolumeMounts Optionally specify extra list of additional volumeMounts for jaeger container
   ##
   extraVolumeMounts: []
-  ## Container ports to expose
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param collector.configuration Specify content for Jaeger collector configuration (auto-generated based on other values otherwise)
+  ##
+  configuration: {}
+  ## @param collector.overrideConfiguration Jaeger collector common configuration override. Values defined here takes precedence over the ones defined at `query.configuration`
+  ##
+  overrideConfiguration: {}
+  ## @param collector.existingConfigmap The name of an existing ConfigMap with your custom configuration for Jaeger collector
+  ##
+  existingConfigmap: ""
+  ## @param collector.receivers Sets the jaeger collector receivers that will be enabled
+  ##
+  receivers:
+    - otlp
+    - jaeger
+    - zipkin
+  ## Jaeger collector container ports to expose
+  ## ref: https://www.jaegertracing.io/docs/latest/architecture/apis/
   containerPorts:
-    ## @param collector.containerPorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
-    ##
-    zipkin: 9411
-    ## @param collector.containerPorts.grpc used by jaeger-collector to send spans in model.proto format
-    ##
-    grpc: 14250
-    ## @param collector.containerPorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
-    ##
-    binary: 14268
-    ## @param collector.containerPorts.admin Admin port: health check at / and metrics at /metrics
-    ##
-    admin: 14269
     ## Otlp ports to expose
     ##
     otlp:
@@ -628,27 +649,33 @@ collector:
       ## @param collector.containerPorts.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
       ##
       http: 4318
+    ## Legacy Jaeger Write API. Maintained for backward-compatibility
+    ##
+    jaeger:
+      ## @param collector.containerPorts.jaeger.grpc Legacy Jaeger protobuf via gRPC API port
+      ##
+      grpc: 14250
+      ## @param collector.containerPorts.jaeger.thrift_http Legacy Jaeger Thrift over HTTP API port
+      ##
+      thrift_http: 14268
+    ## @param collector.containerPorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
+    ##
+    zipkin: 9411
+    ## @param collector.containerPorts.metrics Jaeger collector prometheus metrics port
+    ##
+    metrics: 8888
+    ## @param collector.containerPorts.healthcheck Jaeger collector healthcheck port
+    ##
+    healthcheck: 13133
   ## Jaeger collector.service parameters
   ##
   service:
     ## @param collector.service.type Jaeger service type
     ##
     type: ClusterIP
-    ## Ports to expose
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## Jaeger collector ports to expose
+    ## ref: https://www.jaegertracing.io/docs/latest/architecture/apis/
     ports:
-      ## @param collector.service.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
-      ##
-      zipkin: 9411
-      ## @param collector.service.ports.grpc used by jaeger-collector to send spans in model.proto format
-      ##
-      grpc: 14250
-      ## @param collector.service.ports.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
-      ##
-      binary: 14268
-      ## @param collector.service.ports.admin Admin port: health check at / and metrics at /metrics
-      ##
-      admin: 14269
       ## Otlp ports to expose
       ##
       otlp:
@@ -658,21 +685,24 @@ collector:
         ## @param collector.service.ports.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
         ##
         http: 4318
+      ## Legacy Jaeger Write API. Maintained for backward-compatibility
+      ##
+      jaeger:
+        ## @param collector.service.ports.jaeger.grpc Legacy Jaeger protobuf via gRPC API port
+        ##
+        grpc: 14250
+        ## @param collector.service.ports.jaeger.thrift_http Legacy Jaeger Thrift over HTTP API port
+        ##
+        thrift_http: 14268
+      ## @param collector.service.ports.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
+      ##
+      zipkin: 9411
+      ## @param collector.service.ports.metrics Jaeger collector prometheus metrics port
+      ##
+      metrics: 8888
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:
-      ## @param collector.service.nodePorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
-      ##
-      zipkin: ""
-      ## @param collector.service.nodePorts.grpc used by jaeger-collector to send spans in model.proto format
-      ##
-      grpc: ""
-      ## @param collector.service.nodePorts.binary can accept spans directly from clients in jaeger.thrift format over binary thrift protocol
-      ##
-      binary: ""
-      ## @param collector.service.nodePorts.admin Admin port: health check at / and metrics at /metrics
-      ##
-      admin: ""
       ## Otlp ports to expose
       ##
       otlp:
@@ -682,6 +712,22 @@ collector:
         ## @param collector.service.nodePorts.otlp.http Accepts traces in OpenTelemetry OTLP format over HTTP
         ##
         http: ""
+      ## Legacy Jaeger Write API. Maintained for backward-compatibility
+      ##
+      jaeger:
+        ## @param collector.service.nodePorts.jaeger.grpc Legacy Jaeger protobuf via gRPC API port
+        ##
+        grpc: ""
+        ## @param collector.service.nodePorts.jaeger.thrift_http Legacy Jaeger Thrift over HTTP API port
+        ##
+        thrift_http: ""
+      ## @param collector.service.nodePorts.zipkin can accept Zipkin spans in Thrift, JSON and Proto (disabled by default)
+      ##
+      zipkin: ""
+      ## @param collector.service.nodePorts.metrics Jaeger collector prometheus metrics port
+      ##
+      metrics: ""
+
     ## @param collector.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -725,7 +771,7 @@ collector:
     metrics:
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.collector.service.ports.admin }}"
+        prometheus.io/port: "{{ .Values.collector.service.ports.metrics }}"
         prometheus.io/path: "/metrics"
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1106,7 +1152,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 5.0.4-debian-12-r5
+  tag: 5.0.5-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1199,6 +1245,11 @@ cassandra:
   service:
     ports:
       cql: 9042
+  ## @param cassandra.initDB [object] Init script for initializing the instance
+  ##
+  initDB:
+    create_keyspace.cql: |
+      CREATE KEYSPACE {{ include "jaeger.cassandra.keyspace" . }} WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
   ## Cassandra pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores

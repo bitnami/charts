@@ -1,8 +1,60 @@
 # Changelog
 
-## 13.0.2 (2025-06-09)
+## 14.0.0 (2025-08-11)
 
-* [bitnami/mastodon] Disable MinIO Console ([#34266](https://github.com/bitnami/charts/pull/34266))
+* [bitnami/mastodon] Upgrade to Redis subchart 22 ([#35721](https://github.com/bitnami/charts/pull/35721))
+
+## <small>13.0.13 (2025-08-08)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35703) ([81c0893](https://github.com/bitnami/charts/commit/81c089304112a09197f32b434f0de43800515c3e)), closes [#35703](https://github.com/bitnami/charts/issues/35703)
+
+## <small>13.0.12 (2025-08-07)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35619) ([52a168c](https://github.com/bitnami/charts/commit/52a168cf7984aa0ca26f47f93188af3c876adb0d)), closes [#35619](https://github.com/bitnami/charts/issues/35619)
+
+## <small>13.0.11 (2025-08-07)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35592) ([148d426](https://github.com/bitnami/charts/commit/148d42603cc31e0c1b31b5161c8ce50f4b95911c)), closes [#35592](https://github.com/bitnami/charts/issues/35592)
+
+## <small>13.0.10 (2025-08-05)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35428) ([daeb6a0](https://github.com/bitnami/charts/commit/daeb6a0dfaa58cbec30b5c2c52b17bcb1915da87)), closes [#35428](https://github.com/bitnami/charts/issues/35428)
+
+## <small>13.0.9 (2025-07-23)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35269) ([c9bbc3c](https://github.com/bitnami/charts/commit/c9bbc3c02b99fd9df1fc15459e4f70c5873f40f8)), closes [#35269](https://github.com/bitnami/charts/issues/35269)
+
+## <small>13.0.8 (2025-07-17)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35183) ([328116c](https://github.com/bitnami/charts/commit/328116c05c7c9834d0726a360a277d4c3032afee)), closes [#35183](https://github.com/bitnami/charts/issues/35183)
+
+## <small>13.0.7 (2025-07-15)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#35139) ([419ff09](https://github.com/bitnami/charts/commit/419ff09ba4b51e863621777d0a17c339b4ed8c5c)), closes [#35139](https://github.com/bitnami/charts/issues/35139)
+
+## <small>13.0.6 (2025-07-06)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34812) ([f43f3c3](https://github.com/bitnami/charts/commit/f43f3c3d133970395d79e54e0167cb5db800db08)), closes [#34812](https://github.com/bitnami/charts/issues/34812)
+
+## <small>13.0.5 (2025-07-02)</small>
+
+* [bitnami/mastodon] :zap: :arrow_up: Update dependency references (#34771) ([6a2aa5d](https://github.com/bitnami/charts/commit/6a2aa5dfcdc7f7ec3de69863e716e17b8e8ba2e6)), closes [#34771](https://github.com/bitnami/charts/issues/34771)
+
+## <small>13.0.4 (2025-06-26)</small>
+
+* [bitnami/mastodon] fix: correct indentation for extraEnvVars in tootctlMediaManagement cronjob defin ([b053acd](https://github.com/bitnami/charts/commit/b053acda4b4f84a8940a9f58973dc60f1850c517)), closes [#33981](https://github.com/bitnami/charts/issues/33981)
+
+## <small>13.0.3 (2025-06-23)</small>
+
+* [bitnami/mastodon] fix broken PDB Label matching (#34566) ([d8270d4](https://github.com/bitnami/charts/commit/d8270d4678b71c0081744873cb64def675bb8e62)), closes [#34566](https://github.com/bitnami/charts/issues/34566) [#34544](https://github.com/bitnami/charts/issues/34544)
+
+## <small>13.0.2 (2025-06-09)</small>
+
+* [bitnami/mastodon] Disable MinIO Console (#34266) ([e3949da](https://github.com/bitnami/charts/commit/e3949daf52445ad142cfa3ff80f218d470dd8539)), closes [#34266](https://github.com/bitnami/charts/issues/34266)
 
 ## <small>13.0.1 (2025-06-05)</small>
 

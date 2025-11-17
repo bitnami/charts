@@ -1,8 +1,68 @@
 # Changelog
 
-## 9.3.2 (2025-06-06)
+## 9.4.4 (2025-08-26)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#34242](https://github.com/bitnami/charts/pull/34242))
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#36201](https://github.com/bitnami/charts/pull/36201))
+
+## <small>9.4.3 (2025-08-14)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35883) ([d7ba4ec](https://github.com/bitnami/charts/commit/d7ba4ec682c5280e405233595a5f6580a5d63c95)), closes [#35883](https://github.com/bitnami/charts/issues/35883)
+
+## <small>9.4.2 (2025-08-12)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35764) ([b1412c8](https://github.com/bitnami/charts/commit/b1412c8697d67a799a562530f5997f39012b38a8)), closes [#35764](https://github.com/bitnami/charts/issues/35764)
+
+## <small>9.4.1 (2025-08-10)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35335) ([4c817e4](https://github.com/bitnami/charts/commit/4c817e49f46faf737d63e3483489dbbaf75df4b1)), closes [#35335](https://github.com/bitnami/charts/issues/35335)
+
+## 9.4.0 (2025-07-25)
+
+* [bitnami/clickhouse] feat: MySQL & PostgreSQL ports to be optionally exposed (#35294) ([bff9e31](https://github.com/bitnami/charts/commit/bff9e31d396d064fc9c7a0fbeda3bfecf999e1b2)), closes [#35294](https://github.com/bitnami/charts/issues/35294)
+
+## <small>9.3.11 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35283) ([b266e90](https://github.com/bitnami/charts/commit/b266e9010ee1cf4c6d0fbf1b5444e57ecf281ec3)), closes [#35283](https://github.com/bitnami/charts/issues/35283)
+
+## <small>9.3.10 (2025-07-15)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#35073) ([ea52dae](https://github.com/bitnami/charts/commit/ea52daef3837825321b6851f06dc945f6e5a3f91)), closes [#35073](https://github.com/bitnami/charts/issues/35073)
+
+## <small>9.3.9 (2025-07-10)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34995) ([d440e80](https://github.com/bitnami/charts/commit/d440e80abce56277bacd6489306507d62ba08fc6)), closes [#34995](https://github.com/bitnami/charts/issues/34995)
+
+## <small>9.3.8 (2025-06-27)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34695) ([7d05156](https://github.com/bitnami/charts/commit/7d051567bf7982fe42ce908fe025ff1470daa17d)), closes [#34695](https://github.com/bitnami/charts/issues/34695)
+
+## <small>9.3.7 (2025-06-26)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34671) ([321ca30](https://github.com/bitnami/charts/commit/321ca30734698c763c233274f3ed508b6e50f9eb)), closes [#34671](https://github.com/bitnami/charts/issues/34671)
+
+## <small>9.3.6 (2025-06-26)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34664) ([eaa64a6](https://github.com/bitnami/charts/commit/eaa64a698636f871df89e00c509e099806875dd5)), closes [#34664](https://github.com/bitnami/charts/issues/34664)
+
+## <small>9.3.5 (2025-06-26)</small>
+
+* [bitnami/clickhouse] Update dependencies (#34647) ([08fb26c](https://github.com/bitnami/charts/commit/08fb26ce60273f1bf7f9cf2995d60507e6620987)), closes [#34647](https://github.com/bitnami/charts/issues/34647)
+
+## <small>9.3.4 (2025-06-20)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34570) ([d00e319](https://github.com/bitnami/charts/commit/d00e319eeaabb35420364078e18b6e6d2741536a)), closes [#34570](https://github.com/bitnami/charts/issues/34570)
+
+## <small>9.3.3 (2025-06-13)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34412) ([27dacea](https://github.com/bitnami/charts/commit/27dacea8b42af8b09fd372c17d6b7601a6dd2c6b)), closes [#34412](https://github.com/bitnami/charts/issues/34412)
+
+## <small>9.3.2 (2025-06-06)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#34242) ([88c1463](https://github.com/bitnami/charts/commit/88c14631f9c84360b14f5782ff4b2edbb417247f)), closes [#34242](https://github.com/bitnami/charts/issues/34242)
 
 ## <small>9.3.1 (2025-06-06)</small>
 

@@ -14,7 +14,22 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
-Looking to use MongoDBreg; Sharded in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -261,6 +276,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 | `service.ports.mongodb`                              | MongoDB&reg; service port                                                                                                                                                                                                                             | `27017`                           |
 | `service.clusterIP`                                  | Static clusterIP or None for headless services                                                                                                                                                                                                        | `""`                              |
 | `service.nodePorts.mongodb`                          | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                                                                                                                           | `""`                              |
+| `service.nodePorts.metrics`                          | Specify the metrics nodePort value for the LoadBalancer and NodePort service types.                                                                                                                                                                   | `""`                              |
 | `service.externalIPs`                                | External IP list to use with ClusterIP service type                                                                                                                                                                                                   | `[]`                              |
 | `service.loadBalancerIP`                             | Static IP Address to use for LoadBalancer service type                                                                                                                                                                                                | `""`                              |
 | `service.loadBalancerSourceRanges`                   | List of IP ranges allowed access to load balancer (if supported)                                                                                                                                                                                      | `[]`                              |

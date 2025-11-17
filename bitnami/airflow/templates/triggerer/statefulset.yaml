@@ -76,6 +76,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "airflow.defaultInitContainers.prepareConfig" . | nindent 8 }}
+        {{- include "airflow.defaultInitContainers.prepareVenv" . | nindent 8 }}
         {{- if .Values.dags.enabled }}
         {{- include "airflow.defaultInitContainers.loadDAGs" . | nindent 8 }}
         {{- end }}
@@ -114,7 +115,7 @@ spec:
               value: {{ .Values.executor }}
             - name: PYTHONPYCACHEPREFIX
               value: "/opt/bitnami/airflow/venv/tmp"
-            {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+            {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
             - name: REDIS_HOST
               value: {{ include "airflow.redis.host" . | quote }}
             - name: REDIS_PORT_NUMBER
@@ -126,11 +127,23 @@ spec:
             {{- if .Values.triggerer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.triggerer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.triggerer.extraEnvVarsCM .Values.triggerer.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
+          {{- if or .Values.triggerer.extraEnvVarsCM .Values.triggerer.extraEnvVarsCMs .Values.triggerer.extraEnvVarsSecret .Values.extraEnvVarsCM .Values.extraEnvVarsCMs .Values.extraEnvVarsSecret .Values.extraEnvVarsSecrets }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ .Values.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsCMs }}
+            {{- range .Values.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.triggerer.extraEnvVarsCMs }}
+            {{- range .Values.triggerer.extraEnvVarsCMs }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.extraEnvVarsSecret }}
             - secretRef:
@@ -143,6 +156,12 @@ spec:
             {{- if .Values.triggerer.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ .Values.triggerer.extraEnvVarsSecret }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecrets }}
+            {{- range .Values.extraEnvVarsSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
             {{- end }}
           {{- end }}
           ports:
@@ -213,11 +232,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/airflow/config/airflow_local_settings.py
               subPath: app-conf-dir/airflow_local_settings.py
-            {{- if and .Values.web.containerSecurityContext.enabled .Values.web.containerSecurityContext.readOnlyRootFilesystem }}
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/venv/tmp
-              subPath: app-pyc-cache-dir
-            {{- end }}
+              mountPath: /opt/bitnami/airflow/venv
+              subPath: venv-base-dir
             {{- if  .Values.usePasswordFiles }}
             - name: airflow-secrets
               mountPath: /opt/bitnami/airflow/secrets
@@ -269,7 +286,7 @@ spec:
                   name:  {{ include "airflow.secretName" . }}
               - secret:
                   name: {{ include "airflow.database.secretName" . }}
-              {{- if or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor") }}
+              {{- if or (contains "CeleryExecutor" .Values.executor) (eq .Values.executor "CeleryKubernetesExecutor") }}
               - secret:
                   name: {{ include "airflow.redis.secretName" . }}
               {{- end }}

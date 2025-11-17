@@ -1,8 +1,100 @@
 # Changelog
 
-## 32.2.15 (2025-06-10)
+## 32.4.3 (2025-08-26)
 
-* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#34316](https://github.com/bitnami/charts/pull/34316))
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#36189](https://github.com/bitnami/charts/pull/36189))
+
+## <small>32.4.2 (2025-08-13)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35856) ([93465c0](https://github.com/bitnami/charts/commit/93465c0d2e5763aa1b0ab5dfcb4e8190be6ed004)), closes [#35856](https://github.com/bitnami/charts/issues/35856)
+
+## <small>32.4.1 (2025-08-13)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35827) ([be99d39](https://github.com/bitnami/charts/commit/be99d3966db67abc30e3f0048176c2d0ac873043)), closes [#35827](https://github.com/bitnami/charts/issues/35827)
+
+## 32.4.0 (2025-08-13)
+
+* [bitnami/kafka] feat: conditional implementation of network policy (#35771) ([dbd60d4](https://github.com/bitnami/charts/commit/dbd60d4b0d56b26c37860443fb18d0125949f9fc)), closes [#35771](https://github.com/bitnami/charts/issues/35771)
+
+## <small>32.3.14 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35615) ([057b964](https://github.com/bitnami/charts/commit/057b9642d17ae3cf6f5be25cdfdefdcc335c3357)), closes [#35615](https://github.com/bitnami/charts/issues/35615)
+
+## <small>32.3.13 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35577) ([936d2fe](https://github.com/bitnami/charts/commit/936d2fe023cce7dcb1a5c9db8ca213b5002d81bd)), closes [#35577](https://github.com/bitnami/charts/issues/35577)
+
+## <small>32.3.12 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35572) ([9cf57dc](https://github.com/bitnami/charts/commit/9cf57dcfd95f6b0f957b8cda845c25a95df31f4b)), closes [#35572](https://github.com/bitnami/charts/issues/35572)
+
+## <small>32.3.11 (2025-08-07)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35494) ([06795b8](https://github.com/bitnami/charts/commit/06795b8d5d3e9be7e09b398e65c402898b1fcea1)), closes [#35494](https://github.com/bitnami/charts/issues/35494)
+
+## <small>32.3.10 (2025-08-01)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kafka] Fix component labels of controller to 'controller-eligible' (#35200) ([6cda3bc](https://github.com/bitnami/charts/commit/6cda3bc40d5acac356caf8a8b9a7f145ddca6018)), closes [#35200](https://github.com/bitnami/charts/issues/35200)
+
+## <small>32.3.9 (2025-07-29)</small>
+
+* [bitnami/kafka] Fix provisioning postScript (#35310) ([c5b2cd2](https://github.com/bitnami/charts/commit/c5b2cd2d2ebf0bb50d944e79303438252be34c7a)), closes [#35310](https://github.com/bitnami/charts/issues/35310)
+
+## <small>32.3.8 (2025-07-25)</small>
+
+* [bitnami/kafka] Fix kafka-client-certs volume mount and improve TLS key handling (#35190) ([47af963](https://github.com/bitnami/charts/commit/47af96309b90d5259c2c09b073bbac1a18480db5)), closes [#35190](https://github.com/bitnami/charts/issues/35190) [PKCS#8](https://github.com/PKCS/issues/8)
+
+## <small>32.3.7 (2025-07-23)</small>
+
+* [bitnami/kafka]fix(provisioning): Fix typo in initContainers (#35255) ([51523ee](https://github.com/bitnami/charts/commit/51523eef4e2601d0df89b6d9a26dd7e8d1dd5304)), closes [#35255](https://github.com/bitnami/charts/issues/35255)
+
+## <small>32.3.6 (2025-07-18)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kafka] Update default controller.heapOpts to fit default RAM limit (#34796) ([eb6830e](https://github.com/bitnami/charts/commit/eb6830efb87aa905ff874ba93e75b82f5303a6fb)), closes [#34796](https://github.com/bitnami/charts/issues/34796)
+
+## <small>32.3.5 (2025-07-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35150) ([6202afd](https://github.com/bitnami/charts/commit/6202afd718713f3ca6db813c06fe88587854a90f)), closes [#35150](https://github.com/bitnami/charts/issues/35150)
+
+## <small>32.3.4 (2025-07-15)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#35101) ([658029a](https://github.com/bitnami/charts/commit/658029ab8ae79262dae3ed0d594165820872a218)), closes [#35101](https://github.com/bitnami/charts/issues/35101)
+
+## <small>32.3.3 (2025-07-09)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34916) ([1aab977](https://github.com/bitnami/charts/commit/1aab9779aad9db559e9c37e62ce47cdc5740f9e4)), closes [#34916](https://github.com/bitnami/charts/issues/34916)
+
+## <small>32.3.2 (2025-07-03)</small>
+
+* [bitnami/kafka] fix: Correct extraListeners rendering to avoid malformed YAML (#34772) ([7843fef](https://github.com/bitnami/charts/commit/7843fefb90112624b4e8baea66bfcaf7ed97aa46)), closes [#34772](https://github.com/bitnami/charts/issues/34772)
+
+## <small>32.3.1 (2025-06-30)</small>
+
+* [bitnami/kafka] Add ClusterIP and loadBalancerNames check for using external access hosts list (#343 ([326a7cf](https://github.com/bitnami/charts/commit/326a7cf8d6584c37131ea645d3b9b577e8f5a627)), closes [#34359](https://github.com/bitnami/charts/issues/34359)
+
+## 32.3.0 (2025-06-27)
+
+* [bitnami/kafka] Add kraftVersion value to set static/dynamic quorum (#34689) ([559b34b](https://github.com/bitnami/charts/commit/559b34b2a16d14165cbcf16d7c0aec080002b1cc)), closes [#34689](https://github.com/bitnami/charts/issues/34689)
+
+## <small>32.2.18 (2025-06-25)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34615) ([3e69eb6](https://github.com/bitnami/charts/commit/3e69eb6531e7b8eaca4275c43aec8e780c99ee45)), closes [#34615](https://github.com/bitnami/charts/issues/34615)
+
+## <small>32.2.17 (2025-06-18)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34545) ([abde90b](https://github.com/bitnami/charts/commit/abde90b857ff403f1899bcb26c5e834c7788de0f)), closes [#34545](https://github.com/bitnami/charts/issues/34545)
+
+## <small>32.2.16 (2025-06-16)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34458) ([f9b84e1](https://github.com/bitnami/charts/commit/f9b84e164172062832510f7a5846a2e160a3eeb2)), closes [#34458](https://github.com/bitnami/charts/issues/34458)
+
+## <small>32.2.15 (2025-06-10)</small>
+
+* [bitnami/kafka] :zap: :arrow_up: Update dependency references (#34316) ([6145eac](https://github.com/bitnami/charts/commit/6145eac50971bbe0fe26a59f9aed7b466ba57c60)), closes [#34316](https://github.com/bitnami/charts/issues/34316)
 
 ## <small>32.2.14 (2025-06-10)</small>
 

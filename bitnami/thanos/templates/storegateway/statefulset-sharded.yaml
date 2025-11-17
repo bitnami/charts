@@ -23,6 +23,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- range $hashIndex, $_ := until $hashShards }}
 {{- range $timeIndex, $_ := until $timeShards }}
 {{- $index := add (mul $hashIndex $timeShards) $timeIndex }}
+{{- $shardSelector := dict "shard" $index }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
@@ -31,8 +32,17 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}
-  {{- if $.Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if $.Values.storegateway.statefulsetLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.storegateway.statefulsetLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or $.Values.commonAnnotations $.Values.storegateway.statefulsetAnnotations }}
+  annotations:
+    {{- if $.Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if $.Values.storegateway.statefulsetAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.statefulsetAnnotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if not $.Values.storegateway.autoscaling.enabled }}
@@ -81,8 +91,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" (set $ "shardLoopId" $index)) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAntiAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "extraMatchLabels" $shardSelector "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAntiAffinityPreset "component" "storegateway" "customLabels" $podLabels "extraMatchLabels" $shardSelector "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.storegateway.nodeAffinityPreset.type "key" $.Values.storegateway.nodeAffinityPreset.key "values" $.Values.storegateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.storegateway.dnsConfig }}
@@ -195,7 +205,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if $.Values.storegateway.extraFlags }}
-            {{- $.Values.storegateway.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if $.Values.storegateway.extraEnvVars }}

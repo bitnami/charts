@@ -1,6 +1,6 @@
 <!--- app-name: Kube State Metrics -->
 
-# Bitnami package for Kube State Metrics
+# Bitnami Secure Images Helm chart for Kube State Metrics
 
 kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
 
@@ -14,7 +14,22 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
-Looking to use Kube State Metrics in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -232,7 +247,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                                    | `""`                                 |
 | `terminationGracePeriodSeconds`                     | In seconds, time the given to the kube-state-metrics pod needs to terminate gracefully                                                                                                                            | `""`                                 |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                    | `[]`                                 |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                               |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                              |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                                 |
 | `replicaCount`                                      | Desired number of controller pods                                                                                                                                                                                 | `1`                                  |
 | `podLabels`                                         | Pod labels                                                                                                                                                                                                        | `{}`                                 |

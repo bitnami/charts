@@ -144,6 +144,11 @@ Init container definition for copying the certificates
       mountPath: /tmp/certs
     - name: mlflow-certificates
       mountPath: /bitnami/mlflow/certs
+  {{- if .Values.tracking.resources }}
+  resources: {{- toYaml .Values.tracking.resources | nindent 4 }}
+  {{- else if ne .Values.tracking.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end }}
 
 {{/*
@@ -167,6 +172,11 @@ Init container definition for waiting for the database to be ready
       mountPath: /tmp
     - name: rendered-basic-auth
       mountPath: /bitnami/rendered-basic-auth
+  {{- if .Values.tracking.resources }}
+  resources: {{- toYaml .Values.tracking.resources | nindent 4 }}
+  {{- else if ne .Values.tracking.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 4 }}
+  {{- end }}
 - name: render-auth-conf
   image: {{ include "mlflow.v0.waitContainer.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
@@ -231,6 +241,11 @@ Init container definition for waiting for the database to be ready
       mountPath: /bitnami/basic-auth-overrides
     - name: rendered-basic-auth
       mountPath: /bitnami/rendered-basic-auth
+  {{- if .Values.tracking.resources }}
+  resources: {{- toYaml .Values.tracking.resources | nindent 4 }}
+  {{- else if ne .Values.tracking.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -258,6 +273,11 @@ Init container definition for upgrading the database
   volumeMounts:
     - name: tmp
       mountPath: /tmp
+  {{- if .Values.tracking.resources }}
+  resources: {{- toYaml .Values.tracking.resources | nindent 4 }}
+  {{- else if ne .Values.tracking.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -288,6 +308,11 @@ Init container definition for upgrading the database
   volumeMounts:
     - name: tmp
       mountPath: /tmp
+  {{- if .Values.tracking.resources }}
+  resources: {{- toYaml .Values.tracking.resources | nindent 4 }}
+  {{- else if ne .Values.tracking.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -717,6 +742,11 @@ Return the definition of the git clone init container
   {{- if .Values.run.source.git.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.run.source.git.extraVolumeMounts "context" .) | nindent 12 }}
   {{- end }}
+  {{- if .Values.run.resources }}
+  resources: {{- toYaml .Values.run.resources | nindent 4 }}
+  {{- else if ne .Values.run.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.run.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*
@@ -769,6 +799,11 @@ Init container definition for waiting for the database to be ready
   volumeMounts:
     - name: tmp
       mountPath: /tmp
+  {{- if .context.Values.run.resources }}
+  resources: {{- toYaml .context.Values.run.resources | nindent 4 }}
+  {{- else if ne .context.Values.run.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.run.resourcesPreset) | nindent 4 }}
+  {{- end }}
 {{- end -}}
 
 {{/*

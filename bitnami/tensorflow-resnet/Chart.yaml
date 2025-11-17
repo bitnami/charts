@@ -2,16 +2,15 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
-  category: MachineLearning
   images: |
     - name: tensorflow-resnet
-      image: docker.io/bitnami/tensorflow-resnet:2.19.0-debian-12-r2
+      image: docker.io/bitnami/tensorflow-resnet:2.19.1-debian-12-r0
     - name: tensorflow-serving
-      image: docker.io/bitnami/tensorflow-serving:2.19.0-debian-12-r2
+      image: docker.io/bitnami/tensorflow-serving:2.19.1-debian-12-r0
   licenses: Apache-2.0
   tanzuCategory: application
 apiVersion: v2
-appVersion: 2.19.0
+appVersion: 2.19.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +34,4 @@ maintainers:
 name: tensorflow-resnet
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 4.3.10
+version: 4.3.15

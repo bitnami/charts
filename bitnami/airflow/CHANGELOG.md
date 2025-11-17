@@ -1,8 +1,84 @@
 # Changelog
 
-## 24.1.2 (2025-06-06)
+## 25.0.4 (2025-09-01)
 
-* [bitnami/airflow] :zap: :arrow_up: Update dependency references ([#34221](https://github.com/bitnami/charts/pull/34221))
+* [bitnami/airflow] Allow multiple executors with CeleryExecutor ([#35423](https://github.com/bitnami/charts/pull/35423))
+
+## <small>25.0.2 (2025-08-21)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#36158) ([4a155c7](https://github.com/bitnami/charts/commit/4a155c719f5cb4802a30100b883351620d72f8c7)), closes [#36158](https://github.com/bitnami/charts/issues/36158)
+
+## <small>25.0.1 (2025-08-14)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35898) ([f28b6e5](https://github.com/bitnami/charts/commit/f28b6e56eeca818d26da8752a4de9041b39eae9c)), closes [#35898](https://github.com/bitnami/charts/issues/35898)
+
+## 25.0.0 (2025-08-11)
+
+* [bitnami/airflow] Upgrade to Redis subchart 22 (#35728) ([5c3c29b](https://github.com/bitnami/charts/commit/5c3c29b1243b314b38a943934a9f5129dfc221ac)), closes [#35728](https://github.com/bitnami/charts/issues/35728)
+
+## <small>24.3.4 (2025-08-09)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35716) ([5db3a45](https://github.com/bitnami/charts/commit/5db3a45590b6e39074f2aede8c991a8df0cd50de)), closes [#35716](https://github.com/bitnami/charts/issues/35716)
+
+## <small>24.3.3 (2025-08-07)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35537) ([3190d1e](https://github.com/bitnami/charts/commit/3190d1efa18cc5a0c68f5ece12306da9a6c843be)), closes [#35537](https://github.com/bitnami/charts/issues/35537)
+
+## <small>24.3.2 (2025-08-07)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35528) ([41ee2d3](https://github.com/bitnami/charts/commit/41ee2d3ce869a4affb50f1ee3751481cb81c37c8)), closes [#35528](https://github.com/bitnami/charts/issues/35528)
+
+## <small>24.3.1 (2025-08-06)</small>
+
+* [bitnami/airflow] Bugfix doubled up config in scheduler deployment, incorrect key (#35385) ([29e0a98](https://github.com/bitnami/charts/commit/29e0a98d10905a2b7caf070ccbbe83f68ad15e08)), closes [#35385](https://github.com/bitnami/charts/issues/35385)
+
+## 24.3.0 (2025-08-06)
+
+* [bitnami/airflow] [Feature request] Support multiple configmaps in Airflow chart (#35386) ([d404f90](https://github.com/bitnami/charts/commit/d404f9071f2a15a80b4f2031e3a9b753423b64aa)), closes [#35386](https://github.com/bitnami/charts/issues/35386)
+
+## <small>24.2.5 (2025-08-04)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/airflow] fix AIRFLOW__API_AUTH__JWT_SECRET (#35355) ([7e87866](https://github.com/bitnami/charts/commit/7e87866f2b50d2494f760ef075c91f31e6986ea3)), closes [#35355](https://github.com/bitnami/charts/issues/35355)
+
+## <small>24.2.4 (2025-07-25)</small>
+
+* [bitnami/airflow] Fix/add extra env vars secrets to triggerer (#35047) ([f91d7dc](https://github.com/bitnami/charts/commit/f91d7dc52e9892c9de8cc5eb9a3d3abf14336d9b)), closes [#35047](https://github.com/bitnami/charts/issues/35047)
+
+## <small>24.2.3 (2025-07-21)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/airflow] add events to rbac role (#35201) ([b60d9e6](https://github.com/bitnami/charts/commit/b60d9e6f5b6dc423596e0f1bf6f3ecc412683f78)), closes [#35201](https://github.com/bitnami/charts/issues/35201) [#35152](https://github.com/bitnami/charts/issues/35152)
+
+## <small>24.2.2 (2025-07-15)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#35068) ([7a30b32](https://github.com/bitnami/charts/commit/7a30b329dcd9ee666d0ea4f1c87080d67094aede)), closes [#35068](https://github.com/bitnami/charts/issues/35068)
+
+## <small>24.2.1 (2025-07-09)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34953) ([4ebb820](https://github.com/bitnami/charts/commit/4ebb82056d1b836ce081bee4e4142757e840951b)), closes [#34953](https://github.com/bitnami/charts/issues/34953)
+
+## 24.2.0 (2025-06-25)
+
+* [bitnami/airflow] Move venv to emptydir volume (#34560) ([d2e3dc5](https://github.com/bitnami/charts/commit/d2e3dc579cc0e96c8b09fb6083c504b85a3d5c08)), closes [#34560](https://github.com/bitnami/charts/issues/34560)
+
+## <small>24.1.5 (2025-06-23)</small>
+
+* [bitnami/airflow] Configure correct section for api/web secret_key (#34581) ([fe92d1b](https://github.com/bitnami/charts/commit/fe92d1b2ed3277e8c8549f5732544253ea1178ba)), closes [#34581](https://github.com/bitnami/charts/issues/34581)
+
+## <small>24.1.4 (2025-06-19)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34306) ([24c47d3](https://github.com/bitnami/charts/commit/24c47d393449d1e7d1a62f60ba2ef5db27068239)), closes [#34306](https://github.com/bitnami/charts/issues/34306)
+
+## <small>24.1.3 (2025-06-16)</small>
+
+* [bitnami/airflow] feat: enhance LDAP config with user attribute mapping and support for Flask AppBui ([047f06d](https://github.com/bitnami/charts/commit/047f06d129b6587a1d6e9615603bb7c8c2a78ff0)), closes [#34382](https://github.com/bitnami/charts/issues/34382)
+
+## <small>24.1.2 (2025-06-06)</small>
+
+* [bitnami/airflow] :zap: :arrow_up: Update dependency references (#34221) ([f42b7ae](https://github.com/bitnami/charts/commit/f42b7aefc905b479c54b142d7c0152fc9fa5c36d)), closes [#34221](https://github.com/bitnami/charts/issues/34221)
 
 ## <small>24.1.1 (2025-05-26)</small>
 

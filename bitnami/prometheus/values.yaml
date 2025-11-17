@@ -97,7 +97,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.28.1-debian-12-r9
+    tag: 0.28.1-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -681,7 +681,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 3.4.1-debian-12-r1
+    tag: 3.5.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1082,7 +1082,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.38.0-debian-12-r4
+      tag: 0.39.2-debian-12-r2
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1140,6 +1140,19 @@ server:
     objectStorageConfig:
       secretName: ""
       secretKey: thanos.yaml
+    ## @param server.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param server.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsCM: ""
+    ## @param server.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `server.volumes` for thanos sidecar container
     ## extraVolumeMounts:
@@ -1693,7 +1706,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r46
+    tag: 12-debian-12-r50
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

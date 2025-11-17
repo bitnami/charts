@@ -1,8 +1,45 @@
 # Changelog
 
-## 7.0.3 (2025-06-03)
+## 7.0.11 (2025-08-13)
 
-* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#34081](https://github.com/bitnami/charts/pull/34081))
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references ([#35778](https://github.com/bitnami/charts/pull/35778))
+
+## <small>7.0.10 (2025-08-07)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35681) ([a51bc06](https://github.com/bitnami/charts/commit/a51bc06bb449da0ecbf915fc48042fb04abe902c)), closes [#35681](https://github.com/bitnami/charts/issues/35681)
+
+## <small>7.0.9 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35644) ([d26cd40](https://github.com/bitnami/charts/commit/d26cd40d6647f3df817fad0d8477ad6734ad2dea)), closes [#35644](https://github.com/bitnami/charts/issues/35644)
+
+## <small>7.0.8 (2025-07-29)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35332) ([f28498d](https://github.com/bitnami/charts/commit/f28498df674b5079c3869623ee51d9c4470203c1)), closes [#35332](https://github.com/bitnami/charts/issues/35332)
+
+## <small>7.0.7 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35243) ([46ec76d](https://github.com/bitnami/charts/commit/46ec76d40a0a82d5931d870e7a0b22c8b35835ad)), closes [#35243](https://github.com/bitnami/charts/issues/35243)
+
+## <small>7.0.6 (2025-07-15)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#35096) ([5d7bfa1](https://github.com/bitnami/charts/commit/5d7bfa13c6e0139bb0d7a53a84375d4a78f394d1)), closes [#35096](https://github.com/bitnami/charts/issues/35096)
+
+## <small>7.0.5 (2025-06-24)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34602) ([42959c0](https://github.com/bitnami/charts/commit/42959c00a308b3b1f155591076b5b6bee9322572)), closes [#34602](https://github.com/bitnami/charts/issues/34602)
+
+## <small>7.0.4 (2025-06-13)</small>
+
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34465) ([02e7542](https://github.com/bitnami/charts/commit/02e7542c52fe66efffb5253ca6ad21b819c2e70e)), closes [#34465](https://github.com/bitnami/charts/issues/34465)
+
+## <small>7.0.3 (2025-06-03)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/logstash] :zap: :arrow_up: Update dependency references (#34081) ([164167b](https://github.com/bitnami/charts/commit/164167b0122f854bfad93167a771e8a3d3f2468b)), closes [#34081](https://github.com/bitnami/charts/issues/34081)
 
 ## <small>7.0.2 (2025-05-06)</small>
 

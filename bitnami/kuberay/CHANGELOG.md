@@ -1,8 +1,76 @@
 # Changelog
 
-## 1.4.13 (2025-06-06)
+## 1.4.29 (2025-08-26)
 
-* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#34186](https://github.com/bitnami/charts/pull/34186))
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references ([#36203](https://github.com/bitnami/charts/pull/36203))
+
+## <small>1.4.28 (2025-08-13)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35818) ([03dcca4](https://github.com/bitnami/charts/commit/03dcca4cbcf4f95af6777eba5f161fab0cea79e7)), closes [#35818](https://github.com/bitnami/charts/issues/35818)
+
+## <small>1.4.27 (2025-08-07)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35670) ([2c54644](https://github.com/bitnami/charts/commit/2c5464427b3e1968b527c478607a9c5ea4809f15)), closes [#35670](https://github.com/bitnami/charts/issues/35670)
+
+## <small>1.4.26 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35496) ([608b54b](https://github.com/bitnami/charts/commit/608b54b4641c251a80853d36ee5d10235895e1db)), closes [#35496](https://github.com/bitnami/charts/issues/35496)
+
+## <small>1.4.25 (2025-07-19)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35214) ([10725a5](https://github.com/bitnami/charts/commit/10725a5a444735ae02c5796eba47b7a27ce684be)), closes [#35214](https://github.com/bitnami/charts/issues/35214)
+
+## <small>1.4.24 (2025-07-17)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35168) ([08dc84b](https://github.com/bitnami/charts/commit/08dc84b2bc9deda9fb1c9ed568ec3fc77d894fc8)), closes [#35168](https://github.com/bitnami/charts/issues/35168)
+
+## <small>1.4.23 (2025-07-15)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#35065) ([f4bde76](https://github.com/bitnami/charts/commit/f4bde76a1b4f46e6a09e8773a585ebcc6adf43ed)), closes [#35065](https://github.com/bitnami/charts/issues/35065)
+
+## <small>1.4.22 (2025-07-09)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34917) ([da20a76](https://github.com/bitnami/charts/commit/da20a76f6fc88a8cc3c614874c62d459bf972ced)), closes [#34917](https://github.com/bitnami/charts/issues/34917)
+
+## <small>1.4.21 (2025-07-08)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34845) ([29cd8f8](https://github.com/bitnami/charts/commit/29cd8f8a93ba7c7151a8881a7ecbc328e0c57707)), closes [#34845](https://github.com/bitnami/charts/issues/34845)
+
+## <small>1.4.20 (2025-07-07)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34836) ([f4fc6dd](https://github.com/bitnami/charts/commit/f4fc6dd20bd8ef2f2450922a861a6054f4d941dc)), closes [#34836](https://github.com/bitnami/charts/issues/34836)
+
+## <small>1.4.19 (2025-07-07)</small>
+
+* [bitnami/kuberay]  Update `operator.metrics.serviceMonitor.honorLabels` to keep in sync with upstrea ([3be20eb](https://github.com/bitnami/charts/commit/3be20eb970e579f347c25aadce0ef592fee92e46)), closes [#34793](https://github.com/bitnami/charts/issues/34793)
+
+## <small>1.4.18 (2025-06-20)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34574) ([ef4c802](https://github.com/bitnami/charts/commit/ef4c80257e9fb6563e0550ef6700dafd0f6918cd)), closes [#34574](https://github.com/bitnami/charts/issues/34574)
+
+## <small>1.4.17 (2025-06-19)</small>
+
+* [bitnami/kuberay] Add feature toggle for Role/RoleBinding creation when operator.watchAllNamespaces  ([09106c7](https://github.com/bitnami/charts/commit/09106c769a925778802d7d37cea35f7875765c74)), closes [#34333](https://github.com/bitnami/charts/issues/34333)
+
+## <small>1.4.16 (2025-06-18)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34553) ([6dab9b2](https://github.com/bitnami/charts/commit/6dab9b2653e47160b076656aee7ae6035e5b6d46)), closes [#34553](https://github.com/bitnami/charts/issues/34553)
+
+## <small>1.4.15 (2025-06-18)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34552) ([3fbdf60](https://github.com/bitnami/charts/commit/3fbdf6024b26fdd33ccaea78ba0c6e705492e2da)), closes [#34552](https://github.com/bitnami/charts/issues/34552)
+
+## <small>1.4.14 (2025-06-17)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34360) ([5ec9e65](https://github.com/bitnami/charts/commit/5ec9e65098aff06dca9338054d3af064cf177fb1)), closes [#34360](https://github.com/bitnami/charts/issues/34360)
+
+## <small>1.4.13 (2025-06-06)</small>
+
+* [bitnami/kuberay] :zap: :arrow_up: Update dependency references (#34186) ([de8a30f](https://github.com/bitnami/charts/commit/de8a30febd24f767ec8bbfa82b9e99e42caef4a4)), closes [#34186](https://github.com/bitnami/charts/issues/34186)
 
 ## <small>1.4.12 (2025-05-29)</small>
 

@@ -327,12 +327,12 @@ spec:
               subPath: tmp-dir
             - name: ghost-data
               mountPath: /bitnami/ghost
+            {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
             {{- if and .Values.usePasswordFiles }}
             - name: ghost-secrets
               mountPath: /opt/bitnami/ghost/secrets
-            {{- end }}
-            {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}

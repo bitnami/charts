@@ -87,9 +87,36 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/gitlab-runner
-  tag: 18.0.3-debian-12-r0
+  tag: 18.3.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+## Bitnami Gitlab Runner Helper image
+## ref: https://hub.docker.com/r/bitnami/gitlab-runner-helper/tags/
+## @param helperImage.registry [default: REGISTRY_NAME] Gitlab Runner Helper image registry
+## @param helperImage.repository [default: REPOSITORY_NAME/gitlab-runner-helper] Gitlab Runner Helper image repository
+## @skip helperImage.tag Gitlab Runner Helper image tag (immutable tags are recommended)
+## @param helperImage.digest Gitlab Runner Helper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param helperImage.pullPolicy Gitlab Runner Helper image pull policy
+## @param helperImage.pullSecrets Gitlab Runner Helper image pull secrets
+##
+helperImage:
+  registry: docker.io
+  repository: bitnami/gitlab-runner-helper
+  tag: 18.3.0-debian-12-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -573,6 +600,8 @@ runners:
       [runners.kubernetes]
         namespace = "{{ include "common.names.namespace" . }}"
         image = "{{ include "gitlab-runner.image" . }}"
+        helper_image = "{{ include "gitlab-runner.helper.image" . }}"
+        image_pull_secrets = [{{ include "gitlab-runner.imagePullSecretsRaw" . }}]
 
   ## @param runners.configPath Absolute path for an existing runner configuration file (to be used with volumes/extraVolumes)
   ##

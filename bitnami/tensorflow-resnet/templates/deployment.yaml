@@ -71,16 +71,20 @@ spec:
           image: {{ include "tensorflow-resnet.client.image" . }}
           imagePullPolicy: {{ .Values.client.image.pullPolicy | quote }}
           command:
-            - "/bin/sh"
-            - "-c"
+            - /bin/sh
+            - -ec
             - |
               if [ -f /seed/.initialized ]; then
-                echo "Already initialized. Skipping"
+                  echo "Already initialized. Skipping"
               else
-                curl -o /seed/resnet_50_classification_1.tar.gz https://storage.googleapis.com/tfhub-modules/tensorflow/resnet_50/classification/1.tar.gz
-                cd /seed/ && mkdir 1 && tar -xzf resnet_50_classification_1.tar.gz -C 1
-                rm resnet_50_classification_1.tar.gz
-                touch /seed/.initialized
+                  curl -Lo /seed/model.tar.gz https://www.kaggle.com/api/v1/models/tensorflow/resnet-50/tensorFlow2/classification/1/download
+                  cd /seed/ && mkdir 1 && tar -xzf model.tar.gz -C 1
+                  if [ $? -ne 0 ]; then
+                      echo "Failed to download model"
+                      exit 1
+                  fi
+                  rm model.tar.gz
+                  touch /seed/.initialized
               fi
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}

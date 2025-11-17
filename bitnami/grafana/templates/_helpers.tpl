@@ -181,6 +181,7 @@ Validate values for Grafana.
 {{- $messages := append $messages (include "grafana.validateValues.ldap.configmapsecret" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.ldap.tls" .) -}}
 {{- $messages := append $messages (include "grafana.validateValues.imageRenderer" .) -}}
+{{- $messages := append $messages (include "grafana.validateValues.grafana.kind" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -241,5 +242,14 @@ grafana: replicaCount
 grafana: imageRenderer.enabled imageRenderer.serverURL and imageRenderer.callbackURL
         You must provide the serverURL and callbackURL for Grafana Image Renderer when enabling it.
         (--set imageRenderer.serverURL="http://image-renderer-url/render" --set imageRenderer.callbackURL="http://grafana-url:3000/")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Grafana - must provide a valid resourceType ("deployment" or "statefulset") */}}
+{{- define "grafana.validateValues.grafana.kind" -}}
+{{- if and (ne (lower .Values.grafana.kind) "deployment") (ne (lower .Values.grafana.kind) "statefulset") -}}
+grafana: kind
+    Invalid kind selected. Valid values are "deployment" and
+    "statefulset". Please set a valid mode (--set grafana.kind="xxxx")
 {{- end -}}
 {{- end -}}

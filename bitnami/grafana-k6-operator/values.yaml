@@ -75,7 +75,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/grafana-k6-operator
-  tag: 0.0.21-debian-12-r2
+  tag: 0.0.23-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -99,7 +99,7 @@ image:
 starterImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r46
+  tag: 12-debian-12-r51
   digest: ""
 ## Bitnami Grafana k6 image version
 ## ref: https://hub.docker.com/r/bitnami/grafana-k6/tags/
@@ -111,7 +111,7 @@ starterImage:
 runnerImage:
   registry: docker.io
   repository: bitnami/grafana-k6
-  tag: 1.0.0-debian-12-r2
+  tag: 1.2.3-debian-12-r0
   digest: ""
 ## @param replicaCount Number of Grafana k6 Operator replicas to deploy
 ##
@@ -537,184 +537,6 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## kube-auth-proxy parameters
-  ##
-  authProxy:
-    ## @param metrics.authProxy.enabled
-    ##
-    enabled: false
-    ## Bitnami kube-auth-proxy image
-    ## ref: https://hub.docker.com/r/bitnami/kube-auth-proxy/tags/
-    ## @param metrics.authProxy.image.registry [default: REGISTRY_NAME] kube-auth-proxy image registry
-    ## @param metrics.authProxy.image.repository [default: REPOSITORY_NAME/kube-auth-proxy] kube-auth-proxy image repository
-    ## @skip metrics.authProxy.image.tag kube-auth-proxy image tag (immutable tags are recommended)
-    ## @param metrics.authProxy.image.digest kube-auth-proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-    ## @param metrics.authProxy.image.pullPolicy kube-auth-proxy image pull policy
-    ## @param metrics.authProxy.image.pullSecrets Specify docker-registry secret names as an array
-    ##
-    image:
-      registry: docker.io
-      repository: bitnami/kube-rbac-proxy
-      tag: 0.19.1-debian-12-r3
-      digest: ""
-      ## Specify a imagePullPolicy
-      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-      ##
-      pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## e.g:
-      ## pullSecrets:
-      ##   - myRegistryKeySecretName
-      ##
-      pullSecrets: []
-    ## @param metrics.authProxy.command Override default container command (useful when using custom images)
-    ##
-    command: []
-    ## @param metrics.authProxy.args Override default container args (useful when using custom images)
-    ##
-    args: []
-    ## @param metrics.authProxy.extraArgs Add extra arguments to the default container args section
-    ##
-    extraArgs: []
-    ## Prometheus kube-auth-proxy containers' Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param metrics.authProxy.containerSecurityContext.enabled Enable Prometheus kube-auth-proxy containers' Security Context
-    ## @param metrics.authProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param metrics.authProxy.containerSecurityContext.runAsUser Set Prometheus kube-auth-proxy containers' Security Context runAsUser
-    ## @param metrics.authProxy.containerSecurityContext.runAsGroup Group ID for the Prometheus kube-auth-proxy container
-    ## @param metrics.authProxy.containerSecurityContext.runAsNonRoot Set Prometheus kube-auth-proxy containers' Security Context runAsNonRoot
-    ## @param metrics.authProxy.containerSecurityContext.privileged Set Prometheus kube-auth-proxy container's Security Context privileged
-    ## @param metrics.authProxy.containerSecurityContext.allowPrivilegeEscalation Set Prometheus kube-auth-proxy containers' Security Context allowPrivilegeEscalation
-    ## @param metrics.authProxy.containerSecurityContext.readOnlyRootFilesystem Set Prometheus kube-auth-proxy containers' Security Context readOnlyRootFilesystem
-    ## @param metrics.authProxy.containerSecurityContext.capabilities.drop Set Prometheus kube-auth-proxy containers' Security Context capabilities to be dropped
-    ## @param metrics.authProxy.containerSecurityContext.seccompProfile.type Set Prometheus kube-auth-proxy container's Security Context seccomp profile
-    ## e.g:
-    ##   containerSecurityContext:
-    ##     enabled: true
-    ##     capabilities:
-    ##       drop: ["NET_RAW"]
-    ##     readOnlyRootFilesystem: true
-    ##
-    containerSecurityContext:
-      enabled: true
-      privileged: false
-      runAsNonRoot: true
-      seLinuxOptions: {}
-      runAsUser: 1001
-      runAsGroup: 1001
-      readOnlyRootFilesystem: true
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop: ["ALL"]
-      seccompProfile:
-        type: "RuntimeDefault"
-    ## @param metrics.authProxy.containerPorts.https kube-auth-proxy container port
-    ## @param metrics.authProxy.containerPorts.health kube-auth-proxy health port
-    ##
-    containerPorts:
-      https: 8443
-      health: 8081
-    ## @param metrics.authProxy.extraContainerPorts Optionally specify extra list of additional container ports
-    ## e.g:
-    ## extraContainerPorts:
-    ##   - name: myservice
-    ##     containerPort: 9090
-    ##
-    extraContainerPorts: []
-    ## @param metrics.authProxy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for kube-auth-proxy
-    ##
-    extraVolumeMounts: []
-    ## @param metrics.authProxy.customLivenessProbe Custom livenessProbe that overrides the default one
-    ##
-    customLivenessProbe: {}
-    ## @param metrics.authProxy.customReadinessProbe Custom readinessProbe that overrides the default one
-    ##
-    customReadinessProbe: {}
-    ## @param metrics.authProxy.customStartupProbe Custom startupProbe that overrides the default one
-    ##
-    customStartupProbe: {}
-    ## @param metrics.authProxy.lifecycleHooks for the kube-auth-proxy containers' to automate configuration before or after startup
-    ##
-    lifecycleHooks: {}
-    ## @param metrics.authProxy.extraEnvVars Array with extra environment variables to add to kube-auth-proxy containers
-    ## e.g:
-    ## extraEnvVars:
-    ##   - name: FOO
-    ##     value: "bar"
-    ##
-    extraEnvVars: []
-    ## @param metrics.authProxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ClickHouse Operator Metrics exporter containers
-    ##
-    extraEnvVarsCM: ""
-    ## @param metrics.authProxy.extraEnvVarsSecret Name of existing Secret containing extra env vars for ClickHouse Operator Metrics exporter containers
-    ##
-    extraEnvVarsSecret: ""
-    ## Prometheus kube-auth-proxy resource requests and limits
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param metrics.authProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.authProxy.resources is set (metrics.authProxy.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-    ##
-    resourcesPreset: "micro"
-    ## @param metrics.authProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-    ## Example:
-    ## resources:
-    ##   requests:
-    ##     cpu: 2
-    ##     memory: 512Mi
-    ##   limits:
-    ##     cpu: 3
-    ##     memory: 1024Mi
-    ##
-    resources: {}
-    ## Configure extra options for liveness probe
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param metrics.authProxy.livenessProbe.enabled Enable livenessProbe
-    ## @param metrics.authProxy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param metrics.authProxy.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param metrics.authProxy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param metrics.authProxy.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param metrics.authProxy.livenessProbe.successThreshold Success threshold for livenessProbe
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 30
-      successThreshold: 1
-      failureThreshold: 3
-    ## Configure extra options for readiness probe
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-    ## @param metrics.authProxy.readinessProbe.enabled Enable readinessProbe
-    ## @param metrics.authProxy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param metrics.authProxy.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param metrics.authProxy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param metrics.authProxy.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param metrics.authProxy.readinessProbe.successThreshold Success threshold for readinessProbe
-    ##
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 30
-      successThreshold: 1
-      failureThreshold: 3
-    ## Configure extra options for startup probe
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-startup-probes/#configure-probes
-    ## @param metrics.authProxy.startupProbe.enabled Enable startupProbe
-    ## @param metrics.authProxy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-    ## @param metrics.authProxy.startupProbe.periodSeconds Period seconds for startupProbe
-    ## @param metrics.authProxy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-    ## @param metrics.authProxy.startupProbe.failureThreshold Failure threshold for startupProbe
-    ## @param metrics.authProxy.startupProbe.successThreshold Success threshold for startupProbe
-    ##
-    startupProbe:
-      enabled: false
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 30
-      successThreshold: 1
-      failureThreshold: 3
 
   ## Metrics service configuration
   ##

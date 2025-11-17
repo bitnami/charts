@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/envoyproxy/gateway/refs/tags/v{version}/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_backends.yaml
-# Version: 1.4.1
+# Version: 1.5.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -94,6 +94,13 @@ spec:
                       - hostname
                       - port
                       type: object
+                    hostname:
+                      description: Hostname defines an optional hostname for the backend
+                        endpoint.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
                     ip:
                       description: IP defines an IP endpoint. Supports both IPv4 and
                         IPv6 addresses.
@@ -120,12 +127,19 @@ spec:
                       description: Unix defines the unix domain socket endpoint
                       properties:
                         path:
-                          description: Path defines the unix domain socket path of
-                            the backend endpoint.
+                          description: |-
+                            Path defines the unix domain socket path of the backend endpoint.
+                            The path length must not exceed 108 characters.
                           type: string
+                          x-kubernetes-validations:
+                          - message: unix domain socket path must not exceed 108 characters
+                            rule: size(self) <= 108
                       required:
                       - path
                       type: object
+                    zone:
+                      description: Zone defines the service zone of the backend endpoint.
+                      type: string
                   type: object
                   x-kubernetes-validations:
                   - message: one of fqdn, ip or unix must be specified
@@ -151,7 +165,9 @@ spec:
               tls:
                 description: |-
                   TLS defines the TLS settings for the backend.
-                  Only supported for DynamicResolver backends.
+                  If TLS is specified here and a BackendTLSPolicy is also configured for the backend, the final TLS settings will
+                  be a merge of both configurations. In case of overlapping fields, the values defined in the BackendTLSPolicy will
+                  take precedence.
                 properties:
                   caCertificateRefs:
                     description: |-
@@ -202,6 +218,12 @@ spec:
                       type: object
                     maxItems: 8
                     type: array
+                  insecureSkipVerify:
+                    default: false
+                    description: |-
+                      InsecureSkipVerify indicates whether the upstream's certificate verification
+                      should be skipped. Defaults to "false".
+                    type: boolean
                   wellKnownCACertificates:
                     description: |-
                       WellKnownCACertificates specifies whether system CA certificates may be used in
@@ -219,10 +241,12 @@ spec:
                   rule: '!(has(self.caCertificateRefs) && size(self.caCertificateRefs)
                     > 0 && has(self.wellKnownCACertificates) && self.wellKnownCACertificates
                     != "")'
-                - message: must specify either CACertificateRefs or WellKnownCACertificates
-                  rule: (has(self.caCertificateRefs) && size(self.caCertificateRefs)
-                    > 0 || has(self.wellKnownCACertificates) && self.wellKnownCACertificates
-                    != "")
+                - message: must not contain either CACertificateRefs or WellKnownCACertificates
+                    when InsecureSkipVerify is enabled
+                  rule: '!((has(self.insecureSkipVerify) && self.insecureSkipVerify)
+                    && ((has(self.caCertificateRefs) && size(self.caCertificateRefs)
+                    > 0) || (has(self.wellKnownCACertificates) && self.wellKnownCACertificates
+                    != "")))'
               type:
                 default: Endpoints
                 description: Type defines the type of the backend. Defaults to "Endpoints"
@@ -232,11 +256,8 @@ spec:
                 type: string
             type: object
             x-kubernetes-validations:
-            - message: DynamicResolver type cannot have endpoints and appProtocols
-                specified
-              rule: self.type != 'DynamicResolver' || !has(self.endpoints) && !has(self.appProtocols)
-            - message: TLS settings can only be specified for DynamicResolver backends
-              rule: 'has(self.tls) ? self.type == ''DynamicResolver'' : true'
+            - message: DynamicResolver type cannot have endpoints specified
+              rule: self.type != 'DynamicResolver' || !has(self.endpoints)
           status:
             description: Status defines the current status of Backend.
             properties:

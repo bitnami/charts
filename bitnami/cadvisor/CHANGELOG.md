@@ -1,8 +1,40 @@
 # Changelog
 
-## 0.1.6 (2025-06-05)
+## 0.1.13 (2025-08-13)
 
-* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#34140](https://github.com/bitnami/charts/pull/34140))
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references ([#35790](https://github.com/bitnami/charts/pull/35790))
+
+## <small>0.1.12 (2025-08-06)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#35455) ([da128f9](https://github.com/bitnami/charts/commit/da128f941055f1e40955b6cb00ba23af6cb2e78e)), closes [#35455](https://github.com/bitnami/charts/issues/35455)
+
+## <small>0.1.11 (2025-07-08)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34857) ([b7ea5bf](https://github.com/bitnami/charts/commit/b7ea5bfcf9d77a1a2ae1fb1fe3a3200c5f045fc8)), closes [#34857](https://github.com/bitnami/charts/issues/34857)
+
+## <small>0.1.10 (2025-06-24)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34599) ([bfc8037](https://github.com/bitnami/charts/commit/bfc8037149c521d6b454848d592798994bc66d96)), closes [#34599](https://github.com/bitnami/charts/issues/34599)
+
+## <small>0.1.9 (2025-06-24)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34598) ([ac30779](https://github.com/bitnami/charts/commit/ac30779446f10e9f498b45ed240a9af448d7382e)), closes [#34598](https://github.com/bitnami/charts/issues/34598)
+
+## <small>0.1.8 (2025-06-13)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34408) ([0131882](https://github.com/bitnami/charts/commit/01318827f2cc07107abaea89731c0b9b6235ce6d)), closes [#34408](https://github.com/bitnami/charts/issues/34408)
+
+## <small>0.1.7 (2025-06-13)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34395) ([613d846](https://github.com/bitnami/charts/commit/613d846f1c85141ecee81146f00c9a05081cf1b4)), closes [#34395](https://github.com/bitnami/charts/issues/34395)
+
+## <small>0.1.6 (2025-06-05)</small>
+
+* [bitnami/cadvisor] :zap: :arrow_up: Update dependency references (#34140) ([c38a4a3](https://github.com/bitnami/charts/commit/c38a4a334ee19876cea7a7cba679c7b265127a9b)), closes [#34140](https://github.com/bitnami/charts/issues/34140)
 
 ## <small>0.1.5 (2025-06-05)</small>
 

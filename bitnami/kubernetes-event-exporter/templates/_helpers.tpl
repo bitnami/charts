@@ -34,5 +34,9 @@ Create final config by merging user supplied config and default config
 */}}
 {{- define "kubernetes-event-exporter.config" -}}
   {{- $leaderElectionConfig := fromYaml (include "kubernetes-event-exporter.leaderElectionConfig" .) -}}
-  {{- toYaml (mergeOverwrite $leaderElectionConfig .Values.config) }}
+  {{- $config := .Values.config }}
+  {{- if kindIs "string" $config }}
+    {{- $config = fromYaml (tpl $config .) }}
+  {{- end }}
+  {{- toYaml (mergeOverwrite $leaderElectionConfig $config) }}
 {{- end -}}

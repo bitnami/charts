@@ -78,7 +78,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.83.0-debian-12-r3
+    tag: 0.85.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -638,7 +638,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 3.4.1-debian-12-r1
+    tag: 3.5.0-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1440,7 +1440,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.38.0-debian-12-r4
+      tag: 0.39.2-debian-12-r2
       digest: ""
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
@@ -1591,9 +1591,11 @@ prometheus:
       ##
       type: ClusterIP
       ## @param prometheus.thanos.service.ports.grpc Thanos service port
+      ## @param prometheus.thanos.service.ports.http Thanos service port
       ##
       ports:
         grpc: 10901
+        http: 10902
       ## @param prometheus.thanos.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
       ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
       ##
@@ -1746,6 +1748,33 @@ prometheus:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+    ## Create a ServiceMonitor to monitor Prometheus thanos sidecar
+    ##
+    serviceMonitor:
+      ## @param prometheus.thanos.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus thanos sidecar
+      ##
+      enabled: false
+      ## @param prometheus.thanos.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: ""
+      ## @param prometheus.thanos.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param prometheus.thanos.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param prometheus.thanos.serviceMonitor.metricRelabelings Metric relabeling
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+      ##
+      metricRelabelings: []
+      ## @param prometheus.thanos.serviceMonitor.relabelings Relabel configs
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+      ##
+      relabelings: []
+      ## @param prometheus.thanos.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: ""
   ## config-reloader sidecar container configuration
   ##
   configReloader:
@@ -1869,7 +1898,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.28.1-debian-12-r9
+    tag: 0.28.1-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2558,7 +2587,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.26.0-debian-12-r10
+    tag: 0.27.0-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3303,10 +3332,27 @@ kubeProxy:
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Whether to create and use RBAC resources or not
 ## @param rbac.pspEnabled Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
-##
 rbac:
   create: true
   pspEnabled: true
+  ## @param rbac.rules.operator Custom RBAC rules to set on Prometheus Operator ClusterRole
+  ## @param rbac.rules.prometheus Custom RBAC rules to set on Prometheus ClusterRole
+  ## e.g:
+  ## rbac:
+  ##   rules:
+  ##     operator: []
+  ##     prometheus:
+  ##       - apiGroups:
+  ##           - ""
+  ##         resources:
+  ##           - pods
+  ##         verbs:
+  ##           - get
+  ##           - list
+  ##
+  rules:
+    operator: []
+    prometheus: []
 
 ## @section Thanos Ruler Parameters
 ##
@@ -3326,7 +3372,7 @@ thanosRuler:
   image:
     registry: docker.io
     repository: bitnami/thanos
-    tag: 0.38.0-debian-12-r4
+    tag: 0.39.2-debian-12-r2
     digest: ""
     pullPolicy: IfNotPresent
     pullSecrets: []
@@ -3381,7 +3427,7 @@ thanosRuler:
     ## @param thanosRuler.service.ports.grpc Thanos Ruler service GRPC port
     ##
     ports:
-      http: 9090
+      http: 10902
       grpc: 10901
     ## @param thanosRuler.service.nodePorts.http Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types
     ## @param thanosRuler.service.nodePorts.grpc Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types
@@ -3643,8 +3689,8 @@ thanosRuler:
   ## @param thanosRuler.containerPorts.grpc GRPC container port
   ##
   containerPorts:
-    http: 10902
     grpc: 10901
+    http: 10902
   ## @param thanosRuler.alertQueryUrl The external Query URL the Thanos Ruler will set in the ‘Source’ field of all alerts
   ## Maps to the ‘–alert.query-url’ CLI arg
   ##
@@ -3857,7 +3903,7 @@ thanosRuler:
   priorityClassName: ""
   ## @param thanosRuler.portName Port name used for the pods and governing service
   ##
-  portName: web
+  portName: http
   ## @param thanosRuler.web Defines the configuration of the ThanosRuler web server
   ##
   web: {}

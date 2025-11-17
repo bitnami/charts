@@ -1,8 +1,37 @@
 # Changelog
 
-## 7.4.6 (2025-06-06)
+## 7.4.12 (2025-08-14)
 
-* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#34193](https://github.com/bitnami/charts/pull/34193))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#35879](https://github.com/bitnami/charts/pull/35879))
+
+## <small>7.4.11 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#35502) ([7ff6b32](https://github.com/bitnami/charts/commit/7ff6b329575913fab86c03c7cf095577d0f71bd0)), closes [#35502](https://github.com/bitnami/charts/issues/35502)
+
+## <small>7.4.10 (2025-07-09)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34924) ([e708b49](https://github.com/bitnami/charts/commit/e708b4912bff42962da399fa67a0fb5ed3721e8d)), closes [#34924](https://github.com/bitnami/charts/issues/34924)
+
+## <small>7.4.9 (2025-07-07)</small>
+
+* [bitnami/metrics-server] ci: VIB verify (#34819) ([396147d](https://github.com/bitnami/charts/commit/396147d60dd64dfa32512251b029a37fda5c1edb)), closes [#34819](https://github.com/bitnami/charts/issues/34819)
+
+## <small>7.4.8 (2025-07-03)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34777) ([ab8d476](https://github.com/bitnami/charts/commit/ab8d476c3dfbaaaa69153a91c895d11ad4a03edc)), closes [#34777](https://github.com/bitnami/charts/issues/34777)
+
+## <small>7.4.7 (2025-06-13)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34467) ([2fd5c55](https://github.com/bitnami/charts/commit/2fd5c555759bbd0d22750172eb33cfdb9b51c542)), closes [#34467](https://github.com/bitnami/charts/issues/34467)
+
+## <small>7.4.6 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34193) ([70c9a27](https://github.com/bitnami/charts/commit/70c9a27c97d1a665484c5c8af16959a4809cd6f7)), closes [#34193](https://github.com/bitnami/charts/issues/34193)
 
 ## <small>7.4.5 (2025-05-07)</small>
 

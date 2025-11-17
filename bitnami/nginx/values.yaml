@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.28.0-debian-12-r3
+  tag: 1.29.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -516,7 +516,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.49.0-debian-12-r9
+    tag: 2.51.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -625,6 +625,38 @@ existingServerBlockConfigmap: ""
 ## NOTE: This will override streamServerBlock
 ##
 existingStreamServerBlockConfigmap: ""
+## Collection of NGINX context based includes
+## e.g:
+## contextIncludes:
+##   main: |
+##     load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+##
+contextIncludes:
+  ## @param contextIncludes.main Custom configuration for the main context
+  ##
+  main: ""
+  ## @param contextIncludes.events Custom configuration for the events context
+  ##
+  events: ""
+  ## @param contextIncludes.http Custom configuration for the http context
+  ##
+  http: ""
+## @param existingContextMainConfigmaps List of existing ConfigMaps with custom main context configuration
+## NOTE: These will be mounted alongside contextIncludes.main
+## e.g:
+## existingContextMainConfigmaps:
+##   - "my-modules-config"
+##   - "my-main-directives-config"
+##
+existingContextMainConfigmaps: []
+## @param existingContextEventsConfigmaps List of existing ConfigMaps with custom events context configuration
+## NOTE: These will be mounted alongside contextIncludes.events
+##
+existingContextEventsConfigmaps: []
+## @param existingContextHttpConfigmaps List of existing ConfigMaps with custom http context configuration
+## NOTE: These will be mounted alongside contextIncludes.http
+##
+existingContextHttpConfigmaps: []
 ## @param staticSiteConfigmap Name of existing ConfigMap with the server static site content
 ##
 staticSiteConfigmap: ""
@@ -957,7 +989,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 1.4.2-debian-12-r4
+    tag: 1.4.2-debian-12-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1098,3 +1130,62 @@ metrics:
     ##       summary: Tomcat instance is down.
     ##
     rules: []
+  ## @param metrics.customLivenessProbe Override default metrics liveness probe
+  ##
+  customLivenessProbe: {}
+  ## NGINX metrics containers' liveness probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    periodSeconds: 10
+    failureThreshold: 2
+    successThreshold: 1
+  ## @param metrics.customReadinessProbe Override default metrics readiness probe
+  ##
+  customReadinessProbe: {}
+  ## NGINX metrics containers' readiness probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    timeoutSeconds: 3
+    periodSeconds: 30
+    failureThreshold: 2
+    successThreshold: 1
+  ## @param metrics.customStartupProbe Override default metrics startup probe
+  ##
+  customStartupProbe: {}
+  ## NGINX metrics containers' startup probe.
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param metrics.startupProbe.enabled Enable startupProbe
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    timeoutSeconds: 3
+    periodSeconds: 5
+    failureThreshold: 10
+    successThreshold: 1

@@ -1,6 +1,6 @@
 <!--- app-name: Fluentd -->
 
-# Bitnami package for Fluentd
+# Bitnami Secure Images Helm chart for Fluentd
 
 Fluentd collects events from various data sources and writes them to files, RDBMS, NoSQL, IaaS, SaaS, Hadoop and so on.
 
@@ -14,7 +14,22 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
 ```
 
-Looking to use Fluentd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -260,6 +275,7 @@ TLS for the Fluentd can be enabled by setting `tls.enabled=true`. The chart allo
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                                                                                               | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                                                                                              | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                                                                                                 | `false`                                                    |
+| `varlog.readonly`                                              | Set /var/log volume mount readOnly                                                                                                                                                                                                      | `true`                                                     |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                                                                                                                                              | `true`                                                     |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                                                                                                                                               | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                                                                                                                                                   | `root`                                                     |
@@ -300,6 +316,8 @@ TLS for the Fluentd can be enabled by setting `tls.enabled=true`. The chart allo
 | `forwarder.service.annotations`                                | Provide any additional annotations which may be required                                                                                                                                                                                | `{}`                                                       |
 | `forwarder.service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                                    | `None`                                                     |
 | `forwarder.service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                                                                                                             | `{}`                                                       |
+| `forwarder.service.ipFamilyPolicy`                             | Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).                                                 | `""`                                                       |
+| `forwarder.service.ipFamilies`                                 | A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".                                                                                              | `[]`                                                       |
 | `forwarder.networkPolicy.enabled`                              | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                     | `true`                                                     |
 | `forwarder.networkPolicy.allowExternal`                        | Don't require server label for connections                                                                                                                                                                                              | `true`                                                     |
 | `forwarder.networkPolicy.allowExternalEgress`                  | Allow the pod to access any range of port and all destinations.                                                                                                                                                                         | `true`                                                     |
@@ -410,6 +428,8 @@ TLS for the Fluentd can be enabled by setting `tls.enabled=true`. The chart allo
 | `aggregator.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                             | `{}`                                                       |
 | `aggregator.service.annotationsHeadless`                       | Provide any additional annotations which may be required on headless service                                                                                                                                                            | `{}`                                                       |
 | `aggregator.service.headless.annotations`                      | Annotations for the headless service.                                                                                                                                                                                                   | `{}`                                                       |
+| `aggregator.service.ipFamilyPolicy`                            | Sets the IP family policy for the Service to be able to configure dual-stack; see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services).                                                 | `""`                                                       |
+| `aggregator.service.ipFamilies`                                | A list of IP families for the Service that should be supported, in the order in which they should be applied. Can be "IPv4" and/or "IPv6".                                                                                              | `[]`                                                       |
 | `aggregator.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                     | `true`                                                     |
 | `aggregator.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                                              | `true`                                                     |
 | `aggregator.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                         | `true`                                                     |

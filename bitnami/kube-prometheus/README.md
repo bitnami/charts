@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus Operator -->
 
-# Bitnami package for Prometheus Operator
+# Bitnami Secure Images Helm chart for Prometheus Operator
 
 Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
@@ -16,7 +16,22 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-prometheus
 
 > Tip: Did you know that this app is also available as a Kubernetes App on the Azure Marketplace? Kubernetes Apps are the easiest way to deploy Bitnami on AKS. Click [here](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.prometheus-operator-cnab) to see the listing on Azure Marketplace.
 
-Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -508,6 +523,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                                                           | `1`                          |
 | `prometheus.thanos.service.type`                                      | Kubernetes service type                                                                                                                                                                                                                               | `ClusterIP`                  |
 | `prometheus.thanos.service.ports.grpc`                                | Thanos service port                                                                                                                                                                                                                                   | `10901`                      |
+| `prometheus.thanos.service.ports.http`                                | Thanos service port                                                                                                                                                                                                                                   | `10902`                      |
 | `prometheus.thanos.service.clusterIP`                                 | Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.                                                                                                                                                | `None`                       |
 | `prometheus.thanos.service.nodePorts.grpc`                            | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                                                                                                                           | `""`                         |
 | `prometheus.thanos.service.loadBalancerIP`                            | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                                                                                    | `""`                         |
@@ -533,6 +549,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.ingress.extraTls`                                  | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                                                                                                                   | `[]`                         |
 | `prometheus.thanos.ingress.secrets`                                   | Custom TLS certificates as secrets                                                                                                                                                                                                                    | `[]`                         |
 | `prometheus.thanos.ingress.extraRules`                                | The list of additional rules to be added to this ingress record. Evaluated as a template                                                                                                                                                              | `[]`                         |
+| `prometheus.thanos.serviceMonitor.enabled`                            | Creates a ServiceMonitor to monitor Prometheus thanos sidecar                                                                                                                                                                                         | `false`                      |
+| `prometheus.thanos.serviceMonitor.interval`                           | Scrape interval (use by default, falling back to Prometheus' default)                                                                                                                                                                                 | `""`                         |
+| `prometheus.thanos.serviceMonitor.path`                               | HTTP path to scrape for metrics                                                                                                                                                                                                                       | `/metrics`                   |
+| `prometheus.thanos.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                                                     | `""`                         |
+| `prometheus.thanos.serviceMonitor.metricRelabelings`                  | Metric relabeling                                                                                                                                                                                                                                     | `[]`                         |
+| `prometheus.thanos.serviceMonitor.relabelings`                        | Relabel configs                                                                                                                                                                                                                                       | `[]`                         |
+| `prometheus.thanos.serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                                                                  | `""`                         |
 | `prometheus.configReloader.service.enabled`                           | Enable config-reloader sidecar service                                                                                                                                                                                                                | `false`                      |
 | `prometheus.configReloader.service.type`                              | Kubernetes service type                                                                                                                                                                                                                               | `ClusterIP`                  |
 | `prometheus.configReloader.service.ports.http`                        | config-reloader sidecar container service port                                                                                                                                                                                                        | `8080`                       |
@@ -903,10 +926,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### RBAC parameters
 
-| Name              | Description                                                                                                                                                        | Value  |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
-| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| Name                    | Description                                                                                                                                                        | Value  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `rbac.create`           | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
+| `rbac.pspEnabled`       | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| `rbac.rules.operator`   | Custom RBAC rules to set on Prometheus Operator ClusterRole                                                                                                        | `[]`   |
+| `rbac.rules.prometheus` | Custom RBAC rules to set on Prometheus ClusterRole                                                                                                                 | `[]`   |
 
 ### Thanos Ruler Parameters
 
@@ -931,7 +956,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `thanosRuler.listenLocal`                                 | Makes Thanos Ruler listen on loopback, so that it does not bind against the Pod IP                                                 | `false`                  |
 | `thanosRuler.externalPrefix`                              | The external URL the Thanos Ruler instances will be available under. Maps to  --web.external-prefix on Thanos Ruler                | `""`                     |
 | `thanosRuler.service.type`                                | Kubernetes service type                                                                                                            | `ClusterIP`              |
-| `thanosRuler.service.ports.http`                          | Thanos Ruler service HTTP port                                                                                                     | `9090`                   |
+| `thanosRuler.service.ports.http`                          | Thanos Ruler service HTTP port                                                                                                     | `10902`                  |
 | `thanosRuler.service.ports.grpc`                          | Thanos Ruler service GRPC port                                                                                                     | `10901`                  |
 | `thanosRuler.service.nodePorts.http`                      | Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
 | `thanosRuler.service.nodePorts.grpc`                      | Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
@@ -1023,7 +1048,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `thanosRuler.containers`                                  | Containers allows injecting additional containers or modifying operator generated containers                                       | `[]`                     |
 | `thanosRuler.initContainers`                              | InitContainers allows adding initContainers to the pod definition                                                                  | `[]`                     |
 | `thanosRuler.priorityClassName`                           | Priority class assigned to the Pods                                                                                                | `""`                     |
-| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `web`                    |
+| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `http`                   |
 | `thanosRuler.web`                                         | Defines the configuration of the ThanosRuler web server                                                                            | `{}`                     |
 | `thanosRuler.remoteWrite`                                 | Defines the list of remote write configurations                                                                                    | `{}`                     |
 

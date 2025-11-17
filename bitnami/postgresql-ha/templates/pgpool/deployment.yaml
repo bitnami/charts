@@ -227,7 +227,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql-ha.postgresqlSecretName" . }}
+                  {{- if not (eq (include "postgresql-ha.postgresqlUsername" .) "postgres") }} 
+                  key: postgres-password
+                  {{- else }}
                   key: password
+                  {{- end }}
             {{- end }}
             - name: PGPOOL_ADMIN_USERNAME
               value: {{ (include "postgresql-ha.pgpoolAdminUsername" .) | quote }}
@@ -245,6 +249,8 @@ spec:
               value: {{ .Values.pgpool.authenticationMethod | quote }}
             - name: PGPOOL_ENABLE_LOAD_BALANCING
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
+            - name: PGPOOL_ENABLE_CONNECTION_CACHE
+              value: {{ ternary "yes" "no" .Values.pgpool.useConnectionCache | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
               value: {{ .Values.pgpool.disableLoadBalancingOnWrite | quote }}
@@ -253,6 +259,8 @@ spec:
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}
             - name: PGPOOL_ENABLE_LOG_HOSTNAME
               value: {{ ternary "yes" "no" .Values.pgpool.logHostname | quote }}
+            - name: PGPOOL_ENABLE_LOG_PCP_PROCESSES
+              value: {{ ternary "yes" "no" .Values.pgpool.logPcpProcesses | quote }}
             - name: PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT
               value: {{ ternary "yes" "no" .Values.pgpool.logPerNodeStatement | quote }}
             {{- if .Values.pgpool.logLinePrefix }}

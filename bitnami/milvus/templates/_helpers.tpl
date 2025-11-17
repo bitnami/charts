@@ -32,162 +32,42 @@ Return the proper Wait container image name
 {{- end -}}
 
 {{/*
-Return the proper Milvus Data Coordinator fullname
+Return the proper Milvus Coordinator fullname
 */}}
-{{- define "milvus.data-coordinator.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "data-coordinator" | trunc 63 | trimSuffix "-" -}}
+{{- define "milvus.coordinator.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "coordinator" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Name of the Milvus Data Coordinator service account to use
+Name of the Milvus Coordinator service account to use
 */}}
-{{- define "milvus.data-coordinator.serviceAccountName" -}}
-{{- if .Values.dataCoord.serviceAccount.create -}}
-    {{ default (printf "%s" (include "milvus.data-coordinator.fullname" .)) .Values.dataCoord.serviceAccount.name }}
+{{- define "milvus.coordinator.serviceAccountName" -}}
+{{- if .Values.coordinator.serviceAccount.create -}}
+    {{- default (printf "%s" (include "milvus.coordinator.fullname" .)) .Values.coordinator.serviceAccount.name -}}
 {{- else -}}
-    {{ default "default" .Values.dataCoord.serviceAccount.name }}
+    {{- default "default" .Values.coordinator.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the configuration configmap for Milvus Data Coordinator
+Get the extra configuration configmap for Milvus Coordinator
 */}}
-{{- define "milvus.data-coordinator.configmapName" -}}
-{{- if .Values.dataCoord.existingConfigMap -}}
-    {{- .Values.dataCoord.existingConfigMap -}}
+{{- define "milvus.coordinator.configmapName" -}}
+{{- if .Values.coordinator.existingConfigMap -}}
+    {{- .Values.coordinator.existingConfigMap -}}
 {{- else }}
-    {{- include "milvus.data-coordinator.fullname" . -}}
+    {{- include "milvus.coordinator.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the extra configuration configmap for Milvus Data Coordinator
+Get the extra configuration configmap for Milvus Coordinator
 */}}
-{{- define "milvus.data-coordinator.extraConfigmapName" -}}
-{{- if .Values.dataCoord.extraConfigExistingConfigMap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Value.dataCoord.extraConfigExistingConfigMap "context" $) -}}
+{{- define "milvus.coordinator.extraConfigmapName" -}}
+{{- if .Values.coordinator.extraConfigExistingConfigMap -}}
+    {{- include "common.tplvalues.render" (dict "value" .Value.coordinator.extraConfigExistingConfigMap "context" $) -}}
 {{- else -}}
-    {{- printf "%s-extra" (include "milvus.data-coordinator.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Milvus Index Coordinator fullname
-*/}}
-{{- define "milvus.index-coordinator.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "index-coordinator" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Name of the Milvus Index Coordinator service account to use
-*/}}
-{{- define "milvus.index-coordinator.serviceAccountName" -}}
-{{- if .Values.indexCoord.serviceAccount.create -}}
-    {{ default (printf "%s" (include "milvus.index-coordinator.fullname" .)) .Values.indexCoord.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.indexCoord.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the extra configuration configmap for Milvus Index Coordinator
-*/}}
-{{- define "milvus.index-coordinator.configmapName" -}}
-{{- if .Values.indexCoord.existingConfigMap -}}
-    {{- .Values.indexCoord.existingConfigMap -}}
-{{- else }}
-    {{- include "milvus.index-coordinator.fullname" . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the extra configuration configmap for Milvus Index Coordinator
-*/}}
-{{- define "milvus.index-coordinator.extraConfigmapName" -}}
-{{- if .Values.indexCoord.extraConfigExistingConfigMap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Value.indexCoord.extraConfigExistingConfigMap "context" $) -}}
-{{- else -}}
-    {{- printf "%s-extra" (include "milvus.index-coordinator.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Milvus Query Coordinator fullname
-*/}}
-{{- define "milvus.query-coordinator.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "query-coordinator" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Name of the Milvus Query Coordinator service account to use
-*/}}
-{{- define "milvus.query-coordinator.serviceAccountName" -}}
-{{- if .Values.queryCoord.serviceAccount.create -}}
-    {{ default (printf "%s" (include "milvus.query-coordinator.fullname" .)) .Values.queryCoord.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.queryCoord.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the configuration configmap for Milvus Query Coordinator
-*/}}
-{{- define "milvus.query-coordinator.configmapName" -}}
-{{- if .Values.queryCoord.existingConfigMap -}}
-    {{- .Values.queryCoord.existingConfigMap -}}
-{{- else }}
-    {{- include "milvus.query-coordinator.fullname" . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the extra configuration configmap for Milvus Query Coordinator
-*/}}
-{{- define "milvus.query-coordinator.extraConfigmapName" -}}
-{{- if .Values.queryCoord.extraConfigExistingConfigMap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Value.queryCoord.extraConfigExistingConfigMap "context" $) -}}
-{{- else -}}
-    {{- printf "%s-extra" (include "milvus.query-coordinator.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the proper Milvus Root Coordinator fullname
-*/}}
-{{- define "milvus.root-coordinator.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "root-coordinator" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Name of the Milvus Root Coordinator service account to use
-*/}}
-{{- define "milvus.root-coordinator.serviceAccountName" -}}
-{{- if .Values.rootCoord.serviceAccount.create -}}
-    {{- default (printf "%s" (include "milvus.root-coordinator.fullname" .)) .Values.rootCoord.serviceAccount.name -}}
-{{- else -}}
-    {{- default "default" .Values.rootCoord.serviceAccount.name -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the extra configuration configmap for Milvus Root Coordinator
-*/}}
-{{- define "milvus.root-coordinator.configmapName" -}}
-{{- if .Values.rootCoord.existingConfigMap -}}
-    {{- .Values.rootCoord.existingConfigMap -}}
-{{- else }}
-    {{- include "milvus.root-coordinator.fullname" . -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Get the extra configuration configmap for Milvus Root Coordinator
-*/}}
-{{- define "milvus.root-coordinator.extraConfigmapName" -}}
-{{- if .Values.rootCoord.extraConfigExistingConfigMap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Value.rootCoord.extraConfigExistingConfigMap "context" $) -}}
-{{- else -}}
-    {{- printf "%s-extra" (include "milvus.root-coordinator.fullname" .) -}}
+    {{- printf "%s-extra" (include "milvus.coordinator.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -234,40 +114,40 @@ Get the extra configuration configmap for Milvus Data Node
 {{/*
 Return the proper Milvus Index node fullname
 */}}
-{{- define "milvus.index-node.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "index-node" | trunc 63 | trimSuffix "-" -}}
+{{- define "milvus.streaming-node.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "streaming-node" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Name of the Milvus Index Node service account to use
+Name of the Milvus Streaming Node service account to use
 */}}
-{{- define "milvus.index-node.serviceAccountName" -}}
-{{- if .Values.indexNode.serviceAccount.create -}}
-    {{ default (printf "%s" (include "milvus.index-node.fullname" .)) .Values.indexNode.serviceAccount.name }}
+{{- define "milvus.streaming-node.serviceAccountName" -}}
+{{- if .Values.streamingNode.serviceAccount.create -}}
+    {{ default (printf "%s" (include "milvus.streaming-node.fullname" .)) .Values.streamingNode.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.indexNode.serviceAccount.name }}
+    {{ default "default" .Values.streamingNode.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the configuration configmap for Milvus Index Node
+Get the configuration configmap for Milvus Streaming Node
 */}}
-{{- define "milvus.index-node.configmapName" -}}
-{{- if .Values.indexNode.existingConfigMap -}}
-    {{- .Values.indexNode.existingConfigMap -}}
+{{- define "milvus.streaming-node.configmapName" -}}
+{{- if .Values.streamingNode.existingConfigMap -}}
+    {{- .Values.streamingNode.existingConfigMap -}}
 {{- else }}
-    {{- include "milvus.index-node.fullname" . -}}
+    {{- include "milvus.streaming-node.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the extra configuration configmap for Milvus Index Node
+Get the extra configuration configmap for Milvus Streaming Node
 */}}
-{{- define "milvus.index-node.extraConfigmapName" -}}
-{{- if .Values.indexNode.extraConfigExistingConfigMap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Value.indexNode.extraConfigExistingConfigMap "context" $) -}}
+{{- define "milvus.streaming-node.extraConfigmapName" -}}
+{{- if .Values.streamingNode.extraConfigExistingConfigMap -}}
+    {{- include "common.tplvalues.render" (dict "value" .Value.streamingNode.extraConfigExistingConfigMap "context" $) -}}
 {{- else -}}
-    {{- printf "%s-extra" (include "milvus.index-node.fullname" .) -}}
+    {{- printf "%s-extra" (include "milvus.streaming-node.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -822,7 +702,9 @@ Init container definition for waiting for the database to be ready
           {{- end }}
           {{- end }}
 
-          if curl --max-time 5 "${s3_host}" $params_cert | grep "RequestId"; then
+          if curl --max-time 5 "${s3_host}" $params_cert | grep -E "RequestId|x-guploader-uploadid"; then
+             return 0
+          elif curl --head --max-time 5 "${s3_host}" $params_cert | grep "x-guploader-uploadid"; then
              return 0
           else
              return 1
@@ -1208,7 +1090,7 @@ Compile all warnings into a single message.
 Function to validate the controller deployment
 */}}
 {{- define "milvus.validateValues.controllers" -}}
-{{- if not (or .Values.dataCoord.enabled .Values.rootCoord.enabled .Values.indexCoord.enabled .Values.queryCoord.enabled .Values.dataNode.enabled .Values.queryNode.enabled .Values.indexNode.enabled) -}}
+{{- if not (or .Values.coordinator.enabled .Values.dataNode.enabled .Values.queryNode.enabled .Values.streamingNode.enabled) -}}
 milvus: Missing controllers. At least one controller should be enabled.
 {{- end -}}
 {{- end -}}

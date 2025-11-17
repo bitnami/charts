@@ -122,7 +122,7 @@ spec:
                   {{- $replicaCount := (int .Values.replicaCount) }}
                   {{- $releaseNamespace := include "common.names.namespace" . }}
                   {{- range $iEndpoint, $e := until $replicaCount }}
-                  {{- $endpoint := printf "%s://%s-%d.%s.%s.svc.%s:%d" (include "etcd.peerProtocol" $) $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
+                  {{- $endpoint := printf "%s://%s-%d.%s.%s.svc.%s:%d" (include "etcd.clientProtocol" $) $etcdFullname $iEndpoint $etcdHeadlessServiceName $namespace $clusterDomain $port }}
                   {{- $endpointStr = printf "%s%s" $endpointStr $endpoint }}
                   {{- if ne $iEndpoint (sub $replicaCount 1) }}
                   {{- $endpointStr = printf "%s," $endpointStr }}

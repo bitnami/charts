@@ -1,8 +1,48 @@
 # Changelog
 
-## 0.1.14 (2025-06-06)
+## 0.1.23 (2025-08-14)
 
-* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references ([#34181](https://github.com/bitnami/charts/pull/34181))
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references ([#35874](https://github.com/bitnami/charts/pull/35874))
+
+## <small>0.1.22 (2025-08-07)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#35581) ([7377c1b](https://github.com/bitnami/charts/commit/7377c1b9456ac0cc5986297ba55d46031fceff51)), closes [#35581](https://github.com/bitnami/charts/issues/35581)
+
+## <small>0.1.21 (2025-08-07)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#35491) ([db03bbe](https://github.com/bitnami/charts/commit/db03bbe5b14187a44d8d6fd20420a95da0178531)), closes [#35491](https://github.com/bitnami/charts/issues/35491)
+
+## <small>0.1.20 (2025-08-05)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#35430) ([b51c4e0](https://github.com/bitnami/charts/commit/b51c4e0cd3c45e910020d2e30958cabc6ade51ee)), closes [#35430](https://github.com/bitnami/charts/issues/35430)
+
+## <small>0.1.19 (2025-08-05)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#35426) ([e67fe9c](https://github.com/bitnami/charts/commit/e67fe9ca80c4fb4c194df8e19219ea98672b6de6)), closes [#35426](https://github.com/bitnami/charts/issues/35426)
+
+## <small>0.1.18 (2025-07-09)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#34913) ([d40f12c](https://github.com/bitnami/charts/commit/d40f12cad51b3ec2c878f4e888b91e2ebd5374aa)), closes [#34913](https://github.com/bitnami/charts/issues/34913)
+
+## <small>0.1.17 (2025-07-04)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#34799) ([c7cba99](https://github.com/bitnami/charts/commit/c7cba99ab8328d65a6fc8180dfdb801da5ccb388)), closes [#34799](https://github.com/bitnami/charts/issues/34799)
+
+## <small>0.1.16 (2025-06-18)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#34537) ([57aa4d9](https://github.com/bitnami/charts/commit/57aa4d98a64298752ae8498816a938daf0ee42e1)), closes [#34537](https://github.com/bitnami/charts/issues/34537)
+
+## <small>0.1.15 (2025-06-13)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#34459) ([689aae7](https://github.com/bitnami/charts/commit/689aae708fb400a8f381773fda3ece3b3927e3fb)), closes [#34459](https://github.com/bitnami/charts/issues/34459)
+
+## <small>0.1.14 (2025-06-06)</small>
+
+* [bitnami/kube-arangodb] :zap: :arrow_up: Update dependency references (#34181) ([f49a1a2](https://github.com/bitnami/charts/commit/f49a1a20bed62a8edf68b8d5fca2c30236e87268)), closes [#34181](https://github.com/bitnami/charts/issues/34181)
 
 ## <small>0.1.13 (2025-05-20)</small>
 

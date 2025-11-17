@@ -1,8 +1,60 @@
 # Changelog
 
-## 15.4.10 (2025-06-10)
+## 15.4.22 (2025-08-27)
 
-* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#34292](https://github.com/bitnami/charts/pull/34292))
+* [bitnami/kong] :zap: :arrow_up: Update dependency references ([#36206](https://github.com/bitnami/charts/pull/36206))
+
+## <small>15.4.21 (2025-08-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#35823) ([0966cf4](https://github.com/bitnami/charts/commit/0966cf4b4406aeea7e2a881e90c07c816fcff4b3)), closes [#35823](https://github.com/bitnami/charts/issues/35823)
+
+## <small>15.4.20 (2025-08-07)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#35580) ([f23fc92](https://github.com/bitnami/charts/commit/f23fc927dd295957a69a15fe490269d9f34da4c4)), closes [#35580](https://github.com/bitnami/charts/issues/35580)
+
+## <small>15.4.19 (2025-08-07)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#35490) ([efbd2dc](https://github.com/bitnami/charts/commit/efbd2dc2794ddeb1d40b2bfa2404e13745ba45a8)), closes [#35490](https://github.com/bitnami/charts/issues/35490)
+
+## <small>15.4.18 (2025-07-31)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#35365) ([41a507e](https://github.com/bitnami/charts/commit/41a507e0ca5057d5d794f45f47ce4b0ac60c4d8f)), closes [#35365](https://github.com/bitnami/charts/issues/35365)
+
+## <small>15.4.17 (2025-07-15)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#35067) ([1e67c67](https://github.com/bitnami/charts/commit/1e67c6726cd4c067eda71e6cba81356eb4fef896)), closes [#35067](https://github.com/bitnami/charts/issues/35067)
+
+## <small>15.4.16 (2025-07-09)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34911) ([a019a95](https://github.com/bitnami/charts/commit/a019a9501996380fbde997b5df14ef44516ca8e8)), closes [#34911](https://github.com/bitnami/charts/issues/34911)
+
+## <small>15.4.15 (2025-07-04)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34797) ([8f1f5bf](https://github.com/bitnami/charts/commit/8f1f5bf771cb50a1ff91003f57ed47fb893312ce)), closes [#34797](https://github.com/bitnami/charts/issues/34797)
+
+## <small>15.4.14 (2025-06-27)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34686) ([a7dfce2](https://github.com/bitnami/charts/commit/a7dfce2901c0c69ef606aef2d2e0d620204018bc)), closes [#34686](https://github.com/bitnami/charts/issues/34686)
+
+## <small>15.4.13 (2025-06-20)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34573) ([71818d3](https://github.com/bitnami/charts/commit/71818d38004fac5a9d1228b64bdf9243287e3af9)), closes [#34573](https://github.com/bitnami/charts/issues/34573)
+
+## <small>15.4.12 (2025-06-18)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34536) ([7c2d7fb](https://github.com/bitnami/charts/commit/7c2d7fbaa54ee16542edd52b4b5ab74a4bd2bbfd)), closes [#34536](https://github.com/bitnami/charts/issues/34536)
+
+## <small>15.4.11 (2025-06-13)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34453) ([c545879](https://github.com/bitnami/charts/commit/c5458790c6d6a02d55a98c058083bc4e1b9b8ffb)), closes [#34453](https://github.com/bitnami/charts/issues/34453)
+
+## <small>15.4.10 (2025-06-10)</small>
+
+* [bitnami/kong] :zap: :arrow_up: Update dependency references (#34292) ([41b99d9](https://github.com/bitnami/charts/commit/41b99d92775e380b1a61104158dd708ee386c17f)), closes [#34292](https://github.com/bitnami/charts/issues/34292)
 
 ## <small>15.4.9 (2025-06-06)</small>
 
