@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.9 (2025-10-27)
+## 6.0.9 (2025-11-17)
 
 * [bitnami/grafana-loki] gateway now use a serviceAccount ([#36374](https://github.com/bitnami/charts/pull/36374))
 
