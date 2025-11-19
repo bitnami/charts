@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.0.14 (2025-08-13)
+## 16.0.16 (2025-11-19)
 
-* [bitnami/rabbitmq] Migrate deprecated queue_leader_locator configuration ([#35748](https://github.com/bitnami/charts/pull/35748))
+* [bitnami/rabbitmq] fix: :bug: Sanitize users with dot ([#36389](https://github.com/bitnami/charts/pull/36389))
+
+## <small>16.0.14 (2025-08-21)</small>
+
+* [bitnami/rabbitmq] Migrate deprecated queue_leader_locator configuration (#35748) ([ec2bbe1](https://github.com/bitnami/charts/commit/ec2bbe13ee501ef1312f8f3339f7ce3cbc5ebb13)), closes [#35748](https://github.com/bitnami/charts/issues/35748)
 
 ## <small>16.0.13 (2025-08-07)</small>
 
@@ -669,7 +673,7 @@
 
 ## <small>11.14.4 (2023-05-02)</small>
 
-* [bitnami/rabbitmq] Fix high CPU usage while idle (#16082) ([83827ce](https://github.com/bitnami/charts/commit/83827ce340efd7f7203d1ca7789eb9205110a1e0)), closes [#16082](https://github.com/bitnami/charts/issues/16082) [#11117](https://github.com/bitnami/charts/issues/11117) [#11180](https://github.com/bitnami/charts/issues/11180) [#11116](https://github.com/bitnami/charts/issues/11116)
+* [bitnami/rabbitmq] Fix high CPU usage while idle (#16082) ([83827ce](https://github.com/bitnami/charts/commit/83827ce340efd7f7203d1ca7789eb9205110a1e0)), closes [#16082](https://github.com/bitnami/charts/issues/16082) [#11117](https://github.com/bitnami/charts/issues/11117)
 
 ## <small>11.14.3 (2023-04-29)</small>
 
