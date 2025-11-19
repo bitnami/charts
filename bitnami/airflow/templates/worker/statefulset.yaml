@@ -274,7 +274,34 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
+          {{- if .Values.worker.emptyDir.ephemeral.enabled }}
+          ephemeral:
+            volumeClaimTemplate:
+              {{- if or .Values.worker.emptyDir.ephemeral.annotations .Values.commonAnnotations .Values.commonLabels }}
+              metadata:
+                {{- if or .Values.worker.emptyDir.ephemeral.annotations .Values.commonAnnotations }}
+                {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.worker.emptyDir.ephemeral.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+                annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 18 }}
+                {{- end }}
+                {{- if .Values.commonLabels }}
+                labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 18 }}
+                {{- end }}
+              {{- end }}
+              spec:
+                accessModes:
+                {{- range .Values.worker.emptyDir.ephemeral.accessModes }}
+                  - {{ . | quote }}
+                {{- end }}
+                resources:
+                  requests:
+                    storage: {{ .Values.worker.emptyDir.ephemeral.size | quote }}
+                {{- include "common.storage.class" (dict "persistence" .Values.worker.emptyDir.ephemeral "global" .Values.global) | nindent 16 }}
+          {{- else if .Values.worker.emptyDir.medium }}
+          emptyDir:
+            medium: {{ .Values.worker.emptyDir.medium }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
