@@ -16,7 +16,7 @@ jobs:
     steps:
       - id: checkout-repo
         name: Checkout repo
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
         with:
           ref: index
           path: index
@@ -60,7 +60,7 @@ jobs:
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
           # Install file plugin
           helm plugin add https://github.com/zoobab/helm_file_repo
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
         with:
           ref: 'index'
           path: index
