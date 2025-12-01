@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.23 (2025-11-28)
+## 17.0.23 (2025-12-01)
 
 * [bitnami/minio] extraRules must contain the fields paths and pathType ([#36395](https://github.com/bitnami/charts/pull/36395))
 
