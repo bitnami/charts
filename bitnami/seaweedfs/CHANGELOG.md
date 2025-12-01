@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.0.3 (2025-11-24)
+## 6.0.3 (2025-12-01)
 
 * [bitnami/seaweedfs] fix chown on volume-permissions (master & volume) ([#36386](https://github.com/bitnami/charts/pull/36386))
 
