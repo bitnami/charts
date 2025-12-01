@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.0.5 (2025-11-27)
+## 14.0.5 (2025-12-01)
 
 * [bitnami/mysql] Improve MySQL chart comments to warn about insufficient nano and micro presets ([#36394](https://github.com/bitnami/charts/pull/36394))
 
