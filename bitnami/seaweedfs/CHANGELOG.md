@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.0.1 (2025-08-26)
+## 6.0.3 (2025-12-01)
 
-* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#36196](https://github.com/bitnami/charts/pull/36196))
+* [bitnami/seaweedfs] fix chown on volume-permissions (master & volume) ([#36386](https://github.com/bitnami/charts/pull/36386))
+
+## <small>6.0.1 (2025-08-26)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#36196) ([add6559](https://github.com/bitnami/charts/commit/add65594ab195e0e9bf4b31d0da7ab75898f4466)), closes [#36196](https://github.com/bitnami/charts/issues/36196)
 
 ## 6.0.0 (2025-08-18)
 
