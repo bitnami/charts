@@ -1,6 +1,10 @@
 # Changelog
 
-## 4.4.36 (2025-10-29)
+## <small>4.4.37 (2025-10-29)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Include `endpointslices` in cluster-operator clusterrole ([#36403](https://github.com/bitnami/charts/issues/36403)
+
+## <small>4.4.36 (2025-10-29)</small>
 
 * [bitnami/rabbitmq-cluster-operator] Set network policy properly for metrics ([#36270](https://github.com/bitnami/charts/pull/36270))
 
