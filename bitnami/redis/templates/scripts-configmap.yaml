@@ -819,17 +819,17 @@ data:
     fi
 
   {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
-    push-master-label.sh: |
-      #!/bin/bash
-      # https://download.redis.io/redis-stable/sentinel.conf
+  push-master-label.sh: |
+    #!/bin/bash
+    # https://download.redis.io/redis-stable/sentinel.conf
 
-      {{- if .Values.useHostnames }}
-      echo "${6/.*}" > /etc/shared/current
-      echo "${4/.*}" > /etc/shared/previous
-      {{- else }}
-      echo "$6" > /etc/shared/current
-      echo "$4" > /etc/shared/previous
-      {{- end }}
+    {{- if .Values.useHostnames }}
+    echo "${6/.*}" > /etc/shared/current
+    echo "${4/.*}" > /etc/shared/previous
+    {{- else }}
+    echo "$6" > /etc/shared/current
+    echo "$4" > /etc/shared/previous
+    {{- end }}
   {{- end }}
 {{- else }}
   start-master.sh: |
