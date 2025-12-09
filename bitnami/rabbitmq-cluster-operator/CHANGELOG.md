@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.37 (2025-12-08)
+## 4.4.37 (2025-12-09)
 
 * [bitnami/rabbitmq-cluster-operator] add rbac for endpointslices for cluster-operator ([#36404](https://github.com/bitnami/charts/pull/36404))
 
