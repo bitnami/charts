@@ -1,6 +1,6 @@
 # Changelog
 
-## 23.0.5 (2025-10-25)
+## 23.0.5 (2025-12-09)
 
 * [bitnami/redis] Add support to redis master service with useHostnames false ([#35536](https://github.com/bitnami/charts/pull/35536))
 
