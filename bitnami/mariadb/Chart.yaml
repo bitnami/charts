@@ -36,4 +36,4 @@ maintainers:
 name: mariadb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mariadb
-version: 23.0.0
+version: 23.0.1

@@ -1,8 +1,20 @@
 # Changelog
 
-## 6.0.1 (2025-08-26)
+## 6.0.4 (2025-12-02)
 
-* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references ([#36196](https://github.com/bitnami/charts/pull/36196))
+* [bitnami/seaweedfs] Fix volume-permissions initContainer ([#36397](https://github.com/bitnami/charts/pull/36397))
+
+## <small>6.0.3 (2025-12-02)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/seaweedfs] fix chown on volume-permissions (master & volume) (#36386) ([20ad0ef](https://github.com/bitnami/charts/commit/20ad0ef9e4193a3ec60c457c7831cc6c89b600cb)), closes [#36386](https://github.com/bitnami/charts/issues/36386)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
+
+## <small>6.0.1 (2025-08-26)</small>
+
+* [bitnami/seaweedfs] :zap: :arrow_up: Update dependency references (#36196) ([add6559](https://github.com/bitnami/charts/commit/add65594ab195e0e9bf4b31d0da7ab75898f4466)), closes [#36196](https://github.com/bitnami/charts/issues/36196)
 
 ## 6.0.0 (2025-08-18)
 

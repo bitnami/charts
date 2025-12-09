@@ -454,7 +454,8 @@ configuration: |-
   queue_leader_locator = {{ include "rabbitmq.queueLocator" . }}
   # enable loopback user
   {{- if not (empty .Values.auth.username) }}
-  loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
+  {{- $sanitizedUsername := regexQuoteMeta .Values.auth.username }}
+  loopback_users.{{ $sanitizedUsername }} = {{ .Values.auth.enableLoopbackUser }}
   {{- else}}
   loopback_users.guest = {{ .Values.auth.enableLoopbackUser }}
   {{- end }}

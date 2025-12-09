@@ -1,8 +1,8 @@
 # Changelog
 
-## 17.0.22 (2025-09-01)
+## 17.0.23 (2025-12-01)
 
-* [bitnami/minio]: fix broken provisioning config link ([#36222](https://github.com/bitnami/charts/pull/36222))
+* [bitnami/minio] extraRules must contain the fields paths and pathType ([#36395](https://github.com/bitnami/charts/pull/36395))
 
 ## <small>17.0.21 (2025-08-14)</small>
 
@@ -994,7 +994,7 @@
 ## <small>12.2.3 (2023-03-29)</small>
 
 * [bitnami/minio] Fix minio policy to version minio:2023.3.20  (#15718) ([4f07299](https://github.com/bitnami/charts/commit/4f07299a738c531840ed60c6a7b556d20c2c6dcd)), closes [#15718](https://github.com/bitnami/charts/issues/15718)
-* Bumb version of chart for resolve issue #15718. (#15795) ([877afd5](https://github.com/bitnami/charts/commit/877afd59b602077a4836904fd9608a2e9ffe7e82)), closes [#15718](https://github.com/bitnami/charts/issues/15718) [#15795](https://github.com/bitnami/charts/issues/15795)
+* Bumb version of chart for resolve issue #15718. (#15795) ([877afd5](https://github.com/bitnami/charts/commit/877afd59b602077a4836904fd9608a2e9ffe7e82)), closes [#15795](https://github.com/bitnami/charts/issues/15795)
 
 ## <small>12.2.2 (2023-03-28)</small>
 

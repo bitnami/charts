@@ -207,12 +207,14 @@ httpRelativePath: "/"
 ## @param cache.stack Cache stack to use
 ## @param cache.configFile Path to the file from which cache configuration should be loaded from
 ## @param cache.useHeadlessServiceWithAppVersion Create a headless service used for ispn containing the app version
+## @param cache.javaOptsAppendExtra Extra java options to append to the java options
 ##
 cache:
   enabled: true
   stack: jdbc-ping
   configFile: "cache-ispn.xml"
   useHeadlessServiceWithAppVersion: false
+  javaOptsAppendExtra: ""
 ## Keycloak logging configuration
 ## ref: https://www.keycloak.org/server/logging
 ## @param logging.output Alternates between the default log output format or json format

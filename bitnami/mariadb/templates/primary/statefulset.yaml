@@ -91,8 +91,8 @@ spec:
         - name: preserve-logs-symlinks
           image: {{ include "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.primary.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.primary.initContainerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.initContainerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.primary.resources }}
           resources: {{ toYaml .Values.primary.resources | nindent 12 }}

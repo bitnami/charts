@@ -38,4 +38,4 @@ maintainers:
 name: minio
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio
-version: 17.0.22
+version: 17.0.23

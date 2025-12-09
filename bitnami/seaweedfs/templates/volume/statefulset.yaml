@@ -94,7 +94,7 @@ spec:
             - |
               {{- $chown := printf "%d:%d" (int .Values.volume.containerSecurityContext.runAsUser) (int .Values.volume.podSecurityContext.fsGroup) }}
               {{- range .Values.volume.dataVolumes }}
-              find {{ .mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ $chown }}
+              find {{ .mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $chown }}
               {{- end }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}

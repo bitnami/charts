@@ -707,8 +707,10 @@ ingress:
   ## e.g:
   ## extraRules:
   ## - host: example.local
-  ##     http:
+  ##   http:
+  ##     paths:
   ##       path: /
+  ##       pathType: ImplementationSpecific
   ##       backend:
   ##         service:
   ##           name: example-svc
@@ -1392,8 +1394,10 @@ console:
     ## e.g:
     ## extraRules:
     ## - host: example.local
-    ##     http:
+    ##   http:
+    ##     paths:
     ##       path: /
+    ##       pathType: ImplementationSpecific
     ##       backend:
     ##         service:
     ##           name: example-svc

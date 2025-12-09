@@ -1,4 +1,4 @@
-# Bitnami package for Strimzi Kafka Operator
+# Bitnami Secure Images Helm chart for Strimzi Kafka Operator
 
 Strimzi Kafka Operator provides a way to run Apache Kafka clusters on Kubernetes with different deployment configurations.
 
