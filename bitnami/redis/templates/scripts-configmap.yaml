@@ -419,7 +419,11 @@ data:
     {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
+        {{- if .Values.useHostnames }}
         echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
+        {{- else }}
+        echo "${REDIS_MASTER_HOST}" > /etc/shared/current
+        {{- end }}
     fi
     {{- end }}
 
@@ -819,8 +823,13 @@ data:
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
 
+    {{- if .Values.useHostnames }}
     echo "${6/.*}" > /etc/shared/current
     echo "${4/.*}" > /etc/shared/previous
+    {{- else }}
+    echo "$6" > /etc/shared/current
+    echo "$4" > /etc/shared/previous
+    {{- end }}
   {{- end }}
 {{- else }}
   start-master.sh: |
@@ -1008,25 +1017,67 @@ metadata:
 data:
   update-master-label.sh: |
     #!/bin/bash
-    while true; do
-        while [ ! -f "/etc/shared/current" ] && [ ! -f "/etc/shared/terminate" ]; do
-            sleep 1
-        done
+    set -euo pipefail
 
-        if [ -f "/etc/shared/current" ]; then
-            echo "new master elected, updating label(s)..."
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
-            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" app.kubernetes.io/role-
-            if [ -f /etc/shared/previous ]; then
-                kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+    LOCK_FILE="/etc/shared/update-master-label.lock"
+
+    main_logic() {
+        while true; do
+            while [ ! -f "/etc/shared/current" ] && [ ! -f "/etc/shared/terminate" ]; do
+                sleep 1
+            done
+
+            if [ -f "/etc/shared/current" ]; then
+                current_master=$(< /etc/shared/current)
+                previous_master=""
+                [ -f /etc/shared/previous ] && previous_master=$(< /etc/shared/previous)
+                
+                echo "Current master: $current_master"
+
+                if [ "$current_master" = "$previous_master" ]; then
+                    echo "Master has not changed, skipping label update and cleaning state"
+                    rm -f /etc/shared/current /etc/shared/previous
+                    continue
+                fi
+
+                {{- if .Values.useHostnames }}
+                selector_key="metadata.name"
+                {{- else }}
+                selector_key="status.podIP"
+                {{- end }}
+
+                if [ -n "$current_master" ]; then
+                    echo "Labeling new master $current_master"
+                    kubectl label pod --field-selector="$selector_key=$current_master" isMaster="true" --overwrite || echo "Failed to label master"
+                    kubectl label pod --field-selector="$selector_key=$current_master" app.kubernetes.io/role- || echo "Failed to remove role label"
+                fi
+
+                if [ -n "$previous_master" ]; then
+                    echo "Previous master: $previous_master"
+                    echo "Removing master label from previous master $previous_master"
+                    kubectl label pod --field-selector="$selector_key=$previous_master" isMaster="false" --overwrite || echo "Failed to remove label"
+                fi
+
+                echo "Cleaning state files"
+                rm -f /etc/shared/current /etc/shared/previous
             fi
-            rm "/etc/shared/current" "/etc/shared/previous"
-        fi
 
-        if [ -f "/etc/shared/terminate" ]; then
-            echo "received signal to terminate"
-            rm "/etc/shared/terminate"
-            exit
-        fi
-    done
+            if [ -f "/etc/shared/terminate" ]; then
+                echo "Terminating on request"
+                rm "/etc/shared/terminate"
+                exit
+            fi
+        done
+    }
+
+    export -f main_logic
+
+    if command -v flock &> /dev/null; then
+        echo "flock found. Using lock file $LOCK_FILE to prevent race conditions."
+        flock -n "$LOCK_FILE" bash -c "main_logic"
+    else
+        echo "WARNING: flock command not found in the system. Running without lock."
+        echo "This could cause race conditions in a multi-replica setup."
+        main_logic
+    fi
 {{- end }}
