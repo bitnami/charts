@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.3.4 (2025-12-15)
+
+* bitnami/thanos template allow loadBalancerClass on query service ([#36410](https://github.com/bitnami/charts/issues/36410))
+
 ## 17.3.3 (2025-10-21)
 
 * bitnami/thanos template extraFlags in sharded statefulset storegateway like the template for non-sharded statefulset storegateway ([#36360](https://github.com/bitnami/charts/pull/36360))
