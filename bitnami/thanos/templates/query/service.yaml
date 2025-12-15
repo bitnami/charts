@@ -31,7 +31,7 @@ spec:
   {{- if and (eq .Values.query.service.type "LoadBalancer") .Values.query.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml .Values.query.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
-    {{- if and .Values.query.service.loadBalancerClass (eq .Values.query.service.type "LoadBalancer") }}
+  {{- if and .Values.query.service.loadBalancerClass (eq .Values.query.service.type "LoadBalancer") }}
   loadBalancerClass: {{ .Values.query.service.loadBalancerClass }}
   {{- end }}
   {{- if .Values.query.service.ipFamilyPolicy }}
