@@ -131,7 +131,7 @@ jobs:
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
       - name: Install Kubescape
         run: |
-          curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash -s -- -v v3.0.41
+          curl -s https://raw.githubusercontent.com/kubescape/kubescape/bd0be45c0b8f5d42e7459f85a345eaacd361e22e/install.sh | /bin/bash -s -- -v v3.0.41
       - name: Run helm-dep-build
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
