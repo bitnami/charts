@@ -133,6 +133,20 @@ service:
   ## @param service.labels Additional custom labels for haproxy service
   ##
   labels: {}
+  ## @param service.ipFamilyPolicy IP family policy for the service
+  ## Allowed values: SingleStack, PreferDualStack, RequireDualStack
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
+  ##
+  ipFamilyPolicy: ""
+  ## @param service.ipFamilies IP families for the service
+  ## Allowed values: IPv4, IPv6
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
+  ## e.g:
+  ## ipFamilies:
+  ##   - IPv4
+  ##   - IPv6
+  ##
+  ipFamilies: []
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
