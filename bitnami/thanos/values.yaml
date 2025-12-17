@@ -593,6 +593,11 @@ query:
     ## @param query.service.externalTrafficPolicy Thanos Query service externalTrafficPolicy
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
+    loadBalancerClass: ""
+   ## @param query.service.loadBalancerClass loadBalancerClass if service type is `LoadBalancer`
+    ## Set the loadBalancerClass 
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
     externalTrafficPolicy: Cluster
     ## @param query.service.labels Labels for Thanos Query service
     ##
