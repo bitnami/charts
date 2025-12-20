@@ -1,8 +1,14 @@
 # Changelog
 
-## 17.3.3 (2025-10-21)
+## 17.3.4 (2025-12-20)
 
-* bitnami/thanos template extraFlags in sharded statefulset storegateway like the template for non-sharded statefulset storegateway ([#36360](https://github.com/bitnami/charts/pull/36360))
+* [bitnami/thanos] Fix sharded storegateway endpoints not respecting dnsDiscovery setting ([#36418](https://github.com/bitnami/charts/pull/36418))
+
+## <small>17.3.3 (2025-11-03)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* bitnami/thanos template extraFlags in sharded statefulset storegateway like the template for non-sha ([2dfd26c](https://github.com/bitnami/charts/commit/2dfd26cbcbda4961168712b1709ef4c52368b623)), closes [#36360](https://github.com/bitnami/charts/issues/36360)
 
 ## <small>17.3.1 (2025-08-13)</small>
 
