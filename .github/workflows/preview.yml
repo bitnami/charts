@@ -1,0 +1,50 @@
+name: Chart Preview
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Preview
+        run: |
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer ${{ secrets.PREVIEW_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repo": "${{ github.repository }}",
+              "pr": ${{ github.event.pull_request.number }},
+              "git": {
+                "provider": "github",
+                "owner": "${{ github.repository_owner }}",
+                "repo": "${{ github.event.repository.name }}",
+                "ref": "${{ github.event.pull_request.head.sha }}",
+                "chartPath": "bitnami/wordpress"
+              },
+              "values": {
+                "service": {
+                  "type": "ClusterIP"
+                },
+                "ingress": {
+                  "enabled": true,
+                  "ingressClassName": "nginx"
+                },
+                "persistence": {
+                  "enabled": false
+                },
+                "mariadb": {
+                  "primary": {
+                    "persistence": {
+                      "enabled": false
+                    }
+                  }
+                }
+              },
+              "head": {
+                "owner": "${{ github.repository_owner }}",
+                "repo": "${{ github.event.repository.name }}",
+                "sha": "${{ github.event.pull_request.head.sha }}"
+              }
+            }' \
+            "https://api.previews.chart-preview.com/previews"
