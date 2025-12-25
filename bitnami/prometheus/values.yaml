@@ -741,9 +741,18 @@ server:
         {{- if .Values.server.alertingEndpoints }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.alertingEndpoints "context" $) | nindent 4 }}
         {{- end }}
+        {{- if and .Values.alertmanager.enabled }}
         - scheme: HTTP
           static_configs:
+          {{- if gt (int .Values.alertmanager.replicaCount) 1 }}
+            - targets:
+              {{- range $i := until (int .Values.alertmanager.replicaCount) }}
+                - "{{ printf "%s-%d.%s-headless.%s.svc.%s:%d" (include "prometheus.alertmanager.fullname" $) $i (include "prometheus.alertmanager.fullname" $) (include "common.names.namespace" $) $.Values.clusterDomain (int $.Values.alertmanager.containerPorts.http) }}"
+              {{- end }}
+          {{- else }}
             - targets: [ "{{ printf "%s.%s.svc.%s:%d" (include "prometheus.alertmanager.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain (int .Values.alertmanager.service.ports.http) }}" ]
+          {{- end }}
+        {{- end }}
     rule_files:
       - rules.yaml
     {{- end }}
