@@ -30,6 +30,12 @@ spec:
       port: {{ .Values.alertmanager.service.ports.cluster }}
       protocol: UDP
       targetPort: udp-cluster
+    {{- if and .Values.alertmanager.enabled (gt (int .Values.alertmanager.replicaCount) 1) }}
+    - name: http
+      port: {{ .Values.alertmanager.containerPorts.http }}
+      protocol: TCP
+      targetPort: http
+    {{- end }}
     {{- if .Values.alertmanager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
