@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.2.1 (2025-12-25)
+## 2.2.1 (2025-12-27)
 
-* send alert to all alertmanagers ([#36421](https://github.com/bitnami/charts/pull/36421))
+* [bitnami/prometheus] send alert to all alertmanagers ([#36421](https://github.com/bitnami/charts/pull/36421))
 
 ## <small>2.1.23 (2025-08-14)</small>
 
