@@ -544,7 +544,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ### To 6.0.0
 
-This chart major version standarizes the chart templates and values, modifying some existing parameters names and adding several more. These parameter modifications can be sumarised in the following:
+This chart major version standardizes the chart templates and values, modifying some existing parameters names and adding several more. These parameter modifications can be summarised in the following:
 
 - `worker.autoscaling.CpuTargetPercentage/.replicasMax` parameters are now found by `worker.autoscaling.targetCPU/.maxReplicas`.
 - `webport/webPortHttps/cluster` parameters are now found by `containerPorts.http/.https/.cluster`.

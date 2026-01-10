@@ -37,6 +37,6 @@ Some of the items that need to be implemented are:
 - podSecurityContext
 - containerSecurityContext
 
-Also it is necessary to use the `bitnami/common` chart to standarize some of the above items.
+Also it is necessary to use the `bitnami/common` chart to standardize some of the above items.
 
 :warning: Take into account this is just an example to follow, depending on the specific use case you will need to remove, add or modify those templates, beyond replacing the placeholders `%%FOO%%`
