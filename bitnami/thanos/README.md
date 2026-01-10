@@ -1749,7 +1749,7 @@ This major release bumps the MinIO chart version to [13.x.x](https://github.com/
 
 This major version changes the NetworkPolicy objects and creates one per Thanos component. The `networkPolicy` common value was removed in favor of `COMPONENT.networkPolicy`. Also, NetworkPolicy objects are deployed by default. This can be changed by setting `COMPONENT.networkPolicy.enabled=false` being `COMPONENT` one of the Thanos components.
 
-This version also removes deprecated service port values like `receive.service.http.port` in favor of `recieve.service.ports.http`, as well as `existingServiceAccount`.
+This version also removes deprecated service port values like `receive.service.http.port` in favor of `receive.service.ports.http`, as well as `existingServiceAccount`.
 
 ### To 12.0.0
 

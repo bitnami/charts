@@ -1111,7 +1111,7 @@ This major version changes the default PostgreSQL image from 14.x to 15.x. Follo
 
 ### To 9.0.0
 
-This chart major version updates the PostgreSQL image's version to the latest major, `v14`, as well as standarizes the templates and values. These changes can be sumarised in the following:
+This chart major version updates the PostgreSQL image's version to the latest major, `v14`, as well as standardizes the templates and values. These changes can be summarised in the following:
 
 - Image parameters that used `imageNameImage` are now under `imageName.image`
 - `containerPort` parameters are now found by `containerPorts.xxxx`
