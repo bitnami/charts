@@ -175,7 +175,34 @@ spec:
             {{- end }}
       volumes:
         - name: empty-dir
+          {{- if .Values.setupDBJob.ephemeral.enabled }}
+          ephemeral:
+            volumeClaimTemplate:
+              {{- if or .Values.setupDBJob.ephemeral.annotations .Values.commonAnnotations .Values.commonLabels }}
+              metadata:
+                {{- if or .Values.setupDBJob.ephemeral.annotations .Values.commonAnnotations }}
+                {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.setupDBJob.ephemeral.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+                annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 18 }}
+                {{- end }}
+                {{- if .Values.commonLabels }}
+                labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 18 }}
+                {{- end }}
+              {{- end }}
+              spec:
+                accessModes:
+                {{- range .Values.setupDBJob.ephemeral.accessModes }}
+                  - {{ . | quote }}
+                {{- end }}
+                resources:
+                  requests:
+                    storage: {{ .Values.setupDBJob.ephemeral.size | quote }}
+                {{- include "common.storage.class" (dict "persistence" .Values.setupDBJob.ephemeral "global" .Values.global) | nindent 16 }}
+          {{- else if .Values.setupDBJob.emptyDir.medium }}
+          emptyDir:
+            medium: {{ .Values.setupDBJob.emptyDir.medium }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}

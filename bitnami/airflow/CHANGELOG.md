@@ -1,8 +1,13 @@
 # Changelog
 
-## 25.0.4 (2025-09-01)
+## 25.1.0 (2026-01-12)
 
-* [bitnami/airflow] Allow multiple executors with CeleryExecutor ([#35423](https://github.com/bitnami/charts/pull/35423))
+* [bitnami/airflow] Allow customizing the empty-dir volume parameters ([#36432](https://github.com/bitnami/charts/pull/36432))
+
+## <small>25.0.4 (2025-09-02)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/airflow] Allow multiple executors with CeleryExecutor (#35423) ([157ac96](https://github.com/bitnami/charts/commit/157ac963cfebc96cdbb5ada9b205776f1bf2d22a)), closes [#35423](https://github.com/bitnami/charts/issues/35423)
 
 ## <small>25.0.2 (2025-08-21)</small>
 
