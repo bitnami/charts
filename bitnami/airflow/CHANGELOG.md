@@ -1,8 +1,8 @@
 # Changelog
 
-## 25.1.0 (2025-11-18)
+## 25.1.0 (2026-01-12)
 
-* [bitnami/airflow] Allow customizing the empty-dir volume parameters ([#36377](https://github.com/bitnami/charts/pull/36377))
+* [bitnami/airflow] Allow customizing the empty-dir volume parameters ([#36432](https://github.com/bitnami/charts/pull/36432))
 
 ## <small>25.0.4 (2025-09-02)</small>
 
