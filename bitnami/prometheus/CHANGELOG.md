@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.2.0 (2025-10-20)
+## 2.2.1 (2025-12-27)
 
-* [bitnami/prometheus] Add environment variable support to the Prometheus Thanos container ([#36251](https://github.com/bitnami/charts/pull/36251))
+* [bitnami/prometheus] send alert to all alertmanagers ([#36421](https://github.com/bitnami/charts/pull/36421))
 
 ## <small>2.1.23 (2025-08-14)</small>
 
