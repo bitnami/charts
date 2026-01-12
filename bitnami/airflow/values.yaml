@@ -2069,7 +2069,7 @@ triggerer:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
-    ## @param triggerer.persistence.annotations Additional annotations for backing PVC
+    ## @param triggerer.persistence.annotations Additional Persistent Volume Claim annotations
     ##
     annotations: {}
     ## @param triggerer.persistence.accessModes Persistent Volume Access Modes
