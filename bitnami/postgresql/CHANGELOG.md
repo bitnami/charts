@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.2 (2026-01-11)
+## 17.0.2 (2026-01-12)
 
 * [bitnami/postgresql] Add primary.service.enabled parameter to allow disabling regular service ([#36431](https://github.com/bitnami/charts/pull/36431))
 
