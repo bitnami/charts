@@ -255,7 +255,34 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
+          {{- if .Values.dagProcessor.ephemeral.enabled }}
+          ephemeral:
+            volumeClaimTemplate:
+              {{- if or .Values.dagProcessor.ephemeral.annotations .Values.commonAnnotations .Values.commonLabels }}
+              metadata:
+                {{- if or .Values.dagProcessor.ephemeral.annotations .Values.commonAnnotations }}
+                {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.dagProcessor.ephemeral.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+                annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 18 }}
+                {{- end }}
+                {{- if .Values.commonLabels }}
+                labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 18 }}
+                {{- end }}
+              {{- end }}
+              spec:
+                accessModes:
+                {{- range .Values.dagProcessor.ephemeral.accessModes }}
+                  - {{ . | quote }}
+                {{- end }}
+                resources:
+                  requests:
+                    storage: {{ .Values.dagProcessor.ephemeral.size | quote }}
+                {{- include "common.storage.class" (dict "persistence" .Values.dagProcessor.ephemeral "global" .Values.global) | nindent 16 }}
+          {{- else if .Values.dagProcessor.emptyDir.medium }}
+          emptyDir:
+            medium: {{ .Values.dagProcessor.emptyDir.medium }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
         - name: configuration
           configMap:
             name: {{ include "airflow.configMapName"  . }}
