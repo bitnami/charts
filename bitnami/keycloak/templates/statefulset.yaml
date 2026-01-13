@@ -202,7 +202,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ .Values.httpRelativePath }}
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/started
               port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
               scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
@@ -210,15 +210,17 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" .) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/live
               port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" .) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ trimSuffix "/" .Values.httpRelativePath }}/realms/{{ .Values.adminRealm | default "master" }}
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/ready
               port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
               scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
           {{- end }}
