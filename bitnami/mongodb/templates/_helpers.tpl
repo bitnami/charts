@@ -643,10 +643,10 @@ Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.en
         {{- $tlsArgs = printf "tls=true%s&tlsCAFile=/certs/mongodb-ca-cert" $tlsCertKeyFile -}}
     {{- end -}}
     {{- if .Values.metrics.username -}}
-        {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r \"s/@/%40/g;s/:/%3A/g\"):$(echo $MONGODB_METRICS_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+        {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g'):$(echo $MONGODB_METRICS_PASSWORD | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g')@" "" .Values.auth.enabled -}}
         {{- printf "mongodb://%s$(hostname -s):%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- else -}}
-        {{- $uriAuth := ternary "$MONGODB_ROOT_USER:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
+        {{- $uriAuth := ternary "$(echo $MONGODB_ROOT_USER | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g'):$(echo $MONGODB_ROOT_PASSWORD | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g')@" "" .Values.auth.enabled -}}
         {{- printf "mongodb://%s$(hostname -s):%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- end -}}
 {{- end -}}
