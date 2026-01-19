@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.5.45 (2025-08-21)
+## 17.0.1 (2026-01-19)
 
-* [bitnami/mongodb] :zap: :arrow_up: Update dependency references ([#36166](https://github.com/bitnami/charts/pull/36166))
+* [bitnami/mongodb] Fix URL encoding for special characters in mongodb_exporter URI ([#36437](https://github.com/bitnami/charts/pull/36437))
+
+## <small>16.5.45 (2025-08-21)</small>
+
+* [bitnami/mongodb] :zap: :arrow_up: Update dependency references (#36166) ([83c8f5a](https://github.com/bitnami/charts/commit/83c8f5a37e5cd3d81569f4a5c74e5e50f314491a)), closes [#36166](https://github.com/bitnami/charts/issues/36166)
 
 ## <small>16.5.44 (2025-08-15)</small>
 
