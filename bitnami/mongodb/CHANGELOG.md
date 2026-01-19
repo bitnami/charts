@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.0.1 (2026-01-16)
+## 17.0.1 (2026-01-19)
 
 * [bitnami/mongodb] Fix URL encoding for special characters in mongodb_exporter URI ([#36437](https://github.com/bitnami/charts/pull/36437))
 
