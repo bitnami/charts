@@ -35,4 +35,5 @@ maintainers:
 name: jaeger
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
-version: 6.0.6
+version: 6.1.0
+
