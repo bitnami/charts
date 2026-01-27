@@ -1,8 +1,14 @@
 # Changelog
 
-## 17.0.1 (2025-10-14)
+## 17.0.2 (2026-01-12)
 
-* [bitnami/postgresql] collect metrics as postgres user ([#36349](https://github.com/bitnami/charts/pull/36349))
+* [bitnami/postgresql] Add primary.service.enabled parameter to allow disabling regular service ([#36431](https://github.com/bitnami/charts/pull/36431))
+
+## <small>17.0.1 (2025-10-14)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/postgresql] collect metrics as postgres user (#36349) ([0a10190](https://github.com/bitnami/charts/commit/0a101909ce511465df195263fda978dfae973ebc)), closes [#36349](https://github.com/bitnami/charts/issues/36349)
+* Update kubectl command for creating secrets (#36328) ([b6abcbe](https://github.com/bitnami/charts/commit/b6abcbe116e03c2d2849042eae88952cde2d9df5)), closes [#36328](https://github.com/bitnami/charts/issues/36328)
 
 ## <small>16.7.27 (2025-08-26)</small>
 
@@ -2213,7 +2219,7 @@ Co-authored-by: Carlos Rodríguez Hernández <carlosrh@vmware.com>
 
 ## <small>9.7.1 (2020-09-23)</small>
 
-* [bitnami/chart] postgre #3722: In exsistingSecret: Switched password keys (#3744) ([1517668](https://github.com/bitnami/charts/commit/15176687345d93632a1e16753b0cd2fb52c35868)), closes [#3722](https://github.com/bitnami/charts/issues/3722) [#3744](https://github.com/bitnami/charts/issues/3744)
+* [bitnami/chart] postgre #3722: In exsistingSecret: Switched password keys (#3744) ([1517668](https://github.com/bitnami/charts/commit/15176687345d93632a1e16753b0cd2fb52c35868)), closes [#3744](https://github.com/bitnami/charts/issues/3744)
 
 ## 9.7.0 (2020-09-21)
 
