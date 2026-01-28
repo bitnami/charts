@@ -11,7 +11,7 @@ kind: VerticalPodAutoscaler
 metadata:
   name: {{ printf "%s-shard%d" (include "common.names.fullname" $ ) $i }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" .) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $.Values.commonLabels "context" $) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
     app.kubernetes.io/part-of: clickhouse
   {{- if or $.Values.autoscaling.vpa.annotations $.Values.commonAnnotations }}
