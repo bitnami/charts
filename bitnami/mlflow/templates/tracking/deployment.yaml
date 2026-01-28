@@ -131,7 +131,7 @@ spec:
           args:
             - server
             {{- if .Values.tracking.tls.enabled }}
-            - --ssl-certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --ssl-keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ssl-ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}
+            - --uvicorn-opts='--ssl-certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --ssl-keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ssl-ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}'
             {{- end }}
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - --backend-store-uri={{ include "mlflow.v0.database.uri" . }}
