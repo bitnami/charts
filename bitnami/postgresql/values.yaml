@@ -23,7 +23,7 @@ global:
   ##
   security:
     ## @param global.security.allowInsecureImages Allows skipping image verification
-    allowInsecureImages: false
+    allowInsecureImages: true
   postgresql:
     ## @param global.postgresql.fullnameOverride Full chart name (overrides `fullnameOverride`)
     ## @param global.postgresql.auth.postgresPassword Password for the "postgres" admin user (overrides `auth.postgresPassword`)
@@ -38,7 +38,7 @@ global:
     fullnameOverride: ""
     
     auth:
-      postgresPassword: ""
+      postgresPassword: "postgres-pwd"
       username: ""
       password: ""
       database: ""
@@ -66,7 +66,7 @@ global:
 
 ## @param kubeVersion Override Kubernetes version
 ##
-kubeVersion: ""
+kubeVersion: "1.33.6"
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
@@ -75,7 +75,7 @@ nameOverride: ""
 fullnameOverride: ""
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
-namespaceOverride: ""
+namespaceOverride: "cnp"
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -84,7 +84,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 ## @param commonLabels Add labels to all the deployed resources
 ##
-commonLabels: {}
+commonLabels: {"app.kubernetes.io/managed-by": "Helm"}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
@@ -119,9 +119,9 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: docker.io
-  repository: bitnami/postgresql
-  tag: 17.6.0-debian-12-r4
+  registry: hmctspublic.azurecr.io
+  repository: imported/postgres
+  tag: 17.6-alpine
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -137,7 +137,7 @@ image:
   pullSecrets: []
   ## Set to true if you would like to see extra information on logs
   ##
-  debug: false
+  debug: true
 ## Authentication parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#creating-a-database-on-first-run
@@ -149,7 +149,7 @@ auth:
   enablePostgresUser: true
   ## @param auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` is provided
   ##
-  postgresPassword: ""
+  postgresPassword: "postgres-123"
   ## @param auth.username Name for a custom user to create
   ##
   username: ""
@@ -277,7 +277,7 @@ shmVolume:
   ## e.g:
   ## sizeLimit: 1Gi
   ##
-  sizeLimit: ""
+  sizeLimit: "1Gi"
 ## TLS configuration
 ##
 tls:
@@ -618,12 +618,17 @@ primary:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate: {}
-  ## @param primary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the PostgreSQL Primary container(s)
-  ##
-  extraVolumeMounts: []
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes for the PostgreSQL Primary pod(s)
   ##
-  extraVolumes: []
+  extraVolumes:
+    - name: postgresql-run
+      emptyDir: {}
+  ## @param primary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the PostgreSQL Primary container(s)
+  ##
+  extraVolumeMounts:
+    - name: postgresql-run
+      mountPath: /var/run/postgresql
+
   ## @param primary.sidecars Add additional sidecar containers to the PostgreSQL Primary pod(s)
   ## For example:
   ## sidecars:
@@ -807,14 +812,14 @@ primary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: ""
+    storageClass: "azure-disk-ssd-lrs"
     ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
     ##
     accessModes:
       - ReadWriteOnce
     ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
     ##
-    size: 8Gi
+    size: 1Gi
     ## @param primary.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
@@ -1931,3 +1936,5 @@ metrics:
     ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
     ##
     rules: []
+
+#enabled: false

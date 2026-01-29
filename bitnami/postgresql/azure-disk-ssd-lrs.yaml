@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: azure-disk-ssd-lrs
+provisioner: disk.csi.azure.com
+parameters:
+  skuName: StandardSSD_LRS
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
