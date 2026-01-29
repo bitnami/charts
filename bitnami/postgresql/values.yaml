@@ -715,6 +715,9 @@ primary:
   ## PostgreSQL Primary service configuration
   ##
   service:
+    ## @param primary.service.enabled Enable/disable the PostgreSQL primary service
+    ##
+    enabled: true
     ## @param primary.service.type Kubernetes Service type
     ##
     type: ClusterIP
