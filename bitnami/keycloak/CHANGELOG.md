@@ -1,8 +1,15 @@
 # Changelog
 
+## 25.3.1 (2026-01-13)
+
+* [bitnami/keycloak] feat: use official Keycloak health endpoints for probes ([#36434](https://github.com/bitnami/charts/pull/36434))
+
 ## 25.3.0 (2025-11-11)
 
-* [bitnami/keycloak] New param javaOptsAppendExtra to append additional java opts  ([#36350](https://github.com/bitnami/charts/pull/36350))
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/keycloak] New param javaOptsAppendExtra to append additional java opts  (#36350) ([b1afd5e](https://github.com/bitnami/charts/commit/b1afd5e96c71bbf2fa5ee10d23ca0d7d958fe3a9)), closes [#36350](https://github.com/bitnami/charts/issues/36350)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>25.2.5 (2025-10-08)</small>
 
