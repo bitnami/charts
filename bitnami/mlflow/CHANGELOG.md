@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.1 (2026-01-28)
+## 5.2.1 (2026-01-30)
 
 * [bitnami/mlflow] Use uvicorn opts instead of gunicorn ([#36449](https://github.com/bitnami/charts/pull/36449))
 
