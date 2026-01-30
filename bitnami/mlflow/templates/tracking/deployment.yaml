@@ -130,10 +130,8 @@ spec:
           {{- else }}
           args:
             - server
-            - --gunicorn-opts='--timeout=120'
             {{- if .Values.tracking.tls.enabled }}
-            - --gunicorn-opts
-            - --certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}
+            - --uvicorn-opts='--ssl-certfile {{ include "mlflow.v0.tracking.tlsCert" . }} --ssl-keyfile {{ include "mlflow.v0.tracking.tlsCertKey" . }} {{- if (include "mlflow.v0.tracking.tlsCACert" .)}} --ssl-ca-certs {{ include "mlflow.v0.tracking.tlsCACert" . }}{{- end }}'
             {{- end }}
             {{- if (include "mlflow.v0.database.enabled" .) }}
             - --backend-store-uri={{ include "mlflow.v0.database.uri" . }}
