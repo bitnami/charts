@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.1 (2025-11-10)
+## 3.0.1 (2026-02-03)
 
 * feat(haproxy): add IPv6 dual-stack support with ipFamilyPolicy and ip… ([#36385](https://github.com/bitnami/charts/pull/36385))
 
