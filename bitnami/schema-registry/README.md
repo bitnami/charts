@@ -402,12 +402,12 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `httpRoutes.gatewayParentRefs.sectionName` | The section name of the listener to bind to on the Gateway.                                           | `""`                     |
 | `httpRoutes.shouldStripPath`               | Whether to strip the path before sending the request to the service.                                  | `""`                     |
 | `httpRoutes.shouldRouteToService`          | Whether this HTTPRoute should route to the backend service.                                           | `""`                     |
-| `httpRoutes.matches`                       | HTTPRoute match rules, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutematch.           | `[]`                     |
+| `httpRoutes.matches`                       | HTTPRoute match rules                                                                                 | `[]`                     |
 | `httpRoutes.matches.path`                  | Match the route based on this path structure.                                                         | `{}`                     |
 | `httpRoutes.matches.path.type`             | One of Exact, PathPrefix or RegularExpression.                                                        | `""`                     |
 | `httpRoutes.matches.path.value`            | The path to match on after the host.                                                                  | `""`                     |
-| `httpRoutes.filters`                       | HTTPRoute filters, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter.              | `[]`                     |
-| `httpRoutes.timeouts`                      | HTTPRoute timeouts, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts.           | `{}`                     |
+| `httpRoutes.filters`                       | HTTPRoute filters                                                                                     | `[]`                     |
+| `httpRoutes.timeouts`                      | HTTPRoute timeouts                                                                                    | `{}`                     |
 
 ### RBAC parameters
 

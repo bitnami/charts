@@ -745,7 +745,8 @@ httpRoutes:
   ## @param httpRoutes.shouldRouteToService [string] Whether this HTTPRoute should route to the backend service.
   ##
   shouldRouteToService: true
-  ## @param httpRoutes.matches [array] HTTPRoute match rules, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutematch.
+  ## @param httpRoutes.matches [array] HTTPRoute match rules
+  ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutematch
   ##
   matches:
     ## @param httpRoutes.matches.path [object] Match the route based on this path structure.
@@ -757,10 +758,12 @@ httpRoutes:
       ## @param httpRoutes.matches.path.value [string] The path to match on after the host.
       ##
       value: "/kafka-ui"
-  ## @param httpRoutes.filters [array] HTTPRoute filters, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter.
+  ## @param httpRoutes.filters [array] HTTPRoute filters
+  ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
   ##
   filters: []
-  ## @param httpRoutes.timeouts [object] HTTPRoute timeouts, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts.
+  ## @param httpRoutes.timeouts [object] HTTPRoute timeouts
+  ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
   ##
   timeouts: {}
 ## @section RBAC parameters
