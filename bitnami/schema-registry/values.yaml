@@ -705,6 +705,64 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+## Kafka-UI HTTPRoute configuration
+## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+##
+## @param httpRoutes [array] HTTPRoute resources to create.
+##
+httpRoutes:
+  ## @param httpRoutes.enabled [string] Enable this HTTPRoute
+  ##
+- enabled: false
+  ## @param httpRoutes.hostnames [array] Hostnames to expose this HTTPRoute under
+  ##
+  hostnames:
+  - "example.com"
+  ## @param httpRoutes.annotations [object] Additional annotations for the HTTPRoute resource.
+  ##
+  annotations: {}
+  ## @param httpRoutes.labels [object] Labels for the HTTPRoute
+  ##
+  labels: {}
+  ## @param httpRoutes.nameOverride [string] The name to give this HTTPRoute resource.
+  ##
+  nameOverride: ""
+  ## @param httpRoutes.gatewayParentRefs [array] Which gateway to bind this HTTPRoute to
+  ##
+  gatewayParentRefs:
+  ## @param httpRoutes.gatewayParentRefs.name [string] The name of the gateway to bind this HTTPRoute to.
+  ##
+  - name: "gateway-example"
+    ## @param httpRoutes.gatewayParentRefs.namespace [string] The namespace that the gateway is defined under.
+    ##
+    namespace: "gateway-example"
+    ## @param httpRoutes.gatewayParentRefs.sectionName [string] The section name of the listener to bind to on the Gateway.
+    ##
+    sectionName: "http-listener"
+  ## @param httpRoutes.shouldStripPath [string] Whether to strip the path before sending the request to the service.
+  ##
+  shouldStripPath: true
+  ## @param httpRoutes.shouldRouteToService [string] Whether this HTTPRoute should route to the backend service.
+  ##
+  shouldRouteToService: true
+  ## @param httpRoutes.matches [array] HTTPRoute match rules, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutematch.
+  ##
+  matches:
+    ## @param httpRoutes.matches.path [object] Match the route based on this path structure.
+    ##
+  - path:
+      ## @param httpRoutes.matches.path.type [string] One of Exact, PathPrefix or RegularExpression.
+      ##
+      type: PathPrefix
+      ## @param httpRoutes.matches.path.value [string] The path to match on after the host.
+      ##
+      value: "/kafka-ui"
+  ## @param httpRoutes.filters [array] HTTPRoute filters, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter.
+  ##
+  filters: []
+  ## @param httpRoutes.timeouts [object] HTTPRoute timeouts, ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts.
+  ##
+  timeouts: {}
 ## @section RBAC parameters
 ## Schema Registry pods ServiceAccount.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/

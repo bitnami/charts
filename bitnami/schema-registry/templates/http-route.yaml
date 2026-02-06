@@ -1,0 +1,80 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- range $routeIdx, $route := .Values.httpRoutes }}
+{{- if $route.enabled }}
+{{- if or (not $route.gatewayParentRefs) (lt (len $route.gatewayParentRefs) 1) }}
+{{- fail (printf "httpRoute[%d].gatewayParentRefs must be defined and contain at least one gateway reference." $routeIdx) }}
+{{- end -}}
+
+{{- if or (not $route.matches) (lt (len $route.matches) 1) }}
+{{- fail (printf "httpRoute[%d].matches must be defined and contain at least one match element." $routeIdx) }}
+{{- end -}}
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ tpl ($route.nameOverride | default (printf "%s-%s" $.Chart.Name (first $route.gatewayParentRefs).name)) $ }}-httproute
+  namespace: {{ include "common.names.namespace" $ | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $route.labels $.Values.commonLabels ) "context" $ ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  {{- if or $route.annotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $route.annotations $.Values.commonAnnotations ) "context" $ ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- range $idx, $parentRef := $route.gatewayParentRefs }}
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: {{ tpl (required (printf "httpRoutes[%d].gatewayParentRefs[%d].name is required." $routeIdx $idx) $parentRef.name) $ }}
+    {{- if $parentRef.namespace }}
+    namespace: {{ tpl ($parentRef.namespace) $ }}
+    {{- end }}
+    {{- if $parentRef.sectionName }}
+    sectionName: {{ tpl ($parentRef.sectionName) $ }}
+    {{- end }}
+  {{- end }}
+  hostnames:
+  {{- tpl (toYaml $route.hostnames) $ | nindent 2 }}
+  rules:
+  - matches:
+    {{- tpl (toYaml $route.matches) $ | nindent 4 }}
+    {{- if $route.shouldRouteToService }}
+    backendRefs:
+    - group: ''
+      kind: Service
+      name: {{ include "common.names.fullname" $ }}
+      port: {{ tpl ($.Values.service.ports.http | default "80" | quote) $ }}
+      weight: 1
+    {{- end }}
+    {{- if $route.filters }}
+    filters:
+    {{- if $route.shouldStripPath }}
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: "/"
+    {{- end }}
+    {{- tpl (toYaml $route.filters) $ | nindent 4 }}
+    {{- else if $route.shouldStripPath }}
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: "/"
+    {{- end }}
+    {{- if $route.timeouts }}
+    timeouts:
+    {{- tpl (toYaml $route.timeouts) $ | nindent 4 }}
+    {{- end }}
+{{- /* Add a document separator if there is another item coming */ -}}
+{{- if lt (add1 $routeIdx) (len $.Values.httpRoutes) -}}
+---
+{{- end -}}
+{{- end -}}
+{{- end -}}
