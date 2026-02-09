@@ -121,6 +121,8 @@ Return the appropriate apiVersion for Vertical Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling.k8s.io/v1" -}}
 {{- end -}}
+{{- define "common.capabilities.vpa.apiVersion" -}}
+{{- print "autoscaling.k8s.io/v1" -}}
 {{- end -}}
 
 {{/*
