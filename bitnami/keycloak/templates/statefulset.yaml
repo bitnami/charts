@@ -202,27 +202,27 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/started
-              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
-              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              path: /health/started
+              port: {{ .Values.containerPorts.management }}
+              scheme: HTTP
           {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" .) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/live
-              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
-              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              path: /health/live
+              port: {{ .Values.containerPorts.management }}
+              scheme: HTTP
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" .) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/ready
-              port: {{ ternary "http" "https" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
-              scheme: {{ ternary "HTTP" "HTTPS" (or .Values.httpEnabled (not .Values.tls.enabled)) }}
+              path: /health/ready
+              port: {{ .Values.containerPorts.management }}
+              scheme: HTTP
           {{- end }}
           {{- end }}
           volumeMounts:
