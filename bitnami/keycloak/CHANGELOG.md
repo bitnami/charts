@@ -1,6 +1,6 @@
 # Changelog
 
-## 25.3.1 (2026-01-13)
+## 25.3.1 (2026-02-10)
 
 * [bitnami/keycloak] feat: use official Keycloak health endpoints for probes ([#36434](https://github.com/bitnami/charts/pull/36434))
 
