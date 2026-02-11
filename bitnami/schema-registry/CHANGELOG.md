@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.0.5 (2025-08-13)
+## 26.1.0 (2026-02-11)
 
-* [bitnami/schema-registry] Fix Schema Registry with SCRAM-SHA-512 and external MSK fails due to mandatory jksSecret ([#35772](https://github.com/bitnami/charts/pull/35772))
+* [bitnami/schema-registry] Add support for HTTPRoute resources ([#36458](https://github.com/bitnami/charts/pull/36458))
+
+## <small>26.0.5 (2025-08-13)</small>
+
+* [bitnami/schema-registry] Fix Schema Registry with SCRAM-SHA-512 and external MSK fails due to manda ([18d8436](https://github.com/bitnami/charts/commit/18d843613cfa32edb3de20379394985184152cba)), closes [#35772](https://github.com/bitnami/charts/issues/35772)
 
 ## <small>26.0.4 (2025-08-07)</small>
 
