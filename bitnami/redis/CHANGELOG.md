@@ -1,8 +1,15 @@
 # Changelog
 
-## 23.0.5 (2025-12-09)
+## 23.1.0 (2026-02-12)
 
-* [bitnami/redis] Add support to redis master service with useHostnames false ([#35536](https://github.com/bitnami/charts/pull/35536))
+* [bitnami/redis] feat: add support for sync checks on replica nodes with sentinel ([#36461](https://github.com/bitnami/charts/pull/36461))
+
+## <small>23.0.5 (2025-12-11)</small>
+
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/redis] Add support to redis master service with useHostnames false (#35536) ([de739bd](https://github.com/bitnami/charts/commit/de739bd74672bdfccdcac80feacf70fc89d4eb18)), closes [#35536](https://github.com/bitnami/charts/issues/35536)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>23.0.4 (2025-10-24)</small>
 
