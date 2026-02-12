@@ -1232,6 +1232,9 @@ sentinel:
   ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new master after a failover
   ##
   parallelSyncs: 1
+  ## @param sentinel.replicaSyncCheck Wait for data full sync on replicas before marking them as ready (experimental)
+  ##
+  replicaSyncCheck: false
   ## @param sentinel.configuration Configuration for Redis(R) Sentinel nodes
   ## ref: https://redis.io/topics/sentinel
   ##
