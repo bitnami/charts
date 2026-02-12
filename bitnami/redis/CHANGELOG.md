@@ -1,8 +1,8 @@
 # Changelog
 
-## 23.1.0 (2026-02-12)
+## 23.1.1 (2026-02-12)
 
-* [bitnami/redis] feat: add support for sync checks on replica nodes with sentinel ([#36461](https://github.com/bitnami/charts/pull/36461))
+* [bitnami/redis] bugfix: use TLS port on readiness probes when TLS is enabled ([#36463](https://github.com/bitnami/charts/pull/36463))
 
 ## <small>23.0.5 (2025-12-11)</small>
 
