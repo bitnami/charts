@@ -19,7 +19,7 @@ data:
     timeout=$1
     run_redis_command() {
 {{- if .Values.tls.enabled }}
-        local args=("--tls" "-p" "$REDIS_PORT")
+        local args=("--tls" "-p" "$REDIS_TLS_PORT")
         {{- if not (empty (include "redis.tlsCACert" .)) }}
         args+=("--cacert" {{ template "redis.tlsCACert" . }})
         {{- end }}
