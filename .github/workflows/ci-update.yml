@@ -14,7 +14,7 @@ on: # rebuild any PRs and main branch changes
       - bitnami:main
 # Remove all permissions by default
 permissions: {}
-# Avoid concurrency over the same PR
+# Avoid concurrency over the same PR
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
 jobs:
@@ -110,9 +110,35 @@ jobs:
             git add "bitnami/${CHART}/CHANGELOG.md"
             git commit -m "Update CHANGELOG.md" --signoff
           fi
-      - name: Install readme-generator-for-helm
-        if: needs.get-chart.outputs.values-updated == 'true'
-        run: npm install -g @bitnami/readme-generator-for-helm
+      - name: 'Clone readme-generator-for-helm'
+        if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          repository: bitnami/readme-generator-for-helm
+          path: readme-generator-for-helm
+      - name: 'Setup Node.js'
+        if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238
+        with:
+          node-version: '24.x'
+      - name: 'Get npm cache directory'
+        if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - name: 'Cache dependencies'
+        if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: npm-${{ hashFiles('./readme-generator-for-helm/package-lock.json') }}
+          restore-keys: npm-
+      - name: "Install readme-generator-for-helm"
+        if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
+        run: |
+          cd "${GITHUB_WORKSPACE}/readme-generator-for-helm" || exit 1
+          npm ci
+          npm install -g
       - id: update-readme
         name: 'Update README'
         if: needs.get-chart.outputs.values-updated == 'true'
