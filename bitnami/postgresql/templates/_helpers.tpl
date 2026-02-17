@@ -161,6 +161,21 @@ Get the user-password key.
 {{- end -}}
 
 {{/*
+Get metrics-password key.
+*/}}
+{{- define "postgresql.v1.metricsPasswordKey" -}}
+{{- if or .Values.global.auth.existingSecret .Values.auth.existingSecret -}}
+    {{- if .Values.global.postgresql.auth.secretKeys.metricsPasswordKey -}}
+        {{- printf "%s" (tpl .Values.global.postgresql.auth.secretKeys.metricsPasswordKey $) -}}
+    {{- else if .Values.auth.secretKeys.metricsPasswordKey -}}
+        {{- printf "%s" (tpl .Values.auth.secretKeys.metricsPasswordKey $) -}}
+    {{- end -}}
+{{- else -}}
+    {{- "metrics-password" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.v1.createSecret" -}}

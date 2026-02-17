@@ -15,7 +15,7 @@ global:
   ##
   imagePullSecrets: []
   ## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
-## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+  ## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
   ##
   defaultStorageClass: ""
   storageClass: ""
@@ -34,9 +34,10 @@ global:
     ## @param global.postgresql.auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.adminPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
     ## @param global.postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.userPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
     ## @param global.postgresql.auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.replicationPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
+    ## @param global.postgresql.auth.secretKeys.metricsPasswordKey Name of key in existing secret to use for PostgreSQL credentials (overrides `auth.secretKeys.metricsPasswordKey`). Only used when `global.postgresql.auth.existingSecret` is set.
     ##
     fullnameOverride: ""
-    
+
     auth:
       postgresPassword: ""
       username: ""
@@ -47,6 +48,7 @@ global:
         adminPasswordKey: ""
         userPasswordKey: ""
         replicationPasswordKey: ""
+        metricsPasswordKey: ""
     ## @param global.postgresql.service.ports.postgresql PostgreSQL service port (overrides `service.ports.postgresql`)
     ##
     service:
@@ -165,17 +167,25 @@ auth:
   ## @param auth.replicationPassword Password for the replication user. Ignored if `auth.existingSecret` is provided
   ##
   replicationPassword: ""
+  ## @param auth.metricsUsername Name of the metrics user used by postgresql exporter
+  ##
+  metricsUsername: ""
+  ## @param auth.metricsPassword Password for the metrics user used by postgresql exporter. Ignored if `auth.existingSecret` is provided
+  ##
+  metricsPassword: ""
   ## @param auth.existingSecret Name of existing secret to use for PostgreSQL credentials. `auth.postgresPassword`, `auth.password`, and `auth.replicationPassword` will be ignored and picked up from this secret. The secret might also contains the key `ldap-password` if LDAP is enabled. `ldap.bind_password` will be ignored and picked from this secret in this case.
   ##
   existingSecret: ""
   ## @param auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
   ## @param auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
   ## @param auth.secretKeys.replicationPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
+  ## @param auth.secretKeys.metricsPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
   ##
   secretKeys:
     adminPasswordKey: postgres-password
     userPasswordKey: password
     replicationPasswordKey: replication-password
+    metricsPasswordKey: metrics-password
   ## @param auth.usePasswordFiles Mount credentials as a files instead of using an environment variable
   ##
   usePasswordFiles: true
