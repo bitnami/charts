@@ -1,8 +1,12 @@
 # Changelog
 
-## 25.3.1 (2026-02-10)
+## 25.3.2 (2026-02-19)
 
-* [bitnami/keycloak] feat: use official Keycloak health endpoints for probes ([#36434](https://github.com/bitnami/charts/pull/36434))
+* [bitnami/keycloak] Fix health probe paths with httpRelativePath ([#36467](https://github.com/bitnami/charts/pull/36467))
+
+## <small>25.3.1 (2026-02-19)</small>
+
+* [bitnami/keycloak] feat: use official Keycloak health endpoints for probes (#36434) ([7c0148d](https://github.com/bitnami/charts/commit/7c0148db530a6e7175080eb906752a59da962e11)), closes [#36434](https://github.com/bitnami/charts/issues/36434)
 
 ## 25.3.0 (2025-11-11)
 
