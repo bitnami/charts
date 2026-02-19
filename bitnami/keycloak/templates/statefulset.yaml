@@ -202,7 +202,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- omit .Values.startupProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /health/started
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/started
               port: {{ .Values.containerPorts.management }}
               scheme: HTTP
           {{- end }}
@@ -211,7 +211,7 @@ spec:
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.livenessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /health/live
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/live
               port: {{ .Values.containerPorts.management }}
               scheme: HTTP
           {{- end }}
@@ -220,7 +220,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- omit .Values.readinessProbe "enabled" | toYaml | nindent 12 }}
             httpGet:
-              path: /health/ready
+              path: {{ trimSuffix "/" .Values.httpRelativePath }}/health/ready
               port: {{ .Values.containerPorts.management }}
               scheme: HTTP
           {{- end }}
