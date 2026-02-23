@@ -19,7 +19,7 @@ jobs:
       pull-requests: write
     steps:
       # This step will add the stale comment and label for the first 15 days without activity. It won't close any task
-      - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d
+      - uses: actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'This Issue has been automatically marked as "stale" because it has not had recent activity (for 15 days). It will be closed if no further activity occurs. Thanks for the feedback.'
@@ -30,7 +30,7 @@ jobs:
           exempt-pr-labels: 'on-hold'
           operations-per-run: 500
       # This step will add the 'solved' label and the last comment before closing the issue or PR. Note that it won't close any issue or PR, they will be closed by the clossing-issues workflow
-      - uses: actions/stale@997185467fa4f803885201cee163a9f38240193d
+      - uses: actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'Due to the lack of activity in the last 5 days since it was marked as "stale", we proceed to close this Issue. Do not hesitate to reopen it later if necessary.'
