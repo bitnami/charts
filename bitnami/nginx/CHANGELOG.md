@@ -1,8 +1,13 @@
 # Changelog
 
+## 22.1.1 (2026-02-23)
+
+* [bitnami/nginx] feat: add checksum annotation for existingServerBlockConfigmap via lookup ([#36470](https://github.com/bitnami/charts/pull/36470))
+
 ## 22.1.0 (2025-10-01)
 
-* [bitnami/nginx] allow to change probes for metrics container ([#36296](https://github.com/bitnami/charts/pull/36296))
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/nginx] allow to change probes for metrics container (#36296) ([e044aec](https://github.com/bitnami/charts/commit/e044aecf0bfede5c2a12eb0ecb920cd5ef11b82d)), closes [#36296](https://github.com/bitnami/charts/issues/36296)
 
 ## <small>21.1.23 (2025-08-18)</small>
 
