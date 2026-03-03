@@ -50,7 +50,7 @@ jobs:
           echo "labels=${labels}" >> $GITHUB_OUTPUT
           echo "resource_url=${resource_url}" >> $GITHUB_OUTPUT
   call-pr-review-comment:
-    uses: bitnami/support/.github/workflows/pr-review-comment.yml@main
+    uses: bitnami/support/.github/workflows/pr-review-comment.yml@96bc169b45aa483cf2bafaaee9dae80eabd96cac
     needs: pr-info
     permissions:
       contents: read

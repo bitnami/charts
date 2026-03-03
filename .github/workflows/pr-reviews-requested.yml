@@ -16,5 +16,5 @@ concurrency:
 jobs:
   call-pr-review-workflow:
     if: ${{ github.repository_owner == 'bitnami' }}
-    uses: bitnami/support/.github/workflows/pr-review-requested-sync.yml@main
+    uses: bitnami/support/.github/workflows/pr-review-requested-sync.yml@96bc169b45aa483cf2bafaaee9dae80eabd96cac
     secrets: inherit

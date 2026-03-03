@@ -23,5 +23,5 @@ concurrency:
 jobs:
   call-triage-workflow:
     if: ${{ github.repository_owner == 'bitnami' }}
-    uses: bitnami/support/.github/workflows/item-opened.yml@main
+    uses: bitnami/support/.github/workflows/item-opened.yml@96bc169b45aa483cf2bafaaee9dae80eabd96cac
     secrets: inherit
