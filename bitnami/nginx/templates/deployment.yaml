@@ -36,8 +36,20 @@ spec:
         {{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
         checksum/server-block-configuration: {{ include (print $.Template.BasePath "/server-block-configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if and .Values.streamServerBlock (not .Values.existingServerBlockConfigmap) }}
+        {{- if .Values.existingServerBlockConfigmap }}
+        {{- $existingCM := lookup "v1" "ConfigMap" (include "common.names.namespace" .) .Values.existingServerBlockConfigmap }}
+        {{- if $existingCM }}
+        checksum/server-block-configuration: {{ $existingCM.data | toYaml | sha256sum }}
+        {{- end }}
+        {{- end }}
+        {{- if and .Values.streamServerBlock (not .Values.existingStreamServerBlockConfigmap) }}
         checksum/stream-server-block-configuration: {{ include (print $.Template.BasePath "/stream-server-block-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.existingStreamServerBlockConfigmap }}
+        {{- $existingStreamCM := lookup "v1" "ConfigMap" (include "common.names.namespace" .) .Values.existingStreamServerBlockConfigmap }}
+        {{- if $existingStreamCM }}
+        checksum/stream-server-block-configuration: {{ $existingStreamCM.data | toYaml | sha256sum }}
+        {{- end }}
         {{- end }}
         {{- if or .Values.contextIncludes.main .Values.contextIncludes.events .Values.contextIncludes.http }}
         checksum/context-includes-configuration: {{ include (print $.Template.BasePath "/context-includes-configmap.yaml") . | sha256sum }}
