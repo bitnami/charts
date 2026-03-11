@@ -15,6 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  disableDefaultAdminSecret: {{ .Values.grafana.disableDefaultAdminSecret }}
   client:
     timeout: {{ .Values.grafana.client.timeout }}
   {{- if .Values.grafana.persistence.enabled }}
