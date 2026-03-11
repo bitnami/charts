@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.9.37 (2025-08-18)
+## 4.9.39 (2026-03-11)
 
-* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references ([#36100](https://github.com/bitnami/charts/pull/36100))
+* [bitnami/grafana-operator] Update Grafana Custom Resource to include disableDefaultAdminSecret option supported by the grafana operator ([#36482](https://github.com/bitnami/charts/pull/36482))
+
+## <small>4.9.37 (2025-08-18)</small>
+
+* [bitnami/grafana-operator] :zap: :arrow_up: Update dependency references (#36100) ([6e8b2c5](https://github.com/bitnami/charts/commit/6e8b2c5f49f9eb91170e9405fbb8a16580c55757)), closes [#36100](https://github.com/bitnami/charts/issues/36100)
 
 ## <small>4.9.36 (2025-08-13)</small>
 
@@ -725,7 +729,7 @@
 ## <small>2.7.15 (2023-01-12)</small>
 
 * [bitnami/*] Add license annotation and remove obsolete engine parameter (#14293) ([da2a794](https://github.com/bitnami/charts/commit/da2a7943bae95b6e9b5b4ed972c15e990b69fdb0)), closes [#14293](https://github.com/bitnami/charts/issues/14293)
-* [bitnami/grafana-operator] Revert #14181 and #14103 (#14309) ([1225395](https://github.com/bitnami/charts/commit/12253957032992b6f2f6ecc7b9b74cc22b0ef340)), closes [#14181](https://github.com/bitnami/charts/issues/14181) [#14103](https://github.com/bitnami/charts/issues/14103) [#14309](https://github.com/bitnami/charts/issues/14309) [#14181](https://github.com/bitnami/charts/issues/14181) [#14103](https://github.com/bitnami/charts/issues/14103)
+* [bitnami/grafana-operator] Revert #14181 and #14103 (#14309) ([1225395](https://github.com/bitnami/charts/commit/12253957032992b6f2f6ecc7b9b74cc22b0ef340)), closes [#14181](https://github.com/bitnami/charts/issues/14181) [#14103](https://github.com/bitnami/charts/issues/14103) [#14309](https://github.com/bitnami/charts/issues/14309) [#14181](https://github.com/bitnami/charts/issues/14181)
 
 ## <small>2.7.14 (2023-01-09)</small>
 
@@ -922,7 +926,7 @@
 
 ## <small>2.2.12 (2022-03-22)</small>
 
-* [bitnami/grafana-operator] Correct dashboardNamespaceSelector expected type. Fixes #9456. (#9500) ([8521b88](https://github.com/bitnami/charts/commit/8521b88cc3103f2be95d0ab72494a1b50e186d3d)), closes [#9456](https://github.com/bitnami/charts/issues/9456) [#9500](https://github.com/bitnami/charts/issues/9500) [#9456](https://github.com/bitnami/charts/issues/9456)
+* [bitnami/grafana-operator] Correct dashboardNamespaceSelector expected type. Fixes #9456. (#9500) ([8521b88](https://github.com/bitnami/charts/commit/8521b88cc3103f2be95d0ab72494a1b50e186d3d)), closes [#9500](https://github.com/bitnami/charts/issues/9500)
 
 ## <small>2.2.11 (2022-03-17)</small>
 
