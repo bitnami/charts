@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.9.39 (2026-03-11)
+## 4.9.39 (2026-03-12)
 
 * [bitnami/grafana-operator] Update Grafana Custom Resource to include disableDefaultAdminSecret option supported by the grafana operator ([#36482](https://github.com/bitnami/charts/pull/36482))
 
