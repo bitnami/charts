@@ -47,7 +47,7 @@ spec:
     - group: ''
       kind: Service
       name: {{ include "common.names.fullname" $ }}
-      port: {{ tpl ($.Values.service.ports.http | default "80" | quote) $ }}
+      port: {{ (tpl (default "80" (toString $.Values.service.ports.http)) $) | int }}
       weight: 1
     {{- end }}
     {{- if $route.filters }}
