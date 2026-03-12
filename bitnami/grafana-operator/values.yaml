@@ -512,6 +512,9 @@ grafana:
   ## @param grafana.enabled Enabled the deployment of the Grafana CRD object into the cluster
   ##
   enabled: true
+  ## @param grafana.disableDefaultAdminSecret Disables the creation of the default admin secret
+  ##
+  disableDefaultAdminSecret: false
   ## @param grafana.image.registry [default: REGISTRY_NAME] Grafana image registry
   ## @param grafana.image.repository [default: REPOSITORY_NAME/grafana] Grafana image name
   ## @skip grafana.image.tag Grafana image tag
