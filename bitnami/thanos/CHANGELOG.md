@@ -1,6 +1,10 @@
 # Changelog
 
-## 17.4.0 (2026-02-08)
+## 17.4.1 (2026-03-20)
+
+* [bitnami/thanos]: Fix invalid YAML syntax on the query deployment template when `storegateway.useEndpointGroup` is false ([#36485](https://github.com/bitnami/charts/pull/36485), closes [#36474](https://github.com/bitnami/charts/issues/36474))
+
+## <small>17.4.0 (2026-02-08)</small>
 
 * [bitnami/thanos]: Adds compactor.deploymentAnnotation to thanos compactor options ([#36453](https://github.com/bitnami/charts/pull/36453))
 
