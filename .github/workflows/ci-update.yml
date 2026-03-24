@@ -116,6 +116,7 @@ jobs:
         with:
           repository: bitnami/readme-generator-for-helm
           path: readme-generator-for-helm
+          ref: '4d29f59abac6aeed6fbc2467e24fc17560057bcb' # 3.0.1 commit ID
       - name: 'Setup Node.js'
         if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
