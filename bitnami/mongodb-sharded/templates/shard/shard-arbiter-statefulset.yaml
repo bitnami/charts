@@ -209,8 +209,8 @@ spec:
             exec:
               command:
                 - pgrep
-                - -f
-                - mongodb
+                - -x
+                - mongod
           {{- end }}
           {{- if $.Values.shardsvr.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}

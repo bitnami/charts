@@ -231,6 +231,7 @@ spec:
             exec:
               command:
                 - pgrep
+                - -x
                 - mongod
           {{- end }}
           {{- if .Values.configsvr.customReadinessProbe }}
