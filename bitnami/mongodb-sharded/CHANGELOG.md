@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.12 (2025-08-21)
+## 9.4.14 (2026-03-24)
 
-* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references ([#36167](https://github.com/bitnami/charts/pull/36167))
+* [bitnami/mongodb-sharded] fix(mongos): use exact match in liveness pr… ([#36488](https://github.com/bitnami/charts/pull/36488))
+
+## <small>9.4.12 (2025-08-25)</small>
+
+* [bitnami/mongodb-sharded] :zap: :arrow_up: Update dependency references (#36167) ([2e5bcf4](https://github.com/bitnami/charts/commit/2e5bcf4b7624c06b906d46b1270be10b56c04243)), closes [#36167](https://github.com/bitnami/charts/issues/36167)
 
 ## <small>9.4.11 (2025-08-15)</small>
 
