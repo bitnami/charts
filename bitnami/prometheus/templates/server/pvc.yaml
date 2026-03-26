@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) -}}
+{{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) (not (eq (.Values.server.workloadKind | default "Deployment") "StatefulSet")) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
