@@ -1,8 +1,16 @@
 # Changelog
 
-## 26.1.0 (2026-02-11)
+## 26.1.1 (2026-03-06)
 
-* [bitnami/schema-registry] Add support for HTTPRoute resources ([#36458](https://github.com/bitnami/charts/pull/36458))
+* [bitnami/schema-registry] Resolve port always being 0 in HTTPRoute resource ([#36477](https://github.com/bitnami/charts/pull/36477))
+
+## 26.1.0 (2026-02-19)
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/schema-registry] Add support for HTTPRoute resources (#36458) ([a9905ea](https://github.com/bitnami/charts/commit/a9905eabb01e11d669bffecdab1e55475df72eeb)), closes [#36458](https://github.com/bitnami/charts/issues/36458)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>26.0.5 (2025-08-13)</small>
 
