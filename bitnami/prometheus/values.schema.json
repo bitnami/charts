@@ -641,7 +641,7 @@
                             "default": "/"
                         },
                         "annotations": {
-                            "type": ["object", "string"],
+                            "type": "object",
                             "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
                             "default": {}
                         },
@@ -946,6 +946,11 @@
                     "description": "Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.",
                     "default": [],
                     "items": {}
+                },
+                "workloadKind": {
+                    "type": "string",
+                    "description": "Kubernetes workload kind for Prometheus",
+                    "default": "Deployment"
                 },
                 "replicaCount": {
                     "type": "number",
@@ -1575,7 +1580,7 @@
                             }
                         },
                         "extraEnvVars": {
-                            "type": ["array", "string"],
+                            "type": "array",
                             "description": "Array with extra environment variables to add to the thanos sidecar container",
                             "default": [],
                             "items": {}
@@ -1787,7 +1792,7 @@
                                     "default": "/"
                                 },
                                 "annotations": {
-                                    "type": ["object", "string"],
+                                    "type": "object",
                                     "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
                                     "default": {}
                                 },
@@ -1869,7 +1874,7 @@
                             "default": "/"
                         },
                         "annotations": {
-                            "type": ["object", "string"],
+                            "type": "object",
                             "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
                             "default": {}
                         },

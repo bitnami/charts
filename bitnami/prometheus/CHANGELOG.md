@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.2.1 (2025-12-27)
+## 2.2.2 (2026-03-26)
 
-* [bitnami/prometheus] send alert to all alertmanagers ([#36421](https://github.com/bitnami/charts/pull/36421))
+* [bitnami/prometheus]  run prometheus server as statefulset ([#36491](https://github.com/bitnami/charts/pull/36491))
 
 ## <small>2.1.23 (2025-08-14)</small>
 
