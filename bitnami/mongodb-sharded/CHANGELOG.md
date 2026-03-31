@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.4.14 (2026-03-24)
+## 9.4.14 (2026-03-31)
 
 * [bitnami/mongodb-sharded] fix(mongos): use exact match in liveness pr… ([#36488](https://github.com/bitnami/charts/pull/36488))
 
