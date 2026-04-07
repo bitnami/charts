@@ -39,7 +39,11 @@ jobs:
     name: Automatically update README, CRDs and CHANGELOG
     permissions:
       contents: read
-    if: needs.get-chart.outputs.result == 'ok'
+    if: |
+      needs.get-chart.outputs.result == 'ok' &&
+      (
+        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
+      )
     steps:
       - name: Checkout bitnami/charts
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -101,7 +105,10 @@ jobs:
           # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
           # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
           # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
-          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${pr_title} ([#${PULL_REQUEST_NUMBER}](${PULL_REQUEST_URL}))\n" > "$changelog_file"
+          # Use printf with %s so chart_version / pr_title from untrusted Chart.yaml and API cannot trigger command substitution (unlike echo "...$chart_version...").
+          printf '# Changelog\n\n## %s (%s)\n\n* %s ([#%s](%s))\n' \
+            "$chart_version" "$(date +'%Y-%m-%d')" "$pr_title" "$PULL_REQUEST_NUMBER" "$PULL_REQUEST_URL" \
+            > "$changelog_file"
           cat "$changelog_tmp" >> "$changelog_file"
           rm "$changelog_tmp"
 
