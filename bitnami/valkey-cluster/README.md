@@ -43,7 +43,7 @@ The main features of each chart are the following:
 
 | Valkey                                     | Valkey Cluster                                                   |
 |--------------------------------------------|------------------------------------------------------------------|
-| Supports multiple databases                | Supports DB 0 by default, with support for multiple numbered databases in cluster mode starting with Valkey 9.0 when cluster-databases is configured. Better if you have a big dataset     |
+| Supports multiple databases                | Supports one database by default;  multiple numbered DBs in cluster from Valkey 9.0+ when configured. Better if you have a big dataset     |
 | Single write point (single primary)        | Multiple write points (multiple primary nodes)                   |
 | ![Valkey Topology](img/valkey-topology.png)| ![Valkey Cluster Topology](img/valkey-cluster-topology.png)      |
 
