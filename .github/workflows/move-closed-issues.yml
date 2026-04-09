@@ -7,6 +7,7 @@ on:
   issues:
     types:
       - closed
+  # pull_request_target: required so secrets: inherit reaches bitnami/support; no PR checkout here.
   pull_request_target:
     types:
       - closed

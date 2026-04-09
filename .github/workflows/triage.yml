@@ -9,6 +9,8 @@ on:
     types:
       - reopened
       - opened
+  # pull_request_target: required so secrets: inherit reaches bitnami/support for Projects;
+  # this caller does not checkout the PR branch (audit child workflow for unsafe checkouts).
   pull_request_target:
     types:
       - reopened

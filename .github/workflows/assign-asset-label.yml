@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[Support] Assign asset label'
+# pull_request_target: fork PRs need a write-capable token to add labels; this workflow
+# does not checkout the PR branch (only downloads unified diff via diff_url).
 on:
   pull_request_target:
     types:

@@ -4,6 +4,7 @@
 # NOTE: This workflow is maintained in the https://github.com/bitnami/support repository
 name: '[Support] Review based card movements'
 on:
+  # pull_request_target: required so secrets: inherit reaches bitnami/support; no PR checkout here.
   pull_request_target:
     types:
       - review_requested

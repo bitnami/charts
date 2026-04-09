@@ -2,14 +2,15 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[License] Check license headers'
+# pull_request + default checkout uses the merge ref; avoids pull_request_target + PR head checkout.
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - synchronize
     branches:
       - main
-      - bitnami:main
+      - "bitnami:main"
 # Remove all permissions by default
 permissions: {}
 jobs:
@@ -21,9 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         name: Checkout Repository
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - id: get-modified-files
         name: 'Get modified files'
         env:
