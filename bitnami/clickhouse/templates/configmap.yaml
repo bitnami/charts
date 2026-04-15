@@ -17,5 +17,5 @@ metadata:
   {{- end }}
 data:
   config.xml: |
-    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) | nindent 4 }}
 {{- end }}
