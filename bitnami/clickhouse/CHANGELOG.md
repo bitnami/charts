@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.4.4 (2025-08-26)
+## 9.4.7 (2026-04-15)
 
-* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references ([#36201](https://github.com/bitnami/charts/pull/36201))
+* [bitnami/clickhouse] Clickhouse "configuration" value template ([#36510](https://github.com/bitnami/charts/pull/36510))
+
+## <small>9.4.4 (2025-08-27)</small>
+
+* [bitnami/clickhouse] :zap: :arrow_up: Update dependency references (#36201) ([679acf7](https://github.com/bitnami/charts/commit/679acf7eb5d0e5b52a730f7fa290f2d65308f8a4)), closes [#36201](https://github.com/bitnami/charts/issues/36201)
 
 ## <small>9.4.3 (2025-08-14)</small>
 
