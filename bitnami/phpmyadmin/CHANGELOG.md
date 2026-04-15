@@ -1,8 +1,12 @@
 # Changelog
 
+## 20.0.2 (2026-04-15)
+
+* [bitnami/phpmyadmin] fix override Release namespace with common value ([#36508](https://github.com/bitnami/charts/pull/36508))
+
 ## 20.0.0 (2025-08-18)
 
-* [bitnami/phpmyadmin] Upgrade to MariaDB 12.0 ([#36118](https://github.com/bitnami/charts/pull/36118))
+* [bitnami/phpmyadmin] Upgrade to MariaDB 12.0 (#36118) ([943f947](https://github.com/bitnami/charts/commit/943f947147a6a46158f64f29a8295f92b74a902e)), closes [#36118](https://github.com/bitnami/charts/issues/36118)
 
 ## <small>19.0.24 (2025-08-18)</small>
 
