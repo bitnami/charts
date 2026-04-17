@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.4.0 (2026-02-08)
+## 17.4.1 (2026-03-23)
 
-* [bitnami/thanos]: Adds compactor.deploymentAnnotation to thanos compactor options ([#36453](https://github.com/bitnami/charts/pull/36453))
+* [bitnami/thanos] Fix invalid YAML syntax on the query deployment template when `storegateway.useEndpointGroup` is false ([#36485](https://github.com/bitnami/charts/pull/36485))
+
+## 17.4.0 (2026-02-09)
+
+* [bitnami/thanos]: Adds compactor.deploymentAnnotation to thanos compactor options (#36453) ([c21afd6](https://github.com/bitnami/charts/commit/c21afd6f1b2e696f925869962cf1353a054ac15f)), closes [#36453](https://github.com/bitnami/charts/issues/36453)
 
 ## <small>17.3.4 (2026-01-12)</small>
 
@@ -457,7 +461,7 @@
 
 ## <small>15.0.2 (2024-04-03)</small>
 
-* [bitnami/thanos]Fix: Make prometheus rules reliable with release name (#24655) ([a2a6eab](https://github.com/bitnami/charts/commit/a2a6eabda632d12ded2b2d0959c44aca2b73fab8)), closes [#24655](https://github.com/bitnami/charts/issues/24655) [#24651](https://github.com/bitnami/charts/issues/24651) [#24651](https://github.com/bitnami/charts/issues/24651)
+* [bitnami/thanos]Fix: Make prometheus rules reliable with release name (#24655) ([a2a6eab](https://github.com/bitnami/charts/commit/a2a6eabda632d12ded2b2d0959c44aca2b73fab8)), closes [#24655](https://github.com/bitnami/charts/issues/24655) [#24651](https://github.com/bitnami/charts/issues/24651)
 * Update resourcesPreset comments (#24467) ([92e3e8a](https://github.com/bitnami/charts/commit/92e3e8a507326d2a20a8f10ab3e7746a2ec5c554)), closes [#24467](https://github.com/bitnami/charts/issues/24467)
 
 ## <small>15.0.1 (2024-04-03)</small>
@@ -1543,7 +1547,7 @@
 
 ## <small>3.8.6 (2021-02-15)</small>
 
-* [bitnami/thanos] fix query TLS client in a modular way (#5437) (#5457) ([bbbf490](https://github.com/bitnami/charts/commit/bbbf490439643e885529c1c4f25aeb7c9c29dc93)), closes [#5437](https://github.com/bitnami/charts/issues/5437) [#5457](https://github.com/bitnami/charts/issues/5457) [#5437](https://github.com/bitnami/charts/issues/5437)
+* [bitnami/thanos] fix query TLS client in a modular way (#5437) (#5457) ([bbbf490](https://github.com/bitnami/charts/commit/bbbf490439643e885529c1c4f25aeb7c9c29dc93)), closes [#5437](https://github.com/bitnami/charts/issues/5437) [#5457](https://github.com/bitnami/charts/issues/5457)
 
 ## <small>3.8.5 (2021-02-12)</small>
 
@@ -1725,7 +1729,7 @@
 
 ## 2.2.0 (2020-08-12)
 
-* [bitnami/thanos] Add cache configuration blocks to Thanos store. Index and Bucket (#3387) ([2f2e1dd](https://github.com/bitnami/charts/commit/2f2e1ddcc594c1a6538c1820867862775e009740)), closes [#3387](https://github.com/bitnami/charts/issues/3387) [#3384](https://github.com/bitnami/charts/issues/3384) [#3384](https://github.com/bitnami/charts/issues/3384)
+* [bitnami/thanos] Add cache configuration blocks to Thanos store. Index and Bucket (#3387) ([2f2e1dd](https://github.com/bitnami/charts/commit/2f2e1ddcc594c1a6538c1820867862775e009740)), closes [#3387](https://github.com/bitnami/charts/issues/3387) [#3384](https://github.com/bitnami/charts/issues/3384)
 
 ## <small>2.1.1 (2020-08-07)</small>
 
