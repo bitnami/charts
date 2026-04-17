@@ -38,6 +38,7 @@ spec:
       {{- end }}
     spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "jaeger.collector.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.collector.automountServiceAccountToken }}
       {{- if .Values.collector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.collector.hostAliases "context" $) | nindent 8 }}
