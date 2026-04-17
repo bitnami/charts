@@ -4,6 +4,10 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if not (include "common.capabilities.apiVersions.has" ( dict "version" "monitoring.coreos.com/v1/ServiceMonitor" "context" . )) }}
+  {{- fail "To collect Prometheus metrics, the ServiceMonitor CRD from the Prometheus Operator should be be installed in your cluster, such as through the bitnami/kube-prometheus Helm chart" }}
+}}
+{{- end }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
