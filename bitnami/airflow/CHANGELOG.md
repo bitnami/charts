@@ -1,8 +1,15 @@
 # Changelog
 
+## 25.1.1 (2026-04-20)
+
+* [bitnami/airflow] Improves boolean logic of missing CRDs in the Airflow Helm chart ([#36514](https://github.com/bitnami/charts/pull/36514))
+
 ## 25.1.0 (2026-01-12)
 
-* [bitnami/airflow] Allow customizing the empty-dir volume parameters ([#36432](https://github.com/bitnami/charts/pull/36432))
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/airflow] Allow customizing the empty-dir volume parameters (#36432) ([c58edb8](https://github.com/bitnami/charts/commit/c58edb88cb9f39ae12bc06a507050c00b7b1c8cd)), closes [#36432](https://github.com/bitnami/charts/issues/36432)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>25.0.4 (2025-09-02)</small>
 
