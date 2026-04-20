@@ -8,6 +8,10 @@ NGINX Ingress Controller is an Ingress controller that manages external access t
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+## This Helm chart is deprecated
+
+This product is unmaintained by the upstream; see https://github.com/kubernetes/ingress-NGINX?tab=readme-ov-file#retiring
+
 ## TL;DR
 
 ```console
