@@ -1,3 +1,7 @@
+This Helm chart is deprecated
+
+This product is unmaintained by the upstream; see https://github.com/kubernetes/ingress-NGINX?tab=readme-ov-file#retiring
+
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
