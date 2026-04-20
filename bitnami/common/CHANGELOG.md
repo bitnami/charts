@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.31.7 (2025-10-03)
+## 2.31.9 (2026-04-20)
 
-* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version ([#36324](https://github.com/bitnami/charts/pull/36324))
+* [bitnami/common] escape ChartVersion in labels ([#36516](https://github.com/bitnami/charts/pull/36516))
+
+## <small>2.31.7 (2025-10-03)</small>
+
+* [bitnami/common] Replace "+" to "_" in value of app.kubernetes.io/version (#36324) ([21cd465](https://github.com/bitnami/charts/commit/21cd4652e03b7258564427f139d7954068d6113d)), closes [#36324](https://github.com/bitnami/charts/issues/36324)
 
 ## <small>2.31.6 (2025-09-22)</small>
 
@@ -407,7 +411,7 @@
 
 ## <small>1.11.2 (2022-02-28)</small>
 
-* [bitnami/common] README: Fixed the desscription for `common.labels.matchLabels` (#9062) ([7f17db7](https://github.com/bitnami/charts/commit/7f17db7e9bcdd7918bde322b3b76a62c6a86e752)), closes [#9062](https://github.com/bitnami/charts/issues/9062) [bitnami/charts#9060](https://github.com/bitnami/charts/issues/9060) [bitnami/charts#9060](https://github.com/bitnami/charts/issues/9060)
+* [bitnami/common] README: Fixed the desscription for `common.labels.matchLabels` (#9062) ([7f17db7](https://github.com/bitnami/charts/commit/7f17db7e9bcdd7918bde322b3b76a62c6a86e752)), closes [#9062](https://github.com/bitnami/charts/issues/9062) [bitnami/charts#9060](https://github.com/bitnami/charts/issues/9060)
 
 ## <small>1.11.1 (2022-02-02)</small>
 
