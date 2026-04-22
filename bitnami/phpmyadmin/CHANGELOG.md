@@ -1,6 +1,6 @@
 # Changelog
 
-## 20.0.2 (2026-04-15)
+## 20.0.2 (2026-04-22)
 
 * [bitnami/phpmyadmin] fix override Release namespace with common value ([#36508](https://github.com/bitnami/charts/pull/36508))
 
