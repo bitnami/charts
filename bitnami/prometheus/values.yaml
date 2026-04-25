@@ -764,6 +764,9 @@ server:
   ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##
   extraScrapeConfigs: []
+  ## @param server.workloadKind Kubernetes workload kind for Prometheus
+  ##
+  workloadKind: Deployment
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
   replicaCount: 1
