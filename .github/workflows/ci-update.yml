@@ -136,7 +136,7 @@ jobs:
         run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
       - name: 'Cache dependencies'
         if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
           key: npm-${{ hashFiles('./readme-generator-for-helm/package-lock.json') }}
