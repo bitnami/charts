@@ -275,7 +275,7 @@ spec:
           {{- end }}
           {{- if .Values.server.thanos.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.server.thanos.livenessProbe.enabled }}
+          {{- else if .Values.server.thanos.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.thanos.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /-/ready
