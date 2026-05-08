@@ -1,8 +1,15 @@
 # Changelog
 
-## 17.0.1 (2026-01-19)
+## 17.0.2 (2026-04-28)
 
-* [bitnami/mongodb] Fix URL encoding for special characters in mongodb_exporter URI ([#36437](https://github.com/bitnami/charts/pull/36437))
+* [bitnami/mongodb] fix temp folder typo ([#36500](https://github.com/bitnami/charts/pull/36500))
+
+## <small>17.0.1 (2026-01-19)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/mongodb] Fix URL encoding for special characters in mongodb_exporter URI (#36437) ([18881c1](https://github.com/bitnami/charts/commit/18881c18ac08444dcb00df287dfe9480c3851790)), closes [#36437](https://github.com/bitnami/charts/issues/36437)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>16.5.45 (2025-08-21)</small>
 
@@ -1140,7 +1147,7 @@
 ## <small>12.1.18 (2022-06-08)</small>
 
 * [bitnami/*] Replace Kubeapps URL in READMEs (and kubeapps Chart.yaml) and remove BKPR references (#1 ([c6a7914](https://github.com/bitnami/charts/commit/c6a7914361e5aea6016fb45bf4d621edfd111d32)), closes [#10600](https://github.com/bitnami/charts/issues/10600)
-* [bitnami/mongodb] - Fixing mongdb certificate generation issue when external access is enabled - #10 ([99119c0](https://github.com/bitnami/charts/commit/99119c04fc7642858bd3803517b01c732758822b)), closes [#10262](https://github.com/bitnami/charts/issues/10262) [#10513](https://github.com/bitnami/charts/issues/10513) [#10262](https://github.com/bitnami/charts/issues/10262) [bitnami#10262](https://github.com/bitnami/issues/10262) [bitnami#10262](https://github.com/bitnami/issues/10262)
+* [bitnami/mongodb] - Fixing mongdb certificate generation issue when external access is enabled - #10 ([99119c0](https://github.com/bitnami/charts/commit/99119c04fc7642858bd3803517b01c732758822b)), closes [#10262](https://github.com/bitnami/charts/issues/10262) [#10513](https://github.com/bitnami/charts/issues/10513) [#10262](https://github.com/bitnami/charts/issues/10262) [bitnami#10262](https://github.com/bitnami/issues/10262)
 
 ## <small>12.1.17 (2022-06-06)</small>
 
@@ -2158,7 +2165,7 @@
 
 ## <small>7.10.6 (2020-03-31)</small>
 
-* [bitnami/mongodb] fix indent error in resources (#2164) ([420efdd](https://github.com/bitnami/charts/commit/420efdd0e394c4676bc7376d8b5cac35ecba6ffd)), closes [#2164](https://github.com/bitnami/charts/issues/2164) [#2163](https://github.com/bitnami/charts/issues/2163) [#2163](https://github.com/bitnami/charts/issues/2163)
+* [bitnami/mongodb] fix indent error in resources (#2164) ([420efdd](https://github.com/bitnami/charts/commit/420efdd0e394c4676bc7376d8b5cac35ecba6ffd)), closes [#2164](https://github.com/bitnami/charts/issues/2164) [#2163](https://github.com/bitnami/charts/issues/2163)
 * [bitnami/mongodb] Fix indentation error (#2149) ([0b9ea37](https://github.com/bitnami/charts/commit/0b9ea37ac2495884613269bc70401e4a6b53c6cd)), closes [#2149](https://github.com/bitnami/charts/issues/2149)
 
 ## <small>7.10.5 (2020-03-27)</small>

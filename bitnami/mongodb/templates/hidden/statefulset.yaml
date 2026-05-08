@@ -466,7 +466,7 @@ spec:
               mountPath: /certs
             {{- end }}
             - name: empty-dir
-              mountPath: /opt/bitnami/redis-cluster/tmp
+              mountPath: /opt/bitnami/mongodb/tmp
               subPath: app-tmp-dir
             {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
