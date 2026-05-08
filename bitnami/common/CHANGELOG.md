@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.31.9 (2026-04-20)
+## 2.31.9 (2026-05-08)
 
 * [bitnami/common] escape ChartVersion in labels ([#36516](https://github.com/bitnami/charts/pull/36516))
 
