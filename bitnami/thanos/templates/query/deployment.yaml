@@ -133,7 +133,7 @@ spec:
             {{- $timeShards = len .Values.storegateway.sharded.timePartitioning }}
             {{- end }}
             {{- $shards = mul $hashShards $timeShards | int }}
-            {{- range $index, $_ := until $shards }}
+            {{- range $index, $_ := until $shards -}}
             {{- if $.Values.storegateway.useEndpointGroup }}
             - --endpoint-group={{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}:{{ $.Values.storegateway.service.ports.grpc }}
             {{- else }}
