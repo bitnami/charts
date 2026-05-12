@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.0.16 (2025-11-19)
+## 16.1.0 (2026-05-12)
 
-* [bitnami/rabbitmq] fix: :bug: Sanitize users with dot ([#36389](https://github.com/bitnami/charts/pull/36389))
+* [bitnami/rabbitmq] Added support for httproute in rabbitmq chart ([#36528](https://github.com/bitnami/charts/pull/36528))
+
+## <small>16.0.16 (2025-11-19)</small>
+
+* [bitnami/*] Remove annotations.category (#36224) ([2abc0f9](https://github.com/bitnami/charts/commit/2abc0f9d7e89a5453e57f029c66f581b3d5855ef)), closes [#36224](https://github.com/bitnami/charts/issues/36224)
+* [bitnami/*][TNZ-62332] Modify charts' READMEs title (#36372) ([2012e46](https://github.com/bitnami/charts/commit/2012e46699f555bb1e10134691031975bb5ca50b)), closes [#36372](https://github.com/bitnami/charts/issues/36372)
+* [bitnami/rabbitmq] fix: :bug: Sanitize users with dot (#36389) ([301592c](https://github.com/bitnami/charts/commit/301592c46422482b6a640b2b233b39818954895a)), closes [#36389](https://github.com/bitnami/charts/issues/36389)
+* Change wording in Chart's READMEs (#36379) ([a4ef0a6](https://github.com/bitnami/charts/commit/a4ef0a63877fcf32895869ceef0916c15a4718e5)), closes [#36379](https://github.com/bitnami/charts/issues/36379)
+* Remove TAC sentence present in some READMEs (#36381) ([e07d331](https://github.com/bitnami/charts/commit/e07d3319b61f49ddf6f431da3ed7ec0e0be3d5d0)), closes [#36381](https://github.com/bitnami/charts/issues/36381)
 
 ## <small>16.0.14 (2025-08-21)</small>
 
@@ -749,7 +757,7 @@
 * [bitnami/*] Fix markdown linter issues (#14874) ([a51e0e8](https://github.com/bitnami/charts/commit/a51e0e8d35495b907f3e70dd2f8e7c3bcbf4166a)), closes [#14874](https://github.com/bitnami/charts/issues/14874)
 * [bitnami/*] Fix markdown linter issues 2 (#14890) ([aa96572](https://github.com/bitnami/charts/commit/aa9657237ee8df4a46db0d7fdf8a23230dd6902a)), closes [#14890](https://github.com/bitnami/charts/issues/14890)
 * [bitnami/*] Remove unexpected extra spaces (#14873) ([c97c714](https://github.com/bitnami/charts/commit/c97c714887380d47eae7bfeff316bf01595ecd1d)), closes [#14873](https://github.com/bitnami/charts/issues/14873)
-* [bitnami/rabbitmq] fix broken config option #14766 (#14859) ([75b0cf6](https://github.com/bitnami/charts/commit/75b0cf6f8958d8b35bfa2670d30e4b81e8e88d8d)), closes [#14766](https://github.com/bitnami/charts/issues/14766) [#14859](https://github.com/bitnami/charts/issues/14859) [#14766](https://github.com/bitnami/charts/issues/14766) [#14766](https://github.com/bitnami/charts/issues/14766)
+* [bitnami/rabbitmq] fix broken config option #14766 (#14859) ([75b0cf6](https://github.com/bitnami/charts/commit/75b0cf6f8958d8b35bfa2670d30e4b81e8e88d8d)), closes [#14766](https://github.com/bitnami/charts/issues/14766) [#14859](https://github.com/bitnami/charts/issues/14859) [#14766](https://github.com/bitnami/charts/issues/14766)
 
 ## <small>11.9.1 (2023-02-12)</small>
 
@@ -770,7 +778,7 @@
 ## 11.7.0 (2023-02-01)
 
 * [bitnami/*] Change copyright date (#14682) ([add4ec7](https://github.com/bitnami/charts/commit/add4ec701108ac36ed4de2dffbdf407a0d091067)), closes [#14682](https://github.com/bitnami/charts/issues/14682)
-* [bitnami/rabbitmq] Add ssl_options.password (#14463) ([9941124](https://github.com/bitnami/charts/commit/9941124a3f8d3770d3b17acfaeec0e134930dd25)), closes [#14463](https://github.com/bitnami/charts/issues/14463) [#14373](https://github.com/bitnami/charts/issues/14373) [#14373](https://github.com/bitnami/charts/issues/14373)
+* [bitnami/rabbitmq] Add ssl_options.password (#14463) ([9941124](https://github.com/bitnami/charts/commit/9941124a3f8d3770d3b17acfaeec0e134930dd25)), closes [#14463](https://github.com/bitnami/charts/issues/14463) [#14373](https://github.com/bitnami/charts/issues/14373)
 
 ## <small>11.6.1 (2023-01-31)</small>
 
@@ -778,7 +786,7 @@
 
 ## 11.6.0 (2023-01-26)
 
-* [bitnam/rabbitmq] Choice of setting configuration and extraConfiguration as secret (#14519) ([5520624](https://github.com/bitnami/charts/commit/5520624e67f0ae44928d83d31dadf5e8a217584b)), closes [#14519](https://github.com/bitnami/charts/issues/14519) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444) [#14444](https://github.com/bitnami/charts/issues/14444)
+* [bitnam/rabbitmq] Choice of setting configuration and extraConfiguration as secret (#14519) ([5520624](https://github.com/bitnami/charts/commit/5520624e67f0ae44928d83d31dadf5e8a217584b)), closes [#14519](https://github.com/bitnami/charts/issues/14519) [#14444](https://github.com/bitnami/charts/issues/14444)
 
 ## <small>11.5.1 (2023-01-25)</small>
 
@@ -1594,7 +1602,7 @@
 
 ## 8.2.0 (2020-11-26)
 
-* [bitnami/rabbitmq] Start to use shutdown script waiting for synchronization (#4470) ([9524947](https://github.com/bitnami/charts/commit/95249478d9498b5b57a99b943bd995a1c901cf52)), closes [#4470](https://github.com/bitnami/charts/issues/4470) [#3931](https://github.com/bitnami/charts/issues/3931) [#3931](https://github.com/bitnami/charts/issues/3931)
+* [bitnami/rabbitmq] Start to use shutdown script waiting for synchronization (#4470) ([9524947](https://github.com/bitnami/charts/commit/95249478d9498b5b57a99b943bd995a1c901cf52)), closes [#4470](https://github.com/bitnami/charts/issues/4470) [#3931](https://github.com/bitnami/charts/issues/3931)
 
 ## <small>8.1.1 (2020-11-24)</small>
 
@@ -1708,7 +1716,7 @@
 
 ## <small>7.5.3 (2020-07-10)</small>
 
-* [bitnami/rabbitmq] Corrected example of extraContainerPorts (#3076) ([bcc42b4](https://github.com/bitnami/charts/commit/bcc42b4e3c7ccf9dabd2023e27dd582bc7f4a862)), closes [#3076](https://github.com/bitnami/charts/issues/3076) [#2023](https://github.com/bitnami/charts/issues/2023) [#2027](https://github.com/bitnami/charts/issues/2027) [bitnami#2023](https://github.com/bitnami/issues/2023) [bitnami#2027](https://github.com/bitnami/issues/2027) [bitnami#2023](https://github.com/bitnami/issues/2023) [bitnami#2027](https://github.com/bitnami/issues/2027)
+* [bitnami/rabbitmq] Corrected example of extraContainerPorts (#3076) ([bcc42b4](https://github.com/bitnami/charts/commit/bcc42b4e3c7ccf9dabd2023e27dd582bc7f4a862)), closes [#3076](https://github.com/bitnami/charts/issues/3076) [#2023](https://github.com/bitnami/charts/issues/2023) [#2027](https://github.com/bitnami/charts/issues/2027) [bitnami#2023](https://github.com/bitnami/issues/2023) [bitnami#2027](https://github.com/bitnami/issues/2027)
 
 ## <small>7.5.2 (2020-07-09)</small>
 
