@@ -689,6 +689,22 @@ Because they expose different sets of data, a valid use case is to scrape metric
 | `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.existingSecret`                | It is you own the certificate as secret.                                                                                         | `""`                     |
+| `route.web`                             | Configure the route for the management plugin.                                                                                   |                          |
+| `route.web.enabled`                     | Enable or disable the route for the management plugin                                                                            | `false`                  |
+| `route.web.apiVersion`                  | API version to use for the Route resource (e.g., gateway.networking.k8s.io/v1)                                                   | `""`                     |
+| `route.web.kind`                        | Type of Route to create (e.g., HTTPRoute, TCPRoute, etc.)                                                                        | `""`                     |
+| `route.web.annotations`                 | Annotations to add to the Route resource                                                                                         | `{}`                     |
+| `route.web.labels`                      | Labels to add to the Route resource                                                                                              | `{}`                     |
+| `route.web.hostnames`                   | List of hostnames for which the route will be valid                                                                              | `[]`                     |
+| `route.web.parentRefs`                  | Parent references (e.g., Gateway) for the route                                                                                  | `[]`                     |
+| `route.web.matches`                     | Matching rules for the route                                                                                                     | `[]`                     |
+| `route.web.matches.path.type`           | Path match type (e.g., PathPrefix, Exact)                                                                                        |                          |
+| `route.web.matches.path.value`          | Path value to match                                                                                                              |                          |
+| `route.web.filters`                     | Filters to apply to the route (e.g., rewrites, headers, etc.)                                                                    | `[]`                     |
+| `route.web.sessionPersistence`          | Session persistence configuration (if supported, Experimental in Gateway API v1.5)                                               | `{}`                     |
+| `route.web.timeouts`                    | Timeouts for requests handled by the route                                                                                       | `{}`                     |
+| `route.web.retry`                       | Retry policy configuration for the route (Experimental in Gateway API v1.5)                                                      | `{}`                     |
+| `route.web.backendService`              | Name of the service port key to use as backend (must be one of the keys defined in service.ports)                                | `""`                     |
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |

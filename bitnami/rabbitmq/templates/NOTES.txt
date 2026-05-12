@@ -141,6 +141,31 @@ To Access the RabbitMQ Management interface:
 {{- end }}
 {{- end }}
 
+{{- if .Values.route }}
+{{- $hasEnabledRoute := false }}
+{{- range $name, $route := .Values.route }}
+{{- if $route.enabled }}
+{{- $hasEnabledRoute = true }}
+{{- end }}
+{{- end }}
+{{- if $hasEnabledRoute }}
+
+Enabled routes and URLs:
+{{- range $name, $route := .Values.route }}
+{{- if $route.enabled }}
+{{- if $route.hostnames }}
+{{- range $hostname := $route.hostnames }}
+    - {{ $name }}: http://{{ $hostname }}/
+{{- end }}
+{{- else }}
+    - {{ $name }}: http://<set-hostname>/
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}
+{{- end }}
+
 {{- if .Values.metrics.enabled }}
 
 To access the RabbitMQ Prometheus metrics, get the RabbitMQ Prometheus URL by running:

@@ -31,6 +31,28 @@
       "title": "Number of replicas",
       "description": "Number of replicas to deploy"
     },
+    "route": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "backendService": {
+            "type": "string",
+            "enum": [
+              "amqp",
+              "amqpTls",
+              "dist",
+              "manager",
+              "metrics",
+              "epmd"
+            ],
+            "description": "Only the values defined in service.ports can be used here. The template will automatically resolve the corresponding port number and set this chart's service as the backend."
+          }
+        },
+        "required": ["backendService"]
+      }
+    },
     "persistence": {
       "type": "object",
       "title": "Persistence configuration",

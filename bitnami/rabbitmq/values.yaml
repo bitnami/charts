@@ -1279,6 +1279,46 @@ ingress:
   ## @param ingress.existingSecret It is you own the certificate as secret.
   ##
   existingSecret: ""
+## Configure the gateway routes for the RabbitMQ deployment.
+## The 'web' route is specifically designed to direct traffic to the service 
+## exposed via the Management Plugin (which must be enabled).
+## You can define additional routes for other services exposed by the deployment 
+## by adding new dictionary keys at the same level as 'web' (e.g., for AMQP, STOMP, etc.).
+## [[ref]](https://gateway-api.sigs.k8s.io/)
+route:
+  ## @extra route.web Configure the route for the management plugin.
+  web:
+    ## @param route.web.enabled Enable or disable the route for the management plugin
+    enabled: false
+    ## @param route.web.apiVersion [string] API version to use for the Route resource (e.g., gateway.networking.k8s.io/v1)
+    apiVersion: gateway.networking.k8s.io/v1
+    ## @param route.web.kind [string] Type of Route to create (e.g., HTTPRoute, TCPRoute, etc.)
+    kind: HTTPRoute
+    ## @param route.web.annotations [object] Annotations to add to the Route resource
+    annotations: {}
+    ## @param route.web.labels [object] Labels to add to the Route resource
+    labels: {}
+    ## @param route.web.hostnames [array] List of hostnames for which the route will be valid
+    hostnames: []
+    ## @param route.web.parentRefs [array] Parent references (e.g., Gateway) for the route
+    parentRefs: []
+    ## @param route.web.matches [array] Matching rules for the route
+    matches:
+      - path:
+          ## @extra route.web.matches.path.type [string] Path match type (e.g., PathPrefix, Exact)
+          type: PathPrefix
+          ## @extra route.web.matches.path.value [string] Path value to match
+          value: /
+    ## @param route.web.filters [array] Filters to apply to the route (e.g., rewrites, headers, etc.)
+    filters: []
+    ## @param route.web.sessionPersistence [object] Session persistence configuration (if supported, Experimental in Gateway API v1.5)
+    sessionPersistence: {}
+    ## @param route.web.timeouts [object] Timeouts for requests handled by the route
+    timeouts: {}
+    ## @param route.web.retry [object] Retry policy configuration for the route (Experimental in Gateway API v1.5)
+    retry: {}
+    ## @param route.web.backendService [string] Name of the service port key to use as backend (must be one of the keys defined in service.ports)
+    backendService: manager
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
