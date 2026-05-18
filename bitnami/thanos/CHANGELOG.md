@@ -1,6 +1,6 @@
 # Changelog
 
-## 17.5.0 (2026-05-13)
+## 17.5.0 (2026-05-18)
 
 * [bitnami/thanos] Add Thanos httproute ([#36529](https://github.com/bitnami/charts/pull/36529))
 
