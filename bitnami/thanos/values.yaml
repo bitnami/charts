@@ -966,10 +966,6 @@ query:
     ## @param query.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Query
     ##
     enabled: false
-    ## @param query.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param query.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -987,21 +983,16 @@ query:
     parentRefs: []
     ## @param query.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-query.example.com
     ##
-    hostnames: []
+    hostnames:
+      - query.thanos.local
     ## @param query.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param query.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -1591,10 +1582,6 @@ queryFrontend:
     ## @param queryFrontend.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos QueryFrontend
     ##
     enabled: false
-    ## @param queryFrontend.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param queryFrontend.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -1612,21 +1599,16 @@ queryFrontend:
     parentRefs: []
     ## @param queryFrontend.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-queryfrontend.example.com
     ##
-    hostnames: []
+    hostnames:
+      - query-frontend.thanos.local
     ## @param queryFrontend.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param queryFrontend.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -2186,10 +2168,6 @@ bucketweb:
     ## @param bucketweb.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Bucketweb
     ##
     enabled: false
-    ## @param bucketweb.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param bucketweb.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -2207,21 +2185,16 @@ bucketweb:
     parentRefs: []
     ## @param bucketweb.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-bucketweb.example.com
     ##
-    hostnames: []
+    hostnames:
+      - bucketweb.thanos.local
     ## @param bucketweb.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param bucketweb.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -2794,10 +2767,6 @@ compactor:
     ## @param compactor.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Compactor
     ##
     enabled: false
-    ## @param compactor.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param compactor.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -2815,21 +2784,16 @@ compactor:
     parentRefs: []
     ## @param compactor.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-compactor.example.com
     ##
-    hostnames: []
+    hostnames:
+      - compactor.thanos.local
     ## @param compactor.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param compactor.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -3631,10 +3595,6 @@ storegateway:
     ## @param storegateway.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Storegateway
     ##
     enabled: false
-    ## @param storegateway.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param storegateway.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -3652,21 +3612,16 @@ storegateway:
     parentRefs: []
     ## @param storegateway.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-storegateway.example.com
     ##
-    hostnames: []
+    hostnames:
+      - storegateway.thanos.local
     ## @param storegateway.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param storegateway.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -4376,10 +4331,6 @@ ruler:
     ## @param ruler.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Ruler
     ##
     enabled: false
-    ## @param ruler.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param ruler.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -4397,21 +4348,16 @@ ruler:
     parentRefs: []
     ## @param ruler.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-ruler.example.com
     ##
-    hostnames: []
+    hostnames:
+      - ruler.thanos.local
     ## @param ruler.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param ruler.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
@@ -5122,10 +5068,6 @@ receive:
     ## @param receive.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Receive
     ##
     enabled: false
-    ## @param receive.httpRoute.name The name to give this HTTPRoute resource.
-    ## Defaults to a combination of the fullname and the parentRef name.
-    ##
-    name: ""
     ## @param receive.httpRoute.annotations Additional annotations for the HTTPRoute resource
     ##
     annotations: {}
@@ -5143,21 +5085,16 @@ receive:
     parentRefs: []
     ## @param receive.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
-    ## e.g:
-    ## hostnames:
-    ##   - thanos-receive.example.com
     ##
-    hostnames: []
+    hostnames:
+      - receive.thanos.local
     ## @param receive.httpRoute.matches HTTPRoute rules match conditions
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
-    ## Defaults to a single prefix match on "/"
-    ## e.g:
-    ## matches:
-    ##   - path:
-    ##       type: PathPrefix
-    ##       value: /
     ##
-    matches: []
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
     ## @param receive.httpRoute.filters HTTPRoute filters for request/response manipulation
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
     ## e.g:
