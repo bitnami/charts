@@ -986,7 +986,8 @@ query:
     ##
     hostnames:
       - query.thanos.local
-    ## @param query.httpRoute.matches HTTPRoute rules match conditions
+    ## @param query.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param query.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -1602,7 +1603,8 @@ queryFrontend:
     ##
     hostnames:
       - query-frontend.thanos.local
-    ## @param queryFrontend.httpRoute.matches HTTPRoute rules match conditions
+    ## @param queryFrontend.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param queryFrontend.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -2188,7 +2190,8 @@ bucketweb:
     ##
     hostnames:
       - bucketweb.thanos.local
-    ## @param bucketweb.httpRoute.matches HTTPRoute rules match conditions
+    ## @param bucketweb.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param bucketweb.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -2787,7 +2790,8 @@ compactor:
     ##
     hostnames:
       - compactor.thanos.local
-    ## @param compactor.httpRoute.matches HTTPRoute rules match conditions
+    ## @param compactor.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param compactor.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -3615,7 +3619,8 @@ storegateway:
     ##
     hostnames:
       - storegateway.thanos.local
-    ## @param storegateway.httpRoute.matches HTTPRoute rules match conditions
+    ## @param storegateway.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param storegateway.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -4351,7 +4356,8 @@ ruler:
     ##
     hostnames:
       - ruler.thanos.local
-    ## @param ruler.httpRoute.matches HTTPRoute rules match conditions
+    ## @param ruler.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param ruler.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
@@ -5088,7 +5094,8 @@ receive:
     ##
     hostnames:
       - receive.thanos.local
-    ## @param receive.httpRoute.matches HTTPRoute rules match conditions
+    ## @param receive.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param receive.httpRoute.matches[0].path.value HTTPRoute path match value
     ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
     ##
     matches:
