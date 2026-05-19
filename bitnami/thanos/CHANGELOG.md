@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.4.1 (2026-03-23)
+## 17.5.0 (2026-05-19)
 
-* [bitnami/thanos] Fix invalid YAML syntax on the query deployment template when `storegateway.useEndpointGroup` is false ([#36485](https://github.com/bitnami/charts/pull/36485))
+* [bitnami/thanos] Add Thanos httproute ([#36529](https://github.com/bitnami/charts/pull/36529))
+
+## <small>17.4.1 (2026-04-17)</small>
+
+* [bitnami/thanos] Fix invalid YAML syntax on the query deployment template when `storegateway.useEndp ([a7fb7ee](https://github.com/bitnami/charts/commit/a7fb7ee67a1afdbf4de5b4afb48e7ffeeea1397c)), closes [#36485](https://github.com/bitnami/charts/issues/36485)
 
 ## 17.4.0 (2026-02-09)
 

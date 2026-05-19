@@ -1,0 +1,46 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.httpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ template "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" ( list .Values.queryFrontend.httpRoute.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: query-frontend
+  {{- if or .Values.queryFrontend.httpRoute.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" ( list .Values.queryFrontend.httpRoute.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- if .Values.queryFrontend.httpRoute.parentRefs }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.parentRefs "context" .) | nindent 4 }}
+  {{- else }}
+    - name: gateway
+      namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  hostnames: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.hostnames "context" .) | nindent 4 }}
+  rules:
+    - backendRefs:
+        - name: {{ include "thanos.query-frontend.fullname" . }}
+          port: {{ .Values.queryFrontend.service.ports.http }}
+          weight: 1
+      {{- if .Values.queryFrontend.httpRoute.matches }}
+      matches: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.matches "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.httpRoute.filters }}
+      filters: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.filters "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.queryFrontend.httpRoute.timeouts }}
+      timeouts: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.timeouts "context" .) | nindent 8 }}
+      {{- end }}
+  {{- if .Values.queryFrontend.httpRoute.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.httpRoute.extraRules "context" .) | nindent 4 }}
+  {{- end }}
+{{- end }}

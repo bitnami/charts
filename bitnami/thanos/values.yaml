@@ -959,6 +959,72 @@ query:
       ## @param query.ingress.grpc.pathType Ingress Path type
       ##
       pathType: ImplementationSpecific
+  ## Configure Thanos Query HTTPRoute
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param query.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Query
+    ##
+    enabled: false
+    ## @param query.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param query.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param query.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param query.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - query.thanos.local
+    ## @param query.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param query.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param query.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param query.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param query.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 9090
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
 ## @section Thanos Query Frontend parameters
 queryFrontend:
   ## @param queryFrontend.enabled Enable/disable Thanos Query Frontend component
@@ -1510,6 +1576,72 @@ queryFrontend:
     ## @param queryFrontend.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
+  ## Configure Thanos QueryFrontend HTTPRoute
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param queryFrontend.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos QueryFrontend
+    ##
+    enabled: false
+    ## @param queryFrontend.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param queryFrontend.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param queryFrontend.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param queryFrontend.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - query-frontend.thanos.local
+    ## @param queryFrontend.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param queryFrontend.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param queryFrontend.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param queryFrontend.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param queryFrontend.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 9090
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
 ## @section Thanos Bucket Web parameters
 bucketweb:
   ## @param bucketweb.enabled Enable/disable Thanos Bucket Web component
@@ -2031,6 +2163,72 @@ bucketweb:
     ## @param bucketweb.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
+  ## Configure Thanos Bucketweb HTTPRoute
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param bucketweb.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Bucketweb
+    ##
+    enabled: false
+    ## @param bucketweb.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param bucketweb.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param bucketweb.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param bucketweb.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - bucketweb.thanos.local
+    ## @param bucketweb.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param bucketweb.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param bucketweb.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param bucketweb.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param bucketweb.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 8080
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
 ## @section Thanos Compactor parameters
 compactor:
   ## @param compactor.enabled Enable/disable Thanos Compactor component
@@ -2565,6 +2763,72 @@ compactor:
     ## @param compactor.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
+  ## Configure Thanos Compactor HTTPRoute
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param compactor.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Compactor
+    ##
+    enabled: false
+    ## @param compactor.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param compactor.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param compactor.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param compactor.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - compactor.thanos.local
+    ## @param compactor.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param compactor.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param compactor.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param compactor.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param compactor.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 9090
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
   ## Persistence parameters
   ##
   persistence:
@@ -3328,6 +3592,72 @@ storegateway:
       ## @param storegateway.ingress.grpc.pathType Ingress Path type
       ##
       pathType: ImplementationSpecific
+  ## Configure Thanos Storegateway HTTPRoute
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param storegateway.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Storegateway
+    ##
+    enabled: false
+    ## @param storegateway.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param storegateway.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param storegateway.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param storegateway.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - storegateway.thanos.local
+    ## @param storegateway.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param storegateway.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param storegateway.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param storegateway.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param storegateway.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 9090
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
   ## Sharded parameters
   ## @param storegateway.sharded.enabled Enable sharding for Thanos Store Gateway
   ## @param storegateway.sharded.hashPartitioning.shards Setting hashPartitioning will create multiple store statefulsets based on the number of shards specified using the hashmod of the blocks
@@ -3999,6 +4329,72 @@ ruler:
     ## @param ruler.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
+  ## Configure Thanos Ruler Route
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param ruler.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Ruler
+    ##
+    enabled: false
+    ## @param ruler.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param ruler.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param ruler.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param ruler.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - ruler.thanos.local
+    ## @param ruler.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param ruler.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param ruler.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param ruler.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param ruler.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 9090
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
 ## @section Thanos Receive parameters
 receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
@@ -4671,6 +5067,72 @@ receive:
     ## @param receive.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
+  ## Configure Thanos Receive Route
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httpRoute:
+    ## @param receive.httpRoute.enabled Enable the creation of HTTPRoute resource for Thanos Receive
+    ##
+    enabled: false
+    ## @param receive.httpRoute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param receive.httpRoute.labels Additional labels for the HTTPRoute resource
+    ##
+    labels: {}
+    ## @param receive.httpRoute.parentRefs List of parent Gateway references this HTTPRoute should attach to
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#parentreference
+    ## e.g:
+    ## parentRefs:
+    ##   - name: gateway
+    ##     namespace: gateway-system
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param receive.httpRoute.hostnames List of hostnames to be covered by this HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#hostname
+    ##
+    hostnames:
+      - receive.thanos.local
+    ## @param receive.httpRoute.matches[0].path.type HTTPRoute path match type (Exact, PathPrefix, or RegularExpression)
+    ## @param receive.httpRoute.matches[0].path.value HTTPRoute path match value
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httprouterule
+    ##
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+    ## @param receive.httpRoute.filters HTTPRoute filters for request/response manipulation
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutefilter
+    ## e.g:
+    ## filters:
+    ##   - type: RequestHeaderModifier
+    ##     requestHeaderModifier:
+    ##       add:
+    ##         - name: X-Forwarded-Proto
+    ##           value: https
+    ##
+    filters: []
+    ## @param receive.httpRoute.timeouts Timeout configuration for the HTTPRoute
+    ## ref: https://gateway-api.sigs.k8s.io/reference/spec/#httproutetimeouts
+    ## e.g:
+    ## timeouts:
+    ##   request: 30s
+    ##   backendRequest: 10s
+    ##
+    timeouts: {}
+    ## @param receive.httpRoute.extraRules Additional custom rules to append to the HTTPRoute
+    ## e.g:
+    ## extraRules:
+    ##   - backendRefs:
+    ##       - name: other-service
+    ##         port: 10902
+    ##     matches:
+    ##       - path:
+    ##           type: PathPrefix
+    ##           value: /api
+    ##
+    extraRules: []
 ## @section Thanos Receive Distributor parameters
 receiveDistributor:
   ## @param receiveDistributor.enabled Enable/disable Thanos Receive Distributor component

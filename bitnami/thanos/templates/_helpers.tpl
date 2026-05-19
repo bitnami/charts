@@ -276,14 +276,14 @@ Return the Thanos Ruler configuration configmap.
 Return the queryURL used by Thanos Ruler.
 */}}
 {{- define "thanos.ruler.queryURL" -}}
-{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL -}}
+{{- if and .Values.queryFrontend.enabled .Values.queryFrontend.httpRoute.enabled -}}
+    {{- printf "https://%s" (.Values.queryFrontend.httpRoute.hostnames | first) -}}
+{{- else if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL -}}
     {{- printf "%s://%s" (ternary "https" "http" .Values.queryFrontend.ingress.tls) (tpl .Values.queryFrontend.ingress.hostname .) -}}
-{{- else -}}
-{{- if .Values.ruler.queryURL -}}
+{{- else if .Values.ruler.queryURL -}}
     {{- printf "%s" (tpl .Values.ruler.queryURL $) -}}
 {{- else -}}
     {{- printf "http://%s-query.%s.svc.%s:%d" (include "common.names.fullname" . ) .Release.Namespace .Values.clusterDomain (int  .Values.query.service.ports.http) -}}
-{{- end -}}
 {{- end -}}
 {{- end -}}
 

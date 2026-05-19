@@ -1,0 +1,46 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ruler.enabled .Values.ruler.httpRoute.enabled }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ template "thanos.ruler.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" ( list .Values.ruler.httpRoute.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/component: ruler
+  {{- if or .Values.ruler.httpRoute.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" ( list .Values.ruler.httpRoute.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- if .Values.ruler.httpRoute.parentRefs }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.parentRefs "context" .) | nindent 4 }}
+  {{- else }}
+    - name: gateway
+      namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  hostnames: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.hostnames "context" .) | nindent 4 }}
+  rules:
+    - backendRefs:
+        - name: {{ include "thanos.ruler.fullname" . }}
+          port: {{ .Values.ruler.service.ports.http }}
+          weight: 1
+      {{- if .Values.ruler.httpRoute.matches }}
+      matches: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.matches "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.httpRoute.filters }}
+      filters: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.filters "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ruler.httpRoute.timeouts }}
+      timeouts: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.timeouts "context" .) | nindent 8 }}
+      {{- end }}
+  {{- if .Values.ruler.httpRoute.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.httpRoute.extraRules "context" .) | nindent 4 }}
+  {{- end }}
+{{- end }}
