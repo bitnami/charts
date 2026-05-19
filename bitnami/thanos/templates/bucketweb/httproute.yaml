@@ -11,11 +11,11 @@ metadata:
   name: {{ template "thanos.bucketweb.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" (dict "values" ( list .Values.bucketweb.httpRoute.labels .Values.commonLabels ) "context" . ) }}
-  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
   {{- if or .Values.bucketweb.httpRoute.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" ( list .Values.bucketweb.httpRoute.annotations .Values.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
   {{- end }}
 spec:
   parentRefs:
@@ -30,6 +30,7 @@ spec:
     - backendRefs:
         - name: {{ include "thanos.bucketweb.fullname" . }}
           port: {{ .Values.bucketweb.service.ports.http }}
+          weight: 1
       {{- if .Values.bucketweb.httpRoute.matches }}
       matches: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.httpRoute.matches "context" .) | nindent 8 }}
       {{- end }}
