@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: {{ .Values.server.workloadKind | default "Deployment" }}
+kind: {{ ternary "StatefulSet" "Deployment" .Values.server.useStatefulSet }}
 metadata:
   name: {{ template "prometheus.server.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -17,7 +17,7 @@ metadata:
 spec:
   replicas: {{ .Values.server.replicaCount }}
   {{- if .Values.server.updateStrategy }}
-  {{- if .Values.server.workloadKind | default "Deployment" | eq "Deployment" }}
+  {{- if not .Values.server.useStatefulSet }}
   strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
   {{- else }}
   updateStrategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
@@ -298,7 +298,7 @@ spec:
           configMap:
             name: {{ include "prometheus.server.configmapName" . }}
         {{- if .Values.server.persistence.enabled }}
-        {{- if .Values.server.workloadKind | default "Deployment" | eq "Deployment" }}
+        {{- if not .Values.server.useStatefulSet }}
         - name: data
           persistentVolumeClaim:
             claimName: {{ default (include "prometheus.server.fullname" .) .Values.server.persistence.existingClaim }}
@@ -310,7 +310,7 @@ spec:
         {{- if .Values.server.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if and .Values.server.persistence.enabled .Values.server.workloadKind | default "Deployment" | eq "StatefulSet" }}
+  {{- if and .Values.server.persistence.enabled .Values.server.useStatefulSet }}
   volumeClaimTemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim

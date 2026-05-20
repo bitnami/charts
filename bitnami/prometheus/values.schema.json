@@ -947,10 +947,10 @@
                     "default": [],
                     "items": {}
                 },
-                "workloadKind": {
-                    "type": "string",
-                    "description": "Kubernetes workload kind for Prometheus",
-                    "default": "Deployment"
+                "useStatefulSet": {
+                    "type": "boolean",
+                    "description": "Whether to use a StatefulSet or a Deployment to deploy Prometheus server",
+                    "default": false
                 },
                 "replicaCount": {
                     "type": "number",
