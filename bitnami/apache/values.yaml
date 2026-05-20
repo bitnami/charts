@@ -113,7 +113,7 @@ git:
   pullSecrets: []
 ## @param replicaCount Number of replicas of the Apache deployment
 ##
-replicaCount: 1
+replicaCount: 2
 ## @param revisionHistoryLimit The number of old history to retain to allow rollback
 ##
 revisionHistoryLimit: 10
@@ -469,7 +469,7 @@ service:
   ## @param service.nodePorts.https Node port for HTTPS
   ##
   nodePorts:
-    http: ""
+    http: "30080"
     https: ""
   ## @param service.clusterIP Apache service Cluster IP
   ## e.g.:
