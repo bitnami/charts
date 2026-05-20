@@ -104,8 +104,8 @@ spec:
             - query
             - --log.level={{ .Values.query.logLevel }}
             - --log.format={{ .Values.query.logFormat }}
-            - --grpc-address=0.0.0.0:10901
-            - --http-address=0.0.0.0:10902
+            - --grpc-address=0.0.0.0:{{ .Values.query.containerPorts.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.query.containerPorts.http }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
@@ -201,10 +201,10 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.query.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: 10901
+              containerPort: {{ .Values.query.containerPorts.grpc }}
               protocol: TCP
           {{- if .Values.query.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customLivenessProbe "context" $) | nindent 12 }}
