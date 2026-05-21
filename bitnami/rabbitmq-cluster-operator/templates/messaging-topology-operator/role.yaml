@@ -33,12 +33,6 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - events
-    verbs:
-      - create
-  - apiGroups:
-      - ""
-    resources:
       - configmaps
     verbs:
       - get
@@ -48,4 +42,10 @@ rules:
       - update
       - patch
       - delete
+  - apiGroups:
+      - events.k8s.io
+    resources:
+      - events
+    verbs:
+      - create
 {{- end }}
