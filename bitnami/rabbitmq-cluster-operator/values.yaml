@@ -915,9 +915,11 @@ msgTopologyOperator:
   ##
   lifecycleHooks: {}
   ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator container port (used for metrics)
+  ## @param msgTopologyOperator.containerPorts.health RabbitMQ Messaging Topology Operator container port (used for health probe)
   ##
   containerPorts:
     metrics: 8080
+    health: 8081
   ## @param msgTopologyOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Messaging Topology Operator nodes
   ## e.g:
   ## extraEnvVars:
