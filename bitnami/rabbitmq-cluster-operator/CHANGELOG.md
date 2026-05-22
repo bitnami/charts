@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.37 (2025-12-09)
+## 4.4.39 (2026-05-22)
 
-* [bitnami/rabbitmq-cluster-operator] add rbac for endpointslices for cluster-operator ([#36404](https://github.com/bitnami/charts/pull/36404))
+* [bitnami/rabbitmq-cluster-operator] fix messaging-topology-operator readiness probe ([#36539](https://github.com/bitnami/charts/pull/36539))
+
+## <small>4.4.37 (2025-12-17)</small>
+
+* [bitnami/rabbitmq-cluster-operator] add rbac for endpointslices for cluster-operator (#36404) ([8b08cd4](https://github.com/bitnami/charts/commit/8b08cd4774e6847cf3e76f39622d033404de4a4b)), closes [#36404](https://github.com/bitnami/charts/issues/36404) [#36403](https://github.com/bitnami/charts/issues/36403)
 
 ## <small>4.4.36 (2025-11-11)</small>
 
