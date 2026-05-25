@@ -1,8 +1,16 @@
 # Changelog
 
+## 17.5.2 (2026-05-20)
+
+* [bitnami/thanos] Fix `containerPorts` in query deployment ([#36533](https://github.com/bitnami/charts/pull/36533))
+
+## <small>17.5.1 (2026-05-19)</small>
+
+* [bitnami/thanos] Change hpa bucketweb component label to bucketweb (#36531) ([242f0b8](https://github.com/bitnami/charts/commit/242f0b8106575d3853509806fe23d4bad067846c)), closes [#36531](https://github.com/bitnami/charts/issues/36531)
+
 ## 17.5.0 (2026-05-19)
 
-* [bitnami/thanos] Add Thanos httproute ([#36529](https://github.com/bitnami/charts/pull/36529))
+* [bitnami/thanos] Add Thanos httproute (#36529) ([73c0faa](https://github.com/bitnami/charts/commit/73c0faa841fdb2f6b604bb6662dafa29a074df18)), closes [#36529](https://github.com/bitnami/charts/issues/36529)
 
 ## <small>17.4.1 (2026-04-17)</small>
 
