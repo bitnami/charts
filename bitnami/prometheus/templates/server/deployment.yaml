@@ -16,13 +16,16 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.server.replicaCount }}
-  {{- if .Values.server.updateStrategy }}
-  {{- if not .Values.server.useStatefulSet }}
-  strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
-  {{- else }}
-  updateStrategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
+  {{- if .Values.server.useStatefulSet }}
   serviceName: {{ printf "%s-headless" (include "prometheus.server.fullname" .) }}
   {{- end }}
+  {{- if .Values.server.updateStrategy }}
+  {{- if .Values.server.useStatefulSet }}
+  updateStrategy:
+  {{- else }}
+  strategy: 
+  {{- end }}
+    {{- toYaml .Values.server.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
