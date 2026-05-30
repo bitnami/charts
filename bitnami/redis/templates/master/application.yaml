@@ -540,7 +540,7 @@ spec:
       metadata:
         name: redis-data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
+        labels: {{- include "common.labels.standard" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: master
         {{- if .Values.master.persistence.annotations }}
         annotations: {{- toYaml .Values.master.persistence.annotations | nindent 10 }}

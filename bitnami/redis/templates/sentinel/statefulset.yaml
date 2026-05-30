@@ -844,7 +844,8 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: redis-data
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.persistence.labels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.standard" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: node
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
@@ -867,7 +868,7 @@ spec:
       metadata:
         name: sentinel-data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
+        labels: {{- include "common.labels.standard" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: node
         {{- if .Values.sentinel.persistence.annotations }}
         annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
