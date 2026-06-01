@@ -1,8 +1,13 @@
 # Changelog
 
-## 23.1.1 (2026-02-12)
+## 23.1.2 (2026-06-01)
 
-* [bitnami/redis] bugfix: use TLS port on readiness probes when TLS is enabled ([#36463](https://github.com/bitnami/charts/pull/36463))
+* [bitnami/redis] bugfix: honor custom labels on PVCs ([#36542](https://github.com/bitnami/charts/pull/36542))
+
+## <small>23.1.1 (2026-02-12)</small>
+
+* [bitnami/redis] bugfix: use TLS port on readiness probes when TLS is enabled (#36463) ([e3296a8](https://github.com/bitnami/charts/commit/e3296a831406bacf5ce661c5274590d0b40efcdd)), closes [#36463](https://github.com/bitnami/charts/issues/36463)
+* [bitnami/redis] feat: add support for sync checks on replica nodes with sentinel (#36461) ([38684e0](https://github.com/bitnami/charts/commit/38684e07d2e5ef68f4c2ff9dcdcf61a3c700c1e8)), closes [#36461](https://github.com/bitnami/charts/issues/36461)
 
 ## <small>23.0.5 (2025-12-11)</small>
 
@@ -104,7 +109,7 @@
 
 ## <small>21.2.10 (2025-07-11)</small>
 
-* [bitnami/redis] Fix external service annotations ignored #33270 (#33776) ([cd64f12](https://github.com/bitnami/charts/commit/cd64f12492a47b8e68154737dc75460de67c5bd1)), closes [#33270](https://github.com/bitnami/charts/issues/33270) [#33776](https://github.com/bitnami/charts/issues/33776) [#33270](https://github.com/bitnami/charts/issues/33270)
+* [bitnami/redis] Fix external service annotations ignored #33270 (#33776) ([cd64f12](https://github.com/bitnami/charts/commit/cd64f12492a47b8e68154737dc75460de67c5bd1)), closes [#33270](https://github.com/bitnami/charts/issues/33270) [#33776](https://github.com/bitnami/charts/issues/33776)
 
 ## <small>21.2.9 (2025-07-09)</small>
 
@@ -1079,7 +1084,7 @@
 ## <small>17.3.6 (2022-10-18)</small>
 
 * [bitnami/*] Use new default branch name in links (#12943) ([a529e02](https://github.com/bitnami/charts/commit/a529e02597d49d944eba1eb0f190713293247176)), closes [#12943](https://github.com/bitnami/charts/issues/12943)
-* [bitnami/redis] Allow podSelector from any namespaceSelector (#12624) ([847dc49](https://github.com/bitnami/charts/commit/847dc4956017a5204179effd56f009ff04c9b3e4)), closes [#12624](https://github.com/bitnami/charts/issues/12624) [#12607](https://github.com/bitnami/charts/issues/12607) [#12607](https://github.com/bitnami/charts/issues/12607)
+* [bitnami/redis] Allow podSelector from any namespaceSelector (#12624) ([847dc49](https://github.com/bitnami/charts/commit/847dc4956017a5204179effd56f009ff04c9b3e4)), closes [#12624](https://github.com/bitnami/charts/issues/12624) [#12607](https://github.com/bitnami/charts/issues/12607)
 
 ## <small>17.3.5 (2022-10-11)</small>
 
