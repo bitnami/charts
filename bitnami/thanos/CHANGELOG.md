@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.5.2 (2026-05-20)
+## 17.6.0 (2026-06-03)
 
-* [bitnami/thanos] Fix `containerPorts` in query deployment ([#36533](https://github.com/bitnami/charts/pull/36533))
+* [bitnami/thanos] per-shard extraFlags + shardLoopId in sharded storegateway ([#36543](https://github.com/bitnami/charts/pull/36543))
+
+## <small>17.5.2 (2026-05-25)</small>
+
+* [bitnami/thanos] Fix `containerPorts` in query deployment (#36533) ([b1f6087](https://github.com/bitnami/charts/commit/b1f6087ca0727b8764b3b5a79875f1286300ac17)), closes [#36533](https://github.com/bitnami/charts/issues/36533)
 
 ## <small>17.5.1 (2026-05-19)</small>
 
