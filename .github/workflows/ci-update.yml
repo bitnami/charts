@@ -46,14 +46,14 @@ jobs:
       )
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
       - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
           path: upstream-charts
       - name: Setup git configuration
@@ -119,7 +119,7 @@ jobs:
           fi
       - name: 'Clone readme-generator-for-helm'
         if: needs.get-chart.outputs.values-updated == 'true' && github.event.action != 'edited'
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
         with:
           repository: bitnami/readme-generator-for-helm
           path: readme-generator-for-helm
