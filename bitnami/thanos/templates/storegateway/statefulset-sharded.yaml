@@ -24,6 +24,11 @@ SPDX-License-Identifier: APACHE-2.0
 {{- range $timeIndex, $_ := until $timeShards }}
 {{- $index := add (mul $hashIndex $timeShards) $timeIndex }}
 {{- $shardSelector := dict "shard" $index }}
+{{- $partition := dict }}
+{{- if $timePartitioning }}
+{{- $partition = (slice $.Values.storegateway.sharded.timePartitioning $timeIndex) | first }}
+{{- end }}
+{{- $renderCtx := merge (dict "shardLoopId" $index) $ }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
 kind: StatefulSet
 metadata:
@@ -88,7 +93,7 @@ spec:
       hostAliases: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.affinity }}
-      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" (set $ "shardLoopId" $index)) | nindent 8 }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.affinity "context" $renderCtx) | nindent 8 }}
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "extraMatchLabels" $shardSelector "context" $) | nindent 10 }}
@@ -99,10 +104,10 @@ spec:
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.nodeSelector "context" (set $ "shardLoopId" $index)) | nindent 8 }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.nodeSelector "context" $renderCtx) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.tolerations "context" (set $ "shardLoopId" $index)) | nindent 8 }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.tolerations "context" $renderCtx) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.priorityClassName }}
       priorityClassName: {{ $.Values.storegateway.priorityClassName | quote }}
@@ -114,7 +119,7 @@ spec:
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.storegateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.topologySpreadConstraints "context" $) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.topologySpreadConstraints "context" $renderCtx) | nindent 8 }}
       {{- end }}
       {{- if or $.Values.storegateway.initContainers (and $.Values.volumePermissions.enabled $.Values.storegateway.persistence.enabled) }}
       initContainers:
@@ -196,7 +201,6 @@ spec:
             {{- end }}
             {{- end }}
             {{- if $timePartitioning }}
-            {{- $partition := (slice $.Values.storegateway.sharded.timePartitioning $timeIndex) | first }}
             {{- if $partition.max }}
             - --max-time={{ $partition.max }}
             {{- end }}
@@ -205,7 +209,10 @@ spec:
             {{- end }}
             {{- end }}
             {{- if $.Values.storegateway.extraFlags }}
-            {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraFlags "context" $) | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.extraFlags "context" $renderCtx) | nindent 12 }}
+            {{- end }}
+            {{- if and $timePartitioning $partition.extraFlags }}
+            {{- include "common.tplvalues.render" (dict "value" $partition.extraFlags "context" $renderCtx) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if $.Values.storegateway.extraEnvVars }}
@@ -274,21 +281,12 @@ spec:
           {{- if $.Values.storegateway.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $timePartitioning }}
-          {{- $partition := (slice $.Values.storegateway.sharded.timePartitioning $timeIndex) | first }}
-          {{- if $partition.resources }}
+          {{- if and $timePartitioning $partition.resources }}
           resources: {{- toYaml $partition.resources | nindent 12 }}
           {{- else if $.Values.storegateway.resources }}
           resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
           {{- else if ne $.Values.storegateway.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" $.Values.storegateway.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          {{- else -}}
-          {{- if $.Values.storegateway.resources }}
-          resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
-          {{- else if ne $.Values.storegateway.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" $.Values.storegateway.resourcesPreset) | nindent 12 }}
-          {{- end }}
           {{- end }}
           volumeMounts:
             - name: objstore-config
