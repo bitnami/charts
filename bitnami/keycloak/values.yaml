@@ -984,6 +984,55 @@ metrics:
     ##             severity: critical
     groups: []
 
+## @section Telemetry parameters
+## Keycloak telemetry configuration
+## ref: https://www.keycloak.org/observability/telemetry
+telemetry:
+  ## @param telemetry.enabled Enables OpenTelemetry integration
+  enabled: false
+  ## @param telemetry.endpoint The global OTel collector endpoint
+  endpoint: "http://localhost:4317"
+  ## @param telemetry.protocol The transport protocol for communication. Options: grpc, http/protobuf
+  protocol: "grpc"
+  ## @param telemetry.serviceName The service name used to identify the data source
+  serviceName: "keycloak"
+  ## @param telemetry.resourceAttributes Key-value pairs characterizing the telemetry producer
+  resourceAttributes: ""
+  ## @param telemetry.headers Custom request headers for authentication or metadata
+  headers: {}
+  ## Traces configuration
+  tracing:
+    ## @param telemetry.tracing.enabled Enables OTel tracing
+    enabled: false
+    ## @param telemetry.tracing.endpoint Overrides the global endpoint for traces
+    endpoint: ""
+    ## @param telemetry.tracing.protocol Overrides the global protocol for traces
+    protocol: ""
+  ## Metrics configuration (experimental)
+  metrics:
+    ## @param telemetry.metrics.enabled Enables exporting metrics to an OTel collector
+    enabled: false
+    ## @param telemetry.metrics.interval The interval between metric export attempts
+    interval: "60s"
+    ## @param telemetry.metrics.endpoint Overrides the global endpoint for metrics
+    endpoint: ""
+    ## @param telemetry.metrics.protocol Overrides the global protocol for metrics
+    protocol: ""
+    ## @param telemetry.metrics.headers Specific headers for metrics export
+    headers: {}
+  ## Logs configuration (preview)
+  logs:
+    ## @param telemetry.logs.enabled Enables exporting logs via OTel
+    enabled: false
+    ## @param telemetry.logs.level Filters the most verbose log level exported. Options: off, fatal, error, warn, info, debug, trace, all
+    level: "all"
+    ## @param telemetry.logs.endpoint Overrides the global endpoint for logs
+    endpoint: ""
+    ## @param telemetry.logs.protocol Overrides the global protocol for logs
+    protocol: ""
+    ## @param telemetry.logs.headers Specific headers for logs export
+    headers: {}
+
 ## @section keycloak-config-cli parameters
 
 ## Configuration for keycloak-config-cli

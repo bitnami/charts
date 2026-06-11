@@ -237,6 +237,7 @@ Compile all warnings into a single message.
 {{- $messages := append $messages (include "keycloak.validateValues.database" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.tls" .) -}}
 {{- $messages := append $messages (include "keycloak.validateValues.production" .) -}}
+{{- $messages := append $messages (include "keycloak.validateValues.telemetry" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -273,5 +274,14 @@ keycloak: tls.enabled
 keycloak: production
     In order to enable Production mode, you also need to enable
     HTTPS/TLS (--set tls.enabled=true) or use proxy headers (--set proxyHeaders=FOO).
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Keycloak - Telemetry */}}
+{{- define "keycloak.validateValues.telemetry" -}}
+{{- if and .Values.telemetry.enabled .Values.telemetry.metrics.enabled (not .Values.metrics.enabled) -}}
+keycloak: telemetry.metrics.enabled
+    In order to enable OpenTelemetry metrics, you also need to enable
+    metrics (--set metrics.enabled=true).
 {{- end -}}
 {{- end -}}
