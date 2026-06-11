@@ -3668,6 +3668,25 @@ storegateway:
   ##     source_labels: ["region"]
   ##     regex: cn-zhangjiakou
   ## @param storegateway.sharded.timePartitioning [array] Setting time timePartitioning will create multiple store deployments based on the number of partitions
+  ## Each `timePartitioning` entry may also set per-shard `resources` and `extraFlags`:
+  ##   - `resources` (dict) overrides `storegateway.resources` for this shard only.
+  ##   - `extraFlags` (list) is appended to the global `storegateway.extraFlags` for this shard.
+  ## The shard index is available as `.shardLoopId` inside `affinity`, `nodeSelector`,
+  ## `tolerations`, `topologySpreadConstraints`, and `extraFlags` values, so per-shard
+  ## selectors can be expressed with templated labels.
+  ## e.g:
+  ## timePartitioning:
+  ##   - min: "-30d"
+  ##     max: ""
+  ##     resources:
+  ##       requests:
+  ##         memory: 4Gi
+  ##       limits:
+  ##         memory: 6Gi
+  ##     extraFlags:
+  ##       - --store.index-header-lazy-reader-idle-timeout=24h
+  ##   - min: ""
+  ##     max: "-30d"
   ## @param storegateway.sharded.service.clusterIPs Array of cluster IPs for each Store Gateway service. Length must be the same as the number of shards
   ## e.g:
   ## clusterIPs:
