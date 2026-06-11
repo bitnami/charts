@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.38 (2026-05-21)
+## 4.4.39 (2026-06-07)
 
-* [bitnami/rabbitmq-cluster-operator] fix events permission for messaging-topology-operator ([#36538](https://github.com/bitnami/charts/pull/36538))
+* [bitnami/rabbitmq-cluster-operator] fix messaging-topology-operator readiness probe ([#36539](https://github.com/bitnami/charts/pull/36539))
+
+## <small>4.4.38 (2026-05-27)</small>
+
+* [bitnami/rabbitmq-cluster-operator] fix events permission for messaging-topology-operator (#36538) ([ad01198](https://github.com/bitnami/charts/commit/ad01198edee12fd4dbbf8dfe9d4f7fe8ac36136d)), closes [#36538](https://github.com/bitnami/charts/issues/36538)
 
 ## <small>4.4.37 (2025-12-17)</small>
 
