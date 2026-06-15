@@ -3,8 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: {{ ternary "StatefulSet" "Deployment" .Values.server.useStatefulSet }}
+apiVersion: {{ if .Values.server.useStatefulSet }}{{ include "common.capabilities.statefulset.apiVersion" . }}{{- else }}{{ include "common.capabilities.deployment.apiVersion" . }}{{- end }}
+kind: {{ if .Values.server.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
 metadata:
   name: {{ template "prometheus.server.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -23,7 +23,7 @@ spec:
   {{- if .Values.server.useStatefulSet }}
   updateStrategy:
   {{- else }}
-  strategy: 
+  strategy:
   {{- end }}
     {{- toYaml .Values.server.updateStrategy | nindent 4 }}
   {{- end }}
