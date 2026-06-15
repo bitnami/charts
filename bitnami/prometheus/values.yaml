@@ -764,6 +764,9 @@ server:
   ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##
   extraScrapeConfigs: []
+  ## @param server.useStatefulSet Whether to use a StatefulSet or a Deployment to deploy Prometheus server
+  ##
+  useStatefulSet: false
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
   replicaCount: 1

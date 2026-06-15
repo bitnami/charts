@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.0 (2026-05-20)
+
+* [bitnami/prometheus]  run prometheus server as statefulset ([#36517](https://github.com/bitnami/charts/pull/36517))
+
 ## 2.2.2 (2026-04-23)
 
 * [bitnami/prometheus] prometheus thanos sidecar readiness probe ([#36522](https://github.com/bitnami/charts/pull/36522))
