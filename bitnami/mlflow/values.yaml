@@ -655,6 +655,39 @@ tracking:
     ##             name: http
     ##
     extraRules: []
+  ## @section tracking.httproute Gateway API HTTPRoute configuration
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httproute:
+    ## @param tracking.httproute.enabled Enable HTTPRoute record generation for mlflow tracking
+    ##
+    enabled: false
+    ## @param tracking.httproute.hostname Default hostname for the HTTPRoute
+    ##
+    hostname: mlflow.local
+    ## @param tracking.httproute.path Default path for the HTTPRoute
+    ##
+    path: /
+    ## @param tracking.httproute.annotations Additional annotations for the HTTPRoute resource
+    ##
+    annotations: {}
+    ## @param tracking.httproute.parentRefs List of Gateway parentRefs the HTTPRoute should attach to
+    ## e.g:
+    ## parentRefs:
+    ##   - name: my-gateway
+    ##     namespace: gateway
+    ##     sectionName: https
+    ##
+    parentRefs: []
+    ## @param tracking.httproute.extraHostnames An array with additional hostnames to be covered with the HTTPRoute
+    ## e.g:
+    ## extraHostnames:
+    ##   - mlflow-extra.local
+    ##
+    extraHostnames: []
+    ## @param tracking.httproute.extraRules Additional rules to be added to the HTTPRoute
+    ##
+    extraRules: []
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
