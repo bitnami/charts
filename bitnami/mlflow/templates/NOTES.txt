@@ -57,7 +57,13 @@ MLflow Tracking Server can be accessed through the following DNS name from withi
 
 To access your MLflow site from outside the cluster follow the steps below:
 
-{{- if .Values.tracking.ingress.enabled }}
+{{- if .Values.tracking.httproute.enabled }}
+
+1. Get the MLflow URL via the Gateway API HTTPRoute:
+
+   echo "MLflow URL: https://{{ .Values.tracking.httproute.hostname }}/"
+
+{{- else if .Values.tracking.ingress.enabled }}
 
 1. Get the MLflow URL and associate MLflow hostname to your cluster external IP:
 
