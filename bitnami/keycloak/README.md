@@ -612,6 +612,30 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                  | `{}`    |
 | `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                    | `[]`    |
 
+### Telemetry parameters
+
+| Name                                     | Description                                                                                                   | Value                     |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `telemetry.enabled`                      | Enables OpenTelemetry integration                                                                             | `false`                    |
+| `telemetry.endpoint`                     | The global OTel collector endpoint                                                                            | `http://localhost:4317`   |
+| `telemetry.protocol`                     | The transport protocol for communication. Options: grpc, http/protobuf                                        | `grpc`                    |
+| `telemetry.serviceName`                  | The service name used to identify the data source                                                             | `keycloak`                |
+| `telemetry.resourceAttributes`           | Key-value pairs characterizing the telemetry producer                                                         | `""`                      |
+| `telemetry.headers`                      | Custom request headers for authentication or metadata                                                         | `{}`                      |
+| `telemetry.tracing.enabled`              | Enables OTel tracing                                                                                          | `false`                   |
+| `telemetry.tracing.endpoint`             | Overrides the global endpoint for traces                                                                      | `""`                      |
+| `telemetry.tracing.protocol`             | Overrides the global protocol for traces                                                                      | `""`                      |
+| `telemetry.metrics.enabled`              | Enables exporting metrics to an OTel collector                                                                | `false`                   |
+| `telemetry.metrics.interval`             | The interval between metric export attempts                                                                   | `60s`                     |
+| `telemetry.metrics.endpoint`             | Overrides the global endpoint for metrics                                                                     | `""`                      |
+| `telemetry.metrics.protocol`             | Overrides the global protocol for metrics                                                                     | `""`                      |
+| `telemetry.metrics.headers`              | Specific headers for metrics export                                                                           | `{}`                      |
+| `telemetry.logs.enabled`                 | Enables exporting logs via OTel                                                                               | `false`                   |
+| `telemetry.logs.level`                   | Filters the most verbose log level exported. Options: off, fatal, error, warn, info, debug, trace, all        | `all`                     |
+| `telemetry.logs.endpoint`                | Overrides the global endpoint for logs                                                                        | `""`                      |
+| `telemetry.logs.protocol`                | Overrides the global protocol for logs                                                                        | `""`                      |
+| `telemetry.logs.headers`                 | Specific headers for logs export                                                                              | `{}`                      |
+
 ### keycloak-config-cli parameters
 
 | Name                                                                  | Description                                                                                                                                                                                                                                           | Value                                 |

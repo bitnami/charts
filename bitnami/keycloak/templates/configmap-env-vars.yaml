@@ -88,3 +88,49 @@ data:
   {{- if .Values.extraStartupArgs }}
   KEYCLOAK_EXTRA_ARGS: {{ .Values.extraStartupArgs | quote }}
   {{- end }}
+{{- if .Values.telemetry.enabled }}
+  KC_TELEMETRY_ENDPOINT: {{ .Values.telemetry.endpoint | quote }}
+  KC_TELEMETRY_PROTOCOL: {{ .Values.telemetry.protocol | quote }}
+  KC_TELEMETRY_SERVICE_NAME: {{ .Values.telemetry.serviceName | quote }}
+  {{- if .Values.telemetry.resourceAttributes }}
+  KC_TELEMETRY_RESOURCE_ATTRIBUTES: {{ .Values.telemetry.resourceAttributes | quote }}
+  {{- end }}
+  {{- range $key, $value := .Values.telemetry.headers }}
+  KC_TELEMETRY_HEADER_{{ $key | upper | replace "-" "_" }}: {{ $value | quote }}
+  {{- end }}
+  KC_TRACING_ENABLED: {{ ternary "true" "false" .Values.telemetry.tracing.enabled | quote }}
+  {{- if .Values.telemetry.tracing.endpoint }}
+  KC_TRACING_ENDPOINT: {{ .Values.telemetry.tracing.endpoint | quote }}
+  {{- end }}
+  {{- if .Values.telemetry.tracing.protocol }}
+  KC_TRACING_PROTOCOL: {{ .Values.telemetry.tracing.protocol | quote }}
+  {{- end }}
+  KC_TELEMETRY_METRICS_ENABLED: {{ ternary "true" "false" .Values.telemetry.metrics.enabled | quote }}
+  {{- if .Values.telemetry.metrics.enabled }}
+  KC_TELEMETRY_METRICS_INTERVAL: {{ .Values.telemetry.metrics.interval | quote }}
+  KC_FEATURE_OPENTELEMETRY_METRICS: "enabled"
+  {{- if .Values.telemetry.metrics.endpoint }}
+  KC_TELEMETRY_METRICS_ENDPOINT: {{ .Values.telemetry.metrics.endpoint | quote }}
+  {{- end }}
+  {{- if .Values.telemetry.metrics.protocol }}
+  KC_TELEMETRY_METRICS_PROTOCOL: {{ .Values.telemetry.metrics.protocol | quote }}
+  {{- end }}
+  {{- range $key, $value := .Values.telemetry.metrics.headers }}
+  KC_TELEMETRY_METRICS_HEADER_{{ $key | upper | replace "-" "_" }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+  KC_TELEMETRY_LOGS_ENABLED: {{ ternary "true" "false" .Values.telemetry.logs.enabled | quote }}
+  {{- if .Values.telemetry.logs.enabled }}
+  KC_TELEMETRY_LOGS_LEVEL: {{ .Values.telemetry.logs.level | quote }}
+  KC_FEATURE_OPENTELEMETRY_LOGS: "enabled"
+  {{- if .Values.telemetry.logs.endpoint }}
+  KC_TELEMETRY_LOGS_ENDPOINT: {{ .Values.telemetry.logs.endpoint | quote }}
+  {{- end }}
+  {{- if .Values.telemetry.logs.protocol }}
+  KC_TELEMETRY_LOGS_PROTOCOL: {{ .Values.telemetry.logs.protocol | quote }}
+  {{- end }}
+  {{- range $key, $value := .Values.telemetry.logs.headers }}
+  KC_TELEMETRY_LOGS_HEADER_{{ $key | upper | replace "-" "_" }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
