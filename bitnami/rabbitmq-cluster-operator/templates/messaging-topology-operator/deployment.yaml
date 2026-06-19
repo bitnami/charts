@@ -135,7 +135,7 @@ spec:
             - name: https-metrics
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
               protocol: TCP
-            - name: http-health-port
+            - name: http-health
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.health }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
@@ -144,7 +144,7 @@ spec:
           {{- else if .Values.msgTopologyOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http-health-port
+              port: http-health
           {{- end }}
           {{- if .Values.msgTopologyOperator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customReadinessProbe "context" $) | nindent 12 }}
@@ -152,7 +152,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /readyz
-              port: http-health-port
+              port: http-health
           {{- end }}
           {{- if .Values.msgTopologyOperator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customStartupProbe "context" $) | nindent 12 }}
@@ -160,7 +160,7 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /readyz
-              port: http-health-port
+              port: http-health
           {{- end }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.lifecycleHooks }}
