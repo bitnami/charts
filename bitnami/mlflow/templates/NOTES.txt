@@ -67,6 +67,8 @@ To access your MLflow site from outside the cluster follow the steps below:
     echo "MLflow URL: https://{{ .Values.tracking.httproute.hostnames | first }}"
     echo "$GATEWAY_IP {{ .Values.tracking.httproute.hostnames | first }}" | sudo tee -a /etc/hosts
 
+{{- else if .Values.tracking.ingress.enabled }}
+
 1. Get the MLflow URL and associate MLflow hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
