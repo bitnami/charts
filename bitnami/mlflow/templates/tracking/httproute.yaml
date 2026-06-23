@@ -35,7 +35,7 @@ spec:
       matches: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.matches "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.tracking.httproute.filters }}
-      filters: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.htt nindent 8 }}
+      filters: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.filters "context" .) | nindent 8 }}
       {{- end }}
   {{- if .Values.tracking.httproute.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.extraRules "context" .) | nindent 4 }}
