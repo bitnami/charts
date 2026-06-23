@@ -57,7 +57,17 @@ MLflow Tracking Server can be accessed through the following DNS name from withi
 
 To access your MLflow site from outside the cluster follow the steps below:
 
-{{- if .Values.tracking.ingress.enabled }}
+{{- if .Values.tracking.httproute.enabled }}
+
+1. Get the MLflow URL and associate its hostname to your Gateway's external IP:
+
+    GATEWAY_NAME=$(kubectl get --namespace {{ include "common.names.namespace" . }} httproute {{ include "mlflow.v0.tracking.fullname" . }} -o jsonpath="{.spec.parentRefs[0].name}")
+    GATEWAY_NAMESPACE=$(kubectl get --namespace {{ include "common.names.namespace" . }} httproute {{ include "mlflow.v0.tracking.fullname" . }} -o jsonpath="{.spec.parentRefs[0].namespace}")
+    GATEWAY_IP=$(kubectl get gateway --namespace $GATEWAY_NAMESPACE $GATEWAY_NAME -o jsonpath="{.status.addresses[0].value}")
+    echo "MLflow URL: https://{{ .Values.tracking.httproute.hostnames | first }}"
+    echo "$GATEWAY_IP {{ .Values.tracking.httproute.hostnames | first }}" | sudo tee -a /etc/hosts
+
+{{- else if .Values.tracking.ingress.enabled }}
 
 1. Get the MLflow URL and associate MLflow hostname to your cluster external IP:
 

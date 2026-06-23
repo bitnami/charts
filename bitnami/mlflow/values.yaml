@@ -655,6 +655,52 @@ tracking:
     ##             name: http
     ##
     extraRules: []
+  ## @section tracking.httproute Gateway API HTTPRoute configuration
+  ## ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+  ##
+  httproute:
+      ## @param tracking.httproute.enabled Enable HTTPRoute generation for MLflow tracking
+      ##
+      enabled: false
+      ## @param tracking.httproute.annotations Additional annotations for the HTTPRoute resource
+      ##
+      annotations: {}
+      ## @param tracking.httproute.labels Additional labels for the HTTPRoute resource
+      ##
+      labels: {}
+      ## @param tracking.httproute.parentRefs Gateways the HTTPRoute is attached to. If unspecified, it'll be attached to Gateway named 'gateway' in the same namespace.
+      ## e.g:
+      ## parentRefs:
+      ##   - name: my-gateway
+      ##     sectionName: http
+      ##     namespace: default
+      ##
+      parentRefs: []
+      ## @param tracking.httproute.hostnames [array] List of hostnames matching HTTP header
+      ##
+      hostnames:
+        - mlflow.local
+      ## @param tracking.httproute.matches [array] List of match rules applied to the HTTPRoute for the default svc backend reference
+      ##
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
+      ## @param tracking.httproute.filters List of filter rules applied to the HTTPRoute for the default svc backend reference
+      ##
+      filters: []
+      ## @param tracking.httproute.extraRules List of extra rules applied to the HTTPRoute
+      ## e.g:
+      ## extraRules:
+      ##   - matches:
+      ##       - path:
+      ##           type: PathPrefix
+      ##           value: /api
+      ##     backendRefs:
+      ##       - name: mlflow-tracking
+      ##         port: 5000
+      ##
+      extraRules: []
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##

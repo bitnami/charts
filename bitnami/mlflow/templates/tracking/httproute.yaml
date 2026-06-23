@@ -1,0 +1,43 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.tracking.enabled .Values.tracking.httproute.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ template "mlflow.v0.tracking.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.httproute.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" (dict "customLabels" $labels "context" .) | nindent 4 }}
+    app.kubernetes.io/part-of: mlflow
+    app.kubernetes.io/component: tracking
+  {{- if or .Values.tracking.httproute.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.httproute.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" .) | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+  {{- if .Values.tracking.httproute.parentRefs }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.parentRefs "context" .) | nindent 4 }}
+  {{- else }}
+    - name: gateway
+      namespace: {{ include "common.names.namespace" . | quote }}
+  {{- end }}
+  hostnames: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.hostnames "context" .) | nindent 4 }}
+  rules:
+    - backendRefs:
+        - name: {{ template "mlflow.v0.tracking.fullname" . }}
+          port: {{ ternary (.Values.tracking.service.ports.https | int) (.Values.tracking.service.ports.http | int) .Values.tracking.tls.enabled }}
+          weight: 1
+      {{- if .Values.tracking.httproute.matches }}
+      matches: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.matches "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tracking.httproute.filters }}
+      filters: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.filters "context" .) | nindent 8 }}
+      {{- end }}
+  {{- if .Values.tracking.httproute.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.httproute.extraRules "context" .) | nindent 4 }}
+  {{- end }}
+{{- end }}
