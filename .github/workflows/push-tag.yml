@@ -22,7 +22,7 @@ jobs:
       result: ${{ steps.get-chart.outputs.result }}
     if: ${{ github.repository_owner == 'bitnami' }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -69,7 +69,7 @@ jobs:
     name: Push tag
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
