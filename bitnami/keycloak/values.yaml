@@ -18,7 +18,7 @@ global:
   ## @param global.security.allowInsecureImages Allows skipping image verification
   ##
   security:
-    allowInsecureImages: false
+    allowInsecureImages: true
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -81,7 +81,7 @@ usePasswordFiles: true
 ## @section Keycloak parameters
 
 ## Bitnami Keycloak image version
-## ref: https://hub.docker.com/r/bitnami/keycloak/tags/
+## ref: https://hub.docker.com/r/bitnamilegacy/keycloak/tags/
 ## @param image.registry [default: REGISTRY_NAME] Keycloak image registry
 ## @param image.repository [default: REPOSITORY_NAME/keycloak] Keycloak image repository
 ## @skip image.tag Keycloak image tag (immutable tags are recommended)
@@ -92,7 +92,7 @@ usePasswordFiles: true
 ##
 image:
   registry: docker.io
-  repository: bitnami/keycloak
+  repository: bitnamilegacy/keycloak
   tag: 26.3.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
@@ -108,7 +108,7 @@ image:
   pullSecrets: []
   debug: false
 ## Keycloak authentication parameters
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
+## ref: https://github.com/bitnami/containers/tree/main/bitnamilegacy/keycloak#admin-credentials
 ##
 auth:
   ## @param auth.adminUser Keycloak administrator user
@@ -242,7 +242,7 @@ existingConfigmap: ""
 extraStartupArgs: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#initializing-a-new-instance
+## ref: https://github.com/bitnami/containers/tree/main/bitnamilegacy/keycloak#initializing-a-new-instance
 ## Example:
 ## initdbScripts:
 ##   my_init_script.sh: |
@@ -891,7 +891,7 @@ autoscaling:
 
 metrics:
   ## @param metrics.enabled Enable exposing Keycloak metrics
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#enabling-metrics
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnamilegacy/keycloak#enabling-metrics
   ##
   enabled: false
   ## Keycloak metrics service parameters
@@ -1043,7 +1043,7 @@ keycloakConfigCli:
   ##
   enabled: false
   ## Bitnami keycloak-config-cli image
-  ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
+  ## ref: https://hub.docker.com/r/bitnamilegacy/keycloak-config-cli/tags/
   ## @param keycloakConfigCli.image.registry [default: REGISTRY_NAME] keycloak-config-cli container image registry
   ## @param keycloakConfigCli.image.repository [default: REPOSITORY_NAME/keycloak-config-cli] keycloak-config-cli container image repository
   ## @skip keycloakConfigCli.image.tag keycloak-config-cli container image tag
@@ -1053,7 +1053,7 @@ keycloakConfigCli:
   ##
   image:
     registry: docker.io
-    repository: bitnami/keycloak-config-cli
+    repository: bitnamilegacy/keycloak-config-cli
     tag: 6.4.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
@@ -1306,9 +1306,18 @@ defaultInitContainers:
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
 ## @param postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `auth.existingSecret` is set.
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+## @param postgresql.image.registry PostgreSQL image registry
+## @param postgresql.image.repository PostgreSQL image repository
+## @param postgresql.image.tag PostgreSQL image tag
+## @param postgresql.image.pullPolicy PostgreSQL image pull policy
 ##
 postgresql:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 17.6.0-debian-12-r0
+    pullPolicy: IfNotPresent
   auth:
     postgresPassword: ""
     username: bn_keycloak
