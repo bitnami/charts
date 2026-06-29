@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.31.10 (2026-06-24)
+
+* [bitnami/common] Ensure chart and app version labels end with an alphanumeric character ([#36452](https://github.com/bitnami/charts/issues/36452))
+
 ## 2.31.9 (2026-05-08)
 
 * [bitnami/common] escape ChartVersion in labels ([#36516](https://github.com/bitnami/charts/pull/36516))
