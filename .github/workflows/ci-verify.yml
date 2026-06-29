@@ -168,7 +168,9 @@ jobs:
         run: |
           export PATH="$PATH:$HOME/.kubescape/bin"
           FRAMEWORKS="MITRE,NSA,SOC2,cis-v1.10.0"
-          if [ -d "charts-main/bitnami/${CHART}" ]; then
+          if grep -q '^type:[[:space:]]*library$' "charts-pr/bitnami/${CHART}/Chart.yaml"; then
+            echo "Skipping Kubescape score validation for library chart bitnami/${CHART}"
+          elif [ -d "charts-main/bitnami/${CHART}" ]; then
             report_dir="$(mktemp -d)"
             charts_paths=("charts-pr" "charts-main")
             for chart_path in "${charts_paths[@]}"; do
