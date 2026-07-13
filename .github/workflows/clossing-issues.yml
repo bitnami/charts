@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'bitnami' }}
     steps:
-      - uses: actions/stale@eb5cf3af3ac0a1aa4c9c45633dd1ae542a27a899
+      - uses: actions/stale@1e223db275d687790206a7acac4d1a11bd6fe629
         with:
           any-of-labels: 'solved'
           stale-issue-label: 'solved'
