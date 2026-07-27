@@ -1,8 +1,8 @@
 # Changelog
 
-## <small>17.1.1 (2026-07-22)</small>
+## <small>17.1.1 (2026-07-27)</small>
 
-* [bitnami/postgresql] Add seccompProfile to podSecurityContext and fix backup CronJob pod security context rendering
+* [bitnami/postgresql] Add seccompProfile to podSecurityContext and fix backup CronJob pod security context rendering ([#36578](https://github.com/bitnami/charts/pull/36578))
 
 ## 17.1.0 (2026-02-25)
 
