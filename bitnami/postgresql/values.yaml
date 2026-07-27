@@ -508,6 +508,7 @@ primary:
   ## @param primary.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param primary.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param primary.podSecurityContext.fsGroup Group ID for the pod
+  ## @param primary.podSecurityContext.seccompProfile.type Set PostgreSQL primary pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -515,6 +516,8 @@ primary:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param primary.containerSecurityContext.enabled Enabled containers' Security Context
@@ -968,6 +971,7 @@ readReplicas:
   ## @param readReplicas.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param readReplicas.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param readReplicas.podSecurityContext.fsGroup Group ID for the pod
+  ## @param readReplicas.podSecurityContext.seccompProfile.type Set PostgreSQL read replica pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -975,6 +979,8 @@ readReplicas:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param readReplicas.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1340,12 +1346,15 @@ backup:
     ## @param backup.cronjob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
     ## @param backup.cronjob.podSecurityContext.supplementalGroups Set filesystem extra groups
     ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
+    ## @param backup.cronjob.podSecurityContext.seccompProfile.type Set backup CronJob pod's Security Context seccomp profile
     podSecurityContext:
       enabled: true
       fsGroupChangePolicy: Always
       sysctls: []
       supplementalGroups: []
       fsGroup: 1001
+      seccompProfile:
+        type: "RuntimeDefault"
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1518,6 +1527,7 @@ passwordUpdateJob:
   ## @param passwordUpdateJob.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param passwordUpdateJob.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param passwordUpdateJob.podSecurityContext.fsGroup Set credential init job pod's Security Context fsGroup
+  ## @param passwordUpdateJob.podSecurityContext.seccompProfile.type Set credential init job pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1525,6 +1535,8 @@ passwordUpdateJob:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param passwordUpdateJob.extraEnvVars Array containing extra env vars to configure the credential init job
   ## For example:
   ## extraEnvVars:
