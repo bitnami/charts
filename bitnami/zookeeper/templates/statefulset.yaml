@@ -24,7 +24,11 @@ spec:
       app.kubernetes.io/component: zookeeper
   serviceName: {{ printf "%s-%s" (include "common.names.fullname" .) (default "headless" .Values.service.headless.servicenameOverride) | trunc 63 | trimSuffix "-" }}
   {{- if .Values.updateStrategy }}
-  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  updateStrategy:
+    type: {{ .Values.updateStrategy.type }}
+    {{- if .Values.updateStrategy.rollingUpdate }}
+    rollingUpdate: {{- toYaml .Values.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
   {{- end }}
   template:
     metadata:
