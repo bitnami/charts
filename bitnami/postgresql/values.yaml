@@ -320,7 +320,7 @@ tls:
 ## @section PostgreSQL Primary parameters
 ##
 primary:
-  ## @param primary.replicaCount Number of PostgreSQL Primary replicas to deploy. Set to 0 to scale down without deleting the StatefulSet/PVC (e.g. to save costs in non-production environments)
+  ## @param primary.replicaCount Number of PostgreSQL Primary replicas to deploy. Only 0 or 1 is supported, since a PostgreSQL Primary cannot be horizontally scaled the way readReplicas can
   ##
   replicaCount: 1
   ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
