@@ -379,7 +379,9 @@ data:
         echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf"
     }
     host_id() {
-        echo "$1" | openssl sha1 | awk '{print $2}'
+        printf '%s\n' "{{ include "common.names.namespace" . }}:$1" |
+            openssl sha1 |
+            awk '{print $2}'
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
