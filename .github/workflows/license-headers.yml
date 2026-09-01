@@ -22,8 +22,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         name: Checkout Repository
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: refs/pull/${{ github.event.number }}/merge
       - id: get-modified-files
         name: 'Get modified files'
         env:
