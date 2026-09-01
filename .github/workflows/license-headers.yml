@@ -23,6 +23,7 @@ jobs:
         name: Checkout Repository
         with:
           ref: refs/pull/${{ github.event.number }}/merge
+          allow-unsafe-pr-checkout: true
       - id: get-modified-files
         name: 'Get modified files'
         env:
