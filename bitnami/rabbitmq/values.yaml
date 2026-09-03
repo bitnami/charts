@@ -1520,7 +1520,7 @@ metrics:
     namespace: ""
     ## List of rules, used as template by Helm.
     ## @param metrics.prometheusRule.rules List of rules, used as template by Helm.
-    ## These are just examples rules inspired from https://awesome-prometheus-alerts.grep.to/rules.html
+    ## These are just examples rules inspired from https://samber.github.io/awesome-prometheus-alerts/rules.html
     ## rules:
     ##   - alert: RabbitmqDown
     ##     expr: rabbitmq_up{service="{{ template "common.names.fullname" . }}"} == 0
