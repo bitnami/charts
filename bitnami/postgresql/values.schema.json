@@ -8,6 +8,20 @@
       "form": true,
       "description": "Allowed values: `standalone` or `replication`"
     },
+    "primary": {
+      "type": "object",
+      "title": "Primary database configuration",
+      "form": true,
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of PostgreSQL Primary replicas",
+          "form": true,
+          "description": "Allowed values: `0` or `1`",
+          "enum": [0, 1]
+        }
+      }
+    },
     "auth": {
       "type": "object",
       "title": "Authentication configuration",
