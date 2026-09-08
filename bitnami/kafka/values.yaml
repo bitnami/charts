@@ -813,7 +813,7 @@ controller:
   ## @param controller.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param controller.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param controller.podSecurityContext.fsGroup Set Kafka pod's Security Context fsGroup
-  ## @param controller.podSecurityContext.seccompProfile.type Set Kafka pod's Security Context seccomp profile
+  ## @param controller.podSecurityContext.seccompProfile.type Set Kafka pods' Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
