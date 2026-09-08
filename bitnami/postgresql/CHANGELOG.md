@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>17.1.2 (2026-09-08)</small>
+
+* [bitnami/postgresql] Add seccompProfile to podSecurityContext ([#36593](https://github.com/bitnami/charts/pull/36593))
+
 ## 17.1.0 (2026-02-25)
 
 * [bitnami/postgresql]: configurable data source credentials for postgresql exporter ([#36465](https://github.com/bitnami/charts/pull/36465))
