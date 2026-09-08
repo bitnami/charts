@@ -1,5 +1,9 @@
 # Changelog
 
+## <small>32.4.5 (2026-09-08)</small>
+
+* [bitnami/kafka] Add seccompProfile to containerSecurityContext for controller, broker, provisioning and metrics.jmx; fix duplicate runAsGroup doc line and podSecurityContext seccompProfile typo
+
 ## 32.4.3 (2025-08-26)
 
 * [bitnami/kafka] :zap: :arrow_up: Update dependency references ([#36189](https://github.com/bitnami/charts/pull/36189))
