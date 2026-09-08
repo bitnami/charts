@@ -1,6 +1,6 @@
 # Changelog
 
-## <small>17.1.1 (2026-08-30)</small>
+## <small>17.1.2 (2026-09-08)</small>
 
 * [bitnami/postgresql] Add seccompProfile to podSecurityContext ([#36593](https://github.com/bitnami/charts/pull/36593))
 
