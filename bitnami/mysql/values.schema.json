@@ -64,6 +64,13 @@
       "title": "Primary database configuration",
       "form": true,
       "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "title": "Number of MySQL Primary replicas",
+          "form": true,
+          "description": "Allowed values: `0` or `1`",
+          "enum": [0, 1]
+        },
         "podSecurityContext": {
           "type": "object",
           "title": "MySQL primary Pod security context",
