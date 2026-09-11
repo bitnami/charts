@@ -50,5 +50,4 @@ spec:
       {{- if .Values.msgTopologyOperator.metrics.podMonitor.metricRelabelings }}
       metricRelabelings: {{ toYaml .Values.msgTopologyOperator.metrics.podMonitor.metricRelabelings | nindent 8 }}
       {{- end }}
-      scheme: HTTPS
 {{- end }}
