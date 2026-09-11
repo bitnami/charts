@@ -28,17 +28,7 @@ data:
     # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
     TLS_OPTIONS='--tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
-    # Run the proper check depending on the version
-    [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
-    . /opt/bitnami/scripts/libversion.sh
-    VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
-    VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
-    VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
-    readiness_test='db.isMaster().ismaster || db.isMaster().secondary'
-    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
-        readiness_test='db.hello().isWritablePrimary || db.hello().secondary'
-    fi
-    exec mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "if (!(${readiness_test})) { throw new Error(\"Not ready\") }"
+    exec mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'var res; try { res = db.hello(); } catch(e) { res = db.isMaster(); } if (!(res.isWritablePrimary || res.ismaster || res.secondary)) { throw new Error("Not ready"); }'
   ping-mongodb.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
