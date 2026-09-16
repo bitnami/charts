@@ -125,6 +125,40 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Init container definition to recover the log dir symlink to stdout.
+The container image ships /opt/bitnami/mongodb/logs/mongodb.log as a symlink to
+/dev/stdout, but that symlink is hidden by the empty-dir volume mounted on top of
+/opt/bitnami/mongodb/logs. This init container recreates it inside the volume.
+The "component" key must point to the per-component values holding
+containerSecurityContext, resources and resourcesPreset (e.g. .Values.mongos).
+*/}}
+{{- define "mongodb-sharded.initContainer.prepareLogDir" -}}
+{{- $component := .component -}}
+{{- $context := .context -}}
+- name: log-dir
+  image: {{ include "mongodb-sharded.image" $context }}
+  imagePullPolicy: {{ $context.Values.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      ln -sf /dev/stdout "/opt/bitnami/mongodb/logs/mongodb.log"
+  {{- if $component.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $component.containerSecurityContext "context" $context) | nindent 4 }}
+  {{- end }}
+  {{- if $component.resources }}
+  resources: {{- include "common.tplvalues.render" (dict "value" $component.resources "context" $context) | nindent 4 }}
+  {{- else if ne $component.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $component.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /opt/bitnami/mongodb/logs
+      subPath: app-logs-dir
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb-sharded.imagePullSecrets" -}}

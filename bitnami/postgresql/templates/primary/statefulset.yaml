@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.primary.replicaCount }}
   serviceName: {{ include "postgresql.v1.primary.svc.headless" . }}
   {{- if .Values.primary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}

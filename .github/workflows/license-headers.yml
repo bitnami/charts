@@ -22,8 +22,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         name: Checkout Repository
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: refs/pull/${{ github.event.number }}/merge
+          allow-unsafe-pr-checkout: true
       - id: get-modified-files
         name: 'Get modified files'
         env:
@@ -74,5 +74,5 @@ jobs:
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
       - name: Check license Headers
-        uses: apache/skywalking-eyes/header@61275cc80d0798a405cb070f7d3a8aaf7cf2c2c1
+        uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4
         if: ${{ steps.get-modified-files.outputs.result == 'success' }}
