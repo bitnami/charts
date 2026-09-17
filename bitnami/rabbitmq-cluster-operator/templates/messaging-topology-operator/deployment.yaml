@@ -99,6 +99,7 @@ spec:
           {{- else }}
           args:
             - --metrics-bind-address=:{{ .Values.msgTopologyOperator.containerPorts.metrics }}
+            - --metrics-secure=false # The handling of TLS certificates for the metrics endpoint is not implemented in the chart - feel free to open a PR if you need it
             - --health-probe-bind-address=:{{ .Values.msgTopologyOperator.containerPorts.health }}
           {{- end }}
           env:
@@ -132,7 +133,7 @@ spec:
             - name: https-webhook
               containerPort: 9443
               protocol: TCP
-            - name: https-metrics
+            - name: http-metrics
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}
               protocol: TCP
             - name: http-health
