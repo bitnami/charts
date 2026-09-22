@@ -2,7 +2,7 @@
 
 ## 12.3.14 (2026-09-22)
 
-* [bitnami/cassandra] Add seccompProfile to podSecurityContext, harden volumePermissions init container, and add missing metrics containerSecurityContext
+* [bitnami/cassandra] Add seccompProfile to podSecurityContext, harden volumePermissions init container, and add missing metrics containerSecurityContext ([#36615](https://github.com/bitnami/charts/pull/36615))
 
 ## 12.3.13 (2025-10-02)
 
