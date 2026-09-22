@@ -428,6 +428,7 @@ extraContainerPorts: []
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set WordPress pod's Security Context fsGroup
+## @param podSecurityContext.seccompProfile.type Set WordPress pod's Security Context seccomp profile
 ##
 podSecurityContext:
   enabled: true
@@ -435,6 +436,8 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
@@ -929,10 +932,17 @@ volumePermissions:
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.runAsGroup Group ID for the init container
+  ## @param volumePermissions.containerSecurityContext.runAsNonRoot runAsNonRoot for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type seccompProfile.type for the init container
   ##
   containerSecurityContext:
     seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
 ## @section Other Parameters
 ##
 
