@@ -1729,8 +1729,13 @@
                 },
                 "masterSet": {
                     "type": "string",
-                    "description": "Master set name",
+                    "description": "Master set name base",
                     "default": "mymaster"
+                },
+                "masterSetNamespaceSuffix": {
+                    "type": "boolean",
+                    "description": "Append the release namespace to the Sentinel master set name",
+                    "default": false
                 },
                 "quorum": {
                     "type": "number",

@@ -96,19 +96,19 @@ data:
     }
 
     validate_quorum() {
-        quorum_info_command="$(redis_cli_command) sentinel master {{ .Values.sentinel.masterSet }}"
+        quorum_info_command="$(redis_cli_command) sentinel master {{ include "redis.sentinelMasterSet" . }}"
         info "about to run the command: $quorum_info_command"
         eval $quorum_info_command | grep -Fq "s_down"
     }
 
     trigger_manual_failover() {
-        failover_command="$(redis_cli_command) sentinel failover {{ .Values.sentinel.masterSet }}"
+        failover_command="$(redis_cli_command) sentinel failover {{ include "redis.sentinelMasterSet" . }}"
         info "about to run the command: $failover_command"
         eval $failover_command
     }
 
     get_sentinel_master_info() {
-        sentinel_info_command="$(redis_cli_command {{ .Values.sentinel.getMasterTimeout }}) sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        sentinel_info_command="$(redis_cli_command {{ .Values.sentinel.getMasterTimeout }}) sentinel get-master-addr-by-name {{ include "redis.sentinelMasterSet" . }}"
         info "about to run the command: $sentinel_info_command"
         retry_while "eval $sentinel_info_command" 2 5
     }
@@ -385,9 +385,9 @@ data:
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_SENTINEL_TLS_CERT_FILE} --key ${REDIS_SENTINEL_TLS_KEY_FILE} --cacert ${REDIS_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ include "redis.sentinelMasterSet" . }}"
         else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ include "redis.sentinelMasterSet" . }}"
         fi
         info "about to run the command: $sentinel_info_command"
         retry_while "eval $sentinel_info_command" 2 5
@@ -439,7 +439,7 @@ data:
     cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- if .Values.auth.enabled }}
     {{- if not (contains "sentinel auth-pass" .Values.sentinel.configuration) }}
-    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
+    printf "\nsentinel auth-pass %s %s" "{{ include "redis.sentinelMasterSet" . }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
     {{- if and .Values.auth.enabled .Values.auth.sentinel }}
     printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
@@ -456,17 +456,17 @@ data:
 
     {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
-    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+    sentinel_conf_set "sentinel monitor" "{{ include "redis.sentinelMasterSet" . }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
     {{- end }}
     {{- else }}
-    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+    sentinel_conf_set "sentinel monitor" "{{ include "redis.sentinelMasterSet" . }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
     {{- end }}
 
     add_known_sentinel() {
         hostname="$1"
         ip="$2"
         if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
-            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+            sentinel_conf_add "sentinel known-sentinel {{ include "redis.sentinelMasterSet" . }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
         fi
     }
 
@@ -474,20 +474,20 @@ data:
         hostname="$1"
         ip="$2"
         if [[ -n "$ip" && "$(get_full_hostname "$hostname")" != "$REDIS_MASTER_HOST" ]]; then
-            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "REDIS")"
+            sentinel_conf_add "sentinel known-replica {{ include "redis.sentinelMasterSet" . }} $(get_full_hostname "$hostname") $(get_port "$hostname" "REDIS")"
         fi
     }
 
     add_known_sentinel_public_ip() {
         hostname="$1"
         ip="$2"
-        sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+        sentinel_conf_add "sentinel known-sentinel {{ include "redis.sentinelMasterSet" . }} $ip $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
     }
 
     add_known_replica_public_ip() {
         hostname="$1"
         ip="$2"
-        sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "REDIS")"
+        sentinel_conf_add "sentinel known-replica {{ include "redis.sentinelMasterSet" . }} $ip $(get_port "$hostname" "REDIS")"
     }
 
     for node in $(seq 0 $(({{ .Values.replica.replicaCount }}-1))); do
@@ -621,7 +621,7 @@ data:
     }
 
     sentinel_failover_finished() {
-        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ include "redis.sentinelMasterSet" . }}"))
         echo "REDIS_SENTINEL_INFO: $REDIS_SENTINEL_INFO"
         REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
         echo "REDIS_MASTER_HOST: $REDIS_MASTER_HOST"
@@ -766,7 +766,7 @@ data:
     }
 
     sentinel_failover_finished() {
-        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        REDIS_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ include "redis.sentinelMasterSet" . }}"))
         echo "REDIS_SENTINEL_INFO: $REDIS_SENTINEL_INFO"
         REDIS_MASTER_HOST="${REDIS_SENTINEL_INFO[0]}"
         echo "REDIS_MASTER_HOST: $REDIS_MASTER_HOST"
@@ -810,7 +810,7 @@ data:
 
         echo "Issuing failover"
         # if I am the master, issue a command to failover once
-        run_sentinel_command failover "{{ .Values.sentinel.masterSet }}"
+        run_sentinel_command failover "{{ include "redis.sentinelMasterSet" . }}"
 
         {{- if .Values.sentinel.redisShutdownWaitFailover }}
         echo "Waiting for sentinel to complete failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
