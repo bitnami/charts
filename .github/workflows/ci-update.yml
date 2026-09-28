@@ -52,6 +52,9 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           path: charts
+          # Safe here: this job only runs once a maintainer applies the 'verify' label (see the job's `if:` above),
+          # and the checked-out fork code is only read as data (values.yaml/Chart.yaml), never executed.
+          allow-unsafe-pr-checkout: true
       - name: Clone upstream bitnami/charts repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
