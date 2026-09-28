@@ -1,5 +1,9 @@
 # Changelog
 
+## 27.0.1 (2026-09-22)
+
+* [bitnami/wordpress] Add seccompProfile to podSecurityContext and harden volumePermissions init container ([#36613](https://github.com/bitnami/charts/pull/36613))
+
 ## 26.0.0 (2025-08-18)
 
 * [bitnami/wordpress] Upgrade to MariaDB 12.0 ([#36121](https://github.com/bitnami/charts/pull/36121))
