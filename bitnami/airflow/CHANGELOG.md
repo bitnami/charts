@@ -1,5 +1,9 @@
 # Changelog
 
+## 25.1.1 (2026-10-01)
+
+* [bitnami/airflow] Add seccomp profile to pod security contexts ([#36621](https://github.com/bitnami/charts/pull/36621))
+
 ## 25.1.0 (2026-01-12)
 
 * [bitnami/airflow] Allow customizing the empty-dir volume parameters ([#36432](https://github.com/bitnami/charts/pull/36432))
