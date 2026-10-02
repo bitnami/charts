@@ -689,6 +689,7 @@ web:
   ## @param web.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param web.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param web.podSecurityContext.fsGroup Set Airflow webserver pod's Security Context fsGroup
+  ## @param web.podSecurityContext.seccompProfile.type Set Airflow webserver pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -696,6 +697,8 @@ web:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Airflow webserver containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param web.containerSecurityContext.enabled Enabled Airflow webserver containers' Security Context
@@ -1067,6 +1070,7 @@ scheduler:
   ## @param scheduler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param scheduler.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param scheduler.podSecurityContext.fsGroup Set Airflow scheduler pod's Security Context fsGroup
+  ## @param scheduler.podSecurityContext.seccompProfile.type Set Airflow scheduler pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1074,6 +1078,8 @@ scheduler:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Airflow scheduler containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param scheduler.containerSecurityContext.enabled Enabled Airflow scheduler containers' Security Context
@@ -1446,6 +1452,7 @@ dagProcessor:
   ## @param dagProcessor.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param dagProcessor.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param dagProcessor.podSecurityContext.fsGroup Set Airflow Dag Processor pod's Security Context fsGroup
+  ## @param dagProcessor.podSecurityContext.seccompProfile.type Set Airflow Dag Processor pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1453,6 +1460,8 @@ dagProcessor:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Airflow Dag Processor containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dagProcessor.containerSecurityContext.enabled Enabled Airflow Dag Processor containers' Security Context
@@ -1832,6 +1841,7 @@ triggerer:
   ## @param triggerer.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param triggerer.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param triggerer.podSecurityContext.fsGroup Set Airflow Triggerer pod's Security Context fsGroup
+  ## @param triggerer.podSecurityContext.seccompProfile.type Set Airflow Triggerer pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -1839,6 +1849,8 @@ triggerer:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Airflow Triggerer containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param triggerer.containerSecurityContext.enabled Enabled Airflow Triggerer containers' Security Context
@@ -2320,6 +2332,7 @@ worker:
   ## @param worker.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param worker.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param worker.podSecurityContext.fsGroup Set Airflow worker pod's Security Context fsGroup
+  ## @param worker.podSecurityContext.seccompProfile.type Set Airflow worker pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -2327,6 +2340,8 @@ worker:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Airflow worker containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param worker.containerSecurityContext.enabled Enabled Airflow worker containers' Security Context
@@ -2654,6 +2669,7 @@ setupDBJob:
   ## @param setupDBJob.podSecurityContext.sysctls List of sysctls to allow in "setup-db" job's pods' Security Context
   ## @param setupDBJob.podSecurityContext.supplementalGroups List of supplemental groups to add to "setup-db" job's pods' Security Context
   ## @param setupDBJob.podSecurityContext.fsGroup Set fsGroup in "setup-db" job's pods' Security Context
+  ## @param setupDBJob.podSecurityContext.seccompProfile.type Set seccomp profile in "setup-db" job's pods' Security Context
   ##
   podSecurityContext:
     enabled: true
@@ -2661,6 +2677,8 @@ setupDBJob:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param setupDBJob.extraEnvVars Array containing extra env vars to configure the Airflow "setup-db" job's container
   ##
   extraEnvVars: []
@@ -3123,6 +3141,7 @@ metrics:
   ## @param metrics.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param metrics.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param metrics.podSecurityContext.fsGroup Set StatsD exporter pod's Security Context fsGroup
+  ## @param metrics.podSecurityContext.seccompProfile.type Set StatsD exporter pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -3130,6 +3149,8 @@ metrics:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## StatsD exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable StatsD exporter containers' Security Context
