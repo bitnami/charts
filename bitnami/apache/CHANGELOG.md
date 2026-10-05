@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.4.31 (2026-10-02)
+
+* [bitnami/apache] Add pod-level seccompProfile and correct security-context documentation ([#36623](https://github.com/bitnami/charts/pull/36623)), closes [#36622](https://github.com/bitnami/charts/issues/36622)
+
 ## 11.4.29 (2025-08-18)
 
 * [bitnami/apache] :zap: :arrow_up: Update dependency references ([#36124](https://github.com/bitnami/charts/pull/36124))

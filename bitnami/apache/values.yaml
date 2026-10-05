@@ -242,6 +242,7 @@ schedulerName: ""
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Apache Server pod's Security Context fsGroup
+## @param podSecurityContext.seccompProfile.type Set Apache Server pod's seccomp profile
 ##
 podSecurityContext:
   enabled: true
@@ -249,16 +250,18 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Apache Server containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsGroup Set Apache Server containers' Security Context runAsGroup
-## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
-## @param containerSecurityContext.privileged Set primary container's Security Context privileged
-## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
-## @param containerSecurityContext.readOnlyRootFilesystem Set primary container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.runAsNonRoot Set Apache Server containers' Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set Apache Server containers' Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set Apache Server containers' Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set Apache Server containers' Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
