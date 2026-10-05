@@ -76,6 +76,18 @@ Return the secret containing Redis TLS certificates
 {{- end -}}
 
 {{/*
+Return the Sentinel master set name. Optionally scope it to this release's namespace
+so that Sentinels in different namespaces never share a monitored master set.
+*/}}
+{{- define "redis.sentinelMasterSet" -}}
+{{- if .Values.sentinel.masterSetNamespaceSuffix -}}
+{{- printf "%s-%s" .Values.sentinel.masterSet (include "common.names.namespace" .) -}}
+{{- else -}}
+{{- printf "%s" .Values.sentinel.masterSet -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the path to the cert file.
 */}}
 {{- define "redis.tlsCert" -}}

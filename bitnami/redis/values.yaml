@@ -1206,9 +1206,12 @@ sentinel:
   ## @param sentinel.annotations Additional custom annotations for Redis(R) Sentinel resource
   ##
   annotations: {}
-  ## @param sentinel.masterSet Master set name
+  ## @param sentinel.masterSet Master set name base
   ##
   masterSet: mymaster
+  ## @param sentinel.masterSetNamespaceSuffix Append the release namespace to the Sentinel master set name
+  ##
+  masterSetNamespaceSuffix: false
   ## @param sentinel.quorum Sentinel Quorum
   ##
   quorum: 2

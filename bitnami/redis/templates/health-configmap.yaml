@@ -145,7 +145,7 @@ data:
         PORT=$1;
         FOUND_PORT=0;
       } else if (FOUND_RUNID==1) {
-        printf "\nsentinel known-sentinel {{ .Values.sentinel.masterSet }} %s %s %s", IP, PORT, $0; FOUND_RUNID=0;
+        printf "\nsentinel known-sentinel {{ include "redis.sentinelMasterSet" . }} %s %s %s", IP, PORT, $0; FOUND_RUNID=0;
       }
     }
 {{- else }}
