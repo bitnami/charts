@@ -1,12 +1,12 @@
 # Changelog
 
-## 27.0.1 (2026-09-22)
+## 27.0.1 (2026-10-11)
 
 * [bitnami/wordpress] Add seccompProfile to podSecurityContext and harden volumePermissions init container ([#36613](https://github.com/bitnami/charts/pull/36613))
 
 ## 26.0.0 (2025-08-18)
 
-* [bitnami/wordpress] Upgrade to MariaDB 12.0 ([#36121](https://github.com/bitnami/charts/pull/36121))
+* [bitnami/wordpress] Upgrade to MariaDB 12.0 (#36121) ([3d9e80c](https://github.com/bitnami/charts/commit/3d9e80c9138bcb7ea37d69042f2976cc49d5a8f0)), closes [#36121](https://github.com/bitnami/charts/issues/36121)
 
 ## <small>25.0.26 (2025-08-18)</small>
 
@@ -561,7 +561,7 @@
 
 ## <small>22.4.2 (2024-06-03)</small>
 
-* [bitnami/wordpress] Fix issue #26133 (#26551) ([55dcb0a](https://github.com/bitnami/charts/commit/55dcb0af793299e3a06a52cdd774475ab94040a7)), closes [#26133](https://github.com/bitnami/charts/issues/26133) [#26551](https://github.com/bitnami/charts/issues/26551) [#26133](https://github.com/bitnami/charts/issues/26133)
+* [bitnami/wordpress] Fix issue #26133 (#26551) ([55dcb0a](https://github.com/bitnami/charts/commit/55dcb0af793299e3a06a52cdd774475ab94040a7)), closes [#26133](https://github.com/bitnami/charts/issues/26133) [#26551](https://github.com/bitnami/charts/issues/26551)
 
 ## <small>22.4.1 (2024-05-29)</small>
 
