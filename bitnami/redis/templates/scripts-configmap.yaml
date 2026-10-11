@@ -456,7 +456,11 @@ data:
 
     {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
-    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+    # On the first deployment no Sentinel can be asked yet, so $REDIS_MASTER_HOST is still this pod's own hostname
+    if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        REDIS_MASTER_HOST="{{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }}"
+    fi
+    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
     {{- end }}
     {{- else }}
     sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$REDIS_MASTER_HOST" "$REDIS_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
@@ -481,13 +485,17 @@ data:
     add_known_sentinel_public_ip() {
         hostname="$1"
         ip="$2"
-        sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+        if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
+            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+        fi
     }
 
     add_known_replica_public_ip() {
         hostname="$1"
         ip="$2"
-        sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "REDIS")"
+        if [[ -n "$ip" && "$ip" != "$REDIS_MASTER_HOST" ]]; then
+            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $ip $(get_port "$hostname" "REDIS")"
+        fi
     }
 
     for node in $(seq 0 $(({{ .Values.replica.replicaCount }}-1))); do
