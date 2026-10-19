@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.12 (2026-10-19)
+
+* [bitnami/janusgraph] Harden pod, volume permissions, and credential file security contexts
+
 ## 1.4.10 (2025-08-26)
 
 * [bitnami/janusgraph] :zap: :arrow_up: Update dependency references ([#36187](https://github.com/bitnami/charts/pull/36187))
