@@ -661,6 +661,10 @@ data:
         {{- end }}
     }
 
+    sentinel_failover_not_in_progress() {
+        ! run_sentinel_command master "{{ .Values.sentinel.masterSet }}" | grep -q "failover_in_progress"
+    }
+
     {{ if .Values.auth.sentinel -}}
     # redis-cli automatically consumes credentials from the REDISCLI_AUTH variable
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
@@ -671,14 +675,16 @@ data:
         echo "I am the master pod and you are stopping me. Starting sentinel failover"
         if retry_while "sentinel_failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1; then
             echo "Master has been successfuly failed over to a different pod."
-            exit 0
         else
             echo "Master failover failed"
             exit 1
         fi
-    else
-        exit 0
     fi
+    # If this Sentinel leads a failover, stay up until it ends so the other Sentinels and replicas learn the new master
+    if ! retry_while "sentinel_failover_not_in_progress" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1; then
+        echo "WARNING: Sentinel failover still in progress, shutting down anyway"
+    fi
+    exit 0
   prestop-redis.sh: |
     #!/bin/bash
 
