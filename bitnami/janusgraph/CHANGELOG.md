@@ -2,7 +2,7 @@
 
 ## 1.4.12 (2026-10-19)
 
-* [bitnami/janusgraph] Harden pod, volume permissions, and credential file security contexts
+* [bitnami/janusgraph] Harden pod, volume permissions, and credential file security contexts ([#36635](https://github.com/bitnami/charts/pull/36635)), closes [#36634](https://github.com/bitnami/charts/issues/36634)
 
 ## 1.4.10 (2025-08-26)
 

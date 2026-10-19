@@ -72,6 +72,10 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Pod and credential file security
+
+JanusGraph pods use the `RuntimeDefault` seccomp profile at both the pod and container levels by default. The optional volume-permissions init container also uses an explicit security context, while mounted storage backend password files default to mode `0440`. These settings can be customized through `podSecurityContext`, `volumePermissions.containerSecurityContext`, and `storageBackend.passwordFileMode`. See [#36634](https://github.com/bitnami/charts/issues/36634) and [#36635](https://github.com/bitnami/charts/pull/36635).
+
 ### Prometheus metrics
 
 This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
