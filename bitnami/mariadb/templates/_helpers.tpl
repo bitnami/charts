@@ -193,6 +193,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "mariadb.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "mariadb.validateValues.architecture" .) -}}
+{{- $messages := append $messages (include "mariadb.validateValues.primaryReplicaCount" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -207,6 +208,14 @@ Compile all warnings into a single message, and call fail.
 mariadb: architecture
     Invalid architecture selected. Valid values are "standalone" and
     "replication". Please set a valid architecture (--set architecture="xxxx")
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of MariaDB - primary replicaCount must be 0 or 1 */}}
+{{- define "mariadb.validateValues.primaryReplicaCount" -}}
+{{- if not (has (int .Values.primary.replicaCount) (list 0 1)) -}}
+mariadb: primary.replicaCount
+    Invalid primary.replicaCount. Only 0 or 1 are supported.
 {{- end -}}
 {{- end -}}
 
