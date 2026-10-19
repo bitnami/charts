@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.14 (2026-10-19)
+
+* [bitnami/cloudnative-pg] Add seccompProfile to podSecurityContext ([#36633](https://github.com/bitnami/charts/pull/36633)), closes [#36632](https://github.com/bitnami/charts/issues/36632)
+
 ## 1.0.12 (2025-08-28)
 
 * [bitnami/cloudnative-pg] :zap: :arrow_up: Update dependency references ([#35765](https://github.com/bitnami/charts/pull/35765))
