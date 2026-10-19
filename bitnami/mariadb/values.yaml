@@ -276,6 +276,9 @@ primary:
   ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
   ##
   name: primary
+  ## @param primary.replicaCount Number of MariaDB primary replicas (only `0` or `1` supported)
+  ##
+  replicaCount: 1
   ## @param primary.command Override default container command on MariaDB Primary container(s) (useful when using custom images)
   ##
   command: []

@@ -468,6 +468,11 @@
                     "description": "Name of the primary database (eg primary, master, leader, ...)",
                     "default": "primary"
                 },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of MariaDB primary replicas (only `0` or `1` supported)",
+                    "default": 1
+                },
                 "command": {
                     "type": "array",
                     "description": "Override default container command on MariaDB Primary container(s) (useful when using custom images)",
