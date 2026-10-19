@@ -89,6 +89,9 @@ storageBackend:
   ## Note: ignored when backend does not require authentication
   ##
   usePasswordFiles: true
+  ## @param storageBackend.passwordFileMode Permissions for the mounted storage backend password file. The default requires a matching pod fsGroup for non-root access
+  ##
+  passwordFileMode: "0440"
   ## Cassandra storage backend
   ##
   cassandra:
@@ -295,6 +298,7 @@ resources: {}
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
+## @param podSecurityContext.seccompProfile.type Set JanusGraph pod's Security Context seccomp profile
 ##
 podSecurityContext:
   enabled: true
@@ -302,6 +306,8 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
+  seccompProfile:
+    type: "RuntimeDefault"
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled JanusGraph container securityContext
@@ -866,13 +872,24 @@ volumePermissions:
     requests: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enable security context for the init container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in the init container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param volumePermissions.containerSecurityContext.runAsGroup Set init container's Security Context runAsGroup
+  ## @param volumePermissions.containerSecurityContext.runAsNonRoot Set init container's Security Context runAsNonRoot
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set init container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    seccompProfile:
+      type: "RuntimeDefault"
 
 ## ServiceAccount configuration
 ##
