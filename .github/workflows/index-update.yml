@@ -20,7 +20,7 @@ jobs:
         with:
           ref: index
           path: index
-      - uses: oras-project/setup-oras@1d808f7d7f6995cc68b7bf507bfe5c5446e1dc9d
+      - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4
       - id: get-oci-index
         name: Get OCI index
         run: |
