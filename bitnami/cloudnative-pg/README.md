@@ -76,6 +76,10 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `*.resourcesPreset`  (under the `operator` and `pluginBarmanCloud` sections) values, which automatically sets the `*.resources`  (under the `operator` and `pluginBarmanCloud` sections) section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
+### Pod security contexts
+
+The operator and plugin-barman-cloud workloads use the `RuntimeDefault` seccomp profile at both the pod and container levels by default. The pod-level defaults can be customized through `operator.podSecurityContext.seccompProfile` and `pluginBarmanCloud.podSecurityContext.seccompProfile`. See [#36632](https://github.com/bitnami/charts/issues/36632) and [#36633](https://github.com/bitnami/charts/pull/36633).
+
 ### Backup and restore
 
 The Bitnami CloudNativePG chart includes the [plugin-barman-cloud](https://cloudnative-pg.io/plugin-barman-cloud/) for performing backup operations. This is enabled by setting `pluginBarmanCloud.enabled=true`:
