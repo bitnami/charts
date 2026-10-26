@@ -77,45 +77,65 @@ jobs:
           git config user.email "bitnami.bot@broadcom.com"
 
           read -r -a new_releases_arr <<< $NEW_RELEASES
-          for release in "${new_releases_arr[@]}"; do
-            read -r -a release_arr <<< "$(tr ':' ' ' <<< "$release")"
-            chart_name="${release_arr[0]}"
-            chart_version="${release_arr[1]}"
+          max_attempts=5
+          for ((attempt=1; attempt<=max_attempts; attempt++)); do
+            # Rebuild from the latest index on every attempt, preserving concurrent releases.
+            git fetch --no-tags --depth=1 origin index
+            git reset --hard FETCH_HEAD
+            current_commit_id=$(git rev-parse HEAD)
 
-            ## Update index
-            # Download published asset
-            mkdir ../download
-            helm pull "oci://registry-1.docker.io/bitnamicharts/${chart_name}" --version "${chart_version}" --destination ../download
-            # Rebuild index
-            helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
-            # Replace .tgz in URL with OCI tag
-            sed -i "s|oci://registry-1.docker.io/bitnamicharts/$chart_name-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$chart_name:$chart_version|" ../download/index.yaml
+            for release in "${new_releases_arr[@]}"; do
+              read -r -a release_arr <<< "$(tr ':' ' ' <<< "$release")"
+              chart_name="${release_arr[0]}"
+              chart_version="${release_arr[1]}"
 
-            # Check index integrity
-            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
-              echo "New index.yaml file is shorter than the current one"
+              ## Update index
+              # Download published asset
+              mkdir ../download
+              helm pull "oci://registry-1.docker.io/bitnamicharts/${chart_name}" --version "${chart_version}" --destination ../download
+              # Rebuild index
+              helm repo index --url oci://registry-1.docker.io/bitnamicharts --merge bitnami/index.yaml ../download
+              # Replace .tgz in URL with OCI tag
+              sed -i "s|oci://registry-1.docker.io/bitnamicharts/$chart_name-$chart_version.tgz|oci://registry-1.docker.io/bitnamicharts/$chart_name:$chart_version|" ../download/index.yaml
+
+              # Check index integrity
+              if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+                echo "New index.yaml file is shorter than the current one"
+                exit 1
+              fi
+              # Check repo can be loaded
+              if ! helm repo add cache file://../download/ ; then
+                echo "New index.yaml file can't be used as a file"
+                exit 1
+              else
+                # Remove the repo
+                helm repo remove cache
+              fi
+              cp ../download/index.yaml bitnami/index.yaml
+
+              # Remove chart files
+              rm -rf ../download
+            done
+
+            git add bitnami/index.yaml
+            git commit --signoff --amend --no-edit
+            if git push origin HEAD:refs/heads/index --force-with-lease=refs/heads/index:${current_commit_id}; then
+              break
+            fi
+
+            # Only retry a concurrent update; surface other push failures immediately.
+            git fetch --no-tags --depth=1 origin index
+            if [[ $(git rev-parse FETCH_HEAD) == "$current_commit_id" ]]; then
+              echo "Push failed without a concurrent index update"
               exit 1
             fi
-            # Check repo can be loaded
-            if ! helm repo add cache file://../download/ ; then
-              echo "New index.yaml file can't be used as a file"
+            if [[ $attempt -eq $max_attempts ]]; then
+              echo "Index kept changing; exhausted $max_attempts attempts"
               exit 1
-            else
-              # Remove the repo
-              helm repo remove cache
             fi
-            cp ../download/index.yaml bitnami/index.yaml
-
-            # Remove chart files
-            rm -rf ../download
+            echo "Index changed concurrently; rebuilding (attempt $((attempt + 1))/$max_attempts)"
+            sleep $((attempt * 5))
           done
-
-          # Avoid overriding index branch when remote commit does not match our checkout commit
-          current_commit_id=$(git rev-parse index)
-
-          # Push changes
-          git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-          git push origin index --force-with-lease=index:${current_commit_id}
   notify:
     name: Send notification
     needs:
