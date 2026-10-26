@@ -77,8 +77,7 @@ jobs:
           git config user.email "bitnami.bot@broadcom.com"
 
           read -r -a new_releases_arr <<< $NEW_RELEASES
-          max_attempts=5
-          for ((attempt=1; attempt<=max_attempts; attempt++)); do
+          for attempt in 1 2 3; do
             # Rebuild from the latest index on every attempt, preserving concurrent releases.
             git fetch --no-tags --depth=1 origin index
             git reset --hard FETCH_HEAD
@@ -120,22 +119,12 @@ jobs:
             git add bitnami/index.yaml
             git commit --signoff --amend --no-edit
             if git push origin HEAD:refs/heads/index --force-with-lease=refs/heads/index:${current_commit_id}; then
-              break
+              exit 0
             fi
-
-            # Only retry a concurrent update; surface other push failures immediately.
-            git fetch --no-tags --depth=1 origin index
-            if [[ $(git rev-parse FETCH_HEAD) == "$current_commit_id" ]]; then
-              echo "Push failed without a concurrent index update"
-              exit 1
-            fi
-            if [[ $attempt -eq $max_attempts ]]; then
-              echo "Index kept changing; exhausted $max_attempts attempts"
-              exit 1
-            fi
-            echo "Index changed concurrently; rebuilding (attempt $((attempt + 1))/$max_attempts)"
-            sleep $((attempt * 5))
+            echo "Index push failed (attempt $attempt/3); rebuilding before retrying"
           done
+          echo "Failed to update index after 3 attempts"
+          exit 1
   notify:
     name: Send notification
     needs:
