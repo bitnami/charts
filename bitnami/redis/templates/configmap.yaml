@@ -75,16 +75,16 @@ data:
     port {{ .Values.sentinel.containerPorts.sentinel }}
     {{- if .Values.sentinel.externalAccess.enabled }}
     {{- if .Values.sentinel.externalAccess.service.loadBalancerIP }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
+    sentinel monitor {{ include "redis.sentinelMasterSet" . }} {{ index .Values.sentinel.externalAccess.service.loadBalancerIP 0 }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     {{- end }}
     {{- else }}
-    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
+    sentinel monitor {{ include "redis.sentinelMasterSet" . }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.redis }} {{ .Values.sentinel.quorum }}
     {{- end }}
-    sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
-    sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
-    sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
+    sentinel down-after-milliseconds {{ include "redis.sentinelMasterSet" . }} {{ .Values.sentinel.downAfterMilliseconds }}
+    sentinel failover-timeout {{ include "redis.sentinelMasterSet" . }} {{ .Values.sentinel.failoverTimeout }}
+    sentinel parallel-syncs {{ include "redis.sentinelMasterSet" . }} {{ .Values.sentinel.parallelSyncs }}
     {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
-      sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
+      sentinel client-reconfig-script {{ include "redis.sentinelMasterSet" . }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
     {{- end }}
     {{- if .Values.auth.acl.sentinel }}
     # Sentinel ACL configuration, only for users with password
