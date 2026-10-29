@@ -1,5 +1,9 @@
 # Changelog
 
+## 23.1.0 (2026-10-19)
+
+* [bitnami/mariadb] Allow scaling primary to 0 via `primary.replicaCount`
+
 ## 23.0.1 (2025-11-17)
 
 * [bitnami/mariadb] Add initContainerSecurityContext parameter for primary initContainer ([#34373](https://github.com/bitnami/charts/pull/34373))
