@@ -4,6 +4,11 @@ on:
     - cron: "*/30 * * * *"
 # Remove all permissions by default.
 permissions: {}
+# Serialize discovery and publishing so runs cannot reuse stale release lists
+# or race when updating the shared index branch.
+concurrency:
+  group: index-update
+  cancel-in-progress: false
 jobs:
   find-new-releases:
     runs-on: ubuntu-latest
