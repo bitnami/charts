@@ -219,6 +219,7 @@ operator:
   ## @param operator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param operator.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param operator.podSecurityContext.fsGroup Set cloudnative-pg Operator pod's Security Context fsGroup
+  ## @param operator.podSecurityContext.seccompProfile.type Set cloudnative-pg Operator pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -226,6 +227,8 @@ operator:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
@@ -827,6 +830,7 @@ pluginBarmanCloud:
   ## @param pluginBarmanCloud.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param pluginBarmanCloud.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param pluginBarmanCloud.podSecurityContext.fsGroup Set plugin-barman-cloud pod's Security Context fsGroup
+  ## @param pluginBarmanCloud.podSecurityContext.seccompProfile.type Set plugin-barman-cloud pod's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
@@ -834,6 +838,8 @@ pluginBarmanCloud:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param pluginBarmanCloud.containerSecurityContext.enabled Enabled containers' Security Context

@@ -35,4 +35,4 @@ maintainers:
 name: cloudnative-pg
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cloudnative-pg
-version: 1.0.13
+version: 1.0.14
