@@ -63,7 +63,7 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or .Values.cloneFilesFromGit.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- if or .Values.cloneFilesFromGit.enabled (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
       initContainers:
         {{- if .Values.cloneFilesFromGit.enabled }}
         - name: git-clone-repository
@@ -88,13 +88,14 @@ spec:
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
-          image: "{{ template "mxnet.volumePermissions.image" . }}"
+          image: {{ include "pytorch.volumePermissions.image" . }}
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
           command:
             - /bin/bash
             - -ec
             - |
-              chown -R {{ .Values.securityContext.runAsUser }}:{{ .Values.securityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              {{- $legacySecurityContext := .Values.securityContext | default dict }}
+              chown -R {{ coalesce $legacySecurityContext.runAsUser .Values.containerSecurityContext.runAsUser }}:{{ coalesce $legacySecurityContext.fsGroup .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
           securityContext:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
@@ -105,6 +106,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
       containers:
@@ -127,6 +131,11 @@ spec:
               python {{ .Values.entrypoint.file }} {{ if .Values.entrypoint.args }}{{ .Values.entrypoint.args }}{{ end }}
               {{- end }}
               sleep infinity
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- $architecture := coalesce .Values.mode .Values.architecture }}
@@ -196,7 +205,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.configMap }}
+            {{- if or .Values.existingConfigmap .Values.configMap }}
             - name: ext-files
               mountPath: /app
             {{- else if .Files.Glob "files/*" }}
@@ -215,13 +224,16 @@ spec:
             {{- end }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if .Values.configMap }}
+        {{- if or .Values.existingConfigmap .Values.configMap }}
         - name: ext-files
           configMap:
-            name: {{ .Values.configMap }}
+            name: {{ coalesce .Values.existingConfigmap .Values.configMap }}
         {{- else if .Files.Glob "files/*" }}
         - name: local-files
           configMap:

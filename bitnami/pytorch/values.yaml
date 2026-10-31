@@ -388,7 +388,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the %%MAIN_CONTAINER_NAME%% pod(s)
+## @param initContainers Add additional init containers to the Pytorch pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
