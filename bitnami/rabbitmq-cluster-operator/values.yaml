@@ -354,10 +354,13 @@ clusterOperator:
   ## @param clusterOperator.lifecycleHooks for the RabbitMQ Cluster Operator container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param clusterOperator.containerPorts.metrics RabbitMQ Cluster Operator container port (used for metrics)
-  ##
   containerPorts:
+    ## @param clusterOperator.containerPorts.metrics RabbitMQ Cluster Operator container port (used for metrics)
+    ##
     metrics: 9782
+    ## @param clusterOperator.containerPorts.webhook RabbitMQ Cluster Operator container port (used for webhook)
+    ##
+    webhook: 9443
   ## @param clusterOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Cluster Operator nodes
   ## e.g:
   ## extraEnvVars:
@@ -497,6 +500,68 @@ clusterOperator:
     ## @param clusterOperator.serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
     ##
     automountServiceAccountToken: false
+  ## @section RabbitMQ Cluster Operator Webhook Service parameters
+  ##
+  webhook:
+    ## @param msgTopologyOperator.existingCertSecret name of a secret containing the certificates (use it to avoid certManager creating one)
+    ##
+    existingCertSecret: ""
+    ## @param msgTopologyOperator.existingCertCABundle PEM-encoded CA Bundle of the existing secret provided in existingCertSecret (only if useCertManager=false)
+    ##
+    existingCertCABundle: ""
+    ## Webhook service parameters
+    ##
+    service:
+      ## @param clusterOperator.webhook.service.type RabbitMQ Messaging Topology Operator webhook service type
+      ##
+      type: ClusterIP
+      ## @param clusterOperator.webhook.service.ports.webhook RabbitMQ Messaging Topology Operator webhook service HTTP port
+      ##
+      ports:
+        webhook: 443
+      ## Node ports to expose
+      ## @param clusterOperator.webhook.service.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        https: ""
+      ## @param clusterOperator.webhook.service.clusterIP RabbitMQ Messaging Topology Operator webhook service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param clusterOperator.webhook.service.loadBalancerIP RabbitMQ Messaging Topology Operator webhook service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param clusterOperator.webhook.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+      ##
+      extraPorts: []
+      ## @param clusterOperator.webhook.service.loadBalancerSourceRanges RabbitMQ Messaging Topology Operator webhook service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param clusterOperator.webhook.service.externalTrafficPolicy RabbitMQ Messaging Topology Operator webhook service external traffic policy
+      ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param clusterOperator.webhook.service.annotations Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service
+      ##
+      annotations: {}
+      ## @param clusterOperator.webhook.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param clusterOperator.webhook.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
