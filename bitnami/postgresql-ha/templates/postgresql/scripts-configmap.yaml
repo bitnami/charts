@@ -56,7 +56,7 @@ data:
         exec 2>/dev/null
     fi
 
-    postgresql_enable_nss_wrapper
+    {{- include "postgresql-ha.postgresql.nssWrapperWithCleanup" . | nindent 4 }}
 
     # Prepare env vars for managing roles
     readarray -t primary_node < <(repmgr_get_upstream_node)
@@ -101,7 +101,7 @@ data:
     debug_execute pg_isready "${pg_isready_args[@]}"
 
     # Check if repmgr has split-brain issues
-    postgresql_enable_nss_wrapper
+    {{- include "postgresql-ha.postgresql.nssWrapperWithCleanup" . | nindent 4 }}
     repmgr_check_status
   readiness-probe.sh: |-
     #!/bin/bash
@@ -151,7 +151,7 @@ data:
         fi
 {{- end }}
         # Finally, check if repmgr has split-brain issues
-        postgresql_enable_nss_wrapper
+        {{- include "postgresql-ha.postgresql.nssWrapperWithCleanup" . | nindent 8 }}
         repmgr_check_status
     else
         echo "connection to database failed"
