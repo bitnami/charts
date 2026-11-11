@@ -450,3 +450,26 @@ Return the path to the cert key file.
 {{- define "postgresql-ha.postgresql.tlsCertKey" -}}
 {{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
 {{- end -}}
+
+{{/*
+Enable NSS for a short-lived probe/hook and clean up only files it creates.
+Do not remove identity files inherited from a long-running container process.
+*/}}
+{{- define "postgresql-ha.postgresql.nssWrapperWithCleanup" -}}
+nss_wrapper_original_passwd="${NSS_WRAPPER_PASSWD:-}"
+nss_wrapper_original_group="${NSS_WRAPPER_GROUP:-}"
+cleanup_nss_wrapper() {
+    local passwd_file="${NSS_WRAPPER_PASSWD:-}"
+    local group_file="${NSS_WRAPPER_GROUP:-}"
+    if [[ -n "$passwd_file" && "$passwd_file" != "$nss_wrapper_original_passwd" ]]; then
+        rm -f -- "$passwd_file"
+    fi
+    if [[ -n "$group_file" && "$group_file" != "$nss_wrapper_original_group" ]]; then
+        rm -f -- "$group_file"
+    fi
+}
+trap cleanup_nss_wrapper EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT
+postgresql_enable_nss_wrapper
+{{- end -}}
