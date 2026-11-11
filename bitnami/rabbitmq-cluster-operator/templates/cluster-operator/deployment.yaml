@@ -154,16 +154,27 @@ spec:
           {{- if .Values.clusterOperator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cluster-operator-webhook-certs
+              readOnly: true
           {{- if .Values.clusterOperator.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumeMounts "context" $) | nindent 12 }}
+           {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.clusterOperator.containerPorts.metrics }}
               protocol: TCP
+            - name: webhook-server
+              containerPort: {{ .Values.clusterOperator.containerPorts.webhook }}
+              protocol: TCP
         {{- if .Values.clusterOperator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      volumes:
+        - name: cluster-operator-webhook-certs
+          secret:
+            secretName: {{ template "rmqco.clusterOperator.webhook.fullname" . }}
       {{- if .Values.clusterOperator.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumes "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.extraVolumes "context" $) | nindent 8 }}
       {{- end }}

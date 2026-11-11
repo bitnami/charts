@@ -13,6 +13,36 @@ the rabbitmq-cluster-operator name.
 {{- end -}}
 
 {{/*
+Return the proper RabbitMQ Cluster Operator fullname for use with webhooks
+NOTE: Not using the common function to avoid generating too long names
+*/}}
+{{- define "rmqco.clusterOperator.webhook.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+    {{- printf "%s-%s" .Values.fullnameOverride "webhook" | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+    {{- printf "%s-%s" .Release.Name "webhook" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper RabbitMQ Cluster Operator fullname adding the installation's namespace.
+*/}}
+{{- define "rmqco.clusterOperator.webhook.fullname.namespace" -}}
+{{- printf "%s-%s" (include "rmqco.clusterOperator.webhook.fullname" .) (include "common.names.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper RabbitMQ Messaging Topology Operator fullname
+*/}}
+{{- define "rmqco.clusterOperator.webhook.secretName" -}}
+{{- if .Values.clusterOperator.webhook.existingCertSecret -}}
+    {{- .Values.clusterOperator.webhook.existingCertSecret -}}
+{{- else }}
+    {{- include "rmqco.clusterOperator.webhook.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper RabbitMQ Messaging Topology Operator fullname
 NOTE: Not using the common function to avoid generating too long names
 */}}
