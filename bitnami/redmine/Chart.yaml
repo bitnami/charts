@@ -45,4 +45,4 @@ maintainers:
 name: redmine
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redmine
-version: 34.0.1
+version: 34.0.2
