@@ -53,6 +53,13 @@ Return the name of the Secret used to store the passwords
 {{- end -}}
 
 {{/*
+Return the name of the Secret used to store the SMTP password
+*/}}
+{{- define "redmine.smtpSecretName" -}}
+{{- default (include "redmine.secretName" .) .Values.smtpExistingSecret -}}
+{{- end -}}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "redmine.mailReceiver.name" -}}

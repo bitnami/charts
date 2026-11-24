@@ -164,7 +164,7 @@ spec:
             - name: REDMINE_SMTP_USER
               value: {{ .Values.smtpUser | quote }}
             {{- end }}
-            {{- if .Values.smtpPassword }}
+            {{- if or .Values.smtpPassword .Values.smtpExistingSecret }}
             {{- if .Values.usePasswordFiles }}
             - name: REDMINE_SMTP_PASSWORD_FILE
               value: "/opt/bitnami/redmine/secrets/smtp-password"
@@ -172,7 +172,7 @@ spec:
             - name: REDMINE_SMTP_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "redmine.secretName" . }}
+                  name: {{ include "redmine.smtpSecretName" . }}
                   key: smtp-password
             {{- end }}
             {{- end }}
@@ -259,6 +259,10 @@ spec:
                   name: {{ include "redmine.secretName" . }}
               - secret:
                   name: {{ include "redmine.database.secretName" . }}
+              {{- if .Values.smtpExistingSecret }}
+              - secret:
+                  name: {{ include "redmine.smtpSecretName" . }}
+              {{- end }}
         {{- end }}
         - name: redmine-data
           {{- if .Values.persistence.enabled }}
